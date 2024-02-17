@@ -8,13 +8,8 @@
 
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
 
-const Base = LevelControlBehavior.with("OnOff", "Lighting", "Frequency");
-
 /**
- * This is the default server implementation of LevelControlBehavior.
- *
- * This implementation includes all features of LevelControl.Cluster. You should use LevelControlServer.with to
- * specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link LevelControlBehavior}.
  */
-export class LevelControlServer extends Base {
+export class LevelControlServer extends LevelControlBehavior {
 }

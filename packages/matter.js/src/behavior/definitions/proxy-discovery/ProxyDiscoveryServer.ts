@@ -9,7 +9,7 @@
 import { ProxyDiscoveryBehavior } from "./ProxyDiscoveryBehavior.js";
 
 /**
- * This is the default server implementation of ProxyDiscoveryBehavior.
+ * This is the default server implementation of {@link ProxyDiscoveryBehavior}.
  */
 export class ProxyDiscoveryServer extends ProxyDiscoveryBehavior {
 }

@@ -9,7 +9,7 @@
 import { BallastConfigurationBehavior } from "./BallastConfigurationBehavior.js";
 
 /**
- * This is the default server implementation of BallastConfigurationBehavior.
+ * This is the default server implementation of {@link BallastConfigurationBehavior}.
  */
 export class BallastConfigurationServer extends BallastConfigurationBehavior {
 }

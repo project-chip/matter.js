@@ -8,13 +8,8 @@
 
 import { EthernetNetworkDiagnosticsBehavior } from "./EthernetNetworkDiagnosticsBehavior.js";
 
-const Base = EthernetNetworkDiagnosticsBehavior.with("PacketCounts", "ErrorCounts");
-
 /**
- * This is the default server implementation of EthernetNetworkDiagnosticsBehavior.
- *
- * This implementation includes all features of EthernetNetworkDiagnostics.Cluster. You should use
- * EthernetNetworkDiagnosticsServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link EthernetNetworkDiagnosticsBehavior}.
  */
-export class EthernetNetworkDiagnosticsServer extends Base {
+export class EthernetNetworkDiagnosticsServer extends EthernetNetworkDiagnosticsBehavior {
 }

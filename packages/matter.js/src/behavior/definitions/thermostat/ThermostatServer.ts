@@ -8,21 +8,11 @@
 
 import { ThermostatBehavior } from "./ThermostatBehavior.js";
 
-const Base = ThermostatBehavior.with(
-    "Heating",
-    "Cooling",
-    "Occupancy",
-    "ScheduleConfiguration",
-    "Setback",
-    "AutoMode",
-    "LocalTemperatureNotExposed"
-);
-
 /**
- * This is the default server implementation of ThermostatBehavior.
+ * This is the default server implementation of {@link ThermostatBehavior}.
  *
- * This implementation includes all features of Thermostat.Cluster. You should use ThermostatServer.with to specialize
- * the class for the features your implementation supports.
+ * The Matter specification requires the Thermostat cluster to support features we do not enable by default. You should
+ * use {@link ThermostatServer.with} to specialize the class for the features your implementation supports.
  */
-export class ThermostatServer extends Base {
+export class ThermostatServer extends ThermostatBehavior {
 }

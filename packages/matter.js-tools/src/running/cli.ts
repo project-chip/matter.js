@@ -62,5 +62,5 @@ export async function main(argv = process.argv) {
             .replace(/^src[\\/]/, `dist/${format}/`),
     );
 
-    await executeNode(script, argv);
+    process.exitCode = await executeNode(script, argv);
 }

@@ -566,7 +566,7 @@ export namespace Part {
     export type Configuration<
         T extends EndpointType = EndpointType.Empty,
         O extends PartOptions = PartOptions,
-    > = Options<T, O> & { type: T };
+    > = Options<T, O & { type: T }> & { type: T };
 
     /**
      * Definition of a Part.  May be an {@link EndpointType}, {@link Configuration}, or a {@link Part} instance.

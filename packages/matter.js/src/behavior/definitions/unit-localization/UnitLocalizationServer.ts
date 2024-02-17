@@ -8,13 +8,8 @@
 
 import { UnitLocalizationBehavior } from "./UnitLocalizationBehavior.js";
 
-const Base = UnitLocalizationBehavior.with("TemperatureUnit");
-
 /**
- * This is the default server implementation of UnitLocalizationBehavior.
- *
- * This implementation includes all features of UnitLocalization.Cluster. You should use UnitLocalizationServer.with to
- * specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link UnitLocalizationBehavior}.
  */
-export class UnitLocalizationServer extends Base {
+export class UnitLocalizationServer extends UnitLocalizationBehavior {
 }

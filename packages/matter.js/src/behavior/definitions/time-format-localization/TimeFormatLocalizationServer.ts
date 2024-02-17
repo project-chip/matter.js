@@ -8,13 +8,8 @@
 
 import { TimeFormatLocalizationBehavior } from "./TimeFormatLocalizationBehavior.js";
 
-const Base = TimeFormatLocalizationBehavior.with("CalendarFormat");
-
 /**
- * This is the default server implementation of TimeFormatLocalizationBehavior.
- *
- * This implementation includes all features of TimeFormatLocalization.Cluster. You should use
- * TimeFormatLocalizationServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link TimeFormatLocalizationBehavior}.
  */
-export class TimeFormatLocalizationServer extends Base {
+export class TimeFormatLocalizationServer extends TimeFormatLocalizationBehavior {
 }

@@ -8,13 +8,11 @@
 
 import { WindowCoveringBehavior } from "./WindowCoveringBehavior.js";
 
-const Base = WindowCoveringBehavior.with("Lift", "Tilt", "PositionAwareLift", "AbsolutePosition", "PositionAwareTilt");
-
 /**
- * This is the default server implementation of WindowCoveringBehavior.
+ * This is the default server implementation of {@link WindowCoveringBehavior}.
  *
- * This implementation includes all features of WindowCovering.Cluster. You should use WindowCoveringServer.with to
- * specialize the class for the features your implementation supports.
+ * The Matter specification requires the WindowCovering cluster to support features we do not enable by default. You
+ * should use {@link WindowCoveringServer.with} to specialize the class for the features your implementation supports.
  */
-export class WindowCoveringServer extends Base {
+export class WindowCoveringServer extends WindowCoveringBehavior {
 }

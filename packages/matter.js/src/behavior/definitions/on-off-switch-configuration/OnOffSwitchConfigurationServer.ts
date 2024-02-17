@@ -9,7 +9,7 @@
 import { OnOffSwitchConfigurationBehavior } from "./OnOffSwitchConfigurationBehavior.js";
 
 /**
- * This is the default server implementation of OnOffSwitchConfigurationBehavior.
+ * This is the default server implementation of {@link OnOffSwitchConfigurationBehavior}.
  */
 export class OnOffSwitchConfigurationServer extends OnOffSwitchConfigurationBehavior {
 }

@@ -9,7 +9,7 @@
 import { PowerSourceConfigurationBehavior } from "./PowerSourceConfigurationBehavior.js";
 
 /**
- * This is the default server implementation of PowerSourceConfigurationBehavior.
+ * This is the default server implementation of {@link PowerSourceConfigurationBehavior}.
  */
 export class PowerSourceConfigurationServer extends PowerSourceConfigurationBehavior {
 }

@@ -9,7 +9,7 @@
 import { RelativeHumidityMeasurementBehavior } from "./RelativeHumidityMeasurementBehavior.js";
 
 /**
- * This is the default server implementation of RelativeHumidityMeasurementBehavior.
+ * This is the default server implementation of {@link RelativeHumidityMeasurementBehavior}.
  */
 export class RelativeHumidityMeasurementServer extends RelativeHumidityMeasurementBehavior {
 }

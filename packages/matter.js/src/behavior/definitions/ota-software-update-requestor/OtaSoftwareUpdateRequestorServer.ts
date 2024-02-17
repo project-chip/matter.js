@@ -9,7 +9,7 @@
 import { OtaSoftwareUpdateRequestorBehavior } from "./OtaSoftwareUpdateRequestorBehavior.js";
 
 /**
- * This is the default server implementation of OtaSoftwareUpdateRequestorBehavior.
+ * This is the default server implementation of {@link OtaSoftwareUpdateRequestorBehavior}.
  */
 export class OtaSoftwareUpdateRequestorServer extends OtaSoftwareUpdateRequestorBehavior {
 }

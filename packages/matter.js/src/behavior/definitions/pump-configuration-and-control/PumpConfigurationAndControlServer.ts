@@ -8,21 +8,12 @@
 
 import { PumpConfigurationAndControlBehavior } from "./PumpConfigurationAndControlBehavior.js";
 
-const Base = PumpConfigurationAndControlBehavior.with(
-    "ConstantPressure",
-    "CompensatedPressure",
-    "ConstantFlow",
-    "ConstantSpeed",
-    "ConstantTemperature",
-    "Automatic",
-    "LocalOperation"
-);
-
 /**
- * This is the default server implementation of PumpConfigurationAndControlBehavior.
+ * This is the default server implementation of {@link PumpConfigurationAndControlBehavior}.
  *
- * This implementation includes all features of PumpConfigurationAndControl.Cluster. You should use
- * PumpConfigurationAndControlServer.with to specialize the class for the features your implementation supports.
+ * The Matter specification requires the PumpConfigurationAndControl cluster to support features we do not enable by
+ * default. You should use {@link PumpConfigurationAndControlServer.with} to specialize the class for the features your
+ * implementation supports.
  */
-export class PumpConfigurationAndControlServer extends Base {
+export class PumpConfigurationAndControlServer extends PumpConfigurationAndControlBehavior {
 }

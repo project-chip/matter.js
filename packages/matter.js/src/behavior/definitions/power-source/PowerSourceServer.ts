@@ -8,13 +8,8 @@
 
 import { PowerSourceBehavior } from "./PowerSourceBehavior.js";
 
-const Base = PowerSourceBehavior.with("Wired", "Battery", "Rechargeable", "Replaceable");
-
 /**
- * This is the default server implementation of PowerSourceBehavior.
- *
- * This implementation includes all features of PowerSource.Cluster. You should use PowerSourceServer.with to
- * specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link PowerSourceBehavior}.
  */
-export class PowerSourceServer extends Base {
+export class PowerSourceServer extends PowerSourceBehavior {
 }

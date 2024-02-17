@@ -8,26 +8,8 @@
 
 import { DoorLockBehavior } from "./DoorLockBehavior.js";
 
-const Base = DoorLockBehavior.with(
-    "PinCredential",
-    "RfidCredential",
-    "FingerCredentials",
-    "Logging",
-    "WeekDayAccessSchedules",
-    "DoorPositionSensor",
-    "FaceCredentials",
-    "CredentialOverTheAirAccess",
-    "User",
-    "Notification",
-    "YearDayAccessSchedules",
-    "HolidaySchedules"
-);
-
 /**
- * This is the default server implementation of DoorLockBehavior.
- *
- * This implementation includes all features of DoorLock.Cluster. You should use DoorLockServer.with to specialize the
- * class for the features your implementation supports.
+ * This is the default server implementation of {@link DoorLockBehavior}.
  */
-export class DoorLockServer extends Base {
+export class DoorLockServer extends DoorLockBehavior {
 }

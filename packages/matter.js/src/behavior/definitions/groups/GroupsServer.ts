@@ -8,13 +8,8 @@
 
 import { GroupsBehavior } from "./GroupsBehavior.js";
 
-const Base = GroupsBehavior.with("GroupNames");
-
 /**
- * This is the default server implementation of GroupsBehavior.
- *
- * This implementation includes all features of Groups.Cluster. You should use GroupsServer.with to specialize the
- * class for the features your implementation supports.
+ * This is the default server implementation of {@link GroupsBehavior}.
  */
-export class GroupsServer extends Base {
+export class GroupsServer extends GroupsBehavior {
 }

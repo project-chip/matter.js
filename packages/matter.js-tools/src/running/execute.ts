@@ -10,7 +10,7 @@ import { platform } from "os";
 import colors from "ansi-colors";
 
 export async function execute(bin: string, argv: string[], env?: typeof process.env) {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<number>((resolve, reject) => {
         let finished = false;
 
         const options: SpawnOptions = {
@@ -36,11 +36,7 @@ export async function execute(bin: string, argv: string[], env?: typeof process.
             }
             finished = true;
 
-            if (code === 0) {
-                resolve();
-            } else {
-                reject(`Process ${bin} exited with code ${code}`);
-            }
+            resolve(code ?? 1);
         });
     });
 }

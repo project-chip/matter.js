@@ -8,13 +8,8 @@
 
 import { ColorControlBehavior } from "./ColorControlBehavior.js";
 
-const Base = ColorControlBehavior.with("HueSaturation", "EnhancedHue", "ColorLoop", "Xy", "ColorTemperature");
-
 /**
- * This is the default server implementation of ColorControlBehavior.
- *
- * This implementation includes all features of ColorControl.Cluster. You should use ColorControlServer.with to
- * specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link ColorControlBehavior}.
  */
-export class ColorControlServer extends Base {
+export class ColorControlServer extends ColorControlBehavior {
 }

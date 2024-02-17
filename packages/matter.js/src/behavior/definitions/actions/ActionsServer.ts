@@ -9,7 +9,7 @@
 import { ActionsBehavior } from "./ActionsBehavior.js";
 
 /**
- * This is the default server implementation of ActionsBehavior.
+ * This is the default server implementation of {@link ActionsBehavior}.
  */
 export class ActionsServer extends ActionsBehavior {
 }

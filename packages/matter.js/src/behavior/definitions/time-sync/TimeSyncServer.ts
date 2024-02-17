@@ -8,13 +8,8 @@
 
 import { TimeSyncBehavior } from "./TimeSyncBehavior.js";
 
-const Base = TimeSyncBehavior.with("TimeZone", "NtpClient", "NtpServer");
-
 /**
- * This is the default server implementation of TimeSyncBehavior.
- *
- * This implementation includes all features of TimeSync.Cluster. You should use TimeSyncServer.with to specialize the
- * class for the features your implementation supports.
+ * This is the default server implementation of {@link TimeSyncBehavior}.
  */
-export class TimeSyncServer extends Base {
+export class TimeSyncServer extends TimeSyncBehavior {
 }

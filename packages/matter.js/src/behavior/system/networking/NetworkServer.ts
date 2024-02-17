@@ -101,12 +101,16 @@ export class NetworkServer extends NetworkBehavior {
             return;
         }
 
+        this.state.operationalPort = this.internal.runtime.operationalPort;
+
         const part = this.part;
         part.env.runtime.addWorker(
             this.internal.runtime
                 .openAdvertisementWindow()
                 .then(() => part.act(agent => agent.get(NetworkServer).enterOnlineMode(runtime, true))),
         );
+
+        super.enterOnlineMode(runtime);
     }
 
     async #enterCommissionedMode() {

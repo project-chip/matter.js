@@ -9,7 +9,7 @@
 import { LocalizationConfigurationBehavior } from "./LocalizationConfigurationBehavior.js";
 
 /**
- * This is the default server implementation of LocalizationConfigurationBehavior.
+ * This is the default server implementation of {@link LocalizationConfigurationBehavior}.
  */
 export class LocalizationConfigurationServer extends LocalizationConfigurationBehavior {
 }

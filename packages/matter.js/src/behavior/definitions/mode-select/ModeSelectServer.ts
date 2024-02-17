@@ -8,13 +8,8 @@
 
 import { ModeSelectBehavior } from "./ModeSelectBehavior.js";
 
-const Base = ModeSelectBehavior.with("OnOff");
-
 /**
- * This is the default server implementation of ModeSelectBehavior.
- *
- * This implementation includes all features of ModeSelect.Cluster. You should use ModeSelectServer.with to specialize
- * the class for the features your implementation supports.
+ * This is the default server implementation of {@link ModeSelectBehavior}.
  */
-export class ModeSelectServer extends Base {
+export class ModeSelectServer extends ModeSelectBehavior {
 }

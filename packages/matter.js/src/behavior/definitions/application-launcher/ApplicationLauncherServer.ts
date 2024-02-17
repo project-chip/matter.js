@@ -8,13 +8,8 @@
 
 import { ApplicationLauncherBehavior } from "./ApplicationLauncherBehavior.js";
 
-const Base = ApplicationLauncherBehavior.with("ApplicationPlatform");
-
 /**
- * This is the default server implementation of ApplicationLauncherBehavior.
- *
- * This implementation includes all features of ApplicationLauncher.Cluster. You should use
- * ApplicationLauncherServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link ApplicationLauncherBehavior}.
  */
-export class ApplicationLauncherServer extends Base {
+export class ApplicationLauncherServer extends ApplicationLauncherBehavior {
 }

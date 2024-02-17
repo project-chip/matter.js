@@ -8,13 +8,8 @@
 
 import { FanControlBehavior } from "./FanControlBehavior.js";
 
-const Base = FanControlBehavior.with("MultiSpeed", "Auto", "Rocking", "Wind");
-
 /**
- * This is the default server implementation of FanControlBehavior.
- *
- * This implementation includes all features of FanControl.Cluster. You should use FanControlServer.with to specialize
- * the class for the features your implementation supports.
+ * This is the default server implementation of {@link FanControlBehavior}.
  */
-export class FanControlServer extends Base {
+export class FanControlServer extends FanControlBehavior {
 }

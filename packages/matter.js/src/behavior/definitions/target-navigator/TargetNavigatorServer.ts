@@ -9,7 +9,7 @@
 import { TargetNavigatorBehavior } from "./TargetNavigatorBehavior.js";
 
 /**
- * This is the default server implementation of TargetNavigatorBehavior.
+ * This is the default server implementation of {@link TargetNavigatorBehavior}.
  */
 export class TargetNavigatorServer extends TargetNavigatorBehavior {
 }

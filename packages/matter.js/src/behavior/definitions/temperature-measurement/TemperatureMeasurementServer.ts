@@ -9,7 +9,7 @@
 import { TemperatureMeasurementBehavior } from "./TemperatureMeasurementBehavior.js";
 
 /**
- * This is the default server implementation of TemperatureMeasurementBehavior.
+ * This is the default server implementation of {@link TemperatureMeasurementBehavior}.
  */
 export class TemperatureMeasurementServer extends TemperatureMeasurementBehavior {
 }

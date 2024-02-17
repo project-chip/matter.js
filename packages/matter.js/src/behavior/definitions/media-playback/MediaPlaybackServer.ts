@@ -8,13 +8,8 @@
 
 import { MediaPlaybackBehavior } from "./MediaPlaybackBehavior.js";
 
-const Base = MediaPlaybackBehavior.with("AdvancedSeek", "VariableSpeed");
-
 /**
- * This is the default server implementation of MediaPlaybackBehavior.
- *
- * This implementation includes all features of MediaPlayback.Cluster. You should use MediaPlaybackServer.with to
- * specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link MediaPlaybackBehavior}.
  */
-export class MediaPlaybackServer extends Base {
+export class MediaPlaybackServer extends MediaPlaybackBehavior {
 }

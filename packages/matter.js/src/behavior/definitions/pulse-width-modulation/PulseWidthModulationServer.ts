@@ -8,13 +8,8 @@
 
 import { PulseWidthModulationBehavior } from "./PulseWidthModulationBehavior.js";
 
-const Base = PulseWidthModulationBehavior.with("OnOff", "Lighting", "Frequency");
-
 /**
- * This is the default server implementation of PulseWidthModulationBehavior.
- *
- * This implementation includes all features of PulseWidthModulation.Cluster. You should use
- * PulseWidthModulationServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link PulseWidthModulationBehavior}.
  */
-export class PulseWidthModulationServer extends Base {
+export class PulseWidthModulationServer extends PulseWidthModulationBehavior {
 }

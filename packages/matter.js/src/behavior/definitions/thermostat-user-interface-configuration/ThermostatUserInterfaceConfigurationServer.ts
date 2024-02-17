@@ -9,7 +9,7 @@
 import { ThermostatUserInterfaceConfigurationBehavior } from "./ThermostatUserInterfaceConfigurationBehavior.js";
 
 /**
- * This is the default server implementation of ThermostatUserInterfaceConfigurationBehavior.
+ * This is the default server implementation of {@link ThermostatUserInterfaceConfigurationBehavior}.
  */
 export class ThermostatUserInterfaceConfigurationServer extends ThermostatUserInterfaceConfigurationBehavior {
 }
