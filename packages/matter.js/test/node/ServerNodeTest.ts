@@ -17,7 +17,7 @@ describe("ServerNode", () => {
     it("starts and stops and emits correct lifecycle changes", async () => {
         const node = new MockServerNode();
 
-        const changes = new Array<[string, string]>();
+        const changes = new Array<[string, string?]>();
 
         node.lifecycle.changed.on((type, part) => {
             changes.push([type, part.toString()]);
@@ -25,32 +25,40 @@ describe("ServerNode", () => {
 
         let disposal: Promise<void> | undefined;
 
-        node.lifecycle.ready.on(() => {
-            disposal = node[Symbol.asyncDispose]();
+        node.lifecycle.online.on(() => {
+            disposal = node.destroy();
         });
+
+        for (const event of [ "online", "offline", "ready", "treeReady" ] as const) {
+            node.lifecycle[event].on(() => { changes.push([ event ]) });
+        }
 
         node.add(OnOffLightDevice);
 
-        await node.run();
+        await MockTime.resolve(node.run());
 
         expect(disposal).not.undefined;
 
-        await disposal;
+        await MockTime.resolve(disposal as Promise<void>);
 
         expect(changes).deep.equals([
             ["ready", "node0"],
+            ["ready"],
             ["installed", "node0.?"],
             ["idAssigned", "node0.part0"],
             ["numberAssigned", "node0.part0"],
             ["treeReady", "node0.part0"],
             ["treeReady", "node0"],
+            ["treeReady"],
             ["ready", "node0.part0"],
+            ["online"],
             ["destroyed", "node0.part0"],
+            ["offline"],
             ["destroyed", "node0"],
         ]);
     });
 
-    it.only("announces and expires correctly", async () => {
+    it("announces and expires correctly", async () => {
         const scannerChannel = await UdpChannelFake.create(MockServerNode.createNetwork(2), {
             listeningPort: 5353,
             listeningAddress: "ff02::fb",
@@ -103,7 +111,7 @@ describe("ServerNode", () => {
 
         expect(additional(DnsRecordType.AAAA)).equals("1111:2222:3333:4444:5555:6666:7777:8801");
         expect(additional(DnsRecordType.A)).equals("10.10.10.1");
-        expect(additional(DnsRecordType.SRV)?.port).equals(operationalPort.toString());
+        expect(additional(DnsRecordType.SRV)?.port).equals(operationalPort);
 
         const expirationReceived = new Promise<ByteArray>(resolve =>
             scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => 

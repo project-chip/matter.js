@@ -13,20 +13,17 @@ import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Environment } from "./Environment.js";
 import { Environmental } from "./Environmental.js";
-import { RuntimeService } from "./RuntimeService.js";
 import { VariableService } from "./VariableService.js";
 
 const logger = Logger.get("MDNS");
 
 export class MdnsService {
-    #runtime: RuntimeService;
     #broadcaster?: MdnsBroadcaster;
     #scanner?: MdnsScanner;
     #construction: AsyncConstruction<MdnsService>;
 
     constructor(environment: Environment, options?: MdnsService.Options) {
         environment.set(MdnsService, this);
-        this.#runtime = environment.get(RuntimeService);
 
         this.#construction = AsyncConstruction(this, async () => {
             const vars = environment.get(VariableService);
@@ -51,7 +48,6 @@ export class MdnsService {
     }
 
     get broadcaster() {
-        this.#runtime.addWorker(this);
         return this.#construction.assert("MDNS broadcaster", this.#broadcaster);
     }
 

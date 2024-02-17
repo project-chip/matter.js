@@ -93,6 +93,8 @@ export class ServerRuntime extends NetworkRuntime {
                 port ? port : undefined,
                 this.owner.state.network.listeningAddressIpv6,
             );
+
+            await this.owner.set({ network: { operationalPort: this.#primaryNetInterface.port }});
         }
         return this.#primaryNetInterface;
     }
@@ -234,8 +236,8 @@ export class ServerRuntime extends NetworkRuntime {
         await this.addBroadcasters(this.#matterDevice);
     }
 
-    override async [Symbol.asyncDispose]() {
-        await super[Symbol.asyncDispose]();
+    override async destroy() {
+        await super.destroy();
 
         if (this.#matterDevice) {
             this.owner.env.delete(MatterDevice);

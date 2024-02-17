@@ -54,7 +54,7 @@ export class NetworkBehavior extends Behavior implements Startable, Cancellable 
 
     #cancel() {
         if (this.internal.runtime) {
-            const promise = this.internal.runtime[Symbol.asyncDispose]();
+            const promise = this.internal.runtime.destroy();
             (this.part.lifecycle as NodeLifecycle).offline?.emit(this.context);
             this.internal.runtime = undefined;
             return promise;
@@ -63,7 +63,7 @@ export class NetworkBehavior extends Behavior implements Startable, Cancellable 
 
     async destroy() {
         await this.#cancel();
-        await this.internal.runtime?.[Symbol.asyncDispose]();
+        await this.internal.runtime?.destroy();
     }
 
     async [Symbol.asyncDispose]() {
