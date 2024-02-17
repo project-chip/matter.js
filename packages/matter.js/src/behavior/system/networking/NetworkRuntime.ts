@@ -26,7 +26,7 @@ export abstract class NetworkRuntime {
         });
     }
 
-    async [Symbol.asyncDispose]() {
+    async destroy() {
         await this.#construction;
     }
 

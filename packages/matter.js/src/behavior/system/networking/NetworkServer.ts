@@ -107,10 +107,8 @@ export class NetworkServer extends NetworkBehavior {
         part.env.runtime.addWorker(
             this.internal.runtime
                 .openAdvertisementWindow()
-                .then(() => part.act(agent => agent.get(NetworkServer).enterOnlineMode(runtime, true))),
+                .then(this.callback(function(this: NetworkServer) { this.enterOnlineMode(runtime, true) })),
         );
-
-        super.enterOnlineMode(runtime);
     }
 
     async #enterCommissionedMode() {
