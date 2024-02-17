@@ -193,7 +193,7 @@ export namespace AccountLoginInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3
          */
-        login(request: LoginRequest): MaybePromise<void>;
+        login(request: LoginRequest): MaybePromise;
 
         /**
          * The purpose of this command is to instruct the Content App to clear the current user account. This command
@@ -201,7 +201,7 @@ export namespace AccountLoginInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.4
          */
-        logout(): MaybePromise<void>;
+        logout(): MaybePromise;
     }
 }
 

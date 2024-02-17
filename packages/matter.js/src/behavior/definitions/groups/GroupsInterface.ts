@@ -144,7 +144,7 @@ export namespace GroupsInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.5
          */
-        removeAllGroups(): MaybePromise<void>;
+        removeAllGroups(): MaybePromise;
 
         /**
          * The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the
@@ -155,7 +155,7 @@ export namespace GroupsInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.6
          */
-        addGroupIfIdentifying(request: AddGroupIfIdentifyingRequest): MaybePromise<void>;
+        addGroupIfIdentifying(request: AddGroupIfIdentifyingRequest): MaybePromise;
     }
 }
 

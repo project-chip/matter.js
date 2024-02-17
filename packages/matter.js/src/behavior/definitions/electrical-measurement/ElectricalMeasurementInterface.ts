@@ -14,8 +14,8 @@ export type GetMeasurementProfileCommandRequest = TypeFromSchema<typeof Electric
 
 export namespace ElectricalMeasurementInterface {
     export interface Base {
-        getProfileInfoCommand(): MaybePromise<void>;
-        getMeasurementProfileCommand(request: GetMeasurementProfileCommandRequest): MaybePromise<void>;
+        getProfileInfoCommand(): MaybePromise;
+        getMeasurementProfileCommand(request: GetMeasurementProfileCommandRequest): MaybePromise;
     }
 }
 

@@ -58,7 +58,7 @@ export namespace ChannelInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
          */
-        changeChannelByNumber(request: ChangeChannelByNumberRequest): MaybePromise<void>;
+        changeChannelByNumber(request: ChangeChannelByNumberRequest): MaybePromise;
 
         /**
          * This command provides channel up and channel down functionality, but allows channel index jumps of size
@@ -71,7 +71,7 @@ export namespace ChannelInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
          */
-        skipChannel(request: SkipChannelRequest): MaybePromise<void>;
+        skipChannel(request: SkipChannelRequest): MaybePromise;
     }
 
     export interface ChannelListOrLineupInfo {

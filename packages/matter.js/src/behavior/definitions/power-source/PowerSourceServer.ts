@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { PowerSourceBehavior } from "./PowerSourceBehavior.js";
-import { PowerSource } from "../../../cluster/definitions/PowerSourceCluster.js";
 
-const Base = PowerSourceBehavior.for(PowerSource.Complete);
+const Base = PowerSourceBehavior.with("Wired", "Battery", "Rechargeable", "Replaceable");
 
 /**
  * This is the default server implementation of PowerSourceBehavior.

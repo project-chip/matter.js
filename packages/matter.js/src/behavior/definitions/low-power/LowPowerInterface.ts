@@ -16,7 +16,7 @@ export namespace LowPowerInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.9.3.1
          */
-        sleep(): MaybePromise<void>;
+        sleep(): MaybePromise;
     }
 }
 

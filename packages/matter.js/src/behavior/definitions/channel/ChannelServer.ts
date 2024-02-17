@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { ChannelBehavior } from "./ChannelBehavior.js";
-import { Channel } from "../../../cluster/definitions/ChannelCluster.js";
 
-const Base = ChannelBehavior.for(Channel.Complete);
+const Base = ChannelBehavior.with("ChannelList", "LineupInfo");
 
 /**
  * This is the default server implementation of ChannelBehavior.

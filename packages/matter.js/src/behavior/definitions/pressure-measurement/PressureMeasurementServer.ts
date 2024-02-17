@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { PressureMeasurementBehavior } from "./PressureMeasurementBehavior.js";
-import { PressureMeasurement } from "../../../cluster/definitions/PressureMeasurementCluster.js";
 
-const Base = PressureMeasurementBehavior.for(PressureMeasurement.Complete);
+const Base = PressureMeasurementBehavior.with("Extended");
 
 /**
  * This is the default server implementation of PressureMeasurementBehavior.

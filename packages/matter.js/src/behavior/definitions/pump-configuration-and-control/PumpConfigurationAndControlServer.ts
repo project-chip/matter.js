@@ -7,9 +7,16 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { PumpConfigurationAndControlBehavior } from "./PumpConfigurationAndControlBehavior.js";
-import { PumpConfigurationAndControl } from "../../../cluster/definitions/PumpConfigurationAndControlCluster.js";
 
-const Base = PumpConfigurationAndControlBehavior.for(PumpConfigurationAndControl.Complete);
+const Base = PumpConfigurationAndControlBehavior.with(
+    "ConstantPressure",
+    "CompensatedPressure",
+    "ConstantFlow",
+    "ConstantSpeed",
+    "ConstantTemperature",
+    "Automatic",
+    "LocalOperation"
+);
 
 /**
  * This is the default server implementation of PumpConfigurationAndControlBehavior.

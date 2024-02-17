@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { AudioOutputBehavior } from "./AudioOutputBehavior.js";
-import { AudioOutput } from "../../../cluster/definitions/AudioOutputCluster.js";
 
-const Base = AudioOutputBehavior.for(AudioOutput.Complete);
+const Base = AudioOutputBehavior.with("NameUpdates");
 
 /**
  * This is the default server implementation of AudioOutputBehavior.

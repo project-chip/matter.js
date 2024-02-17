@@ -14,7 +14,7 @@ export namespace ProxyDiscoveryInterface {
         /**
          * @see {@link MatterCoreSpecificationV1_1} § 9.15.13.5
          */
-        proxyDiscoverRequest(): MaybePromise<void>;
+        proxyDiscoverRequest(): MaybePromise;
     }
 }
 

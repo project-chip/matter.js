@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { TimeSyncBehavior } from "./TimeSyncBehavior.js";
-import { TimeSync } from "../../../cluster/definitions/TimeSyncCluster.js";
 
-const Base = TimeSyncBehavior.for(TimeSync.Complete);
+const Base = TimeSyncBehavior.with("TimeZone", "NtpClient", "NtpServer");
 
 /**
  * This is the default server implementation of TimeSyncBehavior.

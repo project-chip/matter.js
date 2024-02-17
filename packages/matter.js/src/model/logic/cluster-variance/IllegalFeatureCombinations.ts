@@ -20,15 +20,13 @@ type Choices = {
 };
 
 /**
- * Analyzes feature conformance to ascertain feature combinations that are
- * unsupported.  Uses rules to match the conformance AST.
+ * Analyzes feature conformance to ascertain feature combinations that are unsupported.  Uses rules to match the
+ * conformance AST.
  *
- * Rule matching is not exhaustive but supports a significant subset of the
- * conformance dialect that is inclusive of all feature conformances used by
- * the 1.1 specifications.
+ * Rule matching is not exhaustive but supports a significant subset of the conformance dialect that is inclusive of all
+ * feature conformances used by the 1.1 specifications.
  *
- * Throws an error if conformance does not adhere to supported rules.  This
- * indicates the ruleset needs augmentation.
+ * Throws an error if conformance does not adhere to supported rules.  This indicates the ruleset needs augmentation.
  */
 export function IllegalFeatureCombinations(cluster: ClusterModel) {
     const illegal = [] as IllegalFeatureCombinations;
@@ -47,8 +45,7 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
     let requiresFeatures = false;
 
     for (const choice of Object.values(choices)) {
-        // If choices are mutually exclusive, reject any two flags in
-        // combination
+        // If choices are mutually exclusive, reject any two flags in combination
         if (choice.exclusive) {
             for (const f1 of choice.features) {
                 for (const f2 of choice.features) {

@@ -28,7 +28,7 @@ export namespace EthernetNetworkDiagnosticsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.15.7.1
          */
-        resetCounts(): MaybePromise<void>;
+        resetCounts(): MaybePromise;
     }
 }
 

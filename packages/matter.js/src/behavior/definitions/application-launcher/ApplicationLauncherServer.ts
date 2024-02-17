@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { ApplicationLauncherBehavior } from "./ApplicationLauncherBehavior.js";
-import { ApplicationLauncher } from "../../../cluster/definitions/ApplicationLauncherCluster.js";
 
-const Base = ApplicationLauncherBehavior.for(ApplicationLauncher.Complete);
+const Base = ApplicationLauncherBehavior.with("ApplicationPlatform");
 
 /**
  * This is the default server implementation of ApplicationLauncherBehavior.

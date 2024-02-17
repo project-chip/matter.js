@@ -36,21 +36,21 @@ export namespace OnOffInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.1
          */
-        off(): MaybePromise<void>;
+        off(): MaybePromise;
 
         /**
          * This command does not have any data fields.
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.2
          */
-        on(): MaybePromise<void>;
+        on(): MaybePromise;
 
         /**
          * This command does not have any data fields.
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.3
          */
-        toggle(): MaybePromise<void>;
+        toggle(): MaybePromise;
     }
 
     export interface LevelControlForLighting {
@@ -59,7 +59,7 @@ export namespace OnOffInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4
          */
-        offWithEffect(request: OffWithEffectRequest): MaybePromise<void>;
+        offWithEffect(request: OffWithEffectRequest): MaybePromise;
 
         /**
          * The OnWithRecallGlobalScene command allows the recall of the settings when the device was turned off.
@@ -68,7 +68,7 @@ export namespace OnOffInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.5
          */
-        onWithRecallGlobalScene(): MaybePromise<void>;
+        onWithRecallGlobalScene(): MaybePromise;
 
         /**
          * The OnWithTimedOff command allows devices to be turned on for a specific duration with a guarded off
@@ -80,7 +80,7 @@ export namespace OnOffInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6
          */
-        onWithTimedOff(request: OnWithTimedOffRequest): MaybePromise<void>;
+        onWithTimedOff(request: OnWithTimedOffRequest): MaybePromise;
     }
 }
 

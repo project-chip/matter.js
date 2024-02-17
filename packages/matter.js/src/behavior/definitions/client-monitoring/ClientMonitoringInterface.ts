@@ -15,9 +15,9 @@ export type UnregisterClientMonitoringRequest = TypeFromSchema<typeof ClientMoni
 
 export namespace ClientMonitoringInterface {
     export interface Base {
-        registerClientMonitoring(request: RegisterClientMonitoringRequest): MaybePromise<void>;
-        unregisterClientMonitoring(request: UnregisterClientMonitoringRequest): MaybePromise<void>;
-        stayAwakeRequest(): MaybePromise<void>;
+        registerClientMonitoring(request: RegisterClientMonitoringRequest): MaybePromise;
+        unregisterClientMonitoring(request: UnregisterClientMonitoringRequest): MaybePromise;
+        stayAwakeRequest(): MaybePromise;
     }
 }
 

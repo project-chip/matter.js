@@ -14,8 +14,8 @@ export type BarrierControlGoToPercentRequest = TypeFromSchema<typeof BarrierCont
 
 export namespace BarrierControlInterface {
     export interface Base {
-        barrierControlGoToPercent(request: BarrierControlGoToPercentRequest): MaybePromise<void>;
-        barrierControlStop(): MaybePromise<void>;
+        barrierControlGoToPercent(request: BarrierControlGoToPercentRequest): MaybePromise;
+        barrierControlStop(): MaybePromise;
     }
 }
 

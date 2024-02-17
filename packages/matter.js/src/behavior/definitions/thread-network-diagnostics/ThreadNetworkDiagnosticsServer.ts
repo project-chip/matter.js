@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { ThreadNetworkDiagnosticsBehavior } from "./ThreadNetworkDiagnosticsBehavior.js";
-import { ThreadNetworkDiagnostics } from "../../../cluster/definitions/ThreadNetworkDiagnosticsCluster.js";
 
-const Base = ThreadNetworkDiagnosticsBehavior.for(ThreadNetworkDiagnostics.Complete);
+const Base = ThreadNetworkDiagnosticsBehavior.with("PacketCounts", "ErrorCounts", "MleCounts", "MacCounts");
 
 /**
  * This is the default server implementation of ThreadNetworkDiagnosticsBehavior.

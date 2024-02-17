@@ -533,7 +533,7 @@ export namespace OperationalCredentialsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.13
          */
-        addTrustedRootCertificate(request: AddTrustedRootCertificateRequest): MaybePromise<void>;
+        addTrustedRootCertificate(request: AddTrustedRootCertificateRequest): MaybePromise;
     }
 }
 

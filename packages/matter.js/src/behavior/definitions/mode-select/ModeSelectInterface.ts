@@ -31,7 +31,7 @@ export namespace ModeSelectInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.6.1
          */
-        changeToMode(request: ChangeToModeRequest): MaybePromise<void>;
+        changeToMode(request: ChangeToModeRequest): MaybePromise;
     }
 }
 

@@ -5,7 +5,7 @@
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { ClusterModel, ClusterVariance } from "@project-chip/matter.js/model";
+import { ClusterModel, ClusterVariance, FieldModel } from "@project-chip/matter.js/model";
 import { TsFile } from "../util/TsFile.js";
 
 const logger = Logger.get("BehaviorServerFile");
@@ -33,9 +33,27 @@ export class BehaviorServerFile extends TsFile {
 
         let base;
         let extraDoc;
-        if (this.variance.components.length) {
-            this.addImport(`../../../cluster/definitions/${this.cluster.name}Cluster.js`, this.cluster.name);
-            this.atom(`const Base = ${this.cluster.name}Behavior.for(${this.cluster.name}.Complete)`);
+
+        // We want to support as many features as possible in the default server but not illegal combinations.  For this
+        // we collect all features then omit ones that are mutually exclusive.  For those we should probably create
+        // different subclasses manually, although at least in some cases it doesn't matter because there are no
+        // elements associated with the features (e.g. Network Commissioning Cluster)
+        const features = new Set(this.cluster.features.map(f => f.name));
+        for (const combo of this.variance.illegal) {
+            if (Object.values(combo).every(v => v)) {
+                for (const key in combo) {
+                    features.delete(key);
+                }
+            }
+        }
+
+        if (features.size) {
+            const featureMap = this.cluster.featureMap;
+            const extension = this.expressions(`const Base = ${this.cluster.name}Behavior.with(`, ")");
+            for (const feature of features) {
+                extension.value(featureMap.get(FieldModel, feature)?.description);
+            }
+
             base = "Base";
             extraDoc =
                 `This implementation includes all features of ${this.cluster.name}.Cluster.  ` +

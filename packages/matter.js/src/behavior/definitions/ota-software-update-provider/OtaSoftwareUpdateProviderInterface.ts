@@ -127,7 +127,7 @@ export namespace OtaSoftwareUpdateProviderInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.22
          */
-        notifyUpdateApplied(request: NotifyUpdateAppliedRequest): MaybePromise<void>;
+        notifyUpdateApplied(request: NotifyUpdateAppliedRequest): MaybePromise;
     }
 }
 

@@ -106,7 +106,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.1
          */
-        upOrOpen(): MaybePromise<void>;
+        upOrOpen(): MaybePromise;
 
         /**
          * Upon receipt of this command, the Window Covering will adjust its position so the physical lift/slide and
@@ -138,7 +138,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.2
          */
-        downOrClose(): MaybePromise<void>;
+        downOrClose(): MaybePromise;
 
         /**
          * Upon receipt of this command, the Window Covering will stop any adjusting to the physical tilt and
@@ -152,7 +152,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.3
          */
-        stopMotion(): MaybePromise<void>;
+        stopMotion(): MaybePromise;
     }
 
     export interface Lift {
@@ -175,7 +175,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
          */
-        goToLiftPercentage(request: GoToLiftPercentageRequest): MaybePromise<void>;
+        goToLiftPercentage(request: GoToLiftPercentageRequest): MaybePromise;
     }
 
     export interface Tilt {
@@ -199,7 +199,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
          */
-        goToTiltPercentage(request: GoToTiltPercentageRequest): MaybePromise<void>;
+        goToTiltPercentage(request: GoToTiltPercentageRequest): MaybePromise;
     }
 
     export interface LiftAndPositionAwareLift {
@@ -222,7 +222,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
          */
-        goToLiftPercentage(request: GoToLiftPercentageRequest): MaybePromise<void>;
+        goToLiftPercentage(request: GoToLiftPercentageRequest): MaybePromise;
     }
 
     export interface TiltAndPositionAwareTilt {
@@ -246,7 +246,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
          */
-        goToTiltPercentage(request: GoToTiltPercentageRequest): MaybePromise<void>;
+        goToTiltPercentage(request: GoToTiltPercentageRequest): MaybePromise;
     }
 
     export interface LiftAndAbsolutePosition {
@@ -259,7 +259,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.4
          */
-        goToLiftValue(request: GoToLiftValueRequest): MaybePromise<void>;
+        goToLiftValue(request: GoToLiftValueRequest): MaybePromise;
     }
 
     export interface TiltAndAbsolutePosition {
@@ -272,7 +272,7 @@ export namespace WindowCoveringInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.6
          */
-        goToTiltValue(request: GoToTiltValueRequest): MaybePromise<void>;
+        goToTiltValue(request: GoToTiltValueRequest): MaybePromise;
     }
 }
 

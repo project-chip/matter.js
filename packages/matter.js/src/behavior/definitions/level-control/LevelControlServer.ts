@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
-import { LevelControl } from "../../../cluster/definitions/LevelControlCluster.js";
 
-const Base = LevelControlBehavior.for(LevelControl.Complete);
+const Base = LevelControlBehavior.with("OnOff", "Lighting", "Frequency");
 
 /**
  * This is the default server implementation of LevelControlBehavior.

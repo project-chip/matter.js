@@ -38,7 +38,7 @@ export namespace OtaSoftwareUpdateRequestorInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.6.1
          */
-        announceOtaProvider(request: AnnounceOtaProviderRequest): MaybePromise<void>;
+        announceOtaProvider(request: AnnounceOtaProviderRequest): MaybePromise;
     }
 }
 

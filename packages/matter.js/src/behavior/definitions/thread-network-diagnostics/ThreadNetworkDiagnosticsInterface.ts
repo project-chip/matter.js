@@ -21,7 +21,7 @@ export namespace ThreadNetworkDiagnosticsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.13.7.1
          */
-        resetCounts(): MaybePromise<void>;
+        resetCounts(): MaybePromise;
     }
 }
 

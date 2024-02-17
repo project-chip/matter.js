@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { ContentLauncherBehavior } from "./ContentLauncherBehavior.js";
-import { ContentLauncher } from "../../../cluster/definitions/ContentLauncherCluster.js";
 
-const Base = ContentLauncherBehavior.for(ContentLauncher.Complete);
+const Base = ContentLauncherBehavior.with("ContentSearch", "UrlPlayback");
 
 /**
  * This is the default server implementation of ContentLauncherBehavior.

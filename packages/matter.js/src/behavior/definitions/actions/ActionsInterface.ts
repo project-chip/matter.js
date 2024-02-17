@@ -166,7 +166,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.1
          */
-        instantAction(request: InstantActionRequest): MaybePromise<void>;
+        instantAction(request: InstantActionRequest): MaybePromise;
 
         /**
          * It is recommended that, where possible (e.g., it is not possible for attributes with Boolean data type), a
@@ -181,7 +181,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.2
          */
-        instantActionWithTransition(request: InstantActionWithTransitionRequest): MaybePromise<void>;
+        instantActionWithTransition(request: InstantActionWithTransitionRequest): MaybePromise;
 
         /**
          * This command triggers the commencement of an action on the involved endpoints. Afterwards, the action’s
@@ -195,7 +195,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.3
          */
-        startAction(request: StartActionRequest): MaybePromise<void>;
+        startAction(request: StartActionRequest): MaybePromise;
 
         /**
          * This command triggers the commencement of an action on the involved endpoints, and shall change the action’s
@@ -207,7 +207,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.4
          */
-        startActionWithDuration(request: StartActionWithDurationRequest): MaybePromise<void>;
+        startActionWithDuration(request: StartActionWithDurationRequest): MaybePromise;
 
         /**
          * This command stops the ongoing action on the involved endpoints. Afterwards, the action’s state shall be
@@ -217,7 +217,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.5
          */
-        stopAction(request: StopActionRequest): MaybePromise<void>;
+        stopAction(request: StopActionRequest): MaybePromise;
 
         /**
          * This command pauses an ongoing action, and shall change the action’s state to Paused.
@@ -227,7 +227,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.6
          */
-        pauseAction(request: PauseActionRequest): MaybePromise<void>;
+        pauseAction(request: PauseActionRequest): MaybePromise;
 
         /**
          * This command pauses an ongoing action, and shall change the action’s state to Paused. After the specified
@@ -246,7 +246,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.7
          */
-        pauseActionWithDuration(request: PauseActionWithDurationRequest): MaybePromise<void>;
+        pauseActionWithDuration(request: PauseActionWithDurationRequest): MaybePromise;
 
         /**
          * This command resumes a previously paused action, and shall change the action’s state to Active.
@@ -259,7 +259,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.8
          */
-        resumeAction(request: ResumeActionRequest): MaybePromise<void>;
+        resumeAction(request: ResumeActionRequest): MaybePromise;
 
         /**
          * This command enables a certain action or automation. Afterwards, the action’s state shall be Active.
@@ -268,7 +268,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.9
          */
-        enableAction(request: EnableActionRequest): MaybePromise<void>;
+        enableAction(request: EnableActionRequest): MaybePromise;
 
         /**
          * This command enables a certain action or automation, and shall change the action’s state to be Active. After
@@ -282,7 +282,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.10
          */
-        enableActionWithDuration(request: EnableActionWithDurationRequest): MaybePromise<void>;
+        enableActionWithDuration(request: EnableActionWithDurationRequest): MaybePromise;
 
         /**
          * This command disables a certain action or automation, and shall change the action’s state to Inactive.
@@ -291,7 +291,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.11
          */
-        disableAction(request: DisableActionRequest): MaybePromise<void>;
+        disableAction(request: DisableActionRequest): MaybePromise;
 
         /**
          * This command disables a certain action or automation, and shall change the action’s state to Disabled. After
@@ -306,7 +306,7 @@ export namespace ActionsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.12
          */
-        disableActionWithDuration(request: DisableActionWithDurationRequest): MaybePromise<void>;
+        disableActionWithDuration(request: DisableActionWithDurationRequest): MaybePromise;
     }
 }
 

@@ -7,9 +7,16 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { ThermostatBehavior } from "./ThermostatBehavior.js";
-import { Thermostat } from "../../../cluster/definitions/ThermostatCluster.js";
 
-const Base = ThermostatBehavior.for(Thermostat.Complete);
+const Base = ThermostatBehavior.with(
+    "Heating",
+    "Cooling",
+    "Occupancy",
+    "ScheduleConfiguration",
+    "Setback",
+    "AutoMode",
+    "LocalTemperatureNotExposed"
+);
 
 /**
  * This is the default server implementation of ThermostatBehavior.

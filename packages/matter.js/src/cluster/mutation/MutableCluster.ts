@@ -11,9 +11,8 @@ import { ClusterComposer } from "./ClusterComposer.js";
 import { ElementModifier } from "./ElementModifier.js";
 
 /**
- * A "mutable cluster" is a {@link ClusterType} with builder methods that
- * support a limited number of modifications as defined by the Matter
- * specification.
+ * A "mutable cluster" is a {@link ClusterType} with builder methods that support a limited number of modifications as
+ * defined by the Matter specification.
  */
 export interface MutableCluster<T extends ClusterType.Options>
     extends ClusterType.Of<T>,
@@ -48,8 +47,7 @@ export function MutableCluster<const T extends ClusterType.Options>(options: T) 
 
 export namespace MutableCluster {
     /**
-     * Define a "component" -- a set of elements that may be added to a
-     * cluster.
+     * Define a "component" -- a set of elements that may be added to a cluster.
      */
     export function Component<const T extends Partial<ClusterType.Options>>(elements: T) {
         return elements;
@@ -93,12 +91,10 @@ export namespace MutableCluster {
     }
 
     /**
-     * ExtensibleOnly creates a factory that produces a {@link MutableCluster}
-     * when the user selects features.
+     * ExtensibleOnly creates a factory that produces a {@link MutableCluster} when the user selects features.
      *
-     * We define clusters this way if the Matter specification defines a
-     * cluster with a set of features, one of which is required, but that are
-     * mutually exclusive.
+     * We define clusters this way if the Matter specification defines a cluster with a set of features, one of which is
+     * required, but none of which is required if others are enabled.
      */
     export interface ExtensibleOnly<T extends ClusterType.Options> {
         id: ClusterId;

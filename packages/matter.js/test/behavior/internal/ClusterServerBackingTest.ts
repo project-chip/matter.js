@@ -23,6 +23,10 @@ import { TlvEnum } from "../../../src/tlv/TlvNumber.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
 import { TlvArray } from "../../../src/tlv/TlvArray.js";
 import { TlvSubjectId } from "../../../src/datatype/SubjectId.js";
+import { Globals } from "../../../src/model/index.js";
+import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
+import { NetworkCommissioning } from "../../../src/cluster/definitions/NetworkCommissioningCluster.js";
+import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOffLightDevice.js";
 
 const ROOT_CERT = ByteArray.fromHex(
     "153001010024020137032414001826048012542826058015203b37062414001824070124080130094104d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9d370a3501290118240260300414e766069362d7e35b79687161644d222bdde93a68300514e766069362d7e35b79687161644d222bdde93a6818300b404e8fb06526f0332b3e928166864a6d29cade53fb5b8918a6d134d0994bf1ae6dce6762dcba99e80e96249d2f1ccedb336b26990f935dba5a0b9e5b4c9e5d1d8f1818181824ff0118",
@@ -42,6 +46,14 @@ function createFabric(index = 1) {
     builder.setOperationalCert(NEW_OP_CERT);
     builder.setIdentityProtectionKey(IPK_KEY);
     return builder.build(FabricIndex(index));
+}
+
+class WifiCommissioningServer extends NetworkCommissioningServer.with("WiFiNetworkInterface") {
+    override initialize() {
+        this.state.maxNetworks = 4;
+        this.state.scanMaxTimeSeconds = 20;
+        this.state.connectMaxTimeSeconds = 40;
+    }
 }
 
 async function performWrite(
@@ -119,13 +131,21 @@ async function writeAcl(node: MockServerNode, fabric: Fabric, acl: TypeFromSchem
 async function readAcls(node: MockServerNode, fabric: Fabric, isFabricFiltered: boolean) {
     return await performRead(node, fabric, isFabricFiltered, {
         endpointId: EndpointNumber(0),
-        clusterId: ClusterId(AccessControl.Cluster.id),
+        clusterId: AccessControl.Cluster.id,
         attributeId: AttributeId(AccessControl.Cluster.attributes.acl.id),
     });
 }
 
+async function readCommandList(node: MockServerNode, cluster: number, endpoint = 1) {
+    return await performRead(node, await createFabric(1), false, {
+        endpointId: EndpointNumber(endpoint),
+        clusterId: ClusterId(cluster),
+        attributeId: AttributeId(Globals.AcceptedCommandList.id),
+    });
+}
+
 describe("ClusterServerBacking", () => {
-    it("respects fabric filtered reads and writes", async () => {
+    it("properly filters reads and writes", async () => {
         const node = await MockServerNode.createOnline();
 
         const fabric1 = await createFabric(1);
@@ -161,13 +181,35 @@ describe("ClusterServerBacking", () => {
             { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 },
         ]);
 
-        // ACLs are fabric sensitive so fabricFiltered = false should have no effect
         const allAcls = await readAcls(node, fabric1, false);
 
         expect(allAcls).deep.equals([
             { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 1 },
+            { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 },
         ]);
 
         await node.destroy();
+    });
+
+    describe("AcceptedCommandList", () => {
+        it("indicates support only for implemented methods", async () => {
+            class MyServer extends WifiCommissioningServer {
+                override scanNetworks(): NetworkCommissioning.ScanNetworksResponse {
+                    return {
+                        networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                    }
+                }
+            }
+
+            const MyDevice = OnOffLightDevice.with(MyServer);
+
+            const node = await MockServerNode.createOnline({ device: MyDevice });
+
+            const commands = await readCommandList(node, NetworkCommissioning.Cluster.id, 1);
+
+            expect(commands).deep.equals([
+                NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.requestId
+            ]);
+        });
     });
 });

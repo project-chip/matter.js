@@ -14,7 +14,7 @@ export namespace ValidProxiesInterface {
         /**
          * @see {@link MatterCoreSpecificationV1_1} § 9.15.15.6
          */
-        getValidProxiesRequest(): MaybePromise<void>;
+        getValidProxiesRequest(): MaybePromise;
     }
 }
 
