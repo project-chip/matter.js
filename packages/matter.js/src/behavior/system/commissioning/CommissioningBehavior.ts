@@ -163,7 +163,7 @@ export namespace CommissioningBehavior {
         passcode = -1;
         discriminator = -1;
         readonly flowType = CommissioningFlowType.Standard;
-        readonly additionalBleAdvertisementData?: ByteArray;
-        readonly automaticAnnouncement = true;
+        readonly additionalBleAdvertisementData = new ByteArray(); // TODO Needed else can not be set!
+        readonly automaticAnnouncement: boolean = true;
     }
 }

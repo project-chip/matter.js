@@ -227,6 +227,7 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 ## TOPICS/DISCUSSIONS/TODOs:
 * Bug: tear down - block events (to prevent reporting empty partsLists)
 * Bug: Expiry broken again, Mdns broadcaster hangs shutdown?
+* Bug: State values that are undefined/optional in State defaults will never be taken over when config is initialized and stay undefined
 * Missing: multiple nodes duplicate port check missing
 * Missing: Re-Add Session changed callbacks
 * How: add a Controller to environment how?

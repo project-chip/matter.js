@@ -45,8 +45,8 @@ export namespace CommissioningOptions {
         readonly additionalBleAdvertisementData?: ByteArray;
 
         /**
-         * If true, enabled Bluetooth LE commissioning.  Defaults to true if bluetooth is enabled on the platform.
+         * If false the device will not automatically announce itself for commissioning.
          */
-        readonly ble: boolean;
+        readonly automaticAnnouncement?: boolean;
     }
 }
