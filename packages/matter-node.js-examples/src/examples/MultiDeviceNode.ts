@@ -38,7 +38,7 @@ const logger = Logger.get("Device");
  * Gets a shell command from an environment variable and execute it and log the response
  */
 function executeCommand(scriptParamName: string) {
-    const script = environment.vars.get<string>(scriptParamName);
+    const script = environment.vars.string(scriptParamName);
     if (script === undefined) return undefined;
     console.log(`${scriptParamName}: ${execSync(script).toString().slice(0, -1)}`);
 }
@@ -79,20 +79,18 @@ for (let i = 1; i <= numDevices; i++) {
     }
     const deviceName = `Matter ${environment.vars.string(`type${i}`) ?? "light"} device ${i}`;
     const vendorName = "matter-node.js";
-    const passcode =
-        environment.vars.get<number>(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
+    const passcode = environment.vars.number(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
     const discriminator =
-        environment.vars.get<number>(`discriminator${i}`) ??
-        deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
+        environment.vars.number(`discriminator${i}`) ?? deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
     // product name / id and vendor id should match what is in the device certificate
-    const vendorId = environment.vars.get<number>(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xfff1);
+    const vendorId = environment.vars.number(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xfff1);
     const productName = `node-matter OnOff-Device ${i}`;
-    const productId = environment.vars.get<number>(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
+    const productId = environment.vars.number(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
 
-    const port = environment.vars.get<number>(`port${i}`) ?? defaultPort++;
+    const port = environment.vars.number(`port${i}`) ?? defaultPort++;
 
     const uniqueId =
-        environment.vars.get<string>(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
+        environment.vars.string(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
 
     // Persist basic data to keep them also on restart
     deviceStorage.set(`passcode${i}`, passcode);

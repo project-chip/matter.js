@@ -63,13 +63,13 @@ if (environment.vars.get("ble.enable")) {
     Ble.get = singleton(
         () =>
             new BleNode({
-                hciId: environment.vars.get<number>("ble.hciId"),
+                hciId: environment.vars.number("ble.hciId"),
             }),
     );
 }
 
 function executeCommand(scriptParamName: string) {
-    const script = environment.vars.get<string>(scriptParamName);
+    const script = environment.vars.string(scriptParamName);
     if (script === undefined) return undefined;
     console.log(`${scriptParamName}: ${execSync(script).toString().slice(0, -1)}`);
 }
@@ -95,19 +95,19 @@ const deviceStorage = (await storageService.open("device")).createContext("data"
 if (deviceStorage.has("isSocket")) {
     logger.info("Device type found in storage. --type parameter is ignored.");
 }
-const isSocket = deviceStorage.get("isSocket", environment.vars.get("type") === "socket");
+const isSocket = deviceStorage.get("isSocket", environment.vars.string("type") === "socket");
 const deviceName = "Matter test device";
 const vendorName = "matter-node.js";
-const passcode = environment.vars.get<number>("passcode") ?? deviceStorage.get("passcode", 20202021);
-const discriminator = environment.vars.get<number>("discriminator") ?? deviceStorage.get("discriminator", 3840);
+const passcode = environment.vars.number("passcode") ?? deviceStorage.get("passcode", 20202021);
+const discriminator = environment.vars.number("discriminator") ?? deviceStorage.get("discriminator", 3840);
 // product name / id and vendor id should match what is in the device certificate
-const vendorId = environment.vars.get<number>("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
+const vendorId = environment.vars.number("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
 const productName = `node-matter OnOff ${isSocket ? "Socket" : "Light"}`;
-const productId = environment.vars.get<number>("productid") ?? deviceStorage.get("productid", 0x8000);
+const productId = environment.vars.number("productid") ?? deviceStorage.get("productid", 0x8000);
 
-const port = environment.vars.get<number>("port") ?? 5540;
+const port = environment.vars.number("port") ?? 5540;
 
-const uniqueId = environment.vars.get<string>("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs().toString());
+const uniqueId = environment.vars.string("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs().toString());
 
 deviceStorage.set("passcode", passcode);
 deviceStorage.set("discriminator", discriminator);
@@ -220,6 +220,7 @@ const server = await ServerNode.create(RootEndpoint, {
             onIpNetwork: !environment.vars.has("ble.enable"),
             ble: environment.vars.has("ble.enable"),
         },
+        ble: environment.vars.has("ble.enable"), // TODO remove when state init is fixed
     },
     commissioning: {
         passcode,
@@ -247,11 +248,11 @@ const server = await ServerNode.create(RootEndpoint, {
         maxNetworks: 1,
         interfaceEnabled: true,
         lastConnectErrorValue: 0,
-        lastNetworkId: networkId,
-        lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-        networks: [{ networkId: networkId, connected: true }],
-        scanMaxTimeSeconds: wifiOrThreadAdded ? 5 : undefined,
-        connectMaxTimeSeconds: wifiOrThreadAdded ? 5 : undefined,
+        lastNetworkId: wifiOrThreadAdded ? null : networkId,
+        lastNetworkingStatus: wifiOrThreadAdded ? null : NetworkCommissioning.NetworkCommissioningStatus.Success,
+        networks: [{ networkId: networkId, connected: !wifiOrThreadAdded }],
+        scanMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
+        connectMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
     },
     //parts: [{ type: OnOffDevice, id: "onoff" }],
 });

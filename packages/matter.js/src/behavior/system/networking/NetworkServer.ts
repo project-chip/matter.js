@@ -30,6 +30,7 @@ export class NetworkServer extends NetworkBehavior {
 
     override initialize() {
         if (this.state.ble === undefined) {
+            // TODO make working again when State init gets fixed!
             this.state.ble = Ble.enabled;
         } else if (this.state.ble && !Ble.enabled) {
             logger.warn("Disabling Bluetooth commissioning because BLE support is not installed");
@@ -116,9 +117,9 @@ export class NetworkServer extends NetworkBehavior {
         );
     }
 
-    async #enterCommissionedMode() {
+    #enterCommissionedMode() {
         if (this.internal.runtime) {
-            await this.internal.runtime.enterCommissionedMode();
+            this.internal.runtime.enterCommissionedMode();
         }
     }
 }
@@ -132,8 +133,8 @@ export namespace NetworkServer {
         openAdvertisementWindowOnStartup = true;
         listeningAddressIpv4?: string;
         listeningAddressIpv6?: string;
-        ipv4 = true;
-        ble?: boolean;
+        ipv4: boolean = true;
+        ble: boolean = false;
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = {
             onIpNetwork: true,
         };

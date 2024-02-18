@@ -171,12 +171,14 @@ export class ServerRuntime extends NetworkRuntime {
      *
      * On decommission we're destroyed so don't need to handle that case.
      */
-    async enterCommissionedMode() {
-        if (this.#mdnsBroadcaster !== undefined && !this.#matterDevice?.hasBroadcaster(this.#mdnsBroadcaster)) {
-            this.#matterDevice?.addBroadcaster(this.#mdnsBroadcaster);
+    enterCommissionedMode() {
+        const mdnsBroadcaster = this.mdnsBroadcaster;
+        if (!this.#matterDevice?.hasBroadcaster(mdnsBroadcaster)) {
+            this.#matterDevice?.addBroadcaster(mdnsBroadcaster);
         }
 
-        if (this.#bleBroadcaster) {
+        // TODO This is too early ... needs to happen after/on commissioning-complete!
+        /*if (this.#bleBroadcaster) {
             await this.#matterDevice?.deleteBroadcaster(this.#bleBroadcaster);
             this.#bleBroadcaster = undefined;
         }
@@ -184,7 +186,7 @@ export class ServerRuntime extends NetworkRuntime {
         if (this.#bleTransport) {
             await this.#matterDevice?.deleteTransportInterface(this.#bleTransport);
             this.#bleTransport = undefined;
-        }
+        }*/
     }
 
     /**
@@ -220,9 +222,7 @@ export class ServerRuntime extends NetworkRuntime {
                 productDescription: this.owner.state.productDescription,
                 ble: !!this.owner.state.network.ble,
             }),
-            () => {
-                // commissioningChangeCallback - we don't use this
-            },
+            () => this.enterCommissionedMode(),
             (_fabricIndex: FabricIndex) => {
                 // TODO - this is "sessionChangeCallback" - add root behavior for accessing sessions
             },
