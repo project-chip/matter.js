@@ -509,7 +509,7 @@ export function astToFunction(
      * non-conformant and vice-versa.
      */
     function createNotOp(param: Conformance.Ast): DynamicNode {
-        let operand = compile(param);
+        const operand = compile(param);
         return createLogicalInversion(operand);
     }
 

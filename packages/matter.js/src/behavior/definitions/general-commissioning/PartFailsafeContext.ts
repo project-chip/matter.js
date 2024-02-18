@@ -6,8 +6,8 @@
 
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
 import { Fabric } from "../../../fabric/Fabric.js";
-import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
 import { Node } from "../../../node/Node.js";
+import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
 import { OperationalCredentialsBehavior } from "../operational-credentials/OperationalCredentialsBehavior.js";
 
 /**
@@ -21,7 +21,7 @@ export class PartFailsafeContext extends FailsafeContext {
         nocs: OperationalCredentialsBehavior.State["nocs"];
         fabrics: OperationalCredentialsBehavior.State["fabrics"];
         trustedRootCertificates: OperationalCredentialsBehavior.State["trustedRootCertificates"];
-    }
+    };
 
     constructor(node: Node, options: FailsafeContext.Options) {
         super(options);
@@ -33,8 +33,8 @@ export class PartFailsafeContext extends FailsafeContext {
             this.#storedState = {
                 nocs: agent.operationalCredentials.state.nocs.map(noc => ({ ...noc })),
                 fabrics: agent.operationalCredentials.state.fabrics.map(fabric => ({ ...fabric })),
-                trustedRootCertificates: [ ...agent.operationalCredentials.state.trustedRootCertificates ],
-            }
+                trustedRootCertificates: [...agent.operationalCredentials.state.trustedRootCertificates],
+            };
 
             if (!agent.has(NetworkCommissioningBehavior)) {
                 return;
@@ -55,18 +55,18 @@ export class PartFailsafeContext extends FailsafeContext {
             await this.#node.act(agent => {
                 const networkCommissioning = agent.get(NetworkCommissioningBehavior);
                 networkCommissioning.state.networks = networks;
-            })
+            });
         }
     }
 
     override async revokeFabric(fabric: Fabric) {
         await this.#node.act(agent => {
             agent.basicInformation.events.leave?.emit({ fabricIndex: fabric.fabricIndex }, agent.context);
-        })
+        });
 
         await fabric.remove();
 
-        this.#restoreOperationalCredentials();
+        await this.#restoreOperationalCredentials();
     }
 
     override async restoreBreadcrumb() {
@@ -87,8 +87,8 @@ export class PartFailsafeContext extends FailsafeContext {
                 opcreds.nocs = state.nocs;
                 opcreds.fabrics = state.fabrics;
                 opcreds.commissionedFabrics = opcreds.fabrics.length;
-                opcreds.trustedRootCertificates = opcreds.trustedRootCertificates;
-            })
+                opcreds.trustedRootCertificates = state.trustedRootCertificates;
+            });
         }
 
         this.#operationalCredentialsRestored = true;

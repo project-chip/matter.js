@@ -1061,7 +1061,7 @@ describe("InteractionProtocol", () => {
         it("rejects mass write with wildcard attribute", async () => {
             withClusters();
 
-            assert.rejects(
+            await assert.rejects(
                 interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), ILLEGAL_MASS_WRITE_REQUEST, {
                     packetHeader: { sessionType: SessionType.Unicast },
                 } as Message),
@@ -1115,7 +1115,7 @@ describe("InteractionProtocol", () => {
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            assert.rejects(
+            await assert.rejects(
                 async () =>
                     await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, {
                         packetHeader: { sessionType: SessionType.Unicast },

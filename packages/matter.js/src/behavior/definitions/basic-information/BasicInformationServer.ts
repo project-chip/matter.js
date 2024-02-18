@@ -53,7 +53,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
 
         const lifecycle = this.part.lifecycle as NodeLifecycle;
 
-        if (lifecycle.online) {
+        if (lifecycle.online !== undefined) {
             this.reactTo(lifecycle.online, this.#online);
         }
     }

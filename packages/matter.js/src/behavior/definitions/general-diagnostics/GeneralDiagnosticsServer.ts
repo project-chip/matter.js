@@ -27,7 +27,7 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
 
         const lifecycle = this.part.lifecycle as NodeLifecycle;
 
-        if (lifecycle.online) {
+        if (lifecycle.online !== undefined) {
             this.reactTo(lifecycle.online, this.#online);
         }
     }
@@ -37,9 +37,6 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
     }
 
     #online() {
-        this.events.bootReason.emit(
-            { bootReason: GeneralDiagnostics.BootReason.Unspecified },
-            this.context
-        );
+        this.events.bootReason.emit({ bootReason: GeneralDiagnostics.BootReason.Unspecified }, this.context);
     }
 }

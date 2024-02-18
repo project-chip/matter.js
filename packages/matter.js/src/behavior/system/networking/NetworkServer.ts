@@ -105,15 +105,17 @@ export class NetworkServer extends NetworkBehavior {
 
         const part = this.part;
         part.env.runtime.addWorker(
-            this.internal.runtime
-                .openAdvertisementWindow()
-                .then(this.callback(function(this: NetworkServer) { this.enterOnlineMode(runtime, true) })),
+            this.internal.runtime.openAdvertisementWindow().then(
+                this.callback(function (this: NetworkServer) {
+                    this.enterOnlineMode(runtime, true);
+                }),
+            ),
         );
     }
 
     async #enterCommissionedMode() {
         if (this.internal.runtime) {
-            this.internal.runtime.enterCommissionedMode();
+            await this.internal.runtime.enterCommissionedMode();
         }
     }
 }

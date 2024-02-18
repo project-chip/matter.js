@@ -94,7 +94,7 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
             return;
         }
 
-        let iterator = this.#observers[Symbol.iterator]();
+        const iterator = this.#observers[Symbol.iterator]();
 
         const emitOne = (observer: Observer<T, R>) => {
             let result;
@@ -102,10 +102,11 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
             try {
                 result = observer(...payload);
             } catch (e) {
-                if (!(e instanceof Error)) {
-                    e = new Error(`${e}`);
+                if (e instanceof Error) {
+                    this.#errorHandler(e, observer);
+                } else {
+                    this.#errorHandler(new Error(`${e}`), observer);
                 }
-                this.#errorHandler(e as Error, observer);
             }
 
             if (this.#once?.has(observer)) {

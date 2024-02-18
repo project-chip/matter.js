@@ -45,7 +45,7 @@ export type EventReportPayload = Omit<TypeFromSchema<typeof TlvEventReport>, "ev
 };
 
 /** Type for TlvEventData where the real data are represented with the schema and the JS value. */
-type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data"> & {
+export type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data"> & {
     schema: TlvSchema<any>;
     payload: any;
 };

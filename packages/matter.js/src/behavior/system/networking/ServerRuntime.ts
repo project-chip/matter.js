@@ -94,7 +94,7 @@ export class ServerRuntime extends NetworkRuntime {
                 this.owner.state.network.listeningAddressIpv6,
             );
 
-            await this.owner.set({ network: { operationalPort: this.#primaryNetInterface.port }});
+            await this.owner.set({ network: { operationalPort: this.#primaryNetInterface.port } });
         }
         return this.#primaryNetInterface;
     }
@@ -170,18 +170,18 @@ export class ServerRuntime extends NetworkRuntime {
      *
      * On decommission we're destroyed so don't need to handle that case.
      */
-    enterCommissionedMode() {
+    async enterCommissionedMode() {
         if (this.#mdnsBroadcaster !== undefined && !this.#matterDevice?.hasBroadcaster(this.#mdnsBroadcaster)) {
             this.#matterDevice?.addBroadcaster(this.#mdnsBroadcaster);
         }
 
         if (this.#bleBroadcaster) {
-            this.#matterDevice?.deleteBroadcaster(this.#bleBroadcaster);
+            await this.#matterDevice?.deleteBroadcaster(this.#bleBroadcaster);
             this.#bleBroadcaster = undefined;
         }
 
         if (this.#bleTransport) {
-            this.#matterDevice?.deleteTransportInterface(this.#bleTransport);
+            await this.#matterDevice?.deleteTransportInterface(this.#bleTransport);
             this.#bleTransport = undefined;
         }
     }

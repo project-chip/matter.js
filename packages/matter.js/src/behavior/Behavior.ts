@@ -220,7 +220,7 @@ export abstract class Behavior {
      * Like a reactor, the callback's "this" will be bound to an active Behavior instance.
      * Because of this: The reactor MUST be a real JS function - arrow functions will not work!
      */
-    protected callback<A extends any[], R extends any>(reactor: Reactor<A, R>, options?: Reactor.Options) {
+    protected callback<A extends any[], R>(reactor: Reactor<A, R>, options?: Reactor.Options) {
         const observable = new Observable<A, R>();
 
         this.reactTo(observable, reactor, options);

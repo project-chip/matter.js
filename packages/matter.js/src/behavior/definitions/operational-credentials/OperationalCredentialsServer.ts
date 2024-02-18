@@ -218,7 +218,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             await this.context.transaction.commit();
         } catch (e) {
             // Fabric insertion into MatterDevice is not currently transactional so we need to remove manually
-            fabric.remove(this.session.getId());
+            await fabric.remove(this.session.getId());
             throw e;
         }
 
