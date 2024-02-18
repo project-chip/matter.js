@@ -233,4 +233,5 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 * How: how add custom cluster servers?
 * Discussion: Discuss and decide matter-node.js re-exports vs not
 * Discussion: change handlers should also allow async implementations
-* Discussion: act/actAsync to get rid of MaybePromise in some places vs "linter" and have more type safetieness? (MaybePromise at all?)
+* Discussion: act/actAsync to get rid of MaybePromise in some places vs "linter" and have more type safeness? (MaybePromise at all?)
+* Discussion: Go over Examples and discuss "convenience" for devs :-)
