@@ -87,7 +87,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
             lastNetworkId?.setLocal(firstNetworkId);
 
             return {
-                networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                networkingStatus,
                 networkIndex: 0,
             };
         },
@@ -114,7 +114,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
             lastNetworkId?.setLocal(firstNetworkId);
 
             return {
-                networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                networkingStatus,
                 networkIndex: 0,
             };
         },
@@ -150,7 +150,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
             await device.startAnnouncement();
 
             return {
-                networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                networkingStatus,
                 errorValue: null,
             };
         },
@@ -173,7 +173,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
             lastNetworkingStatus?.setLocal(networkingStatus);
 
             return {
-                networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                networkingStatus,
                 networkIndex: 0,
             };
         },

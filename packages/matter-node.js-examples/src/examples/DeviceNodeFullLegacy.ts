@@ -11,7 +11,7 @@
  */
 
 /**
- * This example shows how to create a simple on-off Matter device.
+ * This example shows how to create a simple on-off Matter device as a light or as a socket.
  * It can be used as CLI script and starting point for your own device node implementation.
  */
 
@@ -37,7 +37,7 @@ import {
     singleton,
 } from "@project-chip/matter-node.js/util";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
-import DummyWifiNetworkCommissioningClusterServer from "./cluster/DummyWifiNetworkCommissioningClusterServer.js";
+import DummyWifiNetworkCommissioningClusterServer from "./cluster/DummyWifiNetworkCommissioningServerLegacy.js";
 
 const logger = Logger.get("Device");
 
