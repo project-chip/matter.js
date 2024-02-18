@@ -151,6 +151,7 @@ export class ServerRuntime extends NetworkRuntime {
         const isCommissioned = !!this.#commissionedFabrics;
 
         let discoveryCapabilities = this.owner.state.network.discoveryCapabilities;
+        console.log("DISCOVERY CAP", discoveryCapabilities);
         if (isCommissioned) {
             // Already commissioned, only broadcast on network
             discoveryCapabilities = { onIpNetwork: true };

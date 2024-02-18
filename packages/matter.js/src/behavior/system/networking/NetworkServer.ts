@@ -12,6 +12,7 @@ import type { ServerNode } from "../../../node/ServerNode.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "../../../schema/PairingCodeSchema.js";
+import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 import { ServerRuntime } from "./ServerRuntime.js";
 
@@ -55,6 +56,8 @@ export class NetworkServer extends NetworkBehavior {
         if (discoveryCaps.softAccessPoint) {
             logger.warn("Soft access point commissioning is not supported yet");
         }
+
+        this.state.openAdvertisementWindowOnStartup = this.agent.get(CommissioningBehavior).state.automaticAnnouncement;
 
         this.reactTo((this.part.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
 

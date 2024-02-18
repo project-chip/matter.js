@@ -217,7 +217,7 @@ const server = await ServerNode.create(RootEndpoint, {
     network: {
         port,
         discoveryCapabilities: {
-            onIpNetwork: environment.vars.has("ble.enable") ? undefined : true,
+            onIpNetwork: !environment.vars.has("ble.enable"),
             ble: environment.vars.has("ble.enable"),
         },
     },
@@ -310,6 +310,7 @@ await server.bringOnline();
 // announcement and provide the limiting information.
 // Without delaying the announcement is directly triggered with the above "start()" call.
 if (environment.vars.has("ble.enable")) {
+    console.log("Announce device via BLE only now ...");
     // Announce operational in BLE network only if we have ble enabled, else everywhere
     await server.act(agent => agent.network.openAdvertisementWindow());
 }
