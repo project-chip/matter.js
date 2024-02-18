@@ -23,7 +23,7 @@ import { logEndpoint } from "@project-chip/matter-node.js/device";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { QrCode } from "@project-chip/matter-node.js/schema";
 import { Time } from "@project-chip/matter-node.js/time";
-import { requireMinNodeVersion, singleton } from "@project-chip/matter-node.js/util";
+import { ByteArray, requireMinNodeVersion, singleton } from "@project-chip/matter-node.js/util";
 import { TestEventTriggerRequest } from "@project-chip/matter.js/behavior/definitions/general-diagnostics";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffServer } from "@project-chip/matter.js/behavior/definitions/on-off";
@@ -184,6 +184,8 @@ const OnOffDevice = isSocket
 
 // We use the Basic Root Endpoint without a NetworkCommissioning cluster
 let RootEndpoint = ServerNode.RootEndpoint.with(TestGeneralDiagnosticsServer);
+
+let wifiOrThreadAdded = false;
 if (Ble.enabled) {
     // matter.js will create a Ethernet-only device by default when ut comes to Network Commissioning Features.
     // To offer e.g. a "Wi-Fi only device" (or any other combination) we need to override the Network Commissioning
@@ -193,8 +195,10 @@ if (Ble.enabled) {
     // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
     if (environment.vars.has("ble.wifi.fake")) {
         RootEndpoint = RootEndpoint.with(DummyWifiNetworkCommissioningServer);
+        wifiOrThreadAdded = true;
     } else if (environment.vars.has("ble.thread.fake")) {
         RootEndpoint = RootEndpoint.with(DummyThreadNetworkCommissioningServer);
+        wifiOrThreadAdded = true;
     }
 } else {
     RootEndpoint = RootEndpoint.with(
@@ -202,6 +206,7 @@ if (Ble.enabled) {
     );
 }
 
+const networkId = new ByteArray(32);
 // Physical devices appear as "nodes" on a Matter network.  As a device implementer you use a NodeServer to bring a
 // device online.
 //
@@ -219,7 +224,8 @@ const server = await ServerNode.create(RootEndpoint, {
     commissioning: {
         passcode,
         discriminator,
-        automaticAnnouncement: environment.vars.has("ble.enable") ? undefined : true, // Delay announcement when BLE is used to show how limited advertisement works,
+        //additionalBleAdvertisementData: ByteArray.fromHex("00"),
+        automaticAnnouncement: !environment.vars.has("ble.enable"), // Delay announcement when BLE is used to show how limited advertisement works,
     },
     productDescription: {
         name: deviceName,
@@ -234,6 +240,18 @@ const server = await ServerNode.create(RootEndpoint, {
         productId,
         serialNumber: `node-matter-${uniqueId}`,
         uniqueId,
+    },
+
+    // @ts-expect-error ...somehow Type wrong because too conditional
+    networkCommissioning: {
+        maxNetworks: 1,
+        interfaceEnabled: true,
+        lastConnectErrorValue: 0,
+        lastNetworkId: networkId,
+        lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+        networks: [{ networkId: networkId, connected: true }],
+        scanMaxTimeSeconds: wifiOrThreadAdded ? 5 : undefined,
+        connectMaxTimeSeconds: wifiOrThreadAdded ? 5 : undefined,
     },
     //parts: [{ type: OnOffDevice, id: "onoff" }],
 });
@@ -307,24 +325,24 @@ if (!server.lifecycle.isCommissioned) {
     logger.info(`Manual pairing code: ${manualPairingCode}`);
 } else {
     logger.info("Device is already commissioned. Waiting for controllers to connect ...");
+
+    /**
+     * Sometimes reading or writing attributes is required. The following code shows how this works.
+     * For read it is basically `part.state.clustername.attributename`.
+     * The set method allows to set one or multiple values via the structure of also clustername.attributename. When multiple values are set they are considered being one transaction which would be rolled back completely if one value fails to be set.
+     */
+
+    // Read onOff attribute from onOff cluster
+    const onOffValue = part.state.onOff.onOff;
+    console.log(`current OnOff attribute: ${onOffValue}`);
+
+    // Set onOff attribute from OnOff cluster
+    await part.set({
+        onOff: {
+            onOff: !onOffValue,
+        },
+    });
 }
-
-/**
- * Sometimes reading or writing attributes is required. The following code shows how this works.
- * For read it is basically `part.state.clustername.attributename`.
- * The set method allows to set one or multiple values via the structure of also clustername.attributename. When multiple values are set they are considered being one transaction which would be rolled back completely if one value fails to be set.
- */
-
-// Read onOff attribute from onOff cluster
-const onOffValue = part.state.onOff.onOff;
-console.log(`current OnOff attribute: ${onOffValue}`);
-
-// Set onOff attribute from OnOff cluster
-await part.set({
-    onOff: {
-        onOff: !onOffValue,
-    },
-});
 
 /**
  * To correctly tear down the now we can use server[Symbol.asyncDispose]().
