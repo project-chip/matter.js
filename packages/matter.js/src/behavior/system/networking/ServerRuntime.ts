@@ -211,13 +211,11 @@ export class ServerRuntime extends NetworkRuntime {
 
         const { sessionStorage, fabricStorage } = this.owner.env.get(ServerStore);
 
-        const commissioningConfig = this.owner.state.commissioning ?? {};
-
         this.#matterDevice = new MatterDevice(
             sessionStorage,
             fabricStorage,
             () => ({
-                ...commissioningConfig,
+                ...this.owner.state.commissioning,
                 productDescription: this.owner.state.productDescription,
                 ble: !!this.owner.state.network.ble,
             }),
@@ -235,11 +233,7 @@ export class ServerRuntime extends NetworkRuntime {
         this.owner.env.set(MatterDevice, this.#matterDevice);
 
         await this.addTransports(this.#matterDevice);
-
-        const { automaticAnnouncement } = commissioningConfig;
-        if (automaticAnnouncement !== false) {
-            await this.addBroadcasters(this.#matterDevice);
-        }
+        await this.addBroadcasters(this.#matterDevice);
     }
 
     override async destroy() {
