@@ -84,7 +84,7 @@ export class PartStoreFactory extends PartStoreService {
 
             // We track whether parts are new or not so we can log an error if no ID is present.  For the root part we
             // just look for a known key
-            const isNew = !this.#storage.has("root.__nextNumber__");
+            const isNew = !this.#storage.has("__nextNumber__");
 
             // Preload stores so we can access synchronously going forward
             this.#root = await asyncNew(ServerPartStore, "root", this.#storage, isNew);
