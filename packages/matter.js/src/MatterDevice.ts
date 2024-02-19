@@ -454,10 +454,10 @@ export class MatterDevice {
         this.isClosing = true;
         await this.endCommissioning();
         for (const broadcaster of this.broadcasters) {
-            await broadcaster.expireAllAnnouncements();
+            await broadcaster.close();
         }
         if (this.#failsafeContext) {
-            await this.#failsafeContext.destroy();
+            await this.#failsafeContext.close();
             this.#failsafeContext = undefined;
         }
         await this.exchangeManager.close();

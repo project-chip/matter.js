@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../src/MatterDevice.js";
+import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
 import { DnsCodec, DnsMessage, DnsRecordType } from "../../src/codec/DnsCodec.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
@@ -23,10 +25,8 @@ describe("ServerNode", () => {
             changes.push([type, part.toString()]);
         });
 
-        let disposal: Promise<void> | undefined;
-
         node.lifecycle.online.on(() => {
-            disposal = node.destroy();
+            node.env.runtime.cancel();
         });
 
         for (const event of [ "online", "offline", "ready", "treeReady" ] as const) {
@@ -36,10 +36,6 @@ describe("ServerNode", () => {
         node.add(OnOffLightDevice);
 
         await MockTime.resolve(node.run());
-
-        expect(disposal).not.undefined;
-
-        await MockTime.resolve(disposal as Promise<void>);
 
         expect(changes).deep.equals([
             ["ready", "node0"],
@@ -52,8 +48,8 @@ describe("ServerNode", () => {
             ["treeReady"],
             ["ready", "node0.part0"],
             ["online"],
-            ["destroyed", "node0.part0"],
             ["offline"],
+            ["destroyed", "node0.part0"],
             ["destroyed", "node0"],
         ]);
     });
@@ -119,7 +115,7 @@ describe("ServerNode", () => {
             )
         );
 
-        await node.destroy();
+        await node.close();
 
         const expiration = DnsCodec.decode(await expirationReceived);
         expect(expiration?.answers[0]?.ttl).equals(0);
@@ -131,10 +127,10 @@ describe("ServerNode", () => {
         node.cancel();
 
         if (node.lifecycle.isOnline) {
-            await node.lifecycle.offline;
+            await MockTime.resolve(node.lifecycle.offline);
         }
 
-        await node.destroy();
+        await node.close();
     });
 
     it("times out commissioning", async () => {
@@ -152,7 +148,7 @@ describe("ServerNode", () => {
 
         expect(opcreds.commissionedFabrics).equals(0);
 
-        await node.destroy();
+        await node.close();
     });
 
     it("decommissions and recommissions", async () => {
@@ -174,20 +170,16 @@ describe("ServerNode", () => {
 
         // ...then go offline...
         if (node.lifecycle.isOnline) {
-            await node.lifecycle.offline;
+            await MockTime.resolve(node.lifecycle.offline);
         }
 
         // ...then go back online
         // TODO - need fixes in MatterDevice for following steps to work
-        // await MockTime.resolve(node.lifecycle.online);
+        //await MockTime.resolve(node.lifecycle.online);
 
-        // await commission(node);
+        //await commission(node);
 
-        await node.destroy();
-    });
-
-    it("advertises correctly", () => {
-        // TODO
+        await node.close();
     });
 });
 
@@ -246,11 +238,22 @@ async function almostCommission(node?: MockServerNode) {
 }
 
 async function commission(existingNode?: MockServerNode) {
-    const { node, context } = await almostCommission(existingNode);
+    const { node } = await almostCommission(existingNode);
+
+    // Do not reuse session from initial commissioning because we must now move from CASE to PASE
+    const fabric = node.env.get(MatterDevice).fabricManager.getFabrics()[0];
+    const context = {
+        session: await node.createSession({
+            fabric,
+            peerNodeId: NodeId(1),
+        }),
+        command: true,
+    };
 
     await node.online(context, async agent => {
-        // Need to wait for broadcaster cleanup here
-        await MockTime.resolve(agent.generalCommissioning.commissioningComplete());
+        // Use MockTime.resolve to wait for broadcaster cleanup
+        const result = await MockTime.resolve(agent.generalCommissioning.commissioningComplete());
+        expect(result).deep.equals({ errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" });
     });
 
     if (!node.lifecycle.isCommissioned) {

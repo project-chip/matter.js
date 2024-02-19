@@ -6,6 +6,7 @@
 
 import { CommissioningBehavior } from "../behavior/system/commissioning/CommissioningBehavior.js";
 import { NetworkServer } from "../behavior/system/networking/NetworkServer.js";
+import { ServerNetworkRuntime } from "../behavior/system/networking/ServerNetworkRuntime.js";
 import { ProductDescriptionServer } from "../behavior/system/product-description/ProductDescriptionServer.js";
 import { Agent } from "../endpoint/Agent.js";
 import { Part } from "../endpoint/Part.js";
@@ -15,11 +16,13 @@ import { PartInitializer } from "../endpoint/part/PartInitializer.js";
 import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
+import { Mutex } from "../util/Mutex.js";
 import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
 import { IdentityService } from "./server/IdentityService.js";
 import { ServerPartInitializer } from "./server/ServerPartInitializer.js";
 import { ServerStore } from "./server/storage/ServerStore.js";
+import type { MatterCoreSpecificationV1_2 } from "../spec/Specifications.js";
 
 const logger = Logger.get("ServerNode");
 
@@ -29,6 +32,7 @@ const logger = Logger.get("ServerNode");
  * The Matter specification often refers to server-side nodes as "devices".
  */
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
+    #mutex: Mutex;
     #crashed = false;
 
     /**
@@ -52,6 +56,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
         super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));
+        this.#mutex = new Mutex(this, this.construction);
     }
 
     /**
@@ -91,68 +96,77 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * If you add the server as a worker to {@link Environment.runtime} this happens automatically.
      */
     start() {
-        this.construction.then(() => {
+        this.#mutex.run(async () => {
             if (this.#crashed) {
                 this.#crashed = false;
                 this.#reportCrashTermination();
                 return;
             }
 
-            const startNetwork = () => this.act(agent => agent.get(NetworkServer).start());
-
-            if (this.lifecycle.isTreeReady) {
-                startNetwork();
-            } else {
-                this.lifecycle.treeReady.then(startNetwork);
+            if (!this.lifecycle.isTreeReady) {
+                await this.lifecycle.treeReady;
             }
+
+            await new ServerNetworkRuntime(this).run();
         });
     }
 
     /**
      * Take the server offline but leave state and structure intact.
      *
-     * This happens automatically on destruction.
+     * This happens automatically on close.
      */
     cancel() {
-        this.construction.then(() => this.act(agent => agent.get(NetworkServer).cancel()));
+        let network: ServerNetworkRuntime | undefined;
+        this.act(agent => network = agent.network.internal.runtime);
+        if (network) {
+            // Note if runtime is present we call close() immediately, not once the mutex is free, because the mutex is
+            // probably held by the network's run() promise
+            this.#mutex.run(network.close());
+        }
+    }
+
+    override async close() {
+        this.cancel();
+
+        this.#mutex.terminate(() => super.close());
+
+        await this.#mutex;
     }
 
     /**
      * Perform a factory reset of the node.
      */
     async factoryReset() {
-        // Do not reset until constructed
-        await this.construction;
-
-        // Inform user
-        this.statusUpdate("resetting to factory defaults");
-
         // Do not reset whilst online, but note online state and restart after reset
         const isOnline = this.lifecycle.isOnline;
         if (isOnline) {
             this.cancel();
         }
-        if (this.lifecycle.isOnline) {
-            await this.lifecycle.offline;
-        }
 
-        // Destroy the PartServer hierarchy
-        await PartServer.forPart(this)[Symbol.asyncDispose]();
+        this.#mutex.run(async () => {
+            // Inform user
+            this.statusUpdate("resetting to factory defaults");
 
-        // Perform the factory reset
-        await this.lifecycle.factoryReset();
+            // Destroy the PartServer hierarchy
+            await PartServer.forPart(this)[Symbol.asyncDispose]();
 
-        const serverStore = this.env.get(ServerStore);
-        this.env.delete(ServerStore);
-        await serverStore[Symbol.asyncDispose]();
+            // Reset in-memory state
+            await this.reset();
 
-        // Reset puts parts back into inactive state; set to "installed" to trigger re-initialization
-        this.lifecycle.change(PartLifecycle.Change.Installed);
+            // Reset storage
+            await this.resetStorage();
 
-        // Go back online if we were online at time of reset
-        if (isOnline) {
-            this.start();
-        }
+            // Reset puts parts back into inactive state; set to "installed" to trigger re-initialization
+            this.lifecycle.change(PartLifecycle.Change.Installed);
+
+            // Go back online if we were online at time of reset
+            if (isOnline) {
+                this.start();
+            }
+        });
+
+        await this.#mutex;
     }
 
     protected override async initialize(agent: Agent.Instance<T>) {
@@ -179,6 +193,18 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         } else {
             this.#crashed = true;
         }
+    }
+
+    /**
+     * By default on factory reset we erase all stored data.
+     *
+     * If this is inappropriate for your application you may override to alter the behavior.   Matter requires that all
+     * "security- and privacy-related data and key material" is removed on factory reset.
+     * 
+     * {@see {@link MatterCoreSpecificationV1_2} § 13.4}
+     */
+    protected async resetStorage() {
+        await this.env.get(ServerStore).erase();
     }
 
     #reportCrashTermination() {

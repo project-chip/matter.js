@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Lifecycle } from "../../../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { Part } from "../../../endpoint/Part.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
@@ -81,12 +82,29 @@ export class PartStoreFactory extends PartStoreService {
                 this.#persistedNextNumber = this.#nextNumber;
             }
 
+            // We track whether parts are new or not so we can log an error if no ID is present.  For the root part we
+            // just look for a known key
+            const isNew = !this.#storage.has("root.__nextNumber__");
+
             // Preload stores so we can access synchronously going forward
-            this.#root = await asyncNew(ServerPartStore, "root", this.#storage, false);
+            this.#root = await asyncNew(ServerPartStore, "root", this.#storage, isNew);
         });
     }
 
-    async [Symbol.asyncDispose]() {
+    async erase() {
+        if (this.#numbersPersisted) {
+            await this.#numbersPersisted;
+        }
+
+        this.#storage.clearAll();
+
+        this.#construction.setStatus(Lifecycle.Status.Inactive);
+        this.#construction.start();
+        
+        await this.#construction;
+    }
+
+    async close() {
         // We can't dispose until number persistence completes
         if (this.#numbersPersisted) {
             await this.#numbersPersisted;

@@ -8,13 +8,12 @@ import { Ble } from "../../../ble/Ble.js";
 import { ImplementationError } from "../../../common/MatterError.js";
 import { Logger } from "../../../log/Logger.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
-import type { ServerNode } from "../../../node/ServerNode.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "../../../schema/PairingCodeSchema.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
-import { ServerRuntime } from "./ServerRuntime.js";
+import { ServerNetworkRuntime } from "./ServerNetworkRuntime.js";
 
 const logger = Logger.get("NetworkingServer");
 
@@ -65,10 +64,6 @@ export class NetworkServer extends NetworkBehavior {
         super.initialize();
     }
 
-    protected override createRuntime() {
-        return new ServerRuntime(this.part as ServerNode);
-    }
-
     /**
      * Advertise and continue advertising at regular intervals until timeout per Matter specification.  If already
      * advertising, the advertisement timeout resets.
@@ -99,24 +94,6 @@ export class NetworkServer extends NetworkBehavior {
         this.part.env.runtime.addWorker(this.internal.runtime.announceNow());
     }
 
-    protected override enterOnlineMode(runtime: ServerRuntime, announcementWindowOpen = false) {
-        if (announcementWindowOpen || !this.state.openAdvertisementWindowOnStartup) {
-            super.enterOnlineMode(runtime);
-            return;
-        }
-
-        this.state.operationalPort = this.internal.runtime.operationalPort;
-
-        const part = this.part;
-        part.env.runtime.addWorker(
-            this.internal.runtime.openAdvertisementWindow().then(
-                this.callback(function (this: NetworkServer) {
-                    this.enterOnlineMode(runtime, true);
-                }),
-            ),
-        );
-    }
-
     #enterCommissionedMode() {
         if (this.internal.runtime) {
             this.internal.runtime.enterCommissionedMode();
@@ -126,7 +103,7 @@ export class NetworkServer extends NetworkBehavior {
 
 export namespace NetworkServer {
     export class Internal extends NetworkBehavior.Internal {
-        declare runtime: ServerRuntime;
+        declare runtime: ServerNetworkRuntime;
     }
 
     export class State extends NetworkBehavior.State {

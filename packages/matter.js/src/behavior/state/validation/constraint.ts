@@ -91,7 +91,7 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
                 path: location.path.at(""),
             };
 
-            const pos = 0;
+            let pos = 0;
             for (const e of value) {
                 if (e === undefined || e === null) {
                     // Accept nullish
@@ -100,6 +100,8 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
 
                 sublocation.path.id = pos;
                 validateEntryConstraint(e, session, sublocation);
+                
+                pos++;
             }
         }
     };

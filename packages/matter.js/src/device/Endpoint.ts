@@ -84,16 +84,16 @@ export class Endpoint implements EndpointInterface {
     }
 
     removeFromStructure() {
-        this.destroy();
+        this.close();
         this.structureChangedCallback = () => {
             /** noop **/
         };
         this.childEndpoints.forEach(endpoint => endpoint.removeFromStructure());
     }
 
-    destroy() {
+    close() {
         for (const clusterServer of this.clusterServers.values()) {
-            asClusterServerInternal(clusterServer)._destroy();
+            asClusterServerInternal(clusterServer)._close();
         }
     }
 
@@ -147,7 +147,7 @@ export class Endpoint implements EndpointInterface {
     addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
         const currentCluster = this.clusterServers.get(cluster.id);
         if (currentCluster !== undefined) {
-            asClusterServerInternal(currentCluster)._destroy();
+            asClusterServerInternal(currentCluster)._close();
         }
         asClusterServerInternal(cluster)._assignToEndpoint(this);
         if (cluster.id === DescriptorCluster.id) {

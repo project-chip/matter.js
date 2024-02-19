@@ -608,7 +608,7 @@ describe("ClusterServer structure", () => {
             };
             expect(initCalled).true;
 
-            asClusterServerInternal(server)._destroy();
+            asClusterServerInternal(server)._close();
             expect(destroyCalled).true;
         });
 
@@ -628,7 +628,7 @@ describe("ClusterServer structure", () => {
             expect(server).ok;
 
             asClusterServerInternal(server)._assignToEndpoint({} as any);
-            asClusterServerInternal(server)._destroy();
+            asClusterServerInternal(server)._close();
         });
 
         it("GroupsCluster", () => {

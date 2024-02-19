@@ -54,11 +54,6 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
      * Obtain a read-only view of values.
      */
     readonly view: InstanceType<T>;
-
-    /**
-     * Resource datasource values to defaults.
-     */
-    factoryReset(): Promise<void>;
 }
 
 /**
@@ -101,35 +96,6 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
                 ) as InstanceType<T>;
             }
             return readOnlyView;
-        },
-
-        // Note we assume exclusive access here
-        async factoryReset() {
-            const persistedValues = internals.store?.initialValues;
-            if (persistedValues) {
-                let valuesToClear: Val.Struct | undefined;
-                for (const key in persistedValues) {
-                    // Reset metadata but not data
-                    if (key.match(/^__.+__$/)) {
-                        continue;
-                    }
-
-                    if (!valuesToClear) {
-                        valuesToClear = {};
-                    }
-                    valuesToClear[key] = undefined;
-                }
-
-                if (valuesToClear) {
-                    await Transaction.act("factory-reset", async tx => {
-                        await internals.store?.set(tx, valuesToClear as Val.Struct);
-                    });
-                }
-            }
-
-            const oldValues = internals.values;
-            internals.values = internals.defaults ?? {};
-            internals.changed?.emit(oldValues);
         },
     };
 }

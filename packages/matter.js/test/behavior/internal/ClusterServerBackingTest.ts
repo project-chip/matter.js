@@ -188,7 +188,7 @@ describe("ClusterServerBacking", () => {
             { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 },
         ]);
 
-        await node.destroy();
+        await node.close();
     });
 
     describe("AcceptedCommandList", () => {

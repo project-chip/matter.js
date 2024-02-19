@@ -60,7 +60,7 @@ describe("Parts", () => {
 
         expect(parts.size).equals(1);
 
-        await child.destroy();
+        await child.close();
 
         expect(parts.size).equals(0);
     });
@@ -111,7 +111,7 @@ describe("Parts", () => {
             bubbled = part;
         });
 
-        await grandchild.destroy();
+        await grandchild.close();
 
         expect(bubbled).equals(grandchild);
     });

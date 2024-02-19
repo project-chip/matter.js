@@ -113,9 +113,9 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         }
     }
 
-    async [Symbol.asyncDispose]() {
+    async close() {
         for (const part of this) {
-            await part[Symbol.asyncDispose]();
+            await part.close();
         }
     }
 

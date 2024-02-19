@@ -80,8 +80,6 @@ export class Behaviors {
             }
             this.#augmentPartShortcuts(type);
         }
-
-        this.#part.lifecycle.reset.on(async () => await this.#factoryReset());
     }
 
     /**
@@ -250,7 +248,7 @@ export class Behaviors {
     /**
      * Destroy all behaviors that are initialized (have backings present).
      */
-    async [Symbol.asyncDispose]() {
+    async close() {
         const dispose = async (context: ActionContext) => {
             const agent = context.agentFor(this.#part);
 
@@ -273,7 +271,7 @@ export class Behaviors {
                 }
 
                 for (const id of destroyNow) {
-                    await this.#backings[id].destroy(agent);
+                    await this.#backings[id].close(agent);
                     delete this.#backings[id];
                 }
 
@@ -347,6 +345,22 @@ export class Behaviors {
             }
         }
         return defaults;
+    }
+
+    /**
+     * Destroy in-memory state, resetting behaviors to uninitialized state.
+     */
+    async reset() {
+        for (const backing of Object.values(this.#backings)) {
+            try {
+                await this.#part.act(async agent => {
+                    await backing.close(agent);
+                });
+            } catch (e) {
+                logger.error(`Error during reset of ${backing}:`, e);
+            }
+            delete this.#backings[backing.type.id];
+        }
     }
 
     #activateLate(type: Behavior.Type) {
@@ -454,20 +468,5 @@ export class Behaviors {
 
             enumerable: true,
         });
-    }
-
-    async #factoryReset() {
-        for (const type of Object.values(this.#supported)) {
-            try {
-                await this.#part.act(async agent => {
-                    const backing = await this.activate(type, agent);
-                    await backing.createBehavior(agent, type)[Symbol.asyncDispose]();
-                    await backing.factoryReset();
-                });
-            } catch (e) {
-                logger.error(`Error during factory reset of ${this.#part}.${type.id}:`, e);
-            }
-            delete this.#backings[type.id];
-        }
     }
 }

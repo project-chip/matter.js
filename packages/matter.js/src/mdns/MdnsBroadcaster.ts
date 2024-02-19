@@ -27,6 +27,7 @@ import {
     SESSION_IDLE_INTERVAL_MS,
 } from "../session/Session.js";
 import { isIPv4, isIPv6 } from "../util/Ip.js";
+import { BasicSet } from "../util/Set.js";
 import {
     MATTER_COMMISSIONER_SERVICE_QNAME,
     MATTER_COMMISSION_SERVICE_QNAME,
@@ -41,6 +42,7 @@ import {
     getShortDiscriminatorQname,
     getVendorQname,
 } from "./MdnsConsts.js";
+import { MdnsInstanceBroadcaster } from "./MdnsInstanceBroadcaster.js";
 import { AnnouncementType, MdnsServer } from "./MdnsServer.js";
 
 const logger = Logger.get("MdnsBroadcaster");
@@ -56,6 +58,13 @@ const DEFAULT_PAIRING_HINT = {
  * This class is handing MDNS Announcements for multiple instances/devices
  */
 export class MdnsBroadcaster {
+    readonly #activeCommissioningAnnouncements = new Set<number>();
+    readonly #activeOperationalAnnouncements = new Map<number, FabricIndex[]>();
+    readonly #network: Network;
+    readonly #mdnsServer: MdnsServer;
+    readonly #enableIpv4?: boolean;
+    readonly #instances = new BasicSet<MdnsInstanceBroadcaster>;
+
     static async create(network: Network, options?: { enableIpv4?: boolean; multicastInterface?: string }) {
         const { enableIpv4, multicastInterface } = options ?? {};
         return new MdnsBroadcaster(
@@ -65,14 +74,20 @@ export class MdnsBroadcaster {
         );
     }
 
-    private readonly activeCommissioningAnnouncements = new Set<number>();
-    private readonly activeOperationalAnnouncements = new Map<number, FabricIndex[]>();
+    constructor(network: Network, mdnsServer: MdnsServer, enableIpv4?: boolean) {
+        this.#network = network;
+        this.#mdnsServer = mdnsServer;
+        this.#enableIpv4 = enableIpv4;
+    }
 
-    constructor(
-        private readonly network: Network,
-        private readonly mdnsServer: MdnsServer,
-        private readonly enableIpv4?: boolean,
-    ) {}
+    createInstanceBroadcaster(port: number) {
+        const instance = new MdnsInstanceBroadcaster(port, this, () => {
+            this.#instances.delete(instance);
+        });
+        this.#instances.add(instance);
+
+        return instance;
+    }
 
     validatePairingInstructions(
         pairingHint: TypeFromPartialBitSchema<typeof PairingHintBitmap>,
@@ -104,7 +119,7 @@ export class MdnsBroadcaster {
             if (isIPv6(ip)) {
                 records.push(AAAARecord(hostname, ip));
             } else if (isIPv4(ip)) {
-                if (this.enableIpv4) {
+                if (this.#enableIpv4) {
                     records.push(ARecord(hostname, ip));
                 }
             } else {
@@ -137,7 +152,7 @@ export class MdnsBroadcaster {
         logger.debug(
             `Announce commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator} ${announcedNetPort}`,
         );
-        this.activeCommissioningAnnouncements.add(announcedNetPort);
+        this.#activeCommissioningAnnouncements.add(announcedNetPort);
 
         const shortDiscriminator = (discriminator >> 8) & 0x0f;
         const instanceId = Crypto.getRandomData(8).toHex().toUpperCase();
@@ -150,8 +165,8 @@ export class MdnsBroadcaster {
 
         this.validatePairingInstructions(pairingHint, pairingInstructions); // Throws error if invalid!
 
-        await this.mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
-            const ipMac = this.network.getIpMac(netInterface);
+        await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
+            const ipMac = this.#network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
@@ -210,7 +225,7 @@ export class MdnsBroadcaster {
             sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
         }: OperationalInstanceData = {},
     ) {
-        const currentOperationalFabrics = this.activeOperationalAnnouncements.get(announcedNetPort);
+        const currentOperationalFabrics = this.#activeOperationalAnnouncements.get(announcedNetPort);
         if (currentOperationalFabrics !== undefined) {
             const fabricIndexesSet = new Set(fabrics.map(f => f.fabricIndex));
 
@@ -220,13 +235,13 @@ export class MdnsBroadcaster {
             }
         }
 
-        this.activeOperationalAnnouncements.set(
+        this.#activeOperationalAnnouncements.set(
             announcedNetPort,
             fabrics.map(f => f.fabricIndex),
         );
 
-        await this.mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Operative, netInterface => {
-            const ipMac = this.network.getIpMac(netInterface);
+        await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Operative, netInterface => {
+            const ipMac = this.#network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
@@ -293,10 +308,10 @@ export class MdnsBroadcaster {
         const vendorQname = `_V${vendorId}._sub.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
         const deviceQname = `${instanceId}.${MATTER_COMMISSIONER_SERVICE_QNAME}`;
 
-        this.activeCommissioningAnnouncements.add(announcedNetPort);
+        this.#activeCommissioningAnnouncements.add(announcedNetPort);
 
-        await this.mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
-            const ipMac = this.network.getIpMac(netInterface);
+        await this.#mdnsServer.setRecordsGenerator(announcedNetPort, AnnouncementType.Commissionable, netInterface => {
+            const ipMac = this.#network.getIpMac(netInterface);
             if (ipMac === undefined) return [];
             const { mac, ips } = ipMac;
             const hostname = mac.replace(/:/g, "").toUpperCase() + "0000.local";
@@ -327,38 +342,42 @@ export class MdnsBroadcaster {
     }
 
     async announce(announcementPort: number) {
-        this.mdnsServer.announce(announcementPort).catch(error => logger.error(error));
+        this.#mdnsServer.announce(announcementPort).catch(error => logger.error(error));
     }
 
     async expireFabricAnnouncement(announcementPort: number) {
-        if (this.activeOperationalAnnouncements.has(announcementPort)) {
-            await this.mdnsServer.expireAnnouncements(announcementPort, AnnouncementType.Operative);
-            this.activeOperationalAnnouncements.delete(announcementPort);
+        if (this.#activeOperationalAnnouncements.has(announcementPort)) {
+            await this.#mdnsServer.expireAnnouncements(announcementPort, AnnouncementType.Operative);
+            this.#activeOperationalAnnouncements.delete(announcementPort);
         }
     }
 
     async expireCommissioningAnnouncement(announcementPort: number) {
-        if (this.activeCommissioningAnnouncements.has(announcementPort)) {
-            await this.mdnsServer.expireAnnouncements(announcementPort, AnnouncementType.Commissionable);
-            this.activeCommissioningAnnouncements.delete(announcementPort);
+        if (this.#activeCommissioningAnnouncements.has(announcementPort)) {
+            await this.#mdnsServer.expireAnnouncements(announcementPort, AnnouncementType.Commissionable);
+            this.#activeCommissioningAnnouncements.delete(announcementPort);
         }
     }
 
     async expireAllAnnouncements(announcementPort: number) {
         if (
-            !this.activeCommissioningAnnouncements.has(announcementPort) &&
-            !this.activeOperationalAnnouncements.has(announcementPort)
+            !this.#activeCommissioningAnnouncements.has(announcementPort) &&
+            !this.#activeOperationalAnnouncements.has(announcementPort)
         )
             return;
-        await this.mdnsServer.expireAnnouncements(announcementPort);
-        this.activeCommissioningAnnouncements.delete(announcementPort);
-        this.activeOperationalAnnouncements.delete(announcementPort);
+        await this.#mdnsServer.expireAnnouncements(announcementPort);
+        this.#activeCommissioningAnnouncements.delete(announcementPort);
+        this.#activeOperationalAnnouncements.delete(announcementPort);
     }
 
     async close() {
-        await this.mdnsServer.expireAnnouncements();
-        this.activeCommissioningAnnouncements.clear();
-        this.activeOperationalAnnouncements.clear();
-        await this.mdnsServer.close();
+        while (this.#instances.size) {
+            await this.#instances.deleted;
+        }
+
+        await this.#mdnsServer.expireAnnouncements();
+        this.#activeCommissioningAnnouncements.clear();
+        this.#activeOperationalAnnouncements.clear();
+        await this.#mdnsServer.close();
     }
 }

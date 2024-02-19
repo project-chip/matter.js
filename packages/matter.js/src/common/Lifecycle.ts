@@ -99,7 +99,7 @@ export interface Cancellable {
  * Standard interface for disposing of object resources.
  */
 export interface Destructable {
-    destroy(): void | Promise<void>;
+    close(): void | Promise<void>;
 
     [Symbol.dispose]?: () => void;
 

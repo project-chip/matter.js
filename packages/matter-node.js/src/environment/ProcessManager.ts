@@ -28,7 +28,7 @@ const logger = Logger.get("ProcessManager");
  *   - Disabling signal and exit code support with {@link VariableService} variables "runtime.signals" and
  *     "runtime.exitcode" respectively
  *
- *   - Destroying ProcessManager in the default environment using {@link ProcessManager.destroy}
+ *   - Destroying ProcessManager in the default environment using {@link ProcessManager.close}
  *
  *   - Subclassing ProcessManager, overriding specific functionality, and installing with {@link Environment.set}
  */
@@ -43,7 +43,7 @@ export class ProcessManager implements Destructable {
         this.runtime.crashed.on(this.crashListener);
     }
 
-    destroy() {
+    close() {
         this.runtime.started.off(this.startListener);
         this.runtime.stopped.off(this.stopListener);
         this.runtime.crashed.off(this.crashListener);
@@ -51,7 +51,7 @@ export class ProcessManager implements Destructable {
     }
 
     [Symbol.dispose]() {
-        this.destroy();
+        this.close();
     }
 
     protected get hasSignalSupport() {

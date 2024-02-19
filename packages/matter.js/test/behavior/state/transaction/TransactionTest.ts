@@ -403,7 +403,7 @@ describe("Transaction", () => {
 
                 join2();
                 await transaction2.begin();
-                const t2add = transaction2.addResources(resource);
+                const t2add = await transaction2.addResources(resource);
 
                 expect(resource.lockedBy).equals(transaction);
                 await transaction.commit();
@@ -425,7 +425,7 @@ describe("Transaction", () => {
             join2();
             await transaction2.addResources(resource2);
             await transaction2.begin();
-            const t2add1 = transaction2.addResources(resource1);
+            const t2add1 = await transaction2.addResources(resource1);
 
             await expect(transaction.addResources(resource2)).rejectedWith(TransactionDeadlockError);
             await transaction.rollback();
@@ -444,7 +444,7 @@ describe("Transaction", () => {
             join2();
             await transaction2.addResources(resource2);
             await transaction2.begin();
-            const t2add1 = transaction2.addResources(resource1);
+            const t2add1 = await transaction2.addResources(resource1);
 
             join3();
             await transaction3.addResources(resource3);

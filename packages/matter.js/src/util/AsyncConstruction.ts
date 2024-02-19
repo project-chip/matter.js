@@ -81,7 +81,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
     /**
      * Invoke destruction logic then move to destroyed status.
      */
-    destroy(destructor: () => MaybePromise): this;
+    close(destructor: () => MaybePromise): this;
 
     /**
      * AsyncConstruction may be cancellable.  If not this method does nothing.  Regardless you must wait for promise
@@ -321,7 +321,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             return this.then(undefined, onrejected);
         },
 
-        destroy(destructor) {
+        close(destructor) {
             if (status === Lifecycle.Status.Destroying || status === Lifecycle.Status.Destroyed) {
                 return this;
             }

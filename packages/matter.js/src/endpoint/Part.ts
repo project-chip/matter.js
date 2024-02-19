@@ -7,7 +7,7 @@
 import { Behavior } from "../behavior/Behavior.js";
 import { ActionTracer } from "../behavior/context/ActionTracer.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
-import { CrashedDependencyError, UninitializedDependencyError } from "../common/Lifecycle.js";
+import { CrashedDependencyError, Lifecycle, UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Environment } from "../environment/Environment.js";
@@ -419,6 +419,31 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
+     * Perform "soft" reset of the part, reverting all in-memory structures to uninitialized.
+     */
+    async reset() {
+        // Revert lifecycle to uninitialized
+        this.lifecycle.resetting();
+
+        // Reset child parts
+        for (const part of this.parts) {
+            await part.reset();
+        }
+
+        // Reset behaviors
+        await this.behaviors.reset();
+
+        // Notify
+        await this.lifecycle.reset.emit();
+
+        // Set construction to inactive so we can restart
+        this.construction.setStatus(Lifecycle.Status.Inactive);
+
+        // The part will defer construction until it is notified of installation by a node
+        this.construction.start();
+    }
+
+    /**
      * Apply a depth-first visitor function to myself and all descendents.
      */
     visit(visitor: (part: Part) => void) {
@@ -430,17 +455,17 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         }
     }
 
-    async destroy() {
-        await this.construction.destroy(async () => {
-            await this.parts[Symbol.asyncDispose]();
-            await this.behaviors[Symbol.asyncDispose]();
+    async close() {
+        await this.construction.close(async () => {
+            await this.parts.close();
+            await this.behaviors.close();
             this.lifecycle.change(PartLifecycle.Change.Destroyed);
             this.#owner = undefined;
         });
     }
 
     async [Symbol.asyncDispose]() {
-        await this.destroy();
+        await this.close();
     }
 
     toString() {

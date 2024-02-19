@@ -377,7 +377,7 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
      * Destroy internal cluster logics, timers and such
      * @private
      */
-    readonly _destroy: () => void;
+    readonly _close: () => void;
 };
 
 export function isClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(

@@ -76,7 +76,7 @@ export class TransactionalInteractionServer extends InteractionServer {
     async [Symbol.asyncDispose]() {
         this.#part.lifecycle.changed.off(this.#changeListener);
         await this.close();
-        this.#endpointStructure.destroy();
+        this.#endpointStructure.close();
     }
 
     protected override async readAttribute(

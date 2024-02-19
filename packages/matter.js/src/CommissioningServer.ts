@@ -881,7 +881,7 @@ export class CommissioningServer extends MatterNode {
         if (this.port === undefined) {
             throw new ImplementationError("Port must be set before setting the MDNS broadcaster!");
         }
-        this.mdnsInstanceBroadcaster = new MdnsInstanceBroadcaster(this.port, mdnsBroadcaster);
+        this.mdnsInstanceBroadcaster = mdnsBroadcaster.createInstanceBroadcaster(this.port);
     }
 
     /**
@@ -926,9 +926,10 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
         await this.interactionServer?.close();
         this.interactionServer = undefined;
-        this.endpointStructure.destroy();
+        this.endpointStructure.close();
         await this.deviceInstance?.stop();
         this.deviceInstance = undefined;
+        await this.mdnsInstanceBroadcaster?.close();
     }
 
     async factoryReset() {

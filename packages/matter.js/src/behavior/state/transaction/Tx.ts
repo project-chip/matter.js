@@ -75,13 +75,13 @@ export function executeTransaction<T>(
                             return tx.rollback();
                         },
                         () => {
-                            tx.destroy();
+                            tx.close();
                             throw error;
                         },
                         error2 => {
                             if (error !== error2) {
                                 logger.error("Secondary error in", tx.via, "rollback:", error2);
-                                tx.destroy();
+                                tx.close();
                             }
                             throw error;
                         },
@@ -90,7 +90,7 @@ export function executeTransaction<T>(
             ),
 
         () => {
-            tx.destroy();
+            tx.close();
         },
     );
 }
@@ -119,7 +119,7 @@ class Tx implements Transaction {
         }
     }
 
-    destroy() {
+    close() {
         this.#status = Status.Destroyed;
         this.#promise = this.#resolve = this.#waitingOn = undefined;
         this.#resources.clear();
