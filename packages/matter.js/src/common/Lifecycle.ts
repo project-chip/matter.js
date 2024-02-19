@@ -43,6 +43,7 @@ export namespace Lifecycle {
                 throw new UninitializedDependencyError(description, "is not initialized");
 
             case Status.Initializing:
+                debugger;
                 throw new UninitializedDependencyError(description, "is still initializing");
 
             case Status.Crashed:
