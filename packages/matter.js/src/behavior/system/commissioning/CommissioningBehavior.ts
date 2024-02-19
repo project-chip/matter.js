@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FailsafeContext } from "../../../common/FailsafeContext.js";
+import { Lifecycle } from "../../../common/Lifecycle.js";
 import { ImplementationError } from "../../../common/MatterError.js";
 import type { PartServer } from "../../../endpoint/PartServer.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
@@ -38,6 +40,7 @@ export class CommissioningBehavior extends Behavior {
     static override readonly id = "commissioning";
 
     declare state: CommissioningBehavior.State;
+    declare internal: CommissioningBehavior.Internal;
 
     static override early = true;
 
@@ -62,11 +65,26 @@ export class CommissioningBehavior extends Behavior {
         );
     }
 
+    override [Symbol.asyncDispose]() {
+        this.internal.unregisterFailsafeListener?.();
+    }
+
     async #updateCommissioningStatus() {
         const commissioned = !!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics;
         if (commissioned === this.state.commissioned) {
             return;
         }
+
+        // Do not consider commissioned so long as there is an active failsafe timer as commissioning may not be
+        // complete and could still be rolled back
+        if (this.part.env.has(FailsafeContext)) {
+            const failsafe = this.part.env.get(FailsafeContext);
+            if (failsafe.construction.status !== Lifecycle.Status.Destroyed) {
+                this.#monitorFailsafe(failsafe);
+                return;
+            }
+        }
+
         this.state.commissioned = commissioned;
         if (commissioned) {
             (this.part.lifecycle as NodeLifecycle).commissioned.emit(this.context);
@@ -77,6 +95,33 @@ export class CommissioningBehavior extends Behavior {
                 (this.part as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
             );
         }
+    }
+
+    async #monitorFailsafe(failsafe: FailsafeContext) {
+        if (this.internal.unregisterFailsafeListener) {
+            return;
+        }
+
+        // Callback that listens to the failsafe for destruction and triggers commissioning status update
+        const listener = this.callback(
+            function(this: CommissioningBehavior, status: Lifecycle.Status) {
+                if (status === Lifecycle.Status.Destroyed) {
+                    this.part.env.runtime.addWorker(this.#updateCommissioningStatus());
+                    this.internal.unregisterFailsafeListener?.();
+                }
+            }
+        );
+
+        // Callback that removes above listener
+        this.internal.unregisterFailsafeListener = this.callback(
+            function(this: CommissioningBehavior) {
+                failsafe.construction.change.off(listener);
+                this.internal.unregisterFailsafeListener = undefined;
+            }
+        );
+
+        // Register the listener
+        failsafe.construction.change.on(listener);
     }
 
     /**
@@ -158,6 +203,10 @@ export class CommissioningBehavior extends Behavior {
 }
 
 export namespace CommissioningBehavior {
+    export class Internal {
+        unregisterFailsafeListener?: () => void = undefined;
+    }
+
     export class State implements CommissioningOptions {
         commissioned = false;
         passcode = -1;

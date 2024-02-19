@@ -184,11 +184,11 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
         }
-        const timedOp = device.failsafeContext;
+        const failsafeContext = device.failsafeContext;
 
         assertSecureSession(this.session, "commissioningComplete can only be called on a secure session");
 
-        const timedFabric = timedOp.associatedFabric?.fabricIndex;
+        const timedFabric = failsafeContext.associatedFabric?.fabricIndex;
         if (fabric.fabricIndex !== timedFabric) {
             return {
                 errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
@@ -203,7 +203,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         // 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked
         //    (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
         // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
-        await timedOp.completeCommission();
+        await failsafeContext.completeCommission();
 
         // 5. The Breadcrumb attribute SHALL be reset to zero.
         this.state.breadcrumb = BigInt(0);

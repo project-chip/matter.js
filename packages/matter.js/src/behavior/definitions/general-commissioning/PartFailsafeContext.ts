@@ -5,6 +5,7 @@
  */
 
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
+import { Lifecycle } from "../../../common/Lifecycle.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { Node } from "../../../node/Node.js";
 import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
@@ -26,6 +27,12 @@ export class PartFailsafeContext extends FailsafeContext {
     constructor(node: Node, options: FailsafeContext.Options) {
         super(options);
         this.#node = node;
+        this.#node.env.set(FailsafeContext, this);
+        this.construction.change.on(status => {
+            if (status === Lifecycle.Status.Destroyed) {
+                this.#node.env.delete(FailsafeContext, this);
+            }
+        });
     }
 
     override async storeEndpointState() {

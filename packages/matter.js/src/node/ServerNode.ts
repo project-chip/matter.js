@@ -129,7 +129,15 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     override async close() {
         this.cancel();
 
-        this.#mutex.terminate(() => super.close());
+        this.#mutex.terminate(async () => {
+            await super.close();
+            
+            if (this.env.has(ServerStore)) {
+                const store = this.env.get(ServerStore);
+                await store.close();
+                this.env.delete(ServerStore, store);
+            }
+        });
 
         await this.#mutex;
     }
