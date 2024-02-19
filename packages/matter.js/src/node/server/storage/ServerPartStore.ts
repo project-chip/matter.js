@@ -4,15 +4,12 @@ import { ImplementationError } from "../../../common/MatterError.js";
 import { Part } from "../../../endpoint/Part.js";
 import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
-import { Logger } from "../../../log/Logger.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
 
 const NUMBER_KEY = "__number__";
 const KNOWN_KEY = "__known__";
-
-const logger = Logger.get("ServerPartStore");
 
 /**
  * The server implementation of {@link PartStore}.
@@ -24,7 +21,6 @@ export class ServerPartStore implements PartStore {
     #initialValues = {} as Record<string, Val.Struct>;
     #number: number | undefined;
     #construction: AsyncConstruction<PartStore>;
-    #isNew: boolean;
 
     #childStorage: StorageContext;
     #childStores = {} as Record<string, ServerPartStore>;
@@ -62,24 +58,22 @@ export class ServerPartStore implements PartStore {
         }
     }
 
-    get isNew() {
-        return this.#isNew;
-    }
-
-    constructor(partId: string, storage: StorageContext, isNew: boolean) {
+    constructor(storage: StorageContext, load = true) {
         this.#storage = storage;
         this.#childStorage = storage.createContext("parts");
-        this.#isNew = isNew;
 
         this.#construction = AsyncConstruction(this, () => {
-            if (isNew) {
+            // Load is false when the store was not pre-loaded, which means it does not yet exist on disk and we can
+            // avoid async I/O
+            if (!load) {
                 return;
             }
-            return this.#load(partId);
+
+            return this.#load();
         });
     }
 
-    async #load(partId: string) {
+    async #load() {
         this.#knownBehaviors = new Set(this.#storage.get(KNOWN_KEY, Array<string>()));
 
         for (const behaviorId of this.#knownBehaviors) {
@@ -94,8 +88,6 @@ export class ServerPartStore implements PartStore {
         const number = this.#storage.get(NUMBER_KEY, -1) as number | undefined;
         if (number !== -1) {
             this.#number = number;
-        } else {
-            logger.warn(`Part ${partId} has persisted state but no endpoint number, will reassign`);
         }
 
         await this.#loadSubparts();
@@ -120,9 +112,8 @@ export class ServerPartStore implements PartStore {
         let store = this.#childStores[partId];
         if (store === undefined) {
             store = this.#childStores[partId] = new ServerPartStore(
-                partId,
                 this.#childStorage.createContext(partId),
-                true,
+                false,
             );
 
             if (!this.#knownParts.has(partId)) {
@@ -193,7 +184,7 @@ export class ServerPartStore implements PartStore {
     }
 
     async #loadKnownChildStores(partId: string) {
-        const partStore = new ServerPartStore(partId, this.#childStorage.createContext(partId), false);
+        const partStore = new ServerPartStore(this.#childStorage.createContext(partId));
         this.#childStores[partId] = partStore;
         await partStore.construction;
     }

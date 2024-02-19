@@ -44,7 +44,6 @@ export class MockPartInitializer extends PartInitializer {
 
 class MockPartStore implements PartStore {
     part: Part;
-    isNew = true;
     values = {} as Record<string, Val.Struct>;
     initialValues = {};
 
