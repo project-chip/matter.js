@@ -98,7 +98,7 @@ export class ServerPartStore implements PartStore {
             logger.warn(`Part ${partId} has persisted state but no endpoint number, will reassign`);
         }
 
-        this.#loadSubparts();
+        await this.#loadSubparts();
     }
 
     storeForBehavior(behaviorId: string): Datasource.Store {

@@ -78,7 +78,7 @@ export class EndpointFailsafeContext extends FailsafeContext {
             this.#storedNetworkClusterState.set(endpoint.getNumber(), networkCluster.getNetworksAttribute());
         }
         for (const childEndpoint of endpoint.getChildEndpoints()) {
-            this.#storeEndpointState(childEndpoint);
+            await this.#storeEndpointState(childEndpoint);
         }
     }
 

@@ -214,7 +214,7 @@ export class PartLifecycle {
 
                 // Emit part-specific events
                 const observable = (this as unknown as Record<string, Observable>)[type];
-                if (observable) {
+                if (observable !== undefined) {
                     observable.emit();
                 }
             }

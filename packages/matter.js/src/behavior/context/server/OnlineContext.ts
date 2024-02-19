@@ -36,7 +36,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                 fabric = session.getFabric()?.fabricIndex;
 
                 // TODO - group subject
-                subject = session.getPeerNodeId() as SubjectId;
+                subject = session.getPeerNodeId();
             } else {
                 fabric = options.fabric;
                 subject = options.subject;
@@ -46,9 +46,8 @@ export function OnlineContext(options: OnlineContext.Options) {
                 throw new ImplementationError("OnlineContext requires an authorized subject");
             }
 
-            let via;
             const message = options.message;
-            via = Diagnostic.via(
+            const via = Diagnostic.via(
                 `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subject.toString(16)}`,
             );
 

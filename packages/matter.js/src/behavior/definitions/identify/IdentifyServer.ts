@@ -43,7 +43,7 @@ export class IdentifyServer extends Base {
 
     override async [Symbol.asyncDispose]() {
         this.internal.identifyTimer?.stop();
-        super[Symbol.asyncDispose]?.();
+        await super[Symbol.asyncDispose]?.();
     }
 
     #identifyTick() {

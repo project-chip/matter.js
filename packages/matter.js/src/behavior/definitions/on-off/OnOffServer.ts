@@ -37,7 +37,7 @@ export class OnOffServer extends Base {
     override async [Symbol.asyncDispose]() {
         this.internal.timedOnTimer?.stop();
         this.internal.delayedOffTimer?.stop();
-        super[Symbol.asyncDispose]?.();
+        await super[Symbol.asyncDispose]?.();
     }
 
     override on() {

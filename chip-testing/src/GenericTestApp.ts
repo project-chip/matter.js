@@ -42,12 +42,23 @@ export async function startTestApp(appName: string, testInstanceClass: ClassExte
             .then(() => {
                 const runtime = Environment.default.runtime;
                 runtime.cancel();
-                runtime.inactive.then(() => {
-                    storage.close().then(() => {
-                        console.log(`======> Test instance successfully closed.`);
-                        process.exit(0);
+                runtime.inactive
+                    .then(() => {
+                        storage
+                            .close()
+                            .then(() => {
+                                console.log(`======> Test instance successfully closed.`);
+                                process.exit(0);
+                            })
+                            .catch(error => {
+                                console.log(error.stack);
+                                process.exit(1);
+                            });
+                    })
+                    .catch(error => {
+                        console.log(error.stack);
+                        process.exit(1);
                     });
-                });
             })
             .catch(error => {
                 console.log(error.stack);

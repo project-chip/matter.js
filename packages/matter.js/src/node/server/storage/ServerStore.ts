@@ -44,7 +44,7 @@ export class ServerStore {
             throw new ImplementationError("ServerStore must be created with a nodeId");
         }
 
-        let nextNumber = 1;
+        const nextNumber = 1;
 
         this.#construction = AsyncConstruction(this, async () => {
             this.#storageManager = await environment.get(StorageService).open(nodeId);
@@ -62,7 +62,7 @@ export class ServerStore {
 
     async [Symbol.asyncDispose]() {
         await this.#construction;
-        this.#storageManager?.close();
+        await this.#storageManager?.close();
     }
 
     get eventStorage() {

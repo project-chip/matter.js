@@ -91,7 +91,7 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
                 path: location.path.at(""),
             };
 
-            let pos = 0;
+            const pos = 0;
             for (const e of value) {
                 if (e === undefined || e === null) {
                     // Accept nullish

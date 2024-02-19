@@ -366,7 +366,7 @@ export class ModelTraversal {
         }
 
         return this.operation(() => {
-            let access = this.findAspect(model, symbol) as Access | undefined;
+            const access = this.findAspect(model, symbol) as Access | undefined;
 
             if (!access) {
                 return this.findAccess(this.findOwner(VM, model), symbol, VM);
@@ -527,7 +527,7 @@ export class ModelTraversal {
         const parent = parentOf(model);
 
         if (!parent || parent instanceof constructor) {
-            return parent as T | undefined;
+            return parent;
         }
 
         return this.operation(() => {

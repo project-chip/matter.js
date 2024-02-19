@@ -65,6 +65,7 @@ export class ProcessManager implements Destructable {
     protected startListener = () => {
         if (this.hasSignalSupport) {
             process.on("SIGINT", this.interruptHandler);
+            process.on("SIGTERM", this.interruptHandler);
             process.on("SIGUSR2", this.diagnosticHandler);
             process.on("exit", this.exitHandler);
         }
@@ -103,6 +104,7 @@ export class ProcessManager implements Destructable {
 
     #ignoreSignals() {
         process.off("SIGINT", this.interruptHandler);
+        process.off("SIGTERM", this.interruptHandler);
         process.off("SIGUSR2", this.diagnosticHandler);
         process.off("exit", this.exitHandler);
     }

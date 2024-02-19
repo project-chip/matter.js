@@ -167,10 +167,7 @@ class ReactorBacking<T extends any[], R> {
 
         // Otherwise run in independent context and errors do not interfere with emitter
         return MaybePromise.catch(
-            () =>
-                OfflineContext.act("react", context =>
-                    this.#reactWithContext(context as ActionContext, this.#reactors.backing, args),
-                ),
+            () => OfflineContext.act("react", context => this.#reactWithContext(context, this.#reactors.backing, args)),
 
             error => {
                 logger.error(this.#augmentError(error));
@@ -209,7 +206,7 @@ class ReactorBacking<T extends any[], R> {
     }
 
     #reactWithLocks(context: ActionContext, backing: BehaviorBacking, args: T) {
-        const agent = (context as ActionContext).agentFor(backing.part);
+        const agent = context.agentFor(backing.part);
         const behavior = backing.createBehavior(agent, backing.type);
         return this.#reactor.apply(behavior, args) as MaybePromise<any>;
     }

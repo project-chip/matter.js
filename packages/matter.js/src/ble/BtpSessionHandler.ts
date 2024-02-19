@@ -329,10 +329,11 @@ export class BtpSessionHandler {
             const remainingMessageLength = currentProcessedMessage.getRemainingBytesCount();
 
             logger.debug(
-                `Sending BTP fragment: ${Diagnostic.dict({
+                "Sending BTP fragment: ",
+                Diagnostic.dict({
                     fullMessageLength: currentProcessedMessage.getLength(),
                     remainingLengthInBytes: remainingMessageLength,
-                })}`,
+                }),
             );
 
             //checks if last ack number sent < ack number to be sent

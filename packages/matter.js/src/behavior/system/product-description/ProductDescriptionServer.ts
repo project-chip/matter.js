@@ -25,7 +25,7 @@ export class ProductDescriptionServer extends Behavior {
     declare state: ProductDescriptionServer.State;
 
     override initialize() {
-        let pd = this.state;
+        const pd = this.state;
 
         const bi = this.agent.get(BasicInformationBehavior).state;
 

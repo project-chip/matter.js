@@ -12,6 +12,7 @@ import type { ServerNode } from "../../../node/ServerNode.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "../../../schema/PairingCodeSchema.js";
+import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 import { ServerRuntime } from "./ServerRuntime.js";
 
@@ -29,6 +30,7 @@ export class NetworkServer extends NetworkBehavior {
 
     override initialize() {
         if (this.state.ble === undefined) {
+            // TODO make working again when State init gets fixed!
             this.state.ble = Ble.enabled;
         } else if (this.state.ble && !Ble.enabled) {
             logger.warn("Disabling Bluetooth commissioning because BLE support is not installed");
@@ -55,6 +57,8 @@ export class NetworkServer extends NetworkBehavior {
         if (discoveryCaps.softAccessPoint) {
             logger.warn("Soft access point commissioning is not supported yet");
         }
+
+        this.state.openAdvertisementWindowOnStartup = this.agent.get(CommissioningBehavior).state.automaticAnnouncement;
 
         this.reactTo((this.part.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
 
@@ -105,13 +109,15 @@ export class NetworkServer extends NetworkBehavior {
 
         const part = this.part;
         part.env.runtime.addWorker(
-            this.internal.runtime
-                .openAdvertisementWindow()
-                .then(this.callback(function(this: NetworkServer) { this.enterOnlineMode(runtime, true) })),
+            this.internal.runtime.openAdvertisementWindow().then(
+                this.callback(function (this: NetworkServer) {
+                    this.enterOnlineMode(runtime, true);
+                }),
+            ),
         );
     }
 
-    async #enterCommissionedMode() {
+    #enterCommissionedMode() {
         if (this.internal.runtime) {
             this.internal.runtime.enterCommissionedMode();
         }
@@ -127,8 +133,8 @@ export namespace NetworkServer {
         openAdvertisementWindowOnStartup = true;
         listeningAddressIpv4?: string;
         listeningAddressIpv6?: string;
-        ipv4 = true;
-        ble?: boolean;
+        ipv4: boolean = true;
+        ble: boolean = false;
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = {
             onIpNetwork: true,
         };

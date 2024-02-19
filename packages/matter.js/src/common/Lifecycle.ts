@@ -67,7 +67,7 @@ export class DependencyLifecycleError extends ImplementationError {
         super(`${what} ${why}`);
         this.message = Diagnostic.upgrade(this.message, () => {
             Diagnostic.squash(Diagnostic.strong(what), " ", why);
-        }) as string;
+        });
     }
 }
 
