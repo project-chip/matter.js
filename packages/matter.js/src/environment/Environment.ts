@@ -63,8 +63,14 @@ export class Environment {
 
     /**
      * Remove an environmental service.
+     * 
+     * @param type the class of the service to remove
+     * @param instance optional instance expected, if existing instance does not match it is not deleted
      */
-    delete(type: abstract new (...args: any[]) => any) {
+    delete(type: abstract new (...args: any[]) => any, instance?: any) {
+        if (instance !== undefined && this.#services?.get(type) !== instance) {
+            return;
+        }
         this.#services?.delete(type);
         this.#parent?.delete(type);
     }

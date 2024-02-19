@@ -31,6 +31,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     #primaryNetInterface?: UdpInterface;
     #bleBroadcaster?: InstanceBroadcaster;
     #bleTransport?: TransportInterface;
+    #commissionedListener?: () => void;
 
     override get owner() {
         return super.owner as ServerNode;
@@ -238,6 +239,10 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         if (this.owner.state.network.openAdvertisementWindowOnStartup) {
             await this.openAdvertisementWindow();
         }
+
+        this.owner.lifecycle.commissioned.on(
+            this.#commissionedListener = () => this.enterCommissionedMode()
+        );
     }
 
     protected override async stop() {
@@ -261,5 +266,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await this.#rootServer?.[Symbol.asyncDispose]();
         this.#rootServer = undefined;
+
+        if (this.#commissionedListener) {
+            this.owner.lifecycle.commissioned.off(this.#commissionedListener);
+        }
     }
 }

@@ -4,14 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Destructable } from "../../../common/Lifecycle.js";
 import { ImplementationError } from "../../../common/MatterError.js";
 import { Environment } from "../../../environment/Environment.js";
 import { StorageService } from "../../../environment/StorageService.js";
+import { Diagnostic } from "../../../log/Diagnostic.js";
+import { Logger } from "../../../log/Logger.js";
 import { EventHandler } from "../../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { StorageManager } from "../../../storage/StorageManager.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
 import { PartStoreFactory, PartStoreService } from "./PartStoreService.js";
+
+const logger = Logger.get("ServerStore");
 
 /**
  * Non-volatile state management for a {@link NodeServer}.
@@ -20,7 +25,9 @@ import { PartStoreFactory, PartStoreService } from "./PartStoreService.js";
  * However, this will change in the future, and other implementations may be
  * backed by asynchronous storage.  So the public API is asynchronous.
  */
-export class ServerStore {
+export class ServerStore implements Destructable {
+    #location: string;
+    #nodeId: string;
     #storageManager?: StorageManager;
     #eventHandler?: EventHandler;
     #sessionStorage?: StorageContext;
@@ -43,12 +50,18 @@ export class ServerStore {
             throw new ImplementationError("ServerStore must be created with a nodeId");
         }
 
+        const storage = environment.get(StorageService);
+        this.#location = storage.location ?? "(unknown location)";
+        this.#nodeId = nodeId;
+
         this.#construction = AsyncConstruction(this, async () => {
-            this.#storageManager = await environment.get(StorageService).open(nodeId);
+            this.#storageManager = await storage.open(nodeId);
 
             this.#rootStore = await asyncNew(PartStoreFactory, {
                 storage: this.#storageManager.createContext("root"),
             });
+
+            this.#logChange("Opened");
         });
     }
 
@@ -63,9 +76,11 @@ export class ServerStore {
         await this.#rootStore?.erase();
     }
 
-    async [Symbol.asyncDispose]() {
-        await this.#construction;
-        await this.#storageManager?.close();
+    async close() {
+        await this.#construction.close(async () => {
+            await this.#storageManager?.close();
+            this.#logChange("Closed");
+        })
     }
 
     get eventStorage() {
@@ -108,5 +123,9 @@ export class ServerStore {
             throw new ImplementationError("Node storage accessed prior to initialization");
         }
         return this.#storageManager;
+    }
+
+    #logChange(what: "Opened" | "Closed") {
+        logger.info(what, Diagnostic.strong(this.#nodeId ?? "node"), "storage at", `${this.#location}/${this.#nodeId}`);
     }
 }

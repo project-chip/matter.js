@@ -75,7 +75,7 @@ export class AllClustersTestInstance implements TestInstance {
     /** Stop the test instance MatterServer and the device. */
     async stop() {
         if (!this.serverNode) throw new Error("serverNode not initialized on close");
-        await this.serverNode[Symbol.asyncDispose]();
+        await this.serverNode.close();
         //this.serverNode.cancel();
         //await this.serverNode.lifecycle.act;
         this.serverNode = undefined;
