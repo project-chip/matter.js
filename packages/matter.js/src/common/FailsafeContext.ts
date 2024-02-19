@@ -127,7 +127,7 @@ export abstract class FailsafeContext {
         // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
         await this.removePaseSession();
 
-        await this.destroy();
+        await this.close();
     }
 
     getFailSafeContext() {
@@ -178,11 +178,11 @@ export abstract class FailsafeContext {
         }
     }
 
-    async destroy() {
+    async close() {
         await this.#construction;
-        await this.#construction.destroy(async () => {
+        await this.#construction.close(async () => {
             if (this.#failsafe) {
-                this.#failsafe.destroy();
+                this.#failsafe.close();
                 this.#failsafe = undefined;
                 await this.rollback();
             }
@@ -249,7 +249,7 @@ export abstract class FailsafeContext {
     async #failSafeExpired() {
         logger.info("Failsafe timer expired, Reset fabric builder.");
 
-        await this.destroy();
+        await this.close();
     }
 
     protected async rollback() {

@@ -33,9 +33,12 @@ export class FailsafeTimer {
         ).start();
     }
 
-    destroy() {
+    close() {
         if (this.failsafeTimer.isRunning) {
             this.failsafeTimer.stop();
+        }
+        if (this.maxCumulativeFailsafeTimer.isRunning) {
+            this.maxCumulativeFailsafeTimer.stop();
         }
     }
 

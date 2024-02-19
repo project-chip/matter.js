@@ -230,12 +230,12 @@ class AdministratorCommissioningManager {
 
         const device = session.getContext();
         if (device.isFailsafeArmed()) {
-            await device.failsafeContext.destroy();
+            await device.failsafeContext.close();
         }
     }
 
     /** Cleanup resources and stop the timer when the ClusterServer is destroyed. */
-    destroy() {
+    close() {
         if (this.commissioningWindowTimeout !== undefined) {
             this.commissioningWindowTimeout.stop();
             this.commissioningWindowTimeout = undefined;
@@ -268,7 +268,7 @@ export const AdministratorCommissioningHandler: () => ClusterServerHandlers<
 
         revokeCommissioning: async ({ session }) => await manager.revokeCommissioning(session),
 
-        destroyClusterServer: () => manager?.destroy(),
+        destroyClusterServer: () => manager?.close(),
     };
 };
 
@@ -302,6 +302,6 @@ export const BasicAdminCommissioningHandler: () => ClusterServerHandlers<
 
         revokeCommissioning: async ({ session }) => await manager.revokeCommissioning(session),
 
-        destroyClusterServer: () => manager?.destroy(),
+        destroyClusterServer: () => manager?.close(),
     };
 };

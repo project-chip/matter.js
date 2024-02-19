@@ -210,4 +210,7 @@ export interface InstanceBroadcaster {
 
     /** Expire all announcements. */
     expireAllAnnouncements(): Promise<void>;
+
+    /** Destroy the instance */
+    close(): Promise<void>;
 }

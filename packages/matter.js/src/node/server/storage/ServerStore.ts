@@ -36,28 +36,31 @@ export class ServerStore {
     /**
      * Create a new store.
      *
-     * TODO - implement conversion from 0.7 format so people can change API
-     * seamlessly
+     * TODO - implement conversion from 0.7 format so people can change API seamlessly
      */
     constructor(environment: Environment, nodeId?: string) {
         if (nodeId === undefined) {
             throw new ImplementationError("ServerStore must be created with a nodeId");
         }
 
-        const nextNumber = 1;
-
         this.#construction = AsyncConstruction(this, async () => {
             this.#storageManager = await environment.get(StorageService).open(nodeId);
 
             this.#rootStore = await asyncNew(PartStoreFactory, {
                 storage: this.#storageManager.createContext("root"),
-                nextNumber,
             });
         });
     }
 
     static async create(environment: Environment, nodeId: string) {
         return await asyncNew(this, environment, nodeId);
+    }
+
+    async erase() {
+        this.#sessionStorage?.clearAll();
+        this.#fabricStorage?.clearAll();
+        this.#eventStorage?.clearAll();
+        await this.#rootStore?.erase();
     }
 
     async [Symbol.asyncDispose]() {

@@ -50,11 +50,6 @@ export class ServerBehaviorBacking extends BehaviorBacking {
         );
     }
 
-    override async factoryReset() {
-        await this.datasource.factoryReset();
-        await super.factoryReset();
-    }
-
     get #serverStore() {
         return this.part.env.get(ServerStore);
     }

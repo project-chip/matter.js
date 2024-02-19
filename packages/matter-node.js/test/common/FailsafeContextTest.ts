@@ -65,7 +65,7 @@ describe("FailsafeContext", () => {
             networkServer2.setNetworksAttribute([{ networkId: newNetworkId, connected: true }]);
 
             // Restore network data
-            await failsafeContext.destroy();
+            await failsafeContext.close();
 
             // Check if network data is restored
             assert.deepEqual(networkServer1.getNetworksAttribute(), [{ networkId: networkId, connected: true }]);

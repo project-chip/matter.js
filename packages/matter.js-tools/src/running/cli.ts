@@ -62,5 +62,13 @@ export async function main(argv = process.argv) {
             .replace(/^src[\\/]/, `dist/${format}/`),
     );
 
-    process.exitCode = await executeNode(script, argv);
+    // If we run in the same process we cannot enable source maps so default mode is to fork.  However for development
+    // purposes it can be useful to avoid the intermediary process.  In this case you can set "--enable-source-maps"
+    // manually then set MATTER_DIRECT_EXEC
+    if (process.env.MATTER_DIRECT_EXEC) {
+        // This will not transpile properly to commonjs but we only use this module from ESM so that's OK
+        await import(script);
+    } else {
+        process.exitCode = await executeNode(script, argv);
+    }
 }

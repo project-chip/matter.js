@@ -100,7 +100,7 @@ export class PartServer implements EndpointInterface {
         this.#part.behaviors.validateRequirements(this.#part.type.requirements.server?.mandatory);
     }
 
-    destroy(): void {
+    close(): void {
         // This is in EndpointInterface but we handle destruction asynchronously so just ignore
     }
 

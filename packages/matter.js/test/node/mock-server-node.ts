@@ -149,6 +149,10 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
             session: await this.createSession(options),
         } as unknown as MessageExchange<any>;
     }
+
+    override async close() {
+        await MockTime.resolve(super.close());
+    }
 }
 
 export namespace MockServerNode {

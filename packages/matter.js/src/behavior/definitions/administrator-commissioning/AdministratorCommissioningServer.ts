@@ -143,7 +143,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         const device = this.part.env.get(MatterDevice);
         if (device.isFailsafeArmed()) {
-            await device.failsafeContext.destroy();
+            await device.failsafeContext.close();
         }
     }
 

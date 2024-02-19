@@ -33,9 +33,9 @@ export class Reactors {
         return this.#backing;
     }
 
-    async destroy() {
+    async close() {
         for (const reactor of this.#backings) {
-            reactor.destroy();
+            reactor.close();
         }
 
         if (this.#backings.size) {
@@ -115,7 +115,7 @@ class ReactorBacking<T extends any[], R> {
                         this.#destroying = true;
                         return MaybePromise.finally(
                             () => this.#react(args),
-                            () => this.destroy(),
+                            () => this.close(),
                         );
                     }
 
@@ -137,7 +137,7 @@ class ReactorBacking<T extends any[], R> {
         return this.#observable === observable && this.#reactor === reactor && !this.#destroying;
     }
 
-    destroy() {
+    close() {
         if (this.#destroying) {
             return;
         }

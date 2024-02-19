@@ -102,16 +102,31 @@ export class MockTime {
      */
     async resolve<T>(promise: PromiseLike<T>) {
         let resolved = false;
+        let result: T | undefined;
 
-        promise.then(() => (resolved = true));
+        promise.then(r => {
+            resolved = true;
+            result = r;
+        });
 
+        let timeAdvanced = 0;
         while (!resolved) {
             await this.yield();
-            await this.advance(5000);
+
+            // If we've advanced more than one hour, assume we've hung
+            if (timeAdvanced > 60 * 60 * 1000) {
+                throw new Error("Mock timeout: Promise did not resolve within one hour, probably not going to happen")
+            }
+
+            // Advance time exponentially, trying for granularity but also OK performance
+            const nextAdvance = 5000; //timeAdvanced ? timeAdvanced : 1000;
+            await this.advance(nextAdvance);
+            timeAdvanced += nextAdvance;
+
             await this.yield();
         }
 
-        return await promise;
+        return result as T;
     }
 
     /**

@@ -24,6 +24,7 @@ export class MdnsService {
 
     constructor(environment: Environment, options?: MdnsService.Options) {
         environment.set(MdnsService, this);
+        environment.runtime.addWorker(this);
 
         this.#construction = AsyncConstruction(this, async () => {
             const vars = environment.get(VariableService);
@@ -47,6 +48,10 @@ export class MdnsService {
         return new this(environment);
     }
 
+    createInstanceBroadcaster(port: number) {
+        return this.broadcaster.createInstanceBroadcaster(port);
+    }
+
     get broadcaster() {
         return this.#construction.assert("MDNS broadcaster", this.#broadcaster);
     }
@@ -64,7 +69,7 @@ export class MdnsService {
     }
 
     async [Symbol.asyncDispose]() {
-        await this.#construction.destroy(async () => {
+        await this.#construction.close(async () => {
             const broadcasterDisposal = MaybePromise.then(this.#broadcaster?.close(), undefined, e =>
                 logger.error("Error disposing of MDNS broadcaster", e),
             );

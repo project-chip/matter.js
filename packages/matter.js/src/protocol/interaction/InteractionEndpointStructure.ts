@@ -53,9 +53,9 @@ export class InteractionEndpointStructure {
         this.commandPaths.length = 0;
     }
 
-    public destroy() {
+    public close() {
         for (const endpoint of this.endpoints.values()) {
-            endpoint.destroy();
+            endpoint.close();
         }
     }
 

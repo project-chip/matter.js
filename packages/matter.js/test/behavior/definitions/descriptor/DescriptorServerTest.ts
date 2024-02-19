@@ -93,7 +93,7 @@ describe("DescriptorServer", () => {
         const partsState = parent.state.descriptor;
         expect(partsState.partsList).deep.equals([2]);
 
-        await child.destroy();
+        await child.close();
 
         await parent.events.descriptor.partsList$Change;
 

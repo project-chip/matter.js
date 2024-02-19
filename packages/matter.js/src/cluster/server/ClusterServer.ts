@@ -147,7 +147,7 @@ export function ClusterServer<
             assignedEndpoint = endpoint;
         },
 
-        _destroy: () => {
+        _close: () => {
             if (typeof handlers.destroyClusterServer === "function") {
                 handlers.destroyClusterServer();
             }

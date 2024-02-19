@@ -82,19 +82,22 @@ export abstract class BehaviorBacking {
     /**
      * Destroy the backing.
      */
-    destroy(agent: Agent) {
+    close(agent: Agent, invokeClose = true) {
         const initialized = this.construction.status === Lifecycle.Status.Active;
+        if (!initialized) {
+            invokeClose = false;
+        }
 
-        return this.construction.destroy(() => {
+        return this.construction.close(() => {
             let result = MaybePromise.then(
-                () => this.#reactors?.destroy(),
+                () => this.#reactors?.close(),
                 () => {
                     this.#reactors = undefined;
                 },
             );
 
-            if (initialized) {
-                result = MaybePromise.then(result, () => this.#invokeDestroy(agent));
+            if (invokeClose) {
+                result = MaybePromise.then(result, () => this.#invokeClose(agent));
             }
 
             return result;
@@ -109,15 +112,6 @@ export abstract class BehaviorBacking {
      */
     protected invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
         return behavior.initialize(options);
-    }
-
-    /**
-     * Reset state during a reset.
-     *
-     * This is an optional extension point for derivatives.
-     */
-    factoryReset(): MaybePromise {
-        return this.#reactors?.destroy();
     }
 
     /**
@@ -230,7 +224,7 @@ export abstract class BehaviorBacking {
     /**
      * Invoke {@link Behavior.destroy} to clean up application logic.
      */
-    #invokeDestroy(agent: Agent): MaybePromise {
+    #invokeClose(agent: Agent): MaybePromise {
         // Do not use Agent.get because backing is in "destroying" state
         const behavior = this.createBehavior(agent, this.type);
 

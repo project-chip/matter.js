@@ -31,7 +31,7 @@ const activeParts = new Set<MockPart<any>>();
 // I think we can get by without this
 // afterEach(async () => {
 //     while (activeParts.size) {
-//         await activeParts[Symbol.iterator]().next().value?.destroy();
+//         await activeParts[Symbol.iterator]().next().value?.close();
 //     }
 // });
 
@@ -52,9 +52,9 @@ export class MockPart<T extends EndpointType> extends Part<T> {
         activeParts.add(this);
     }
 
-    override async destroy() {
+    override async close() {
         activeParts.delete(this);
-        await super.destroy();
+        await super.close();
     }
 
     static create<const T extends EndpointType>(definition: T | Part.Configuration<T>): Promise<MockPart<T>>;

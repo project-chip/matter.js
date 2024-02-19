@@ -122,38 +122,6 @@ export class PartLifecycle {
     }
 
     /**
-     * Perform factory reset.
-     */
-    async factoryReset() {
-        if (!this.#isInstalled) {
-            throw new ImplementationError("Cannot reset uninstalled part");
-        }
-
-        await this.#part.construction;
-
-        // Run reset once cancelled
-        this.#isReady = this.#isTreeReady = this.#isInstalled = false;
-
-        await this.#factoryReset();
-
-        this.#part.construction.setStatus(Lifecycle.Status.Inactive);
-
-        // The part will defer construction until it is notified of installation by the node
-        this.#part.construction.start();
-    }
-
-    /**
-     * Reset child parts and behaviors as part of factory reset.
-     */
-    async #factoryReset() {
-        for (const part of this.#part.parts) {
-            await part.lifecycle.#factoryReset();
-        }
-
-        await this.#reset.emit();
-    }
-
-    /**
      * Bubble a lifecycle change event from a child.
      */
     bubble(type: PartLifecycle.Change, part: Part) {
@@ -225,6 +193,13 @@ export class PartLifecycle {
 
     protected emitError(name: string, error: Error) {
         logger.error("Unhandled error in", Diagnostic.strong(`${this.#part}.lifecycle.${name}`), "handler:", error);
+    }
+
+    /**
+     * Revert to uninstalled state.
+     */
+    resetting() {
+        this.#isInstalled = this.#isReady = this.#isTreeReady = false;
     }
 
     #checkTreeReadiness() {

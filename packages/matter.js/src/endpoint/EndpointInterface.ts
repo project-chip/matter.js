@@ -27,7 +27,7 @@ export interface EndpointInterface {
     getChildEndpoints(): EndpointInterface[];
     determineUniqueID(): string | undefined;
     verifyRequiredClusters(): void;
-    destroy(): void;
+    close(): void;
     setStructureChangedCallback(callback: () => void): void;
 
     addClusterServer<A extends Attributes, E extends Events>(server: ClusterServerObj<A, E>): void;
