@@ -204,7 +204,7 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
         dim: false,
         bold: false,
     };
-    let styles: StyleName[] = [primary];
+    const styles: StyleName[] = [primary];
 
     const prefix = style("prefix", `${formatTime(now)} ${Level[level].padEnd(6)}`);
 
@@ -221,7 +221,7 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
         return style(styles[styles.length - 1], text);
     }
 
-    let message = renderDiagnostic(values, {
+    const message = renderDiagnostic(values, {
         text: text => creator.text(normal(text)),
 
         indent: producer => creator.indent(producer),
@@ -292,7 +292,7 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
             }
         }
 
-        let codes = Array<AnsiCode>();
+        const codes = Array<AnsiCode>();
 
         if ((!targetDim && currentStyle.dim) || (!targetBold && currentStyle.bold)) {
             // Don't think we can reset dim/bold without full reset

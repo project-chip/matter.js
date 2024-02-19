@@ -94,7 +94,7 @@ export class ServerRuntime extends NetworkRuntime {
                 this.owner.state.network.listeningAddressIpv6,
             );
 
-            await this.owner.set({ network: { operationalPort: this.#primaryNetInterface.port }});
+            await this.owner.set({ network: { operationalPort: this.#primaryNetInterface.port } });
         }
         return this.#primaryNetInterface;
     }
@@ -151,6 +151,7 @@ export class ServerRuntime extends NetworkRuntime {
         const isCommissioned = !!this.#commissionedFabrics;
 
         let discoveryCapabilities = this.owner.state.network.discoveryCapabilities;
+        console.log("DISCOVERY CAP", discoveryCapabilities);
         if (isCommissioned) {
             // Already commissioned, only broadcast on network
             discoveryCapabilities = { onIpNetwork: true };
@@ -171,19 +172,21 @@ export class ServerRuntime extends NetworkRuntime {
      * On decommission we're destroyed so don't need to handle that case.
      */
     enterCommissionedMode() {
-        if (this.#mdnsBroadcaster !== undefined && !this.#matterDevice?.hasBroadcaster(this.#mdnsBroadcaster)) {
-            this.#matterDevice?.addBroadcaster(this.#mdnsBroadcaster);
+        const mdnsBroadcaster = this.mdnsBroadcaster;
+        if (!this.#matterDevice?.hasBroadcaster(mdnsBroadcaster)) {
+            this.#matterDevice?.addBroadcaster(mdnsBroadcaster);
         }
 
-        if (this.#bleBroadcaster) {
-            this.#matterDevice?.deleteBroadcaster(this.#bleBroadcaster);
+        // TODO This is too early ... needs to happen after/on commissioning-complete!
+        /*if (this.#bleBroadcaster) {
+            await this.#matterDevice?.deleteBroadcaster(this.#bleBroadcaster);
             this.#bleBroadcaster = undefined;
         }
 
         if (this.#bleTransport) {
-            this.#matterDevice?.deleteTransportInterface(this.#bleTransport);
+            await this.#matterDevice?.deleteTransportInterface(this.#bleTransport);
             this.#bleTransport = undefined;
-        }
+        }*/
     }
 
     /**
@@ -219,9 +222,7 @@ export class ServerRuntime extends NetworkRuntime {
                 productDescription: this.owner.state.productDescription,
                 ble: !!this.owner.state.network.ble,
             }),
-            () => {
-                // commissioningChangeCallback - we don't use this
-            },
+            () => this.enterCommissionedMode(),
             (_fabricIndex: FabricIndex) => {
                 // TODO - this is "sessionChangeCallback" - add root behavior for accessing sessions
             },

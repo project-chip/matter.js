@@ -77,7 +77,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
     /**
      * Starts the node and resolve when the node enters his online state. Use `cancel()` to stop the node.
      */
-    async startUp() {
+    async bringOnline() {
         const runtime = this.env.runtime;
 
         runtime.addWorker(this);

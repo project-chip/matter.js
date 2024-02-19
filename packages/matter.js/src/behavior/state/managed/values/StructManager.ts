@@ -48,7 +48,7 @@ export function StructManager(owner: RootSupervisor, schema: Schema, _managed?: 
         }
     }
 
-    let Wrapper = GeneratedClass({
+    const Wrapper = GeneratedClass({
         name: `${schema.name}$Managed`,
 
         // Inheriting from managed class increases complexity with little benefit
@@ -143,13 +143,12 @@ interface Wrapper extends Val.Struct, InternalCollection {
 function configureProperty(manager: RootSupervisor, schema: ValueModel) {
     const name = camelize(schema.name);
 
-    let { access, manage, validate } = manager.get(schema);
+    const { access, manage, validate } = manager.get(schema);
 
     const fabricScopedList =
-        schema.effectiveAccess.fabric === Access.Fabric.Scoped
-        && schema.effectiveMetatype === Metatype.array;
+        schema.effectiveAccess.fabric === Access.Fabric.Scoped && schema.effectiveMetatype === Metatype.array;
 
-    let descriptor: PropertyDescriptor = {
+    const descriptor: PropertyDescriptor = {
         enumerable: true,
 
         set(this: Wrapper, value: Val) {
@@ -225,7 +224,7 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                     throw new PhantomReferenceError(this[REF].location);
                 }
                 if (struct[Val.properties]) {
-                    const properties = (struct as Val.Dynamic)[Val.properties](this[SESSION]);
+                    const properties = struct[Val.properties](this[SESSION]);
                     if (name in properties) {
                         return properties[name];
                     }
@@ -274,7 +273,7 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                 return value;
             }
 
-            let managed = this[REF].subrefs?.[name];
+            const managed = this[REF].subrefs?.[name];
             if (managed) {
                 return managed.owner;
             }

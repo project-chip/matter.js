@@ -34,7 +34,12 @@ import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { toHexString } from "../../util/Number.js";
 import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
-import { AttributeReportPayload, DataReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
+import {
+    AttributeReportPayload,
+    DataReportPayload,
+    EventDataPayload,
+    EventReportPayload,
+} from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
     InteractionServerMessenger,
@@ -203,7 +208,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
         }
 
-        let attributeReportsPayload = new Array<AttributeReportPayload>();
+        const attributeReportsPayload = new Array<AttributeReportPayload>();
         for (const path of attributeRequests ?? []) {
             const attributes = this.#endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
@@ -316,7 +321,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     continue;
                 }
 
-                const reportsForPath = new Array();
+                const reportsForPath = new Array<{ eventData: EventDataPayload }>();
                 for (const { path, event } of events) {
                     const matchingEvents = this.#eventHandler.getEvents(path, eventFilters);
                     logger.debug(
@@ -339,7 +344,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     );
                 }
                 eventReportsPayload.push(
-                    ...reportsForPath.sort((a, b) => a.eventData.eventNumber - b.eventData.eventNumber),
+                    ...reportsForPath.sort((a, b) => {
+                        const eventNumberA = a.eventData?.eventNumber ?? 0;
+                        const eventNumberB = b.eventData?.eventNumber ?? 0;
+                        if (eventNumberA > eventNumberB) {
+                            return 1;
+                        } else if (eventNumberA < eventNumberB) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    }),
                 );
             }
         }
@@ -569,7 +584,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                             `Error while handling write request from ${
                                 exchange.channel.name
                             } to ${this.#endpointStructure.resolveAttributeName(path)}:`,
-                            error instanceof StatusResponseError ? error.message : error
+                            error instanceof StatusResponseError ? error.message : error,
                         );
                         if (error instanceof StatusResponseError) {
                             writeResults.push({ path, statusCode: error.code, clusterStatusCode: error.clusterCode });

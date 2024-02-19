@@ -74,8 +74,7 @@ export class CommissioningBehavior extends Behavior {
             (this.part.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
 
             this.part.env.runtime.addWorker(
-                (this.part as ServerNode).factoryReset()
-                    .then(this.callback(this.initiateCommissioning))
+                (this.part as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
             );
         }
     }
@@ -84,7 +83,7 @@ export class CommissioningBehavior extends Behavior {
      * The server invokes this method when the node is active but not yet commissioned.
      *
      * An uncommissioned node is not yet associated with fabrics.  It cannot be used until commissioned by a controller.
-     * 
+     *
      * The default implementation logs the QR code and credentials.
      */
     initiateCommissioning() {
@@ -118,8 +117,8 @@ export class CommissioningBehavior extends Behavior {
             vendorId: bi.vendorId,
             productId: bi.productId,
             flowType: this.state.flowType,
-            discriminator: this.state.discriminator as number,
-            passcode: this.state.passcode as number,
+            discriminator: this.state.discriminator,
+            passcode: this.state.passcode,
             discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
                 this.agent.get(NetworkServer).state.discoveryCapabilities,
             ),
@@ -127,8 +126,8 @@ export class CommissioningBehavior extends Behavior {
 
         return {
             manualPairingCode: ManualPairingCodeCodec.encode({
-                discriminator: this.state.discriminator as number,
-                passcode: this.state.passcode as number,
+                discriminator: this.state.discriminator,
+                passcode: this.state.passcode,
             }),
             qrPairingCode,
         };
@@ -164,7 +163,7 @@ export namespace CommissioningBehavior {
         passcode = -1;
         discriminator = -1;
         readonly flowType = CommissioningFlowType.Standard;
-        readonly additionalBleAdvertisementData?: ByteArray;
-        readonly automaticAnnouncement = true;
+        readonly additionalBleAdvertisementData = new ByteArray(); // TODO Needed else can not be set!
+        readonly automaticAnnouncement: boolean = true;
     }
 }

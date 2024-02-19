@@ -48,7 +48,7 @@ export class VariableService {
         }
 
         let value: VariableService.Value = this.#vars;
-        for (let segment of this.#parseName(name)) {
+        for (const segment of this.#parseName(name)) {
             if (value === null || typeof value !== "object" || Array.isArray(value)) {
                 return fallback;
             }
@@ -227,6 +227,9 @@ function parseArgvStyle(values: string[]) {
         } else {
             key = arg.slice(0, separatorPos);
             value = arg.slice(separatorPos + 1);
+            if ((value.startsWith("'") && value.endsWith("'")) || (value.startsWith('"') && value.endsWith('"'))) {
+                value = value.slice(1, -1).replaceAll("\\'", "'").replaceAll('\\"', '"');
+            }
         }
 
         addVariable(variables, key.toLowerCase().split("-"), value);

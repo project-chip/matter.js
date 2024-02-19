@@ -5,7 +5,6 @@
  */
 
 import "@project-chip/matter-node.js";
-import { WindowCovering } from "@project-chip/matter-node.js/cluster";
 import { GoToLiftPercentageRequest, WindowCoveringServer } from "@project-chip/matter.js/behaviors/window-covering";
 import { OnOffLightDevice, OnOffLightRequirements } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { WindowCoveringDevice } from "@project-chip/matter.js/devices/WindowCoveringDevice";
@@ -17,17 +16,14 @@ import { ServerNode } from "@project-chip/matter.js/node";
  * Our example device, the Excelsior 1000 EZ-Nite™, is a roller shade with an illuminated valance.
  */
 
-// TODO - type information is currently incorrect for WindowCoveringServer.with, use that instead when it's fixed
-const LiftingWindowCovering = WindowCoveringServer.for(
-    WindowCovering.Cluster.with("Lift", "AbsolutePosition", "PositionAwareLift"),
-);
+const LiftingWindowCoveringServer = WindowCoveringServer.with("Lift", "AbsolutePosition", "PositionAwareLift");
 
 /**
  * Implementation of the Matter WindowCovering cluster for the shade motor.
  *
  * TODO - some of this should probably move to WindowCoveringServer
  */
-class RollerShade extends LiftingWindowCovering {
+class RollerShade extends LiftingWindowCoveringServer {
     get currentPos() {
         return this.state.currentPositionLiftPercent100ths ?? 0;
     }

@@ -250,7 +250,7 @@ function createListValidator(schema: ValueModel, factory: RootSupervisor): Value
     const entry = schema.listEntry;
     let validateEntries: undefined | ValueSupervisor.Validate;
     if (entry) {
-        let entryValidator = factory.get(entry).validate;
+        const entryValidator = factory.get(entry).validate;
 
         validateEntries = (list: Val, session: ValueSupervisor.Session, location: ValidationLocation) => {
             if (!list || typeof (list as Iterable<unknown>)[Symbol.iterator] !== "function") {

@@ -75,7 +75,7 @@ describe("Parts", () => {
         parent.parts.add(child);
         await child.construction;
 
-        let bubbled = Array<PartLifecycle.Change>();
+        const bubbled = Array<PartLifecycle.Change>();
         parent.lifecycle.changed.on((type, part) => {
             expect(part).equals(grandchild);
             bubbled.push(type);

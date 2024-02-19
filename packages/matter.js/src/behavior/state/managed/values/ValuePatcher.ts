@@ -20,9 +20,8 @@ import { Val } from "../../Val.js";
 export function ValuePatcher(schema: Schema, owner: RootSupervisor) {
     switch (schema.effectiveMetatype) {
         case Metatype.any:
-            // "any" means the schema defines no type.  Assume it's an object since ValuePatcher is only invoked where
-            // an object is expected naturally
-
+        // "any" means the schema defines no type.  Assume it's an object since ValuePatcher is only invoked where
+        // an object is expected naturally
         case Metatype.object:
             return StructPatcher(schema as ValueModel, owner);
 
@@ -88,7 +87,7 @@ function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervis
         const key = camelize(member.name);
 
         memberPatchers[key] = handler;
-        
+
         if (metatype === Metatype.object) {
             memberDefaults[key] = getDefaults(member);
         }
@@ -119,11 +118,7 @@ function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervis
 
             // If this is not a subcollection or the new value is not an object, just do direct set
             const subpatch = memberPatchers[key];
-            if (
-                !subpatch
-                || newValue === null
-                || (typeof newValue !== "object")
-            ) {
+            if (!subpatch || newValue === null || typeof newValue !== "object") {
                 target[key] = newValue;
                 continue;
             }
@@ -222,8 +217,6 @@ function ListPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervisor
 
 function PrimitivePatcher(): ValueSupervisor.Patch {
     return (_changes, _target, path) => {
-        throw new ImplementationError(
-            `Cannot generate patch ${path} because it does not define not a collection`,
-        );
-    }
+        throw new ImplementationError(`Cannot generate patch ${path} because it does not define not a collection`);
+    };
 }

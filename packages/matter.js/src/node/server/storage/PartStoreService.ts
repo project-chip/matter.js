@@ -184,7 +184,7 @@ export class PartStoreFactory extends PartStoreService {
             this.#numbersToPersist = undefined;
             for (const part of numbersToPersist) {
                 const store = this.storeForPart(part);
-                store.saveNumber();
+                await store.saveNumber();
             }
 
             if (this.#nextNumber !== this.#persistedNextNumber) {

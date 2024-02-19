@@ -22,11 +22,7 @@ export class DescriptorServer extends DescriptorBehavior {
     override initialize() {
         // We update PartsList differently if there's an index
         if (this.part.behaviors.has(IndexBehavior)) {
-            this.reactTo(
-                this.agent.get(IndexBehavior).events.change,
-                this.#updatePartsList,
-                { lock: true },
-            )
+            this.reactTo(this.agent.get(IndexBehavior).events.change, this.#updatePartsList, { lock: true });
         } else if (this.part.hasParts) {
             for (const part of this.part.parts) {
                 this.#monitorDestruction(part);
@@ -35,11 +31,7 @@ export class DescriptorServer extends DescriptorBehavior {
         this.#updatePartsList();
 
         // Handle lifecycle changes
-        this.reactTo(
-            this.part.lifecycle.changed,
-            this.#applyChange,
-            { lock: true }
-        );
+        this.reactTo(this.part.lifecycle.changed, this.#applyChange, { lock: true });
 
         // Initialize ServerList
         this.state.serverList = this.#serverList;
@@ -104,11 +96,7 @@ export class DescriptorServer extends DescriptorBehavior {
      * Monitor part for removal.
      */
     #monitorDestruction(part: Part) {
-        this.reactTo(
-            part.lifecycle.destroyed,
-            this.#updatePartsList,
-            { lock: true }
-        );
+        this.reactTo(part.lifecycle.destroyed, this.#updatePartsList, { lock: true });
     }
 
     /**
@@ -121,8 +109,7 @@ export class DescriptorServer extends DescriptorBehavior {
         // aggregator endpoints
         if (this.agent.has(IndexBehavior)) {
             const index = this.agent.get(IndexBehavior);
-            const numbers = Object.keys(index.partsByNumber)
-                .map(n => Number.parseInt(n));
+            const numbers = Object.keys(index.partsByNumber).map(n => Number.parseInt(n));
 
             // My part should not appear in its own PartsList
             const pos = numbers.indexOf(this.part.number);
@@ -134,7 +121,7 @@ export class DescriptorServer extends DescriptorBehavior {
             return;
         } else if (part.hasParts) {
             // No IndexBehavior, just direct descendents
-            this.state.partsList = [ ...part.parts ].map(part => part.number) as EndpointNumber[];
+            this.state.partsList = [...part.parts].map(part => part.number);
         } else {
             // No sub-parts
             this.state.partsList = [];
@@ -145,9 +132,9 @@ export class DescriptorServer extends DescriptorBehavior {
      * Computed current server list.
      */
     get #serverList() {
-        const list = new Array<ClusterId>;
+        const list = new Array<ClusterId>();
         for (const type of Object.values(this.part.behaviors.supported)) {
-            const clusterId = (type as { cluster?: { id?: ClusterId }}).cluster?.id;
+            const clusterId = (type as { cluster?: { id?: ClusterId } }).cluster?.id;
             if (clusterId) {
                 list.push(clusterId);
             }
