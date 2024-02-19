@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../common/MatterError.js";
 import { Logger } from "../log/Logger.js";
 import { AsyncConstructable } from "./AsyncConstruction.js";
 import { MaybePromiseLike } from "./Promises.js";
@@ -69,7 +68,7 @@ export class Mutex implements PromiseLike<unknown> {
      */
     terminate(cleanup?: () => PromiseLike<void>) {
         if (this.#canceled) {
-            throw new InternalError(`Double cancel of ${this.#owner} activity`);
+            return;
         }
 
         this.#canceled = true;
