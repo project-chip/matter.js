@@ -187,7 +187,7 @@ The following reference implementation and code references are available as basi
 - For BLE functionality you can use the Node.js implementations provided by [matter-node-ble.js](packages/matter-node-ble.js/README.md) as reference. 
 - For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/matter-node.js-examples/src/examples/cluster/DummyWifiNetworkCommissioningServerLegacy.ts) which contains a static "testing only" (but API complete for Wifi) reference.
 
-If you implement a specific platform we would be happy about aa PR with the code, so that also other community members can benefit from it.
+If you implement a specific platform we would be happy about a PR with the code, so that also other community members can benefit from it.
 
 ## matter.js based projects
 
