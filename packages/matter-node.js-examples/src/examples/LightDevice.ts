@@ -11,7 +11,6 @@ import { ServerNode } from "@project-chip/matter.js/node";
 
 // Install Matter.js extensions for Node.js
 import "@project-chip/matter-node.js";
-import { Part } from "@project-chip/matter.js/endpoint";
 
 // Matter exposes functionality in groups called "clusters".  For this example device we override the matter.js "On/Off"
 // cluster implementation to print status to the console.
@@ -51,9 +50,8 @@ const ExampleLight = OnOffLightDevice.with(ReportingOnOffServer);
 // IlluminatedRollerShade.ts for a more detailed example.
 const node = await ServerNode.create();
 
-const part = new Part(ExampleLight);
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.
-await node.add(part);
+await node.add(ExampleLight);
 
 // Our device is now built and we can bring the node online.
 //
