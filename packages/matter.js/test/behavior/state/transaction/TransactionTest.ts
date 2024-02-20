@@ -119,24 +119,24 @@ function test(what: string, actor: () => MaybePromise) {
  * Run a test against {@link transaction} and {@link transaction2}.
  */
 function test2(what: string, actor: () => MaybePromise) {
-    test(what, () => {
+    test(what, () =>
         Transaction.act("test2", tx => {
             transaction2 = tx;
             return actor();
-        });
-    });
+        })
+    );
 }
 
 /**
  * Run a test against all three transactions.
  */
 function test3(what: string, actor: () => MaybePromise) {
-    test2(what, () => {
+    test2(what, () =>
         Transaction.act("test3", tx => {
             transaction3 = tx;
             return actor();
-        });
-    });
+        })
+    );
 }
 
 describe("Transaction", () => {
@@ -403,7 +403,7 @@ describe("Transaction", () => {
 
                 join2();
                 await transaction2.begin();
-                const t2add = await transaction2.addResources(resource);
+                const t2add = /* do not await here! */ transaction2.addResources(resource);
 
                 expect(resource.lockedBy).equals(transaction);
                 await transaction.commit();
@@ -425,7 +425,7 @@ describe("Transaction", () => {
             join2();
             await transaction2.addResources(resource2);
             await transaction2.begin();
-            const t2add1 = await transaction2.addResources(resource1);
+            const t2add1 = /* do not await here! */ transaction2.addResources(resource1);
 
             await expect(transaction.addResources(resource2)).rejectedWith(TransactionDeadlockError);
             await transaction.rollback();
@@ -444,7 +444,7 @@ describe("Transaction", () => {
             join2();
             await transaction2.addResources(resource2);
             await transaction2.begin();
-            const t2add1 = await transaction2.addResources(resource1);
+            const t2add1 = /* do not await here! */ transaction2.addResources(resource1);
 
             join3();
             await transaction3.addResources(resource3);
