@@ -125,7 +125,9 @@ function logClusterServer(
                 for (const commandName in commands) {
                     const command = commands[commandName];
                     if (command === undefined) continue;
-                    logger.info(`"${command.name}" (${toHexString(command.invokeId)}/${command.responseId})`);
+                    logger.info(
+                        `"${command.name}" (${toHexString(command.invokeId)}/${toHexString(command.responseId)})`,
+                    );
                 }
             });
         });
