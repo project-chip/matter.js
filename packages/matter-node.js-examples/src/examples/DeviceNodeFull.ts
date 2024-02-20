@@ -36,6 +36,11 @@ import { ServerNode } from "@project-chip/matter.js/node";
 import { execSync } from "child_process";
 import { DummyThreadNetworkCommissioningServer } from "./cluster/DummyThreadNetworkCommissioningServer.js";
 import { DummyWifiNetworkCommissioningServer } from "./cluster/DummyWifiNetworkCommissioningServer.js";
+import {
+    MyFancyCommandRequest,
+    MyFancyCommandResponse,
+    MyFancyOwnFunctionalityBehavior,
+} from "./cluster/MyFancyOwnFunctionality.js";
 
 const logger = Logger.get("Device");
 
@@ -153,6 +158,22 @@ class TestGeneralDiagnosticsServer extends RootRequirements.GeneralDiagnosticsSe
     }
 }
 
+class MyFancyOwnFunctionalityServer extends MyFancyOwnFunctionalityBehavior {
+    /** We return the incoming value and store the length of the string in our attribute and send it out as event */
+    override myFancyCommand(request: MyFancyCommandRequest): MyFancyCommandResponse {
+        const { value } = request;
+        this.state.myFancyValue = value.length;
+
+        this.events.myFancyEvent.emit({ eventValue: value }, this.context);
+
+        return { response: value };
+    }
+
+    override initialize() {
+        this.state.myFancyValue = -1; // Always initialize with -1
+    }
+}
+
 /**
  * Create Device instance and add needed Listener
  *
@@ -169,9 +190,13 @@ class TestGeneralDiagnosticsServer extends RootRequirements.GeneralDiagnosticsSe
 //
 // In this case we are using with() to install our On/Off cluster behavior.
 // .with("LevelControlForLighting") not needed because we always have it in by default because we have default implementation
-const OnOffDevice = isSocket
-    ? OnOffPlugInUnitDevice.with(OnOffShellExecServer)
-    : OnOffLightDevice.with(OnOffShellExecServer);
+let OnOffDevice = isSocket
+    ? vendorId === 0xfff4
+        ? OnOffPlugInUnitDevice.with(OnOffShellExecServer, MyFancyOwnFunctionalityServer)
+        : OnOffPlugInUnitDevice.with(OnOffShellExecServer)
+    : vendorId === 0xfff4
+      ? OnOffLightDevice.with(OnOffShellExecServer, MyFancyOwnFunctionalityServer)
+      : OnOffLightDevice.with(OnOffShellExecServer);
 
 /**
  * Modify automatically added clusters of the Root endpoint if needed
@@ -243,7 +268,7 @@ const server = await ServerNode.create(RootEndpoint, {
         uniqueId,
     },
 
-    // @ts-expect-error ...somehow Type wrong because too conditional
+    // @ts-expect-error ... TS do not see the types because both next clusters was added conditionally
     networkCommissioning: {
         maxNetworks: 1,
         interfaceEnabled: true,
@@ -254,7 +279,9 @@ const server = await ServerNode.create(RootEndpoint, {
         scanMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
         connectMaxTimeSeconds: wifiOrThreadAdded ? 3 : undefined,
     },
-    //parts: [{ type: OnOffDevice, id: "onoff" }],
+    myFancyFunctionality: {
+        myFancyValue: 0,
+    },
 });
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.
@@ -342,6 +369,10 @@ if (!server.lifecycle.isCommissioned) {
     await part.set({
         onOff: {
             onOff: !onOffValue,
+        },
+        // @ts-expect-error conditional
+        myFancyOwnFunctionality: {
+            myFancyValue: 36,
         },
     });
 }
