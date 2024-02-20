@@ -114,11 +114,10 @@ describe("ListManager", () => {
     it("basic array iteration", async () => {
         const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
-        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1) }, async (ref) => {
+        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1) }, async ref => {
             const list = ref.list as string[];
 
-            list[0] = "hi",
-            list[1] = "there";
+            (list[0] = "hi"), (list[1] = "there");
             list[2] = "aaaaand goodbye";
 
             const list2 = Array<string>();
@@ -127,7 +126,7 @@ describe("ListManager", () => {
                 list2.push(value);
             }
 
-            expect(list2).deep.equals([ "hi", "there", "aaaaand goodbye"]);
+            expect(list2).deep.equals(["hi", "there", "aaaaand goodbye"]);
         });
     });
 
@@ -248,7 +247,7 @@ describe("ListManager", () => {
                 { fabricIndex: 1, value: 1 },
                 { fabricIndex: 1, value: 3 },
                 { fabricIndex: 1, value: 5 },
-                { fabricIndex: 1, value: 7 }
+                { fabricIndex: 1, value: 7 },
             ]);
         });
     });

@@ -63,7 +63,7 @@ export class Environment {
 
     /**
      * Remove an environmental service.
-     * 
+     *
      * @param type the class of the service to remove
      * @param instance optional instance expected, if existing instance does not match it is not deleted
      */

@@ -60,7 +60,7 @@ export abstract class NetworkRuntime {
         try {
             await this.stop();
         } finally {
-            this.#owner.act(agent => agent.get(NetworkBehavior).internal.runtime = undefined);;
+            this.#owner.act(agent => (agent.get(NetworkBehavior).internal.runtime = undefined));
         }
     }
 

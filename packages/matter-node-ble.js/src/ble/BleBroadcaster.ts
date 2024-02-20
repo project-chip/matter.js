@@ -8,13 +8,13 @@ import { BtpCodec } from "@project-chip/matter.js/codec";
 import {
     CommissionerInstanceData,
     CommissioningModeInstanceData,
+    ImplementationError,
     InstanceBroadcaster,
 } from "@project-chip/matter.js/common";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { BlenoBleServer } from "./BlenoBleServer.js";
-import { ImplementationError } from "@project-chip/matter.js/common";
 
 const logger = Logger.get("BleBroadcaster");
 
@@ -27,10 +27,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
     #advertise = false;
     #isClosed = false;
 
-    constructor(
-        blenoServer: BlenoBleServer,
-        additionalAdvertisementData?: ByteArray,
-    ) {
+    constructor(blenoServer: BlenoBleServer, additionalAdvertisementData?: ByteArray) {
         this.#blenoServer = blenoServer;
         this.#additionalAdvertisementData = additionalAdvertisementData;
     }
@@ -109,7 +106,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
 
     async expireAllAnnouncements() {
         this.#assertOpen();
-         await this.#blenoServer.stopAdvertising();
+        await this.#blenoServer.stopAdvertising();
     }
 
     async close() {

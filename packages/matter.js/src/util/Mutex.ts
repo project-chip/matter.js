@@ -31,14 +31,16 @@ export class Mutex implements PromiseLike<unknown> {
      * may engage in another activity immediately thereafter.  So the mutex is not guaranteed to be available after an
      * await.
      */
-    then<TResult1 = void, TResult2 = never>(onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>
-    {
+    then<TResult1 = void, TResult2 = never>(
+        onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): PromiseLike<TResult1 | TResult2> {
         return (this.#promise || Promise.resolve()).then(onfulfilled, onrejected);
     }
 
     /**
      * Enqueue additional work.
-     * 
+     *
      * If {@link task} is a function it runs when current activity completes.  If it is a promise then the mutex will
      * not clear until {@link task} resolves.
      */
@@ -58,7 +60,7 @@ export class Mutex implements PromiseLike<unknown> {
                 }
 
                 this.#cancel = cancel;
-                return this.initiateTask(task).finally(this.#cancel = undefined);
+                return this.initiateTask(task).finally((this.#cancel = undefined));
             });
         }
     }

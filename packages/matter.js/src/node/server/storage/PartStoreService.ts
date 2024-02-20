@@ -96,7 +96,7 @@ export class PartStoreFactory extends PartStoreService {
 
         this.#construction.setStatus(Lifecycle.Status.Inactive);
         this.#construction.start();
-        
+
         await this.#construction;
     }
 

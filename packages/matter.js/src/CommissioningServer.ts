@@ -308,8 +308,8 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.addClusterServer(basicInformationCluster);
 
         if (reachabilitySupported) {
-            basicInformationCluster.subscribeReachableAttribute(newValue =>
-                basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
+            basicInformationCluster.subscribeReachableAttribute(
+                newValue => basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
             );
         }
 

@@ -4,29 +4,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
+import { AccessControl } from "../../../src/cluster/definitions/AccessControlCluster.js";
+import { NetworkCommissioning } from "../../../src/cluster/definitions/NetworkCommissioningCluster.js";
 import { Message, SessionType } from "../../../src/codec/MessageCodec.js";
 import { AttributeId } from "../../../src/datatype/AttributeId.js";
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
 import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
-import { INTERACTION_MODEL_REVISION } from "../../../src/protocol/interaction/InteractionServer.js";
-import { MockServerNode } from "../../node/mock-server-node.js";
-import { AccessControl } from "../../../src/cluster/definitions/AccessControlCluster.js";
-import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
 import { FabricIndex } from "../../../src/datatype/FabricIndex.js";
-import { VendorId } from "../../../src/datatype/VendorId.js";
 import { NodeId } from "../../../src/datatype/NodeId.js";
-import { ByteArray } from "../../../src/util/ByteArray.js";
-import { TlvReadRequest, TlvWriteRequest } from "../../../src/protocol/interaction/InteractionProtocol.js";
-import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
-import { TlvField, TlvObject } from "../../../src/tlv/TlvObject.js";
-import { TlvEnum } from "../../../src/tlv/TlvNumber.js";
-import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
-import { TlvArray } from "../../../src/tlv/TlvArray.js";
 import { TlvSubjectId } from "../../../src/datatype/SubjectId.js";
-import { Globals } from "../../../src/model/index.js";
-import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
-import { NetworkCommissioning } from "../../../src/cluster/definitions/NetworkCommissioningCluster.js";
+import { VendorId } from "../../../src/datatype/VendorId.js";
 import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOffLightDevice.js";
+import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
+import { Globals } from "../../../src/model/index.js";
+import { TlvReadRequest, TlvWriteRequest } from "../../../src/protocol/interaction/InteractionProtocol.js";
+import { INTERACTION_MODEL_REVISION } from "../../../src/protocol/interaction/InteractionServer.js";
+import { TlvArray } from "../../../src/tlv/TlvArray.js";
+import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
+import { TlvEnum } from "../../../src/tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../../../src/tlv/TlvObject.js";
+import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
+import { ByteArray } from "../../../src/util/ByteArray.js";
+import { MockServerNode } from "../../node/mock-server-node.js";
 
 const ROOT_CERT = ByteArray.fromHex(
     "153001010024020137032414001826048012542826058015203b37062414001824070124080130094104d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9d370a3501290118240260300414e766069362d7e35b79687161644d222bdde93a68300514e766069362d7e35b79687161644d222bdde93a6818300b404e8fb06526f0332b3e928166864a6d29cade53fb5b8918a6d134d0994bf1ae6dce6762dcba99e80e96249d2f1ccedb336b26990f935dba5a0b9e5b4c9e5d1d8f1818181824ff0118",
@@ -59,7 +59,7 @@ class WifiCommissioningServer extends NetworkCommissioningServer.with("WiFiNetwo
 async function performWrite(
     node: MockServerNode,
     fabric: Fabric,
-    request: TypeFromSchema<typeof TlvWriteRequest>["writeRequests"][number]
+    request: TypeFromSchema<typeof TlvWriteRequest>["writeRequests"][number],
 ) {
     const exchange = await node.createExchange({ fabric });
 
@@ -71,7 +71,7 @@ async function performWrite(
             suppressResponse: true,
             interactionModelRevision: INTERACTION_MODEL_REVISION,
             timedRequest: false,
-            writeRequests: [ request ],
+            writeRequests: [request],
         },
         {
             packetHeader: { sessionType: SessionType.Unicast },
@@ -83,7 +83,7 @@ async function performRead(
     node: MockServerNode,
     fabric: Fabric,
     isFabricFiltered: boolean,
-    request: Exclude<TypeFromSchema<typeof TlvReadRequest>["attributeRequests"], undefined>[number]
+    request: Exclude<TypeFromSchema<typeof TlvReadRequest>["attributeRequests"], undefined>[number],
 ) {
     const exchange = await node.createExchange({ fabric });
 
@@ -93,9 +93,7 @@ async function performRead(
         exchange,
         {
             interactionModelRevision: INTERACTION_MODEL_REVISION,
-            attributeRequests: [
-                request
-            ],
+            attributeRequests: [request],
             isFabricFiltered: isFabricFiltered,
         },
         {
@@ -122,9 +120,7 @@ async function writeAcl(node: MockServerNode, fabric: Fabric, acl: TypeFromSchem
             clusterId: ClusterId(AccessControl.Cluster.id),
             attributeId: AttributeId(AccessControl.Cluster.attributes.acl.id),
         },
-        data: TlvArray(AcesWithoutFabric).encodeTlv([
-            acl
-        ]),
+        data: TlvArray(AcesWithoutFabric).encodeTlv([acl]),
     });
 }
 
@@ -172,14 +168,10 @@ describe("ClusterServerBacking", () => {
 
         const fabric1Acls = await readAcls(node, fabric1, true);
 
-        expect(fabric1Acls).deep.equals([
-            { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 1 },
-        ]);
+        expect(fabric1Acls).deep.equals([{ privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 1 }]);
 
         const fabric2Acls = await readAcls(node, fabric2, true);
-        expect(fabric2Acls).deep.equals([
-            { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 },
-        ]);
+        expect(fabric2Acls).deep.equals([{ privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 }]);
 
         const allAcls = await readAcls(node, fabric1, false);
 
@@ -197,7 +189,7 @@ describe("ClusterServerBacking", () => {
                 override scanNetworks(): NetworkCommissioning.ScanNetworksResponse {
                     return {
                         networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                    }
+                    };
                 }
             }
 
@@ -208,7 +200,8 @@ describe("ClusterServerBacking", () => {
             const commands = await readCommandList(node, NetworkCommissioning.Cluster.id, 1);
 
             expect(commands).deep.equals([
-                NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks.requestId
+                NetworkCommissioning.WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks
+                    .requestId,
             ]);
         });
     });

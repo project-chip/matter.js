@@ -6,10 +6,13 @@
 
 import { MatterDevice } from "../../src/MatterDevice.js";
 import { OnlineContext } from "../../src/behavior/context/server/OnlineContext.js";
+import { Crypto } from "../../src/crypto/Crypto.js";
+import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { Part } from "../../src/endpoint/Part.js";
+import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { Environment } from "../../src/environment/Environment.js";
 import { StorageService } from "../../src/environment/StorageService.js";
 import { Network } from "../../src/net/Network.js";
@@ -21,9 +24,6 @@ import { MessageExchange } from "../../src/protocol/MessageExchange.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { MaybePromise } from "../../src/util/Promises.js";
-import { Crypto } from "../../src/crypto/Crypto.js";
-import { Key, PrivateKey } from "../../src/crypto/Key.js";
-import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 
 // These are temporary until we get proper crypto.subtle support
 Crypto.get().sign = () => {
@@ -51,10 +51,7 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
         storage.location = "(memory)";
         storage.factory = () => new StorageBackendMemory();
 
-        environment.set(
-            Network,
-            MockServerNode.createNetwork(1),
-        );
+        environment.set(Network, MockServerNode.createNetwork(1));
 
         const config = {
             type,
@@ -87,9 +84,9 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
         let { online, config, device } = options ?? {};
 
         if (!config) {
-            config = { type: ServerRootEndpoint as T } as Node.Configuration<T>
+            config = { type: ServerRootEndpoint as T } as Node.Configuration<T>;
         }
-        
+
         const node = new MockServerNode<ServerRootEndpoint>(config.type, config);
 
         if (device === undefined && options && !("device" in options)) {
@@ -116,13 +113,10 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
 
     static createNetwork(lastIdentifierByte: number) {
         const byte = lastIdentifierByte.toString(16).padStart(2, "0");
-        return new NetworkFake(
-            `00:11:22:33:44:${byte}`,
-            [
-                `1111:2222:3333:4444:5555:6666:7777:88${byte}`,
-                `10.10.10.${lastIdentifierByte}`,
-            ]
-        );
+        return new NetworkFake(`00:11:22:33:44:${byte}`, [
+            `1111:2222:3333:4444:5555:6666:7777:88${byte}`,
+            `10.10.10.${lastIdentifierByte}`,
+        ]);
     }
 
     async createSession(options?: Partial<Parameters<MatterDevice["createSecureSession"]>[0]>) {

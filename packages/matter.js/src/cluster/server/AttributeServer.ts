@@ -135,7 +135,9 @@ export abstract class BaseAttributeServer<T> {
             this.value = initValue;
         } catch (error) {
             logger.warn(
-                `Attribute value to initialize for ${name} has an invalid value ${Logger.toJSON(initValue)}. Restore to default ${Logger.toJSON(defaultValue)}`,
+                `Attribute value to initialize for ${name} has an invalid value ${Logger.toJSON(
+                    initValue,
+                )}. Restore to default ${Logger.toJSON(defaultValue)}`,
             );
             if (defaultValue === undefined) {
                 throw new ImplementationError(`Attribute value to initialize for ${name} can not be undefined.`);

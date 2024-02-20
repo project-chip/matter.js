@@ -398,15 +398,15 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Execute a function against an {@link Agent} for the part.
-     * 
+     *
      * Agents provide the highest-leve API for interacting with parts.  The agent is a composite object with properties
      * for each supported behavior.
-     * 
+     *
      * State changes made by {@link actor} are atomic and made permanent only when the actor exits unless you commit the
      * transaction manually.
-     * 
+     *
      * {@link actor} runs in an "offline" context where ACLs are ignored and all state is read/write.
-     * 
+     *
      * The {@link Agent} is destroyed after {@link actor} exits so you should not maintain references to the agent,
      * its behaviors or associated state.
      */
