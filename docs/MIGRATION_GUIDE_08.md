@@ -1,10 +1,9 @@
 # Migration guide matter.js Device API to 0.8
 
 With version 0.8 the matter.js project introduces a new high level API to build devices bases on code generation
-for all Matter 1.1 device types, clusters and functionality. In the past we already generated the code for all 
-cluster definitions and this got now enhanced for all device types. Additionally, the way how own cluster logic can be 
-implemented also needed to be adjusted and got enhanced together with a very flexible way to choose the wanted cluster 
-features.
+for all Matter 1.1 device types, clusters and functionality. In the past we already generated the code for all
+cluster definitions and this has now been enhanced for all device types. Additionally, the way custom cluster logic can be
+implemented also needed to be adjusted and was enhanced with a very flexible way to choose the wanted cluster features.
 
 This means that developers need to adjust their code to use the new classes and concepts introduced by this change. The
 former API (pre 0.8, called "Legacy" for of now) is still 100% functional, but will be deprecated and removed in upcoming 
@@ -17,19 +16,23 @@ This document tries to give an overview how the commonly used components and cla
 adjusted for the new API.
 
 ## Examples
-Matter.js contains several examples to show how devices are built that also can be used in practice as CLI scripts. 
-These examples got also adjusted and exists for Legacy API (*Legacy.ts) and new API. This can be used too to see the 
-differences between the APIs.
+Matter.js contains several examples to show how devices are built that also can be used in practice as CLI scripts.
+These examples were also adjusted and exist for the legacy API (*Legacy.ts) as well as the new API. This can be used 
+too to see the differences between the APIs.
 
 ## Components
 The following sections shows the legacy and matching new components and tries to show the differences and what they 
 have in common.
 
 ### New:Environment <--> Legacy:MatterServer
-The new API introduces an Environment singleton which represents a platform specific basic environment and is in our 
-current case initialized as soon as matter-node.js is imported. It encapsulates the basic Process, Network, Storage, 
+The new API introduces an Environment which represents a platform specific basic environment. A "default" Environment is, in our 
+current case, initialized as soon as matter-node.js is imported. It encapsulates the basic Process, Network, Storage, 
 Configuration and logging for the rest of the components in one central place. The old API also had parts of this registered automatically but especially configuration and storage was needed to be provided by the developer.
-Like in MatterServer the Environment also maintains the MDNS broadcasting and scanning for all nodes that are added later. In fact this is all what they have in common, so the differences are:
+Like in MatterServer the Environment also maintains the MDNS broadcasting and scanning for all nodes that are added later. 
+
+The Environment to use can be provided in the configuration of the ServerNode instance you create (see below) as property `environment` - if not provided the default environment is used.
+
+In fact this is all what they have in common, so the differences are:
 * The default storage is defined by the Environment which is initialized - in the case of the Node.js Environment it is the file based key value store "node-localstorage". To exchange the storage to something else you can implement/extend an own Environment class (see [NodeJsEnvironment](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts)) or just overwrite the storage factory (`Environment.default.get(StorageService).factory = (namespace: string) => createMyStorage(namespace);`)
 * Basic configuration can be provided via a config file, CLI parameters or also environment variables. Some defined configuration keys are used by the base environment or the Node.js environment (e.g. MDNS network interface and such), but also custom configuration can be added and access from within every place in the code by accessing the environment. So this also acts as central place to share configuration for the device implementation. Some variables and their usage is documented in the [Examples Readme](../packages/matter-node.js-examples/README.md). Else check the [Environment.ts](../packages/matter.js/src/environment/Environment.ts) and [NodeJsEnvironment.ts](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts).
 * The "ProcessManager" of the environment will, in case of the Node.js environment, also register Process signal handlers to handle Shutdown (SIGINT, SIGTERM, exit) or to trigger logging diagnostic data (SIGUSR2). For other environments this needs to be implemented accordingly. 
@@ -54,8 +57,8 @@ Afterward you start the node. Here you have two options:
 The following methods are also existing on the ServerNode:
 * **`start()`**: This starts the node - mainly used internally
 * **`cancel()`**: This brings the node offline and removes all network sockets but leave state and structure intact, so it can be started again.
-* **`factoryReset()`**: This factory resets the device. If started it is stopped and restarted afterwards.
-* **`destroy()`**: This destroys the node, taking it offline and removing it from the environment workers (??) 
+* **`factoryReset()`**: This factory resets the device. If started it is stopped and restarted afterward.
+* **`destroy()`**: This destroys the node, taking it offline and removing it from the environment workers-
 
 ### New:Part <--> Legacy:Endpoint and Device-Classes/Clusters
 A "Part" describes an endpoint which is added in the Matter endpoint structure.
@@ -101,10 +104,10 @@ const serverNode = await ServerNode.create({
 ```
 
 **IMPORTANT**
-Please note that attribute change events can __not__ be added before the part is added to te node!
+Please note that attribute change events can __not__ be added before the part is added to the node!
 
 #### Provide cluster properties/defaults with creation
-Each Device type has mandatory clusters that are added by default automatically and use their default values as define dby the Matter specification. To override these defaults you can add them as configuration when adding the node:
+Each Device type has mandatory clusters that are added by default automatically and use their default values as defined by the Matter specification. To override these defaults you can add them as configuration when adding the node:
 
 ```javascript
 const part = await serverNode.add(OnOffLightDevice, { 
@@ -161,6 +164,50 @@ const part = await serverNode.add(
 );
 ```
 
+### Initialize and destroy cluster logic
+The legacy API had the two handler methods "initializeClusterServer" and "destroyClusterServer" to initialize and 
+cleanup own cluster states.
+
+The new API uses `initialize()` to initialize and `async [Symbol.asyncDispose]()` to cleanup the cluster state.
+
+As an example you can check the [OnOffServer.ts](../packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts) implementation.
+
+### Dynamic Getter/Setter for cluster attributes
+The Legacy API allowed to use nameAttributeGetterGetter and nameAttributeSetter as CLuster command handlers to implement cases where the attribute value needs to be defined dynamically.
+
+**Note**
+Because this type of attribute value determination is problematic when it comes to subscriptions and other cases please try to use this only if it is really needed and the values are not relevant to be subscribed. Ideally set the attribite value when it is changed to the new value.
+
+In order to create dynamic getter or setters in the new API you can overwrite the respective attributes in the Cluster state definition in the Server implementation as shown in [OperationalCredentialsServer.ts at the end of the file](../packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts):
+
+The following example shows how to define a dynamic getter and setter for the attribute "currentFabricIndex":
+
+```javascript
+    //...
+    [Val.properties](session: ValueSupervisor.Session) {
+        return {
+            get currentFabricIndex() {
+                return session.fabric ?? FabricIndex.NO_FABRIC;
+            },
+            
+            set currentFabricIndex(_value: number) {
+                throw ImplementationError("Set not allowed");
+            }
+        };
+    }
+```
+
+### Add Own/Custom defined clusters
+matter.js also allows to define and add additional clusters to the system. Todo this we need the following components to be created:
+* The Tlv Schema definition of the cluster which is used to encode and decode the data on the matter message TlV level. Also the controller uses this to build cluster client representations to access the data
+* The matter.js Model definition of the cluster which is used by the new API to do additional validations
+* Some glue code to provide typings and such for TypeScript and developer convenience :-)
+
+**Note**
+Currently the Tlv-Schema and the Model definition is kind of duplicated code and needs to match in their respective formats. In the future we plan to use a json representation like it is already in use for all official clusters - and then offer code generators also for custom clusters which would create all the relevant code automatically. But the adjusted generators are not yet ready.
+
+The DevicesFullNode.ts contains a [MyFancyFunctionality custom cluster](../packages/matter-node.js-examples/src/examples/cluster/MyFancyOwnFunctionality.ts) that shows how this can be built right now already (with a bit overhead as described). The code contained here in one file is normally split into several files in the generated code.
+
 ### React to change events on cluster attributes
 To react to change events in your code outside of cluster implementations (there special rule might apply because of the transactionality) you do:
 
@@ -198,7 +245,7 @@ await part.set({
 
 You can provide multiple values also from multiple clusters within this part to set together. This means that they are set as a transaction - if one fails, all fail!
 
-#### How to get QR Code and pairing details if device is not commissioned?
+### How to get QR Code and pairing details if device is not commissioned?
 ```javascript
 if (!serverNode.lifecycle.isCommissioned) {
     const { qrPairingCode, manualPairingCode } = await serverNode.act(agent => agent.commissioning.pairingCodes);
@@ -211,9 +258,8 @@ if (!serverNode.lifecycle.isCommissioned) {
 }
 ```
 
-#### More options?
+### More options?
 Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/examples/DeviceNodeFull.ts) example for more interaction points.
-
 
 
 
@@ -226,13 +272,18 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 
 ## TOPICS/DISCUSSIONS/TODOs:
 * Bug: tear down - block events (to prevent reporting empty partsLists)
-* Bug: Expiry broken again, Mdns broadcaster hangs shutdown?
 * Bug: State values that are undefined/optional in State defaults will never be taken over when config is initialized and stay undefined
+* Bug: Greg: https://github.com/project-chip/matter.js/pull/696/files/5d428c568c3caf207799a2b5fabab45980dc1390#diff-5de6af6079ba8b41732bc937ce419016e66f110464eef7c130eacaa0f2874aac
+* Bug: Greg: https://github.com/project-chip/matter.js/pull/696/files/5d428c568c3caf207799a2b5fabab45980dc1390#diff-96ded3092330f11f54ce85d4a74a0b7e1110afde53889e826de64c65a7706ba7
 * Missing: multiple nodes duplicate port check missing
 * Missing: Re-Add Session changed callbacks
 * How: add a Controller to environment how?
 * How: how add custom cluster servers?
+* Discussion: readonly fields in Behavior State (Re https://github.com/project-chip/matter.js/pull/696/files/5d428c568c3caf207799a2b5fabab45980dc1390#diff-9bbc528df5309b02282e61c6068bb88e217d9142afd630b35afabf251ae2ce1f)
 * Discussion: Discuss and decide matter-node.js re-exports vs not
 * Discussion: change handlers should also allow async implementations
 * Discussion: act/actAsync to get rid of MaybePromise in some places vs "linter" and have more type safeness? (MaybePromise at all?)
 * Discussion: Go over Examples and discuss "convenience" for devs :-)
+* Discussion: async store?
+* Discussion: GHA tests runs? adjust for branch or start PR?
+* Later: Generator options for custom clusters into own projects
