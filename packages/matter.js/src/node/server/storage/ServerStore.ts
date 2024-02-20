@@ -80,7 +80,7 @@ export class ServerStore implements Destructable {
         await this.#construction.close(async () => {
             await this.#storageManager?.close();
             this.#logChange("Closed");
-        })
+        });
     }
 
     get eventStorage() {

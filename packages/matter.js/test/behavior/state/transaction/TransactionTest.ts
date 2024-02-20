@@ -123,7 +123,7 @@ function test2(what: string, actor: () => MaybePromise) {
         Transaction.act("test2", tx => {
             transaction2 = tx;
             return actor();
-        })
+        }),
     );
 }
 
@@ -135,7 +135,7 @@ function test3(what: string, actor: () => MaybePromise) {
         Transaction.act("test3", tx => {
             transaction3 = tx;
             return actor();
-        })
+        }),
     );
 }
 

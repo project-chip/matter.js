@@ -103,22 +103,18 @@ export class CommissioningBehavior extends Behavior {
         }
 
         // Callback that listens to the failsafe for destruction and triggers commissioning status update
-        const listener = this.callback(
-            function(this: CommissioningBehavior, status: Lifecycle.Status) {
-                if (status === Lifecycle.Status.Destroyed) {
-                    this.part.env.runtime.addWorker(this.#updateCommissioningStatus());
-                    this.internal.unregisterFailsafeListener?.();
-                }
+        const listener = this.callback(function (this: CommissioningBehavior, status: Lifecycle.Status) {
+            if (status === Lifecycle.Status.Destroyed) {
+                this.part.env.runtime.addWorker(this.#updateCommissioningStatus());
+                this.internal.unregisterFailsafeListener?.();
             }
-        );
+        });
 
         // Callback that removes above listener
-        this.internal.unregisterFailsafeListener = this.callback(
-            function(this: CommissioningBehavior) {
-                failsafe.construction.change.off(listener);
-                this.internal.unregisterFailsafeListener = undefined;
-            }
-        );
+        this.internal.unregisterFailsafeListener = this.callback(function (this: CommissioningBehavior) {
+            failsafe.construction.change.off(listener);
+            this.internal.unregisterFailsafeListener = undefined;
+        });
 
         // Register the listener
         failsafe.construction.change.on(listener);

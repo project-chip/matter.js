@@ -111,10 +111,7 @@ export class ServerPartStore implements PartStore {
 
         let store = this.#childStores[partId];
         if (store === undefined) {
-            store = this.#childStores[partId] = new ServerPartStore(
-                this.#childStorage.createContext(partId),
-                false,
-            );
+            store = this.#childStores[partId] = new ServerPartStore(this.#childStorage.createContext(partId), false);
 
             if (!this.#knownParts.has(partId)) {
                 this.#knownParts.add(partId);

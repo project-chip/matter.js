@@ -97,7 +97,7 @@ export namespace SupportedBehaviors {
      */
     export type StatePatchOf<SB extends SupportedBehaviors> = {
         [K in keyof SB]?: Behavior.PatchStateOf<SB[K]>;
-    }
+    };
 }
 
 function addBehaviors(target: SupportedBehaviors, types: SupportedBehaviors.List) {

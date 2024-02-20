@@ -16,13 +16,13 @@ import { PartInitializer } from "../endpoint/part/PartInitializer.js";
 import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
+import type { MatterCoreSpecificationV1_2 } from "../spec/Specifications.js";
 import { Mutex } from "../util/Mutex.js";
 import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
 import { IdentityService } from "./server/IdentityService.js";
 import { ServerPartInitializer } from "./server/ServerPartInitializer.js";
 import { ServerStore } from "./server/storage/ServerStore.js";
-import type { MatterCoreSpecificationV1_2 } from "../spec/Specifications.js";
 
 const logger = Logger.get("ServerNode");
 
@@ -118,7 +118,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      */
     cancel() {
         let network: ServerNetworkRuntime | undefined;
-        this.act(agent => network = agent.network.internal.runtime);
+        this.act(agent => (network = agent.network.internal.runtime));
         if (network) {
             // Note if runtime is present we call close() immediately, not once the mutex is free, because the mutex is
             // probably held by the network's run() promise
@@ -131,7 +131,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
         this.#mutex.terminate(async () => {
             await super.close();
-            
+
             if (this.env.has(ServerStore)) {
                 const store = this.env.get(ServerStore);
                 await store.close();
@@ -208,7 +208,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      *
      * If this is inappropriate for your application you may override to alter the behavior.   Matter requires that all
      * "security- and privacy-related data and key material" is removed on factory reset.
-     * 
+     *
      * {@see {@link MatterCoreSpecificationV1_2} § 13.4}
      */
     protected async resetStorage() {

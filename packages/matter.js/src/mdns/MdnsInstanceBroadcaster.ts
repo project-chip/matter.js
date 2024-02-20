@@ -15,7 +15,7 @@ import type { MdnsBroadcaster } from "./MdnsBroadcaster.js";
 
 /**
  * This class is handing MDNS Announcements for one instance of a device aka "port".
- * 
+ *
  * Obtain an instance via {@link MdnsBroadcaster.createInstanceBroadcaster}.
  */
 export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
@@ -24,11 +24,7 @@ export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
     readonly #onclose: () => void;
     #isClosed = false;
 
-    constructor(
-        instancePort: number,
-        mdnsBroadcaster: MdnsBroadcaster,
-        onclose: () => void,
-    ) {
+    constructor(instancePort: number, mdnsBroadcaster: MdnsBroadcaster, onclose: () => void) {
         this.#instancePort = instancePort;
         this.#mdnsBroadcaster = mdnsBroadcaster;
         this.#onclose = onclose;
@@ -39,7 +35,7 @@ export class MdnsInstanceBroadcaster implements InstanceBroadcaster {
             return;
         }
         this.#isClosed = true;
-        
+
         await this.#mdnsBroadcaster.expireAllAnnouncements(this.#instancePort);
         this.#onclose();
     }

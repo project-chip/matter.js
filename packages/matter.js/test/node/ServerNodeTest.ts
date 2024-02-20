@@ -29,8 +29,10 @@ describe("ServerNode", () => {
             node.env.runtime.cancel();
         });
 
-        for (const event of [ "online", "offline", "ready", "treeReady" ] as const) {
-            node.lifecycle[event].on(() => { changes.push([ event ]) });
+        for (const event of ["online", "offline", "ready", "treeReady"] as const) {
+            node.lifecycle[event].on(() => {
+                changes.push([event]);
+            });
         }
 
         node.add(OnOffLightDevice);
@@ -62,17 +64,16 @@ describe("ServerNode", () => {
         });
 
         const advertisementReceived = new Promise<ByteArray>(resolve =>
-            scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
-                resolve(data),
-            )
+            scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 
         const node = await MockServerNode.createOnline({
-            config: { type: ServerRootEndpoint,
+            config: {
+                type: ServerRootEndpoint,
                 network: { port: 0 },
                 commissioning: { discriminator: 2002 },
                 basicInformation: { vendorId: 65501 },
-            }
+            },
         });
 
         const operationalPort = node.state.network.operationalPort;
@@ -110,9 +111,7 @@ describe("ServerNode", () => {
         expect(additional(DnsRecordType.SRV)?.port).equals(operationalPort);
 
         const expirationReceived = new Promise<ByteArray>(resolve =>
-            scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => 
-                resolve(data)
-            )
+            scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => resolve(data)),
         );
 
         await node.close();

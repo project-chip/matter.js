@@ -52,9 +52,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
      */
     get mdnsBroadcaster() {
         if (!this.#mdnsBroadcaster) {
-            this.#mdnsBroadcaster = this.owner.env.get(MdnsService).createInstanceBroadcaster(
-                this.owner.state.network.operationalPort,
-            );
+            this.#mdnsBroadcaster = this.owner.env
+                .get(MdnsService)
+                .createInstanceBroadcaster(this.owner.state.network.operationalPort);
         }
         return this.#mdnsBroadcaster;
     }
@@ -147,7 +147,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         const isCommissioned = !!this.#commissionedFabrics;
 
         let discoveryCapabilities = this.owner.state.network.discoveryCapabilities;
-        
+
         if (isCommissioned) {
             // Already commissioned, only broadcast on network
             discoveryCapabilities = { onIpNetwork: true };
@@ -235,14 +235,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.addTransports(this.#matterDevice);
         await this.addBroadcasters(this.#matterDevice);
 
-        await this.owner.set({ network: { operationalPort: this.operationalPort }});
+        await this.owner.set({ network: { operationalPort: this.operationalPort } });
         if (this.owner.state.network.openAdvertisementWindowOnStartup) {
             await this.openAdvertisementWindow();
         }
 
-        this.owner.lifecycle.commissioned.on(
-            this.#commissionedListener = () => this.enterCommissionedMode()
-        );
+        this.owner.lifecycle.commissioned.on((this.#commissionedListener = () => this.enterCommissionedMode()));
     }
 
     protected override async stop() {

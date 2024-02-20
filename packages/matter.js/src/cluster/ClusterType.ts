@@ -231,23 +231,22 @@ export namespace ClusterType {
     export type RelaxTypes<V> = V extends number
         ? number
         : V extends object
-            ? V extends (...args: any[]) => any
-                ? V
-                : {
+          ? V extends (...args: any[]) => any
+              ? V
+              : {
                     [K in keyof V]: RelaxTypes<V[K]>;
                 }
-            : V;
+          : V;
 
-    export type PatchType<V> =
-        V extends (infer E)[]
-            ? Record<`${number}`, PatchType<E>> | PatchType<E>[]
-            : V extends object
-                ? V extends (...args: any[]) => any
-                    ? V
-                    : {
-                        [K in keyof V]?: PatchType<V[K]>;
-                    }
-                : V;
+    export type PatchType<V> = V extends (infer E)[]
+        ? Record<`${number}`, PatchType<E>> | PatchType<E>[]
+        : V extends object
+          ? V extends (...args: any[]) => any
+              ? V
+              : {
+                    [K in keyof V]?: PatchType<V[K]>;
+                }
+          : V;
 
     /**
      * A slightly relaxed version of AttributeValues for input.

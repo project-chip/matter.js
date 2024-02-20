@@ -63,7 +63,7 @@ export class MdnsBroadcaster {
     readonly #network: Network;
     readonly #mdnsServer: MdnsServer;
     readonly #enableIpv4?: boolean;
-    readonly #instances = new BasicSet<MdnsInstanceBroadcaster>;
+    readonly #instances = new BasicSet<MdnsInstanceBroadcaster>();
 
     static async create(network: Network, options?: { enableIpv4?: boolean; multicastInterface?: string }) {
         const { enableIpv4, multicastInterface } = options ?? {};
