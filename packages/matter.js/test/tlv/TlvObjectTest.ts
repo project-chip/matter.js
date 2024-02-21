@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "../../src/common/ValidationError.js";
 import { FabricIndex, TlvFabricIndex } from "../../src/datatype/FabricIndex.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
@@ -231,6 +232,24 @@ describe("TlvObject tests", () => {
                     { mandatoryField: 1, optionalField: "test" },
                     { mandatoryField: 2, optionalField: "test" },
                 ]);
+            });
+        });
+
+        describe("ValidationError", () => {
+            it("throws error on invalid field value", () => {
+                let hasThrown = false;
+                try {
+                    // @ts-expect-error  test case
+                    schema.validate({ mandatoryField: 1, optionalField: 2 });
+                } catch (error) {
+                    hasThrown = true;
+                    expect(error instanceof ValidationError).true;
+                    if (error instanceof ValidationError) {
+                        expect(error.message).equal("(Validation/135) Expected string, got number.");
+                        expect(error.fieldName).equal("optionalField");
+                    }
+                }
+                expect(hasThrown).true;
             });
         });
 
