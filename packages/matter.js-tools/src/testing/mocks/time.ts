@@ -103,15 +103,26 @@ export class MockTime {
     async resolve<T>(promise: PromiseLike<T>) {
         let resolved = false;
         let result: T | undefined;
+        let error: any;
 
-        promise.then(r => {
-            resolved = true;
-            result = r;
-        });
+        promise.then(
+            r => {
+                resolved = true;
+                result = r;
+            },
+            e => {
+                resolved = true;
+                error = e;
+            }
+        );
 
         let timeAdvanced = 0;
         while (!resolved) {
             await this.yield();
+
+            if (resolved) {
+                break;
+            }
 
             // If we've advanced more than one hour, assume we've hung
             if (timeAdvanced > 60 * 60 * 1000) {
@@ -123,7 +134,15 @@ export class MockTime {
             await this.advance(nextAdvance);
             timeAdvanced += nextAdvance;
 
+            if (resolved) {
+                break;
+            }
+
             await this.yield();
+        }
+
+        if (error !== undefined) {
+            throw error;
         }
 
         return result as T;
