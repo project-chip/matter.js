@@ -6,7 +6,7 @@
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
-import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
+import { Format, Level, Logger, createFileLogger } from "@project-chip/matter-node.js/log";
 import { singleton } from "@project-chip/matter-node.js/util";
 import yargs from "yargs/yargs";
 import { MatterNode } from "./MatterNode.js";
@@ -18,7 +18,7 @@ if (process.stdin?.isTTY) Logger.format = Format.ANSI;
 
 let theNode: MatterNode;
 
-export function setLogLevel(level: string): void {
+export function setLogLevel(identifier: string, level: string): void {
     let logLevel = Level.INFO;
     switch (level) {
         case "fatal":
@@ -34,7 +34,7 @@ export function setLogLevel(level: string): void {
             logLevel = Level.DEBUG;
             break;
     }
-    Logger.defaultLogLevel = logLevel;
+    Logger.setDefaultLoglevelForLogger(identifier, logLevel);
 }
 
 /**
@@ -60,21 +60,28 @@ async function main() {
                     })
                     .options({
                         ble: {
-                            description: "Enable BLE support",
+                            description: "Enable BLE support.",
                             type: "boolean",
                         },
                         bleHciId: {
-                            description: "HCI ID of the BLE adapter to use",
+                            description:
+                                "HCI ID of the BLE adapter to use. The provided value will be persisted for future runs.",
                             type: "number",
                             default: 0,
                         },
                         factoryReset: {
-                            description: "Factory-Reset storage of this node",
+                            description: "Factory-Reset storage of this node.",
                             default: false,
                             type: "boolean",
                         },
                         netInterface: {
-                            description: "Network interface to use for MDNS announcements and scanning",
+                            description: "Network interface to use for MDNS announcements and scanning.",
+                            type: "string",
+                            default: undefined,
+                        },
+                        logfile: {
+                            description:
+                                "Logfile to use to log to. By Default debug loglevel is logged to the file. The provided value will be persisted for future runs.",
                             type: "string",
                             default: undefined,
                         },
@@ -83,14 +90,28 @@ async function main() {
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface } = argv;
+                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface, logfile } = argv;
 
                 theNode = new MatterNode(nodeNum, netInterface);
                 await theNode.initialize(factoryReset);
 
+                if (logfile !== undefined) {
+                    theNode.Store.set("LogFile", logfile);
+                }
+                if (theNode.Store.has("LogFile")) {
+                    const storedLogFileName = theNode.Store.get<string>("LogFile");
+                    if (storedLogFileName !== undefined) {
+                        Logger.addLogger("file", await createFileLogger(storedLogFileName), {
+                            defaultLogLevel: theNode.Store.get<Level>("LoglevelFile", Level.DEBUG),
+                            logFormat: Format.PLAIN,
+                        });
+                    }
+                }
+                setLogLevel("default", theNode.Store.get<string>("LogLevel", "info"));
+
                 const theShell = new Shell(theNode, PROMPT);
 
-                if (bleHciId) {
+                if (bleHciId !== undefined) {
                     theNode.Store.set("BleHciId", bleHciId);
                 }
 
@@ -103,8 +124,6 @@ async function main() {
                             }),
                     );
                 }
-
-                setLogLevel(theNode.Store.get<string>("LogLevel", "info"));
 
                 console.log(`Started Node #${nodeNum} (Type: ${nodeType}) ${ble ? "with" : "without"} BLE`);
                 theShell.start();

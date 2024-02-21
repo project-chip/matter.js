@@ -11,15 +11,15 @@ import type { Argv } from "yargs";
 import yargs from "yargs/yargs";
 import { MatterNode } from "../MatterNode.js";
 import { exit } from "../app";
+import cmdAttributes from "./cmd_cluster-attributes";
+import cmdCommands from "./cmd_cluster-commands";
+import cmdEvents from "./cmd_cluster-events";
 import cmdCommission from "./cmd_commission.js";
 import cmdConfig from "./cmd_config.js";
 import cmdDiscover from "./cmd_discover.js";
 import cmdIdentify from "./cmd_identify.js";
-import cmdLock from "./cmd_lock.js";
 import cmdNodes from "./cmd_nodes.js";
-import cmdOnOff from "./cmd_onoff.js";
 import cmdSession from "./cmd_session.js";
-
 import cmdSubscribe from "./cmd_subscribe.js";
 
 function exitCommand() {
@@ -97,13 +97,14 @@ export class Shell {
                 .command([
                     cmdCommission(this.theNode),
                     cmdConfig(this.theNode),
-                    cmdLock(this.theNode),
                     cmdSession(this.theNode),
                     cmdNodes(this.theNode),
-                    cmdOnOff(this.theNode),
                     cmdSubscribe(this.theNode),
                     cmdIdentify(this.theNode),
                     cmdDiscover(this.theNode),
+                    cmdAttributes(this.theNode),
+                    cmdEvents(this.theNode),
+                    cmdCommands(this.theNode),
                     exitCommand(),
                 ])
                 .command({

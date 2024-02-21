@@ -4,4 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "@project-chip/matter.js/log";
+export function camelize(str: string) {
+    return str.charAt(0).toLowerCase() + str.slice(1);
+}

@@ -5,6 +5,7 @@
  */
 
 import { UnexpectedDataError } from "../common/MatterError.js";
+import { tryCatch } from "../common/TryCatchHandler.js";
 import { ValidationError } from "../common/ValidationError.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
@@ -85,7 +86,16 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
             throw new ValidationError(`Array is too long: ${data.length}, max ${this.maxLength}.`);
         if (data.length < this.minLength)
             throw new ValidationError(`Array is too short: ${data.length}, min ${this.minLength}.`);
-        data.forEach(element => this.elementSchema.validate(element));
+        data.forEach((element, index) => {
+            tryCatch(
+                () => this.elementSchema.validate(element),
+                ValidationError,
+                error => {
+                    error.fieldName = `[${index}]${error.fieldName !== undefined ? `.${error.fieldName}` : ""}`;
+                    throw error;
+                },
+            );
+        });
     }
 
     decodeFromChunkedArray(chunks: ArrayAsChunked, currentValue?: T[]): T[] {

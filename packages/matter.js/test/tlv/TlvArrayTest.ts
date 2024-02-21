@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "../../src/common/ValidationError.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { ArrayAsChunked, ArraySchema, TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvNullable } from "../../src/tlv/TlvNullable.js";
@@ -12,10 +13,12 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 
 type TestVector<I, E> = { [testName: string]: { input: I; out: E } };
 
-const validateTestVector: TestVector<string[], boolean> = {
+const validateTestVector: TestVector<string[], boolean | number> = {
     "validates an array with an acceptable length": { input: ["a", "b"], out: false },
     "throws an error if the array is too short": { input: ["a"], out: true },
     "throws an error if the array is too long": { input: ["a", "b", "c", "d", "e"], out: true },
+    // @ts-expect-error test case
+    "throws an error if entry is wrong datatype": { input: ["a", 7], out: 1 },
 };
 
 describe("TlvArray", () => {
@@ -120,10 +123,25 @@ describe("TlvArray", () => {
             const { input, out: throwException } = validateTestVector[testName];
             it(testName, () => {
                 const test = () => schema.validate(input);
-                if (throwException) {
-                    expect(test).throw();
+                if (typeof throwException === "boolean") {
+                    if (throwException) {
+                        expect(test).throw();
+                    } else {
+                        expect(test).not.throw();
+                    }
                 } else {
-                    expect(test).not.throw();
+                    let hasThrown = false;
+                    try {
+                        test();
+                    } catch (error) {
+                        hasThrown = true;
+                        expect(error instanceof ValidationError).true;
+                        if (error instanceof ValidationError) {
+                            expect(error.message).equal("(Validation/135) Expected string, got number.");
+                            expect(error.fieldName).equal(`[${throwException}]`);
+                        }
+                    }
+                    expect(hasThrown).ok;
                 }
             });
         }

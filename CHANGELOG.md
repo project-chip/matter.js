@@ -11,6 +11,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 * Matter-Core functionality:
+  * Feature: Allowed multiple Loggers and log targets to be registered. Logging to console is still default
   * Enhancement: Implemented handling for session interval parameters as defined by Matter 1.2 specification
   * Enhancement: Improved discovery data handling and use MDNS data for Pase/Case connections session interval parameters
   * Enhancement: Storing session parameter with session resumption details to reuse on session restores
@@ -18,9 +19,11 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Prevented resending the same MDNS scanner queries
   * Enhancement: Optimized MDNS Scanner queries to prevent resending of queries that are already in progress
   * Enhancement: Optimized Commissioning error handling for Controller
+  * Enhancement: Enhanced ValidationError to provide the affected structure-aware fieldname in case of an error
   * Fix: Improved Standalone Ack handling for messages to match Matter 1.2 specification
   * Fix: Adjusted commands GoToLiftPercentage and GoToTiltPercentage to match with Matter SDK and work around specification issue
   * Fix: Fixed BLE commissioning for Controller
+  * Fix: Makes sure to validate the data when invoking a command from a cluster client
   * Fix: Only set session active timestamp if we create a session based on an incoming message and not when we are the creator of the session to prevent too fast resubmissions
   * Fix: Correctly handle CASE Resumptions without known resumption records and fallback to a full CASE session establishment
   * Fix: Enhanced commissioning flow based on latest Matter SDK test cases and match with specification
@@ -37,9 +40,13 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Fix: Adjusted the Group limits in GroupKeyManagement cluster to 1 because we do not support groups yet
   * Fix: (Luligu) Corrected the Device type for bridged nodes with Power source information
 * matter.js shell:
+  * Feature: Added support for Debug logging into a Logfile additionally to e.g. Info logging in console
   * Enhancement: Adjusted logic to output detailed node information on nodes command
   * Enhancement: Do not subscribe all attributes when connecting a node for administrative actions (unpair, open commissioning windows)
   * Enhancement: Allowed to specify the BLE HCI id as shell start parameter and store in settings
+  * Enhancement: Added attribute, event and command actions in the shell based on the Cluster model (all known Matter 1.1 clusters are supported)
+  * Enhancement: Enhanced the Shell Readme with many information and examples
+  * Fix: Correctly quote when showing configuration values for wifi- and thread-credentials
   * Fix: Fixed issues when using quoted strings as CLI parameters (e.g. for wifi/thread credentials or JSON structs for commands/attribute writes)
 
 ## 0.7.4 (2023-12-31)

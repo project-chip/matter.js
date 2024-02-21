@@ -9,35 +9,40 @@ import { Format, Level, Logger } from "../../src/log/Logger.js";
 /**
  * Invoke logic and return any log messages produced.
  */
-export function captureLogs(fn: () => void) {
+export function captureLogs(fn: () => void, fromLogger = "default") {
     if (!Logger) {
         throw new Error("No logger loaded, cannot capture logs");
     }
+    const logger = Logger.getLoggerforIdentifier(fromLogger);
     const actualLogSettings = {
-        logFormatter: Logger.logFormatter,
-        log: Logger.log,
-        defaultLogLevel: Logger.defaultLogLevel,
-        logLevels: { ...Logger.logLevels },
+        logFormatter: logger.logFormatter,
+        log: logger.log,
+        defaultLogLevel: logger.defaultLogLevel,
+        logLevels: { ...logger.logLevels },
     };
 
     try {
-        Logger.format = Format.PLAIN;
+        Logger.setFormatForLogger(fromLogger, Format.PLAIN);
         const captured = new Array<{ level: Level; message: string }>();
-        Logger.log = (level, message) =>
+        Logger.setLogger(fromLogger, (level, message) =>
             captured.push({
                 level,
                 message: message.replace(/\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d\d\d/, "xxxx-xx-xx xx:xx:xx.xxx"),
-            });
+            }),
+        );
         fn();
         return captured;
     } finally {
-        Object.assign(Logger, actualLogSettings);
+        Logger.setLogFormatterForLogger(fromLogger, actualLogSettings.logFormatter);
+        Logger.setDefaultLoglevelForLogger(fromLogger, actualLogSettings.defaultLogLevel);
+        Logger.setLogLevelsForLogger(fromLogger, actualLogSettings.logLevels);
+        Logger.setLogger(fromLogger, actualLogSettings.log);
     }
 }
 
 /**
  * Run logic and return a singled produced log message.
  */
-export function captureLog(fn: () => void) {
-    return captureLogs(fn).pop();
+export function captureLog(fn: () => void, fromLogger?: string) {
+    return captureLogs(fn, fromLogger).pop();
 }

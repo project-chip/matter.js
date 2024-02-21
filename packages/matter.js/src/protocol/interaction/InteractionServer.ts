@@ -17,6 +17,7 @@ import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import { InternalError, MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { ValidationError } from "../../common/ValidationError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -884,11 +885,16 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                             ),
                         StatusResponseError,
                         async error => {
-                            logger.info(
-                                `Error ${toHexString(error.code)}${
-                                    error.clusterCode !== undefined ? `/${toHexString(error.clusterCode)}` : ""
-                                } while invoking command: ${error.message}`,
-                            );
+                            const errorLogText = `Error ${toHexString(error.code)}${
+                                error.clusterCode !== undefined ? `/${toHexString(error.clusterCode)}` : ""
+                            } while invoking command: ${error.message}`;
+                            if (error instanceof ValidationError) {
+                                logger.info(
+                                    `Validation-${errorLogText}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
+                                );
+                            } else {
+                                logger.info(errorLogText);
+                            }
                             return {
                                 code: error.code,
                                 clusterCode: error.clusterCode,
