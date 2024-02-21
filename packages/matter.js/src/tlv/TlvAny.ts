@@ -36,7 +36,7 @@ export class AnySchema extends TlvSchema<TlvStream> {
         return byteLength;
     }
 
-    override encodeTlvInternal(writer: TlvWriter, tlvStream: TlvStream, tagAssigned?: TlvTag | undefined): void {
+    override encodeTlvInternal(writer: TlvWriter, tlvStream: TlvStream, tagAssigned?: TlvTag): void {
         tlvStream.forEach(({ tag, typeLength, value }) => {
             if (tagAssigned !== undefined) {
                 // Assign the tag to the 1st TLV element in the stream

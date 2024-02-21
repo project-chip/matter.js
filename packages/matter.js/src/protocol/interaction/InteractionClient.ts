@@ -459,7 +459,7 @@ export class InteractionClient {
             const writeRequests = attributes.map(
                 ({ endpointId, clusterId, attribute: { id, schema }, value, dataVersion }) => ({
                     path: { endpointId, clusterId, attributeId: id },
-                    data: schema.encodeTlv(value),
+                    data: schema.encodeTlv(value, true),
                     dataVersion,
                 }),
             );

@@ -9,8 +9,8 @@ import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 export class TlvWrapper<O, T> extends TlvSchema<O> {
     constructor(
-        private readonly underlyingSchema: TlvSchema<T>,
-        private readonly wrap: (object: O) => T,
+        protected readonly underlyingSchema: TlvSchema<T>,
+        protected readonly wrap: (object: O) => T,
         private readonly unwrap: (value: T) => O,
     ) {
         super();
@@ -20,8 +20,8 @@ export class TlvWrapper<O, T> extends TlvSchema<O> {
         return this.unwrap(this.underlyingSchema.decodeTlvInternalValue(reader, typeLength));
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: O, tag?: TlvTag | undefined): void {
-        this.underlyingSchema.encodeTlvInternal(writer, this.wrap(value), tag);
+    override encodeTlvInternal(writer: TlvWriter, value: O, tag?: TlvTag, forWriteInteraction?: boolean): void {
+        this.underlyingSchema.encodeTlvInternal(writer, this.wrap(value), tag, forWriteInteraction);
     }
 
     override validate(value: O): void {
