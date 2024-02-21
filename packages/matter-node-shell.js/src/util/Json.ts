@@ -7,7 +7,7 @@
 import { ValidationError } from "@project-chip/matter-node.js/common";
 import { ValueModel } from "@project-chip/matter-node.js/model";
 import { ByteArray } from "@project-chip/matter-node.js/util";
-import { firstLetterToLowerCase } from "./String";
+import { camelize } from "./String";
 
 export function convertJsonDataWithModel(model: ValueModel, data: any): any {
     const definingModel = model.definingModel ?? model;
@@ -22,7 +22,7 @@ export function convertJsonDataWithModel(model: ValueModel, data: any): any {
                 throw new ValidationError(`Expected object, got ${typeof data}`);
             }
             for (const child of definingModel.children) {
-                const childKeyName = firstLetterToLowerCase(child.name);
+                const childKeyName = camelize(child.name);
                 data[childKeyName] = convertJsonDataWithModel(child, data[childKeyName]);
             }
             return data;

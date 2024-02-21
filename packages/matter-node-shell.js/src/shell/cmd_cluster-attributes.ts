@@ -13,7 +13,7 @@ import { toHexString } from "@project-chip/matter-node.js/util";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { convertJsonDataWithModel } from "../util/Json";
-import { firstLetterToLowerCase } from "../util/String";
+import { camelize } from "../util/String";
 
 function generateAllAttributeHandlersForCluster(yargs: Argv, theNode: MatterNode) {
     const model = new MatterModel();
@@ -129,7 +129,7 @@ function generateClusterAttributeHandlers(yargs: Argv, cluster: ClusterModel, th
                                 `Attribute values for cluster ${cluster.name} (${node.nodeId.toString()}/${endpointId}/${clusterId}):`,
                             );
                             for (const attribute of cluster.attributes) {
-                                const attributeName = firstLetterToLowerCase(attribute.name);
+                                const attributeName = camelize(attribute.name);
                                 const attributeClient = clusterClient.attributes[attributeName];
                                 if (!(attributeClient instanceof SupportedAttributeClient)) {
                                     continue;
@@ -187,7 +187,7 @@ function generateAttributeReadHandler(
     attribute: AttributeModel,
     theNode: MatterNode,
 ) {
-    const attributeName = firstLetterToLowerCase(attribute.name);
+    const attributeName = camelize(attribute.name);
     return yargs.command(
         [`${attribute.name.toLowerCase()} <node-id> <endpoint-id>`, `0x${attribute.id.toString(16)}`],
         `Read ${clusterName}.${attribute.name} attribute`,
@@ -239,7 +239,7 @@ function generateAttributeWriteHandler(
 ) {
     //console.log("Generating attribute handler for ", attribute.name, attribute);
     //console.log(attribute.definingModel);
-    const attributeName = firstLetterToLowerCase(attribute.name);
+    const attributeName = camelize(attribute.name);
     const typeHint = `${attribute.type}${attribute.definingModel === undefined ? "" : " as JSON string"}`;
     return yargs.command(
         [`${attribute.name.toLowerCase()} <value> <nodeId> <endpointId>`, `0x${attribute.id.toString(16)}`],

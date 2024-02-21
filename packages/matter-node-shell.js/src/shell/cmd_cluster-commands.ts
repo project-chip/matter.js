@@ -12,7 +12,7 @@ import { MatterNode } from "../MatterNode";
 
 import { ValidationError } from "@project-chip/matter-node.js/common";
 import { convertJsonDataWithModel } from "../util/Json";
-import { firstLetterToLowerCase } from "../util/String";
+import { camelize } from "../util/String";
 
 function generateAllCommandHandlersForCluster(yargs: Argv, theNode: MatterNode) {
     const model = new MatterModel();
@@ -126,7 +126,7 @@ async function executeCommand(
     command: CommandModel,
     requestData?: any,
 ) {
-    const commandName = firstLetterToLowerCase(command.name);
+    const commandName = camelize(command.name);
 
     const node = (await theNode.connectAndGetNodes(nodeId))[0];
 

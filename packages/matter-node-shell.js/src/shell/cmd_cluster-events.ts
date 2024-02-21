@@ -11,7 +11,7 @@ import { ClusterModel, EventModel, MatterModel } from "@project-chip/matter-node
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 
-import { firstLetterToLowerCase } from "../util/String";
+import { camelize } from "../util/String";
 
 function generateAllEventHandlersForCluster(yargs: Argv, theNode: MatterNode) {
     const model = new MatterModel();
@@ -50,7 +50,7 @@ function generateEventHandler(
     theNode: MatterNode,
 ) {
     //console.log("Generating event handler for ", event.name, JSON.stringify(event));
-    const eventName = firstLetterToLowerCase(event.name);
+    const eventName = camelize(event.name);
     return yargs.command(
         [`${event.name.toLowerCase()} <node-id> <endpoint-id>`, `0x${event.id.toString(16)}`],
         `Read ${clusterName}.${event.name} event`,
