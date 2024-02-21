@@ -113,7 +113,7 @@ export class ServerStore implements Destructable {
 
     get partStores(): PartStoreService {
         if (this.#rootStore === undefined) {
-            throw new ImplementationError("Part storage accessed prior to initialization");
+            throw new ImplementationError("Endpoint storage accessed prior to initialization");
         }
         return this.#rootStore;
     }

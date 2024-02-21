@@ -18,29 +18,29 @@ import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { EndpointInterface } from "./EndpointInterface.js";
-import { Part } from "./Part.js";
+import { Endpoint } from "./Endpoint.js";
 
 const SERVER = Symbol("server");
-interface ServerPart extends Part {
-    [SERVER]?: PartServer;
+interface ServerPart extends Endpoint {
+    [SERVER]?: EndpointServer;
 }
 
 /**
- * PartServer makes a {@link Part} available for remote access as an Endpoint on a Matter network.
+ * EndpointServer makes a {@link Endpoint} available for remote access as an Endpoint on a Matter network.
  */
-export class PartServer implements EndpointInterface {
-    #part: Part;
+export class EndpointServer implements EndpointInterface {
+    #endpoint: Endpoint;
     #name = "";
     readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
 
-    get part() {
-        return this.#part;
+    get endpoint() {
+        return this.#endpoint;
     }
 
-    constructor(part: Part) {
-        (part as ServerPart)[SERVER] = this;
-        this.#part = part;
-        this.#name = part.type.name;
+    constructor(endpoint: Endpoint) {
+        (endpoint as ServerPart)[SERVER] = this;
+        this.#endpoint = endpoint;
+        this.#name = endpoint.type.name;
     }
 
     createBacking(type: Behavior.Type): BehaviorBacking {
@@ -50,18 +50,18 @@ export class PartServer implements EndpointInterface {
 
             // Sanity check
             if (this.#clusterServers.has(cluster.id)) {
-                throw new InternalError(`${this.#part}.${cluster.id} cluster ${cluster.id} initialized multiple times`);
+                throw new InternalError(`${this.#endpoint}.${cluster.id} cluster ${cluster.id} initialized multiple times`);
             }
 
             backing = new ClusterServerBehaviorBacking(this, type as ClusterBehavior.Type);
         } else {
-            backing = new ServerBehaviorBacking(this.#part, type);
+            backing = new ServerBehaviorBacking(this.#endpoint, type);
         }
         return backing;
     }
 
     get number() {
-        return this.#part.number;
+        return this.#endpoint.number;
     }
 
     get name() {
@@ -85,19 +85,19 @@ export class PartServer implements EndpointInterface {
     }
 
     getChildEndpoints(): EndpointInterface[] {
-        if (this.#part.hasParts) {
-            const parts = this.#part.parts;
-            return [...parts].map(part => PartServer.forPart(part));
+        if (this.#endpoint.hasParts) {
+            const parts = this.#endpoint.parts;
+            return [...parts].map(endpoint => EndpointServer.forEndpoint(endpoint));
         }
         return [];
     }
 
     determineUniqueID(): string | undefined {
-        return this.#part.id;
+        return this.#endpoint.id;
     }
 
     verifyRequiredClusters(): void {
-        this.#part.behaviors.validateRequirements(this.#part.type.requirements.server?.mandatory);
+        this.#endpoint.behaviors.validateRequirements(this.#endpoint.type.requirements.server?.mandatory);
     }
 
     close(): void {
@@ -107,9 +107,9 @@ export class PartServer implements EndpointInterface {
     async [Symbol.asyncDispose]() {
         // I believe the cluster servers are effectively disposed when the structure is emptied
         this.#clusterServers.clear();
-        delete (this.#part as ServerPart)[SERVER];
-        for (const part of this.#part.parts) {
-            const server = (part as ServerPart)[SERVER];
+        delete (this.#endpoint as ServerPart)[SERVER];
+        for (const endpoint of this.#endpoint.parts) {
+            const server = (endpoint as ServerPart)[SERVER];
             if (server) {
                 await server[Symbol.asyncDispose]();
             }
@@ -151,51 +151,51 @@ export class PartServer implements EndpointInterface {
     }
 
     addClusterClient(): void {
-        throw new NotImplementedError("Cluster clients unavailable on PartServer");
+        throw new NotImplementedError("Cluster clients unavailable on EndpointServer");
     }
 
     getClusterClient(): any {
-        throw new NotImplementedError("Cluster clients unavailable on PartServer");
+        throw new NotImplementedError("Cluster clients unavailable on EndpointServer");
     }
 
     addChildEndpoint(endpoint: EndpointInterface): void {
-        if (endpoint instanceof PartServer) {
-            this.#part.parts.add(endpoint.#part);
+        if (endpoint instanceof EndpointServer) {
+            this.#endpoint.parts.add(endpoint.#endpoint);
         } else {
-            throw new ImplementationError("Attempt to add unmanaged endpoint as child of Part");
+            throw new ImplementationError("Attempt to add unmanaged endpoint as child of Endpoint");
         }
     }
 
     getChildEndpoint(id: EndpointNumber): EndpointInterface | undefined {
-        if (!this.#part.hasParts) {
+        if (!this.#endpoint.hasParts) {
             return;
         }
-        for (const part of this.#part.parts) {
-            if (part.number === id) {
-                return PartServer.forPart(part);
+        for (const endpoint of this.#endpoint.parts) {
+            if (endpoint.number === id) {
+                return EndpointServer.forEndpoint(endpoint);
             }
         }
     }
 
     /**
-     * Retrieve the server for a part.
+     * Retrieve the server for an endpoint.
      */
-    static forPart(part: Part) {
-        let server = (part as ServerPart)[SERVER];
+    static forEndpoint(endpoint: Endpoint) {
+        let server = (endpoint as ServerPart)[SERVER];
         if (!server) {
-            server = (part as ServerPart)[SERVER] = new PartServer(part);
+            server = (endpoint as ServerPart)[SERVER] = new EndpointServer(endpoint);
         }
         return server;
     }
 
     /**
-     * Hierarchical diagnostics of part and children.
+     * Hierarchical diagnostics of endpoint and children.
      */
     get [Diagnostic.value]() {
-        const diagnostics = ["Part", Diagnostic.strong(this.#part.id), this.#part.diagnosticDict];
-        if (this.#part.parts.size) {
+        const diagnostics = ["Endpoint", Diagnostic.strong(this.#endpoint.id), this.#endpoint.diagnosticDict];
+        if (this.#endpoint.parts.size) {
             diagnostics.push(
-                Diagnostic.list([...this.#part.parts].map(part => PartServer.forPart(part)[Diagnostic.value])),
+                Diagnostic.list([...this.#endpoint.parts].map(endpoint => EndpointServer.forEndpoint(endpoint)[Diagnostic.value])),
             );
         }
         return diagnostics as unknown;

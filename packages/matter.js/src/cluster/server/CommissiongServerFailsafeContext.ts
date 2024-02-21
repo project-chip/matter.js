@@ -21,7 +21,7 @@ const logger = Logger.get("ClusterServerFailsafeContext");
 /**
  * {@link FailsafeContext} implementation for {@link EndpointInterface} API.
  */
-export class EndpointFailsafeContext extends FailsafeContext {
+export class CommissioningServerFailsafeContext extends FailsafeContext {
     #rootEndpoint: EndpointInterface;
     #storedNetworkClusterState = new Map<
         EndpointNumber,

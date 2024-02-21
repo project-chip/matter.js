@@ -25,7 +25,7 @@ import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
-import { Part, PartServer } from "@project-chip/matter.js/endpoint";
+import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -152,8 +152,8 @@ async function main() {
      * In this case we directly use the default command implementation from matter.js. Check out the DeviceNodeFull example
      * to see how to customize the command handlers.
      */
-    const part = new Part(isSocket ? OnOffPlugInUnitDevice : OnOffLightDevice, { id: "onoff" });
-    await server.add(part);
+    const endpoint = new Endpoint(isSocket ? OnOffPlugInUnitDevice : OnOffLightDevice, { id: "onoff" });
+    await server.add(endpoint);
 
     /**
      * Register state change handlers of the node for identify and onoff states to react to the commands.
@@ -161,7 +161,7 @@ async function main() {
      * reported back to the controller.
      */
     let isIdentifying = false;
-    part.events.identify.identifyTime$Change.on(value => {
+    endpoint.events.identify.identifyTime$Change.on(value => {
         // identifyTime is set when an identify commandf is called and then decreased every second while indenitfy logic runs.
         if (value > 0 && !isIdentifying) {
             isIdentifying = true;
@@ -172,7 +172,7 @@ async function main() {
         }
     });
 
-    part.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Change.on(value => {
         executeCommand(value ? "on" : "off");
         console.log(`OnOff is now ${value ? "ON" : "OFF"}`);
     });
@@ -180,7 +180,7 @@ async function main() {
     /**
      * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
      */
-    logEndpoint(PartServer.forPart(server));
+    logEndpoint(EndpointServer.forEndpoint(server));
 
     /**
      * In order to start the node and announce it into the network we use the run method which resolves when the node goes

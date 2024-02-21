@@ -12,9 +12,9 @@ import { AnyAttributeServer, AttributeServer } from "../../cluster/server/Attrib
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
-import { Part } from "../../endpoint/Part.js";
-import { PartServer } from "../../endpoint/PartServer.js";
-import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
+import { Endpoint } from "../../endpoint/Endpoint.js";
+import { EndpointServer } from "../../endpoint/EndpointServer.js";
+import { EndpointLifecycle } from "../../endpoint/properties/EndpointLifecycle.js";
 import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { StatusResponseError } from "../../protocol/interaction/StatusCode.js";
@@ -37,44 +37,44 @@ import { ServerStore } from "./storage/ServerStore.js";
  */
 export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
-    #changeListener: (type: PartLifecycle.Change) => void;
-    #part: Part;
+    #changeListener: (type: EndpointLifecycle.Change) => void;
+    #endpoint: Endpoint;
     #tracer?: ActionTracer;
 
-    constructor(part: Part<ServerRootEndpoint>) {
+    constructor(endpoint: Endpoint<ServerRootEndpoint>) {
         const structure = new InteractionEndpointStructure();
 
         super({
-            eventHandler: part.env.get(ServerStore).eventHandler,
+            eventHandler: endpoint.env.get(ServerStore).eventHandler,
             endpointStructure: structure,
-            subscriptionOptions: part.state.network.subscriptionOptions,
+            subscriptionOptions: endpoint.state.network.subscriptionOptions,
         });
 
-        if (part.env.has(ActionTracer)) {
-            this.#tracer = part.env.get(ActionTracer);
+        if (endpoint.env.has(ActionTracer)) {
+            this.#tracer = endpoint.env.get(ActionTracer);
         }
 
-        this.#part = part;
+        this.#endpoint = endpoint;
         this.#endpointStructure = structure;
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
         this.#updateStructure();
         this.#changeListener = type => {
             switch (type) {
-                case PartLifecycle.Change.TreeReady:
-                case PartLifecycle.Change.ClientsChanged:
-                case PartLifecycle.Change.ServersChanged:
-                case PartLifecycle.Change.Destroyed:
+                case EndpointLifecycle.Change.TreeReady:
+                case EndpointLifecycle.Change.ClientsChanged:
+                case EndpointLifecycle.Change.ServersChanged:
+                case EndpointLifecycle.Change.Destroyed:
                     this.#updateStructure();
                     break;
             }
         };
 
-        part.lifecycle.changed.on(this.#changeListener);
+        endpoint.lifecycle.changed.on(this.#changeListener);
     }
 
     async [Symbol.asyncDispose]() {
-        this.#part.lifecycle.changed.off(this.#changeListener);
+        this.#endpoint.lifecycle.changed.off(this.#changeListener);
         await this.close();
         this.#endpointStructure.close();
     }
@@ -175,8 +175,8 @@ export class TransactionalInteractionServer extends InteractionServer {
     }
 
     #updateStructure() {
-        if (this.#part.lifecycle.isTreeReady) {
-            this.#endpointStructure.initializeFromEndpoint(PartServer.forPart(this.#part));
+        if (this.#endpoint.lifecycle.isTreeReady) {
+            this.#endpointStructure.initializeFromEndpoint(EndpointServer.forEndpoint(this.#endpoint));
         }
     }
 }

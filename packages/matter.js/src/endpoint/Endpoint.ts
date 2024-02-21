@@ -20,39 +20,39 @@ import { MaybePromise } from "../util/Promises.js";
 import { Agent } from "./Agent.js";
 import { DataModelPath } from "./DataModelPath.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
-import { Behaviors } from "./part/Behaviors.js";
-import { PartInitializer } from "./part/PartInitializer.js";
-import { PartLifecycle } from "./part/PartLifecycle.js";
-import { Parts } from "./part/Parts.js";
-import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
+import { Behaviors } from "./properties/Behaviors.js";
+import { EndpointInitializer } from "./properties/EndpointInitializer.js";
+import { EndpointLifecycle } from "./properties/EndpointLifecycle.js";
+import { Parts } from "./properties/Parts.js";
+import { SupportedBehaviors } from "./properties/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
 
-const logger = Logger.get("Part");
+const logger = Logger.get("Endpoint");
 
 /**
- * Endpoints consist of a hierarchy of parts.  This class manages the current state of a single part.
+ * Endpoints consist of a hierarchy of parts.  This class manages the current state of a single endpoint.
  *
- * You can interact with endpoints using an {@link Agent} created with {@link Part.agentFor}.  Agents are stateless and
+ * You can interact with endpoints using an {@link Agent} created with {@link Endpoint.agentFor}.  Agents are stateless and
  * designed for quick instantiation so you can create them as needed then discard.
  *
  * Most often direct access to {@link Agent} is transparent as Matter.js acquires an agent as necessary for
  * {@link Behavior} interactions.
  */
-export class Part<T extends EndpointType = EndpointType.Empty> {
+export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #type: EndpointType;
     #id?: string;
     #number?: EndpointNumber;
-    #owner?: Part;
+    #owner?: Endpoint;
     #agentType?: Agent.Type<T>;
     #behaviors?: Behaviors;
-    #lifecycle: PartLifecycle;
+    #lifecycle: EndpointLifecycle;
     #parts?: Parts;
-    #construction: AsyncConstruction<Part<T>>;
+    #construction: AsyncConstruction<Endpoint<T>>;
     #stateView = {} as SupportedBehaviors.StateOf<T["behaviors"]>;
     #eventsView = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
 
     /**
-     * A string that uniquely identifies a Part.
+     * A string that uniquely identifies an endpoint.
      *
      * This ID must be unique amongst all Parts with the same owner.
      */
@@ -60,36 +60,38 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         if (this.#id === undefined) {
             throw new UninitializedDependencyError(
                 this.toString(),
-                "part ID is not yet assigned; set ID or await part.construction to avoid this error",
+                "endpoint ID is not yet assigned; set ID or await endpoint.construction to avoid this error",
             );
         }
         return this.#id;
     }
 
     /**
-     * The Matter {@link EndpointNumber} of the endpoint.  This uniquely identifies the {@link Part} in the scope of the
+     * The Matter {@link EndpointNumber} of the endpoint.  This uniquely identifies the {@link Endpoint} in the scope of the
      * Matter node.
      */
     get number(): EndpointNumber {
         if (this.#number === undefined) {
             throw new UninitializedDependencyError(
                 this.toString(),
-                "part number is not yet assigned; set number or await part.construction to avoid this error",
+                "endpoint number is not yet assigned; set number or await endpoint.construction to avoid this error",
             );
         }
         return this.#number;
     }
 
     /**
-     * The owner of the part.
+     * The owner of the endpoint.
+     * 
+     * Every endpoint but the root endpoint (the "node") is owned by another endpoint.
      */
-    get owner(): Part | undefined {
+    get owner(): Endpoint | undefined {
         return this.#owner;
     }
 
     /**
-     * The part's environment.  Part implementations use the environment to access platform components such as storage
-     * and network components.
+     * The endpoint's environment.  Endpoint implementations use the environment to access platform components such as
+     * storage and network components.
      */
     get env(): Environment {
         if (this.owner) {
@@ -99,13 +101,13 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Access the pool of behaviors supported by this part.
+     * Access the pool of behaviors supported by this endpoint.
      */
     get behaviors() {
         if (this.#behaviors === undefined) {
             throw new UninitializedDependencyError(
                 this.toString(),
-                "behaviors are not yet initialized; await part.construction to avoid this error",
+                "behaviors are not yet initialized; await endpoint.construction to avoid this error",
             );
         }
         return this.#behaviors;
@@ -133,10 +135,10 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      *
      * {@link values} is an object with a {@link Behavior.id} as the key and state values as sub-objects.
      *
-     * Input values must adhere to the {@link Behavior.schema} of the target {@link Behavior}.  If the part will throw
+     * Input values must adhere to the {@link Behavior.schema} of the target {@link Behavior}.  If not, set will throw
      * an error.
      *
-     * This is a transactional operation.  Any errors will result in no change.  The part will wait for exclusive access
+     * This is a transactional operation.  An error results in no change.  The endpoint will wait for exclusive access
      * before applying changes.
      *
      * @param values the values to change
@@ -213,28 +215,28 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     /**
      * Create new endpoint.
      *
-     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Part.add} to construct
-     * and initialize a {@link Part} in one step.
+     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Endpoint.add} to construct
+     * and initialize a {@link Endpoint} in one step.
      *
      * @param config
      */
-    constructor(config: Part.Configuration<T> | T);
+    constructor(config: Endpoint.Configuration<T> | T);
 
     /**
      * Create new endpoint.
      *
-     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Part.add} to construct
-     * and initialize a {@link Part} in one step.
+     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Endpoint.add} to construct
+     * and initialize a {@link Endpoint} in one step.
      *
      * @param config
      */
-    constructor(type: T, options?: Part.Options<T>);
+    constructor(type: T, options?: Endpoint.Options<T>);
 
-    constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
-        // Create construction early so parts and behaviors can hook events
+    constructor(definition: T | Endpoint.Configuration<T>, options?: Endpoint.Options<T>) {
+        // Create construction early so endpoints and behaviors can hook events
         this.#construction = AsyncConstruction(this);
 
-        const config = Part.configurationFor(definition, options);
+        const config = Endpoint.configurationFor(definition, options);
 
         this.#type = config.type;
         this.#lifecycle = this.createLifecycle();
@@ -252,7 +254,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         }
 
         if (config.owner) {
-            this.owner = config.owner instanceof Agent ? config.owner.part : config.owner;
+            this.owner = config.owner instanceof Agent ? config.owner.endpoint : config.owner;
         }
 
         if (config.parts) {
@@ -293,12 +295,12 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
             throw new ImplementationError('Endpoint ID may not include "."');
         }
 
-        if (this.lifecycle.isInstalled && this.owner instanceof Part) {
+        if (this.lifecycle.isInstalled && this.owner instanceof Endpoint) {
             this.owner.parts.assertIdAvailable(id, this);
         }
 
         this.#id = id;
-        this.lifecycle.change(PartLifecycle.Change.IdAssigned);
+        this.lifecycle.change(EndpointLifecycle.Change.IdAssigned);
     }
 
     set number(number: number) {
@@ -339,18 +341,18 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
         this.#number = EndpointNumber(number);
 
-        this.lifecycle.change(PartLifecycle.Change.NumberAssigned);
+        this.lifecycle.change(EndpointLifecycle.Change.NumberAssigned);
     }
 
-    set owner(owner: Part | undefined) {
+    set owner(owner: Endpoint | undefined) {
         if (this.#owner === owner) {
             return;
         }
         if (this.#owner) {
-            throw new ImplementationError("Part owner cannot be reassigned");
+            throw new ImplementationError("Endpoint owner cannot be reassigned");
         }
         if (owner === undefined) {
-            throw new ImplementationError("Part owner must be defined");
+            throw new ImplementationError("Endpoint owner must be defined");
         }
 
         this.#owner = owner;
@@ -366,35 +368,35 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     /**
      * Add a child endpoint.
      *
-     * @param config the {@link Part} or {@link Part.Configuration}
+     * @param config the {@link Endpoint} or {@link Endpoint.Configuration}
      */
-    async add<T extends EndpointType>(part: Part<T> | Part.Configuration<T> | T): Promise<Part<T>>;
+    async add<T extends EndpointType>(endpoint: Endpoint<T> | Endpoint.Configuration<T> | T): Promise<Endpoint<T>>;
 
     /**
      * Add a child endpoint.
      *
      * @param type the {@link EndpointType} of the child endpoint
-     * @param options settings for the new part
+     * @param options settings for the new endpoint
      */
-    async add<T extends EndpointType>(type: T, options?: Part.Options<T>): Promise<Part<T>>;
+    async add<T extends EndpointType>(type: T, options?: Endpoint.Options<T>): Promise<Endpoint<T>>;
 
-    async add<T extends EndpointType>(definition: T | Part<T> | Part.Configuration<T>, options?: Part.Options<T>) {
-        let part;
-        if (definition instanceof Part) {
-            part = definition;
+    async add<T extends EndpointType>(definition: T | Endpoint<T> | Endpoint.Configuration<T>, options?: Endpoint.Options<T>) {
+        let endpoint;
+        if (definition instanceof Endpoint) {
+            endpoint = definition;
         } else {
-            part = new Part(definition as any, options);
+            endpoint = new Endpoint(definition as any, options);
         }
 
-        this.parts.add(part);
+        this.parts.add(endpoint);
 
-        await part.construction;
+        await endpoint.construction;
 
-        return part;
+        return endpoint;
     }
 
     /**
-     * The type of endpoint this part implements.
+     * The type of endpoint this endpoint implements.
      */
     get type() {
         return this.#type;
@@ -411,25 +413,25 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Is this a parent Part?
+     * Is this a parent Endpoint?
      */
     get hasParts() {
         return !!this.#parts?.size;
     }
 
     /**
-     * Part information that varies as the part initializes.
+     * Endpoint information that varies as the endpoint initializes.
      */
     get lifecycle() {
         return this.#lifecycle;
     }
 
     protected createLifecycle() {
-        return new PartLifecycle(this);
+        return new EndpointLifecycle(this);
     }
 
     /**
-     * Create an {@link Agent.Type} for the part.
+     * Create an {@link Agent.Type} for the endpoint.
      */
     get agentType() {
         if (!this.#agentType) {
@@ -439,21 +441,21 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Execute a function against an {@link Agent} for the part.
+     * Execute a function against an {@link Agent} for the endpoint.
      *
-     * Agents provide the highest-leve API for interacting with parts.  The agent is a composite object with properties
-     * for each supported behavior.
+     * Agents provide the highest-leve API for interacting with endpoints.  The agent is a composite object with
+     * properties for each supported behavior.
      *
      * State changes made by {@link actor} are atomic and made permanent only when the actor exits unless you commit the
      * transaction manually.
      *
      * {@link actor} runs in an "offline" context where ACLs are ignored and all state is read/write.
      *
-     * The {@link Agent} is destroyed after {@link actor} exits so you should not maintain references to the agent,
-     * its behaviors or associated state.
+     * The {@link Agent} is destroyed after {@link actor} exits so you should not maintain references to the agent, its
+     * behaviors or associated state.
      */
     act<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
-        this.construction.assert("Part");
+        this.construction.assert("Endpoint");
 
         return OfflineContext.act("offline", context => {
             return actor(context.agentFor(this));
@@ -461,15 +463,15 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Perform "soft" reset of the part, reverting all in-memory structures to uninitialized.
+     * Perform "soft" reset of the endpoint, reverting all in-memory structures to uninitialized.
      */
     async reset() {
         // Revert lifecycle to uninitialized
         this.lifecycle.resetting();
 
         // Reset child parts
-        for (const part of this.parts) {
-            await part.reset();
+        for (const endpoint of this.parts) {
+            await endpoint.reset();
         }
 
         // Reset behaviors
@@ -481,14 +483,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         // Set construction to inactive so we can restart
         this.construction.setStatus(Lifecycle.Status.Inactive);
 
-        // The part will defer construction until it is notified of installation by a node
+        // The endpoint will defer construction until it is notified of installation by a node
         this.construction.start();
     }
 
     /**
      * Apply a depth-first visitor function to myself and all descendents.
      */
-    visit(visitor: (part: Part) => void) {
+    visit(visitor: (endpoint: Endpoint) => void) {
         visitor(this);
         if (this.hasParts) {
             for (const part of this.parts) {
@@ -501,7 +503,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         await this.construction.close(async () => {
             await this.parts.close();
             await this.behaviors.close();
-            this.lifecycle.change(PartLifecycle.Change.Destroyed);
+            this.lifecycle.change(EndpointLifecycle.Change.Destroyed);
             this.#owner = undefined;
         });
     }
@@ -515,7 +517,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Path identifying the part in the Matter data model.
+     * Path identifying the endpoint in the Matter data model.
      */
     get path(): DataModelPath {
         let ident;
@@ -540,19 +542,19 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      * Derivatives may override to perform async construction prior to full initialization.
      */
     protected initialize(agent: Agent.Instance<T>) {
-        this.env.get(PartInitializer).initializeDescendent(this);
+        this.env.get(EndpointInitializer).initializeDescendent(this);
         return this.behaviors.initialize(agent);
     }
 
     /**
      * Invoked if one or more behaviors crashed during initialization.
      *
-     * The default implementation crashes the part.
+     * The default implementation crashes the endpoint.
      */
     protected behaviorCrash() {
         this.construction.then(() => {
             logger.info(
-                "Part",
+                "Endpoint",
                 Diagnostic.strong(this.toString()),
                 "initialization failed because of errors in behaviors",
             );
@@ -584,7 +586,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
             // Update lifecycle indicating initialization is complete
             () => {
-                this.lifecycle.change(PartLifecycle.Change.Ready);
+                this.lifecycle.change(EndpointLifecycle.Change.Ready);
                 if (trace) {
                     trace.path = this.path;
                     this.env.get(ActionTracer).record(trace);
@@ -602,7 +604,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Diagnostic information regarding part state.
+     * Diagnostic information regarding endpoint state.
      */
     get diagnosticDict() {
         return Diagnostic.dict({
@@ -613,16 +615,16 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 }
 
-export namespace Part {
+export namespace Endpoint {
     export type BehaviorOptions<T extends EndpointType = EndpointType.Empty, O extends PartOptions = PartOptions> = {
         [K in keyof T["behaviors"] as K extends keyof O ? never : K]?: Behavior.Options<T["behaviors"][K]>;
     };
 
     export interface PartOptions {
-        owner?: Part | Agent;
+        owner?: Endpoint | Agent;
         id?: string;
         number?: number;
-        parts?: Iterable<Part.Definition>;
+        parts?: Iterable<Endpoint.Definition>;
     }
 
     export type Options<
@@ -636,16 +638,17 @@ export namespace Part {
     > = Options<T, O & { type: T }> & { type: T };
 
     /**
-     * Definition of a Part.  May be an {@link EndpointType}, {@link Configuration}, or a {@link Part} instance.
+     * Definition of an endpoint.  May be an {@link EndpointType}, {@link Configuration}, or a {@link Endpoint}
+     * instance.
      */
-    export type Definition<T extends EndpointType = EndpointType.Empty> = T | Configuration<T> | Part<T>;
+    export type Definition<T extends EndpointType = EndpointType.Empty> = T | Configuration<T> | Endpoint<T>;
 
     /**
      * Obtain a configuration from constructor parameters.
      */
     export function configurationFor<T extends EndpointType>(
-        definition: T | Part.Configuration<T>,
-        options?: Part.Options<T>,
+        definition: T | Endpoint.Configuration<T>,
+        options?: Endpoint.Options<T>,
     ) {
         if ((definition as EndpointType).deviceType) {
             return {
@@ -657,13 +660,13 @@ export namespace Part {
     }
 
     /**
-     * Obtain a part for the given {@link Definition}.
+     * Obtain an endpoint for the given {@link Definition}.
      */
-    export function partFor<T extends EndpointType>(definition: Definition<T>): Part<T> {
-        if (definition instanceof Part) {
+    export function partFor<T extends EndpointType>(definition: Definition<T>): Endpoint<T> {
+        if (definition instanceof Endpoint) {
             return definition;
         }
 
-        return new Part(definition);
+        return new Endpoint(definition);
     }
 }

@@ -30,7 +30,7 @@ export class AccessControlServer extends AccessControlBehavior {
         // TODO - between these we should have enough information to find applicable entries in this.state.acls.
         // Haven't implemented actual lookup yet.  Might want to build an index
         cluster;
-        this.part.number;
+        this.endpoint.number;
         this.#deviceTypes;
 
         // TODO - !!! temporarily fallback to all access !!!

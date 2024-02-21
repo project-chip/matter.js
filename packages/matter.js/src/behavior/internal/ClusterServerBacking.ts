@@ -17,7 +17,7 @@ import {
 } from "../../cluster/server/ClusterServerTypes.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
-import type { PartServer } from "../../endpoint/PartServer.js";
+import type { EndpointServer } from "../../endpoint/EndpointServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { CommandModel } from "../../model/index.js";
@@ -42,7 +42,7 @@ const logger = Logger.get("Behavior");
  * Backing for cluster behaviors on servers.
  */
 export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
-    #server: PartServer;
+    #server: EndpointServer;
     #clusterServer?: ClusterServerObj<Attributes, Events>;
 
     get clusterServer() {
@@ -53,8 +53,8 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         return super.type as ClusterBehavior.Type;
     }
 
-    constructor(server: PartServer, type: ClusterBehavior.Type) {
-        super(server.part, type);
+    constructor(server: EndpointServer, type: ClusterBehavior.Type) {
+        super(server.endpoint, type);
         this.#server = server;
     }
 
@@ -163,7 +163,7 @@ function withBehavior<T>(
         throw new InternalError("Message context not installed");
     }
 
-    const agent = context.agentFor(backing.part);
+    const agent = context.agentFor(backing.endpoint);
 
     return fn(agent.get(backing.type));
 }

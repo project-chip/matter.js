@@ -5,14 +5,14 @@
  */
 
 import { NotImplementedError } from "../../common/MatterError.js";
-import { Part } from "../../endpoint/Part.js";
+import { Endpoint } from "../../endpoint/Endpoint.js";
 import { Behavior } from "../Behavior.js";
 import { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import { Datasource } from "../state/managed/Datasource.js";
 
 export class ClientBehaviorBacking extends BehaviorBacking {
-    constructor(part: Part, type: Behavior.Type) {
-        super(part, type);
+    constructor(endpoint: Endpoint, type: Behavior.Type) {
+        super(endpoint, type);
     }
 
     get store(): Datasource.Store {

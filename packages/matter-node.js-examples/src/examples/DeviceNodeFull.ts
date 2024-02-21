@@ -29,7 +29,7 @@ import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/def
 import { OnOffServer } from "@project-chip/matter.js/behavior/definitions/on-off";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
-import { Part, PartServer } from "@project-chip/matter.js/endpoint";
+import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { RootRequirements } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
@@ -285,8 +285,8 @@ const server = await ServerNode.create(RootEndpoint, {
 });
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.
-const part = new Part(OnOffDevice, { id: "onoff" });
-await server.add(part);
+const endpoint = new Endpoint(OnOffDevice, { id: "onoff" });
+await server.add(endpoint);
 
 /*
 activeSessionsChangedCallback: fabricIndex => {
@@ -310,7 +310,7 @@ server.lifecycle.offline.on(() => console.log("Server is offline"));
 
 // React on a change of identificationTime to do Identify stuff for the own device
 let isIdentifying = false;
-part.events.identify.identifyTime$Change.on(value => {
+endpoint.events.identify.identifyTime$Change.on(value => {
     if (value > 0 && !isIdentifying) {
         isIdentifying = true;
         logger.info(`Run identify logic, ideally blink a light every 0.5s ...`);
@@ -325,7 +325,7 @@ part.events.identify.identifyTime$Change.on(value => {
 // Note that you may serve multiple nodes from a single process.  We only have one, however, so we can use the run()
 // method of the node.
 
-logEndpoint(PartServer.forPart(server));
+logEndpoint(EndpointServer.forEndpoint(server));
 
 /**
  * In order to start the node and announce it into the network we start the node. This method resolves when the Matter
@@ -357,16 +357,16 @@ if (!server.lifecycle.isCommissioned) {
 
     /**
      * Sometimes reading or writing attributes is required. The following code shows how this works.
-     * For read it is basically `part.state.clustername.attributename`.
+     * For read it is basically `endpoint.state.clustername.attributename`.
      * The set method allows to set one or multiple values via the structure of also clustername.attributename. When multiple values are set they are considered being one transaction which would be rolled back completely if one value fails to be set.
      */
 
     // Read onOff attribute from onOff cluster
-    const onOffValue = part.state.onOff.onOff;
+    const onOffValue = endpoint.state.onOff.onOff;
     console.log(`current OnOff attribute: ${onOffValue}`);
 
     // Set onOff attribute from OnOff cluster
-    await part.set({
+    await endpoint.set({
         onOff: {
             onOff: !onOffValue,
         },

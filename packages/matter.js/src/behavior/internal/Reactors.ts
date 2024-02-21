@@ -206,7 +206,7 @@ class ReactorBacking<T extends any[], R> {
     }
 
     #reactWithLocks(context: ActionContext, backing: BehaviorBacking, args: T) {
-        const agent = context.agentFor(backing.part);
+        const agent = context.agentFor(backing.endpoint);
         const behavior = backing.createBehavior(agent, backing.type);
         return this.#reactor.apply(behavior, args) as MaybePromise<any>;
     }

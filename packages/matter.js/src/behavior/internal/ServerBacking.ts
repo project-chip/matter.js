@@ -23,7 +23,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
 
     override get store() {
         if (!this.#store) {
-            this.#store = this.#serverStore.partStores.storeForPart(this.part).storeForBehavior(this.type.id);
+            this.#store = this.#serverStore.partStores.storeForPart(this.endpoint).storeForBehavior(this.type.id);
         }
         return this.#store;
     }
@@ -51,7 +51,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
     }
 
     get #serverStore() {
-        return this.part.env.get(ServerStore);
+        return this.endpoint.env.get(ServerStore);
     }
 
     /**

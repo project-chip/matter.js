@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../behavior/Behavior.js";
-import { SupportedBehaviors } from "../part/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../properties/SupportedBehaviors.js";
 import { EndpointType } from "./EndpointType.js";
 
 /**

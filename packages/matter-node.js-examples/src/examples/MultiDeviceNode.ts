@@ -26,7 +26,7 @@ import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
-import { Part, PartServer } from "@project-chip/matter.js/endpoint";
+import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -157,8 +157,8 @@ for (let i = 1; i <= numDevices; i++) {
         `Added device ${i} on port ${port} and unique id ${uniqueId}: Passcode: ${passcode}, Discriminator: ${discriminator}`,
     );
 
-    const part = new Part(isSocket ? OnOffPlugInUnitDevice : OnOffLightDevice, { id: "onoff" });
-    await server.add(part);
+    const endpoint = new Endpoint(isSocket ? OnOffPlugInUnitDevice : OnOffLightDevice, { id: "onoff" });
+    await server.add(endpoint);
 
     /**
      * Register state change handlers of the node for identify and onoff states to react to the commands.
@@ -166,7 +166,7 @@ for (let i = 1; i <= numDevices; i++) {
      * reported back to the controller.
      */
     let isIdentifying = false;
-    part.events.identify.identifyTime$Change.on(value => {
+    endpoint.events.identify.identifyTime$Change.on(value => {
         // identifyTime is set when an identify commandf is called and then decreased every second while indenitfy logic runs.
         if (value > 0 && !isIdentifying) {
             isIdentifying = true;
@@ -177,7 +177,7 @@ for (let i = 1; i <= numDevices; i++) {
         }
     });
 
-    part.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Change.on(value => {
         executeCommand(value ? `on${i}` : `off${i}`);
         console.log(`OnOff ${i} is now ${value ? "ON" : "OFF"}`);
     });
@@ -185,7 +185,7 @@ for (let i = 1; i <= numDevices; i++) {
     /**
      * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
      */
-    logEndpoint(PartServer.forPart(server));
+    logEndpoint(EndpointServer.forEndpoint(server));
 
     console.log("----------------------------");
     console.log(`QR Code for Device ${i} on port ${port}:`);

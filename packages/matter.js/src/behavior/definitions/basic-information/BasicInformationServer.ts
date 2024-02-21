@@ -51,7 +51,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
 
-        const lifecycle = this.part.lifecycle as NodeLifecycle;
+        const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
         if (lifecycle.online !== undefined) {
             this.reactTo(lifecycle.online, this.#online);

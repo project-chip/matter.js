@@ -21,8 +21,8 @@ describe("ServerNode", () => {
 
         const changes = new Array<[string, string?]>();
 
-        node.lifecycle.changed.on((type, part) => {
-            changes.push([type, part.toString()]);
+        node.lifecycle.changed.on((type, endpoint) => {
+            changes.push([type, endpoint.toString()]);
         });
 
         node.lifecycle.online.on(() => {

@@ -56,9 +56,9 @@ export class ProductDescriptionServer extends Behavior {
             return;
         }
 
-        // Continually react to tree mutations until we discover a device part
+        // Continually react to tree mutations until we discover a device endpoint
         this.reactTo(
-            this.part.lifecycle.changed,
+            this.endpoint.lifecycle.changed,
 
             this.#setDeviceType,
 
@@ -104,17 +104,17 @@ function inferDeviceType(agent: Agent): DeviceTypeId | undefined {
                 break;
 
             default:
-                if (agent.part.type.deviceClass === DeviceClasses.Simple) {
+                if (agent.endpoint.type.deviceClass === DeviceClasses.Simple) {
                     return dt.deviceType;
                 }
         }
     }
 
-    if (!recurse || !agent.part.hasParts) {
+    if (!recurse || !agent.endpoint.hasParts) {
         return;
     }
 
-    for (const child of agent.part.parts) {
+    for (const child of agent.endpoint.parts) {
         const deviceType = inferDeviceType(agent.context.agentFor(child));
         if (deviceType !== undefined) {
             return deviceType;

@@ -7,7 +7,7 @@
 import { CrashedDependencyError, Lifecycle } from "../../common/Lifecycle.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import type { Agent } from "../../endpoint/Agent.js";
-import type { Part } from "../../endpoint/Part.js";
+import type { Endpoint } from "../../endpoint/Endpoint.js";
 import { Logger } from "../../log/Logger.js";
 import { AsyncConstruction } from "../../util/AsyncConstruction.js";
 import { EventEmitter, Observable } from "../../util/Observable.js";
@@ -23,7 +23,7 @@ const logger = Logger.get("BehaviorBacking");
  * The "backing" for a behavior manages those portions of behavior that endure for the lifetime of an endpoint.
  */
 export abstract class BehaviorBacking {
-    #part: Part;
+    #endpoint: Endpoint;
     #type: Behavior.Type;
     #internal?: object;
     #events?: EventEmitter;
@@ -36,8 +36,8 @@ export abstract class BehaviorBacking {
         return this.#construction;
     }
 
-    constructor(part: Part, type: Behavior.Type, options?: Behavior.Options) {
-        this.#part = part;
+    constructor(endpoint: Endpoint, type: Behavior.Type, options?: Behavior.Options) {
+        this.#endpoint = endpoint;
         this.#type = type;
         this.#options = options;
 
@@ -49,7 +49,7 @@ export abstract class BehaviorBacking {
     }
 
     get path() {
-        return this.part.path.at(this.type.id);
+        return this.#endpoint.path.at(this.type.id);
     }
 
     /**
@@ -115,10 +115,10 @@ export abstract class BehaviorBacking {
     }
 
     /**
-     * The {@link Part} that owns the behavior.
+     * The {@link Endpoint} that owns the behavior.
      */
-    get part() {
-        return this.#part;
+    get endpoint() {
+        return this.#endpoint;
     }
 
     /**
@@ -140,7 +140,7 @@ export abstract class BehaviorBacking {
         }
 
         throw new ImplementationError(
-            `Cannot create ${this.#part}.${type.id} because installed implementation is incompatible`,
+            `Cannot create ${this.#endpoint}.${type.id} because installed implementation is incompatible`,
         );
     }
 
@@ -157,11 +157,11 @@ export abstract class BehaviorBacking {
 
     protected get datasourceOptions(): Datasource.Options {
         return {
-            path: this.part.path.at(this.#type.id).at("state"),
+            path: this.#endpoint.path.at(this.#type.id).at("state"),
             supervisor: this.type.supervisor,
             type: this.type.State,
             events: this.events as unknown as Datasource.Events,
-            defaults: this.part.behaviors.defaultsFor(this.type),
+            defaults: this.#endpoint.behaviors.defaultsFor(this.type),
             store: this.store,
             versioning: this.type.versioning,
         };

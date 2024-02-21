@@ -68,7 +68,7 @@ export class ClusterBehavior extends Behavior {
     static readonly Interface = ClusterInterface.Empty;
 
     /**
-     * All ClusterBehavior initialization currently runs as part of {@link Part} initialization.
+     * All ClusterBehavior initialization currently runs as part of {@link Endpoint} initialization.
      */
     static override readonly early = true;
 

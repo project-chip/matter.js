@@ -43,10 +43,10 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
             networkingStatus,
             threadScanResults: [
                 {
-                    panId: this.part.env.vars.number("ble.thread.panId"),
-                    extendedPanId: this.part.env.vars.number("ble.thread.extendedPanId"),
-                    networkName: this.part.env.vars.string("ble.thread.networkName"),
-                    channel: this.part.env.vars.number("ble.thread.channel"),
+                    panId: this.endpoint.env.vars.number("ble.thread.panId"),
+                    extendedPanId: this.endpoint.env.vars.number("ble.thread.extendedPanId"),
+                    networkName: this.endpoint.env.vars.string("ble.thread.networkName"),
+                    channel: this.endpoint.env.vars.number("ble.thread.channel"),
                     version: 385,
                     extendedAddress: ByteArray.fromString("00:00:00:00:00:00"),
                     rssi: -50,

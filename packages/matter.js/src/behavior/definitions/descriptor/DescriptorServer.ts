@@ -8,8 +8,8 @@ import { Descriptor } from "../../../cluster/definitions/DescriptorCluster.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
 import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
-import { Part } from "../../../endpoint/Part.js";
-import { PartLifecycle } from "../../../endpoint/part/PartLifecycle.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
+import { EndpointLifecycle } from "../../../endpoint/properties/EndpointLifecycle.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { IndexBehavior } from "../../system/index/IndexBehavior.js";
@@ -21,23 +21,23 @@ import { DescriptorBehavior } from "./DescriptorBehavior.js";
 export class DescriptorServer extends DescriptorBehavior {
     override initialize() {
         // We update PartsList differently if there's an index
-        if (this.part.behaviors.has(IndexBehavior)) {
+        if (this.endpoint.behaviors.has(IndexBehavior)) {
             this.reactTo(this.agent.get(IndexBehavior).events.change, this.#updatePartsList, { lock: true });
-        } else if (this.part.hasParts) {
-            for (const part of this.part.parts) {
-                this.#monitorDestruction(part);
+        } else if (this.endpoint.hasParts) {
+            for (const endpoint of this.endpoint.parts) {
+                this.#monitorDestruction(endpoint);
             }
         }
         this.#updatePartsList();
 
         // Handle lifecycle changes
-        this.reactTo(this.part.lifecycle.changed, this.#applyChange, { lock: true });
+        this.reactTo(this.endpoint.lifecycle.changed, this.#applyChange, { lock: true });
 
         // Initialize ServerList
         this.state.serverList = this.#serverList;
 
         if (!this.state.deviceTypeList.length) {
-            const partType = this.part.type;
+            const partType = this.endpoint.type;
             this.state.deviceTypeList = [
                 {
                     deviceType: partType.deviceType,
@@ -73,18 +73,18 @@ export class DescriptorServer extends DescriptorBehavior {
     /**
      * Process a structure change event and trigger state updates if necessary.
      */
-    #applyChange(type: PartLifecycle.Change, part: Part) {
+    #applyChange(type: EndpointLifecycle.Change, endpoint: Endpoint) {
         switch (type) {
-            case PartLifecycle.Change.Ready:
-                if (!this.part.parts.has(part)) {
+            case EndpointLifecycle.Change.Ready:
+                if (!this.endpoint.parts.has(endpoint)) {
                     return;
                 }
                 this.#updatePartsList();
-                this.#monitorDestruction(part);
+                this.#monitorDestruction(endpoint);
                 break;
 
-            case PartLifecycle.Change.ServersChanged:
-                if (part !== this.part) {
+            case EndpointLifecycle.Change.ServersChanged:
+                if (endpoint !== this.endpoint) {
                     return;
                 }
                 this.state.serverList = this.#serverList;
@@ -93,17 +93,17 @@ export class DescriptorServer extends DescriptorBehavior {
     }
 
     /**
-     * Monitor part for removal.
+     * Monitor endpoint for removal.
      */
-    #monitorDestruction(part: Part) {
-        this.reactTo(part.lifecycle.destroyed, this.#updatePartsList, { lock: true });
+    #monitorDestruction(endpoint: Endpoint) {
+        this.reactTo(endpoint.lifecycle.destroyed, this.#updatePartsList, { lock: true });
     }
 
     /**
      * Update the parts list.
      */
     #updatePartsList() {
-        const part = this.part;
+        const endpoint = this.endpoint;
 
         // The presence of IndexBehavior indicates a flat namespace as required by Matter standard for root and
         // aggregator endpoints
@@ -111,17 +111,17 @@ export class DescriptorServer extends DescriptorBehavior {
             const index = this.agent.get(IndexBehavior);
             const numbers = Object.keys(index.partsByNumber).map(n => Number.parseInt(n));
 
-            // My part should not appear in its own PartsList
-            const pos = numbers.indexOf(this.part.number);
+            // My endpoint should not appear in its own PartsList
+            const pos = numbers.indexOf(this.endpoint.number);
             if (pos !== -1) {
                 numbers.splice(pos, 1);
             }
 
             this.state.partsList = numbers as EndpointNumber[];
             return;
-        } else if (part.hasParts) {
+        } else if (endpoint.hasParts) {
             // No IndexBehavior, just direct descendents
-            this.state.partsList = [...part.parts].map(part => part.number);
+            this.state.partsList = [...endpoint.parts].map(endpoint => endpoint.number);
         } else {
             // No sub-parts
             this.state.partsList = [];
@@ -133,7 +133,7 @@ export class DescriptorServer extends DescriptorBehavior {
      */
     get #serverList() {
         const list = new Array<ClusterId>();
-        for (const type of Object.values(this.part.behaviors.supported)) {
+        for (const type of Object.values(this.endpoint.behaviors.supported)) {
             const clusterId = (type as { cluster?: { id?: ClusterId } }).cluster?.id;
             if (clusterId) {
                 list.push(clusterId);

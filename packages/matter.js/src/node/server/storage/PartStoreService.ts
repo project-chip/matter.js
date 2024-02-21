@@ -6,7 +6,7 @@
 
 import { Lifecycle } from "../../../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
-import { Part } from "../../../endpoint/Part.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
 import { Logger } from "../../../log/Logger.js";
 import type { StorageContext } from "../../../storage/StorageContext.js";
@@ -21,8 +21,8 @@ const logger = Logger.get("PartStoreService");
 /**
  * Manages all {@link ServerPartStore}s for a {@link NodeServer}.
  *
- * We eagerly load all available part data from disk because this allows us to keep {@link Part} initialization more
- * synchronous.  We can initialize most behaviors synchronously if their state is already in memory.
+ * We eagerly load all available endpoint data from disk because this allows us to keep {@link Endpoint} initialization
+ * more synchronous.  We can initialize most behaviors synchronously if their state is already in memory.
  *
  * TODO - cleanup of storage for permanently removed endpoints
  */
@@ -30,23 +30,23 @@ export abstract class PartStoreService {
     /**
      * Allocate an endpoint number.
      *
-     * Either allocates a new number for a {@link Part} or reserves the part's number.  If the {@link Part} already has
-     * a number but it is allocated to a different part it is an error.
+     * Either allocates a new number for a {@link Endpoint} or reserves the endpoint's number.  If the {@link Endpoint}
+     * already has a number but it is allocated to a different endpoint it is an error.
      *
      * We must persist the assigned number and next endpoint number.  We are fairly resilient to the small chance that
      * persistence fails so we persist lazily and return synchronously.
      */
-    abstract assignNumber(part: Part): void;
+    abstract assignNumber(endpoint: Endpoint): void;
 
     /**
-     * Obtain the store for a single {@link Part}.
+     * Obtain the store for a single {@link Endpoint}.
      *
      * These stores are cached internally by ID.
      *
      * TODO - when StorageContext becomes async we can keep this synchronous if we add "StorageContext.subcontexts" or
      * somesuch
      */
-    abstract storeForPart(part: Part): PartStore;
+    abstract storeForPart(endpoint: Endpoint): PartStore;
 }
 
 export class PartStoreFactory extends PartStoreService {
@@ -55,7 +55,7 @@ export class PartStoreFactory extends PartStoreService {
     #construction: AsyncConstruction<PartStoreFactory>;
     #persistedNextNumber?: number;
     #numbersPersisted?: Promise<void>;
-    #numbersToPersist?: Array<Part>;
+    #numbersToPersist?: Array<Endpoint>;
     #nextNumber?: number;
     #root?: ServerPartStore;
 
@@ -107,21 +107,21 @@ export class PartStoreFactory extends PartStoreService {
         }
     }
 
-    assignNumber(part: Part) {
+    assignNumber(endpoint: Endpoint) {
         if (this.#nextNumber === undefined) {
-            throw new InternalError("Part number assigned prior to store initialization");
+            throw new InternalError("Endpoint number assigned prior to store initialization");
         }
 
         this.#construction.assert();
 
-        const store = this.storeForPart(part);
+        const store = this.storeForPart(endpoint);
 
-        if (part.lifecycle.hasNumber) {
+        if (endpoint.lifecycle.hasNumber) {
             // Reserve number
-            if (this.#allocatedNumbers.has(part.number)) {
-                if (this.storeForPart(part).number !== part.number) {
+            if (this.#allocatedNumbers.has(endpoint.number)) {
+                if (this.storeForPart(endpoint).number !== endpoint.number) {
                     throw new IdentityConflictError(
-                        `Part ${part.id} number ${part.number} is allocated to another part`,
+                        `Endpoint ${endpoint.id} number ${endpoint.number} is allocated to another endpoint`,
                     );
                 }
                 return;
@@ -133,7 +133,7 @@ export class PartStoreFactory extends PartStoreService {
                 if (this.#allocatedNumbers.has(knownNumber)) {
                     logger.warn(`Stored number ${knownNumber} is already allocated to another endpoint, ignoring`);
                 } else {
-                    part.number = knownNumber;
+                    endpoint.number = knownNumber;
                     return;
                 }
             }
@@ -143,33 +143,33 @@ export class PartStoreFactory extends PartStoreService {
             while (this.#nextNumber < 1 || this.#allocatedNumbers.has(this.#nextNumber)) {
                 this.#nextNumber = (this.#nextNumber + 1) % 0xffff;
                 if (this.#nextNumber === startNumber) {
-                    throw new ImplementationError("Cannot add additional parts because part numbers are exhausted");
+                    throw new ImplementationError("Cannot add additional endpoints because endpoint numbers are exhausted");
                 }
             }
 
             const number = this.#nextNumber++;
-            part.number = number;
+            endpoint.number = number;
         }
 
-        this.#allocatedNumbers.add(part.number);
-        store.number = part.number;
-        this.#persistNumber(part);
+        this.#allocatedNumbers.add(endpoint.number);
+        store.number = endpoint.number;
+        this.#persistNumber(endpoint);
     }
 
-    storeForPart(part: Part): ServerPartStore {
+    storeForPart(endpoint: Endpoint): ServerPartStore {
         this.#construction.assert();
 
-        if (!part.lifecycle.hasId) {
-            throw new InternalError("Part storage access without assigned ID");
+        if (!endpoint.lifecycle.hasId) {
+            throw new InternalError("Endpoint storage access without assigned ID");
         }
-        if (part.owner) {
-            return this.storeForPart(part.owner).childStoreFor(part);
+        if (endpoint.owner) {
+            return this.storeForPart(endpoint.owner).childStoreFor(endpoint);
         }
-        if (part.number !== 0) {
-            throw new InternalError("Part storage inaccessible because part is not root and is not owned by part");
+        if (endpoint.number !== 0) {
+            throw new InternalError("Endpoint storage inaccessible because endpoint is not a node and is not owned by another endpoint");
         }
         if (!this.#root) {
-            throw new InternalError("Part storage accessed prior to initialization");
+            throw new InternalError("Endpoint storage accessed prior to initialization");
         }
         return this.#root;
     }
@@ -177,15 +177,15 @@ export class PartStoreFactory extends PartStoreService {
     /**
      * Lazily persist a newly allocated number and the next number.
      */
-    #persistNumber(part: Part) {
+    #persistNumber(endpoint: Endpoint) {
         // If there's already a set of numbers to persist there will be an outstanding promise that will do the work
         // for us
         if (this.#numbersToPersist) {
-            this.#numbersToPersist.push(part);
+            this.#numbersToPersist.push(endpoint);
             return;
         }
 
-        this.#numbersToPersist = [part];
+        this.#numbersToPersist = [endpoint];
 
         const numberPersister = async () => {
             await this.#construction;
@@ -196,8 +196,8 @@ export class PartStoreFactory extends PartStoreService {
             }
 
             this.#numbersToPersist = undefined;
-            for (const part of numbersToPersist) {
-                const store = this.storeForPart(part);
+            for (const endpoint of numbersToPersist) {
+                const store = this.storeForPart(endpoint);
                 await store.saveNumber();
             }
 

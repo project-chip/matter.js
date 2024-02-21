@@ -14,7 +14,7 @@ import { AdministratorCommissioningServer } from "../administrator-commissioning
 import { BasicInformationServer } from "../basic-information/BasicInformationServer.js";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
 import { ArmFailSafeRequest, SetRegulatoryConfigRequest } from "./GeneralCommissioningInterface.js";
-import { PartFailsafeContext } from "./PartFailsafeContext.js";
+import { ServerNodeFailsafeContext } from "./ServerNodeFailsafeContext.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
@@ -68,7 +68,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
                 await device.beginTimed(
-                    new PartFailsafeContext(this.part as Node, {
+                    new ServerNodeFailsafeContext(this.endpoint as Node, {
                         fabrics: device.fabricManager,
                         sessions: device.sessionManager,
                         expiryLengthSeconds,

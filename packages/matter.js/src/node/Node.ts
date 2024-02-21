@@ -5,9 +5,9 @@
  */
 
 import { ImplementationError } from "../common/MatterError.js";
-import { Part } from "../endpoint/Part.js";
+import { Endpoint } from "../endpoint/Endpoint.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
-import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
+import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { EndpointType } from "../endpoint/type/EndpointType.js";
 import { Environment } from "../environment/Environment.js";
 import { Diagnostic } from "../log/Diagnostic.js";
@@ -21,7 +21,7 @@ const logger = Logger.get("Node");
  *
  * In Matter, a "node" is an individually addressable top-level network resource.
  */
-export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
+export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
     #environment: Environment;
 
     constructor(config: Node.Configuration<T>) {
@@ -44,9 +44,9 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
             this.number = 0;
         }
 
-        // We don't really get "installed" as we are the root part.  This informs the part it is ready for full
+        // We don't really get "installed" as we are the root endpoint.  This informs the endpoint it is ready for full
         // initialization
-        this.lifecycle.change(PartLifecycle.Change.Installed);
+        this.lifecycle.change(EndpointLifecycle.Change.Installed);
 
         this.lifecycle.online.on(() => {
             this.statusUpdate("is online");
@@ -56,9 +56,9 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
             this.statusUpdate("is offline");
         });
 
-        this.lifecycle.changed.on((type, part) => {
-            if (type === PartLifecycle.Change.Crashed) {
-                this.partCrashed(part);
+        this.lifecycle.changed.on((type, endpoint) => {
+            if (type === EndpointLifecycle.Change.Crashed) {
+                this.endpointCrashed(endpoint);
             }
         });
     }
@@ -108,19 +108,19 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
         logger.notice(Diagnostic.strong(this.toString()), message);
     }
 
-    protected partCrashed(part: Part) {
-        return this.lifecycle.partError.emit(part, part.construction.error ?? new Error("Unknown error"));
+    protected endpointCrashed(endpoint: Endpoint) {
+        return this.lifecycle.partError.emit(endpoint, endpoint.construction.error ?? new Error("Unknown error"));
     }
 }
 
 export namespace Node {
-    export interface NodeOptions extends Part.PartOptions {
+    export interface NodeOptions extends Endpoint.PartOptions {
         environment?: Environment;
     }
 
-    export type Options<T extends RootEndpoint = RootEndpoint> = Part.Options<T, NodeOptions>;
+    export type Options<T extends RootEndpoint = RootEndpoint> = Endpoint.Options<T, NodeOptions>;
 
-    export type Configuration<T extends RootEndpoint = RootEndpoint> = Part.Configuration<T, NodeOptions>;
+    export type Configuration<T extends RootEndpoint = RootEndpoint> = Endpoint.Configuration<T, NodeOptions>;
 
     export function nodeConfigFor<T extends RootEndpoint>(
         defaultType: T,
@@ -145,6 +145,6 @@ export namespace Node {
         return {
             type: defaultType,
             ...configuration,
-        } as Part.Configuration<T>;
+        } as Endpoint.Configuration<T>;
     }
 }

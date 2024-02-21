@@ -25,7 +25,7 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
             this.state.rebootCount++;
         }
 
-        const lifecycle = this.part.lifecycle as NodeLifecycle;
+        const lifecycle = this.endpoint.lifecycle as NodeLifecycle;
 
         if (lifecycle.online !== undefined) {
             this.reactTo(lifecycle.online, this.#online);

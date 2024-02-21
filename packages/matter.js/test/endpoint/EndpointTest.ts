@@ -11,7 +11,7 @@ import { AccessControl } from "../../src/cluster/definitions/AccessControlCluste
 import { BasicInformation } from "../../src/cluster/definitions/BasicInformationCluster.js";
 import { WindowCoveringCluster } from "../../src/cluster/definitions/WindowCoveringCluster.js";
 import { Agent } from "../../src/endpoint/Agent.js";
-import { Part } from "../../src/endpoint/Part.js";
+import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { TemperatureSensorDevice } from "../../src/endpoint/definitions/device/TemperatureSensorDevice.js";
 import { WindowCoveringDevice } from "../../src/endpoint/definitions/device/WindowCoveringDevice.js";
 import { RootEndpoint } from "../../src/endpoint/definitions/system/RootEndpoint.js";
@@ -21,7 +21,7 @@ const WindowCoveringLiftDevice = WindowCoveringDevice.with(
     WindowCoveringServer.for(WindowCoveringCluster.with("Lift", "PositionAwareLift", "AbsolutePosition")),
 );
 
-describe("Part", () => {
+describe("Endpoint", () => {
     describe("agentType", () => {
         it("supports behaviors", () => {
             // RootEndpoint
@@ -32,38 +32,38 @@ describe("Part", () => {
             const agent1 = {} as Agent.Instance<RootEndpoint>;
             agent1.index satisfies IndexBehavior;
 
-            // Part.agentType
-            const agent2 = {} as InstanceType<Part<RootEndpoint>["agentType"]>;
+            // Endpoint.agentType
+            const agent2 = {} as InstanceType<Endpoint<RootEndpoint>["agentType"]>;
             agent2.index satisfies IndexBehavior;
         });
     });
 
     describe("constructor", () => {
         it("accepts bare endpoint type", async () => {
-            const part = new Part(WindowCoveringLiftDevice);
+            const endpoint = new Endpoint(WindowCoveringLiftDevice);
             const node = new MockNode();
-            node.parts.add(part);
-            await part.construction;
-            expect(part.state.windowCovering.endProductType).equals(0);
+            node.parts.add(endpoint);
+            await endpoint.construction;
+            expect(endpoint.state.windowCovering.endProductType).equals(0);
         });
 
         it("accepts endpoint type with options", async () => {
-            const part = new Part(WindowCoveringLiftDevice, {
+            const endpoint = new Endpoint(WindowCoveringLiftDevice, {
                 owner: new MockNode(),
                 windowCovering: { physicalClosedLimitLift: 100 },
             });
-            await part.construction;
-            expect(part.state.windowCovering.physicalClosedLimitLift).equals(100);
+            await endpoint.construction;
+            expect(endpoint.state.windowCovering.physicalClosedLimitLift).equals(100);
         });
 
         it("accepts configuration", async () => {
-            const part = new Part({
+            const endpoint = new Endpoint({
                 type: WindowCoveringLiftDevice,
                 owner: new MockNode(),
                 windowCovering: { physicalClosedLimitLift: 200 },
             });
-            await part.construction;
-            expect(part.state.windowCovering.physicalClosedLimitLift).equals(200);
+            await endpoint.construction;
+            expect(endpoint.state.windowCovering.physicalClosedLimitLift).equals(200);
         });
     });
 

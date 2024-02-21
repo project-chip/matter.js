@@ -6,7 +6,7 @@
 
 import { DeviceTypeId } from "../../datatype/DeviceTypeId.js";
 import { DeviceClasses } from "../../device/DeviceTypes.js";
-import { SupportedBehaviors } from "../part/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../properties/SupportedBehaviors.js";
 
 /**
  * An EndpointType defines functionality for an endpoint.

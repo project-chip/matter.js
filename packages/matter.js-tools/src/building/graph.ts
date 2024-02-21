@@ -15,9 +15,8 @@ import { Project } from "./project.js";
 /**
  * Graph of dependencies for workspace packages.
  *
- * We use this information to determine which packages are "dirty" and need
- * rebuild.  In the future we can also use for parallel build, only tricky
- * part there is showing status.
+ * We use this information to determine which packages are "dirty" and need rebuild.  In the future we can also use for
+ * parallel build, only tricky part there is showing status.
  */
 export class Graph {
     protected constructor(readonly nodes: Graph.Node[]) {}

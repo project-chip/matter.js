@@ -9,11 +9,11 @@ import { NetworkServer } from "../behavior/system/networking/NetworkServer.js";
 import { ServerNetworkRuntime } from "../behavior/system/networking/ServerNetworkRuntime.js";
 import { ProductDescriptionServer } from "../behavior/system/product-description/ProductDescriptionServer.js";
 import { Agent } from "../endpoint/Agent.js";
-import { Part } from "../endpoint/Part.js";
-import { PartServer } from "../endpoint/PartServer.js";
+import { Endpoint } from "../endpoint/Endpoint.js";
+import { EndpointServer } from "../endpoint/EndpointServer.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
-import { PartInitializer } from "../endpoint/part/PartInitializer.js";
-import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
+import { EndpointInitializer } from "../endpoint/properties/EndpointInitializer.js";
+import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import type { MatterCoreSpecificationV1_2 } from "../spec/Specifications.js";
@@ -21,7 +21,7 @@ import { Mutex } from "../util/Mutex.js";
 import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
 import { IdentityService } from "./server/IdentityService.js";
-import { ServerPartInitializer } from "./server/ServerPartInitializer.js";
+import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";
 import { ServerStore } from "./server/storage/ServerStore.js";
 
 const logger = Logger.get("ServerNode");
@@ -50,7 +50,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      *
      * You can use {@link create} to construct the node and wait for it to initialize fully.
      *
-     * @param config a {@link Part.Configuration} for the root endpoint
+     * @param config a {@link Endpoint.Configuration} for the root endpoint
      */
     constructor(config: Partial<Node.Configuration<T>>);
 
@@ -157,7 +157,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
             this.statusUpdate("resetting to factory defaults");
 
             // Destroy the PartServer hierarchy
-            await PartServer.forPart(this)[Symbol.asyncDispose]();
+            await EndpointServer.forEndpoint(this)[Symbol.asyncDispose]();
 
             // Reset in-memory state
             await this.reset();
@@ -166,7 +166,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
             await this.resetStorage();
 
             // Reset puts parts back into inactive state; set to "installed" to trigger re-initialization
-            this.lifecycle.change(PartLifecycle.Change.Installed);
+            this.lifecycle.change(EndpointLifecycle.Change.Installed);
 
             // Go back online if we were online at time of reset
             if (isOnline) {
@@ -183,16 +183,16 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
         this.env.set(ServerStore, serverStore);
 
-        this.env.set(PartInitializer, new ServerPartInitializer(this.env));
+        this.env.set(EndpointInitializer, new ServerEndpointInitializer(this.env));
 
         this.env.set(IdentityService, new IdentityService(this));
 
         return super.initialize(agent);
     }
 
-    protected override partCrashed(part: Part) {
-        // Part crashes may be disabled by event handlers except for the node
-        if (super.partCrashed(part) === false && part !== this) {
+    protected override endpointCrashed(endpoint: Endpoint) {
+        // Endpoint crashes may be disabled by event handlers except for the node
+        if (super.endpointCrashed(endpoint) === false && endpoint !== this) {
             return false;
         }
 

@@ -15,8 +15,7 @@ import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 /**
  * The primary interface for Matter.js endpoint implementations.
  *
- * TODO - this is a transitional interface that allows us to have multiple
- * endpoint implementations
+ * TODO - this is a transitional interface that allows us to have multiple implementations of the legacy endpoint API
  */
 export interface EndpointInterface {
     name: string;

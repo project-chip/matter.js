@@ -5,7 +5,7 @@ import { ImplementationError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { SubjectId } from "../../../datatype/SubjectId.js";
 import { Agent } from "../../../endpoint/Agent.js";
-import { Part } from "../../../endpoint/Part.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
@@ -66,11 +66,11 @@ export function OnlineContext(options: OnlineContext.Options) {
                         return AccessLevel.Administer;
                     },
 
-                    agentFor<T extends EndpointType>(part: Part<T>): Agent.Instance<T> {
+                    agentFor<T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
                         if (!agents) {
                             agents = ContextAgents(context as ActionContext);
                         }
-                        return agents.agentFor(part);
+                        return agents.agentFor(endpoint);
                     },
 
                     get [Contextual.context](): ActionContext {

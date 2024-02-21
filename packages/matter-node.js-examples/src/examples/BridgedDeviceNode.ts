@@ -27,7 +27,7 @@ import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/beh
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
-import { Part, PartServer } from "@project-chip/matter.js/endpoint";
+import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { AggregatorEndpoint } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
@@ -150,13 +150,14 @@ const server = await ServerNode.create(
 /**
  * Matter Nodes are a composition of endpoints. Create and add a single multiple endpoint to the node to make it a
  * composed device. This example uses the OnOffLightDevice or OnOffPlugInUnitDevice depending on the value of the type
- * parameter. It also assigns each Part a unique ID to store the endpoint number for it in the storage to restore the
- * device on restart.
+ * parameter. It also assigns each Endpoint a unique ID to store the endpoint number for it in the storage to restore
+ * the device on restart.
+ *
  * In this case we directly use the default command implementation from matter.js. Check out the DeviceNodeFull example
  * to see how to customize the command handlers.
  */
 
-const aggregator = new Part(AggregatorEndpoint, { id: "aggregator" });
+const aggregator = new Endpoint(AggregatorEndpoint, { id: "aggregator" });
 await server.add(aggregator);
 
 const numDevices = environment.vars.number("num") || 2;
@@ -165,7 +166,7 @@ for (let i = 1; i <= numDevices; i++) {
 
     const name = `OnOff ${isSocket ? "Socket" : "Light"} ${i}`;
 
-    const part = new Part(
+    const endpoint = new Endpoint(
         isSocket
             ? OnOffPlugInUnitDevice.with(BridgedDeviceBasicInformationServer)
             : OnOffLightDevice.with(BridgedDeviceBasicInformationServer),
@@ -180,15 +181,16 @@ for (let i = 1; i <= numDevices; i++) {
             },
         },
     );
-    aggregator.parts.add(part);
+    aggregator.parts.add(endpoint);
 
     /**
-     * Register state change handlers of the part for identify and onoff states to react to the commands.
+     * Register state change handlers of the endpoint for identify and onoff states to react to the commands.
+     * 
      * If the code in these change handlers fail then the change is also rolled back and not executed and an error is
      * reported back to the controller.
      */
     let isIdentifying = false;
-    part.events.identify.identifyTime$Change.on(value => {
+    endpoint.events.identify.identifyTime$Change.on(value => {
         // identifyTime is set when an identify commandf is called and then decreased every second while indenitfy logic runs.
         if (value > 0 && !isIdentifying) {
             isIdentifying = true;
@@ -199,7 +201,7 @@ for (let i = 1; i <= numDevices; i++) {
         }
     });
 
-    part.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Change.on(value => {
         executeCommand(value ? `on${i}` : `off${i}`);
         console.log(`${name} is now ${value ? "ON" : "OFF"}`);
     });
@@ -215,4 +217,4 @@ await server.bringOnline();
 /**
  * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
  */
-logEndpoint(PartServer.forPart(server));
+logEndpoint(EndpointServer.forEndpoint(server));

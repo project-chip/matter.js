@@ -1,7 +1,7 @@
 import { Val } from "../../../behavior/state/Val.js";
 import { Datasource } from "../../../behavior/state/managed/Datasource.js";
 import { ImplementationError } from "../../../common/MatterError.js";
-import { Part } from "../../../endpoint/Part.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
@@ -99,11 +99,11 @@ export class ServerPartStore implements PartStore {
         return DatasourceStore(this, behaviorId);
     }
 
-    childStoreFor(part: Part): ServerPartStore {
-        if (!part.lifecycle.hasId) {
-            throw new ImplementationError("Cannot access part storage because part has no assigned ID");
+    childStoreFor(endpoint: Endpoint): ServerPartStore {
+        if (!endpoint.lifecycle.hasId) {
+            throw new ImplementationError("Cannot access endpoint storage because endpoint has no assigned ID");
         }
-        return this.#storeForPartId(part.id);
+        return this.#storeForPartId(endpoint.id);
     }
 
     #storeForPartId(partId: string) {

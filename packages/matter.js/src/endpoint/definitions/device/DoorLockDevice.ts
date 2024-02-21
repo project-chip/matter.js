@@ -10,7 +10,7 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import { DoorLockServer as BaseDoorLockServer } from "../../../behavior/definitions/door-lock/DoorLockServer.js";
 import { TimeSyncBehavior as BaseTimeSyncBehavior } from "../../../behavior/definitions/time-sync/TimeSyncBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
-import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 

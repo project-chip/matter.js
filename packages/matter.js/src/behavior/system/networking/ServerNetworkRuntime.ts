@@ -10,7 +10,7 @@ import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { TransportInterface } from "../../../common/TransportInterface.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
-import { PartServer } from "../../../endpoint/PartServer.js";
+import { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
 import { Network } from "../../../net/Network.js";
@@ -24,7 +24,7 @@ import { NetworkRuntime } from "./NetworkRuntime.js";
  * Handles network functionality for {@link NodeServer}.
  */
 export class ServerNetworkRuntime extends NetworkRuntime {
-    #rootServer?: PartServer;
+    #rootServer?: EndpointServer;
     #interactionServer?: TransactionalInteractionServer;
     #matterDevice?: MatterDevice;
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
@@ -38,11 +38,11 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     /**
-     * Access the {@link PartServer} for the root part.
+     * Access the {@link EndpointServer} for the root endpoint.
      */
     get rootServer() {
         if (!this.#rootServer) {
-            this.#rootServer = PartServer.forPart(this.owner);
+            this.#rootServer = EndpointServer.forEndpoint(this.owner);
         }
         return this.#rootServer;
     }

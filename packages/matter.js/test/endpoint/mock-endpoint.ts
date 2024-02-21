@@ -1,7 +1,7 @@
 import { Behavior } from "../../src/behavior/Behavior.js";
-import { Part } from "../../src/endpoint/Part.js";
+import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
-import { MockEndpoint } from "../behavior/mock-behavior.js";
+import { MockEndpointType } from "../behavior/mock-behavior.js";
 import { MockNode } from "../node/mock-node.js";
 
 export class MockBehavior1 extends Behavior {
@@ -26,7 +26,7 @@ export namespace MockBehavior2 {
     }
 }
 
-const activeParts = new Set<MockPart<any>>();
+const activeParts = new Set<MockEndpoint<any>>();
 
 // I think we can get by without this
 // afterEach(async () => {
@@ -35,13 +35,13 @@ const activeParts = new Set<MockPart<any>>();
 //     }
 // });
 
-export class MockPart<T extends EndpointType> extends Part<T> {
-    constructor(definition: T | Part.Configuration<T>);
+export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
+    constructor(definition: T | Endpoint.Configuration<T>);
 
-    constructor(type: T, options: Part.Options<T>);
+    constructor(type: T, options: Endpoint.Options<T>);
 
-    constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
-        const config = Part.configurationFor(definition, options);
+    constructor(definition: T | Endpoint.Configuration<T>, options?: Endpoint.Options<T>) {
+        const config = Endpoint.configurationFor(definition, options);
 
         if (!("owner" in config)) {
             config.owner = new MockNode();
@@ -57,16 +57,16 @@ export class MockPart<T extends EndpointType> extends Part<T> {
         await super.close();
     }
 
-    static create<const T extends EndpointType>(definition: T | Part.Configuration<T>): Promise<MockPart<T>>;
+    static create<const T extends EndpointType>(definition: T | Endpoint.Configuration<T>): Promise<MockEndpoint<T>>;
 
-    static create<const T extends EndpointType>(type: T, options: Part.Configuration<T>): Promise<MockPart<T>>;
+    static create<const T extends EndpointType>(type: T, options: Endpoint.Configuration<T>): Promise<MockEndpoint<T>>;
 
-    static async create(definition: EndpointType | Part.Configuration, options?: Part.Options) {
-        const part = new MockPart(Part.configurationFor(definition, options));
-        return await part.construction;
+    static async create(definition: EndpointType | Endpoint.Configuration, options?: Endpoint.Options) {
+        const endpoint = new MockEndpoint(Endpoint.configurationFor(definition, options));
+        return await endpoint.construction;
     }
 
     static async createWith<T extends Behavior.Type>(type: T) {
-        return await MockPart.create(MockEndpoint.with(type));
+        return await MockEndpoint.create(MockEndpointType.with(type));
     }
 }

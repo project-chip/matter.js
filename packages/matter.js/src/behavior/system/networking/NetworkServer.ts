@@ -59,7 +59,7 @@ export class NetworkServer extends NetworkBehavior {
 
         this.state.openAdvertisementWindowOnStartup = this.agent.get(CommissioningBehavior).state.automaticAnnouncement;
 
-        this.reactTo((this.part.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
+        this.reactTo((this.endpoint.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
 
         super.initialize();
     }
@@ -91,7 +91,7 @@ export class NetworkServer extends NetworkBehavior {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
-        this.part.env.runtime.addWorker(this.internal.runtime.announceNow());
+        this.endpoint.env.runtime.addWorker(this.internal.runtime.announceNow());
     }
 
     #enterCommissionedMode() {

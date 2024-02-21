@@ -14,7 +14,7 @@ import { OperationalCredentialsBehavior } from "../operational-credentials/Opera
 /**
  * {@link FailsafeContext} for {@link Node} API.
  */
-export class PartFailsafeContext extends FailsafeContext {
+export class ServerNodeFailsafeContext extends FailsafeContext {
     #node: Node;
     #operationalCredentialsRestored = false;
     #storedState?: {

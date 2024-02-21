@@ -11,7 +11,7 @@ import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/us
 import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLightDevice";
-import { Part } from "@project-chip/matter.js/endpoint";
+import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
@@ -146,7 +146,7 @@ export class AllClustersTestInstance implements TestInstance {
             },
         );
 
-        const endpoint1 = new Part(DimmableLightDevice.with(FixedLabelServer, UserLabelServer), {
+        const endpoint1 = new Endpoint(DimmableLightDevice.with(FixedLabelServer, UserLabelServer), {
             number: EndpointNumber(1),
             id: "onoff1",
             fixedLabel: {

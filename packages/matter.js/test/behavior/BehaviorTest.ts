@@ -8,7 +8,7 @@ import { Behavior } from "../../src/behavior/Behavior.js";
 import { BehaviorBacking } from "../../src/behavior/internal/BehaviorBacking.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { EventEmitter, Observable } from "../../src/util/Observable.js";
-import { MockPart } from "../endpoint/mock-part.js";
+import { MockEndpoint } from "../endpoint/mock-endpoint.js";
 
 class TestBehavior extends Behavior {
     static override readonly id = "test";
@@ -33,8 +33,8 @@ namespace TestBehavior {
 
 function test(what: string, fn: (behavior: TestBehavior) => void) {
     it(what, async () => {
-        const part = await MockPart.createWith(TestBehavior);
-        part.act(agent => {
+        const endpoint = await MockEndpoint.createWith(TestBehavior);
+        endpoint.act(agent => {
             const behavior = agent.test;
             fn(behavior);
         });
@@ -72,8 +72,8 @@ describe("Behavior", () => {
         TestBehavior.id satisfies "test";
         NewBehavior.id satisfies "test";
 
-        const part = await MockPart.createWith(NewBehavior);
-        part.act(agent => {
+        const endpoint = await MockEndpoint.createWith(NewBehavior);
+        endpoint.act(agent => {
             const behavior = agent.test;
 
             const state = behavior.state;

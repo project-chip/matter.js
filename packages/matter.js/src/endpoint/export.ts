@@ -6,5 +6,5 @@
 
 export * from "./Agent.js";
 export * from "./EndpointInterface.js";
-export * from "./Part.js";
-export * from "./PartServer.js";
+export * from "./Endpoint.js";
+export * from "./EndpointServer.js";

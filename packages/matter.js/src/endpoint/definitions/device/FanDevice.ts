@@ -10,7 +10,7 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
 import { FanControlServer as BaseFanControlServer } from "../../../behavior/definitions/fan-control/FanControlServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
-import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 

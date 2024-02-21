@@ -1,6 +1,6 @@
 import { AccessLevel } from "../../../cluster/Cluster.js";
 import { Agent } from "../../../endpoint/Agent.js";
-import { Part } from "../../../endpoint/Part.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { MaybePromise } from "../../../util/Promises.js";
@@ -22,7 +22,7 @@ export namespace OfflineContext {
     /**
      * Operate in offline context.  Interactions with private Matter.js APIs happen in an offline context.
      *
-     * {@link act} provides an {@link ActionContext} you can use to access agents for a {@link Part}.
+     * {@link act} provides an {@link ActionContext} you can use to access agents for a {@link Endpoint}.
      * State changes and change events occur once {@link actor} returns.
      *
      * The {@link Transaction} is destroyed with {@link act} exits so you should not keep a reference to any agents
@@ -82,11 +82,11 @@ function createOfflineContext(transaction: Transaction, options?: OfflineContext
             return AccessLevel.View;
         },
 
-        agentFor<const T extends EndpointType>(part: Part<T>): Agent.Instance<T> {
+        agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
             if (!agents) {
                 agents = ContextAgents(context);
             }
-            return agents?.agentFor(part);
+            return agents?.agentFor(endpoint);
         },
 
         get [Contextual.context]() {

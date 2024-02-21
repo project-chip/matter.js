@@ -1,5 +1,5 @@
 /**
- * @license
+ * @licensepart
  * Copyright 2022 The node-matter Authors
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -14,7 +14,7 @@ import {
     NetworkCommissioning,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
-import { Part } from "@project-chip/matter.js/endpoint";
+import { Endpoint } from "@project-chip/matter.js/endpoint";
 import { AggregatorEndpoint, DimmableLightDevice } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
@@ -145,7 +145,7 @@ export class BridgeTestInstance implements TestInstance {
             },
         );
 
-        const bridgedLight = new Part(DimmableLightDevice.with(BridgedDeviceBasicInformationServer), {
+        const bridgedLight = new Endpoint(DimmableLightDevice.with(BridgedDeviceBasicInformationServer), {
             id: "onoff-3",
             number: 3,
             bridgedDeviceBasicInformation: {
@@ -171,7 +171,7 @@ export class BridgeTestInstance implements TestInstance {
             },
         });
 
-        const aggregator = new Part(AggregatorEndpoint, { id: "aggregator", number: 1 });
+        const aggregator = new Endpoint(AggregatorEndpoint, { id: "aggregator", number: 1 });
 
         await serverNode.add(aggregator);
 
