@@ -47,6 +47,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Added attribute, event and command actions in the shell based on the Cluster model (all known Matter 1.1 clusters are supported)
   * Enhancement: Enhanced the Shell Readme with many information and examples
   * Fix: Correctly quote when showing configuration values for wifi- and thread-credentials
+  * Fix: Fixed issues when using quoted strings as CLI parameters (e.g. for wifi/thread credentials or JSON structs for commands/attribute writes)
 
 ## 0.7.4 (2023-12-31)
 * Matter-Core functionality:

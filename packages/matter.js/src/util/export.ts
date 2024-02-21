@@ -7,6 +7,7 @@
 export * from "./Array.js";
 export * from "./ByteArray.js";
 export * from "./Cache.js";
+export * from "./CommandlineParser.js";
 export * from "./DataReader.js";
 export * from "./DataWriter.js";
 export * from "./DeepEqual.js";
