@@ -5,6 +5,7 @@
  */
 
 import { ValidationError } from "../../src/common/ValidationError.js";
+import { FabricIndex, TlvFabricIndex } from "../../src/datatype/FabricIndex.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvNullable } from "../../src/tlv/TlvNullable.js";
@@ -66,6 +67,16 @@ const schemaListRepeatedUnlimited = TlvTaggedList({
     repeatedField: TlvRepeatedField(2, TlvString),
 });
 
+const schemaWithFabricIndex = TlvObject({
+    /** Mandatory field jsdoc */
+    mandatoryField: TlvField(1, TlvUInt8),
+
+    /** Optional field jsdoc */
+    optionalField: TlvOptionalField(2, TlvString),
+
+    fabricIndex: TlvField(254, TlvFabricIndex),
+});
+
 type CodecVector<I, E> = { [valueDescription: string]: { encoded: E; decoded: I } };
 
 const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
@@ -121,6 +132,44 @@ describe("TlvObject tests", () => {
                     expect(tlvDecoded).deep.equal(decoded);
                 });
             }
+        });
+
+        describe("encodeTlv with decodeTlv with fabric index", () => {
+            it(`encode/decodes with fabricIndex`, () => {
+                const tlvEncoded = schemaWithFabricIndex.encodeTlv({
+                    mandatoryField: 1,
+                    optionalField: "test",
+                    fabricIndex: FabricIndex(1),
+                });
+                const tlvDecoded = schemaWithFabricIndex.decodeTlv(tlvEncoded);
+                expect(tlvDecoded).deep.equal({
+                    mandatoryField: 1,
+                    optionalField: "test",
+                    fabricIndex: FabricIndex(1),
+                });
+            });
+
+            it(`encode/decodes with ignoring fabricIndex for write interaction`, () => {
+                const noFabricEncoded = schema.encodeTlv({ mandatoryField: 1, optionalField: "test" });
+
+                const tlvEncoded = schemaWithFabricIndex.encodeTlv(
+                    // @ts-expect-error fabricIndex missing because undefined and ok for writeInteraction
+                    {
+                        mandatoryField: 1,
+                        optionalField: "test",
+                    },
+                    true,
+                );
+
+                // THe Tlv encoded data is the same as without FabricIndex
+                expect(tlvEncoded).deep.equal(noFabricEncoded);
+
+                const tlvDecoded = schemaWithFabricIndex.decodeTlv(tlvEncoded);
+                expect(tlvDecoded).deep.equal({
+                    mandatoryField: 1,
+                    optionalField: "test",
+                });
+            });
         });
 
         describe("inject Field value", () => {

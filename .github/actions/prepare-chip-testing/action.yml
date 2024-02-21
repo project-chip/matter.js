@@ -42,7 +42,7 @@ runs:
 
     - name: Cache Bin files
       id: cache-bin
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       env:
         cache-name: chip-bin
       with:
@@ -59,7 +59,7 @@ runs:
 
     - name: Cache Python Environments files
       id: cache-env
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       env:
         cache-name: chip-env
       with:
@@ -68,7 +68,7 @@ runs:
 
     - name: Cache Chip out files
       id: cache-out
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       env:
         cache-name: chip-out
       with:

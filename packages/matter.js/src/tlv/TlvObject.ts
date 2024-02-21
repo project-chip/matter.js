@@ -7,6 +7,7 @@
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { ValidationError } from "../common/ValidationError.js";
+import { Globals } from "../model/index.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
@@ -76,13 +77,22 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
         }
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: TypeFromFields<F>, tag?: TlvTag): void {
+    override encodeTlvInternal(
+        writer: TlvWriter,
+        value: TypeFromFields<F>,
+        tag?: TlvTag,
+        forWriteInteraction?: boolean,
+    ): void {
         writer.writeTag({ type: this.type }, tag);
         for (const name in this.fieldDefinitions) {
             const { id, schema, optional: isOptional, repeated: isRepeated } = this.fieldDefinitions[name];
             const fieldValue = (value as any)[name];
             if (fieldValue === undefined) {
                 if (!isOptional) {
+                    if (forWriteInteraction && id === <number>Globals.FabricIndex.id) {
+                        // FabricIndex field should not be included in encoded data for write interactions
+                        continue;
+                    }
                     throw new ValidationError(`Missing mandatory field ${name}`, name);
                 }
                 continue;
@@ -92,10 +102,10 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
                     throw new ValidationError(`Repeated field ${name} should be an array.`, name);
                 }
                 for (const element of fieldValue) {
-                    schema.encodeTlvInternal(writer, element, { id });
+                    schema.encodeTlvInternal(writer, element, { id }, forWriteInteraction);
                 }
             } else {
-                schema.encodeTlvInternal(writer, fieldValue, { id });
+                schema.encodeTlvInternal(writer, fieldValue, { id }, forWriteInteraction);
             }
         }
         writer.writeTag({ type: TlvType.EndOfContainer });
@@ -224,7 +234,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             const field = this.fieldDefinitions[k] as FieldType<any>;
 
             if (field.id === fieldId) {
-                if (removeChecker((value as any)[k])) {
+                if ((value as any)[k] !== undefined && removeChecker((value as any)[k])) {
                     delete (value as any)[k];
                 }
             } else {
