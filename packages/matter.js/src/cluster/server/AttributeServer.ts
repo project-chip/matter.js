@@ -127,7 +127,7 @@ export abstract class BaseAttributeServer<T> {
             this.schema.validate(value);
         } catch (error) {
             if (error instanceof ValidationError) {
-                error.message = `Validation error for attribute "${this.name}": ${error.message}`;
+                error.message = `Validation error for attribute "${this.name}"${error.fieldName !== undefined ? `in field ${error.fieldName}` : ""}: ${error.message}`;
             }
             throw error;
         }

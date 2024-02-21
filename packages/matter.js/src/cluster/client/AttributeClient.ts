@@ -66,6 +66,13 @@ export class AttributeClient<T> {
     async set(value: T, dataVersion?: number) {
         if (!this.isWritable) throw new AttributeError(`Attribute ${this.name} is not writable`);
 
+        value = this.schema.injectField(
+            value,
+            <number>Globals.FabricIndex.id,
+            FabricIndex.OMIT_FABRIC,
+            existingFieldIndex => existingFieldIndex === undefined,
+        );
+
         this.schema.validate(value);
 
         if (this.isFabricScoped) {

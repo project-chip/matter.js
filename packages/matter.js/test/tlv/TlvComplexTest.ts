@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ValidationError } from "../../src/common/ValidationError.js";
 import { FabricId, TlvFabricId } from "../../src/datatype/FabricId.js";
 import { FabricIndex, TlvFabricIndex } from "../../src/datatype/FabricIndex.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
@@ -46,7 +47,9 @@ const schema = TlvObject({
 });
 
 type CodecVector<I, E> = { [valueDescription: string]: { encoded: E; decoded: I } };
-type CodecErrorVector<I> = { [valueDescription: string]: { structure: I; expectedError?: string } };
+type CodecErrorVector<I> = {
+    [valueDescription: string]: { structure: I; expectedError?: string; errorFieldName?: string };
+};
 
 const codecVector: CodecVector<TypeFromSchema<typeof schema>, string> = {
     "an object with all fields": {
@@ -87,18 +90,21 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
     "an object with no fields": {
         structure: {} as any,
         expectedError: "Missing mandatory field arrayField",
+        errorFieldName: "arrayField",
     },
     "an object with empty array": {
         structure: {
             arrayField: [],
         } as any,
         expectedError: "Array is too short: 0, min 1.",
+        errorFieldName: "arrayField",
     },
     "an object with missing nullable value": {
         structure: {
             arrayField: [{ mandatoryNumber: 1 }],
         } as any,
         expectedError: "Missing mandatory field nullableBoolean",
+        errorFieldName: "nullableBoolean",
     },
     "an object with invalid datatype in array": {
         structure: {
@@ -109,6 +115,7 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
             ],
         } as any,
         expectedError: "Expected number, got string.",
+        errorFieldName: "arrayField.[0].mandatoryNumber",
     },
     "an object with invalid datatype in array #2": {
         structure: {
@@ -123,6 +130,7 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
             ],
         } as any,
         expectedError: "Expected number, got object.",
+        errorFieldName: "arrayField.[0].mandatoryNumber",
     },
     "an object with invalid number wrapper value": {
         structure: {
@@ -135,6 +143,7 @@ const codecErrorVector: CodecErrorVector<TypeFromSchema<typeof schema>> = {
             optionalWrapperNumber: FabricIndex(0x12345678),
         },
         expectedError: "Invalid value: 305419896 is above the maximum, 254.",
+        errorFieldName: "optionalWrapperNumber",
     },
 };
 
@@ -180,13 +189,14 @@ describe("TlvObject", () => {
 
     describe("errors", () => {
         for (const valueDescription in codecErrorVector) {
-            const { structure, expectedError } = codecErrorVector[valueDescription];
+            const { structure, expectedError, errorFieldName } = codecErrorVector[valueDescription];
             it(`checks ${valueDescription}`, () => {
                 try {
                     schema.validate(structure);
                 } catch (error) {
-                    expect(error instanceof Error).equal(true);
-                    expect((error as Error).message).equal(`(Validation/135) ${expectedError}` || "");
+                    expect(error instanceof ValidationError).true;
+                    expect((error as ValidationError).message).equal(`(Validation/135) ${expectedError}`);
+                    expect((error as ValidationError).fieldName).equal(errorFieldName);
                 }
             });
 
@@ -194,8 +204,9 @@ describe("TlvObject", () => {
                 try {
                     schema.encode(structure);
                 } catch (error) {
-                    expect(error instanceof Error).equal(true);
-                    expect((error as Error).message).equal(`(Validation/135) ${expectedError}` || "");
+                    expect(error instanceof ValidationError).true;
+                    expect((error as ValidationError).message).equal(`(Validation/135) ${expectedError}`);
+                    expect((error as ValidationError).fieldName).equal(errorFieldName);
                 }
             });
         }
