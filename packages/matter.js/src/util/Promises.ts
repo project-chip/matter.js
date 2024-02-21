@@ -145,7 +145,7 @@ export const MaybePromise = {
      */
     finally<T>(
         producer: MaybePromise<T> | (() => MaybePromise<T>),
-        onfinally?: (() => void) | undefined | null,
+        onfinally?: (() => MaybePromise<void>) | undefined | null,
     ): MaybePromise<T> {
         try {
             if (typeof producer === "function") {
@@ -248,7 +248,7 @@ export class Tracker {
             },
         });
 
-        return MaybePromise.finally(promise, () => this.#tracked.delete(promise as Promise<T>));
+        return MaybePromise.finally(promise, () => { this.#tracked.delete(promise as Promise<T>) });
     }
 }
 

@@ -112,10 +112,20 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Current state values for all behaviors.  This view is read-only.
+     * Current state values for all behaviors, keyed by behavior ID.  This view is read-only.
      */
     get state() {
         return this.#stateView;
+    }
+
+    /**
+     * Current state for a specific behavior.
+     */
+    stateOf<T extends Behavior.Type>(type: T) {
+        if (!this.behaviors.has(type)) {
+            throw new ImplementationError(`Behavior ${type.id} is not supported by this endpoint`);
+        }
+        return this.#stateView[type.id] as Behavior.StateOf<T>;
     }
 
     /**
@@ -158,10 +168,42 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Events for all behaviors.
+     * Update state values for a single behavior.
+     * 
+     * The patch semantics used here are identical to {@link set}.
+     * 
+     * @param type the {@link Behavior} to patch
+     * @param values the values to change
+     */
+    async setStateOf<T extends Behavior.Type>(type: T, values: Behavior.PatchStateOf<T>) {
+        await this.act(async agent => {
+            const behavior = agent.get(type);
+
+            const tx = agent.context.transaction;
+            await tx.begin();
+            await tx.addResources(behavior);
+
+            const patch = (behavior.constructor as Behavior.Type).supervisor.patch;
+
+            patch(values, behavior.state, this.path);
+        });
+    }
+
+    /**
+     * Events for all behaviors keyed by behavior ID.
      */
     get events() {
         return this.#eventsView;
+    }
+
+    /**
+     * Events for a specific behavior.
+     */
+    eventsOf<T extends Behavior.Type>(type: T) {
+        if (!this.behaviors.has(type)) {
+            throw new ImplementationError(`Behavior ${type.id} is not supported by this endpoint`);
+        }
+        return this.#eventsView[type.id] as Behavior.EventsOf<T>;
     }
 
     get construction() {

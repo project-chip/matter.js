@@ -108,13 +108,13 @@ export namespace NetworkServer {
 
     export class State extends NetworkBehavior.State {
         openAdvertisementWindowOnStartup = true;
-        listeningAddressIpv4?: string;
-        listeningAddressIpv6?: string;
-        ipv4: boolean = true;
-        ble: boolean = false;
+        listeningAddressIpv4?: string = undefined;
+        listeningAddressIpv6?: string = undefined;
+        ipv4 = true;
+        ble = false;
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = {
             onIpNetwork: true,
         };
-        subscriptionOptions?: SubscriptionOptions;
+        subscriptionOptions?: SubscriptionOptions = undefined;
     }
 }

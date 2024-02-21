@@ -16,9 +16,9 @@ import "@project-chip/matter-node.js";
 // cluster implementation to print status to the console.
 class ReportingOnOffServer extends OnOffLightRequirements.OnOffServer {
     // Intercept the "on" command to the Matter On/Off cluster to print a log message.
-    override on() {
+    override async on() {
         console.log("Turning light ON");
-        super.on();
+        await super.on();
     }
 
     // This is the functional inverse of on() above.
