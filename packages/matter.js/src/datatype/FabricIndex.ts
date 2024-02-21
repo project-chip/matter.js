@@ -30,18 +30,31 @@ export namespace FabricIndex {
     export const OMIT_FABRIC = -1 as FabricIndex;
 }
 
-/** Tlv Schema for a Fabric Index. */
-export const TlvFabricIndex = new TlvWrapper<FabricIndex, number | undefined>(
-    TlvUInt8.bound({ min: 0, max: 254 }),
-    fabricIndex => (fabricIndex === -1 ? undefined : fabricIndex),
-    value => {
-        switch (value) {
-            case undefined:
-                return FabricIndex.OMIT_FABRIC;
-            case 0:
-                return FabricIndex.NO_FABRIC;
-            default:
-                return value as FabricIndex;
+class FabricIndexTlvWrapper extends TlvWrapper<FabricIndex, number | undefined> {
+    constructor() {
+        super(
+            TlvUInt8.bound({ min: 0, max: 254 }),
+            fabricIndex => (fabricIndex === FabricIndex.OMIT_FABRIC ? undefined : fabricIndex),
+            value => {
+                switch (value) {
+                    case undefined:
+                        return FabricIndex.OMIT_FABRIC;
+                    case 0:
+                        return FabricIndex.NO_FABRIC;
+                    default:
+                        return value as FabricIndex;
+                }
+            },
+        );
+    }
+
+    override validate(value: FabricIndex): void {
+        const wrappedValue = this.wrap(value);
+        if (wrappedValue !== undefined) {
+            this.underlyingSchema.validate(wrappedValue);
         }
-    },
-);
+    }
+}
+
+/** Tlv Schema for a Fabric Index. */
+export const TlvFabricIndex = new FabricIndexTlvWrapper();
