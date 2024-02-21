@@ -32,7 +32,7 @@ function generateAllAttributeHandlersForCluster(yargs: Argv, theNode: MatterNode
                     demandOption: true,
                 })
                 .positional("attribute-id", {
-                    describe: "attribute id id to read, use * to read all attributes of the given cluster",
+                    describe: "attribute id to read, use * to read all attributes of the given cluster",
                     type: "string",
                     demandOption: true,
                 })
