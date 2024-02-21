@@ -5,18 +5,19 @@
  */
 
 import { Level } from "@project-chip/matter.js/log";
-import { createWriteStream } from "fs";
+import { open } from "fs/promises";
 
 /**
  * Creates a file based logger to append to the given path.
  * The file is opened on start and closed when the process shuts down.
  * Errors are logged to the console.
  */
-export function createFileLogger(path: string) {
-    const writer = createWriteStream(path, {
-        flags: "a",
-    });
-    process.on("beforeExit", () => writer.close(err => err && console.error(`Failed to close log file: ${err}`)));
+export async function createFileLogger(path: string) {
+    const fileHandle = await open(path, "a");
+    const writer = fileHandle.createWriteStream();
+    process.on("beforeExit", () =>
+        fileHandle.close().catch(err => err && console.error(`Failed to close log file: ${err}`)),
+    );
 
     return (_level: Level, formattedLog: string) => {
         try {

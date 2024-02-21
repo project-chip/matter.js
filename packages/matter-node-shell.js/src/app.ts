@@ -101,7 +101,7 @@ async function main() {
                 if (theNode.Store.has("LogFile")) {
                     const storedLogFileName = theNode.Store.get<string>("LogFile");
                     if (storedLogFileName !== undefined) {
-                        Logger.addLogger("file", createFileLogger(storedLogFileName), {
+                        Logger.addLogger("file", await createFileLogger(storedLogFileName), {
                             defaultLogLevel: theNode.Store.get<Level>("LoglevelFile", Level.DEBUG),
                             logFormat: Format.PLAIN,
                         });
