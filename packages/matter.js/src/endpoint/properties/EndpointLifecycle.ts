@@ -11,15 +11,15 @@ import { Logger } from "../../log/Logger.js";
 import type { Node } from "../../node/Node.js";
 import { Observable } from "../../util/Observable.js";
 import { MaybePromise } from "../../util/Promises.js";
-import type { Part } from "../Part.js";
+import type { Endpoint } from "../Endpoint.js";
 
 const logger = Logger.get("PartLifecycle");
 
 /**
- * State related to a {@link Part}'s lifecycle.
+ * State related to a {@link Endpoint}'s lifecycle.
  */
-export class PartLifecycle {
-    #part: Part;
+export class EndpointLifecycle {
+    #endpoint: Endpoint;
     #isInstalled = false;
     #isReady = false;
     #isTreeReady = false;
@@ -29,40 +29,40 @@ export class PartLifecycle {
     #ready = new Observable<[]>(error => this.emitError("ready", error));
     #treeReady = new Observable<[]>(error => this.emitError("treeReady", error));
     #destroyed = new Observable<[]>(error => this.emitError("destroyed", error));
-    #changed = new Observable<[type: PartLifecycle.Change, part: Part]>(error => this.emitError("changed", error));
+    #changed = new Observable<[type: EndpointLifecycle.Change, endpoint: Endpoint]>(error => this.emitError("changed", error));
     #reset = new Observable<[], MaybePromise>();
-    #queuedUpdates?: Array<PartLifecycle.Change>;
+    #queuedUpdates?: Array<EndpointLifecycle.Change>;
 
     /**
-     * Emitted when a part is installed into an initialized owner.
+     * Emitted when an endpoint is installed into an initialized owner.
      */
     get installed() {
         return this.#installed;
     }
 
     /**
-     * Emitted when a part is fully initialized excepting children.
+     * Emitted when an endpoint is fully initialized excepting children.
      */
     get ready() {
         return this.#ready;
     }
 
     /**
-     * Emitted when a part is fully initialized including children.
+     * Emitted when an endpoint is fully initialized including children.
      */
     get treeReady() {
         return this.#treeReady;
     }
 
     /**
-     * Emitted when the part is destroyed.
+     * Emitted when the endpoint is destroyed.
      */
     get destroyed() {
         return this.#destroyed;
     }
 
     /**
-     * Bubbling event indicating changes to part structure.
+     * Bubbling event indicating changes to endpoint structure.
      */
     get changed() {
         return this.#changed;
@@ -76,47 +76,47 @@ export class PartLifecycle {
     }
 
     /**
-     * Is the {@link Part} installed in a {@link Node}?
+     * Is the {@link Endpoint} installed in a {@link Node}?
      */
     get isInstalled() {
         return this.#isInstalled;
     }
 
     /**
-     * Is the {@link Part} fully initialized, excepting children?
+     * Is the {@link Endpoint} fully initialized, excepting children?
      */
     get isReady() {
         return this.#isReady;
     }
 
     /**
-     * Is the {@link Part} fully initialized, including children?
+     * Is the {@link Endpoint} fully initialized, including children?
      */
     get isTreeReady() {
         return this.#isTreeReady;
     }
 
     /**
-     * Does the part have an ID?
+     * Does the endpoint have an ID?
      */
     get hasId() {
         return this.#hasId;
     }
 
     /**
-     * Does the part have an endpoint number?
+     * Does the endpoint have an endpoint number?
      */
     get hasNumber() {
         return this.#hasNumber;
     }
 
-    constructor(part: Part) {
-        this.#part = part;
+    constructor(endpoint: Endpoint) {
+        this.#endpoint = endpoint;
 
         // Bubble crash events
-        part.construction.change.on(status => {
+        endpoint.construction.change.on(status => {
             if (status === Lifecycle.Status.Crashed) {
-                this.change(PartLifecycle.Change.Crashed);
+                this.change(EndpointLifecycle.Change.Crashed);
             }
         });
     }
@@ -124,10 +124,10 @@ export class PartLifecycle {
     /**
      * Bubble a lifecycle change event from a child.
      */
-    bubble(type: PartLifecycle.Change, part: Part) {
-        this.#changed.emit(type, part);
+    bubble(type: EndpointLifecycle.Change, endpoint: Endpoint) {
+        this.#changed.emit(type, endpoint);
 
-        if (type === PartLifecycle.Change.TreeReady) {
+        if (type === EndpointLifecycle.Change.TreeReady) {
             this.#checkTreeReadiness();
         }
     }
@@ -135,30 +135,30 @@ export class PartLifecycle {
     /**
      * Inform the Lifecycle of a change in lifecycle.
      */
-    change(type: PartLifecycle.Change) {
+    change(type: EndpointLifecycle.Change) {
         // Update state
         switch (type) {
-            case PartLifecycle.Change.Installed:
+            case EndpointLifecycle.Change.Installed:
                 this.#isInstalled = true;
                 break;
 
-            case PartLifecycle.Change.Ready:
+            case EndpointLifecycle.Change.Ready:
                 // Sanity checks
                 if (!this.#hasId) {
-                    throw new ImplementationError("Part reports as ready but has no ID assigned");
+                    throw new ImplementationError("Endpoint reports as ready but has no ID assigned");
                 }
                 if (!this.#hasNumber) {
-                    throw new ImplementationError("Part reports as ready but has no number assigned");
+                    throw new ImplementationError("Endpoint reports as ready but has no number assigned");
                 }
                 this.#isReady = true;
                 this.#checkTreeReadiness();
                 break;
 
-            case PartLifecycle.Change.IdAssigned:
+            case EndpointLifecycle.Change.IdAssigned:
                 this.#hasId = true;
                 break;
 
-            case PartLifecycle.Change.NumberAssigned:
+            case EndpointLifecycle.Change.NumberAssigned:
                 this.#hasNumber = true;
                 break;
         }
@@ -178,9 +178,9 @@ export class PartLifecycle {
                 this.#queuedUpdates.shift();
 
                 // Emit change event
-                this.changed.emit(type, this.#part);
+                this.changed.emit(type, this.#endpoint);
 
-                // Emit part-specific events
+                // Emit endpoint-specific events
                 const observable = (this as unknown as Record<string, Observable>)[type];
                 if (observable !== undefined) {
                     observable.emit();
@@ -192,7 +192,7 @@ export class PartLifecycle {
     }
 
     protected emitError(name: string, error: Error) {
-        logger.error("Unhandled error in", Diagnostic.strong(`${this.#part}.lifecycle.${name}`), "handler:", error);
+        logger.error("Unhandled error in", Diagnostic.strong(`${this.#endpoint}.lifecycle.${name}`), "handler:", error);
     }
 
     /**
@@ -207,16 +207,16 @@ export class PartLifecycle {
             return;
         }
 
-        if (!this.#part.parts.areReady) {
+        if (!this.#endpoint.parts.areReady) {
             return;
         }
 
         this.#isTreeReady = true;
-        this.change(PartLifecycle.Change.TreeReady);
+        this.change(EndpointLifecycle.Change.TreeReady);
     }
 }
 
-export namespace PartLifecycle {
+export namespace EndpointLifecycle {
     export enum Change {
         Installed = "installed",
         Ready = "ready",

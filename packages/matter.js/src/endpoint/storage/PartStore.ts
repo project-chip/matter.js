@@ -6,11 +6,12 @@
 
 import { Val } from "../../behavior/state/Val.js";
 import type { Datasource } from "../../behavior/state/managed/Datasource.js";
+import type { Endpoint } from "../../device/Endpoint.js";
 
 /**
- * Persistence backing for a {@link Part}.
+ * Persistence backing for an {@link Endpoint}.
  *
- * This is the interface a {@link Part} uses for reading and writing
+ * This is the interface a {@link Endpoint} uses for reading and writing
  * non-volatile values.
  */
 export interface PartStore {
@@ -32,7 +33,7 @@ export interface PartStore {
     set(values: Record<string, Val.Struct | undefined>): Promise<void>;
 
     /**
-     * Remove all persisted information for the {@link Part}
+     * Remove all persisted information for the {@link Endpoint}
      */
     delete(): Promise<void>;
 

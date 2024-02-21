@@ -141,7 +141,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         await this.#closeCommissioningWindow();
 
-        const device = this.part.env.get(MatterDevice);
+        const device = this.endpoint.env.get(MatterDevice);
         if (device.isFailsafeArmed()) {
             await device.failsafeContext.close();
         }
@@ -241,14 +241,14 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     async #closeCommissioningWindow() {
         this.callback(this.#endCommissioning);
-        await this.part.env.get(MatterDevice).endCommissioning();
+        await this.endpoint.env.get(MatterDevice).endCommissioning();
     }
 
     /**
      * Close commissioning window on timeout when there's nobody to await the resulting promise
      * */
     #commissioningTimeout() {
-        this.part.env.runtime.addWorker(this.#closeCommissioningWindow());
+        this.endpoint.env.runtime.addWorker(this.#closeCommissioningWindow());
     }
 
     /**

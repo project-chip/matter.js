@@ -20,7 +20,7 @@ class MockFabricImplementation {
 
 export const MockFabric = MockFabricImplementation as unknown as new (id?: number) => Fabric;
 
-export const MockEndpoint = MutableEndpoint({
+export const MockEndpointType = MutableEndpoint({
     name: "MyEndpoint",
     deviceType: 1,
     deviceRevision: 1,

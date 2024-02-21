@@ -69,7 +69,7 @@ export abstract class Behavior {
 
     /**
      * By default behaviors load lazily as they are accessed.  You can set this flag to true to force behaviors to load
-     * immediately when the part is initialized.
+     * immediately when the endpoint initializes.
      */
     static readonly early: boolean = false;
 
@@ -86,10 +86,10 @@ export abstract class Behavior {
     }
 
     /**
-     * The part that owns behavior's agent.
+     * The endpoint that owns behavior's agent.
      */
-    get part() {
-        return this.#agent.part;
+    get endpoint() {
+        return this.#agent.endpoint;
     }
 
     /**
@@ -199,7 +199,7 @@ export abstract class Behavior {
      * Description used in diagnostic messages.
      */
     toString() {
-        return `${this.part}.${(this.constructor as Behavior.Type).id}`;
+        return `${this.endpoint}.${(this.constructor as Behavior.Type).id}`;
     }
 
     /**
@@ -369,7 +369,7 @@ export namespace Behavior {
         : {};
 
     /**
-     * Configuration options you may set when adding a {@link Behavior} to a Part.
+     * Configuration options you may set when adding a {@link Behavior} to an endpoint.
      */
     export type Options<T extends Behavior.Type = Behavior.Type> = Behavior.InputStateOf<T> &
         Behavior.InitializationOptionsOf<T>;

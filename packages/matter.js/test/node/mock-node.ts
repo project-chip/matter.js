@@ -11,8 +11,8 @@ import { Datasource } from "../../src/behavior/state/managed/Datasource.js";
 import { Transaction } from "../../src/behavior/state/transaction/Transaction.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { Agent } from "../../src/endpoint/Agent.js";
-import { Part } from "../../src/endpoint/Part.js";
-import { PartInitializer } from "../../src/endpoint/part/PartInitializer.js";
+import { Endpoint } from "../../src/endpoint/Endpoint.js";
+import { EndpointInitializer } from "../../src/endpoint/properties/EndpointInitializer.js";
 import { PartStore } from "../../src/endpoint/storage/PartStore.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
 import { Environment } from "../../src/environment/Environment.js";
@@ -26,33 +26,33 @@ import { ServerStore } from "../../src/node/server/storage/ServerStore.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 
-export class MockPartInitializer extends PartInitializer {
+export class MockPartInitializer extends EndpointInitializer {
     #nextId = 1;
-    override initializeDescendent(part: Part) {
-        if (!part.lifecycle.hasNumber) {
-            part.number = EndpointNumber(this.#nextId++);
+    override initializeDescendent(endpoint: Endpoint) {
+        if (!endpoint.lifecycle.hasNumber) {
+            endpoint.number = EndpointNumber(this.#nextId++);
         }
-        if (!part.lifecycle.hasId) {
-            part.id = part.number.toString();
+        if (!endpoint.lifecycle.hasId) {
+            endpoint.id = endpoint.number.toString();
         }
     }
 
-    createBacking(part: Part, behavior: Behavior.Type) {
-        return new ServerBehaviorBacking(part, behavior);
+    createBacking(endpoint: Endpoint, behavior: Behavior.Type) {
+        return new ServerBehaviorBacking(endpoint, behavior);
     }
 }
 
 class MockPartStore implements PartStore {
-    part: Part;
+    endpoint: Endpoint;
     values = {} as Record<string, Val.Struct>;
     initialValues = {};
 
-    constructor(part: Part) {
-        this.part = part;
+    constructor(endpoint: Endpoint) {
+        this.endpoint = endpoint;
     }
 
     toString() {
-        return `MockStore#${this.part.number}`;
+        return `MockStore#${this.endpoint.number}`;
     }
 
     async set(values: Record<string, Val.Struct>) {
@@ -98,16 +98,16 @@ class MockPartStoreService extends PartStoreService {
     #stores = Array<MockPartStore>();
     #nextNumber = 1;
 
-    override assignNumber(part: Part<EndpointType.Empty>): void {
-        part.number = this.#nextNumber++;
+    override assignNumber(endpoint: Endpoint<EndpointType.Empty>): void {
+        endpoint.number = this.#nextNumber++;
     }
 
-    override storeForPart(part: Part<EndpointType.Empty>): PartStore {
-        if (this.#stores[part.number]) {
-            return this.#stores[part.number];
+    override storeForPart(endpoint: Endpoint<EndpointType.Empty>): PartStore {
+        if (this.#stores[endpoint.number]) {
+            return this.#stores[endpoint.number];
         }
 
-        return (this.#stores[part.number] = new MockPartStore(part));
+        return (this.#stores[endpoint.number] = new MockPartStore(endpoint));
     }
 }
 
@@ -141,7 +141,7 @@ export class MockNode<T extends ServerRootEndpoint = ServerRootEndpoint> extends
 
     override initialize(agent: Agent.Instance<T>) {
         this.env.set(StorageService, new StorageService(this.env, () => new StorageBackendMemory()));
-        this.env.set(PartInitializer, new MockPartInitializer());
+        this.env.set(EndpointInitializer, new MockPartInitializer());
         this.env.set(ServerStore, new MockServerStore(this.env, "test"));
         this.env.set(PartStoreService, new MockPartStoreService());
         this.env.set(IdentityService, new IdentityService(this));

@@ -5,25 +5,25 @@
  */
 
 import { ActionContext } from "../behavior/context/ActionContext.js";
-import { Part } from "../endpoint/Part.js";
-import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
+import { Endpoint } from "../endpoint/Endpoint.js";
+import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { Observable } from "../util/Observable.js";
 
 /**
  * Extended lifecycle information that only applies to root endpoints.
  */
-export class NodeLifecycle extends PartLifecycle {
+export class NodeLifecycle extends EndpointLifecycle {
     #online = Observable<[context: ActionContext]>();
     #offline = Observable<[Context: ActionContext]>();
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
     #initialized = Observable<[isCommissioned: boolean]>();
-    #partError = Observable<[part: Part, error: Error], boolean | undefined>();
+    #partError = Observable<[endpoint: Endpoint, error: Error], boolean | undefined>();
     #isOnline = false;
     #isCommissioned = false;
 
-    constructor(part: Part) {
-        super(part);
+    constructor(endpoint: Endpoint) {
+        super(endpoint);
 
         this.#online.on(() => {
             this.#isOnline = true;
@@ -57,7 +57,7 @@ export class NodeLifecycle extends PartLifecycle {
     }
 
     /**
-     * Emits when the nodes part tree is ready/initialized and used to initialize the commissioning state
+     * Emits when the node's endpoint tree is ready/initialized and used to initialize the commissioning state
      */
     get initialized() {
         return this.#initialized;
@@ -92,11 +92,11 @@ export class NodeLifecycle extends PartLifecycle {
     }
 
     /**
-     * Emits for unhandled errors in {@link Part} initialization.
+     * Emits for unhandled errors in {@link Endpoint} initialization.
      *
      * By default these errors causes node activity to terminate.  This may not be desirable for nodes with many parts
-     * that function independently.  If you install a listener here returning false the node will will treat the part
-     * that crashed as incapacitated but otherwise continue operation.
+     * that function independently.  If you install a listener here returning false the node will will treat the
+     * endpoint that crashed as incapacitated but otherwise continue operation.
      */
     get partError() {
         return this.#partError;

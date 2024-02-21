@@ -26,7 +26,7 @@ import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
-import { Part, PartServer } from "@project-chip/matter.js/endpoint";
+import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -148,24 +148,26 @@ const server = await ServerNode.create(
 /**
  * Matter Nodes are a composition of endpoints. Create and add a single multiple endpoint to the node to make it a
  * composed device. This example uses the OnOffLightDevice or OnOffPlugInUnitDevice depending on the value of the type
- * parameter. It also assigns each Part a unique ID to store the endpoint number for it in the storage to restore the
- * device on restart.
+ * parameter. It also assigns each Endpoint a unique ID to store the endpoint number for it in the storage to restore
+ * the device on restart.
+ *
  * In this case we directly use the default command implementation from matter.js. Check out the DeviceNodeFull example
  * to see how to customize the command handlers.
  */
 const numDevices = environment.vars.number("num") || 2;
 for (let i = 1; i <= numDevices; i++) {
     const isSocket = environment.vars.string(`type${i}`) === "socket";
-    const part = new Part(isSocket ? OnOffPlugInUnitDevice : OnOffLightDevice, { id: `onoff-${i}` });
-    await server.add(part);
+    const endpoint = new Endpoint(isSocket ? OnOffPlugInUnitDevice : OnOffLightDevice, { id: `onoff-${i}` });
+    await server.add(endpoint);
 
     /**
-     * Register state change handlers of the part for identify and onoff states to react to the commands.
+     * Register state change handlers of the endpoint for identify and onoff states to react to the commands.
+     *
      * If the code in these change handlers fail then the change is also rolled back and not executed and an error is
      * reported back to the controller.
      */
     let isIdentifying = false;
-    part.events.identify.identifyTime$Change.on(value => {
+    endpoint.events.identify.identifyTime$Change.on(value => {
         // identifyTime is set when an identify commandf is called and then decreased every second while indenitfy logic runs.
         if (value > 0 && !isIdentifying) {
             isIdentifying = true;
@@ -176,7 +178,7 @@ for (let i = 1; i <= numDevices; i++) {
         }
     });
 
-    part.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Change.on(value => {
         executeCommand(value ? `on${i}` : `off${i}`);
         console.log(`OnOff ${i} is now ${value ? "ON" : "OFF"}`);
     });
@@ -185,7 +187,7 @@ for (let i = 1; i <= numDevices; i++) {
 /**
  * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
  */
-logEndpoint(PartServer.forPart(server));
+logEndpoint(EndpointServer.forEndpoint(server));
 
 /**
  * In order to start the node and announce it into the network we use the run method which resolves when the node goes

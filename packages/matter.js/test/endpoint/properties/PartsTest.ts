@@ -5,27 +5,27 @@
  */
 
 import { IndexBehavior } from "../../../src/behavior/system/index/IndexBehavior.js";
-import { Part } from "../../../src/endpoint/Part.js";
-import { PartLifecycle } from "../../../src/endpoint/part/PartLifecycle.js";
-import { MockEndpoint } from "../../behavior/mock-behavior.js";
-import { MockPart } from "../mock-part.js";
+import { Endpoint } from "../../../src/endpoint/Endpoint.js";
+import { EndpointLifecycle } from "../../../src/endpoint/properties/EndpointLifecycle.js";
+import { MockEndpointType } from "../../behavior/mock-behavior.js";
+import { MockEndpoint } from "../mock-endpoint.js";
 
 function createParent() {
-    return new MockPart(MockEndpoint, { number: 1 });
+    return new MockEndpoint(MockEndpointType, { number: 1 });
 }
 
 function createParentAndChild() {
-    return new MockPart(MockEndpoint, { number: 2, owner: undefined });
+    return new MockEndpoint(MockEndpointType, { number: 2, owner: undefined });
 }
 
 function createChild() {
-    return new MockPart(MockEndpoint, { number: 3, owner: undefined });
+    return new MockEndpoint(MockEndpointType, { number: 3, owner: undefined });
 }
 
-async function assembleIncrementally(assemble: (child: Part, parent: Part, grandparent: Part) => Promise<void>) {
-    const grandparent = new MockPart(MockEndpoint);
-    const parent = new MockPart(MockEndpoint, { owner: undefined });
-    const child = new MockPart(MockEndpoint, { owner: undefined });
+async function assembleIncrementally(assemble: (child: Endpoint, parent: Endpoint, grandparent: Endpoint) => Promise<void>) {
+    const grandparent = new MockEndpoint(MockEndpointType);
+    const parent = new MockEndpoint(MockEndpointType, { owner: undefined });
+    const child = new MockEndpoint(MockEndpointType, { owner: undefined });
 
     await assemble(child, parent, grandparent);
 
@@ -75,9 +75,9 @@ describe("Parts", () => {
         parent.parts.add(child);
         await child.construction;
 
-        const bubbled = Array<PartLifecycle.Change>();
-        parent.lifecycle.changed.on((type, part) => {
-            expect(part).equals(grandchild);
+        const bubbled = Array<EndpointLifecycle.Change>();
+        parent.lifecycle.changed.on((type, endpoint) => {
+            expect(endpoint).equals(grandchild);
             bubbled.push(type);
         });
 
@@ -85,10 +85,10 @@ describe("Parts", () => {
         await grandchild.construction;
 
         expect(bubbled).deep.equals([
-            PartLifecycle.Change.Installed,
-            PartLifecycle.Change.IdAssigned,
-            PartLifecycle.Change.TreeReady,
-            PartLifecycle.Change.Ready,
+            EndpointLifecycle.Change.Installed,
+            EndpointLifecycle.Change.IdAssigned,
+            EndpointLifecycle.Change.TreeReady,
+            EndpointLifecycle.Change.Ready,
         ]);
     });
 
@@ -105,10 +105,10 @@ describe("Parts", () => {
         child.parts.add(grandchild);
         await grandchild.construction;
 
-        let bubbled: Part | undefined;
-        parent.lifecycle.changed.on((type, part) => {
-            expect(type).equals(PartLifecycle.Change.Destroyed);
-            bubbled = part;
+        let bubbled: Endpoint | undefined;
+        parent.lifecycle.changed.on((type, endpoint) => {
+            expect(type).equals(EndpointLifecycle.Change.Destroyed);
+            bubbled = endpoint;
         });
 
         await grandchild.close();

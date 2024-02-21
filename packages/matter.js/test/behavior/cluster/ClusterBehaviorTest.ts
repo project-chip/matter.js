@@ -15,7 +15,7 @@ import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.j
 import { ClusterModel } from "../../../src/model/index.js";
 import { Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Promises.js";
-import { MockPart } from "../../endpoint/mock-part.js";
+import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
 
 describe("ClusterBehavior", () => {
@@ -91,8 +91,8 @@ describe("ClusterBehavior", () => {
         });
 
         it("instance exposes values for enabled cluster elements", async () => {
-            const part = await MockPart.createWith(MyBehavior);
-            part.act(agent => {
+            const endpoint = await MockEndpoint.createWith(MyBehavior);
+            endpoint.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.reqAttr).equals("hello");
                 expect(behavior.reqCmd).is.a("function");
@@ -102,8 +102,8 @@ describe("ClusterBehavior", () => {
         });
 
         it("instance does not expose values for disabled cluster elements", async () => {
-            const part = await MockPart.createWith(MyBehavior);
-            part.act(agent => {
+            const endpoint = await MockEndpoint.createWith(MyBehavior);
+            endpoint.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.optAttr).undefined;
                 expect(behavior.events.optAttr$Change?.constructor.name).equals("Emitter");

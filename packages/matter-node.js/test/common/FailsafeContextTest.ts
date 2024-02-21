@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterServer, EndpointFailsafeContext, NetworkCommissioning } from "@project-chip/matter.js/cluster";
+import { ClusterServer, CommissioningServerFailsafeContext, NetworkCommissioning } from "@project-chip/matter.js/cluster";
 import { EndpointNumber } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import { ByteArray } from "@project-chip/matter.js/util";
@@ -46,7 +46,7 @@ describe("FailsafeContext", () => {
             rootEndpoint.addChildEndpoint(otherEndpoint);
 
             // Open FailSafe context and store network data
-            const failsafeContext = await EndpointFailsafeContext.create(rootEndpoint, {
+            const failsafeContext = await CommissioningServerFailsafeContext.create(rootEndpoint, {
                 sessions: {
                     getPaseSession() {
                         return undefined;

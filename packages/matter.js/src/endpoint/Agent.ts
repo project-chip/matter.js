@@ -8,13 +8,13 @@ import { Behavior } from "../behavior/Behavior.js";
 import { ActionContext } from "../behavior/context/ActionContext.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { MaybePromise } from "../util/Promises.js";
-import type { Part } from "./Part.js";
-import type { SupportedBehaviors } from "./part/SupportedBehaviors.js";
+import type { Endpoint } from "./Endpoint.js";
+import type { SupportedBehaviors } from "./properties/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
 
 /**
  * An Agent offers interaction with a single endpoint.  This is the operational interface to endpoints.  It is separate
- * from the {@link Part} because the agent is context-aware and may be bound to a specific fabric.
+ * from the {@link Endpoint} because the agent is context-aware and may be bound to a specific fabric.
  *
  * An endpoint agent manages one or more {@link Behavior} instances that implement a discrete subset of the agent's
  * functionality.
@@ -26,30 +26,30 @@ import { EndpointType } from "./type/EndpointType.js";
  * no guarantee they will exist beyond the lifecycle of a single transaction.
  */
 export class Agent {
-    #part: Part;
+    #endpoint: Endpoint;
     #context: ActionContext;
     #behaviors = {} as Record<string, Behavior>;
 
-    constructor(part: Part, context: ActionContext) {
-        this.#part = part;
+    constructor(endpoint: Endpoint, context: ActionContext) {
+        this.#endpoint = endpoint;
         this.#context = context;
     }
 
     /**
-     * Access the {@link Part} this agent acts on behalf of.
+     * Access the {@link Endpoint} this agent acts on behalf of.
      */
-    get part() {
-        return this.#part;
+    get endpoint() {
+        return this.#endpoint;
     }
 
     /**
      * Access an {@link Agent} for this agent's owner.
      */
     get owner(): Agent | undefined {
-        if (this.#part.owner === undefined) {
+        if (this.#endpoint.owner === undefined) {
             return undefined;
         }
-        return this.context.agentFor(this.#part.owner);
+        return this.context.agentFor(this.#endpoint.owner);
     }
 
     /**
@@ -63,7 +63,7 @@ export class Agent {
      * Test to see if a {@link Behavior.Type} is supported by this agent.
      */
     has<BehaviorT extends Behavior.Type>(type: BehaviorT): this is InstanceType<BehaviorT> {
-        return this.#part.behaviors.has(type);
+        return this.#endpoint.behaviors.has(type);
     }
 
     /**
@@ -79,7 +79,7 @@ export class Agent {
     get<T extends Behavior.Type>(type: T) {
         let behavior = this.#behaviors[type.id];
         if (!behavior) {
-            behavior = this.#part.behaviors.createSync(type, this);
+            behavior = this.#endpoint.behaviors.createSync(type, this);
             this.#behaviors[type.id] = behavior;
         }
         return behavior as InstanceType<T>;
@@ -96,7 +96,7 @@ export class Agent {
             return behavior as InstanceType<T>;
         }
 
-        return this.#part.behaviors.createMaybeAsync(type, this) as MaybePromise<InstanceType<T>>;
+        return this.#endpoint.behaviors.createMaybeAsync(type, this) as MaybePromise<InstanceType<T>>;
     }
 
     /**
@@ -105,18 +105,18 @@ export class Agent {
      * Functionally identical to {@link load} but has no return value.
      */
     activate(type: Behavior.Type) {
-        this.#part.behaviors.activate(type, this);
+        this.#endpoint.behaviors.activate(type, this);
     }
 
     /**
      * Add support for a {@link Behavior.Type}.
      */
     require<T extends Behavior.Type>(type: T, options?: Behavior.Options<T>) {
-        this.#part.behaviors.require(type, options);
+        this.#endpoint.behaviors.require(type, options);
     }
 
     toString() {
-        return this.#part.toString();
+        return this.#endpoint.toString();
     }
 
     /**
@@ -153,7 +153,7 @@ export namespace Agent {
      * {@link Agent.require}.
      */
     export interface Type<T extends EndpointType = EndpointType.Empty> {
-        new (part: Part, context: ActionContext): Instance<T>;
+        new (endpoint: Endpoint, context: ActionContext): Instance<T>;
     }
 
     export type Instance<T extends EndpointType = EndpointType.Empty> = Agent & {

@@ -13,7 +13,7 @@ import {
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
 import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
-import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 

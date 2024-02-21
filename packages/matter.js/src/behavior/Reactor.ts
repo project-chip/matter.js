@@ -8,6 +8,7 @@ import type { Observable } from "../util/Observable.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Behavior } from "./Behavior.js";
 import { Resource } from "./state/transaction/Resource.js";
+import type { Endpoint } from "../endpoint/Endpoint.js";
 
 /**
  * A reactor is an {@link Observable} observer managed by a {@link Behavior}.  You install reactors using
@@ -16,17 +17,17 @@ import { Resource } from "./state/transaction/Resource.js";
  * A reactor is similar to a normal handler installed with {@link Observable.on}.  It provides several benefits over
  * installing an observer directly:
  *
- *   - The behavior uninstalls {@link reactor} when the part is destroyed
+ *   - The behavior uninstalls {@link reactor} when the {@link Endpoint} is destroyed
  *
  *   - If {@link reactor} is asynchronous, the behavior tracks the resulting promise.  It provides error handling and
- *     ensures the promise completes before Part destruction
+ *     ensures the promise completes before {@link Endpoint} destruction
  *
  *   - The behavior ensures reactors run serially even if they are asynchronous
  *
  *   - Matter.js manages the context in which the reactor runs automatically, either joining the emitter's context or
  *     creating a dedicated offline context
  *
- *   - Matter.js ensures that {@link reactor} only registers with {@link Observable} once for a given {@link Part}
+ *   - Matter.js ensures that {@link reactor} only registers with {@link Observable} once for a given {@link Endpoint}
  *
  *   - You may optionally designate resources (including {@link Behavior}s) for locking prior to reaction
  *

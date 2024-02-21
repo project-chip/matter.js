@@ -11,7 +11,7 @@ import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { Agent } from "../../src/endpoint/Agent.js";
-import { Part } from "../../src/endpoint/Part.js";
+import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { Environment } from "../../src/environment/Environment.js";
 import { StorageService } from "../../src/environment/StorageService.js";
@@ -153,6 +153,6 @@ export namespace MockServerNode {
     export interface Options<T extends ServerRootEndpoint> {
         online?: boolean;
         config?: Node.Configuration<T>;
-        device?: Part.Definition;
+        device?: Endpoint.Definition;
     }
 }

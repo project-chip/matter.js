@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Part } from "../../../endpoint/Part.js";
-import { PartLifecycle } from "../../../endpoint/part/PartLifecycle.js";
+import type { Endpoint } from "../../../endpoint/Endpoint.js";
+import { EndpointLifecycle } from "../../../endpoint/properties/EndpointLifecycle.js";
 import { IdentityService } from "../../../node/server/IdentityService.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { EventEmitter, Observable } from "../../../util/Observable.js";
@@ -14,7 +14,7 @@ import { ActionContext } from "../../context/ActionContext.js";
 import { OfflineContext } from "../../context/server/OfflineContext.js";
 
 /**
- * This behavior indexes all descendents of a {@link Part} by number.
+ * This behavior indexes all descendents of a {@link Endpoint} by number.
  *
  * IndexBehavior should only be present on root and aggregator parts as its presence causes the endpoint's PartsList
  * attribute to reflect a flat namespace as required by the Matter standard.
@@ -28,7 +28,7 @@ export class IndexBehavior extends Behavior {
     static override readonly early = true;
 
     override initialize() {
-        this.reactTo(this.part.lifecycle.changed, this.#handleChange);
+        this.reactTo(this.endpoint.lifecycle.changed, this.#handleChange);
     }
 
     override [Symbol.asyncDispose]() {
@@ -45,56 +45,56 @@ export class IndexBehavior extends Behavior {
     }
 
     /**
-     * Retrieve a {@link Part} by number.
+     * Retrieve a {@link Endpoint} by number.
      *
-     * Note that {@link state.partsByNumber} does not include {@link part} but this method will return it if the number
+     * Note that {@link state.partsByNumber} does not include {@link endpoint} but this method will return it if the number
      * matches.
      */
     forNumber(number: number) {
-        if (this.part.lifecycle.hasNumber && number === this.part.number) {
-            return this.part;
+        if (this.endpoint.lifecycle.hasNumber && number === this.endpoint.number) {
+            return this.endpoint;
         }
         return this.internal.partsByNumber[number];
     }
 
-    #handleChange(type: PartLifecycle.Change, part: Part) {
+    #handleChange(type: EndpointLifecycle.Change, endpoint: Endpoint) {
         switch (type) {
-            case PartLifecycle.Change.IdAssigned:
-            case PartLifecycle.Change.NumberAssigned:
-            case PartLifecycle.Change.Installed:
-                this.#add(part);
+            case EndpointLifecycle.Change.IdAssigned:
+            case EndpointLifecycle.Change.NumberAssigned:
+            case EndpointLifecycle.Change.Installed:
+                this.#add(endpoint);
                 break;
 
-            case PartLifecycle.Change.Destroyed:
-                this.#remove(part);
+            case EndpointLifecycle.Change.Destroyed:
+                this.#remove(endpoint);
                 break;
         }
     }
 
-    #add(part: Part) {
+    #add(endpoint: Endpoint) {
         // This assertion is a sanity check; if there is a conflict then state is already corrupted
-        if (part.lifecycle.hasNumber) {
-            this.part.env.get(IdentityService).assertNumberAvailable(part.number, part);
-            this.internal.partsByNumber[part.number] = part;
+        if (endpoint.lifecycle.hasNumber) {
+            this.endpoint.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
+            this.internal.partsByNumber[endpoint.number] = endpoint;
         }
 
-        for (const child of part.parts) {
+        for (const child of endpoint.parts) {
             this.#add(child);
         }
 
         this.#change();
     }
 
-    #remove(part: Part) {
-        if (part.id && this.internal.partsById[part.id] === part) {
-            delete this.internal.partsById[part.id];
+    #remove(endpoint: Endpoint) {
+        if (endpoint.id && this.internal.partsById[endpoint.id] === endpoint) {
+            delete this.internal.partsById[endpoint.id];
         }
 
-        if (part.number !== undefined && this.internal.partsByNumber[part.number] === part) {
-            delete this.internal.partsByNumber[part.number];
+        if (endpoint.number !== undefined && this.internal.partsByNumber[endpoint.number] === endpoint) {
+            delete this.internal.partsByNumber[endpoint.number];
         }
 
-        for (const child of part.parts) {
+        for (const child of endpoint.parts) {
             this.#remove(child);
         }
 
@@ -105,7 +105,7 @@ export class IndexBehavior extends Behavior {
         if (this.internal.changeBroadcaster) {
             return;
         }
-        broadcastChange(`Update ${this.part} index`, this.internal, this.events.change);
+        broadcastChange(`Update ${this.endpoint} index`, this.internal, this.events.change);
     }
 }
 
@@ -128,14 +128,14 @@ export namespace IndexBehavior {
         changeBroadcaster?: Timer;
 
         /**
-         * Map of ID to {@link Part}.
+         * Map of ID to {@link Endpoint}.
          */
-        partsById = {} as Record<string, Part | undefined>;
+        partsById = {} as Record<string, Endpoint | undefined>;
 
         /**
-         * Map of number to {@link Part}.
+         * Map of number to {@link Endpoint}.
          */
-        partsByNumber = {} as Record<number, Part | undefined>;
+        partsByNumber = {} as Record<number, Endpoint | undefined>;
     }
 
     export class Events extends EventEmitter {

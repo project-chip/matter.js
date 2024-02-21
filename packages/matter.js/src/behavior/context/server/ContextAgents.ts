@@ -5,7 +5,7 @@
  */
 
 import { Agent } from "../../../endpoint/Agent.js";
-import { Part } from "../../../endpoint/Part.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { ActionContext } from "../ActionContext.js";
 
@@ -15,13 +15,13 @@ import { ActionContext } from "../ActionContext.js";
 export interface ContextAgents extends ReturnType<typeof ContextAgents> {}
 
 export function ContextAgents(context: ActionContext) {
-    const agents = new Map<Part, Agent>();
+    const agents = new Map<Endpoint, Agent>();
 
     return {
-        agentFor<const T extends EndpointType>(part: Part<T>): Agent.Instance<T> {
-            let agent = agents.get(part) as undefined | Agent.Instance<T>;
+        agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
+            let agent = agents.get(endpoint) as undefined | Agent.Instance<T>;
             if (agent === undefined) {
-                agents.set(part, (agent = new part.agentType(part, context)));
+                agents.set(endpoint, (agent = new endpoint.agentType(endpoint, context)));
             }
             return agent;
         },

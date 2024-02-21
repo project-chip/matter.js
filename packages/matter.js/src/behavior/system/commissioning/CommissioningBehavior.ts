@@ -7,7 +7,7 @@
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
 import { Lifecycle } from "../../../common/Lifecycle.js";
 import { ImplementationError } from "../../../common/MatterError.js";
-import type { PartServer } from "../../../endpoint/PartServer.js";
+import type { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { DatatypeModel, FieldElement } from "../../../model/index.js";
@@ -32,7 +32,7 @@ import { CommissioningOptions } from "./CommissioningOptions.js";
 const logger = Logger.get("Commissioning");
 
 /**
- * Server functionality related to commissioning used by {@link PartServer}.
+ * Server functionality related to commissioning used by {@link EndpointServer}.
  *
  * Better name would be CommissioningServer but we already have one of those.
  */
@@ -55,9 +55,9 @@ export class CommissioningBehavior extends Behavior {
             this.state.discriminator = PaseClient.generateRandomDiscriminator();
         }
 
-        this.reactTo((this.part as Node).lifecycle.online, this.#nodeOnline);
+        this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
 
-        this.reactTo((this.part as Node).lifecycle.treeReady, this.#initializeNode);
+        this.reactTo((this.endpoint as Node).lifecycle.treeReady, this.#initializeNode);
 
         this.reactTo(
             this.agent.get(OperationalCredentialsBehavior).events.commissionedFabrics$Change,
@@ -77,8 +77,8 @@ export class CommissioningBehavior extends Behavior {
 
         // Do not consider commissioned so long as there is an active failsafe timer as commissioning may not be
         // complete and could still be rolled back
-        if (this.part.env.has(FailsafeContext)) {
-            const failsafe = this.part.env.get(FailsafeContext);
+        if (this.endpoint.env.has(FailsafeContext)) {
+            const failsafe = this.endpoint.env.get(FailsafeContext);
             if (failsafe.construction.status !== Lifecycle.Status.Destroyed) {
                 this.#monitorFailsafe(failsafe);
                 return;
@@ -87,12 +87,12 @@ export class CommissioningBehavior extends Behavior {
 
         this.state.commissioned = commissioned;
         if (commissioned) {
-            (this.part.lifecycle as NodeLifecycle).commissioned.emit(this.context);
+            (this.endpoint.lifecycle as NodeLifecycle).commissioned.emit(this.context);
         } else {
-            (this.part.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
+            (this.endpoint.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
 
-            this.part.env.runtime.addWorker(
-                (this.part as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
+            this.endpoint.env.runtime.addWorker(
+                (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
             );
         }
     }
@@ -105,7 +105,7 @@ export class CommissioningBehavior extends Behavior {
         // Callback that listens to the failsafe for destruction and triggers commissioning status update
         const listener = this.callback(function (this: CommissioningBehavior, status: Lifecycle.Status) {
             if (status === Lifecycle.Status.Destroyed) {
-                this.part.env.runtime.addWorker(this.#updateCommissioningStatus());
+                this.endpoint.env.runtime.addWorker(this.#updateCommissioningStatus());
                 this.internal.unregisterFailsafeListener?.();
             }
         });
@@ -133,7 +133,7 @@ export class CommissioningBehavior extends Behavior {
         const { qrPairingCode, manualPairingCode } = this.pairingCodes;
 
         logger.notice(
-            Diagnostic.strong(this.part.toString()),
+            Diagnostic.strong(this.endpoint.toString()),
             "is uncommissioned",
             Diagnostic.dict({
                 passcode,
@@ -194,7 +194,7 @@ export class CommissioningBehavior extends Behavior {
 
     #initializeNode() {
         const isCommissioned = !!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics;
-        (this.part.lifecycle as NodeLifecycle).initialized.emit(isCommissioned);
+        (this.endpoint.lifecycle as NodeLifecycle).initialized.emit(isCommissioned);
     }
 }
 

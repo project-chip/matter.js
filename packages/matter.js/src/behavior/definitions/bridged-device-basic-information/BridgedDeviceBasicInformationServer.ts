@@ -20,10 +20,10 @@ const BRIDGED_NODE_REVISION = 1;
  */
 export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInformationBehavior {
     override initialize() {
-        if (this.part.lifecycle.isInstalled) {
+        if (this.endpoint.lifecycle.isInstalled) {
             this.#configurePart();
         } else {
-            this.reactTo(this.part.lifecycle.installed, this.#configurePart, { once: true })
+            this.reactTo(this.endpoint.lifecycle.installed, this.#configurePart, { once: true })
         }
         this.reactTo(this.events.reachable$Change, this.#emitReachableChange);
     }
@@ -40,21 +40,21 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
      * appear under aggregator nodes.
      * 
      * Therefore this default implementation of BridgedDeviceBasicInformation injects the BridgedNode device type on the
-     * associated {@link Part} and asserts that its parent is a {@link AggregatorEndpoint}.
+     * associated {@link Endpoint} and asserts that its parent is a {@link AggregatorEndpoint}.
      */
     #configurePart() {
-        // Obtain part's owner.  This method should only be invoked after owner is known
+        // Obtain endpoint's owner.  This method should only be invoked after owner is known
         const owner = this.agent.owner;
         if (owner === undefined) {
-            throw new ImplementationError(`Bridged node ${this.part} has no parent`);
+            throw new ImplementationError(`Bridged node ${this.endpoint} has no parent`);
         }
 
         // Assert owner is an aggregator
         if (!owner.get(DescriptorServer).hasDeviceType(AggregatorEndpoint.deviceType)) {
-            throw new ImplementationError(`Bridged node ${this.part} owner ${owner} is not an aggregator`);
+            throw new ImplementationError(`Bridged node ${this.endpoint} owner ${owner} is not an aggregator`);
         }
 
-        // Ensure part is a bridged node
+        // Ensure endpoint is a bridged node
         this.agent.get(DescriptorServer).addDeviceTypes({
             deviceType: BRIDGED_NODE_DEVICE_TYPE,
             revision: BRIDGED_NODE_REVISION,

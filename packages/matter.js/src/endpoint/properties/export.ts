@@ -5,7 +5,7 @@
  */
 
 export * from "./Behaviors.js";
-export * from "./PartInitializer.js";
-export * from "./PartLifecycle.js";
+export * from "./EndpointInitializer.js";
+export * from "./EndpointLifecycle.js";
 export * from "./Parts.js";
 export * from "./SupportedBehaviors.js";

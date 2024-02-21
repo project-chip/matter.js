@@ -20,25 +20,25 @@ import { MaybePromise } from "../../util/Promises.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
 import type { Agent } from "../Agent.js";
-import type { Part } from "../Part.js";
-import { PartInitializer } from "./PartInitializer.js";
-import { PartLifecycle } from "./PartLifecycle.js";
+import type { Endpoint } from "../Endpoint.js";
+import { EndpointInitializer } from "./EndpointInitializer.js";
+import { EndpointLifecycle } from "./EndpointLifecycle.js";
 import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 
 const logger = Logger.get("Behaviors");
 
 /**
- * This class manages {@link Behavior} instances owned by a {@link Part}.
+ * This class manages {@link Behavior} instances owned by a {@link Endpoint}.
  */
 export class Behaviors {
-    #part: Part;
+    #endpoint: Endpoint;
     #supported: SupportedBehaviors;
     #backings: Record<string, BehaviorBacking> = {};
     #options: Record<string, object | undefined>;
     #initializing?: BasicSet<BehaviorBacking>;
 
     /**
-     * The {@link SupportedBehaviors} of the {@link Part}.
+     * The {@link SupportedBehaviors} of the {@link Endpoint}.
      */
     get supported() {
         return this.#supported;
@@ -56,12 +56,12 @@ export class Behaviors {
         return Diagnostic.lifecycleList(this.status);
     }
 
-    constructor(part: Part, supported: SupportedBehaviors, options: Record<string, object | undefined>) {
+    constructor(endpoint: Endpoint, supported: SupportedBehaviors, options: Record<string, object | undefined>) {
         if (typeof supported !== "object") {
-            throw new ImplementationError('Part "behaviors" option must be an array of Behavior.Type instances');
+            throw new ImplementationError('Endpoint "behaviors" option must be an array of Behavior.Type instances');
         }
 
-        this.#part = part;
+        this.#endpoint = endpoint;
         this.#supported = supported;
         this.#options = options;
 
@@ -73,10 +73,10 @@ export class Behaviors {
         for (const id in supported) {
             const type = supported[id];
             if (!(type.prototype instanceof Behavior)) {
-                throw new ImplementationError(`${part}.${id}" is not a Behavior.Type`);
+                throw new ImplementationError(`${endpoint}.${id}" is not a Behavior.Type`);
             }
             if (typeof type.id !== "string") {
-                throw new ImplementationError(`${part}.${id} has no ID`);
+                throw new ImplementationError(`${endpoint}.${id} has no ID`);
             }
             this.#augmentPartShortcuts(type);
         }
@@ -113,7 +113,7 @@ export class Behaviors {
     }
 
     /**
-     * Does the {@link Part} support a specified behavior?
+     * Does the {@link Endpoint} support a specified behavior?
      */
     has<T extends Behavior.Type>(type: T) {
         const myType = this.#supported[type.id];
@@ -131,7 +131,7 @@ export class Behaviors {
         if (this.#supported[type.id]) {
             if (!this.has(type)) {
                 throw new ImplementationError(
-                    `Cannot require ${this.#part}.${type.id} because incompatible implementation already exists`,
+                    `Cannot require ${this.#endpoint}.${type.id} because incompatible implementation already exists`,
                 );
             }
             return;
@@ -141,9 +141,9 @@ export class Behaviors {
 
         this.#augmentPartShortcuts(type);
 
-        this.#part.lifecycle.change(PartLifecycle.Change.ServersChanged);
+        this.#endpoint.lifecycle.change(EndpointLifecycle.Change.ServersChanged);
 
-        if (type.early && this.#part.lifecycle.isInstalled) {
+        if (type.early && this.#endpoint.lifecycle.isInstalled) {
             this.#activateLate(type);
         }
     }
@@ -156,7 +156,7 @@ export class Behaviors {
 
         if (MaybePromise.is(behavior)) {
             throw new ImplementationError(
-                `Synchronous access to ${this.#part}.${type.id} is impossible because it is still initializing`,
+                `Synchronous access to ${this.#endpoint}.${type.id} is impossible because it is still initializing`,
             );
         }
 
@@ -250,7 +250,7 @@ export class Behaviors {
      */
     async close() {
         const dispose = async (context: ActionContext) => {
-            const agent = context.agentFor(this.#part);
+            const agent = context.agentFor(this.#endpoint);
 
             let destroyNow = new Set(Object.keys(this.#backings));
             while (destroyNow.size) {
@@ -300,7 +300,7 @@ export class Behaviors {
         for (const requirement of Object.values(requirements)) {
             let name = camelize(requirement.name, true);
 
-            if (this.#part.behaviors.has(requirement)) {
+            if (this.#endpoint.behaviors.has(requirement)) {
                 continue;
             }
 
@@ -308,7 +308,7 @@ export class Behaviors {
             // doesn't currently
             const cluster = (requirement as ClusterBehavior.Type).cluster;
             if (cluster) {
-                const other = this.#part.behaviors.supported[requirement.id];
+                const other = this.#endpoint.behaviors.supported[requirement.id];
 
                 if ((other as ClusterBehavior.Type | undefined)?.cluster?.id === cluster.id) {
                     continue;
@@ -322,14 +322,14 @@ export class Behaviors {
 
         if (missing.length) {
             throw new ImplementationError(
-                `${this.#part} is missing required behaviors: ${describeList("and", ...missing)}`,
+                `${this.#endpoint} is missing required behaviors: ${describeList("and", ...missing)}`,
             );
         }
     }
 
     /**
      * Obtain default values for a behavior.  This is state values as present when the behavior is first initialized for
-     * a new part.
+     * a new endpoint.
      */
     defaultsFor(type: Behavior.Type) {
         const options = this.#options[type.id];
@@ -353,7 +353,7 @@ export class Behaviors {
     async reset() {
         for (const backing of Object.values(this.#backings)) {
             try {
-                await this.#part.act(async agent => {
+                await this.#endpoint.act(async agent => {
                     await backing.close(agent);
                 });
             } catch (e) {
@@ -364,17 +364,17 @@ export class Behaviors {
     }
 
     #activateLate(type: Behavior.Type) {
-        OfflineContext.act("behavior-late-activation", context => this.activate(type, context.agentFor(this.#part)), {
+        OfflineContext.act("behavior-late-activation", context => this.activate(type, context.agentFor(this.#endpoint)), {
             unversionedVolatiles: true,
         });
     }
 
     /**
-     * Obtain a backing for a part shortcut.
+     * Obtain a backing for an endpoint shortcut.
      */
     #backingFor(container: string, type: Behavior.Type) {
-        if (this.#part.construction.status !== Lifecycle.Status.Initializing) {
-            this.#part.construction.assert(`Cannot access ${this.#part}.${type.id} because part is`);
+        if (this.#endpoint.construction.status !== Lifecycle.Status.Initializing) {
+            this.#endpoint.construction.assert(`Cannot access ${this.#endpoint}.${type.id} because endpoint`);
         }
 
         let backing = this.#backings[type.id];
@@ -390,7 +390,7 @@ export class Behaviors {
             }
             backing = this.#backings[type.id];
             if (backing === undefined) {
-                throw new InternalError(`Behavior ${this.#part}.${type.id} late activation did not create backing`);
+                throw new InternalError(`Behavior ${this.#endpoint}.${type.id} late activation did not create backing`);
             }
         }
         return backing;
@@ -401,10 +401,10 @@ export class Behaviors {
         // our type might be an extension
         const myType = this.#getBehaviorType(type);
         if (!myType) {
-            throw new ImplementationError(`Request for unsupported behavior ${this.#part}.${type.id}}`);
+            throw new ImplementationError(`Request for unsupported behavior ${this.#endpoint}.${type.id}}`);
         }
 
-        const backing = this.#part.env.get(PartInitializer).createBacking(this.#part, myType);
+        const backing = this.#endpoint.env.get(EndpointInitializer).createBacking(this.#endpoint, myType);
         this.#backings[type.id] = backing;
 
         this.#initializeBacking(backing, agent);
@@ -445,7 +445,7 @@ export class Behaviors {
     }
 
     #augmentPartShortcuts(type: Behavior.Type) {
-        Object.defineProperty(this.#part.state, type.id, {
+        Object.defineProperty(this.#endpoint.state, type.id, {
             get: () => {
                 return this.#backingFor("state", type).stateView;
             },
@@ -457,7 +457,7 @@ export class Behaviors {
             enumerable: true,
         });
 
-        Object.defineProperty(this.#part.events, type.id, {
+        Object.defineProperty(this.#endpoint.events, type.id, {
             get: () => {
                 return this.#backingFor("events", type).events;
             },

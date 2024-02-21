@@ -75,7 +75,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             );
         }
 
-        const timedOp = this.part.env.get(MatterDevice).failsafeContext;
+        const timedOp = this.endpoint.env.get(MatterDevice).failsafeContext;
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
                 `csrRequest received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
@@ -116,7 +116,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         //        SHALL be InvalidNodeOpId if the matter-node-id attribute in the subject DN of the NOC has a value
         //        outside the Operational Node ID range and InvalidNOC for all other failures.
 
-        const timedOp = this.part.env.get(MatterDevice).failsafeContext;
+        const timedOp = this.endpoint.env.get(MatterDevice).failsafeContext;
 
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
@@ -358,7 +358,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override addTrustedRootCertificate({ rootCaCertificate }: AddTrustedRootCertificateRequest) {
-        const device = this.part.env.get(MatterDevice);
+        const device = this.endpoint.env.get(MatterDevice);
         const timedOp = device.failsafeContext;
 
         if (timedOp.hasRootCert) {
@@ -385,7 +385,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 array.splice(index, 1);
             }
         }
-        this.state.trustedRootCertificates = this.part.env
+        this.state.trustedRootCertificates = this.endpoint.env
             .get(MatterDevice)
             .getFabrics()
             .map(f => f.rootCert);

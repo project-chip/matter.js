@@ -6,24 +6,24 @@
 
 import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
-import { Part } from "../Part.js";
+import { Endpoint } from "../Endpoint.js";
 
 /**
- * Base class for {@link Part} initialization services.
+ * Base class for {@link Endpoint} initialization services.
  */
-export abstract class PartInitializer {
+export abstract class EndpointInitializer {
     /**
-     * Initialize a {@link Part}.
+     * Initialize a {@link Endpoint}.
      */
-    initializeDescendent(_part: Part) {}
+    initializeDescendent(_endpoint: Endpoint) {}
 
     /**
      * Create backing for a behavior of a descendent.
      *
-     * @param part the {@link Part} the behavior belongs to
+     * @param endpoint the {@link Endpoint} the behavior belongs to
      * @param type the {@link Behavior} type
      * @param defaults default values for behavior state
      * @returns a new {@link BehaviorBacking}
      */
-    abstract createBacking(part: Part, behavior: Behavior.Type): BehaviorBacking;
+    abstract createBacking(endpoint: Endpoint, behavior: Behavior.Type): BehaviorBacking;
 }

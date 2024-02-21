@@ -7,21 +7,21 @@
 import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
 import { IndexBehavior } from "../../behavior/system/index/IndexBehavior.js";
 import { ImplementationError } from "../../common/MatterError.js";
-import { Part } from "../../endpoint/Part.js";
+import { Endpoint } from "../../endpoint/Endpoint.js";
 
 /**
- * Thrown when there is a part ID or number conflict.
+ * Thrown when there is a endpoint ID or number conflict.
  */
 export class IdentityConflictError extends ImplementationError {}
 
 /**
- * Provides NodeServer and Part identification.
+ * Provides NodeServer and Endpoint identification.
  */
 export class IdentityService {
-    #partsById?: Record<string, Part | undefined>;
-    #node: Part;
+    #partsById?: Record<string, Endpoint | undefined>;
+    #node: Endpoint;
 
-    constructor(node: Part) {
+    constructor(node: Endpoint) {
         this.#node = node;
     }
 
@@ -33,9 +33,9 @@ export class IdentityService {
     }
 
     /**
-     * Ensure that a number is available for assignment to a {@link Part}.
+     * Ensure that a number is available for assignment to a {@link Endpoint}.
      */
-    assertNumberAvailable(number: number, part: Part) {
+    assertNumberAvailable(number: number, endpoint: Endpoint) {
         let other;
         if (this.#node.lifecycle.hasNumber && this.#node.number === number) {
             other = this.#node;
@@ -45,12 +45,12 @@ export class IdentityService {
             }
             other = this.#partsById?.[number];
         }
-        if (other && other !== part) {
+        if (other && other !== endpoint) {
             let owner;
             if (other.lifecycle.hasId) {
-                owner = `part ${other.id}`;
+                owner = `endpoint ${other.id}`;
             } else {
-                owner = `another part`;
+                owner = `another endpoint`;
             }
             throw new IdentityConflictError(`Endpoint number ${number} is already assigned to ${owner}`);
         }

@@ -10,22 +10,22 @@ import { ClusterId } from "../../../../src/datatype/ClusterId.js";
 import { DeviceTypeId } from "../../../../src/datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../../../src/datatype/EndpointNumber.js";
 import { MutableEndpoint } from "../../../../src/endpoint/type/MutableEndpoint.js";
-import { MockPart } from "../../../endpoint/mock-part.js";
-import { MockEndpoint } from "../../mock-behavior.js";
+import { MockEndpoint } from "../../../endpoint/mock-endpoint.js";
+import { MockEndpointType } from "../../mock-behavior.js";
 
 async function createFamily() {
-    const parent = await MockPart.create({
-        type: MockEndpoint,
+    const parent = await MockEndpoint.create({
+        type: MockEndpointType,
         number: 1,
     });
 
-    const child = await MockPart.create({ type: MockEndpoint, number: 2, owner: parent });
+    const child = await MockEndpoint.create({ type: MockEndpointType, number: 2, owner: parent });
 
     return { parent, child };
 }
 
 describe("DescriptorServer", () => {
-    it("properly extends part type", () => {
+    it("properly extends endpoint type", () => {
         const device = MutableEndpoint({
             name: "Foo",
             deviceType: 1,
@@ -43,7 +43,7 @@ describe("DescriptorServer", () => {
     });
 
     it("adds device type automatically if necessary", async () => {
-        const device = await MockPart.create(MockEndpoint);
+        const device = await MockEndpoint.create(MockEndpointType);
         expect(device.state.descriptor.deviceTypeList).deep.equals([
             {
                 deviceType: 1,
@@ -53,11 +53,11 @@ describe("DescriptorServer", () => {
     });
 
     it("does not add device type automatically if unnecessary", async () => {
-        const Device2Endpoint = MockEndpoint.set({
+        const Device2Endpoint = MockEndpointType.set({
             descriptor: { deviceTypeList: [{ deviceType: 2, revision: 2 }] },
         });
 
-        const device = await MockPart.create(Device2Endpoint);
+        const device = await MockEndpoint.create(Device2Endpoint);
         expect(device.state.descriptor.deviceTypeList).deep.equals([
             {
                 deviceType: 2,
@@ -67,7 +67,7 @@ describe("DescriptorServer", () => {
     });
 
     it("adds servers automatically", async () => {
-        const device = await MockPart.create(MockEndpoint);
+        const device = await MockEndpoint.create(MockEndpointType);
 
         device.behaviors.require(OnOffServer);
 

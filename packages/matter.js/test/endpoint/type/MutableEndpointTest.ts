@@ -6,9 +6,9 @@
 
 import { DeviceTypeId } from "../../../src/datatype/DeviceTypeId.js";
 import { DeviceClasses } from "../../../src/device/DeviceTypes.js";
-import { SupportedBehaviors } from "../../../src/endpoint/part/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../../../src/endpoint/properties/SupportedBehaviors.js";
 import { MutableEndpoint } from "../../../src/endpoint/type/MutableEndpoint.js";
-import { MockBehavior1, MockBehavior2 } from "../mock-part.js";
+import { MockBehavior1, MockBehavior2 } from "../mock-endpoint.js";
 
 const Identity = {
     name: "Base",

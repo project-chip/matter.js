@@ -13,7 +13,7 @@ import { AdministratorCommissioning } from "../definitions/AdministratorCommissi
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { EndpointFailsafeContext } from "./EndpointFailsafeContext.js";
+import { CommissioningServerFailsafeContext } from "./CommissiongServerFailsafeContext.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
@@ -60,7 +60,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
                 await device.beginTimed(
-                    new EndpointFailsafeContext(endpoint, {
+                    new CommissioningServerFailsafeContext(endpoint, {
                         fabrics: device.fabricManager,
                         sessions: device.sessionManager,
                         expiryLengthSeconds,
