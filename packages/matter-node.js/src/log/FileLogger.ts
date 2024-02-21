@@ -15,8 +15,9 @@ import { open } from "fs/promises";
 export async function createFileLogger(path: string) {
     const fileHandle = await open(path, "a");
     const writer = fileHandle.createWriteStream();
-    process.on("beforeExit", () =>
-        fileHandle.close().catch(err => err && console.error(`Failed to close log file: ${err}`)),
+    process.on(
+        "beforeExit",
+        () => void fileHandle.close().catch(err => err && console.error(`Failed to close log file: ${err}`)),
     );
 
     return (_level: Level, formattedLog: string) => {
