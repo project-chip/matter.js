@@ -98,7 +98,7 @@ export class NodeLifecycle extends EndpointLifecycle {
      * that function independently.  If you install a listener here returning false the node will will treat the
      * endpoint that crashed as incapacitated but otherwise continue operation.
      */
-    get partError() {
+    get endpointError() {
         return this.#partError;
     }
 }

@@ -109,7 +109,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
     }
 
     protected endpointCrashed(endpoint: Endpoint) {
-        return this.lifecycle.partError.emit(endpoint, endpoint.construction.error ?? new Error("Unknown error"));
+        return this.lifecycle.endpointError.emit(endpoint, endpoint.construction.error ?? new Error("Unknown error"));
     }
 }
 
