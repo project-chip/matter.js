@@ -23,10 +23,6 @@ import {
 } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "./cluster/definitions/GeneralDiagnosticsCluster.js";
 import { GroupKeyManagementCluster } from "./cluster/definitions/GroupKeyManagementCluster.js";
-import {
-    NetworkCommissioning,
-    NetworkCommissioningCluster,
-} from "./cluster/definitions/NetworkCommissioningCluster.js";
 import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
@@ -357,23 +353,6 @@ export class CommissioningServer extends MatterNode {
                     allowCountryCodeChange: generalCommissioning?.allowCountryCodeChange ?? true,
                     countryCodeWhitelist: generalCommissioning?.countryCodeWhitelist ?? undefined,
                 }),
-            ),
-        );
-
-        const networkId = new ByteArray(32);
-        // TODO Get the defaults from the cluster meta details
-        this.rootEndpoint.addClusterServer(
-            ClusterServer(
-                NetworkCommissioningCluster.with("EthernetNetworkInterface"),
-                {
-                    maxNetworks: 1,
-                    interfaceEnabled: true,
-                    lastConnectErrorValue: 0,
-                    lastNetworkId: networkId,
-                    lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                    networks: [{ networkId: networkId, connected: true }],
-                },
-                {}, // Ethernet is not requiring any methods
             ),
         );
 

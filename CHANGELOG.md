@@ -30,6 +30,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Fix: Enhanced handling for fabric scoped command invokes to match with specification
   * Fix: Enhanced handling for fabric sensitive attribute reads to match with specification
 * matter.js API:
+  * Fix (potentially Breaking): Remove NetworkCommissioningCluster (Ethernet) from default added clusters in CommissioningServer because we formally have an out-of-band network connection, re-add manually if needed!
   * Enhancement: Allowed to pass connect options when connecting a node for Controller
   * Enhancement: Stored Discovery and Basic information data for commissioned nodes and allow API access for easy determination of devices without need to connect to them
   * Enhancement: Improved OnOff/Dimmable Lighting devices and add Startup handling to match specification
@@ -39,6 +40,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Enhanced CLI arguments parser to allow "--name" additionally to "-name"
   * Fix: Adjusted the Group limits in GroupKeyManagement cluster to 1 because we do not support groups yet
   * Fix: (Luligu) Corrected the Device type for bridged nodes with Power source information
+  * Fix: Adjusted Commissioning logic for Controller to accept devices without network commissioning cluster by assuming out-of-band IP connection 
 * matter.js shell:
   * Feature: Added support for Debug logging into a Logfile additionally to e.g. Info logging in console
   * Enhancement: Adjusted logic to output detailed node information on nodes command

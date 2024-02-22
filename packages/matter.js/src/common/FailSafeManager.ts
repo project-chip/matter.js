@@ -5,13 +5,10 @@ import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Endpoint } from "../device/Endpoint.js";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
-import { Logger } from "../log/Logger.js";
 import { Time, Timer } from "../time/Time.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { MatterFlowError } from "./MatterError.js";
-
-const logger = Logger.get("FailSafeManager");
 
 export class MatterFabricConflictError extends MatterFlowError {}
 
@@ -64,10 +61,6 @@ export class FailSafeManager {
             const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Cluster);
             if (networkCluster !== undefined) {
                 networkCluster.setNetworksAttribute(networkState);
-            } else {
-                logger.warn(
-                    `NetworkCluster not found for endpoint ${endpointId}, but expected. Can not restore network data!`,
-                );
             }
             this.storedNetworkClusterState.delete(endpointId);
         }
