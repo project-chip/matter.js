@@ -44,6 +44,7 @@ import { PaseServer } from "./session/pase/PaseServer.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
+import { Mutex } from "./util/Mutex.js";
 
 const logger = Logger.get("MatterDevice");
 
@@ -62,6 +63,11 @@ export class MatterDevice {
     readonly #fabricManager;
     readonly #sessionManager;
     #failsafeContext?: FailsafeContext;
+    
+    // Currently we do not put much effort into synchronizing announcements as it probably isn't really necessary.  But
+    // this mutex prevents automated announcements from piling up and allows us to ensure announcements are complete
+    // on close
+    #announcementMutex = new Mutex(this);
 
     constructor(
         readonly sessionStorage: StorageContext,
@@ -84,10 +90,9 @@ export class MatterDevice {
         this.addProtocolHandler(this.secureChannelProtocol);
 
         this.announceInterval = Time.getPeriodicTimer("Server node announcement", DEVICE_ANNOUNCEMENT_INTERVAL_MS, () =>
-            // TODO - this promise is not awaited
             // Announcement needs to await a previous announcement because otherwise in testing at least announcement
             // may crash if started simultaneously
-            this.announce(),
+            this.#announcementMutex.run(() => this.announce())
         );
     }
 
@@ -450,9 +455,10 @@ export class MatterDevice {
         return { session, channel: await networkInterface.openChannel(device.addresses[0]) };
     }
 
-    async stop() {
+    async close() {
         this.isClosing = true;
         await this.endCommissioning();
+        await this.#announcementMutex;
         for (const broadcaster of this.broadcasters) {
             await broadcaster.close();
         }

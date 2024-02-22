@@ -81,7 +81,8 @@ export class ServerEndpointInitializer extends EndpointInitializer {
             throw new InternalError("Cannot determine ID for endpoint because parent does not list as child");
         }
 
-        const id = `endpoint${index}`;
+        // Use "part" rather than "endpoint" because it is scoped within parent endpoint
+        const id = `part${index}`;
         logger.warn(`Using fallback ID of ${id} for child of ${endpoint.owner}; assign ID to remove this warning`);
 
         return id;

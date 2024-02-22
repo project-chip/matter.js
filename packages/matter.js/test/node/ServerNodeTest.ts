@@ -174,9 +174,9 @@ describe("ServerNode", () => {
 
         // ...then go back online
         // TODO - need fixes in MatterDevice for following steps to work
-        //await MockTime.resolve(node.lifecycle.online);
+        await MockTime.resolve(node.lifecycle.online);
 
-        //await commission(node);
+        await commission(node);
 
         await node.close();
     });

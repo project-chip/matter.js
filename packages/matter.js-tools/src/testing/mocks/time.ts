@@ -118,7 +118,11 @@ export class MockTime {
 
         let timeAdvanced = 0;
         while (!resolved) {
-            await this.yield();
+            // Interestingly, a Time.yield() works in almost every case.  However, on Node SubtleCrypto.deriveBits hangs
+            // if you only yield via microtask.  It seems to require yielding via macrotask.  So we use setTimeout here.
+            // Probably related to entropy collection but I think it's safe to classify as a Node bug.  Tested on
+            // version 20.11.0
+            await new Promise<void>(resolve => setTimeout(() => resolve(), 0));
 
             if (resolved) {
                 break;
@@ -126,13 +130,16 @@ export class MockTime {
 
             // If we've advanced more than one hour, assume we've hung
             if (timeAdvanced > 60 * 60 * 1000) {
-                throw new Error("Mock timeout: Promise did not resolve within one hour, probably not going to happen");
+                debugger;
+                throw new Error("Mock timeout: Promise did not resolve within one (virtual) hour, probably not going to happen");
             }
 
-            // Advance time exponentially, trying for granularity but also OK performance
-            const nextAdvance = 5000; //timeAdvanced ? timeAdvanced : 1000;
-            await this.advance(nextAdvance);
-            timeAdvanced += nextAdvance;
+            // Advance time exponentially, trying for granularity but also OK performance.  Note that we are not only
+            // advancing time but also yielding event loop.  So it's possible if we run out of time it's just because
+            // there were too few yields in one virtual hour.  As designed currently it's 360 macrotasks and 360
+            // microtasks (360 loops w/ 1 macro- and 1 micro-yield)
+            await this.advance(1000);
+            timeAdvanced += 1000;
 
             if (resolved) {
                 break;

@@ -9,8 +9,7 @@ import { SupportedBehaviors } from "../properties/SupportedBehaviors.js";
 import { EndpointType } from "./EndpointType.js";
 
 /**
- * A MutableEndpoint is an EndpointType with factory functions that make it
- * convenient to reconfigure the endpoint.
+ * A MutableEndpoint is an EndpointType with factory functions that make it convenient to reconfigure the endpoint.
  */
 export interface MutableEndpoint extends EndpointType {
     /**
@@ -19,14 +18,12 @@ export interface MutableEndpoint extends EndpointType {
     defaults: {};
 
     /**
-     * Define an endpoint like this one with different defaults.  Only
-     * updates values present in the input object.
+     * Define an endpoint like this one with different defaults.  Only updates values present in the input object.
      */
     set(defaults: {}): MutableEndpoint;
 
     /**
-     * Define an endpoint like this one with additional and/or replacement
-     * server behaviors.
+     * Define an endpoint like this one with additional and/or replacement server behaviors.
      */
     with(...behaviors: SupportedBehaviors.List): MutableEndpoint;
 }
@@ -85,8 +82,20 @@ export namespace MutableEndpoint {
         "behaviors" | "defaults" | "set" | "with"
     > & {
         behaviors: B["behaviors"] & SB;
+
+        /**
+         * Access default state values.
+         */
         defaults: SupportedBehaviors.StateOf<SB>;
+
+        /**
+         * Define an endpoint like this one with different defaults.  Only updates values present in the input object.
+         */
         set(defaults: SupportedBehaviors.InputStateOf<SB>): With<B, SB>;
+
+        /**
+         * Define an endpoint like this one with additional and/or replacement server behaviors.
+         */
         with<const BL extends SupportedBehaviors.List>(...behaviors: BL): With<B, SupportedBehaviors.With<SB, BL>>;
     };
 }
