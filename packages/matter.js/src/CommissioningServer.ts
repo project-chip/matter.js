@@ -906,7 +906,7 @@ export class CommissioningServer extends MatterNode {
         await this.interactionServer?.close();
         this.interactionServer = undefined;
         this.endpointStructure.close();
-        await this.deviceInstance?.stop();
+        await this.deviceInstance?.close();
         this.deviceInstance = undefined;
         await this.mdnsInstanceBroadcaster?.close();
     }

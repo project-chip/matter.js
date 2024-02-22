@@ -247,7 +247,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         if (this.#matterDevice) {
             this.owner.env.delete(MatterDevice);
 
-            await this.#matterDevice.stop();
+            await this.#matterDevice.close();
 
             this.#matterDevice = undefined;
             this.#primaryNetInterface = undefined;
