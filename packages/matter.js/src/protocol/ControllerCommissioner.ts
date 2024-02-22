@@ -514,10 +514,10 @@ export class ControllerCommissioner {
      */
     private async configureRegulatoryInformation() {
         if (this.collectedCommissioningData.networkFeatures === undefined) {
-            throw new CommissioningError("No network features collected");
+            throw new CommissioningError("No network features collected. This should never happen.");
         }
         // Read the infos for all Network Commissioning clusters
-        const hasRadioNetwork = !!this.collectedCommissioningData.networkFeatures.find(
+        const hasRadioNetwork = this.collectedCommissioningData.networkFeatures.some(
             ({ value: { wiFiNetworkInterface, threadNetworkInterface } }) =>
                 wiFiNetworkInterface || threadNetworkInterface,
         );
@@ -735,21 +735,26 @@ export class ControllerCommissioner {
             this.collectedCommissioningData.networkFeatures === undefined ||
             this.collectedCommissioningData.networkStatus === undefined
         ) {
-            throw new CommissioningError("Could not get network details from the device ... Stop commissioning!");
+            throw new CommissioningError("No network features or status collected. This should never happen.");
         }
         if (
             this.commissioningOptions.wifiNetwork === undefined &&
             this.commissioningOptions.threadNetwork === undefined
         ) {
-            const anyEthernetInterface = !!this.collectedCommissioningData.networkFeatures.find(
-                ({ value: { ethernetNetworkInterface } }) => ethernetNetworkInterface === true,
-            );
-            const anyInterfaceConnected = this.collectedCommissioningData.networkStatus.find(
-                ({ value }) => !!value.find(({ connected }) => connected === true),
-            );
+            // Check if we have no networkCommissioning cluster or an Ethernet one
+            const anyEthernetInterface =
+                this.collectedCommissioningData.networkFeatures.length === 0 ||
+                this.collectedCommissioningData.networkFeatures.some(
+                    ({ value: { ethernetNetworkInterface } }) => ethernetNetworkInterface === true,
+                );
+            const anyInterfaceConnected =
+                this.collectedCommissioningData.networkStatus.length === 0 ||
+                this.collectedCommissioningData.networkStatus.some(({ value }) =>
+                    value.some(({ connected }) => connected === true),
+                );
             if (!anyEthernetInterface && !anyInterfaceConnected) {
                 throw new CommissioningError(
-                    "No network credentials are configured for commissioning and no Ethernet interface is available on the device and no interface already connected.",
+                    "No Wi-Fi/Thread network credentials are configured for commissioning and no Ethernet interface is available on the device and no interface already connected.",
                 );
             }
         }
