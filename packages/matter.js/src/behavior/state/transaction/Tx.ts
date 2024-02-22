@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ReadOnlyError } from "../../../common/MatterError.js";
+import { ImplementationError, ReadOnlyError } from "../../../common/MatterError.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { MaybePromise, createPromise } from "../../../util/Promises.js";
@@ -246,12 +246,19 @@ class Tx implements Transaction {
                 continue;
             }
 
+            // This sanity check uses the participant's diagnostic name to prevent logic errors from installing multiple
+            // participants that modify the same data
+            if ([...this.#participants].findIndex(p => p.toString() === participant.toString()) !== -1) {
+                throw new ImplementationError(`Participant ${participant} identity is not unique`);
+            }
+
             this.#participants.add(participant);
 
             if (participant.role !== undefined) {
                 if (this.#roles.has(participant.role)) {
                     throw new TransactionFlowError(`A participant is already registered for role ${participant.role}`);
                 }
+                this.#roles.set(participant.role, participant);
             }
         }
     }

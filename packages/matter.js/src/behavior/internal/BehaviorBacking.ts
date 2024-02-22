@@ -6,7 +6,7 @@
 
 import { CrashedDependencyError, Lifecycle } from "../../common/Lifecycle.js";
 import { ImplementationError } from "../../common/MatterError.js";
-import type { Agent } from "../../endpoint/Agent.js";
+import { installBehavior, type Agent } from "../../endpoint/Agent.js";
 import type { Endpoint } from "../../endpoint/Endpoint.js";
 import { Logger } from "../../log/Logger.js";
 import { AsyncConstruction } from "../../util/AsyncConstruction.js";
@@ -63,7 +63,7 @@ export abstract class BehaviorBacking {
                 this.construction.start(() => {
                     // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
                     // will throw if the behavior isn't initialized
-                    const behavior = this.createBehavior(agent, this.#type);
+                    const behavior = this.#lifecycleInstance(agent);
 
                     // Perform actual initialization
                     return this.invokeInitializer(behavior, this.#options);
@@ -226,12 +226,24 @@ export abstract class BehaviorBacking {
      */
     #invokeClose(agent: Agent): MaybePromise {
         // Do not use Agent.get because backing is in "destroying" state
-        const behavior = this.createBehavior(agent, this.type);
+        const behavior = this.#lifecycleInstance(agent);
 
         return MaybePromise.then(
             () => behavior?.[Symbol.asyncDispose](),
             undefined,
             e => logger.error(`Destroying ${this}:`, e),
         );
+    }
+
+    /**
+     * Obtain a behavior instance for lifecycle methods (initialize and close).
+     * 
+     * Under these circumstances we can't use {@link Agent.get} because it will throw if the endpoint is initializing
+     * or closing.
+     * 
+     * Instead we use a "friend" method of agent to retrieve any existing behavior or create a new one.
+     */
+    #lifecycleInstance(agent: Agent) {
+        return (agent as unknown as Agent.Internal)[installBehavior](this.#type.id, () => this.createBehavior(agent, this.#type));
     }
 }
