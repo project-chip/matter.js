@@ -5,11 +5,17 @@
  */
 
 import { MatterDevice } from "../../src/MatterDevice.js";
+import { DescriptorBehavior } from "../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
+import { PumpConfigurationAndControlServer } from "../../src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlServer.js";
 import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
+import { PumpConfigurationAndControl } from "../../src/cluster/definitions/PumpConfigurationAndControlCluster.js";
 import { DnsCodec, DnsMessage, DnsRecordType } from "../../src/codec/DnsCodec.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
+import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
+import { PumpDevice } from "../../src/endpoint/definitions/device/PumpDevice.js";
+import { AggregatorEndpoint } from "../../src/endpoint/definitions/system/AggregatorEndpoint.js";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
 import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -173,13 +179,39 @@ describe("ServerNode", () => {
         }
 
         // ...then go back online
-        // TODO - need fixes in MatterDevice for following steps to work
         await MockTime.resolve(node.lifecycle.online);
 
         await commission(node);
 
         await node.close();
     });
+
+    it("properly deploys aggregator", async () => {
+        const aggregator = new Endpoint(AggregatorEndpoint);
+
+        const light = new Endpoint(OnOffLightDevice, { owner: aggregator });
+
+        // Hrm always fun to configure pumps
+        const pump = new Endpoint(
+            PumpDevice.with(PumpConfigurationAndControlServer.with("ConstantPressure").set({
+                effectiveControlMode: PumpConfigurationAndControl.ControlMode.ConstantPressure,
+                effectiveOperationMode: PumpConfigurationAndControl.OperationMode.Normal
+            })),
+            { owner: aggregator }
+        );
+
+        const node = await MockServerNode.createOnline({ device: aggregator });
+
+        await commission(node);
+
+        expect(node.stateOf(DescriptorBehavior).partsList).deep.equals([ aggregator.number, light.number, pump.number ]);
+        expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([ light.number, pump.number ]);
+
+        expect(light.stateOf(DescriptorBehavior).serverList).deep.equals([3,4,5,6,29]);
+        expect(pump.stateOf(DescriptorBehavior).serverList).deep.equals([6, 3, 512, 29]);
+
+        await node.close();
+    }).timeout(86400000);
 });
 
 async function almostCommission(node?: MockServerNode) {
