@@ -211,7 +211,7 @@ describe("ServerNode", () => {
         expect(pump.stateOf(DescriptorBehavior).serverList).deep.equals([6, 3, 512, 29]);
 
         await node.close();
-    }).timeout(86400000);
+    });
 });
 
 async function almostCommission(node?: MockServerNode) {

@@ -12,6 +12,8 @@ import type { Endpoint } from "./Endpoint.js";
 import type { SupportedBehaviors } from "./properties/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
 
+export const installBehavior = Symbol("installBehavior");
+
 /**
  * An Agent offers interaction with a single endpoint.  This is the operational interface to endpoints.  It is separate
  * from the {@link Endpoint} because the agent is context-aware and may be bound to a specific fabric.
@@ -79,8 +81,7 @@ export class Agent {
     get<T extends Behavior.Type>(type: T) {
         let behavior = this.#behaviors[type.id];
         if (!behavior) {
-            behavior = this.#endpoint.behaviors.createSync(type, this);
-            this.#behaviors[type.id] = behavior;
+            behavior = this[installBehavior](type.id, () => this.#endpoint.behaviors.createSync(type, this));
         }
         return behavior as InstanceType<T>;
     }
@@ -140,6 +141,14 @@ export class Agent {
             instanceDescriptors: props,
         }) as Agent.Type<T>;
     }
+
+    private [installBehavior](id: string, create: () => Behavior) {
+        const behavior = this.#behaviors[id];
+        if (behavior) {
+            return behavior;
+        }
+        return this.#behaviors[id] = create();
+    }
 }
 
 export namespace Agent {
@@ -159,4 +168,11 @@ export namespace Agent {
     export type Instance<T extends EndpointType = EndpointType.Empty> = Agent & {
         readonly [K in keyof T["behaviors"] & string]: InstanceType<T["behaviors"][K]>;
     };
+
+    /**
+     * Internal interface used by BehaviorBacking to initialize and close.
+     */
+    export interface Internal {
+        [installBehavior](id: string, create: () => Behavior): Behavior;
+    }
 }
