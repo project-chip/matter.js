@@ -37,8 +37,8 @@
         "@project-chip/matter.js": "0.7.5"
     },
     "optionalDependencies": {
-        "@abandonware/bleno": "^0.6.1",
-        "@abandonware/noble": "^1.9.2-23"
+        "@stoprocent/bleno": "^0.7.6",
+        "@stoprocent/noble": "^1.13.6"
     },
     "engines": {
         "node": ">=16.0.0"
