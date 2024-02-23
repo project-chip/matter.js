@@ -6,7 +6,7 @@
 
 import type { ClusterType } from "../cluster/ClusterType.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
-import { Agent } from "../endpoint/Agent.js";
+import { Agent, INSTALL_BEHAVIOR } from "../endpoint/Agent.js";
 import { assertSecureSession } from "../session/SecureSession.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { EventEmitter, Observable } from "../util/Observable.js";
@@ -151,6 +151,12 @@ export abstract class Behavior {
     constructor(agent: Agent, backing: BehaviorBacking) {
         this.#agent = agent;
         (this as unknown as Internal)[BACKING] = backing;
+
+        // Note - for introspection instance agent and backing will actually be undefined.  Not represented in types
+        // because it would require numerous assertions just to handle internal edge case
+        if (agent !== undefined) {
+            (agent as unknown as Agent.Internal)[INSTALL_BEHAVIOR](this);
+        }
     }
 
     /**

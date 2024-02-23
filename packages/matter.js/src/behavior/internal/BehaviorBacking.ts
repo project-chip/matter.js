@@ -6,7 +6,7 @@
 
 import { CrashedDependencyError, Lifecycle } from "../../common/Lifecycle.js";
 import { ImplementationError } from "../../common/MatterError.js";
-import { installBehavior, type Agent } from "../../endpoint/Agent.js";
+import { type Agent } from "../../endpoint/Agent.js";
 import type { Endpoint } from "../../endpoint/Endpoint.js";
 import { Logger } from "../../log/Logger.js";
 import { AsyncConstruction } from "../../util/AsyncConstruction.js";
@@ -244,6 +244,10 @@ export abstract class BehaviorBacking {
      * Instead we use a "friend" method of agent to retrieve any existing behavior or create a new one.
      */
     #lifecycleInstance(agent: Agent) {
-        return (agent as unknown as Agent.Internal)[installBehavior](this.#type.id, () => this.createBehavior(agent, this.#type));
+        if (agent.isLoaded(this.#type)) {
+            return agent.get(this.#type);
+        }
+        const behavior = this.createBehavior(agent, this.#type);
+        return behavior;
     }
 }

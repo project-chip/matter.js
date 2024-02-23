@@ -12,7 +12,7 @@ import type { Endpoint } from "./Endpoint.js";
 import type { SupportedBehaviors } from "./properties/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
 
-export const installBehavior = Symbol("installBehavior");
+export const INSTALL_BEHAVIOR = Symbol("install-behavior");
 
 /**
  * An Agent offers interaction with a single endpoint.  This is the operational interface to endpoints.  It is separate
@@ -81,7 +81,7 @@ export class Agent {
     get<T extends Behavior.Type>(type: T) {
         let behavior = this.#behaviors[type.id];
         if (!behavior) {
-            behavior = this[installBehavior](type.id, () => this.#endpoint.behaviors.createSync(type, this));
+            behavior = this.#endpoint.behaviors.createSync(type, this);
         }
         return behavior as InstanceType<T>;
     }
@@ -116,6 +116,13 @@ export class Agent {
         this.#endpoint.behaviors.require(type, options);
     }
 
+    /**
+     * Determine whether a behavior is loaded (does not validate class, only by ID).
+     */
+    isLoaded(type: Behavior.Type) {
+        return this.#behaviors[type.id] !== undefined;
+    }
+
     toString() {
         return this.#endpoint.toString();
     }
@@ -142,12 +149,8 @@ export class Agent {
         }) as Agent.Type<T>;
     }
 
-    private [installBehavior](id: string, create: () => Behavior) {
-        const behavior = this.#behaviors[id];
-        if (behavior) {
-            return behavior;
-        }
-        return this.#behaviors[id] = create();
+    [INSTALL_BEHAVIOR](behavior: Behavior) {
+        this.#behaviors[(behavior.constructor as Behavior.Type).id] = behavior;
     }
 }
 
@@ -170,9 +173,9 @@ export namespace Agent {
     };
 
     /**
-     * Internal interface used by BehaviorBacking to initialize and close.
+     * Internal interface used by Behavior's constructor to install.
      */
     export interface Internal {
-        [installBehavior](id: string, create: () => Behavior): Behavior;
+        [INSTALL_BEHAVIOR](behavior: Behavior): void;
     }
 }

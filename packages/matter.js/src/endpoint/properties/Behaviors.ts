@@ -203,21 +203,33 @@ export class Behaviors {
         this.activate(type, agent);
         let backing = this.#backings[type.id];
 
+        // On first activation the backing will create the behavior to initialize.  Otherwise we need to create now.
+        // This function obtains the behavior in both cases
+        const getBehavior = () => {
+            if (agent.isLoaded(type)) {
+                return agent.get(type);
+            }
+            return backing.createBehavior(agent, type);
+        }
+
+        // If the backing initializes asynchronously, return a promise that returns the behavior when initialized
         if (!backing.construction.ready) {
             return backing.construction
-                .then(() => backing.createBehavior(agent, type))
+                .then(() => getBehavior())
                 .catch(() => {
                     // The backing logs the actual error so here the error should just throw "unavailable due to crash"
                     backing.construction.assert(backing.toString());
 
                     // Shouldn't get here but catch result type needs to be a behavior
-                    return backing.createBehavior(agent, type);
+                    return getBehavior();
                 });
         }
 
+        // Synchronous construction; first a sanity check
         backing.construction.assert(backing.toString());
 
-        return backing.createBehavior(agent, type);
+        // Return the behavior instance
+        return getBehavior();
     }
 
     /**
