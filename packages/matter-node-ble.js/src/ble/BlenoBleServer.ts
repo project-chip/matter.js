@@ -368,13 +368,19 @@ export class BlenoBleServer implements Channel<ByteArray> {
             await this.btpSession.close();
             this.btpSession = undefined;
         }
+        this.onMatterMessageListener = undefined;
     }
 
     async disconnect() {
+        Bleno.disconnect();
+        /*
+        TODO: This is not working as expected, the disconnect event is not triggered, seems issue in Bleno
         return new Promise<void>(resolve => {
-            Bleno.once("disconnect", () => resolve());
-            Bleno.disconnect();
-        });
+            Bleno.once("disconnect", () => {
+                console.log("DISCONNECTED");
+                resolve();
+            });
+        });*/
     }
 
     // Channel<ByteArray>

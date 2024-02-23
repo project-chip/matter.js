@@ -84,7 +84,9 @@ export class NobleBleCentralInterface implements NetInterface {
             // Try to cleanup strange "in between" states
             await peripheral.disconnectAsync();
         }
+        logger.debug(`Connect to Peripheral now`);
         await peripheral.connectAsync();
+        logger.debug(`Peripheral connected successfully`);
 
         // Once the peripheral has been connected, then discover the services and characteristics of interest.
         const services = await peripheral.discoverServicesAsync([BLE_MATTER_SERVICE_UUID]);
