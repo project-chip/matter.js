@@ -48,6 +48,12 @@ import { Mutex } from "./util/Mutex.js";
 
 const logger = Logger.get("MatterDevice");
 
+export enum FabricAction {
+    Added,
+    Removed,
+    Updated,
+}
+
 export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
     private readonly broadcasters = new Array<InstanceBroadcaster>();
@@ -73,13 +79,13 @@ export class MatterDevice {
         readonly sessionStorage: StorageContext,
         readonly fabricStorage: StorageContext,
         private readonly getCommissioningConfig: () => CommissioningOptions.Configuration,
-        private readonly commissioningChangedCallback: (fabricIndex: FabricIndex) => void,
+        private readonly commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
         this.#fabricManager = new FabricManager(fabricStorage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
             // When fabric is removed, also remove the resumption record
             this.#sessionManager.removeResumptionRecord(peerNodeId);
-            this.commissioningChangedCallback(fabricIndex);
+            this.commissioningChangedCallback(fabricIndex, FabricAction.Removed);
         });
 
         this.#sessionManager = new SessionManager(this, sessionStorage);
@@ -115,7 +121,7 @@ export class MatterDevice {
         this.#failsafeContext = failsafeContext;
 
         failsafeContext.events.fabricAdded.on(fabric => {
-            this.commissioningChangedCallback(fabric.fabricIndex);
+            this.commissioningChangedCallback(fabric.fabricIndex, FabricAction.Added);
             const fabrics = this.#fabricManager.getFabrics();
             this.sendFabricAnnouncements(fabrics, true).catch(error =>
                 logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
@@ -124,7 +130,7 @@ export class MatterDevice {
         });
 
         failsafeContext.events.fabricUpdated.on(fabric => {
-            this.commissioningChangedCallback(fabric.fabricIndex);
+            this.commissioningChangedCallback(fabric.fabricIndex, FabricAction.Updated);
         });
 
         failsafeContext.events.commissioned.on(async () => await this.endCommissioning());
