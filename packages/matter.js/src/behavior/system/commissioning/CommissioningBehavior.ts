@@ -208,7 +208,6 @@ export namespace CommissioningBehavior {
         passcode = -1;
         discriminator = -1;
         flowType = CommissioningFlowType.Standard;
-        additionalBleAdvertisementData?: ByteArray = undefined; // TODO Needed else can not be set!
-        automaticAnnouncement = true;
+        additionalBleAdvertisementData?: ByteArray = undefined;
     }
 }

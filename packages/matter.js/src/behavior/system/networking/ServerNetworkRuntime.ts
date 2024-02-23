@@ -236,9 +236,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.addBroadcasters(this.#matterDevice);
 
         await this.owner.set({ network: { operationalPort: this.operationalPort } });
-        if (this.owner.state.network.openAdvertisementWindowOnStartup) {
-            await this.openAdvertisementWindow();
-        }
+
+        await this.openAdvertisementWindow();
 
         this.owner.lifecycle.commissioned.on((this.#commissionedListener = () => this.enterCommissionedMode()));
     }
