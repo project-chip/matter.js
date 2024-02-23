@@ -22,7 +22,9 @@ function createChild() {
     return new MockEndpoint(MockEndpointType, { number: 3, owner: undefined });
 }
 
-async function assembleIncrementally(assemble: (child: Endpoint, parent: Endpoint, grandparent: Endpoint) => Promise<void>) {
+async function assembleIncrementally(
+    assemble: (child: Endpoint, parent: Endpoint, grandparent: Endpoint) => Promise<void>,
+) {
     const grandparent = new MockEndpoint(MockEndpointType);
     const parent = new MockEndpoint(MockEndpointType, { owner: undefined });
     const child = new MockEndpoint(MockEndpointType, { owner: undefined });

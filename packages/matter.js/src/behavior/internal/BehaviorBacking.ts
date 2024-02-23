@@ -237,10 +237,10 @@ export abstract class BehaviorBacking {
 
     /**
      * Obtain a behavior instance for lifecycle methods (initialize and close).
-     * 
+     *
      * Under these circumstances we can't use {@link Agent.get} because it will throw if the endpoint is initializing
      * or closing.
-     * 
+     *
      * Instead we use a "friend" method of agent to retrieve any existing behavior or create a new one.
      */
     #lifecycleInstance(agent: Agent) {

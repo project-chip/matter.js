@@ -156,11 +156,7 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
             this.#endpoint.env.get(IdentityService).assertNumberAvailable(endpoint.number, endpoint);
             if (usedNumbers?.has(endpoint.number)) {
                 throw new IdentityConflictError(
-                    `Cannot add endpoint ${
-                        forefather
-                    } because descendents have conflicting definitions for endpoint number ${
-                        endpoint.number
-                    }`,
+                    `Cannot add endpoint ${forefather} because descendents have conflicting definitions for endpoint number ${endpoint.number}`,
                 );
             }
         }

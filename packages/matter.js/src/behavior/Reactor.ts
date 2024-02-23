@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Endpoint } from "../endpoint/Endpoint.js";
 import type { Observable } from "../util/Observable.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Behavior } from "./Behavior.js";
 import { Resource } from "./state/transaction/Resource.js";
-import type { Endpoint } from "../endpoint/Endpoint.js";
 
 /**
  * A reactor is an {@link Observable} observer managed by a {@link Behavior}.  You install reactors using

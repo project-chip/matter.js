@@ -82,7 +82,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * The owner of the endpoint.
-     * 
+     *
      * Every endpoint but the root endpoint (the "node") is owned by another endpoint.
      */
     get owner(): Endpoint | undefined {
@@ -171,9 +171,9 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Update state values for a single behavior.
-     * 
+     *
      * The patch semantics used here are identical to {@link set}.
-     * 
+     *
      * @param type the {@link Behavior} to patch
      * @param values the values to change
      */
@@ -380,7 +380,10 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     async add<T extends EndpointType>(type: T, options?: Endpoint.Options<T>): Promise<Endpoint<T>>;
 
-    async add<T extends EndpointType>(definition: T | Endpoint<T> | Endpoint.Configuration<T>, options?: Endpoint.Options<T>) {
+    async add<T extends EndpointType>(
+        definition: T | Endpoint<T> | Endpoint.Configuration<T>,
+        options?: Endpoint.Options<T>,
+    ) {
         let endpoint;
         if (definition instanceof Endpoint) {
             endpoint = definition;

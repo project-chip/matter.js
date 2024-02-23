@@ -210,7 +210,7 @@ export class Behaviors {
                 return agent.get(type);
             }
             return backing.createBehavior(agent, type);
-        }
+        };
 
         // If the backing initializes asynchronously, return a promise that returns the behavior when initialized
         if (!backing.construction.ready) {
@@ -376,9 +376,13 @@ export class Behaviors {
     }
 
     #activateLate(type: Behavior.Type) {
-        OfflineContext.act("behavior-late-activation", context => this.activate(type, context.agentFor(this.#endpoint)), {
-            unversionedVolatiles: true,
-        });
+        OfflineContext.act(
+            "behavior-late-activation",
+            context => this.activate(type, context.agentFor(this.#endpoint)),
+            {
+                unversionedVolatiles: true,
+            },
+        );
     }
 
     /**

@@ -79,9 +79,8 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
 /**
  * The cluster type for a behavior.
  */
-export type ClusterOf<B extends Behavior.Type> = InstanceType<B> extends { cluster: infer C extends ClusterType }
-    ? C
-    : ClusterType.Unknown;
+export type ClusterOf<B extends Behavior.Type> =
+    InstanceType<B> extends { cluster: infer C extends ClusterType } ? C : ClusterType.Unknown;
 
 /**
  * Create a new state subclass that inherits relevant default values from a base Behavior.Type and adds new default

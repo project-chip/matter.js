@@ -380,11 +380,10 @@ describe("ClusterServer structure", () => {
                 ImplementationError,
                 "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
             );
-            expect(
-                () =>
-                    basic2?.subscribeLocalConfigDisabledAttribute(() => {
-                        /* ignore */
-                    }),
+            expect(() =>
+                basic2?.subscribeLocalConfigDisabledAttribute(() => {
+                    /* ignore */
+                }),
             ).throw(
                 ImplementationError,
                 "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",

@@ -248,7 +248,9 @@ export class Tracker {
             },
         });
 
-        return MaybePromise.finally(promise, () => { this.#tracked.delete(promise as Promise<T>) });
+        return MaybePromise.finally(promise, () => {
+            this.#tracked.delete(promise as Promise<T>);
+        });
     }
 }
 

@@ -5,6 +5,6 @@
  */
 
 export * from "./Agent.js";
-export * from "./EndpointInterface.js";
 export * from "./Endpoint.js";
+export * from "./EndpointInterface.js";
 export * from "./EndpointServer.js";
