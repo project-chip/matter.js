@@ -16,134 +16,74 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import "@project-chip/matter-node.js";
 
-import { NetworkCommissioning } from "@project-chip/matter-node.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter-node.js/datatype";
 import { logEndpoint } from "@project-chip/matter-node.js/device";
-import { Logger } from "@project-chip/matter-node.js/log";
 import { Time } from "@project-chip/matter-node.js/time";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
-import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
 import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
-import { ByteArray } from "@project-chip/matter.js/util";
 import { execSync } from "child_process";
-
-const logger = Logger.get("Device");
-
-/**
- * Get the default Environment to access variables (command line parameters and environment), get a storage and such
- * convenient things used in this example.
- */
-const environment = Environment.default;
-
-/**
- * Gets a shell command from an environment variable and execute it and log the response
- */
-function executeCommand(scriptParamName: string) {
-    const script = environment.vars.string(scriptParamName);
-    if (script === undefined) return undefined;
-    console.log(`${scriptParamName}: ${execSync(script).toString().slice(0, -1)}`);
-}
 
 requireMinNodeVersion(16);
 
 async function main() {
-    /**
-     * Collect all needed data
-     *
-     * This block collects all needed data from cli, environment or storage. Replace this with where ever your data come from.
-     *
-     * Note: This example uses the matter.js process storage system to store the device parameter data for convenience
-     * and easy reuse. When you also do that be careful to not overlap with Matter-Server own storage contexts
-     * (so maybe better not do it ;-)).
-     */
-    const storageService = environment.get(StorageService);
-    logger.info(`Storage location: ${storageService.location} (Directory)`);
-    logger.info(
-        'Use the parameter "--storage-path=NAME-OR-PATH" to specify a different storage location in this directory, use --storage-clear to start with an empty storage.',
-    );
-    const deviceStorage = (await storageService.open("device")).createContext("data");
+    /** Initialize configuration values */
+    const {
+        isSocket,
+        deviceName,
+        vendorName,
+        passcode,
+        discriminator,
+        vendorId,
+        productName,
+        productId,
+        port,
+        uniqueId,
+    } = await getConfiguration();
 
-    const isSocket = deviceStorage.get("isSocket", environment.vars.get("type") === "socket");
-    if (deviceStorage.has("isSocket")) {
-        logger.info(`Device type ${isSocket ? "socket" : "light"} found in storage. --type parameter is ignored.`);
-    }
-    const deviceName = "Matter test device";
-    const vendorName = "matter-node.js";
-    const passcode = environment.vars.number("passcode") ?? deviceStorage.get("passcode", 20202021);
-    const discriminator = environment.vars.number("discriminator") ?? deviceStorage.get("discriminator", 3840);
-    // product name / id and vendor id should match what is in the device certificate
-    const vendorId = environment.vars.number("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
-    const productName = `node-matter OnOff ${isSocket ? "Socket" : "Light"}`;
-    const productId = environment.vars.number("productid") ?? deviceStorage.get("productid", 0x8000);
-
-    const port = environment.vars.number("port") ?? 5540;
-
-    const uniqueId = environment.vars.string("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs().toString());
-
-    // Persist basic data to keep them also on restart
-    deviceStorage.set("passcode", passcode);
-    deviceStorage.set("discriminator", discriminator);
-    deviceStorage.set("vendorid", vendorId);
-    deviceStorage.set("productid", productId);
-    deviceStorage.set("isSocket", isSocket);
-    deviceStorage.set("uniqueid", uniqueId);
-
-    const networkId = new ByteArray(32);
     /**
      * Create a Matter ServerNode, which contains the Root Endpoint and all relevant data and configuration
      */
-    const server = await ServerNode.create(
-        ServerNode.RootEndpoint.with(
-            NetworkCommissioningServer.with(NetworkCommissioning.Feature.EthernetNetworkInterface),
-        ),
-        {
-            // Give the Node a unique ID which is used to store the state of this node
-            id: uniqueId,
+    const server = await ServerNode.create({
+        // Required: Give the Node a unique ID which is used to store the state of this node
+        id: uniqueId,
 
-            // Provide Network relevant configuration like the port
-            network: {
-                port,
-            },
-
-            // Provide Commissioning relevant settings
-            commissioning: {
-                passcode,
-                discriminator,
-            },
-
-            // Provide Node announcement settings
-            productDescription: {
-                name: deviceName,
-                deviceType: DeviceTypeId(isSocket ? OnOffPlugInUnitDevice.deviceType : OnOffLightDevice.deviceType),
-            },
-
-            // Ethernet NetworkCommissioning data
-            networkCommissioning: {
-                maxNetworks: 1,
-                interfaceEnabled: true,
-                lastConnectErrorValue: 0,
-                lastNetworkId: networkId,
-                lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
-                networks: [{ networkId: networkId, connected: true }],
-            },
-
-            // Provide defaults for the BasicInformation cluster on the Root endpoint
-            basicInformation: {
-                vendorName,
-                vendorId: VendorId(vendorId),
-                nodeLabel: productName,
-                productName,
-                productLabel: productName,
-                productId,
-                serialNumber: `matterjs-${uniqueId}`,
-                uniqueId,
-            },
+        // Provide Network relevant configuration like the port
+        // Optional when operating only one device on a host, Default port is 5540
+        network: {
+            port,
         },
-    );
+
+        // Provide Commissioning relevant settings
+        // Optional for development/testing purposes
+        commissioning: {
+            passcode,
+            discriminator,
+        },
+
+        // Provide Node announcement settings
+        // Optional: If Ommitted some development defaults are used
+        productDescription: {
+            name: deviceName,
+            deviceType: DeviceTypeId(isSocket ? OnOffPlugInUnitDevice.deviceType : OnOffLightDevice.deviceType),
+        },
+
+        // Provide defaults for the BasicInformation cluster on the Root endpoint
+        // Optional: If Omitted some development defaults are used
+        basicInformation: {
+            vendorName,
+            vendorId: VendorId(vendorId),
+            nodeLabel: productName,
+            productName,
+            productLabel: productName,
+            productId,
+            serialNumber: `matterjs-${uniqueId}`,
+            uniqueId,
+        },
+    });
 
     /**
      * Matter Nodes are a composition of endpoints. Create and add a single endpoint to the node. This example uses the
@@ -162,13 +102,13 @@ async function main() {
      */
     let isIdentifying = false;
     endpoint.events.identify.identifyTime$Change.on(value => {
-        // identifyTime is set when an identify commandf is called and then decreased every second while indenitfy logic runs.
+        // identifyTime is set when an identify command is called and then decreased every second while indentify logic runs.
         if (value > 0 && !isIdentifying) {
             isIdentifying = true;
-            logger.info(`Run identify logic, ideally blink a light every 0.5s ...`);
+            console.log(`Run identify logic, ideally blink a light every 0.5s ...`);
         } else if (value === 0) {
             isIdentifying = false;
-            logger.info(`Stop identify logic ...`);
+            console.log(`Stop identify logic ...`);
         }
     });
 
@@ -191,3 +131,72 @@ async function main() {
 }
 
 main().catch(error => console.error(error));
+
+/*********************************************************************************************************
+ * Convenience Methods
+ *********************************************************************************************************/
+
+/** Defined a shell command from an environment variable and execute it and log the response. */
+function executeCommand(scriptParamName: string) {
+    const script = Environment.default.vars.string(scriptParamName);
+    if (script === undefined) return undefined;
+    console.log(`${scriptParamName}: ${execSync(script).toString().slice(0, -1)}`);
+}
+
+async function getConfiguration() {
+    /**
+     * Collect all needed data
+     *
+     * This block collects all needed data from cli, environment or storage. Replace this with where ever your data come from.
+     *
+     * Note: This example uses the matter.js process storage system to store the device parameter data for convenience
+     * and easy reuse. When you also do that be careful to not overlap with Matter-Server own storage contexts
+     * (so maybe better not do it ;-)).
+     */
+    const environment = Environment.default;
+
+    const storageService = environment.get(StorageService);
+    console.log(`Storage location: ${storageService.location} (Directory)`);
+    console.log(
+        'Use the parameter "--storage-path=NAME-OR-PATH" to specify a different storage location in this directory, use --storage-clear to start with an empty storage.',
+    );
+    const deviceStorage = (await storageService.open("device")).createContext("data");
+
+    const isSocket = deviceStorage.get("isSocket", environment.vars.get("type") === "socket");
+    if (deviceStorage.has("isSocket")) {
+        console.log(`Device type ${isSocket ? "socket" : "light"} found in storage. --type parameter is ignored.`);
+    }
+    const deviceName = "Matter test device";
+    const vendorName = "matter-node.js";
+    const passcode = environment.vars.number("passcode") ?? deviceStorage.get("passcode", 20202021);
+    const discriminator = environment.vars.number("discriminator") ?? deviceStorage.get("discriminator", 3840);
+    // product name / id and vendor id should match what is in the device certificate
+    const vendorId = environment.vars.number("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
+    const productName = `node-matter OnOff ${isSocket ? "Socket" : "Light"}`;
+    const productId = environment.vars.number("productid") ?? deviceStorage.get("productid", 0x8000);
+
+    const port = environment.vars.number("port") ?? 5540;
+
+    const uniqueId = environment.vars.string("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs().toString());
+
+    // Persist basic data to keep them also on restart
+    deviceStorage.set("passcode", passcode);
+    deviceStorage.set("discriminator", discriminator);
+    deviceStorage.set("vendorid", vendorId);
+    deviceStorage.set("productid", productId);
+    deviceStorage.set("isSocket", isSocket);
+    deviceStorage.set("uniqueid", uniqueId);
+
+    return {
+        isSocket,
+        deviceName,
+        vendorName,
+        passcode,
+        discriminator,
+        vendorId,
+        productName,
+        productId,
+        port,
+        uniqueId,
+    };
+}

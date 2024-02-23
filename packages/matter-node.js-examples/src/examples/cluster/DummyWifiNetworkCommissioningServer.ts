@@ -50,7 +50,9 @@ export class DummyWifiNetworkCommissioningServer extends NetworkCommissioningBeh
                         wpa3Personal: true,
                     },
                     ssid: ssid || ByteArray.fromString(this.endpoint.env.vars.get("ble.wifi.scanSsid") ?? "TestSSID"), // Set a valid existing local Wi-Fi SSID here
-                    bssid: ByteArray.fromString(this.endpoint.env.vars.get("ble.wifi.scanBssid") ?? "00:00:00:00:00:00"),
+                    bssid: ByteArray.fromString(
+                        this.endpoint.env.vars.get("ble.wifi.scanBssid") ?? "00:00:00:00:00:00",
+                    ),
                     channel: 1,
                 },
             ],

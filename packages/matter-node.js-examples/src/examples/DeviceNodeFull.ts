@@ -250,8 +250,6 @@ const server = await ServerNode.create(RootEndpoint, {
     commissioning: {
         passcode,
         discriminator,
-        //additionalBleAdvertisementData: ByteArray.fromHex("00"),
-        automaticAnnouncement: !environment.vars.has("ble.enable"), // Delay announcement when BLE is used to show how limited advertisement works,
     },
     productDescription: {
         name: deviceName,
@@ -333,15 +331,6 @@ logEndpoint(EndpointServer.forEndpoint(server));
  * resolves when the node goes offline again, but we want to execute code afterwards, so we use start() here
  */
 await server.bringOnline();
-
-// When we want to limit the initial announcement to one medium (e.g. BLE) then we need to delay the
-// announcement and provide the limiting information.
-// Without delaying the announcement is directly triggered with the above "start()" call.
-if (environment.vars.has("ble.enable")) {
-    console.log("Announce device via BLE only now ...");
-    // Announce operational in BLE network only if we have ble enabled, else everywhere
-    await server.act(agent => agent.network.openAdvertisementWindow());
-}
 
 /**
  * If the node is not commissioned already we display the QR code on console. The QR code is also logged
