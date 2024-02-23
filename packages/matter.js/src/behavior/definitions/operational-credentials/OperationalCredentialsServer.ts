@@ -421,7 +421,7 @@ export namespace OperationalCredentialsServer {
          * Development devices and those intended for personal use may use a development certificate.  This is the
          * default if you do not provide an official certification in {@link ServerOptions.certification}.
          */
-        certification?: DeviceCertification.Configuration;
+        certification?: DeviceCertification.Configuration = undefined;
 
         [Val.properties](session: ValueSupervisor.Session) {
             return {
