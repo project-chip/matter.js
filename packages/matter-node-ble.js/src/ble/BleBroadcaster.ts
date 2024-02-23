@@ -46,7 +46,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
             return;
         }
         logger.debug(
-            `store data for commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`,
+            `set data for commissioning mode ${mode} ${deviceName} ${deviceType} ${vendorId} ${productId} ${discriminator}`,
         );
         this.#productId = productId;
         this.#vendorId = vendorId;
@@ -89,7 +89,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
             this.#additionalAdvertisementData !== undefined && this.#additionalAdvertisementData.length > 0,
         );
 
-        // TODO if needed implement this according to the spec 5.4.2.5.3. (first 30s 20-60ms, 150-1200ms after)
+        // TODO if needed implement this according to the spec 5.4.2.5.3. (first 30s 20-60ms, 150-1285ms after)
         process.env["BLENO_ADVERTISING_INTERVAL"] = "100"; // use statically 100ms for now
 
         await this.#blenoServer.advertise(advertisementData, this.#additionalAdvertisementData);
@@ -97,6 +97,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
 
     async expireCommissioningAnnouncement() {
         this.#assertOpen();
+        this.#advertise = false;
         await this.#blenoServer.stopAdvertising();
     }
 
@@ -106,6 +107,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
 
     async expireAllAnnouncements() {
         this.#assertOpen();
+        this.#advertise = false;
         await this.#blenoServer.stopAdvertising();
     }
 
