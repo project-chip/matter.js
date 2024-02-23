@@ -11,7 +11,6 @@ import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "../../../schema/PairingCodeSchema.js";
-import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 import { ServerNetworkRuntime } from "./ServerNetworkRuntime.js";
 
@@ -57,7 +56,7 @@ export class NetworkServer extends NetworkBehavior {
             logger.warn("Soft access point commissioning is not supported yet");
         }
 
-        this.reactTo((this.endpoint.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
+        this.reactTo((this.endpoint.lifecycle as NodeLifecycle).commissioned, this.#endUncommissionedMode);
 
         super.initialize();
     }
@@ -91,9 +90,9 @@ export class NetworkServer extends NetworkBehavior {
         this.endpoint.env.runtime.addWorker(this.internal.runtime.announceNow());
     }
 
-    #enterCommissionedMode() {
+    #endUncommissionedMode() {
         if (this.internal.runtime) {
-            this.internal.runtime.enterCommissionedMode();
+            this.internal.runtime.endUncommissionedMode();
         }
     }
 }

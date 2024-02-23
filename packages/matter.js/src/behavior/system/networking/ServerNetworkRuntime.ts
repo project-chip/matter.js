@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../../MatterDevice.js";
+import { FabricAction, MatterDevice } from "../../../MatterDevice.js";
 import { Ble } from "../../../ble/Ble.js";
 import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
@@ -163,25 +163,40 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     /**
-     * On commission we turn off bluetooth and join the IP network if we haven't already.
-     *
-     * On decommission we're destroyed so don't need to handle that case.
+     * When the first Faric gets added we need to enable MDNS broadcasting.
      */
-    enterCommissionedMode() {
+    enableMdnsBroadcasting() {
         const mdnsBroadcaster = this.mdnsBroadcaster;
         if (!this.#matterDevice?.hasBroadcaster(mdnsBroadcaster)) {
             this.#matterDevice?.addBroadcaster(mdnsBroadcaster);
         }
+    }
 
+    /**
+     * On commission we turn off bluetooth and join the IP network if we haven't already.
+     *
+     * On decommission we're destroyed so don't need to handle that case.
+     */
+    endUncommissionedMode() {
         if (this.#bleBroadcaster) {
-            this.owner.env.runtime.addWorker(this.#matterDevice?.deleteBroadcaster(this.#bleBroadcaster));
+            this.owner.env.runtime.addWorker(this.#removeBleBroadcaster(this.#bleBroadcaster));
             this.#bleBroadcaster = undefined;
         }
 
         if (this.#bleTransport) {
-            this.owner.env.runtime.addWorker(this.#matterDevice?.deleteTransportInterface(this.#bleTransport));
+            this.owner.env.runtime.addWorker(this.#removeBleTransport(this.#bleTransport));
             this.#bleTransport = undefined;
         }
+    }
+
+    async #removeBleBroadcaster(bleBroadcaster: InstanceBroadcaster) {
+        await this.#matterDevice?.deleteBroadcaster(bleBroadcaster);
+        await bleBroadcaster.close();
+    }
+
+    async #removeBleTransport(bleTransport: TransportInterface) {
+        await this.#matterDevice?.deleteTransportInterface(bleTransport);
+        await bleTransport.close();
     }
 
     /**
@@ -217,9 +232,14 @@ export class ServerNetworkRuntime extends NetworkRuntime {
                 productDescription: this.owner.state.productDescription,
                 ble: !!this.owner.state.network.ble,
             }),
-            () => {
-                if (this.#matterDevice?.fabricManager.getFabrics().length) {
-                    this.enterCommissionedMode();
+            (fabricIndex: FabricIndex, fabricAction: FabricAction) => {
+                const fabrics = this.#matterDevice?.getFabrics() ?? [];
+                if (
+                    fabricAction === FabricAction.Added &&
+                    fabrics.length === 1 &&
+                    fabrics[0].fabricIndex === fabricIndex
+                ) {
+                    this.enableMdnsBroadcasting();
                 }
             },
             (_fabricIndex: FabricIndex) => {
@@ -239,7 +259,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         await this.openAdvertisementWindow();
 
-        this.owner.lifecycle.commissioned.on((this.#commissionedListener = () => this.enterCommissionedMode()));
+        this.owner.lifecycle.commissioned.on((this.#commissionedListener = () => this.endUncommissionedMode()));
     }
 
     protected override async stop() {
