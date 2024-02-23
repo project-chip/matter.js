@@ -11,6 +11,20 @@
 | `T` | `T` |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
 
+## Hierarchy
+
+- **`Attribute`**
+
+  ↳ [`OptionalAttribute`](exports_cluster.OptionalAttribute.md)
+
+  ↳ [`WritableAttribute`](exports_cluster.WritableAttribute.md)
+
+  ↳ [`FabricScopedAttribute`](exports_cluster.FabricScopedAttribute.md)
+
+  ↳ [`FixedAttribute`](exports_cluster.FixedAttribute.md)
+
+  ↳ [`UnknownAttribute`](exports_cluster.UnknownAttribute.md)
+
 ## Table of contents
 
 ### Properties

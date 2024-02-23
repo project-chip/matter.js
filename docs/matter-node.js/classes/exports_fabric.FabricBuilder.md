@@ -332,7 +332,7 @@ ___
 
 ### setIdentityProtectionKey
 
-▸ **setIdentityProtectionKey**(`key`): [`FabricBuilder`](exports_fabric.FabricBuilder.md)
+▸ **setIdentityProtectionKey**(`key`): `this`
 
 #### Parameters
 
@@ -342,7 +342,7 @@ ___
 
 #### Returns
 
-[`FabricBuilder`](exports_fabric.FabricBuilder.md)
+`this`
 
 #### Defined in
 
@@ -352,7 +352,7 @@ ___
 
 ### setIntermediateCACert
 
-▸ **setIntermediateCACert**(`certificate`): [`FabricBuilder`](exports_fabric.FabricBuilder.md)
+▸ **setIntermediateCACert**(`certificate`): `this`
 
 #### Parameters
 
@@ -362,7 +362,7 @@ ___
 
 #### Returns
 
-[`FabricBuilder`](exports_fabric.FabricBuilder.md)
+`this`
 
 #### Defined in
 
@@ -372,7 +372,7 @@ ___
 
 ### setOperationalCert
 
-▸ **setOperationalCert**(`operationalCert`): [`FabricBuilder`](exports_fabric.FabricBuilder.md)
+▸ **setOperationalCert**(`operationalCert`): `this`
 
 #### Parameters
 
@@ -382,7 +382,7 @@ ___
 
 #### Returns
 
-[`FabricBuilder`](exports_fabric.FabricBuilder.md)
+`this`
 
 #### Defined in
 
@@ -392,7 +392,7 @@ ___
 
 ### setRootCert
 
-▸ **setRootCert**(`rootCert`): [`FabricBuilder`](exports_fabric.FabricBuilder.md)
+▸ **setRootCert**(`rootCert`): `this`
 
 #### Parameters
 
@@ -402,7 +402,7 @@ ___
 
 #### Returns
 
-[`FabricBuilder`](exports_fabric.FabricBuilder.md)
+`this`
 
 #### Defined in
 
@@ -412,7 +412,7 @@ ___
 
 ### setRootNodeId
 
-▸ **setRootNodeId**(`rootNodeId`): [`FabricBuilder`](exports_fabric.FabricBuilder.md)
+▸ **setRootNodeId**(`rootNodeId`): `this`
 
 #### Parameters
 
@@ -422,7 +422,7 @@ ___
 
 #### Returns
 
-[`FabricBuilder`](exports_fabric.FabricBuilder.md)
+`this`
 
 #### Defined in
 
@@ -432,7 +432,7 @@ ___
 
 ### setRootVendorId
 
-▸ **setRootVendorId**(`rootVendorId`): [`FabricBuilder`](exports_fabric.FabricBuilder.md)
+▸ **setRootVendorId**(`rootVendorId`): `this`
 
 #### Parameters
 
@@ -442,7 +442,7 @@ ___
 
 #### Returns
 
-[`FabricBuilder`](exports_fabric.FabricBuilder.md)
+`this`
 
 #### Defined in
 

@@ -10,9 +10,11 @@
 | :------ |
 | `T` |
 
-## Implements
+## Hierarchy
 
-- [`Session`](../interfaces/exports_session.Session.md)\<`T`\>
+- [`Session`](exports_session.Session.md)\<`T`\>
+
+  ↳ **`SecureSession`**
 
 ## Table of contents
 
@@ -24,7 +26,8 @@
 
 - [\_closingAfterExchangeFinished](exports_session.SecureSession.md#_closingafterexchangefinished)
 - [\_sendCloseMessageWhenClosing](exports_session.SecureSession.md#_sendclosemessagewhenclosing)
-- [activeRetransmissionTimeoutMs](exports_session.SecureSession.md#activeretransmissiontimeoutms)
+- [activeIntervalMs](exports_session.SecureSession.md#activeintervalms)
+- [activeThresholdMs](exports_session.SecureSession.md#activethresholdms)
 - [activeTimestamp](exports_session.SecureSession.md#activetimestamp)
 - [attestationKey](exports_session.SecureSession.md#attestationkey)
 - [closeCallback](exports_session.SecureSession.md#closecallback)
@@ -34,12 +37,11 @@
 - [fabric](exports_session.SecureSession.md#fabric)
 - [generateNonce](exports_session.SecureSession.md#generatenonce)
 - [id](exports_session.SecureSession.md#id)
-- [idleRetransmissionTimeoutMs](exports_session.SecureSession.md#idleretransmissiontimeoutms)
+- [idleIntervalMs](exports_session.SecureSession.md#idleintervalms)
 - [messageCounter](exports_session.SecureSession.md#messagecounter)
 - [messageReceptionState](exports_session.SecureSession.md#messagereceptionstate)
 - [peerNodeId](exports_session.SecureSession.md#peernodeid)
 - [peerSessionId](exports_session.SecureSession.md#peersessionid)
-- [retransmissionRetries](exports_session.SecureSession.md#retransmissionretries)
 - [subscriptionChangedCallback](exports_session.SecureSession.md#subscriptionchangedcallback)
 - [subscriptions](exports_session.SecureSession.md#subscriptions)
 - [timestamp](exports_session.SecureSession.md#timestamp)
@@ -68,10 +70,10 @@
 - [getFabric](exports_session.SecureSession.md#getfabric)
 - [getId](exports_session.SecureSession.md#getid)
 - [getIncrementedMessageCounter](exports_session.SecureSession.md#getincrementedmessagecounter)
-- [getMrpParameters](exports_session.SecureSession.md#getmrpparameters)
 - [getNodeId](exports_session.SecureSession.md#getnodeid)
 - [getPeerNodeId](exports_session.SecureSession.md#getpeernodeid)
 - [getPeerSessionId](exports_session.SecureSession.md#getpeersessionid)
+- [getSessionParameters](exports_session.SecureSession.md#getsessionparameters)
 - [isPase](exports_session.SecureSession.md#ispase)
 - [isPeerActive](exports_session.SecureSession.md#ispeeractive)
 - [isSecure](exports_session.SecureSession.md#issecure)
@@ -97,7 +99,6 @@
 | Name | Type |
 | :------ | :------ |
 | `args` | `Object` |
-| `args.activeRetransmissionTimeoutMs?` | `number` |
 | `args.attestationKey` | `Uint8Array` |
 | `args.closeCallback` | () => `Promise`\<`void`\> |
 | `args.context` | `T` |
@@ -105,19 +106,23 @@
 | `args.encryptKey` | `Uint8Array` |
 | `args.fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
 | `args.id` | `number` |
-| `args.idleRetransmissionTimeoutMs?` | `number` |
+| `args.isInitiator` | `boolean` |
 | `args.peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `args.peerSessionId` | `number` |
-| `args.retransmissionRetries?` | `number` |
+| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/exports_session.SessionParameters.md)\> |
 | `args.subscriptionChangedCallback?` | () => `void` |
 
 #### Returns
 
 [`SecureSession`](exports_session.SecureSession.md)\<`T`\>
 
+#### Overrides
+
+[Session](exports_session.Session.md).[constructor](exports_session.Session.md#constructor)
+
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:50
+packages/matter.js/dist/esm/session/SecureSession.d.ts:41
 
 ## Properties
 
@@ -127,7 +132,7 @@ packages/matter.js/dist/esm/session/SecureSession.d.ts:50
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:18
+packages/matter.js/dist/esm/session/SecureSession.d.ts:16
 
 ___
 
@@ -137,17 +142,35 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:19
+packages/matter.js/dist/esm/session/SecureSession.d.ts:17
 
 ___
 
-### activeRetransmissionTimeoutMs
+### activeIntervalMs
 
-• `Private` `Readonly` **activeRetransmissionTimeoutMs**: `any`
+• `Protected` `Readonly` **activeIntervalMs**: `number`
+
+#### Inherited from
+
+[Session](exports_session.Session.md).[activeIntervalMs](exports_session.Session.md#activeintervalms)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:31
+packages/matter.js/dist/esm/session/Session.d.ts:35
+
+___
+
+### activeThresholdMs
+
+• `Protected` `Readonly` **activeThresholdMs**: `number`
+
+#### Inherited from
+
+[Session](exports_session.Session.md).[activeThresholdMs](exports_session.Session.md#activethresholdms)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:36
 
 ___
 
@@ -155,9 +178,13 @@ ___
 
 • **activeTimestamp**: `number`
 
+#### Inherited from
+
+[Session](exports_session.Session.md).[activeTimestamp](exports_session.Session.md#activetimestamp)
+
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:17
+packages/matter.js/dist/esm/session/Session.d.ts:33
 
 ___
 
@@ -167,17 +194,29 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:27
+packages/matter.js/dist/esm/session/SecureSession.d.ts:25
 
 ___
 
 ### closeCallback
 
-• `Private` `Readonly` **closeCallback**: `any`
+• `Protected` `Readonly` **closeCallback**: () => `Promise`\<`void`\>
+
+#### Type declaration
+
+▸ (): `Promise`\<`void`\>
+
+##### Returns
+
+`Promise`\<`void`\>
+
+#### Inherited from
+
+[Session](exports_session.Session.md).[closeCallback](exports_session.Session.md#closecallback)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:28
+packages/matter.js/dist/esm/session/Session.d.ts:37
 
 ___
 
@@ -187,7 +226,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:20
+packages/matter.js/dist/esm/session/SecureSession.d.ts:18
 
 ___
 
@@ -197,7 +236,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:25
+packages/matter.js/dist/esm/session/SecureSession.d.ts:23
 
 ___
 
@@ -207,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:26
+packages/matter.js/dist/esm/session/SecureSession.d.ts:24
 
 ___
 
@@ -217,7 +256,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:22
+packages/matter.js/dist/esm/session/SecureSession.d.ts:20
 
 ___
 
@@ -227,7 +266,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:98
+packages/matter.js/dist/esm/session/SecureSession.d.ts:81
 
 ___
 
@@ -237,37 +276,49 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:21
+packages/matter.js/dist/esm/session/SecureSession.d.ts:19
 
 ___
 
-### idleRetransmissionTimeoutMs
+### idleIntervalMs
 
-• `Private` `Readonly` **idleRetransmissionTimeoutMs**: `any`
+• `Protected` `Readonly` **idleIntervalMs**: `number`
+
+#### Inherited from
+
+[Session](exports_session.Session.md).[idleIntervalMs](exports_session.Session.md#idleintervalms)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:30
+packages/matter.js/dist/esm/session/Session.d.ts:34
 
 ___
 
 ### messageCounter
 
-• `Private` `Readonly` **messageCounter**: `any`
+• `Protected` `Readonly` **messageCounter**: [`MessageCounter`](exports_protocol.MessageCounter.md)
+
+#### Inherited from
+
+[Session](exports_session.Session.md).[messageCounter](exports_session.Session.md#messagecounter)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:33
+packages/matter.js/dist/esm/session/Session.d.ts:38
 
 ___
 
 ### messageReceptionState
 
-• `Private` `Readonly` **messageReceptionState**: `any`
+• `Protected` `Readonly` **messageReceptionState**: [`MessageReceptionState`](exports_protocol.MessageReceptionState.md)
+
+#### Inherited from
+
+[Session](exports_session.Session.md).[messageReceptionState](exports_session.Session.md#messagereceptionstate)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:34
+packages/matter.js/dist/esm/session/Session.d.ts:39
 
 ___
 
@@ -277,7 +328,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:23
+packages/matter.js/dist/esm/session/SecureSession.d.ts:21
 
 ___
 
@@ -287,17 +338,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:24
-
-___
-
-### retransmissionRetries
-
-• `Private` `Readonly` **retransmissionRetries**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/SecureSession.d.ts:32
+packages/matter.js/dist/esm/session/SecureSession.d.ts:22
 
 ___
 
@@ -307,7 +348,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:29
+packages/matter.js/dist/esm/session/SecureSession.d.ts:26
 
 ___
 
@@ -325,9 +366,13 @@ ___
 
 • **timestamp**: `number`
 
+#### Inherited from
+
+[Session](exports_session.Session.md).[timestamp](exports_session.Session.md#timestamp)
+
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:16
+packages/matter.js/dist/esm/session/Session.d.ts:32
 
 ## Accessors
 
@@ -341,7 +386,7 @@ packages/matter.js/dist/esm/session/SecureSession.d.ts:16
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:65
+packages/matter.js/dist/esm/session/SecureSession.d.ts:55
 
 ___
 
@@ -353,13 +398,13 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[closingAfterExchangeFinished](../interfaces/exports_session.Session.md#closingafterexchangefinished)
+Session.closingAfterExchangeFinished
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:66
+packages/matter.js/dist/esm/session/SecureSession.d.ts:56
 
 ___
 
@@ -371,13 +416,13 @@ ___
 
 `string`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[name](../interfaces/exports_session.Session.md#name)
+Session.name
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:79
+packages/matter.js/dist/esm/session/SecureSession.d.ts:67
 
 ___
 
@@ -391,7 +436,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:91
+packages/matter.js/dist/esm/session/SecureSession.d.ts:74
 
 ___
 
@@ -405,7 +450,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:67
+packages/matter.js/dist/esm/session/SecureSession.d.ts:57
 
 ## Methods
 
@@ -425,7 +470,7 @@ packages/matter.js/dist/esm/session/SecureSession.d.ts:67
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:77
+packages/matter.js/dist/esm/session/SecureSession.d.ts:65
 
 ___
 
@@ -445,7 +490,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:90
+packages/matter.js/dist/esm/session/SecureSession.d.ts:73
 
 ___
 
@@ -465,7 +510,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:93
+packages/matter.js/dist/esm/session/SecureSession.d.ts:76
 
 ___
 
@@ -485,7 +530,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:70
+packages/matter.js/dist/esm/session/SecureSession.d.ts:60
 
 ___
 
@@ -504,13 +549,13 @@ ___
 
 [`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[decode](../interfaces/exports_session.Session.md#decode)
+[Session](exports_session.Session.md).[decode](exports_session.Session.md#decode)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:73
+packages/matter.js/dist/esm/session/SecureSession.d.ts:61
 
 ___
 
@@ -531,13 +576,13 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 `Promise`\<`void`\>
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[destroy](../interfaces/exports_session.Session.md#destroy)
+[Session](exports_session.Session.md).[destroy](exports_session.Session.md#destroy)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:97
+packages/matter.js/dist/esm/session/SecureSession.d.ts:80
 
 ___
 
@@ -555,13 +600,13 @@ ___
 
 [`Packet`](../interfaces/exports_codec.Packet.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[encode](../interfaces/exports_session.Session.md#encode)
+[Session](exports_session.Session.md).[encode](exports_session.Session.md#encode)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:74
+packages/matter.js/dist/esm/session/SecureSession.d.ts:62
 
 ___
 
@@ -582,13 +627,13 @@ Ends a session. Outstanding subscription data will be flushed before the session
 
 `Promise`\<`void`\>
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[end](../interfaces/exports_session.Session.md#end)
+[Session](exports_session.Session.md).[end](exports_session.Session.md#end)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:95
+packages/matter.js/dist/esm/session/SecureSession.d.ts:78
 
 ___
 
@@ -600,13 +645,13 @@ ___
 
 [`Fabric`](exports_fabric.Fabric.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[getAssociatedFabric](../interfaces/exports_session.Session.md#getassociatedfabric)
+[Session](exports_session.Session.md).[getAssociatedFabric](exports_session.Session.md#getassociatedfabric)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:78
+packages/matter.js/dist/esm/session/SecureSession.d.ts:66
 
 ___
 
@@ -620,7 +665,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:75
+packages/matter.js/dist/esm/session/SecureSession.d.ts:63
 
 ___
 
@@ -632,13 +677,13 @@ ___
 
 `T`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[getContext](../interfaces/exports_session.Session.md#getcontext)
+[Session](exports_session.Session.md).[getContext](exports_session.Session.md#getcontext)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:85
+packages/matter.js/dist/esm/session/SecureSession.d.ts:68
 
 ___
 
@@ -652,7 +697,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:76
+packages/matter.js/dist/esm/session/SecureSession.d.ts:64
 
 ___
 
@@ -664,13 +709,13 @@ ___
 
 `number`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[getId](../interfaces/exports_session.Session.md#getid)
+[Session](exports_session.Session.md).[getId](exports_session.Session.md#getid)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:86
+packages/matter.js/dist/esm/session/SecureSession.d.ts:69
 
 ___
 
@@ -682,37 +727,13 @@ ___
 
 `number`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/exports_session.Session.md).[getIncrementedMessageCounter](../interfaces/exports_session.Session.md#getincrementedmessagecounter)
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/SecureSession.d.ts:99
-
-___
-
-### getMrpParameters
-
-▸ **getMrpParameters**(): `Object`
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `activeRetransmissionTimeoutMs` | `number` |
-| `idleRetransmissionTimeoutMs` | `number` |
-| `retransmissionRetries` | `number` |
-
-#### Implementation of
-
-[Session](../interfaces/exports_session.Session.md).[getMrpParameters](../interfaces/exports_session.Session.md#getmrpparameters)
+[Session](exports_session.Session.md).[getIncrementedMessageCounter](exports_session.Session.md#getincrementedmessagecounter)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:80
+packages/matter.js/dist/esm/session/Session.d.ts:49
 
 ___
 
@@ -724,13 +745,13 @@ ___
 
 [`NodeId`](../modules/exports_datatype.md#nodeid)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[getNodeId](../interfaces/exports_session.Session.md#getnodeid)
+[Session](exports_session.Session.md).[getNodeId](exports_session.Session.md#getnodeid)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:88
+packages/matter.js/dist/esm/session/SecureSession.d.ts:71
 
 ___
 
@@ -742,13 +763,13 @@ ___
 
 [`NodeId`](../modules/exports_datatype.md#nodeid)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[getPeerNodeId](../interfaces/exports_session.Session.md#getpeernodeid)
+[Session](exports_session.Session.md).[getPeerNodeId](exports_session.Session.md#getpeernodeid)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:89
+packages/matter.js/dist/esm/session/SecureSession.d.ts:72
 
 ___
 
@@ -760,13 +781,31 @@ ___
 
 `number`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[getPeerSessionId](../interfaces/exports_session.Session.md#getpeersessionid)
+[Session](exports_session.Session.md).[getPeerSessionId](exports_session.Session.md#getpeersessionid)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:87
+packages/matter.js/dist/esm/session/SecureSession.d.ts:70
+
+___
+
+### getSessionParameters
+
+▸ **getSessionParameters**(): [`SessionParameters`](../interfaces/exports_session.SessionParameters.md)
+
+#### Returns
+
+[`SessionParameters`](../interfaces/exports_session.SessionParameters.md)
+
+#### Inherited from
+
+[Session](exports_session.Session.md).[getSessionParameters](exports_session.Session.md#getsessionparameters)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:51
 
 ___
 
@@ -778,13 +817,13 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[isPase](../interfaces/exports_session.Session.md#ispase)
+[Session](exports_session.Session.md).[isPase](exports_session.Session.md#ispase)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:69
+packages/matter.js/dist/esm/session/SecureSession.d.ts:59
 
 ___
 
@@ -796,13 +835,13 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/exports_session.Session.md).[isPeerActive](../interfaces/exports_session.Session.md#ispeeractive)
+[Session](exports_session.Session.md).[isPeerActive](exports_session.Session.md#ispeeractive)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:72
+packages/matter.js/dist/esm/session/Session.d.ts:48
 
 ___
 
@@ -814,13 +853,13 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/exports_session.Session.md).[isSecure](../interfaces/exports_session.Session.md#issecure)
+[Session](exports_session.Session.md).[isSecure](exports_session.Session.md#issecure)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:68
+packages/matter.js/dist/esm/session/SecureSession.d.ts:58
 
 ___
 
@@ -838,13 +877,13 @@ ___
 
 `void`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/exports_session.Session.md).[notifyActivity](../interfaces/exports_session.Session.md#notifyactivity)
+[Session](exports_session.Session.md).[notifyActivity](exports_session.Session.md#notifyactivity)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:71
+packages/matter.js/dist/esm/session/Session.d.ts:47
 
 ___
 
@@ -864,31 +903,32 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:92
+packages/matter.js/dist/esm/session/SecureSession.d.ts:75
 
 ___
 
 ### updateMessageCounter
 
-▸ **updateMessageCounter**(`messageCounter`): `void`
+▸ **updateMessageCounter**(`messageCounter`, `_sourceNodeId?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `messageCounter` | `number` |
+| `_sourceNodeId?` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
 `void`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/exports_session.Session.md).[updateMessageCounter](../interfaces/exports_session.Session.md#updatemessagecounter)
+[Session](exports_session.Session.md).[updateMessageCounter](exports_session.Session.md#updatemessagecounter)
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:100
+packages/matter.js/dist/esm/session/Session.d.ts:50
 
 ___
 
@@ -907,17 +947,16 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `args` | `Object` |
-| `args.activeRetransmissionTimeoutMs?` | `number` |
 | `args.closeCallback` | () => `Promise`\<`void`\> |
 | `args.context` | `T` |
 | `args.fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
 | `args.id` | `number` |
-| `args.idleRetransmissionTimeoutMs?` | `number` |
 | `args.isInitiator` | `boolean` |
 | `args.isResumption` | `boolean` |
 | `args.peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `args.peerSessionId` | `number` |
 | `args.salt` | `Uint8Array` |
+| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/exports_session.SessionParameters.md)\> |
 | `args.sharedSecret` | `Uint8Array` |
 | `args.subscriptionChangedCallback?` | () => `void` |
 
@@ -927,4 +966,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:35
+packages/matter.js/dist/esm/session/SecureSession.d.ts:27

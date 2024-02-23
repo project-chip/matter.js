@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.7.5 (2024-02-23)
 * Matter-Core functionality:
   * Feature: Allowed multiple Loggers and log targets to be registered. Logging to console is still default
   * Enhancement: Implemented handling for session interval parameters as defined by Matter 1.2 specification

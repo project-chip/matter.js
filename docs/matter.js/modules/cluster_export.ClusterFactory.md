@@ -56,13 +56,13 @@ They may converge over time but are fully compatible.
 
 ### Attribute
 
-Ƭ **Attribute**: [`Attribute`](cluster_export.md#attribute)\<`any`, `any`\>
+Ƭ **Attribute**: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`any`, `any`\>
 
 Definition of a cluster attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L43)
+[packages/matter.js/src/cluster/ClusterFactory.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L43)
 
 ___
 
@@ -80,19 +80,19 @@ Extract the type of a cluster's attributes.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:316](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L316)
+[packages/matter.js/src/cluster/ClusterFactory.ts:316](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L316)
 
 ___
 
 ### Command
 
-Ƭ **Command**: [`Command`](cluster_export.md#command)\<`any`, `any`, `any`\>
+Ƭ **Command**: [`Command`](../interfaces/cluster_export.Command.md)\<`any`, `any`, `any`\>
 
 Definition of a cluster command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L48)
+[packages/matter.js/src/cluster/ClusterFactory.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L48)
 
 ___
 
@@ -110,13 +110,13 @@ Extract the type of a cluster's commands.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:323](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L323)
+[packages/matter.js/src/cluster/ClusterFactory.ts:323](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L323)
 
 ___
 
 ### Definition
 
-Ƭ **Definition**\<`T`\>: \{ `attributes`: `T`[``"attributes"``] extends infer A ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<`T`[``"features"``] extends {} ? `T`[``"features"``] : {}\>\> : {} ; `commands`: `T`[``"commands"``] extends {} ? `T`[``"commands"``] : {} ; `events`: `T`[``"events"``] extends {} ? `T`[``"events"``] : {} ; `features`: `T`[``"features"``] extends {} ? `T`[``"features"``] : {} ; `id`: [`Branded`](util_export.md#branded)\<`T`[``"id"``], ``"ClusterId"``\> ; `name`: `T`[``"name"``] ; `revision`: `T`[``"revision"``] ; `supportedFeatures`: `T`[``"supportedFeatures"``] extends {} ? `T`[``"supportedFeatures"``] : {} ; `unknown`: `T`[``"unknown"``] extends `boolean` ? `T`[``"unknown"``] : ``false``  } & `Omit`\<`T`, ``"attributes"``\>
+Ƭ **Definition**\<`T`\>: \{ `attributes`: `T`[``"attributes"``] extends infer A ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](cluster_export.md#globalattributes)\<`T`[``"features"``] extends {} ? `T`[``"features"``] : {}\>\> : {} ; `commands`: `T`[``"commands"``] extends {} ? `T`[``"commands"``] : {} ; `events`: `T`[``"events"``] extends {} ? `T`[``"events"``] : {} ; `features`: `T`[``"features"``] extends {} ? `T`[``"features"``] : {} ; `id`: [`Branded`](util_export.md#branded)\<`T`[``"id"``], ``"ClusterId"``\> ; `name`: `T`[``"name"``] ; `revision`: `T`[``"revision"``] ; `supportedFeatures`: `T`[``"supportedFeatures"``] extends {} ? `T`[``"supportedFeatures"``] : {} ; `unknown`: `T`[``"unknown"``] extends `boolean` ? `T`[``"unknown"``] : ``false``  } & `Omit`\<`T`, ``"attributes"``\>
 
 A "definition" is the fully typed Cluster for a PartialDefinition.
 
@@ -128,9 +128,9 @@ A "definition" is the fully typed Cluster for a PartialDefinition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:172](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L172)
+[packages/matter.js/src/cluster/ClusterFactory.ts:172](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L172)
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:117](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L117)
+[packages/matter.js/src/cluster/ClusterFactory.ts:117](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L117)
 
 ___
 
@@ -142,7 +142,7 @@ An "element" is a single attribute, command or event of a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:155](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L155)
+[packages/matter.js/src/cluster/ClusterFactory.ts:155](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L155)
 
 ___
 
@@ -161,19 +161,19 @@ events) of a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L38)
+[packages/matter.js/src/cluster/ClusterFactory.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L38)
 
 ___
 
 ### Event
 
-Ƭ **Event**: [`Event`](cluster_export.md#event)\<`any`, `any`\>
+Ƭ **Event**: [`Event`](../interfaces/cluster_export.Event.md)\<`any`, `any`\>
 
 Definition of a cluster event.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:53](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L53)
+[packages/matter.js/src/cluster/ClusterFactory.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L53)
 
 ___
 
@@ -191,7 +191,7 @@ Extract the type of a cluster's events.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:330](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L330)
+[packages/matter.js/src/cluster/ClusterFactory.ts:330](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L330)
 
 ___
 
@@ -199,12 +199,12 @@ ___
 
 Ƭ **Extender**: (...`features`: `any`) => [`Cluster`](../interfaces/cluster_export.ClusterFactory.Cluster.md)
 
+An "extender" is a function that creates a cluster with specific
+features enabled.
+
 #### Type declaration
 
 ▸ (`...features`): [`Cluster`](../interfaces/cluster_export.ClusterFactory.Cluster.md)
-
-An "extender" is a function that creates a cluster with specific
-features enabled.
 
 ##### Parameters
 
@@ -218,7 +218,7 @@ features enabled.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:142](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L142)
+[packages/matter.js/src/cluster/ClusterFactory.ts:142](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L142)
 
 ___
 
@@ -230,7 +230,7 @@ A "MutableDefinition" is a Cluster with fields that may be modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:134](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L134)
+[packages/matter.js/src/cluster/ClusterFactory.ts:134](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L134)
 
 ___
 
@@ -243,7 +243,7 @@ empty elements to be present.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:107](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L107)
+[packages/matter.js/src/cluster/ClusterFactory.ts:107](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L107)
 
 ## Functions
 
@@ -277,7 +277,7 @@ Create a conditional version of an unconditional element definition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:298](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L298)
+[packages/matter.js/src/cluster/ClusterFactory.ts:298](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L298)
 
 ___
 
@@ -291,7 +291,7 @@ Define a cluster component.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends `Partial`\<[`Component`](cluster_export.ClusterFactory.md#component)\> |
+| `T` | extends `Partial`\<[`Component`](../interfaces/cluster_export.ClusterFactory.Component.md)\> |
 
 #### Parameters
 
@@ -305,7 +305,7 @@ Define a cluster component.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:160](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L160)
+[packages/matter.js/src/cluster/ClusterFactory.ts:160](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L160)
 
 ___
 
@@ -333,13 +333,13 @@ Define a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:172](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L172)
+[packages/matter.js/src/cluster/ClusterFactory.ts:172](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L172)
 
 ___
 
 ### Extensible
 
-▸ **Extensible**\<`DefinitionT`, `ExtenderT`\>(`definition`, `extender`): \{ `attributes`: `DefinitionT`[``"attributes"``] extends `A` ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<`DefinitionT`[``"features"``] extends {} ? `any`[`any`] : {}\>\> : {} ; `commands`: `DefinitionT`[``"commands"``] extends {} ? `any`[`any`] : {} ; `events`: `DefinitionT`[``"events"``] extends {} ? `any`[`any`] : {} ; `features`: `DefinitionT`[``"features"``] extends {} ? `any`[`any`] : {} ; `id`: [`Branded`](util_export.md#branded)\<`DefinitionT`[``"id"``], ``"ClusterId"``\> ; `name`: `DefinitionT`[``"name"``] ; `revision`: `DefinitionT`[``"revision"``] ; `supportedFeatures`: `DefinitionT`[``"supportedFeatures"``] extends {} ? `any`[`any`] : {} ; `unknown`: `DefinitionT`[``"unknown"``] extends `boolean` ? `any`[`any`] : ``false``  } & `Omit`\<`DefinitionT`, ``"attributes"``\> & \{ `with`: `ExtenderT` = extender }
+▸ **Extensible**\<`DefinitionT`, `ExtenderT`\>(`definition`, `extender`): \{ `attributes`: `DefinitionT`[``"attributes"``] extends `A` ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](cluster_export.md#globalattributes)\<`DefinitionT`[``"features"``] extends {} ? `any`[`any`] : {}\>\> : {} ; `commands`: `DefinitionT`[``"commands"``] extends {} ? `any`[`any`] : {} ; `events`: `DefinitionT`[``"events"``] extends {} ? `any`[`any`] : {} ; `features`: `DefinitionT`[``"features"``] extends {} ? `any`[`any`] : {} ; `id`: [`Branded`](util_export.md#branded)\<`DefinitionT`[``"id"``], ``"ClusterId"``\> ; `name`: `DefinitionT`[``"name"``] ; `revision`: `DefinitionT`[``"revision"``] ; `supportedFeatures`: `DefinitionT`[``"supportedFeatures"``] extends {} ? `any`[`any`] : {} ; `unknown`: `DefinitionT`[``"unknown"``] extends `boolean` ? `any`[`any`] : ``false``  } & `Omit`\<`DefinitionT`, ``"attributes"``\> & \{ `with`: `ExtenderT` = extender }
 
 Define an extensible cluster.
 
@@ -359,11 +359,11 @@ Define an extensible cluster.
 
 #### Returns
 
-\{ `attributes`: `DefinitionT`[``"attributes"``] extends `A` ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<`DefinitionT`[``"features"``] extends {} ? `any`[`any`] : {}\>\> : {} ; `commands`: `DefinitionT`[``"commands"``] extends {} ? `any`[`any`] : {} ; `events`: `DefinitionT`[``"events"``] extends {} ? `any`[`any`] : {} ; `features`: `DefinitionT`[``"features"``] extends {} ? `any`[`any`] : {} ; `id`: [`Branded`](util_export.md#branded)\<`DefinitionT`[``"id"``], ``"ClusterId"``\> ; `name`: `DefinitionT`[``"name"``] ; `revision`: `DefinitionT`[``"revision"``] ; `supportedFeatures`: `DefinitionT`[``"supportedFeatures"``] extends {} ? `any`[`any`] : {} ; `unknown`: `DefinitionT`[``"unknown"``] extends `boolean` ? `any`[`any`] : ``false``  } & `Omit`\<`DefinitionT`, ``"attributes"``\> & \{ `with`: `ExtenderT` = extender }
+\{ `attributes`: `DefinitionT`[``"attributes"``] extends `A` ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](cluster_export.md#globalattributes)\<`DefinitionT`[``"features"``] extends {} ? `any`[`any`] : {}\>\> : {} ; `commands`: `DefinitionT`[``"commands"``] extends {} ? `any`[`any`] : {} ; `events`: `DefinitionT`[``"events"``] extends {} ? `any`[`any`] : {} ; `features`: `DefinitionT`[``"features"``] extends {} ? `any`[`any`] : {} ; `id`: [`Branded`](util_export.md#branded)\<`DefinitionT`[``"id"``], ``"ClusterId"``\> ; `name`: `DefinitionT`[``"name"``] ; `revision`: `DefinitionT`[``"revision"``] ; `supportedFeatures`: `DefinitionT`[``"supportedFeatures"``] extends {} ? `any`[`any`] : {} ; `unknown`: `DefinitionT`[``"unknown"``] extends `boolean` ? `any`[`any`] : ``false``  } & `Omit`\<`DefinitionT`, ``"attributes"``\> & \{ `with`: `ExtenderT` = extender }
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:192](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L192)
+[packages/matter.js/src/cluster/ClusterFactory.ts:192](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L192)
 
 ___
 
@@ -395,7 +395,7 @@ Define a cluster that can only be extended.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:205](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L205)
+[packages/matter.js/src/cluster/ClusterFactory.ts:205](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L205)
 
 ___
 
@@ -422,7 +422,7 @@ This is used by extenders and does not convey type information.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:217](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L217)
+[packages/matter.js/src/cluster/ClusterFactory.ts:217](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L217)
 
 ___
 
@@ -448,7 +448,7 @@ Used by extenders.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:282](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L282)
+[packages/matter.js/src/cluster/ClusterFactory.ts:282](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L282)
 
 ___
 
@@ -474,4 +474,4 @@ Used by extenders.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:268](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L268)
+[packages/matter.js/src/cluster/ClusterFactory.ts:268](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L268)

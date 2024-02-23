@@ -67,8 +67,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `privateKey` | [`ByteArray`](util_export.md#bytearray-1) |
-| `publicKey` | [`ByteArray`](util_export.md#bytearray-1) |
+| `privateKey` | [`ByteArray`](util_export.md#bytearray) |
+| `publicKey` | [`ByteArray`](util_export.md#bytearray) |
 
 #### Defined in
 
@@ -280,7 +280,7 @@ packages/matter.js/dist/esm/crypto/Crypto.d.ts:67
 
 ### Key
 
-▸ **Key**(`properties`): [`Key`](crypto_export.md#key)
+▸ **Key**(`properties`): [`Key`](../interfaces/crypto_export.Key.md)
 
 Generic key factory.
 
@@ -288,11 +288,11 @@ Generic key factory.
 
 | Name | Type |
 | :------ | :------ |
-| `properties` | `Partial`\<[`Key`](crypto_export.md#key)\> |
+| `properties` | `Partial`\<[`Key`](../interfaces/crypto_export.Key.md)\> |
 
 #### Returns
 
-[`Key`](crypto_export.md#key)
+[`Key`](../interfaces/crypto_export.Key.md)
 
 #### Defined in
 
@@ -302,7 +302,7 @@ ___
 
 ### PrivateKey
 
-▸ **PrivateKey**(`privateKey`, `options?`): [`PrivateKey`](crypto_export.md#privatekey)
+▸ **PrivateKey**(`privateKey`, `options?`): [`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
 Private key factory.
 
@@ -311,11 +311,11 @@ Private key factory.
 | Name | Type |
 | :------ | :------ |
 | `privateKey` | `Uint8Array` \| [`BinaryKeyPair`](crypto_export.md#binarykeypair) |
-| `options?` | `Partial`\<[`Key`](crypto_export.md#key)\> |
+| `options?` | `Partial`\<[`Key`](../interfaces/crypto_export.Key.md)\> |
 
 #### Returns
 
-[`PrivateKey`](crypto_export.md#privatekey)
+[`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
 #### Defined in
 
@@ -325,7 +325,7 @@ ___
 
 ### PublicKey
 
-▸ **PublicKey**(`publicKey`, `options?`): [`PublicKey`](crypto_export.md#publickey)
+▸ **PublicKey**(`publicKey`, `options?`): [`PublicKey`](../interfaces/crypto_export.PublicKey.md)
 
 Public key factory.
 
@@ -334,11 +334,11 @@ Public key factory.
 | Name | Type |
 | :------ | :------ |
 | `publicKey` | `Uint8Array` |
-| `options?` | `Partial`\<[`Key`](crypto_export.md#key)\> |
+| `options?` | `Partial`\<[`Key`](../interfaces/crypto_export.Key.md)\> |
 
 #### Returns
 
-[`PublicKey`](crypto_export.md#publickey)
+[`PublicKey`](../interfaces/crypto_export.PublicKey.md)
 
 #### Defined in
 
@@ -348,7 +348,7 @@ ___
 
 ### SymmetricKey
 
-▸ **SymmetricKey**(`privateKey`, `options?`): [`Key`](crypto_export.md#key)
+▸ **SymmetricKey**(`privateKey`, `options?`): [`Key`](../interfaces/crypto_export.Key.md)
 
 Symmetric key factory.
 
@@ -357,11 +357,11 @@ Symmetric key factory.
 | Name | Type |
 | :------ | :------ |
 | `privateKey` | `Uint8Array` |
-| `options?` | `Partial`\<[`Key`](crypto_export.md#key)\> |
+| `options?` | `Partial`\<[`Key`](../interfaces/crypto_export.Key.md)\> |
 
 #### Returns
 
-[`Key`](crypto_export.md#key)
+[`Key`](../interfaces/crypto_export.Key.md)
 
 #### Defined in
 

@@ -12,7 +12,7 @@
 
 ## Hierarchy
 
-- [`Schema`](internal_.Schema.md)\<`T`, [`ByteArray`](../modules/internal_.md#bytearray-1)\>
+- [`Schema`](internal_.Schema.md)\<`T`, [`ByteArray`](../modules/internal_.md#bytearray)\>
 
   ↳ **`TlvSchema`**
 
@@ -266,13 +266,14 @@ ___
 
 ### encodeTlv
 
-▸ **encodeTlv**(`value`): [`TlvStream`](../modules/internal_.md#tlvstream)
+▸ **encodeTlv**(`value`, `forWriteInteraction?`): [`TlvStream`](../modules/internal_.md#tlvstream)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
+| `forWriteInteraction?` | `boolean` |
 
 #### Returns
 
@@ -290,7 +291,7 @@ ___
 
 ### encodeTlvInternal
 
-▸ **encodeTlvInternal**(`writer`, `value`, `tag?`): `void`
+▸ **encodeTlvInternal**(`writer`, `value`, `tag?`, `forWriteInteraction?`): `void`
 
 #### Parameters
 
@@ -299,6 +300,7 @@ ___
 | `writer` | [`TlvWriter`](../interfaces/internal_.TlvWriter.md) |
 | `value` | `T` |
 | `tag?` | [`TlvTag`](../modules/internal_.md#tlvtag) |
+| `forWriteInteraction?` | `boolean` |
 
 #### Returns
 

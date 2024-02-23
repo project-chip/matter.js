@@ -48,20 +48,25 @@ It sends out queries to discover various types of Matter device types and listen
 - [getCommissionableDeviceRecords](mdns_export.MdnsScanner.md#getcommissionabledevicerecords)
 - [getCommissionableQueryRecords](mdns_export.MdnsScanner.md#getcommissionablequeryrecords)
 - [getDiscoveredCommissionableDevices](mdns_export.MdnsScanner.md#getdiscoveredcommissionabledevices)
-- [getDiscoveredOperationalDevices](mdns_export.MdnsScanner.md#getdiscoveredoperationaldevices)
+- [getDiscoveredOperationalDevice](mdns_export.MdnsScanner.md#getdiscoveredoperationaldevice)
 - [getOperationalDeviceRecords](mdns_export.MdnsScanner.md#getoperationaldevicerecords)
 - [handleCommissionableRecords](mdns_export.MdnsScanner.md#handlecommissionablerecords)
 - [handleDnsMessage](mdns_export.MdnsScanner.md#handlednsmessage)
 - [handleIpRecords](mdns_export.MdnsScanner.md#handleiprecords)
+- [handleOperationalRecords](mdns_export.MdnsScanner.md#handleoperationalrecords)
 - [handleOperationalSrvRecord](mdns_export.MdnsScanner.md#handleoperationalsrvrecord)
+- [handleOperationalTxtRecord](mdns_export.MdnsScanner.md#handleoperationaltxtrecord)
 - [hasWaiter](mdns_export.MdnsScanner.md#haswaiter)
 - [parseCommissionableTxtRecord](mdns_export.MdnsScanner.md#parsecommissionabletxtrecord)
+- [parseTxtRecord](mdns_export.MdnsScanner.md#parsetxtrecord)
 - [registerWaiterPromise](mdns_export.MdnsScanner.md#registerwaiterpromise)
 - [removeQuery](mdns_export.MdnsScanner.md#removequery)
 - [sendQueries](mdns_export.MdnsScanner.md#sendqueries)
 - [setQueryRecords](mdns_export.MdnsScanner.md#setqueryrecords)
 - [sortServerEntries](mdns_export.MdnsScanner.md#sortserverentries)
 - [create](mdns_export.MdnsScanner.md#create)
+- [deviceAddressDiagnostics](mdns_export.MdnsScanner.md#deviceaddressdiagnostics)
+- [discoveryDataDiagnostics](mdns_export.MdnsScanner.md#discoverydatadiagnostics)
 
 ## Constructors
 
@@ -82,7 +87,7 @@ It sends out queries to discover various types of Matter device types and listen
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:96](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L96)
+[packages/matter.js/src/mdns/MdnsScanner.ts:107](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L107)
 
 ## Properties
 
@@ -92,7 +97,7 @@ It sends out queries to discover various types of Matter device types and listen
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:79](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L79)
+[packages/matter.js/src/mdns/MdnsScanner.ts:90](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L90)
 
 ___
 
@@ -102,17 +107,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L94)
+[packages/matter.js/src/mdns/MdnsScanner.ts:105](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L105)
 
 ___
 
 ### commissionableDeviceRecords
 
-• `Private` `Readonly` **commissionableDeviceRecords**: `Map`\<`string`, [`CommissionableDeviceRecordWithExpire`](../modules/export._internal_.md#commissionabledevicerecordwithexpire)\>
+• `Private` `Readonly` **commissionableDeviceRecords**: `Map`\<`string`, [`CommissionableDeviceRecordWithExpire`](../modules/mdns_export._internal_.md#commissionabledevicerecordwithexpire)\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:84](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L84)
+[packages/matter.js/src/mdns/MdnsScanner.ts:95](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L95)
 
 ___
 
@@ -122,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:98](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L98)
+[packages/matter.js/src/mdns/MdnsScanner.ts:109](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L109)
 
 ___
 
@@ -132,7 +137,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:97](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L97)
+[packages/matter.js/src/mdns/MdnsScanner.ts:108](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L108)
 
 ___
 
@@ -142,17 +147,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:81](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L81)
+[packages/matter.js/src/mdns/MdnsScanner.ts:92](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L92)
 
 ___
 
 ### operationalDeviceRecords
 
-• `Private` `Readonly` **operationalDeviceRecords**: `Map`\<`string`, `Map`\<`string`, [`MatterServerRecordWithExpire`](../modules/export._internal_.md#matterserverrecordwithexpire)\>\>
+• `Private` `Readonly` **operationalDeviceRecords**: `Map`\<`string`, [`OperationalDeviceRecordWithExpire`](../modules/mdns_export._internal_.md#operationaldevicerecordwithexpire)\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:83](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L83)
+[packages/matter.js/src/mdns/MdnsScanner.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L94)
 
 ___
 
@@ -162,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:93](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L93)
+[packages/matter.js/src/mdns/MdnsScanner.ts:104](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L104)
 
 ___
 
@@ -172,7 +177,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:80](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L80)
+[packages/matter.js/src/mdns/MdnsScanner.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L91)
 
 ___
 
@@ -182,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:85](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L85)
+[packages/matter.js/src/mdns/MdnsScanner.ts:96](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L96)
 
 ## Methods
 
@@ -205,7 +210,7 @@ Some identifiers are identical to the official DNS-SD identifiers, others are cu
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:396](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L396)
+[packages/matter.js/src/mdns/MdnsScanner.ts:429](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L429)
 
 ___
 
@@ -232,7 +237,7 @@ be over.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:346](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L346)
+[packages/matter.js/src/mdns/MdnsScanner.ts:379](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L379)
 
 ___
 
@@ -253,7 +258,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:341](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L341)
+[packages/matter.js/src/mdns/MdnsScanner.ts:374](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L374)
 
 ___
 
@@ -273,7 +278,7 @@ Close all connects, end all timers and resolve all pending promises.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:571](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L571)
+[packages/matter.js/src/mdns/MdnsScanner.ts:606](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L606)
 
 ___
 
@@ -294,7 +299,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:302](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L302)
+[packages/matter.js/src/mdns/MdnsScanner.ts:335](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L335)
 
 ___
 
@@ -308,7 +313,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:839](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L839)
+[packages/matter.js/src/mdns/MdnsScanner.ts:948](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L948)
 
 ___
 
@@ -328,7 +333,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:416](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L416)
+[packages/matter.js/src/mdns/MdnsScanner.ts:449](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L449)
 
 ___
 
@@ -361,7 +366,7 @@ These can be requested by the getCommissionableDevices method.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:508](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L508)
+[packages/matter.js/src/mdns/MdnsScanner.ts:541](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L541)
 
 ___
 
@@ -389,7 +394,7 @@ Discovers commissionable devices based on a defined identifier and returns the f
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:534](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L534)
+[packages/matter.js/src/mdns/MdnsScanner.ts:569](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L569)
 
 ___
 
@@ -404,7 +409,7 @@ Check all options for a query identifier and return the most relevant one with a
 | Name | Type |
 | :------ | :------ |
 | `instanceName` | `string` |
-| `record` | [`CommissionableDeviceRecordWithExpire`](../modules/export._internal_.md#commissionabledevicerecordwithexpire) |
+| `record` | [`CommissionableDeviceRecordWithExpire`](../modules/mdns_export._internal_.md#commissionabledevicerecordwithexpire) |
 
 #### Returns
 
@@ -412,13 +417,13 @@ Check all options for a query identifier and return the most relevant one with a
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:427](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L427)
+[packages/matter.js/src/mdns/MdnsScanner.ts:460](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L460)
 
 ___
 
 ### findOperationalDevice
 
-▸ **findOperationalDevice**(`«destructured»`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]\>
+▸ **findOperationalDevice**(`«destructured»`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<`undefined` \| [`OperationalDevice`](../modules/common_export.md#operationaldevice)\>
 
 Method to find an operational device (already commissioned) and return a promise with the list of discovered
 IP/ports or an empty array if not found.
@@ -434,7 +439,7 @@ IP/ports or an empty array if not found.
 
 #### Returns
 
-`Promise`\<[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]\>
+`Promise`\<`undefined` \| [`OperationalDevice`](../modules/common_export.md#operationaldevice)\>
 
 #### Implementation of
 
@@ -442,7 +447,7 @@ IP/ports or an empty array if not found.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:311](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L311)
+[packages/matter.js/src/mdns/MdnsScanner.ts:344](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L344)
 
 ___
 
@@ -467,7 +472,7 @@ promise.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:282](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L282)
+[packages/matter.js/src/mdns/MdnsScanner.ts:315](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L315)
 
 ___
 
@@ -481,13 +486,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:196](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L196)
+[packages/matter.js/src/mdns/MdnsScanner.ts:222](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L222)
 
 ___
 
 ### getCommissionableDeviceRecords
 
-▸ **getCommissionableDeviceRecords**(`identifier`): \{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` = undefined; `instanceId`: `string`  }[]
+▸ **getCommissionableDeviceRecords**(`identifier`): \{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `ICD?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SAT?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` = undefined; `instanceId`: `string`  }[]
 
 Returns the metadata and list of all target addresses (IP/port) discovered for a queried commissionable device
 record.
@@ -500,11 +505,11 @@ record.
 
 #### Returns
 
-\{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` = undefined; `instanceId`: `string`  }[]
+\{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `ICD?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SAT?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` = undefined; `instanceId`: `string`  }[]
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:359](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L359)
+[packages/matter.js/src/mdns/MdnsScanner.ts:392](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L392)
 
 ___
 
@@ -524,13 +529,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:477](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L477)
+[packages/matter.js/src/mdns/MdnsScanner.ts:510](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L510)
 
 ___
 
 ### getDiscoveredCommissionableDevices
 
-▸ **getDiscoveredCommissionableDevices**(`identifier`): \{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` = undefined; `instanceId`: `string`  }[]
+▸ **getDiscoveredCommissionableDevices**(`identifier`): \{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `ICD?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SAT?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` = undefined; `instanceId`: `string`  }[]
 
 Return already discovered commissionable devices and return them. Does not send out new DNS-SD queries.
 
@@ -542,7 +547,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Returns
 
-\{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` = undefined; `instanceId`: `string`  }[]
+\{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `ICD?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SAT?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` = undefined; `instanceId`: `string`  }[]
 
 #### Implementation of
 
@@ -550,13 +555,13 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:564](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L564)
+[packages/matter.js/src/mdns/MdnsScanner.ts:599](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L599)
 
 ___
 
-### getDiscoveredOperationalDevices
+### getDiscoveredOperationalDevice
 
-▸ **getDiscoveredOperationalDevices**(`«destructured»`, `nodeId`): [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]
+▸ **getDiscoveredOperationalDevice**(`«destructured»`, `nodeId`): `undefined` \| [`OperationalDevice`](../modules/common_export.md#operationaldevice)
 
 Return already discovered addresses of an operational paired device and return them. Does not send out new
 DNS-SD queries.
@@ -570,21 +575,21 @@ DNS-SD queries.
 
 #### Returns
 
-[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]
+`undefined` \| [`OperationalDevice`](../modules/common_export.md#operationaldevice)
 
 #### Implementation of
 
-[Scanner](../interfaces/common_export.Scanner.md).[getDiscoveredOperationalDevices](../interfaces/common_export.Scanner.md#getdiscoveredoperationaldevices)
+[Scanner](../interfaces/common_export.Scanner.md).[getDiscoveredOperationalDevice](../interfaces/common_export.Scanner.md#getdiscoveredoperationaldevice)
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:351](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L351)
+[packages/matter.js/src/mdns/MdnsScanner.ts:384](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L384)
 
 ___
 
 ### getOperationalDeviceRecords
 
-▸ **getOperationalDeviceRecords**(`deviceMatterQname`): [`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]
+▸ **getOperationalDeviceRecords**(`deviceMatterQname`): `undefined` \| [`OperationalDevice`](../modules/common_export.md#operationaldevice)
 
 Returns the list of all targets (IP/port) discovered for a queried operational device record.
 
@@ -596,11 +601,11 @@ Returns the list of all targets (IP/port) discovered for a queried operational d
 
 #### Returns
 
-[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]
+`undefined` \| [`OperationalDevice`](../modules/common_export.md#operationaldevice)
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:218](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L218)
+[packages/matter.js/src/mdns/MdnsScanner.ts:244](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L244)
 
 ___
 
@@ -622,7 +627,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:689](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L689)
+[packages/matter.js/src/mdns/MdnsScanner.ts:788](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L788)
 
 ___
 
@@ -647,7 +652,7 @@ It will parse the message and check if it contains relevant discovery records.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:586](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L586)
+[packages/matter.js/src/mdns/MdnsScanner.ts:621](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L621)
 
 ___
 
@@ -669,13 +674,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:602](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L602)
+[packages/matter.js/src/mdns/MdnsScanner.ts:637](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L637)
 
 ___
 
-### handleOperationalSrvRecord
+### handleOperationalRecords
 
-▸ **handleOperationalSrvRecord**(`answers`, `formerAnswers`, `netInterface`): `boolean`
+▸ **handleOperationalRecords**(`answers`, `formerAnswers`, `netInterface`): `boolean`
 
 #### Parameters
 
@@ -691,7 +696,51 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:618](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L618)
+[packages/matter.js/src/mdns/MdnsScanner.ts:653](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L653)
+
+___
+
+### handleOperationalSrvRecord
+
+▸ **handleOperationalSrvRecord**(`record`, `answers`, `formerAnswers`, `netInterface`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `record` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\> |
+| `answers` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[] |
+| `formerAnswers` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[] |
+| `netInterface` | `string` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/matter.js/src/mdns/MdnsScanner.ts:719](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L719)
+
+___
+
+### handleOperationalTxtRecord
+
+▸ **handleOperationalTxtRecord**(`record`, `netInterface`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `record` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\> |
+| `netInterface` | `string` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/mdns/MdnsScanner.ts:679](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L679)
 
 ___
 
@@ -713,13 +762,13 @@ Returns weather a waiter promise is registered for a specific queryId.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:298](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L298)
+[packages/matter.js/src/mdns/MdnsScanner.ts:331](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L331)
 
 ___
 
 ### parseCommissionableTxtRecord
 
-▸ **parseCommissionableTxtRecord**(`record`): `undefined` \| [`CommissionableDeviceRecordWithExpire`](../modules/export._internal_.md#commissionabledevicerecordwithexpire)
+▸ **parseCommissionableTxtRecord**(`record`): `undefined` \| [`CommissionableDeviceRecordWithExpire`](../modules/mdns_export._internal_.md#commissionabledevicerecordwithexpire)
 
 #### Parameters
 
@@ -729,11 +778,31 @@ ___
 
 #### Returns
 
-`undefined` \| [`CommissionableDeviceRecordWithExpire`](../modules/export._internal_.md#commissionabledevicerecordwithexpire)
+`undefined` \| [`CommissionableDeviceRecordWithExpire`](../modules/mdns_export._internal_.md#commissionabledevicerecordwithexpire)
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:817](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L817)
+[packages/matter.js/src/mdns/MdnsScanner.ts:936](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L936)
+
+___
+
+### parseTxtRecord
+
+▸ **parseTxtRecord**(`record`): `undefined` \| [`DiscoveryData`](../modules/common_export.md#discoverydata)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `record` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\> |
+
+#### Returns
+
+`undefined` \| [`DiscoveryData`](../modules/common_export.md#discoverydata)
+
+#### Defined in
+
+[packages/matter.js/src/mdns/MdnsScanner.ts:917](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L917)
 
 ___
 
@@ -758,7 +827,7 @@ The promise will be resolved when the timer runs out latest.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:263](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L263)
+[packages/matter.js/src/mdns/MdnsScanner.ts:296](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L296)
 
 ___
 
@@ -781,7 +850,7 @@ out. If it was the last query announcing will stop completely.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:204](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L204)
+[packages/matter.js/src/mdns/MdnsScanner.ts:230](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L230)
 
 ___
 
@@ -800,7 +869,7 @@ packets and the query is sent as Truncated query.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:113](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L113)
+[packages/matter.js/src/mdns/MdnsScanner.ts:124](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L124)
 
 ___
 
@@ -825,13 +894,13 @@ out. When entry already exists the query is overwritten and answers are always a
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:184](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L184)
+[packages/matter.js/src/mdns/MdnsScanner.ts:195](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L195)
 
 ___
 
 ### sortServerEntries
 
-▸ **sortServerEntries**(`entries`): [`MatterServerRecordWithExpire`](../modules/export._internal_.md#matterserverrecordwithexpire)[]
+▸ **sortServerEntries**(`entries`): [`MatterServerRecordWithExpire`](../modules/mdns_export._internal_.md#matterserverrecordwithexpire)[]
 
 Sort the list of found IP/ports and make sure link-local IPv6 addresses come first, IPv6 next and IPv4 last.
 
@@ -839,15 +908,15 @@ Sort the list of found IP/ports and make sure link-local IPv6 addresses come fir
 
 | Name | Type |
 | :------ | :------ |
-| `entries` | [`MatterServerRecordWithExpire`](../modules/export._internal_.md#matterserverrecordwithexpire)[] |
+| `entries` | [`MatterServerRecordWithExpire`](../modules/mdns_export._internal_.md#matterserverrecordwithexpire)[] |
 
 #### Returns
 
-[`MatterServerRecordWithExpire`](../modules/export._internal_.md#matterserverrecordwithexpire)[]
+[`MatterServerRecordWithExpire`](../modules/mdns_export._internal_.md#matterserverrecordwithexpire)[]
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:235](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L235)
+[packages/matter.js/src/mdns/MdnsScanner.ts:268](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L268)
 
 ___
 
@@ -869,4 +938,44 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:66](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L66)
+[packages/matter.js/src/mdns/MdnsScanner.ts:77](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L77)
+
+___
+
+### deviceAddressDiagnostics
+
+▸ **deviceAddressDiagnostics**(`addresses`): [`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `addresses` | `Map`\<`string`, [`MatterServerRecordWithExpire`](../modules/mdns_export._internal_.md#matterserverrecordwithexpire)\> |
+
+#### Returns
+
+[`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)[]
+
+#### Defined in
+
+[packages/matter.js/src/mdns/MdnsScanner.ts:991](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L991)
+
+___
+
+### discoveryDataDiagnostics
+
+▸ **discoveryDataDiagnostics**(`data`): [`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `data` | [`DiscoveryData`](../modules/common_export.md#discoverydata) |
+
+#### Returns
+
+[`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)
+
+#### Defined in
+
+[packages/matter.js/src/mdns/MdnsScanner.ts:975](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L975)

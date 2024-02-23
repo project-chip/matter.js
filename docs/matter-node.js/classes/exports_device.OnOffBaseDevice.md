@@ -8,7 +8,7 @@ Abstract Base class for OnOff devices
 
 ## Hierarchy
 
-- [`OnOffBaseDevice_base`](../modules/export._internal_.md#onoffbasedevice_base)
+- [`OnOffBaseDevice_base`](../modules/exports_device._internal_.md#onoffbasedevice_base)
 
   ↳ **`OnOffBaseDevice`**
 
@@ -28,6 +28,7 @@ Abstract Base class for OnOff devices
 - [deviceType](exports_device.OnOffBaseDevice.md#devicetype)
 - [deviceTypes](exports_device.OnOffBaseDevice.md#devicetypes)
 - [id](exports_device.OnOffBaseDevice.md#id)
+- [isLighting](exports_device.OnOffBaseDevice.md#islighting)
 - [name](exports_device.OnOffBaseDevice.md#name)
 - [uniqueStorageKey](exports_device.OnOffBaseDevice.md#uniquestoragekey)
 
@@ -74,7 +75,7 @@ Abstract Base class for OnOff devices
 
 ### constructor
 
-• **new OnOffBaseDevice**(`definition`, `attributeInitialValues?`, `options?`): [`OnOffBaseDevice`](exports_device.OnOffBaseDevice.md)
+• **new OnOffBaseDevice**(`definition`, `attributeInitialValues?`, `options?`, `isLighting?`): [`OnOffBaseDevice`](exports_device.OnOffBaseDevice.md)
 
 Creates a new OnOffBaseDevice
 
@@ -82,9 +83,10 @@ Creates a new OnOffBaseDevice
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `definition` | [`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition) | Device type definition of the device to create |
+| `definition` | [`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md) | Device type definition of the device to create |
 | `attributeInitialValues?` | `Object` | Optional object with initial attribute values for automatically added clusters |
 | `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) | Optional endpoint options |
+| `isLighting?` | `boolean` | Define if Lighting feature is set |
 
 #### Returns
 
@@ -96,7 +98,7 @@ OnOffBaseDevice\_base.constructor
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:47
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:49
 
 ## Properties
 
@@ -130,7 +132,7 @@ ___
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -153,6 +155,16 @@ OnOffBaseDevice\_base.id
 #### Defined in
 
 packages/matter.js/dist/esm/device/Endpoint.d.ts:23
+
+___
+
+### isLighting
+
+• `Protected` **isLighting**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:39
 
 ___
 
@@ -216,14 +228,14 @@ packages/matter.js/dist/esm/device/Device.d.ts:114
 
 | Name | Type |
 | :------ | :------ |
-| `K_2` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K_2` | extends keyof [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K_2` |
-| `...args` | `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K_2`]\> |
+| `...args` | `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands)[`K_2`]\> |
 
 #### Returns
 
@@ -359,14 +371,14 @@ packages/matter.js/dist/esm/device/Device.d.ts:97
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K` |
-| `handler` | [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`] |
+| `handler` | [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands)[`K`] |
 
 #### Returns
 
@@ -401,7 +413,7 @@ Adds mandatory clusters to the device
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:57
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:59
 
 ___
 
@@ -449,7 +461,7 @@ This is an example of a convenient device class API to control the device withou
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:79
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:81
 
 ___
 
@@ -496,7 +508,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -530,7 +542,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -678,7 +690,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -736,7 +748,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -778,11 +790,11 @@ ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+[[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -822,7 +834,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:67
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:69
 
 ___
 
@@ -844,7 +856,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -878,7 +890,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -950,14 +962,14 @@ packages/matter.js/dist/esm/device/Device.d.ts:105
 
 | Name | Type |
 | :------ | :------ |
-| `K_1` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K_1` | extends keyof [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K_1` |
-| `handler` | [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K_1`] |
+| `handler` | [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands)[`K_1`] |
 
 #### Returns
 
@@ -1026,7 +1038,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] |
 
 #### Returns
 
@@ -1061,7 +1073,7 @@ This is an example f a convenient device class API to control the device without
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:66
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:68
 
 ___
 
@@ -1102,7 +1114,7 @@ This is an example f a convenient device class API to control the device without
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:72
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:74
 
 ___
 

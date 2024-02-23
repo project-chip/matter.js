@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](storage_export._internal_.md)
+
 ### Classes
 
 - [Storage](../classes/storage_export.Storage.md)
@@ -27,7 +31,7 @@
 
 ### SupportedStorageTypes
 
-Ƭ **SupportedStorageTypes**: [`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes)
+Ƭ **SupportedStorageTypes**: [`SupportedStorageBaseTypes`](storage_export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](storage_export._internal_.md#supportedcomplexstoragetypes)
 
 #### Defined in
 

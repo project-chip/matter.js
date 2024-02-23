@@ -12,6 +12,12 @@
 | `ResponseT` | `ResponseT` |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
 
+## Hierarchy
+
+- **`Command`**
+
+  ↳ [`OptionalCommand`](cluster_export.OptionalCommand.md)
+
 ## Table of contents
 
 ### Properties
@@ -35,7 +41,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:604](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L604)
+[packages/matter.js/src/cluster/Cluster.ts:604](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L604)
 
 ___
 
@@ -45,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:606](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L606)
+[packages/matter.js/src/cluster/Cluster.ts:606](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L606)
 
 ___
 
@@ -55,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:607](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L607)
+[packages/matter.js/src/cluster/Cluster.ts:607](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L607)
 
 ___
 
@@ -65,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:599](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L599)
+[packages/matter.js/src/cluster/Cluster.ts:599](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L599)
 
 ___
 
@@ -75,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:608](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L608)
+[packages/matter.js/src/cluster/Cluster.ts:608](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L608)
 
 ___
 
@@ -85,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:600](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L600)
+[packages/matter.js/src/cluster/Cluster.ts:600](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L600)
 
 ___
 
@@ -95,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:601](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L601)
+[packages/matter.js/src/cluster/Cluster.ts:601](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L601)
 
 ___
 
@@ -105,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:602](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L602)
+[packages/matter.js/src/cluster/Cluster.ts:602](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L602)
 
 ___
 
@@ -115,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:603](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L603)
+[packages/matter.js/src/cluster/Cluster.ts:603](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L603)
 
 ___
 
@@ -125,4 +131,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:605](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L605)
+[packages/matter.js/src/cluster/Cluster.ts:605](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L605)

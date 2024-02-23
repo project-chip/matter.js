@@ -17,7 +17,9 @@
 
   ↳ **`TlvWrapper`**
 
-  ↳↳ [`TlvCaseAuthenticatedTagSchema`](export._internal_.TlvCaseAuthenticatedTagSchema.md)
+  ↳↳ [`TlvCaseAuthenticatedTagSchema`](exports_datatype._internal_.TlvCaseAuthenticatedTagSchema.md)
+
+  ↳↳ [`FabricIndexTlvWrapper`](exports_datatype._internal_.FabricIndexTlvWrapper.md)
 
 ## Table of contents
 
@@ -83,7 +85,7 @@ packages/matter.js/dist/esm/tlv/TlvWrapper.d.ts:12
 
 ### underlyingSchema
 
-• `Private` `Readonly` **underlyingSchema**: `any`
+• `Protected` `Readonly` **underlyingSchema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Defined in
 
@@ -103,7 +105,21 @@ ___
 
 ### wrap
 
-• `Private` `Readonly` **wrap**: `any`
+• `Protected` `Readonly` **wrap**: (`object`: `O`) => `T`
+
+#### Type declaration
+
+▸ (`object`): `T`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `object` | `O` |
+
+##### Returns
+
+`T`
 
 #### Defined in
 
@@ -292,13 +308,14 @@ ___
 
 ### encodeTlv
 
-▸ **encodeTlv**(`value`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
+▸ **encodeTlv**(`value`, `forWriteInteraction?`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | `O` |
+| `forWriteInteraction?` | `boolean` |
 
 #### Returns
 
@@ -316,7 +333,7 @@ ___
 
 ### encodeTlvInternal
 
-▸ **encodeTlvInternal**(`writer`, `value`, `tag?`): `void`
+▸ **encodeTlvInternal**(`writer`, `value`, `tag?`, `forWriteInteraction?`): `void`
 
 #### Parameters
 
@@ -325,6 +342,7 @@ ___
 | `writer` | [`TlvWriter`](../interfaces/exports_tlv.TlvWriter.md) |
 | `value` | `O` |
 | `tag?` | [`TlvTag`](../modules/exports_tlv.md#tlvtag) |
+| `forWriteInteraction?` | `boolean` |
 
 #### Returns
 

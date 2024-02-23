@@ -18,20 +18,22 @@
 
 ### Properties
 
-- [activeRetransmissionTimeoutMs](exports_protocol.MessageExchange.md#activeretransmissiontimeoutms)
+- [activeIntervalMs](exports_protocol.MessageExchange.md#activeintervalms)
+- [activeThresholdMs](exports_protocol.MessageExchange.md#activethresholdms)
 - [channel](exports_protocol.MessageExchange.md#channel)
 - [closeCallback](exports_protocol.MessageExchange.md#closecallback)
 - [closeInternal](exports_protocol.MessageExchange.md#closeinternal)
 - [closeTimer](exports_protocol.MessageExchange.md#closetimer)
 - [exchangeId](exports_protocol.MessageExchange.md#exchangeid)
 - [getResubmissionBackOffTime](exports_protocol.MessageExchange.md#getresubmissionbackofftime)
-- [idleRetransmissionTimeoutMs](exports_protocol.MessageExchange.md#idleretransmissiontimeoutms)
+- [idleIntervalMs](exports_protocol.MessageExchange.md#idleintervalms)
 - [isInitiator](exports_protocol.MessageExchange.md#isinitiator)
 - [messagesQueue](exports_protocol.MessageExchange.md#messagesqueue)
 - [nodeId](exports_protocol.MessageExchange.md#nodeid)
 - [peerNodeId](exports_protocol.MessageExchange.md#peernodeid)
 - [peerSessionId](exports_protocol.MessageExchange.md#peersessionid)
 - [protocolId](exports_protocol.MessageExchange.md#protocolid)
+- [receivedMessageAckTimer](exports_protocol.MessageExchange.md#receivedmessageacktimer)
 - [receivedMessageToAck](exports_protocol.MessageExchange.md#receivedmessagetoack)
 - [retransmissionRetries](exports_protocol.MessageExchange.md#retransmissionretries)
 - [retransmissionTimer](exports_protocol.MessageExchange.md#retransmissiontimer)
@@ -53,6 +55,7 @@
 - [nextMessage](exports_protocol.MessageExchange.md#nextmessage)
 - [onMessageReceived](exports_protocol.MessageExchange.md#onmessagereceived)
 - [send](exports_protocol.MessageExchange.md#send)
+- [sendStandaloneAckForMessage](exports_protocol.MessageExchange.md#sendstandaloneackformessage)
 - [startTimedInteraction](exports_protocol.MessageExchange.md#starttimedinteraction)
 - [waitFor](exports_protocol.MessageExchange.md#waitfor)
 - [fromInitialMessage](exports_protocol.MessageExchange.md#frominitialmessage)
@@ -74,7 +77,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\> |
+| `session` | [`Session`](exports_session.Session.md)\<`ContextT`\> |
 | `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)\<`ContextT`\> |
 | `isInitiator` | `boolean` |
 | `peerSessionId` | `number` |
@@ -90,17 +93,27 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:56
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:60
 
 ## Properties
 
-### activeRetransmissionTimeoutMs
+### activeIntervalMs
 
-• `Private` `Readonly` **activeRetransmissionTimeoutMs**: `any`
+• `Private` `Readonly` **activeIntervalMs**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:45
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:47
+
+___
+
+### activeThresholdMs
+
+• `Private` `Readonly` **activeThresholdMs**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:49
 
 ___
 
@@ -110,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:35
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:37
 
 ___
 
@@ -120,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:42
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:44
 
 ___
 
@@ -130,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:71
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:76
 
 ___
 
@@ -140,7 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:54
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:58
 
 ___
 
@@ -150,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:40
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:42
 
 ___
 
@@ -164,17 +177,17 @@ MatterCoreSpecificationV1_0, section 4.11.2.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:62
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:67
 
 ___
 
-### idleRetransmissionTimeoutMs
+### idleIntervalMs
 
-• `Private` `Readonly` **idleRetransmissionTimeoutMs**: `any`
+• `Private` `Readonly` **idleIntervalMs**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:46
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:48
 
 ___
 
@@ -184,7 +197,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:36
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:38
 
 ___
 
@@ -194,7 +207,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:48
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:51
 
 ___
 
@@ -204,7 +217,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:38
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:40
 
 ___
 
@@ -214,7 +227,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:39
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:41
 
 ___
 
@@ -224,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:37
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:39
 
 ___
 
@@ -234,7 +247,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:41
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:43
+
+___
+
+### receivedMessageAckTimer
+
+• `Private` **receivedMessageAckTimer**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:53
 
 ___
 
@@ -244,7 +267,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:49
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:52
 
 ___
 
@@ -254,7 +277,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:47
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:50
 
 ___
 
@@ -264,7 +287,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:53
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:57
 
 ___
 
@@ -274,7 +297,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:63
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:68
 
 ___
 
@@ -284,7 +307,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:52
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:56
 
 ___
 
@@ -294,7 +317,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:51
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:55
 
 ___
 
@@ -304,17 +327,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:50
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:54
 
 ___
 
 ### session
 
-• `Readonly` **session**: [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
+• `Readonly` **session**: [`Session`](exports_session.Session.md)\<`ContextT`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:34
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:36
 
 ___
 
@@ -324,7 +347,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:55
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:59
 
 ## Methods
 
@@ -338,7 +361,7 @@ packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:55
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:66
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:71
 
 ___
 
@@ -352,7 +375,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:70
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:75
 
 ___
 
@@ -366,7 +389,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:64
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:69
 
 ___
 
@@ -380,7 +403,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:68
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:73
 
 ___
 
@@ -394,7 +417,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:69
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:74
 
 ___
 
@@ -408,7 +431,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:67
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:72
 
 ___
 
@@ -422,7 +445,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:59
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:64
 
 ___
 
@@ -443,7 +466,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:57
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:62
 
 ___
 
@@ -465,7 +488,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:58
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:63
+
+___
+
+### sendStandaloneAckForMessage
+
+▸ **sendStandaloneAckForMessage**(`message`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message` | [`Message`](../interfaces/exports_codec.Message.md) |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:61
 
 ___
 
@@ -485,7 +528,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:65
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:70
 
 ___
 
@@ -506,7 +549,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:60
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:65
 
 ___
 
@@ -534,7 +577,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:43
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:45
 
 ___
 
@@ -563,4 +606,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:44
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:46

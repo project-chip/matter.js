@@ -67,7 +67,7 @@ Create a new PairedDevice instance. All data are automatically parsed from the p
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `definition` | [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]] | DeviceTypeDefinitions of the paired device as reported by the device |
+| `definition` | [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] | DeviceTypeDefinitions of the paired device as reported by the device |
 | `clusters` | `undefined` \| ([`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\> \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>)[] | Clusters of the paired device as reported by the device |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) | Endpoint ID of the paired device as reported by the device |
 
@@ -97,7 +97,7 @@ ___
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -433,7 +433,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -491,7 +491,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -533,11 +533,11 @@ ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+[[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -585,7 +585,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -619,7 +619,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -685,7 +685,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] |
 
 #### Returns
 

@@ -33,7 +33,7 @@ Door state is ajar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:555](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L555)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:555](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L555)
 
 ___
 
@@ -45,7 +45,7 @@ Door state is closed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:535](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L535)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:535](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L535)
 
 ___
 
@@ -57,7 +57,7 @@ Door state is currently forced open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:545](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L545)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:545](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L545)
 
 ___
 
@@ -69,7 +69,7 @@ Door state is jammed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:540](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L540)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:540](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L540)
 
 ___
 
@@ -81,7 +81,7 @@ Door state is open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:530](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L530)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:530](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L530)
 
 ___
 
@@ -93,4 +93,4 @@ Door state is invalid for unspecified reason
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:550](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L550)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:550](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L550)

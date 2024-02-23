@@ -25,7 +25,7 @@ Node is connected and all data is up-to-date.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/PairedNode.ts#L62)
+[packages/matter.js/src/device/PairedNode.ts:62](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/PairedNode.ts#L62)
 
 ___
 
@@ -37,7 +37,7 @@ The node was just Decommissioned.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:88](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/PairedNode.ts#L88)
+[packages/matter.js/src/device/PairedNode.ts:88](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/PairedNode.ts#L88)
 
 ___
 
@@ -50,7 +50,7 @@ is still active then the device will be reconnected once it is available again.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:68](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/PairedNode.ts#L68)
+[packages/matter.js/src/device/PairedNode.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/PairedNode.ts#L68)
 
 ___
 
@@ -62,7 +62,7 @@ Node is reconnecting. Data are stale. It is yet unknown if the reconnection is s
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:71](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/PairedNode.ts#L71)
+[packages/matter.js/src/device/PairedNode.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/PairedNode.ts#L71)
 
 ___
 
@@ -75,7 +75,7 @@ This State information will only be fired when the subscribeAllAttributesAndEven
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:83](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/PairedNode.ts#L83)
+[packages/matter.js/src/device/PairedNode.ts:83](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/PairedNode.ts#L83)
 
 ___
 
@@ -88,4 +88,4 @@ minutes to reconnect.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:77](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/PairedNode.ts#L77)
+[packages/matter.js/src/device/PairedNode.ts:77](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/PairedNode.ts#L77)

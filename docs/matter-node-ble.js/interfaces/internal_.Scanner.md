@@ -19,7 +19,7 @@
 - [findCommissionableDevicesContinuously](internal_.Scanner.md#findcommissionabledevicescontinuously)
 - [findOperationalDevice](internal_.Scanner.md#findoperationaldevice)
 - [getDiscoveredCommissionableDevices](internal_.Scanner.md#getdiscoveredcommissionabledevices)
-- [getDiscoveredOperationalDevices](internal_.Scanner.md#getdiscoveredoperationaldevices)
+- [getDiscoveredOperationalDevice](internal_.Scanner.md#getdiscoveredoperationaldevice)
 
 ## Methods
 
@@ -42,7 +42,7 @@ be over.
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:94
+matter.js/dist/esm/common/Scanner.d.ts:106
 
 ___
 
@@ -58,7 +58,7 @@ Close the scanner server and free resources.
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:96
+matter.js/dist/esm/common/Scanner.d.ts:108
 
 ___
 
@@ -83,7 +83,7 @@ vendorId, etc.) and returns as soon as minimum one was found or the timeout is o
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:81
+matter.js/dist/esm/common/Scanner.d.ts:93
 
 ___
 
@@ -109,13 +109,13 @@ called when it is discovered.
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:87
+matter.js/dist/esm/common/Scanner.d.ts:99
 
 ___
 
 ### findOperationalDevice
 
-▸ **findOperationalDevice**(`fabric`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
+▸ **findOperationalDevice**(`fabric`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<`undefined` \| [`OperationalDevice`](../modules/internal_.md#operationaldevice)\>
 
 Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
 and return them.
@@ -131,11 +131,11 @@ and return them.
 
 #### Returns
 
-`Promise`\<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
+`Promise`\<`undefined` \| [`OperationalDevice`](../modules/internal_.md#operationaldevice)\>
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:71
+matter.js/dist/esm/common/Scanner.d.ts:83
 
 ___
 
@@ -157,13 +157,13 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:89
+matter.js/dist/esm/common/Scanner.d.ts:101
 
 ___
 
-### getDiscoveredOperationalDevices
+### getDiscoveredOperationalDevice
 
-▸ **getDiscoveredOperationalDevices**(`fabric`, `nodeId`): [`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]
+▸ **getDiscoveredOperationalDevice**(`fabric`, `nodeId`): `undefined` \| [`OperationalDevice`](../modules/internal_.md#operationaldevice)
 
 Return already discovered addresses of an operational paired device and return them. Does not send out new
 DNS-SD queries.
@@ -177,8 +177,8 @@ DNS-SD queries.
 
 #### Returns
 
-[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]
+`undefined` \| [`OperationalDevice`](../modules/internal_.md#operationaldevice)
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:76
+matter.js/dist/esm/common/Scanner.d.ts:88

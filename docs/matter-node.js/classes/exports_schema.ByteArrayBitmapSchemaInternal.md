@@ -14,7 +14,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)\<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\>, [`ByteArray`](../modules/util_export.md#bytearray-1)\>
+- [`Schema`](exports_schema.Schema.md)\<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\>, [`ByteArray`](../modules/util_export.md#bytearray)\>
 
   ↳ **`ByteArrayBitmapSchemaInternal`**
 

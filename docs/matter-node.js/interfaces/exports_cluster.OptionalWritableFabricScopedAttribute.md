@@ -13,9 +13,11 @@
 
 ## Hierarchy
 
-- [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)\<`T`, `F`\>
+- [`OptionalWritableAttribute`](exports_cluster.OptionalWritableAttribute.md)\<`T`, `F`\>
 
   ↳ **`OptionalWritableFabricScopedAttribute`**
+
+  ↳↳ [`ConditionalWritableFabricScopedAttribute`](exports_cluster.ConditionalWritableFabricScopedAttribute.md)
 
 ## Table of contents
 
@@ -47,7 +49,7 @@
 
 #### Inherited from
 
-OptionalWritableAttribute.default
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[default](exports_cluster.OptionalWritableAttribute.md#default)
 
 #### Defined in
 
@@ -61,7 +63,7 @@ ___
 
 #### Overrides
 
-OptionalWritableAttribute.fabricScoped
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[fabricScoped](exports_cluster.OptionalWritableAttribute.md#fabricscoped)
 
 #### Defined in
 
@@ -75,7 +77,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.fixed
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[fixed](exports_cluster.OptionalWritableAttribute.md#fixed)
 
 #### Defined in
 
@@ -89,7 +91,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.id
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[id](exports_cluster.OptionalWritableAttribute.md#id)
 
 #### Defined in
 
@@ -103,7 +105,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.isConditional
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[isConditional](exports_cluster.OptionalWritableAttribute.md#isconditional)
 
 #### Defined in
 
@@ -117,7 +119,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.mandatoryIf
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[mandatoryIf](exports_cluster.OptionalWritableAttribute.md#mandatoryif)
 
 #### Defined in
 
@@ -131,7 +133,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.omitChanges
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[omitChanges](exports_cluster.OptionalWritableAttribute.md#omitchanges)
 
 #### Defined in
 
@@ -145,7 +147,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.optional
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[optional](exports_cluster.OptionalWritableAttribute.md#optional)
 
 #### Defined in
 
@@ -159,7 +161,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.optionalIf
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[optionalIf](exports_cluster.OptionalWritableAttribute.md#optionalif)
 
 #### Defined in
 
@@ -173,7 +175,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.persistent
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[persistent](exports_cluster.OptionalWritableAttribute.md#persistent)
 
 #### Defined in
 
@@ -187,7 +189,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.readAcl
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[readAcl](exports_cluster.OptionalWritableAttribute.md#readacl)
 
 #### Defined in
 
@@ -201,7 +203,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.scene
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[scene](exports_cluster.OptionalWritableAttribute.md#scene)
 
 #### Defined in
 
@@ -215,7 +217,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.schema
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[schema](exports_cluster.OptionalWritableAttribute.md#schema)
 
 #### Defined in
 
@@ -229,7 +231,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.timed
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[timed](exports_cluster.OptionalWritableAttribute.md#timed)
 
 #### Defined in
 
@@ -243,7 +245,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.unknown
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[unknown](exports_cluster.OptionalWritableAttribute.md#unknown)
 
 #### Defined in
 
@@ -257,7 +259,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.writable
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[writable](exports_cluster.OptionalWritableAttribute.md#writable)
 
 #### Defined in
 
@@ -271,7 +273,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.writeAcl
+[OptionalWritableAttribute](exports_cluster.OptionalWritableAttribute.md).[writeAcl](exports_cluster.OptionalWritableAttribute.md#writeacl)
 
 #### Defined in
 

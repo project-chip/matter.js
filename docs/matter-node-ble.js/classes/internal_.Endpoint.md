@@ -62,7 +62,7 @@ Create a new Endpoint instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/internal_.md#devicetypedefinition), ...DeviceTypeDefinition[]] | One or multiple DeviceTypeDefinitions of the endpoint |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../interfaces/internal_.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] | One or multiple DeviceTypeDefinitions of the endpoint |
 | `options?` | [`EndpointOptions`](../interfaces/internal_.EndpointOptions.md) | Options for the endpoint |
 
 #### Returns
@@ -117,7 +117,7 @@ ___
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/internal_.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../interfaces/internal_.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Defined in
 
@@ -391,7 +391,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -441,7 +441,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -475,11 +475,11 @@ ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/internal_.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../interfaces/internal_.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[[`DeviceTypeDefinition`](../modules/internal_.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+[[`DeviceTypeDefinition`](../interfaces/internal_.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Defined in
 
@@ -519,7 +519,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -549,7 +549,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -603,7 +603,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/internal_.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../interfaces/internal_.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] |
 
 #### Returns
 

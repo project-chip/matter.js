@@ -19,7 +19,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `switchActions`: [`WritableAttribute`](exports_cluster.md#writableattribute)\<[`SwitchActions`](../enums/exports_cluster.OnOffSwitchConfiguration.SwitchActions.md), `any`\> ; `switchType`: [`Attribute`](exports_cluster.md#attribute)\<[`SwitchType`](../enums/exports_cluster.OnOffSwitchConfiguration.SwitchType.md), `any`\>  } ; `id`: ``7`` ; `name`: ``"OnOffSwitchConfiguration"`` ; `revision`: ``1``  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `switchActions`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`SwitchActions`](../enums/exports_cluster.OnOffSwitchConfiguration.SwitchActions.md), `any`\> ; `switchType`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`SwitchType`](../enums/exports_cluster.OnOffSwitchConfiguration.SwitchType.md), `any`\>  } ; `id`: ``7`` ; `name`: ``"OnOffSwitchConfiguration"`` ; `revision`: ``1``  }\>
 
 On/off Switch Configuration
 

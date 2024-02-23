@@ -253,7 +253,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:90
+matter.js/dist/esm/MatterDevice.d.ts:89
 
 ___
 
@@ -359,7 +359,7 @@ matter.js/dist/esm/MatterDevice.d.ts:33
 
 ### addBroadcaster
 
-▸ **addBroadcaster**(`broadcaster`): [`MatterDevice`](internal_.MatterDevice.md)
+▸ **addBroadcaster**(`broadcaster`): `this`
 
 #### Parameters
 
@@ -369,7 +369,7 @@ matter.js/dist/esm/MatterDevice.d.ts:33
 
 #### Returns
 
-[`MatterDevice`](internal_.MatterDevice.md)
+`this`
 
 #### Defined in
 
@@ -393,13 +393,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:82
+matter.js/dist/esm/MatterDevice.d.ts:81
 
 ___
 
 ### addProtocolHandler
 
-▸ **addProtocolHandler**(`protocol`): [`MatterDevice`](internal_.MatterDevice.md)
+▸ **addProtocolHandler**(`protocol`): `this`
 
 #### Parameters
 
@@ -409,7 +409,7 @@ ___
 
 #### Returns
 
-[`MatterDevice`](internal_.MatterDevice.md)
+`this`
 
 #### Defined in
 
@@ -419,7 +419,7 @@ ___
 
 ### addScanner
 
-▸ **addScanner**(`scanner`): [`MatterDevice`](internal_.MatterDevice.md)
+▸ **addScanner**(`scanner`): `this`
 
 #### Parameters
 
@@ -429,7 +429,7 @@ ___
 
 #### Returns
 
-[`MatterDevice`](internal_.MatterDevice.md)
+`this`
 
 #### Defined in
 
@@ -439,7 +439,7 @@ ___
 
 ### addTransportInterface
 
-▸ **addTransportInterface**(`netInterface`): [`MatterDevice`](internal_.MatterDevice.md)
+▸ **addTransportInterface**(`netInterface`): `this`
 
 #### Parameters
 
@@ -449,7 +449,7 @@ ___
 
 #### Returns
 
-[`MatterDevice`](internal_.MatterDevice.md)
+`this`
 
 #### Defined in
 
@@ -473,7 +473,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:98
+matter.js/dist/esm/MatterDevice.d.ts:97
 
 ___
 
@@ -495,7 +495,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:97
+matter.js/dist/esm/MatterDevice.d.ts:96
 
 ___
 
@@ -538,7 +538,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:91
+matter.js/dist/esm/MatterDevice.d.ts:90
 
 ___
 
@@ -558,7 +558,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:89
+matter.js/dist/esm/MatterDevice.d.ts:88
 
 ___
 
@@ -572,7 +572,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:95
+matter.js/dist/esm/MatterDevice.d.ts:94
 
 ___
 
@@ -585,15 +585,14 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `args` | `Object` |
-| `args.activeRetransmissionTimeoutMs?` | `number` |
 | `args.fabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
-| `args.idleRetransmissionTimeoutMs?` | `number` |
 | `args.isInitiator` | `boolean` |
 | `args.isResumption` | `boolean` |
 | `args.peerNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
 | `args.peerSessionId` | `number` |
 | `args.salt` | `Uint8Array` |
 | `args.sessionId` | `number` |
+| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/internal_.SessionParameters.md)\> |
 | `args.sharedSecret` | `Uint8Array` |
 
 #### Returns
@@ -616,7 +615,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:99
+matter.js/dist/esm/MatterDevice.d.ts:98
 
 ___
 
@@ -630,13 +629,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:100
+matter.js/dist/esm/MatterDevice.d.ts:99
 
 ___
 
 ### findDevice
 
-▸ **findDevice**(`fabric`, `nodeId`, `timeOutSeconds?`): `Promise`\<`undefined` \| \{ `channel`: [`Channel`](../interfaces/internal_.Channel.md)\<`Uint8Array`\> ; `session`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>  }\>
+▸ **findDevice**(`fabric`, `nodeId`, `timeOutSeconds?`): `Promise`\<`undefined` \| \{ `channel`: [`Channel`](../interfaces/internal_.Channel.md)\<`Uint8Array`\> ; `session`: [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>  }\>
 
 #### Parameters
 
@@ -648,11 +647,11 @@ ___
 
 #### Returns
 
-`Promise`\<`undefined` \| \{ `channel`: [`Channel`](../interfaces/internal_.Channel.md)\<`Uint8Array`\> ; `session`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>  }\>
+`Promise`\<`undefined` \| \{ `channel`: [`Channel`](../interfaces/internal_.Channel.md)\<`Uint8Array`\> ; `session`: [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>  }\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:101
+matter.js/dist/esm/MatterDevice.d.ts:100
 
 ___
 
@@ -673,7 +672,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:79
+matter.js/dist/esm/MatterDevice.d.ts:78
 
 ___
 
@@ -693,7 +692,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:86
+matter.js/dist/esm/MatterDevice.d.ts:85
 
 ___
 
@@ -707,7 +706,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:106
+matter.js/dist/esm/MatterDevice.d.ts:105
 
 ___
 
@@ -727,7 +726,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:84
+matter.js/dist/esm/MatterDevice.d.ts:83
 
 ___
 
@@ -741,7 +740,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:94
+matter.js/dist/esm/MatterDevice.d.ts:93
 
 ___
 
@@ -755,7 +754,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:93
+matter.js/dist/esm/MatterDevice.d.ts:92
 
 ___
 
@@ -783,7 +782,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:81
+matter.js/dist/esm/MatterDevice.d.ts:80
 
 ___
 
@@ -845,7 +844,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:85
+matter.js/dist/esm/MatterDevice.d.ts:84
 
 ___
 
@@ -859,7 +858,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:96
+matter.js/dist/esm/MatterDevice.d.ts:95
 
 ___
 
@@ -873,7 +872,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:92
+matter.js/dist/esm/MatterDevice.d.ts:91
 
 ___
 
@@ -887,7 +886,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:88
+matter.js/dist/esm/MatterDevice.d.ts:87
 
 ___
 
@@ -907,7 +906,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:87
+matter.js/dist/esm/MatterDevice.d.ts:86
 
 ___
 
@@ -949,7 +948,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:83
+matter.js/dist/esm/MatterDevice.d.ts:82
 
 ___
 
@@ -991,7 +990,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:105
+matter.js/dist/esm/MatterDevice.d.ts:104
 
 ___
 
@@ -1011,4 +1010,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:80
+matter.js/dist/esm/MatterDevice.d.ts:79

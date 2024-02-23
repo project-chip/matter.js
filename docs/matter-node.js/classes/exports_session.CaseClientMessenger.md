@@ -169,15 +169,15 @@ ___
 
 ### readSigma2
 
-▸ **readSigma2**(): `Promise`\<\{ `sigma2`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` ; `sigma2Resume?`: `undefined`  } \| \{ `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` ; `sigma2Resume`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `resumeMic`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>  }\>
+▸ **readSigma2**(): `Promise`\<\{ `sigma2`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\>  }\> ; `sigma2Bytes`: `Uint8Array` ; `sigma2Resume?`: `undefined`  } \| \{ `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` ; `sigma2Resume`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `resumeMic`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>  }\>
 
 #### Returns
 
-`Promise`\<\{ `sigma2`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` ; `sigma2Resume?`: `undefined`  } \| \{ `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` ; `sigma2Resume`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `resumeMic`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>  }\>
+`Promise`\<\{ `sigma2`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\>  }\> ; `sigma2Bytes`: `Uint8Array` ; `sigma2Resume?`: `undefined`  } \| \{ `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` ; `sigma2Resume`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `resumeMic`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>  }\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/case/CaseMessenger.d.ts:38
+packages/matter.js/dist/esm/session/case/CaseMessenger.d.ts:39
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `sigma1` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `destinationId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumeMic`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> |
+| `sigma1` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `destinationId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumeMic`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\>  }\> |
 
 #### Returns
 
@@ -271,7 +271,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/case/CaseMessenger.d.ts:37
+packages/matter.js/dist/esm/session/case/CaseMessenger.d.ts:38
 
 ___
 
@@ -291,7 +291,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/case/CaseMessenger.d.ts:60
+packages/matter.js/dist/esm/session/case/CaseMessenger.d.ts:62
 
 ___
 

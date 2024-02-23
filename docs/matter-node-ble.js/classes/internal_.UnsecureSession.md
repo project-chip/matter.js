@@ -10,9 +10,11 @@
 | :------ |
 | `T` |
 
-## Implements
+## Hierarchy
 
-- [`Session`](../interfaces/internal_.Session.md)\<`T`\>
+- [`Session`](internal_.Session.md)\<`T`\>
+
+  ↳ **`UnsecureSession`**
 
 ## Table of contents
 
@@ -22,12 +24,17 @@
 
 ### Properties
 
+- [activeIntervalMs](internal_.UnsecureSession.md#activeintervalms)
+- [activeThresholdMs](internal_.UnsecureSession.md#activethresholdms)
+- [activeTimestamp](internal_.UnsecureSession.md#activetimestamp)
 - [closeCallback](internal_.UnsecureSession.md#closecallback)
 - [closingAfterExchangeFinished](internal_.UnsecureSession.md#closingafterexchangefinished)
 - [context](internal_.UnsecureSession.md#context)
+- [idleIntervalMs](internal_.UnsecureSession.md#idleintervalms)
 - [initiatorNodeId](internal_.UnsecureSession.md#initiatornodeid)
 - [messageCounter](internal_.UnsecureSession.md#messagecounter)
 - [messageReceptionState](internal_.UnsecureSession.md#messagereceptionstate)
+- [timestamp](internal_.UnsecureSession.md#timestamp)
 
 ### Accessors
 
@@ -44,10 +51,10 @@
 - [getContext](internal_.UnsecureSession.md#getcontext)
 - [getId](internal_.UnsecureSession.md#getid)
 - [getIncrementedMessageCounter](internal_.UnsecureSession.md#getincrementedmessagecounter)
-- [getMrpParameters](internal_.UnsecureSession.md#getmrpparameters)
 - [getNodeId](internal_.UnsecureSession.md#getnodeid)
 - [getPeerNodeId](internal_.UnsecureSession.md#getpeernodeid)
 - [getPeerSessionId](internal_.UnsecureSession.md#getpeersessionid)
+- [getSessionParameters](internal_.UnsecureSession.md#getsessionparameters)
 - [isPase](internal_.UnsecureSession.md#ispase)
 - [isPeerActive](internal_.UnsecureSession.md#ispeeractive)
 - [isSecure](internal_.UnsecureSession.md#issecure)
@@ -59,7 +66,7 @@
 
 ### constructor
 
-• **new UnsecureSession**\<`T`\>(`context`, `messageCounter`, `closeCallback`, `initiatorNodeId?`): [`UnsecureSession`](internal_.UnsecureSession.md)\<`T`\>
+• **new UnsecureSession**\<`T`\>(`args`): [`UnsecureSession`](internal_.UnsecureSession.md)\<`T`\>
 
 #### Type parameters
 
@@ -71,28 +78,89 @@
 
 | Name | Type |
 | :------ | :------ |
-| `context` | `T` |
-| `messageCounter` | [`MessageCounter`](internal_.MessageCounter.md) |
-| `closeCallback` | () => `void` |
-| `initiatorNodeId?` | [`NodeId`](../modules/internal_.md#nodeid) |
+| `args` | `Object` |
+| `args.closeCallback` | () => `Promise`\<`void`\> |
+| `args.context` | `T` |
+| `args.initiatorNodeId?` | [`NodeId`](../modules/internal_.md#nodeid) |
+| `args.isInitiator?` | `boolean` |
+| `args.messageCounter` | [`MessageCounter`](internal_.MessageCounter.md) |
+| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/internal_.SessionParameters.md)\> |
 
 #### Returns
 
 [`UnsecureSession`](internal_.UnsecureSession.md)\<`T`\>
 
+#### Overrides
+
+[Session](internal_.Session.md).[constructor](internal_.Session.md#constructor)
+
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:19
+matter.js/dist/esm/session/UnsecureSession.d.ts:16
 
 ## Properties
 
-### closeCallback
+### activeIntervalMs
 
-• `Private` `Readonly` **closeCallback**: `any`
+• `Protected` `Readonly` **activeIntervalMs**: `number`
+
+#### Inherited from
+
+[Session](internal_.Session.md).[activeIntervalMs](internal_.Session.md#activeintervalms)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:15
+matter.js/dist/esm/session/Session.d.ts:35
+
+___
+
+### activeThresholdMs
+
+• `Protected` `Readonly` **activeThresholdMs**: `number`
+
+#### Inherited from
+
+[Session](internal_.Session.md).[activeThresholdMs](internal_.Session.md#activethresholdms)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:36
+
+___
+
+### activeTimestamp
+
+• **activeTimestamp**: `number`
+
+#### Inherited from
+
+[Session](internal_.Session.md).[activeTimestamp](internal_.Session.md#activetimestamp)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:33
+
+___
+
+### closeCallback
+
+• `Protected` `Readonly` **closeCallback**: () => `Promise`\<`void`\>
+
+#### Type declaration
+
+▸ (): `Promise`\<`void`\>
+
+##### Returns
+
+`Promise`\<`void`\>
+
+#### Inherited from
+
+[Session](internal_.Session.md).[closeCallback](internal_.Session.md#closecallback)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:37
 
 ___
 
@@ -100,13 +168,13 @@ ___
 
 • `Readonly` **closingAfterExchangeFinished**: ``false``
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[closingAfterExchangeFinished](../interfaces/internal_.Session.md#closingafterexchangefinished)
+[Session](internal_.Session.md).[closingAfterExchangeFinished](internal_.Session.md#closingafterexchangefinished)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:17
+matter.js/dist/esm/session/UnsecureSession.d.ts:14
 
 ___
 
@@ -116,7 +184,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:13
+matter.js/dist/esm/session/UnsecureSession.d.ts:15
+
+___
+
+### idleIntervalMs
+
+• `Protected` `Readonly` **idleIntervalMs**: `number`
+
+#### Inherited from
+
+[Session](internal_.Session.md).[idleIntervalMs](internal_.Session.md#idleintervalms)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:34
 
 ___
 
@@ -126,27 +208,49 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:16
+matter.js/dist/esm/session/UnsecureSession.d.ts:13
 
 ___
 
 ### messageCounter
 
-• `Private` `Readonly` **messageCounter**: `any`
+• `Protected` `Readonly` **messageCounter**: [`MessageCounter`](internal_.MessageCounter.md)
+
+#### Inherited from
+
+[Session](internal_.Session.md).[messageCounter](internal_.Session.md#messagecounter)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:14
+matter.js/dist/esm/session/Session.d.ts:38
 
 ___
 
 ### messageReceptionState
 
-• `Private` `Readonly` **messageReceptionState**: `any`
+• `Protected` `Readonly` **messageReceptionState**: [`MessageReceptionState`](internal_.MessageReceptionState.md)
+
+#### Inherited from
+
+[Session](internal_.Session.md).[messageReceptionState](internal_.Session.md#messagereceptionstate)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:18
+matter.js/dist/esm/session/Session.d.ts:39
+
+___
+
+### timestamp
+
+• **timestamp**: `number`
+
+#### Inherited from
+
+[Session](internal_.Session.md).[timestamp](internal_.Session.md#timestamp)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:32
 
 ## Accessors
 
@@ -158,13 +262,13 @@ matter.js/dist/esm/session/UnsecureSession.d.ts:18
 
 `string`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[name](../interfaces/internal_.Session.md#name)
+Session.name
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:28
+matter.js/dist/esm/session/UnsecureSession.d.ts:30
 
 ## Methods
 
@@ -182,13 +286,13 @@ matter.js/dist/esm/session/UnsecureSession.d.ts:28
 
 [`DecodedMessage`](../interfaces/internal_.DecodedMessage.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[decode](../interfaces/internal_.Session.md#decode)
+[Session](internal_.Session.md).[decode](internal_.Session.md#decode)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:24
+matter.js/dist/esm/session/UnsecureSession.d.ts:26
 
 ___
 
@@ -200,13 +304,13 @@ ___
 
 `Promise`\<`void`\>
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[destroy](../interfaces/internal_.Session.md#destroy)
+[Session](internal_.Session.md).[destroy](internal_.Session.md#destroy)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:39
+matter.js/dist/esm/session/UnsecureSession.d.ts:36
 
 ___
 
@@ -224,13 +328,13 @@ ___
 
 [`Packet`](../interfaces/internal_.Packet.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[encode](../interfaces/internal_.Session.md#encode)
+[Session](internal_.Session.md).[encode](internal_.Session.md#encode)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:25
+matter.js/dist/esm/session/UnsecureSession.d.ts:27
 
 ___
 
@@ -242,13 +346,13 @@ ___
 
 `Promise`\<`void`\>
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[end](../interfaces/internal_.Session.md#end)
+[Session](internal_.Session.md).[end](internal_.Session.md#end)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:40
+matter.js/dist/esm/session/UnsecureSession.d.ts:37
 
 ___
 
@@ -260,13 +364,13 @@ ___
 
 [`Fabric`](internal_.Fabric.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[getAssociatedFabric](../interfaces/internal_.Session.md#getassociatedfabric)
+[Session](internal_.Session.md).[getAssociatedFabric](internal_.Session.md#getassociatedfabric)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:41
+matter.js/dist/esm/session/UnsecureSession.d.ts:38
 
 ___
 
@@ -280,7 +384,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:26
+matter.js/dist/esm/session/UnsecureSession.d.ts:28
 
 ___
 
@@ -292,13 +396,13 @@ ___
 
 `T`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[getContext](../interfaces/internal_.Session.md#getcontext)
+[Session](internal_.Session.md).[getContext](internal_.Session.md#getcontext)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:34
+matter.js/dist/esm/session/UnsecureSession.d.ts:31
 
 ___
 
@@ -310,13 +414,13 @@ ___
 
 `number`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[getId](../interfaces/internal_.Session.md#getid)
+[Session](internal_.Session.md).[getId](internal_.Session.md#getid)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:35
+matter.js/dist/esm/session/UnsecureSession.d.ts:32
 
 ___
 
@@ -328,37 +432,13 @@ ___
 
 `number`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/internal_.Session.md).[getIncrementedMessageCounter](../interfaces/internal_.Session.md#getincrementedmessagecounter)
-
-#### Defined in
-
-matter.js/dist/esm/session/UnsecureSession.d.ts:42
-
-___
-
-### getMrpParameters
-
-▸ **getMrpParameters**(): `Object`
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `activeRetransmissionTimeoutMs` | `number` |
-| `idleRetransmissionTimeoutMs` | `number` |
-| `retransmissionRetries` | `number` |
-
-#### Implementation of
-
-[Session](../interfaces/internal_.Session.md).[getMrpParameters](../interfaces/internal_.Session.md#getmrpparameters)
+[Session](internal_.Session.md).[getIncrementedMessageCounter](internal_.Session.md#getincrementedmessagecounter)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:29
+matter.js/dist/esm/session/Session.d.ts:49
 
 ___
 
@@ -370,13 +450,13 @@ ___
 
 [`NodeId`](../modules/internal_.md#nodeid)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[getNodeId](../interfaces/internal_.Session.md#getnodeid)
+[Session](internal_.Session.md).[getNodeId](internal_.Session.md#getnodeid)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:37
+matter.js/dist/esm/session/UnsecureSession.d.ts:34
 
 ___
 
@@ -388,13 +468,13 @@ ___
 
 `undefined`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[getPeerNodeId](../interfaces/internal_.Session.md#getpeernodeid)
+[Session](internal_.Session.md).[getPeerNodeId](internal_.Session.md#getpeernodeid)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:38
+matter.js/dist/esm/session/UnsecureSession.d.ts:35
 
 ___
 
@@ -406,13 +486,31 @@ ___
 
 `number`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[getPeerSessionId](../interfaces/internal_.Session.md#getpeersessionid)
+[Session](internal_.Session.md).[getPeerSessionId](internal_.Session.md#getpeersessionid)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:36
+matter.js/dist/esm/session/UnsecureSession.d.ts:33
+
+___
+
+### getSessionParameters
+
+▸ **getSessionParameters**(): [`SessionParameters`](../interfaces/internal_.SessionParameters.md)
+
+#### Returns
+
+[`SessionParameters`](../interfaces/internal_.SessionParameters.md)
+
+#### Inherited from
+
+[Session](internal_.Session.md).[getSessionParameters](internal_.Session.md#getsessionparameters)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:51
 
 ___
 
@@ -424,13 +522,13 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[isPase](../interfaces/internal_.Session.md#ispase)
+[Session](internal_.Session.md).[isPase](internal_.Session.md#ispase)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:21
+matter.js/dist/esm/session/UnsecureSession.d.ts:25
 
 ___
 
@@ -442,13 +540,13 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/internal_.Session.md).[isPeerActive](../interfaces/internal_.Session.md#ispeeractive)
+[Session](internal_.Session.md).[isPeerActive](internal_.Session.md#ispeeractive)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:23
+matter.js/dist/esm/session/Session.d.ts:48
 
 ___
 
@@ -460,37 +558,37 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/internal_.Session.md).[isSecure](../interfaces/internal_.Session.md#issecure)
+[Session](internal_.Session.md).[isSecure](internal_.Session.md#issecure)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:20
+matter.js/dist/esm/session/UnsecureSession.d.ts:24
 
 ___
 
 ### notifyActivity
 
-▸ **notifyActivity**(`_messageReceived`): `void`
+▸ **notifyActivity**(`messageReceived`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `_messageReceived` | `boolean` |
+| `messageReceived` | `boolean` |
 
 #### Returns
 
 `void`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/internal_.Session.md).[notifyActivity](../interfaces/internal_.Session.md#notifyactivity)
+[Session](internal_.Session.md).[notifyActivity](internal_.Session.md#notifyactivity)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:22
+matter.js/dist/esm/session/Session.d.ts:47
 
 ___
 
@@ -510,28 +608,29 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:27
+matter.js/dist/esm/session/UnsecureSession.d.ts:29
 
 ___
 
 ### updateMessageCounter
 
-▸ **updateMessageCounter**(`messageCounter`): `void`
+▸ **updateMessageCounter**(`messageCounter`, `_sourceNodeId?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `messageCounter` | `number` |
+| `_sourceNodeId?` | [`NodeId`](../modules/internal_.md#nodeid) |
 
 #### Returns
 
 `void`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/internal_.Session.md).[updateMessageCounter](../interfaces/internal_.Session.md#updatemessagecounter)
+[Session](internal_.Session.md).[updateMessageCounter](internal_.Session.md#updatemessagecounter)
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:43
+matter.js/dist/esm/session/Session.d.ts:50

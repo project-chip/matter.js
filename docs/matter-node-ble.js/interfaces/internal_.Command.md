@@ -12,6 +12,12 @@
 | `ResponseT` | `ResponseT` |
 | `F` | extends [`BitSchema`](../modules/internal_.md#bitschema) |
 
+## Hierarchy
+
+- **`Command`**
+
+  ↳ [`OptionalCommand`](internal_.OptionalCommand.md)
+
 ## Table of contents
 
 ### Properties

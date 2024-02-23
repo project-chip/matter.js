@@ -43,25 +43,25 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:377](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L377)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:377](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L377)
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `fanMode`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<``null`` \| `number`, `any`\>  } ; `features`: \{ `auto`: [`BitFlag`](schema_export.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag-1) ; `rocking`: [`BitFlag`](schema_export.md#bitflag-1) ; `wind`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``514`` = 0x202; `name`: ``"FanControl"`` = "FanControl"; `revision`: ``2`` = 2 }\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `fanMode`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>  } ; `features`: \{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``514`` = 0x202; `name`: ``"FanControl"`` = "FanControl"; `revision`: ``2`` = 2 }\>
 
 These elements and properties are present in all FanControl clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:169](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:169](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L169)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `fanMode`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<``null`` \| `number`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `auto`: [`BitFlag`](schema_export.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag-1) ; `rocking`: [`BitFlag`](schema_export.md#bitflag-1) ; `wind`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `auto`: [`BitFlag`](schema_export.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag-1) ; `rocking`: [`BitFlag`](schema_export.md#bitflag-1) ; `wind`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: {} ; `events`: {} ; `features`: \{ `auto`: [`BitFlag`](schema_export.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag-1) ; `rocking`: [`BitFlag`](schema_export.md#bitflag-1) ; `wind`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)\<``514`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"FanControl"`` ; `revision`: ``2`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `fanMode`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<``null`` \| `number`, `any`\>  } ; `features`: \{ `auto`: [`BitFlag`](schema_export.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag-1) ; `rocking`: [`BitFlag`](schema_export.md#bitflag-1) ; `wind`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``514`` = 0x202; `name`: ``"FanControl"`` = "FanControl"; `revision`: ``2`` = 2 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.FanControl.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `auto`: [`BitFlag`](schema_export.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag-1) ; `rocking`: [`BitFlag`](schema_export.md#bitflag-1) ; `wind`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
+• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `fanMode`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  }\>\> ; `commands`: {} ; `events`: {} ; `features`: \{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: [`Branded`](util_export.md#branded)\<``514`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"FanControl"`` ; `revision`: ``2`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `fanMode`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>  } ; `features`: \{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``514`` = 0x202; `name`: ``"FanControl"`` = "FanControl"; `revision`: ``2`` = 2 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.FanControl.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  }, `T`\>\> = extender }
 
 Fan Control
 
@@ -76,13 +76,13 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:353](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L353)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:353](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L353)
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)\<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)\<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)\<`number`, `never`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)\<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `fanMode`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `auto`: [`BitFlag`](schema_export.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag-1) ; `rocking`: [`BitFlag`](schema_export.md#bitflag-1) ; `wind`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)\<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `percentCurrent`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<``null`` \| `number`, `any`\> ; `rockSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag-1) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag-1) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `rocking`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `rockSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag-1) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag-1) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `rocking`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `speedCurrent`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `multiSpeed`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `speedMax`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`number`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `multiSpeed`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `speedSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<``null`` \| `number`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `multiSpeed`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `windSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag-1) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `wind`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `windSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag-1) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `wind`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `features`: \{ `auto`: [`BitFlag`](schema_export.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag-1) ; `rocking`: [`BitFlag`](schema_export.md#bitflag-1) ; `wind`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``514`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"FanControl"`` = Cluster.name; `revision`: ``2`` = Cluster.revision }\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `never`\> ; `eventList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `fanMode`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `featureMap`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `percentCurrent`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\> ; `rockSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `rocking`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `rockSupport`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `rocking`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `speedCurrent`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `multiSpeed`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `speedMax`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `multiSpeed`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `speedSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `multiSpeed`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `windSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `wind`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `windSupport`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `wind`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `features`: \{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: ``514`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"FanControl"`` = Cluster.name; `revision`: ``2`` = Cluster.revision }\>
 
 This cluster supports all FanControl features. It may support illegal feature combinations.
 
@@ -91,19 +91,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:394](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L394)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:394](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L394)
 
 ___
 
 ### MultiSpeedComponent
 
-• `Const` **MultiSpeedComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `speedCurrent`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `speedMax`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`number`, `any`\> ; `speedSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<``null`` \| `number`, `any`\>  }  }\>
+• `Const` **MultiSpeedComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `speedCurrent`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `speedMax`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `speedSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>  }  }\>
 
 A FanControlCluster supports these elements if it supports feature MultiSpeed.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:247](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L247)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:247](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L247)
 
 ___
 
@@ -121,13 +121,13 @@ The value of the FanControl rockSetting attribute
 
 | Name | Type |
 | :------ | :------ |
-| `rockLeftRight` | [`BitFlag`](schema_export.md#bitflag-1) |
-| `rockRound` | [`BitFlag`](schema_export.md#bitflag-1) |
-| `rockUpDown` | [`BitFlag`](schema_export.md#bitflag-1) |
+| `rockLeftRight` | [`BitFlag`](schema_export.md#bitflag) |
+| `rockRound` | [`BitFlag`](schema_export.md#bitflag) |
+| `rockUpDown` | [`BitFlag`](schema_export.md#bitflag) |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:115](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L115)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L115)
 
 ___
 
@@ -145,37 +145,37 @@ The value of the FanControl rockSupport attribute
 
 | Name | Type |
 | :------ | :------ |
-| `rockLeftRight` | [`BitFlag`](schema_export.md#bitflag-1) |
-| `rockRound` | [`BitFlag`](schema_export.md#bitflag-1) |
-| `rockUpDown` | [`BitFlag`](schema_export.md#bitflag-1) |
+| `rockLeftRight` | [`BitFlag`](schema_export.md#bitflag) |
+| `rockRound` | [`BitFlag`](schema_export.md#bitflag) |
+| `rockUpDown` | [`BitFlag`](schema_export.md#bitflag) |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:108](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:108](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L108)
 
 ___
 
 ### RockingComponent
 
-• `Const` **RockingComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `rockSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag-1) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag-1) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\> ; `rockSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag-1) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag-1) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  }  }\>
+• `Const` **RockingComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `rockSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `rockSupport`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\>  }  }\>
 
 A FanControlCluster supports these elements if it supports feature Rocking.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:280](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L280)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:280](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L280)
 
 ___
 
 ### WindComponent
 
-• `Const` **WindComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `windSetting`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag-1) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\> ; `windSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag-1) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  }  }\>
+• `Const` **WindComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `windSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `windSupport`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\>  }  }\>
 
 A FanControlCluster supports these elements if it supports feature Wind.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:313](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L313)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:313](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L313)
 
 ___
 
@@ -193,12 +193,12 @@ The value of the FanControl windSetting attribute
 
 | Name | Type |
 | :------ | :------ |
-| `naturalWind` | [`BitFlag`](schema_export.md#bitflag-1) |
-| `sleepWind` | [`BitFlag`](schema_export.md#bitflag-1) |
+| `naturalWind` | [`BitFlag`](schema_export.md#bitflag) |
+| `sleepWind` | [`BitFlag`](schema_export.md#bitflag) |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:129](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L129)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:129](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L129)
 
 ___
 
@@ -216,9 +216,9 @@ The value of the FanControl windSupport attribute
 
 | Name | Type |
 | :------ | :------ |
-| `naturalWind` | [`BitFlag`](schema_export.md#bitflag-1) |
-| `sleepWind` | [`BitFlag`](schema_export.md#bitflag-1) |
+| `naturalWind` | [`BitFlag`](schema_export.md#bitflag) |
+| `sleepWind` | [`BitFlag`](schema_export.md#bitflag) |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:122](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L122)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:122](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L122)

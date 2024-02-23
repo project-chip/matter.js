@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
 
 ## Properties
 
@@ -74,7 +74,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
 
 ## Methods
 
@@ -92,7 +92,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:75](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L75)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:75](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L75)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:71](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L71)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L71)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L33)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L33)
 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L44)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L44)
 
 ___
 
@@ -179,21 +179,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:67](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/pase/PaseMessenger.ts#L67)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:67](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/pase/PaseMessenger.ts#L67)
 
 ___
 
 ### readPbkdfParamResponse
 
-▸ **readPbkdfParamResponse**(): `Promise`\<\{ `response`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\> ; `responsePayload`: `Uint8Array` = payload }\>
+▸ **readPbkdfParamResponse**(): `Promise`\<\{ `response`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `pbkdfParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>  }\> ; `responsePayload`: `Uint8Array` = payload }\>
 
 #### Returns
 
-`Promise`\<\{ `response`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\> ; `responsePayload`: `Uint8Array` = payload }\>
+`Promise`\<\{ `response`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `pbkdfParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>  }\> ; `responsePayload`: `Uint8Array` = payload }\>
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:58](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/pase/PaseMessenger.ts#L58)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:58](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/pase/PaseMessenger.ts#L58)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:53](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L53)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L53)
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:67](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L67)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:67](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L67)
 
 ___
 
@@ -267,7 +267,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:59](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L59)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L59)
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:63](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/pase/PaseMessenger.ts#L63)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/pase/PaseMessenger.ts#L63)
 
 ___
 
@@ -307,7 +307,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:71](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/pase/PaseMessenger.ts#L71)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/pase/PaseMessenger.ts#L71)
 
 ___
 
@@ -319,7 +319,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `request` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\> |
+| `request` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `passcodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\>  }\> |
 
 #### Returns
 
@@ -327,7 +327,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/pase/PaseMessenger.ts#L54)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:54](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/pase/PaseMessenger.ts#L54)
 
 ___
 
@@ -345,7 +345,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:63](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L63)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L63)
 
 ___
 
@@ -369,7 +369,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:95](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L95)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:95](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L95)
 
 ___
 
@@ -387,4 +387,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L48)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L48)

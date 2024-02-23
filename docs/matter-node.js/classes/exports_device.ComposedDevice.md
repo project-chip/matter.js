@@ -69,7 +69,7 @@ Creates a new ComposedDevice.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `definition` | [`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition) | DeviceTypeDefinitions of the composed device |
+| `definition` | [`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md) | DeviceTypeDefinitions of the composed device |
 | `devices?` | [`Device`](exports_device.Device.md)[] | Array with devices that should be combined into one device that are directly added. |
 | `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) | Optional Endpoint options |
 
@@ -89,7 +89,7 @@ packages/matter.js/dist/esm/device/ComposedDevice.d.ts:16
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -435,7 +435,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -493,7 +493,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -535,11 +535,11 @@ ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+[[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -605,7 +605,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -639,7 +639,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -727,7 +727,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] |
 
 #### Returns
 

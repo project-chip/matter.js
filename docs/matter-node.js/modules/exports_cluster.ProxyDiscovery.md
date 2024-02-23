@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `commands`: \{ `proxyDiscoverRequest`: [`Command`](exports_cluster.md#command)\<`void`, `void`, `any`\>  } ; `id`: ``67`` ; `name`: ``"ProxyDiscovery"`` ; `revision`: ``1``  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `commands`: \{ `proxyDiscoverRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``67`` ; `name`: ``"ProxyDiscovery"`` ; `revision`: ``1``  }\>
 
 Proxy Discovery
 

@@ -24,7 +24,7 @@ Interaction with a vendor-specified means is needed before commissioning.
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L31)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L31)
 
 ___
 
@@ -36,7 +36,7 @@ When not commissioned, the device always enters commissioning mode upon power-up
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L25)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L25)
 
 ___
 
@@ -48,4 +48,4 @@ User action required to enter commissioning mode.
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L28)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L28)

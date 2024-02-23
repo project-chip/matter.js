@@ -28,4 +28,4 @@ Node supports Basic Commissioning Method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:151](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L151)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:151](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L151)

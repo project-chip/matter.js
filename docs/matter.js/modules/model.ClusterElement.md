@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/ClusterElement.ts#L43)
+[packages/matter.js/src/model/elements/ClusterElement.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L43)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/ClusterElement.ts#L42)
+[packages/matter.js/src/model/elements/ClusterElement.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L42)
 
 ___
 
@@ -48,9 +48,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/ClusterElement.ts#L40)
+[packages/matter.js/src/model/elements/ClusterElement.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L40)
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/ClusterElement.ts#L41)
+[packages/matter.js/src/model/elements/ClusterElement.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L41)
 
 ## Variables
 
@@ -60,6 +60,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/ClusterElement.ts#L40)
+[packages/matter.js/src/model/elements/ClusterElement.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L40)
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/ClusterElement.ts#L41)
+[packages/matter.js/src/model/elements/ClusterElement.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L41)

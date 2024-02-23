@@ -344,13 +344,14 @@ ___
 
 ### encodeTlv
 
-▸ **encodeTlv**(`value`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
+▸ **encodeTlv**(`value`, `forWriteInteraction?`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | `number` |
+| `forWriteInteraction?` | `boolean` |
 
 #### Returns
 

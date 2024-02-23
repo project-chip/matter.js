@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](net_export._internal_.md)
+
 ### Classes
 
 - [Network](../classes/net_export.Network.md)
@@ -37,7 +41,7 @@
 
 ### ListenerFunc
 
-Ƭ **ListenerFunc**: (`netInterface`: `string`, `peerAddress`: `string`, `peerPort`: `number`, `data`: [`ByteArray`](util_export.md#bytearray-1)) => `void`
+Ƭ **ListenerFunc**: (`netInterface`: `string`, `peerAddress`: `string`, `peerPort`: `number`, `data`: [`ByteArray`](util_export.md#bytearray)) => `void`
 
 #### Type declaration
 
@@ -50,7 +54,7 @@
 | `netInterface` | `string` |
 | `peerAddress` | `string` |
 | `peerPort` | `number` |
-| `data` | [`ByteArray`](util_export.md#bytearray-1) |
+| `data` | [`ByteArray`](util_export.md#bytearray) |
 
 ##### Returns
 
@@ -58,7 +62,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:12](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L12)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L12)
 
 ## Variables
 
@@ -68,7 +72,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L16)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L16)
 
 ## Functions
 
@@ -88,4 +92,4 @@ obj is NetInterface
 
 #### Defined in
 
-[packages/matter.js/src/net/NetInterface.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/NetInterface.ts#L19)
+[packages/matter.js/src/net/NetInterface.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/NetInterface.ts#L19)

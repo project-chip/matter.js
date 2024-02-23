@@ -51,7 +51,7 @@ Class to Handle one FailSafe context. This is mainly used when adding (Commissio
 
 | Name | Type |
 | :------ | :------ |
-| `device` | [`MatterDevice`](export._internal_.MatterDevice.md) |
+| `device` | [`MatterDevice`](exports_cluster._internal_.MatterDevice.md) |
 | `associatedFabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
 | `expiryLengthSeconds` | `number` |
 | `maxCumulativeFailsafeSeconds` | `number` |

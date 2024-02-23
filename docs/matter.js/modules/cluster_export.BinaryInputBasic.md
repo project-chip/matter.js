@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `activeText`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`string`, `any`\> ; `applicationType`: [`OptionalAttribute`](cluster_export.md#optionalattribute)\<`number`, `any`\> ; `description`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`string`, `any`\> ; `inactiveText`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`string`, `any`\> ; `outOfService`: [`WritableAttribute`](cluster_export.md#writableattribute)\<`boolean`, `any`\> ; `polarity`: [`OptionalAttribute`](cluster_export.md#optionalattribute)\<`number`, `any`\> ; `presentValue`: [`WritableAttribute`](cluster_export.md#writableattribute)\<`boolean`, `any`\> ; `reliability`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `statusFlags`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\>  } ; `id`: ``15`` = 0xf; `name`: ``"BinaryInputBasic"`` = "BinaryInputBasic"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `activeText`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`string`, `any`\> ; `applicationType`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `description`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`string`, `any`\> ; `inactiveText`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`string`, `any`\> ; `outOfService`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`boolean`, `any`\> ; `polarity`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `presentValue`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`boolean`, `any`\> ; `reliability`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `statusFlags`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `id`: ``15`` = 0xf; `name`: ``"BinaryInputBasic"`` = "BinaryInputBasic"; `revision`: ``1`` = 1 }\>
 
 Binary Input (Basic)
 
@@ -23,4 +23,4 @@ measurement.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L22)

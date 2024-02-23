@@ -12,6 +12,12 @@
 | `ResponseT` | `ResponseT` |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
 
+## Hierarchy
+
+- **`Command`**
+
+  ↳ [`OptionalCommand`](exports_cluster.OptionalCommand.md)
+
 ## Table of contents
 
 ### Properties

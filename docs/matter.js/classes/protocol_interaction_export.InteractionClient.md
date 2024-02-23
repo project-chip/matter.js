@@ -68,7 +68,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:133](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L133)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:133](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L133)
 
 ## Properties
 
@@ -78,7 +78,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:134](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L134)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:134](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L134)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:135](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L135)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:135](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L135)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:130](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L130)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:130](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L130)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:129](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L129)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:129](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L129)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:128](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L128)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:128](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L128)
 
 ___
 
@@ -128,21 +128,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:131](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L131)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:131](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L131)
 
 ## Accessors
 
 ### session
 
-• `get` **session**(): [`Session`](../interfaces/session_export.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+• `get` **session**(): [`Session`](session_export.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Returns
 
-[`Session`](../interfaces/session_export.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+[`Session`](session_export.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1030](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1030)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1033](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1033)
 
 ## Methods
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1022](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1022)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1025](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1025)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:162](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L162)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:162](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L162)
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:189](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L189)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:189](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L189)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:178](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L178)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:178](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L178)
 
 ___
 
@@ -235,7 +235,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)\<`any`, `any`\> |
+| `A` | extends [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:284](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L284)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:284](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L284)
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)\<`any`, `any`\> |
+| `A` | extends [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:302](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L302)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:302](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L302)
 
 ___
 
@@ -298,7 +298,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/cluster_export.md#event)\<`T`, `any`\> |
+| `E` | extends [`Event`](../interfaces/cluster_export.Event.md)\<`T`, `any`\> |
 
 #### Parameters
 
@@ -317,7 +317,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:333](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L333)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:333](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L333)
 
 ___
 
@@ -340,7 +340,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:213](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L213)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:213](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L213)
 
 ___
 
@@ -365,7 +365,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:236](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L236)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:236](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L236)
 
 ___
 
@@ -388,7 +388,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:225](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L225)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:225](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L225)
 
 ___
 
@@ -400,7 +400,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](../modules/cluster_export.md#command)\<`any`, `any`, `any`\> |
+| `C` | extends [`Command`](../interfaces/cluster_export.Command.md)\<`any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -421,7 +421,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:839](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L839)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:839](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L839)
 
 ___
 
@@ -433,7 +433,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](../modules/cluster_export.md#command)\<`any`, `any`, `any`\> |
+| `C` | extends [`Command`](../interfaces/cluster_export.Command.md)\<`any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -453,7 +453,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:937](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L937)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:940](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L940)
 
 ___
 
@@ -474,7 +474,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:350](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L350)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:350](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L350)
 
 ___
 
@@ -495,7 +495,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:151](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L151)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:151](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L151)
 
 ___
 
@@ -517,7 +517,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1000](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1000)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1003](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1003)
 
 ___
 
@@ -537,7 +537,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:156](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L156)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:156](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L156)
 
 ___
 
@@ -558,7 +558,7 @@ ___
 | `options` | `Object` |
 | `options.asTimedRequest?` | `boolean` |
 | `options.attributeData` | `Object` |
-| `options.attributeData.attribute` | [`Attribute`](../modules/cluster_export.md#attribute)\<`T`, `any`\> |
+| `options.attributeData.attribute` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`T`, `any`\> |
 | `options.attributeData.clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
 | `options.attributeData.dataVersion?` | `number` |
 | `options.attributeData.endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
@@ -572,7 +572,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:394](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L394)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:394](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L394)
 
 ___
 
@@ -586,7 +586,7 @@ ___
 | :------ | :------ |
 | `options` | `Object` |
 | `options.asTimedRequest?` | `boolean` |
-| `options.attributes` | \{ `attribute`: [`Attribute`](../modules/cluster_export.md#attribute)\<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/datatype_export.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) ; `value`: `any`  }[] |
+| `options.attributes` | \{ `attribute`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/datatype_export.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) ; `value`: `any`  }[] |
 | `options.suppressResponse?` | `boolean` |
 | `options.timedRequestTimeoutMs?` | `number` |
 
@@ -596,7 +596,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:430](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L430)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:430](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L430)
 
 ___
 
@@ -626,7 +626,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:654](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L654)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:654](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L654)
 
 ___
 
@@ -638,7 +638,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)\<`any`, `any`\> |
+| `A` | extends [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -662,7 +662,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:499](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L499)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:499](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L499)
 
 ___
 
@@ -675,7 +675,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/cluster_export.md#event)\<`T`, `any`\> |
+| `E` | extends [`Event`](../interfaces/cluster_export.Event.md)\<`T`, `any`\> |
 
 #### Parameters
 
@@ -699,7 +699,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:583](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L583)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:583](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L583)
 
 ___
 
@@ -730,7 +730,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:696](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L696)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:696](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L696)
 
 ___
 
@@ -756,4 +756,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:991](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L991)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:994](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L994)

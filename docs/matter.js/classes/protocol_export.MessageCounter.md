@@ -52,7 +52,7 @@ a number of messages before the rollover callback is called (Default 1000).
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:55](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L55)
+[packages/matter.js/src/protocol/MessageCounter.ts:55](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L55)
 
 ## Properties
 
@@ -70,7 +70,7 @@ a number of messages before the rollover callback is called (Default 1000).
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:56](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L56)
+[packages/matter.js/src/protocol/MessageCounter.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L56)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L48)
+[packages/matter.js/src/protocol/MessageCounter.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L48)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:57](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L57)
+[packages/matter.js/src/protocol/MessageCounter.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L57)
 
 ## Methods
 
@@ -104,4 +104,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L60)
+[packages/matter.js/src/protocol/MessageCounter.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L60)

@@ -6,4 +6,4 @@
 
 ## Indexable
 
-▪ [key: `string`]: [`Command`](../modules/internal_.md#command)\<`any`, `any`, `any`\>
+▪ [key: `string`]: [`Command`](internal_.Command.md)\<`any`, `any`, `any`\>

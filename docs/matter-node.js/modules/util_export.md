@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](util_export._internal_.md)
+
 ### Namespaces
 
 - [serialize](util_export.serialize.md)
@@ -69,6 +73,7 @@
 - [camelize](util_export.md#camelize)
 - [capitalize](util_export.md#capitalize)
 - [commandExecutor](util_export.md#commandexecutor)
+- [commandlineParser](util_export.md#commandlineparser)
 - [createPromise](util_export.md#createpromise)
 - [describeList](util_export.md#describelist)
 - [extendPublicHandlerMethods](util_export.md#extendpublichandlermethods)
@@ -95,7 +100,7 @@
 
 ### ArrayMinLength
 
-Ƭ **ArrayMinLength**\<`T`, `N`\>: [`BuildArrayMinLength`](export._internal_.md#buildarrayminlength)\<`T`, `N`, []\>
+Ƭ **ArrayMinLength**\<`T`, `N`\>: [`BuildArrayMinLength`](util_export._internal_.md#buildarrayminlength)\<`T`, `N`, []\>
 
 #### Type parameters
 
@@ -190,6 +195,8 @@ ___
 
 Ƭ **ClassExtends**\<`C`\>: (...`args`: `any`[]) => `C`
 
+Type that represents a class constructor of a defined type or extend of it
+
 #### Type parameters
 
 | Name |
@@ -199,8 +206,6 @@ ___
 #### Type declaration
 
 • **new ClassExtends**(`...args`): `C`
-
-Type that represents a class constructor of a defined type or extend of it
 
 ##### Parameters
 
@@ -222,6 +227,11 @@ ___
 
 Ƭ **HandlerFunction**: (...`args`: `any`[]) => `any`
 
+**`License`**
+
+Copyright 2022 The matter.js Authors
+SPDX-License-Identifier: Apache-2.0
+
 #### Type declaration
 
 ▸ (`...args`): `any`
@@ -235,11 +245,6 @@ ___
 ##### Returns
 
 `any`
-
-**`License`**
-
-Copyright 2022 The matter.js Authors
-SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
@@ -693,7 +698,34 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:30](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/util/CommandLine.ts#L30)
+[packages/matter-node.js/src/util/CommandLine.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/CommandLine.ts#L33)
+
+___
+
+### commandlineParser
+
+▸ **commandlineParser**(`line`): `string`[]
+
+Quote aware Command line parser
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `line` | `string` |
+
+#### Returns
+
+`string`[]
+
+**`License`**
+
+Copyright 2022-2023 Project CHIP Authors
+SPDX-License-Identifier: Apache-2.0
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/CommandlineParser.d.ts:8
 
 ___
 
@@ -750,7 +782,7 @@ ___
 
 ### extendPublicHandlerMethods
 
-▸ **extendPublicHandlerMethods**\<`ParentClass`, `H`\>(`parentClass`): [`ExtendPublicHandlerMethods`](export._internal_.md#extendpublichandlermethods)\<`ParentClass`, `H`\>
+▸ **extendPublicHandlerMethods**\<`ParentClass`, `H`\>(`parentClass`): [`ExtendPublicHandlerMethods`](util_export._internal_.md#extendpublichandlermethods)\<`ParentClass`, `H`\>
 
 #### Type parameters
 
@@ -767,7 +799,7 @@ ___
 
 #### Returns
 
-[`ExtendPublicHandlerMethods`](export._internal_.md#extendpublichandlermethods)\<`ParentClass`, `H`\>
+[`ExtendPublicHandlerMethods`](util_export._internal_.md#extendpublichandlermethods)\<`ParentClass`, `H`\>
 
 #### Defined in
 
@@ -791,7 +823,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/util/CommandLine.ts#L22)
+[packages/matter-node.js/src/util/CommandLine.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/CommandLine.ts#L25)
 
 ___
 
@@ -811,7 +843,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/util/CommandLine.ts#L12)
+[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/CommandLine.ts#L12)
 
 ___
 
@@ -831,7 +863,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/util/CommandLine.ts#L18)
+[packages/matter-node.js/src/util/CommandLine.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/CommandLine.ts#L19)
 
 ___
 
@@ -1060,7 +1092,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/util/Node.ts#L11)
+[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/Node.ts#L11)
 
 ___
 

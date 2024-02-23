@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`Event`](../modules/internal_.md#event)\<`T`, `F`\>
+- [`Event`](internal_.Event.md)\<`T`, `F`\>
 
   ↳ **`OptionalEvent`**
 
@@ -39,7 +39,7 @@
 
 #### Inherited from
 
-Event.id
+[Event](internal_.Event.md).[id](internal_.Event.md#id)
 
 #### Defined in
 
@@ -53,7 +53,7 @@ ___
 
 #### Inherited from
 
-Event.isConditional
+[Event](internal_.Event.md).[isConditional](internal_.Event.md#isconditional)
 
 #### Defined in
 
@@ -67,7 +67,7 @@ ___
 
 #### Inherited from
 
-Event.mandatoryIf
+[Event](internal_.Event.md).[mandatoryIf](internal_.Event.md#mandatoryif)
 
 #### Defined in
 
@@ -81,7 +81,7 @@ ___
 
 #### Overrides
 
-Event.optional
+[Event](internal_.Event.md).[optional](internal_.Event.md#optional)
 
 #### Defined in
 
@@ -95,7 +95,7 @@ ___
 
 #### Inherited from
 
-Event.optionalIf
+[Event](internal_.Event.md).[optionalIf](internal_.Event.md#optionalif)
 
 #### Defined in
 
@@ -109,7 +109,7 @@ ___
 
 #### Inherited from
 
-Event.priority
+[Event](internal_.Event.md).[priority](internal_.Event.md#priority)
 
 #### Defined in
 
@@ -123,7 +123,7 @@ ___
 
 #### Inherited from
 
-Event.readAcl
+[Event](internal_.Event.md).[readAcl](internal_.Event.md#readacl)
 
 #### Defined in
 
@@ -137,7 +137,7 @@ ___
 
 #### Inherited from
 
-Event.schema
+[Event](internal_.Event.md).[schema](internal_.Event.md#schema)
 
 #### Defined in
 
@@ -151,7 +151,7 @@ ___
 
 #### Inherited from
 
-Event.unknown
+[Event](internal_.Event.md).[unknown](internal_.Event.md#unknown)
 
 #### Defined in
 

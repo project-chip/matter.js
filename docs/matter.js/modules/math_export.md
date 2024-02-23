@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](math_export._internal_.md)
+
 ### Classes
 
 - [ReedSolomon](../classes/math_export.ReedSolomon.md)

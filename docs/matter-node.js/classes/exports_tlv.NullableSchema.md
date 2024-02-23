@@ -270,13 +270,14 @@ ___
 
 ### encodeTlv
 
-▸ **encodeTlv**(`value`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
+▸ **encodeTlv**(`value`, `forWriteInteraction?`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | ``null`` \| `T` |
+| `forWriteInteraction?` | `boolean` |
 
 #### Returns
 
@@ -294,7 +295,7 @@ ___
 
 ### encodeTlvInternal
 
-▸ **encodeTlvInternal**(`writer`, `value`, `tag?`): `void`
+▸ **encodeTlvInternal**(`writer`, `value`, `tag?`, `forWriteInteraction?`): `void`
 
 #### Parameters
 
@@ -303,6 +304,7 @@ ___
 | `writer` | [`TlvWriter`](../interfaces/exports_tlv.TlvWriter.md) |
 | `value` | ``null`` \| `T` |
 | `tag?` | [`TlvTag`](../modules/exports_tlv.md#tlvtag) |
+| `forWriteInteraction?` | `boolean` |
 
 #### Returns
 

@@ -96,7 +96,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `_bytes` | [`ByteArray`](util_export.md#bytearray-1) |
+| `_bytes` | [`ByteArray`](util_export.md#bytearray) |
 | `_elements?` | [`DerNode`](exports_codec.md#dernode)[] |
 | `_padding?` | `number` |
 | `_tag` | `number` |
@@ -130,7 +130,7 @@ ___
 
 ### DnsMessagePartiallyPreEncoded
 
-Ƭ **DnsMessagePartiallyPreEncoded**: `Omit`\<[`DnsMessage`](exports_codec.md#dnsmessage), ``"answers"`` \| ``"additionalRecords"``\> & \{ `additionalRecords`: ([`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\> \| [`ByteArray`](util_export.md#bytearray-1))[] ; `answers`: ([`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\> \| [`ByteArray`](util_export.md#bytearray-1))[]  }
+Ƭ **DnsMessagePartiallyPreEncoded**: `Omit`\<[`DnsMessage`](exports_codec.md#dnsmessage), ``"answers"`` \| ``"additionalRecords"``\> & \{ `additionalRecords`: ([`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\> \| [`ByteArray`](util_export.md#bytearray))[] ; `answers`: ([`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\> \| [`ByteArray`](util_export.md#bytearray))[]  }
 
 #### Defined in
 

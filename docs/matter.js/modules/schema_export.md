@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](schema_export._internal_.md)
+
 ### Enumerations
 
 - [CommissionningFlowType](../enums/schema_export.CommissionningFlowType.md)
@@ -52,21 +56,21 @@
 
 ### BitField
 
-Ƭ **BitField**: [`BitRange`](export._internal_.md#bitrange-1)\<`number`, [`Number`](export._internal_.md#number)\>
+Ƭ **BitField**: [`BitRange`](schema_export._internal_.md#bitrange)\<`number`, [`Number`](schema_export._internal_.md#number)\>
 
 Defines the bit position and bit length of a numeric value.
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L36)
+[packages/matter.js/src/schema/BitmapSchema.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L36)
 
-[packages/matter.js/src/schema/BitmapSchema.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L37)
+[packages/matter.js/src/schema/BitmapSchema.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L37)
 
 ___
 
 ### BitFieldEnum
 
-Ƭ **BitFieldEnum**\<`E`\>: [`BitRange`](export._internal_.md#bitrange-1)\<`E`, [`Enum`](export._internal_.md#enum)\>
+Ƭ **BitFieldEnum**\<`E`\>: [`BitRange`](schema_export._internal_.md#bitrange)\<`E`, [`Enum`](schema_export._internal_.md#enum)\>
 
 Defines the bit position and bit length of an enum flag.
 
@@ -78,23 +82,23 @@ Defines the bit position and bit length of an enum flag.
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L40)
+[packages/matter.js/src/schema/BitmapSchema.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L40)
 
-[packages/matter.js/src/schema/BitmapSchema.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L41)
+[packages/matter.js/src/schema/BitmapSchema.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L41)
 
 ___
 
 ### BitFlag
 
-Ƭ **BitFlag**: [`BitRange`](export._internal_.md#bitrange-1)\<`boolean`, [`Flag`](export._internal_.md#flag)\>
+Ƭ **BitFlag**: [`BitRange`](schema_export._internal_.md#bitrange)\<`boolean`, [`Flag`](schema_export._internal_.md#flag)\>
 
 Defines the bit position of a boolean flag.
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:32](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L32)
+[packages/matter.js/src/schema/BitmapSchema.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L32)
 
-[packages/matter.js/src/schema/BitmapSchema.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L33)
+[packages/matter.js/src/schema/BitmapSchema.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L33)
 
 ___
 
@@ -113,9 +117,9 @@ Create a type with specified bit flags set
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:202](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L202)
+[packages/matter.js/src/schema/BitmapSchema.ts:202](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L202)
 
-[packages/matter.js/src/schema/BitmapSchema.ts:196](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L196)
+[packages/matter.js/src/schema/BitmapSchema.ts:196](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L196)
 
 ___
 
@@ -125,11 +129,11 @@ ___
 
 #### Index signature
 
-▪ [key: `string`]: [`BitFlag`](schema_export.md#bitflag-1) \| [`BitField`](schema_export.md#bitfield-1) \| [`BitFieldEnum`](schema_export.md#bitfieldenum-1)\<`any`\>
+▪ [key: `string`]: [`BitFlag`](schema_export.md#bitflag) \| [`BitField`](schema_export.md#bitfield) \| [`BitFieldEnum`](schema_export.md#bitfieldenum)\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L44)
+[packages/matter.js/src/schema/BitmapSchema.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L44)
 
 ___
 
@@ -147,7 +151,7 @@ Create a partial bitmap from a flag sequence
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:191](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L191)
+[packages/matter.js/src/schema/BitmapSchema.ts:191](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L191)
 
 ___
 
@@ -167,17 +171,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:74](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L74)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:74](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L74)
 
 ___
 
 ### QrCodeData
 
-Ƭ **QrCodeData**: [`TypeFromBitmapSchema`](schema_export.md#typefrombitmapschema)\<typeof [`QrCodeDataSchema`](export._internal_.md#qrcodedataschema)\>
+Ƭ **QrCodeData**: [`TypeFromBitmapSchema`](schema_export.md#typefrombitmapschema)\<typeof [`QrCodeDataSchema`](schema_export._internal_.md#qrcodedataschema)\>
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:57](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L57)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L57)
 
 ___
 
@@ -193,7 +197,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L45)
+[packages/matter.js/src/schema/BitmapSchema.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L45)
 
 ___
 
@@ -209,7 +213,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:51](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L51)
+[packages/matter.js/src/schema/BitmapSchema.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L51)
 
 ___
 
@@ -225,17 +229,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L48)
+[packages/matter.js/src/schema/BitmapSchema.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L48)
 
 ## Variables
 
 ### Base38
 
-• `Const` **Base38**: [`Base38Schema`](../classes/export._internal_.Base38Schema.md)
+• `Const` **Base38**: [`Base38Schema`](../classes/schema_export._internal_.Base38Schema.md)
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:97](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/Base38Schema.ts#L97)
+[packages/matter.js/src/schema/Base38Schema.ts:97](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/Base38Schema.ts#L97)
 
 ___
 
@@ -249,33 +253,33 @@ See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificat
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ble` | [`BitFlag`](schema_export.md#bitflag-1) | Device supports BLE for discovery when not commissioned. |
-| `onIpNetwork` | [`BitFlag`](schema_export.md#bitflag-1) | Device is already on the IP network. |
-| `softAccessPoint` | [`BitFlag`](schema_export.md#bitflag-1) | Device supports hosting a Soft-AP when not commissioned. |
+| `ble` | [`BitFlag`](schema_export.md#bitflag) | Device supports BLE for discovery when not commissioned. |
+| `onIpNetwork` | [`BitFlag`](schema_export.md#bitflag) | Device is already on the IP network. |
+| `softAccessPoint` | [`BitFlag`](schema_export.md#bitflag) | Device supports hosting a Soft-AP when not commissioned. |
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L35)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L35)
 
 ___
 
 ### DiscoveryCapabilitiesSchema
 
-• `Const` **DiscoveryCapabilitiesSchema**: [`BitmapSchemaInternal`](../classes/schema_export.BitmapSchemaInternal.md)\<\{ `ble`: [`BitFlag`](schema_export.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](schema_export.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](schema_export.md#bitflag-1)  }\>
+• `Const` **DiscoveryCapabilitiesSchema**: [`BitmapSchemaInternal`](../classes/schema_export.BitmapSchemaInternal.md)\<\{ `ble`: [`BitFlag`](schema_export.md#bitflag) ; `onIpNetwork`: [`BitFlag`](schema_export.md#bitflag) ; `softAccessPoint`: [`BitFlag`](schema_export.md#bitflag)  }\>
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L45)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L45)
 
 ___
 
 ### ManualPairingCodeCodec
 
-• `Const` **ManualPairingCodeCodec**: [`ManualPairingCodeSchema`](../classes/export._internal_.ManualPairingCodeSchema.md)
+• `Const` **ManualPairingCodeCodec**: [`ManualPairingCodeSchema`](../classes/schema_export._internal_.ManualPairingCodeSchema.md)
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:120](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L120)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:120](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L120)
 
 ___
 
@@ -285,23 +289,23 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:217](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/QrCodeSchema.ts#L217)
+[packages/matter.js/src/schema/QrCodeSchema.ts:217](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/QrCodeSchema.ts#L217)
 
 ___
 
 ### QrPairingCodeCodec
 
-• `Const` **QrPairingCodeCodec**: [`QrPairingCodeSchema`](../classes/export._internal_.QrPairingCodeSchema.md)
+• `Const` **QrPairingCodeCodec**: [`QrPairingCodeSchema`](../classes/schema_export._internal_.QrPairingCodeSchema.md)
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:72](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L72)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/PairingCodeSchema.ts#L72)
 
 ## Functions
 
 ### BitField
 
-▸ **BitField**(`offset`, `length`): [`BitField`](schema_export.md#bitfield-1)
+▸ **BitField**(`offset`, `length`): [`BitField`](schema_export.md#bitfield)
 
 #### Parameters
 
@@ -312,17 +316,17 @@ ___
 
 #### Returns
 
-[`BitField`](schema_export.md#bitfield-1)
+[`BitField`](schema_export.md#bitfield)
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L37)
+[packages/matter.js/src/schema/BitmapSchema.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L37)
 
 ___
 
 ### BitFieldEnum
 
-▸ **BitFieldEnum**\<`E`\>(`offset`, `length`): [`BitFieldEnum`](schema_export.md#bitfieldenum-1)\<`E`\>
+▸ **BitFieldEnum**\<`E`\>(`offset`, `length`): [`BitFieldEnum`](schema_export.md#bitfieldenum)\<`E`\>
 
 #### Type parameters
 
@@ -339,17 +343,17 @@ ___
 
 #### Returns
 
-[`BitFieldEnum`](schema_export.md#bitfieldenum-1)\<`E`\>
+[`BitFieldEnum`](schema_export.md#bitfieldenum)\<`E`\>
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L41)
+[packages/matter.js/src/schema/BitmapSchema.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L41)
 
 ___
 
 ### BitFlag
 
-▸ **BitFlag**(`offset`): [`BitFlag`](schema_export.md#bitflag-1)
+▸ **BitFlag**(`offset`): [`BitFlag`](schema_export.md#bitflag)
 
 #### Parameters
 
@@ -359,11 +363,11 @@ ___
 
 #### Returns
 
-[`BitFlag`](schema_export.md#bitflag-1)
+[`BitFlag`](schema_export.md#bitflag)
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L33)
+[packages/matter.js/src/schema/BitmapSchema.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L33)
 
 ___
 
@@ -393,7 +397,7 @@ Create a bitmap schema with a named subset of flags set
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:202](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L202)
+[packages/matter.js/src/schema/BitmapSchema.ts:202](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L202)
 
 ___
 
@@ -421,7 +425,7 @@ Declares a bitmap schema by indicating the bit position and their names.
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:231](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L231)
+[packages/matter.js/src/schema/BitmapSchema.ts:231](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L231)
 
 ___
 
@@ -451,7 +455,7 @@ Create a full bitmap schema from a partial bitmap schema
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:215](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L215)
+[packages/matter.js/src/schema/BitmapSchema.ts:215](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L215)
 
 ___
 
@@ -479,4 +483,4 @@ Declares a bitmap schema backed by a ByteArray by indicating the bit position an
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:234](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L234)
+[packages/matter.js/src/schema/BitmapSchema.ts:234](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/schema/BitmapSchema.ts#L234)

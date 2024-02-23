@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:158](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L158)
+[packages/matter.js/src/model/aspects/Conformance.ts:158](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L158)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:159](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L159)
+[packages/matter.js/src/model/aspects/Conformance.ts:159](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L159)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:155](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L155)
+[packages/matter.js/src/model/aspects/Conformance.ts:155](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L155)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:156](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L156)
+[packages/matter.js/src/model/aspects/Conformance.ts:156](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L156)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:157](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L157)
+[packages/matter.js/src/model/aspects/Conformance.ts:157](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L157)

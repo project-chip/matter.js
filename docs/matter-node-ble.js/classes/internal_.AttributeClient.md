@@ -57,7 +57,7 @@ General class for AttributeClients
 
 | Name | Type |
 | :------ | :------ |
-| `attribute` | [`Attribute`](../modules/internal_.md#attribute)\<`T`, `any`\> |
+| `attribute` | [`Attribute`](../interfaces/internal_.Attribute.md)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
@@ -75,7 +75,7 @@ matter.js/dist/esm/cluster/client/AttributeClient.d.ts:30
 
 ### attribute
 
-• `Readonly` **attribute**: [`Attribute`](../modules/internal_.md#attribute)\<`T`, `any`\>
+• `Readonly` **attribute**: [`Attribute`](../interfaces/internal_.Attribute.md)\<`T`, `any`\>
 
 #### Defined in
 

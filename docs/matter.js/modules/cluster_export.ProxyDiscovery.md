@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `proxyDiscoverRequest`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `id`: ``67`` = 0x43; `name`: ``"ProxyDiscovery"`` = "ProxyDiscovery"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `proxyDiscoverRequest`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``67`` = 0x43; `name`: ``"ProxyDiscovery"`` = "ProxyDiscovery"; `revision`: ``1`` = 1 }\>
 
 Proxy Discovery
 
@@ -28,4 +28,4 @@ Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the ove
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L24)

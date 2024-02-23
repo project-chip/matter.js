@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](datatype_export._internal_.md)
+
 ### Namespaces
 
 - [CaseAuthenticatedTag](datatype_export.CaseAuthenticatedTag.md)
@@ -71,9 +75,9 @@ An Attribute ID is a 32 bit number and indicates an attribute defined in a clust
 
 #### Defined in
 
-[packages/matter.js/src/datatype/AttributeId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/AttributeId.ts#L19)
+[packages/matter.js/src/datatype/AttributeId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/AttributeId.ts#L19)
 
-[packages/matter.js/src/datatype/AttributeId.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/AttributeId.ts#L17)
+[packages/matter.js/src/datatype/AttributeId.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/AttributeId.ts#L17)
 
 ___
 
@@ -89,11 +93,11 @@ MatterCoreSpecificationV1_2 § 6.6.2.1.2.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L19)
+[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L19)
 
-[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L17)
+[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L17)
 
-[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L26)
+[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L26)
 
 ___
 
@@ -110,9 +114,9 @@ SHALL define conformance to that specification.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/ClusterId.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/ClusterId.ts#L20)
+[packages/matter.js/src/datatype/ClusterId.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/ClusterId.ts#L20)
 
-[packages/matter.js/src/datatype/ClusterId.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/ClusterId.ts#L18)
+[packages/matter.js/src/datatype/ClusterId.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/ClusterId.ts#L18)
 
 ___
 
@@ -128,9 +132,9 @@ A Command ID is a 32 bit number and indicates a command defined in a cluster spe
 
 #### Defined in
 
-[packages/matter.js/src/datatype/CommandId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CommandId.ts#L19)
+[packages/matter.js/src/datatype/CommandId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CommandId.ts#L19)
 
-[packages/matter.js/src/datatype/CommandId.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CommandId.ts#L17)
+[packages/matter.js/src/datatype/CommandId.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CommandId.ts#L17)
 
 ___
 
@@ -146,9 +150,9 @@ A Device type ID is a 32-bit number that defines the type of the device.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/DeviceTypeId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/DeviceTypeId.ts#L19)
+[packages/matter.js/src/datatype/DeviceTypeId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/DeviceTypeId.ts#L19)
 
-[packages/matter.js/src/datatype/DeviceTypeId.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/DeviceTypeId.ts#L17)
+[packages/matter.js/src/datatype/DeviceTypeId.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/DeviceTypeId.ts#L17)
 
 ___
 
@@ -164,9 +168,9 @@ A Endpoint Number is a 16-bit number that that indicates an instance of a device
 
 #### Defined in
 
-[packages/matter.js/src/datatype/EndpointNumber.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/EndpointNumber.ts#L19)
+[packages/matter.js/src/datatype/EndpointNumber.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/EndpointNumber.ts#L19)
 
-[packages/matter.js/src/datatype/EndpointNumber.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/EndpointNumber.ts#L17)
+[packages/matter.js/src/datatype/EndpointNumber.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/EndpointNumber.ts#L17)
 
 ___
 
@@ -182,9 +186,9 @@ An EVent ID is a 32 bit number and indicates an event defined in a cluster speci
 
 #### Defined in
 
-[packages/matter.js/src/datatype/EventId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/EventId.ts#L19)
+[packages/matter.js/src/datatype/EventId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/EventId.ts#L19)
 
-[packages/matter.js/src/datatype/EventId.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/EventId.ts#L17)
+[packages/matter.js/src/datatype/EventId.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/EventId.ts#L17)
 
 ___
 
@@ -201,9 +205,9 @@ a particular root CA.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/FabricId.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricId.ts#L21)
+[packages/matter.js/src/datatype/FabricId.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricId.ts#L21)
 
-[packages/matter.js/src/datatype/FabricId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricId.ts#L19)
+[packages/matter.js/src/datatype/FabricId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricId.ts#L19)
 
 ___
 
@@ -224,11 +228,11 @@ a fabric, such as fabric-scoped data model elements, then the fabric-index value
 
 #### Defined in
 
-[packages/matter.js/src/datatype/FabricIndex.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricIndex.ts#L24)
+[packages/matter.js/src/datatype/FabricIndex.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricIndex.ts#L24)
 
-[packages/matter.js/src/datatype/FabricIndex.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricIndex.ts#L22)
+[packages/matter.js/src/datatype/FabricIndex.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricIndex.ts#L22)
 
-[packages/matter.js/src/datatype/FabricIndex.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricIndex.ts#L28)
+[packages/matter.js/src/datatype/FabricIndex.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricIndex.ts#L28)
 
 ___
 
@@ -251,9 +255,9 @@ The Group ID space is allocated as described in Table 2, “Group ID Allocations
 
 #### Defined in
 
-[packages/matter.js/src/datatype/GroupId.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/GroupId.ts#L26)
+[packages/matter.js/src/datatype/GroupId.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/GroupId.ts#L26)
 
-[packages/matter.js/src/datatype/GroupId.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/GroupId.ts#L24)
+[packages/matter.js/src/datatype/GroupId.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/GroupId.ts#L24)
 
 ___
 
@@ -270,11 +274,11 @@ group of Nodes on a Fabric.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/NodeId.ts#L26)
+[packages/matter.js/src/datatype/NodeId.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/NodeId.ts#L26)
 
-[packages/matter.js/src/datatype/NodeId.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/NodeId.ts#L24)
+[packages/matter.js/src/datatype/NodeId.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/NodeId.ts#L24)
 
-[packages/matter.js/src/datatype/NodeId.ts:30](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/NodeId.ts#L30)
+[packages/matter.js/src/datatype/NodeId.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/NodeId.ts#L30)
 
 ___
 
@@ -291,7 +295,7 @@ authentication method provided by the Secure Channel architecture.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/SubjectId.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/SubjectId.ts#L16)
+[packages/matter.js/src/datatype/SubjectId.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/SubjectId.ts#L16)
 
 ___
 
@@ -309,9 +313,9 @@ Connectivity Standards Alliance (see [CSA Manufacturer Code Database]).
 
 #### Defined in
 
-[packages/matter.js/src/datatype/VendorId.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/VendorId.ts#L21)
+[packages/matter.js/src/datatype/VendorId.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/VendorId.ts#L21)
 
-[packages/matter.js/src/datatype/VendorId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/VendorId.ts#L19)
+[packages/matter.js/src/datatype/VendorId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/VendorId.ts#L19)
 
 ## Variables
 
@@ -323,17 +327,17 @@ Tlv schema for an Attribute Id.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/AttributeId.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/AttributeId.ts#L24)
+[packages/matter.js/src/datatype/AttributeId.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/AttributeId.ts#L24)
 
 ___
 
 ### TlvCaseAuthenticatedTag
 
-• `Const` **TlvCaseAuthenticatedTag**: [`TlvCaseAuthenticatedTagSchema`](../classes/export._internal_.TlvCaseAuthenticatedTagSchema.md)
+• `Const` **TlvCaseAuthenticatedTag**: [`TlvCaseAuthenticatedTagSchema`](../classes/datatype_export._internal_.TlvCaseAuthenticatedTagSchema.md)
 
 #### Defined in
 
-[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:71](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L71)
+[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L71)
 
 ___
 
@@ -345,7 +349,7 @@ Tlv schema for a cluster Id.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/ClusterId.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/ClusterId.ts#L25)
+[packages/matter.js/src/datatype/ClusterId.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/ClusterId.ts#L25)
 
 ___
 
@@ -357,7 +361,7 @@ Tlv schema for an Command Id.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/CommandId.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CommandId.ts#L24)
+[packages/matter.js/src/datatype/CommandId.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CommandId.ts#L24)
 
 ___
 
@@ -369,7 +373,7 @@ Tlv schema for a Device type ID.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/DeviceTypeId.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/DeviceTypeId.ts#L24)
+[packages/matter.js/src/datatype/DeviceTypeId.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/DeviceTypeId.ts#L24)
 
 ___
 
@@ -381,7 +385,7 @@ Tlv schema for an Endpoint number.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/EndpointNumber.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/EndpointNumber.ts#L24)
+[packages/matter.js/src/datatype/EndpointNumber.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/EndpointNumber.ts#L24)
 
 ___
 
@@ -393,7 +397,7 @@ Tlv schema for an Event Id.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/EventId.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/EventId.ts#L24)
+[packages/matter.js/src/datatype/EventId.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/EventId.ts#L24)
 
 ___
 
@@ -405,19 +409,19 @@ Tlv schema for a Node Identifier.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/FabricId.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricId.ts#L26)
+[packages/matter.js/src/datatype/FabricId.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricId.ts#L26)
 
 ___
 
 ### TlvFabricIndex
 
-• `Const` **TlvFabricIndex**: [`TlvWrapper`](../classes/tlv_export.TlvWrapper.md)\<[`FabricIndex`](datatype_export.md#fabricindex), `undefined` \| `number`\>
+• `Const` **TlvFabricIndex**: [`FabricIndexTlvWrapper`](../classes/datatype_export._internal_.FabricIndexTlvWrapper.md)
 
 Tlv Schema for a Fabric Index.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/FabricIndex.ts:34](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricIndex.ts#L34)
+[packages/matter.js/src/datatype/FabricIndex.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricIndex.ts#L60)
 
 ___
 
@@ -429,7 +433,7 @@ Tlv Schema for a Group Id.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/GroupId.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/GroupId.ts#L31)
+[packages/matter.js/src/datatype/GroupId.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/GroupId.ts#L31)
 
 ___
 
@@ -441,7 +445,7 @@ Tlv schema for a Node Identifier.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:109](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/NodeId.ts#L109)
+[packages/matter.js/src/datatype/NodeId.ts:109](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/NodeId.ts#L109)
 
 ___
 
@@ -453,7 +457,7 @@ Tlv schema for a Subject Id
 
 #### Defined in
 
-[packages/matter.js/src/datatype/SubjectId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/SubjectId.ts#L19)
+[packages/matter.js/src/datatype/SubjectId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/SubjectId.ts#L19)
 
 ___
 
@@ -465,7 +469,7 @@ Data model for a Vendor Identifier.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/VendorId.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/VendorId.ts#L26)
+[packages/matter.js/src/datatype/VendorId.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/VendorId.ts#L26)
 
 ## Functions
 
@@ -485,7 +489,7 @@ Data model for a Vendor Identifier.
 
 #### Defined in
 
-[packages/matter.js/src/datatype/AttributeId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/AttributeId.ts#L19)
+[packages/matter.js/src/datatype/AttributeId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/AttributeId.ts#L19)
 
 ___
 
@@ -505,7 +509,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L19)
+[packages/matter.js/src/datatype/CaseAuthenticatedTag.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CaseAuthenticatedTag.ts#L19)
 
 ___
 
@@ -525,7 +529,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/ClusterId.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/ClusterId.ts#L20)
+[packages/matter.js/src/datatype/ClusterId.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/ClusterId.ts#L20)
 
 ___
 
@@ -545,7 +549,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/CommandId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/CommandId.ts#L19)
+[packages/matter.js/src/datatype/CommandId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/CommandId.ts#L19)
 
 ___
 
@@ -565,7 +569,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/DeviceTypeId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/DeviceTypeId.ts#L19)
+[packages/matter.js/src/datatype/DeviceTypeId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/DeviceTypeId.ts#L19)
 
 ___
 
@@ -585,7 +589,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/EndpointNumber.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/EndpointNumber.ts#L19)
+[packages/matter.js/src/datatype/EndpointNumber.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/EndpointNumber.ts#L19)
 
 ___
 
@@ -605,7 +609,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/EventId.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/EventId.ts#L19)
+[packages/matter.js/src/datatype/EventId.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/EventId.ts#L19)
 
 ___
 
@@ -625,7 +629,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/FabricId.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricId.ts#L21)
+[packages/matter.js/src/datatype/FabricId.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricId.ts#L21)
 
 ___
 
@@ -645,7 +649,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/FabricIndex.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricIndex.ts#L24)
+[packages/matter.js/src/datatype/FabricIndex.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/FabricIndex.ts#L24)
 
 ___
 
@@ -665,7 +669,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/GroupId.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/GroupId.ts#L26)
+[packages/matter.js/src/datatype/GroupId.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/GroupId.ts#L26)
 
 ___
 
@@ -685,7 +689,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/NodeId.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/NodeId.ts#L26)
+[packages/matter.js/src/datatype/NodeId.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/NodeId.ts#L26)
 
 ___
 
@@ -705,4 +709,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/VendorId.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/VendorId.ts#L21)
+[packages/matter.js/src/datatype/VendorId.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/datatype/VendorId.ts#L21)

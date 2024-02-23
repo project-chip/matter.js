@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `clientList`: [`FixedAttribute`](exports_cluster.md#fixedattribute)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/ClusterId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_ClusterId_.md)[], `any`\> ; `deviceTypeList`: [`FixedAttribute`](exports_cluster.md#fixedattribute)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `partsList`: [`Attribute`](exports_cluster.md#attribute)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EndpointNumber"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EndpointNumber_.md)[], `any`\> ; `serverList`: [`FixedAttribute`](exports_cluster.md#fixedattribute)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/ClusterId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_ClusterId_.md)[], `any`\>  } ; `id`: ``29`` ; `name`: ``"Descriptor"`` ; `revision`: ``1``  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `clientList`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/ClusterId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_ClusterId_.md)[], `any`\> ; `deviceTypeList`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `partsList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EndpointNumber"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EndpointNumber_.md)[], `any`\> ; `serverList`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/ClusterId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_ClusterId_.md)[], `any`\>  } ; `id`: ``29`` ; `name`: ``"Descriptor"`` ; `revision`: ``1``  }\>
 
 Descriptor
 
@@ -43,7 +43,7 @@ ___
 
 ### TlvDeviceTypeStruct
 
-• `Const` **TlvDeviceTypeStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvDeviceTypeStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 The device type and revision define endpoint conformance to a release of a device type definition. See the Data
 Model specification for more information.

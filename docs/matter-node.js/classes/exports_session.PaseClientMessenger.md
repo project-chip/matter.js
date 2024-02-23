@@ -179,21 +179,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:60
+packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:62
 
 ___
 
 ### readPbkdfParamResponse
 
-▸ **readPbkdfParamResponse**(): `Promise`\<\{ `response`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> ; `responsePayload`: `Uint8Array`  }\>
+▸ **readPbkdfParamResponse**(): `Promise`\<\{ `response`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `pbkdfParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\>  }\> ; `responsePayload`: `Uint8Array`  }\>
 
 #### Returns
 
-`Promise`\<\{ `response`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> ; `responsePayload`: `Uint8Array`  }\>
+`Promise`\<\{ `response`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `pbkdfParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\>  }\> ; `responsePayload`: `Uint8Array`  }\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:43
+packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:44
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:59
+packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:61
 
 ___
 
@@ -307,7 +307,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:64
+packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:66
 
 ___
 
@@ -319,7 +319,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `request` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> |
+| `request` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`boolean`\> ; `passcodeId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\>  }\> |
 
 #### Returns
 
@@ -327,7 +327,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:42
+packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:43
 
 ___
 

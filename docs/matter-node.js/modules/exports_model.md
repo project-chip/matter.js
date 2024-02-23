@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](exports_model._internal_.md)
+
 ### Namespaces
 
 - [Access](exports_model.Access.md)
@@ -1265,7 +1269,7 @@ ___
 
 ### RecordValidator
 
-▸ **RecordValidator**(`fields`, `featureMap`, `features`): [`RecordValidator`](../interfaces/export._internal_.RecordValidator.md)
+▸ **RecordValidator**(`fields`, `featureMap`, `features`): [`RecordValidator`](../interfaces/exports_model._internal_.RecordValidator.md)
 
 Creates a utility object that can validate records based on a model.
 
@@ -1281,7 +1285,7 @@ TODO - doesn't currently recurse into children
 
 #### Returns
 
-[`RecordValidator`](../interfaces/export._internal_.RecordValidator.md)
+[`RecordValidator`](../interfaces/exports_model._internal_.RecordValidator.md)
 
 a Validator
 

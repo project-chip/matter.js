@@ -73,7 +73,7 @@
 | `rootNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `operationalId` | `Uint8Array` |
 | `rootPublicKey` | `Uint8Array` |
-| `keyPair` | [`Key`](../modules/crypto_export.md#key) |
+| `keyPair` | [`Key`](../interfaces/crypto_export.Key.md) |
 | `rootVendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
 | `rootCert` | `Uint8Array` |
 | `identityProtectionKey` | `Uint8Array` |
@@ -352,7 +352,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Returns
 
@@ -372,7 +372,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -451,7 +451,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Returns
 
@@ -477,7 +477,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -498,7 +498,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -640,7 +640,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 | `value` | `T` |
 

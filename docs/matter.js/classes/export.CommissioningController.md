@@ -47,8 +47,11 @@ Controller class to commission and connect multiple nodes into one fabric.
 - [createInteractionClient](export.CommissioningController.md#createinteractionclient)
 - [disconnectNode](export.CommissioningController.md#disconnectnode)
 - [discoverCommissionableDevices](export.CommissioningController.md#discovercommissionabledevices)
+- [enhanceDeviceDetailsFromCache](export.CommissioningController.md#enhancedevicedetailsfromcache)
+- [enhanceDeviceDetailsFromRemote](export.CommissioningController.md#enhancedevicedetailsfromremote)
 - [getActiveSessionInformation](export.CommissioningController.md#getactivesessioninformation)
 - [getCommissionedNodes](export.CommissioningController.md#getcommissionednodes)
+- [getCommissionedNodesDetails](export.CommissioningController.md#getcommissionednodesdetails)
 - [getConnectedNode](export.CommissioningController.md#getconnectednode)
 - [getPort](export.CommissioningController.md#getport)
 - [initialize](export.CommissioningController.md#initialize)
@@ -86,7 +89,7 @@ Creates a new CommissioningController instance
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:141](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L141)
+[packages/matter.js/src/CommissioningController.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L146)
 
 ## Properties
 
@@ -96,7 +99,7 @@ Creates a new CommissioningController instance
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:133](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L133)
+[packages/matter.js/src/CommissioningController.ts:138](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L138)
 
 ___
 
@@ -106,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:132](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L132)
+[packages/matter.js/src/CommissioningController.ts:137](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L137)
 
 ___
 
@@ -116,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:125](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L125)
+[packages/matter.js/src/CommissioningController.ts:130](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L130)
 
 ___
 
@@ -126,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:126](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L126)
+[packages/matter.js/src/CommissioningController.ts:131](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L131)
 
 ___
 
@@ -136,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:127](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L127)
+[packages/matter.js/src/CommissioningController.ts:132](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L132)
 
 ___
 
@@ -146,7 +149,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:130](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L130)
+[packages/matter.js/src/CommissioningController.ts:135](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L135)
 
 ___
 
@@ -158,7 +161,7 @@ The options for the CommissioningController
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:141](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L141)
+[packages/matter.js/src/CommissioningController.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L146)
 
 ___
 
@@ -168,7 +171,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:134](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L134)
+[packages/matter.js/src/CommissioningController.ts:139](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L139)
 
 ___
 
@@ -178,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:124](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L124)
+[packages/matter.js/src/CommissioningController.ts:129](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L129)
 
 ___
 
@@ -188,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:129](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L129)
+[packages/matter.js/src/CommissioningController.ts:134](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L134)
 
 ## Accessors
 
@@ -202,7 +205,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:145](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L145)
+[packages/matter.js/src/CommissioningController.ts:150](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L150)
 
 ## Methods
 
@@ -222,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:159](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L159)
+[packages/matter.js/src/CommissioningController.ts:164](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L164)
 
 ___
 
@@ -241,7 +244,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:149](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L149)
+[packages/matter.js/src/CommissioningController.ts:154](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L154)
 
 ___
 
@@ -254,7 +257,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `identifierData` | [`CommissionableDeviceIdentifiers`](../modules/common_export.md#commissionabledeviceidentifiers) |
-| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\> |
+| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `onIpNetwork`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `softAccessPoint`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\> |
 
 #### Returns
 
@@ -262,7 +265,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:401](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L401)
+[packages/matter.js/src/CommissioningController.ts:469](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L469)
 
 ___
 
@@ -282,7 +285,7 @@ Disconnects all connected nodes and Closes the network connections and other res
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:360](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L360)
+[packages/matter.js/src/CommissioningController.ts:428](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L428)
 
 ___
 
@@ -305,16 +308,22 @@ paired node on success.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:199](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L199)
+[packages/matter.js/src/CommissioningController.ts:204](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L204)
 
 ___
 
 ### connect
 
-▸ **connect**(): `Promise`\<[`PairedNode`](device_export.PairedNode.md)[]\>
+▸ **connect**(`connectOptions?`): `Promise`\<[`PairedNode`](device_export.PairedNode.md)[]\>
 
 Connects to all paired nodes.
 After connection the endpoint data of the device is analyzed and an object structure is created.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `connectOptions?` | [`CommissioningControllerNodeOptions`](../modules/device_export.md#commissioningcontrollernodeoptions) |
 
 #### Returns
 
@@ -322,7 +331,7 @@ After connection the endpoint data of the device is analyzed and an object struc
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:289](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L289)
+[packages/matter.js/src/CommissioningController.ts:351](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L351)
 
 ___
 
@@ -346,7 +355,7 @@ After connection the endpoint data of the device is analyzed and an object struc
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:259](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L259)
+[packages/matter.js/src/CommissioningController.ts:264](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L264)
 
 ___
 
@@ -369,7 +378,7 @@ not be used directly. See the PairedNode class for the public API.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:342](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L342)
+[packages/matter.js/src/CommissioningController.ts:404](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L404)
 
 ___
 
@@ -389,7 +398,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:247](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L247)
+[packages/matter.js/src/CommissioningController.ts:252](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L252)
 
 ___
 
@@ -402,7 +411,7 @@ ___
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `identifierData` | [`CommissionableDeviceIdentifiers`](../modules/common_export.md#commissionabledeviceidentifiers) | `undefined` |
-| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\> | `undefined` |
+| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `onIpNetwork`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `softAccessPoint`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\> | `undefined` |
 | `discoveredCallback?` | (`device`: [`CommissionableDevice`](../modules/common_export.md#commissionabledevice)) => `void` | `undefined` |
 | `timeoutSeconds` | `number` | `900` |
 
@@ -412,7 +421,49 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:412](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L412)
+[packages/matter.js/src/CommissioningController.ts:480](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L480)
+
+___
+
+### enhanceDeviceDetailsFromCache
+
+▸ **enhanceDeviceDetailsFromCache**(`nodeId`, `pairedNode`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+| `pairedNode` | [`PairedNode`](device_export.PairedNode.md) |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/matter.js/src/CommissioningController.ts:297](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L297)
+
+___
+
+### enhanceDeviceDetailsFromRemote
+
+▸ **enhanceDeviceDetailsFromRemote**(`nodeId`, `pairedNode`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+| `pairedNode` | [`PairedNode`](device_export.PairedNode.md) |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/matter.js/src/CommissioningController.ts:323](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L323)
 
 ___
 
@@ -428,7 +479,7 @@ Returns active session information for all connected nodes.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:437](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L437)
+[packages/matter.js/src/CommissioningController.ts:505](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L505)
 
 ___
 
@@ -444,7 +495,21 @@ Returns an array with the Node Ids for all commissioned nodes.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:353](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L353)
+[packages/matter.js/src/CommissioningController.ts:415](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L415)
+
+___
+
+### getCommissionedNodesDetails
+
+▸ **getCommissionedNodesDetails**(): \{ `advertisedName`: `undefined` \| `string` = discoveryData.DN; `basicInformationData`: `undefined` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> ; `discoveryData`: `undefined` \| [`DiscoveryData`](../modules/common_export.md#discoverydata) ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `operationalAddress`: `undefined` \| `string`  }[]
+
+#### Returns
+
+\{ `advertisedName`: `undefined` \| `string` = discoveryData.DN; `basicInformationData`: `undefined` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> ; `discoveryData`: `undefined` \| [`DiscoveryData`](../modules/common_export.md#discoverydata) ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `operationalAddress`: `undefined` \| `string`  }[]
+
+#### Defined in
+
+[packages/matter.js/src/CommissioningController.ts:421](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L421)
 
 ___
 
@@ -466,7 +531,7 @@ Returns the PairedNode instance for a given node id, if this node is connected.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:348](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L348)
+[packages/matter.js/src/CommissioningController.ts:410](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L410)
 
 ___
 
@@ -484,7 +549,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:371](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L371)
+[packages/matter.js/src/CommissioningController.ts:439](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L439)
 
 ___
 
@@ -508,7 +573,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:375](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L375)
+[packages/matter.js/src/CommissioningController.ts:443](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L443)
 
 ___
 
@@ -524,7 +589,7 @@ Internal method to initialize a MatterController instance.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:169](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L169)
+[packages/matter.js/src/CommissioningController.ts:174](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L174)
 
 ___
 
@@ -540,7 +605,7 @@ Returns true if t least one node is commissioned/paired with this controller ins
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:332](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L332)
+[packages/matter.js/src/CommissioningController.ts:394](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L394)
 
 ___
 
@@ -562,7 +627,7 @@ Check if a given node id is commissioned on this controller.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:216](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L216)
+[packages/matter.js/src/CommissioningController.ts:221](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L221)
 
 ___
 
@@ -588,7 +653,7 @@ use this in case of an error.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:227](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L227)
+[packages/matter.js/src/CommissioningController.ts:232](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L232)
 
 ___
 
@@ -602,7 +667,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:428](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L428)
+[packages/matter.js/src/CommissioningController.ts:496](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L496)
 
 ___
 
@@ -628,7 +693,7 @@ Set the MDNS Broadcaster instance. Should be only used internally
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:318](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L318)
+[packages/matter.js/src/CommissioningController.ts:380](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L380)
 
 ___
 
@@ -654,7 +719,7 @@ Set the MDNS Scanner instance. Should be only used internally
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:309](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L309)
+[packages/matter.js/src/CommissioningController.ts:371](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L371)
 
 ___
 
@@ -676,7 +741,7 @@ Set the Storage instance. Should be only used internally
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:327](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L327)
+[packages/matter.js/src/CommissioningController.ts:389](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L389)
 
 ___
 
@@ -696,4 +761,4 @@ Initialize the controller and connect to all commissioned nodes if autoConnect i
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:388](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L388)
+[packages/matter.js/src/CommissioningController.ts:456](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L456)

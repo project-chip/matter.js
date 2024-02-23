@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `configurationList`: [`WritableAttribute`](cluster_export.md#writableattribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `proxyAllNodes`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `sourceList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)[]\>  }\>[], `any`\>  } ; `id`: ``66`` = 0x42; `name`: ``"ProxyConfiguration"`` = "ProxyConfiguration"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `configurationList`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `proxyAllNodes`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `sourceList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)[]\>  }\>[], `any`\>  } ; `id`: ``66`` = 0x42; `name`: ``"ProxyConfiguration"`` = "ProxyConfiguration"; `revision`: ``1`` = 1 }\>
 
 Proxy Configuration
 
@@ -27,7 +27,7 @@ This cluster provides a means for a proxy-capable device to be told the set of N
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L43)
 
 ___
 
@@ -51,4 +51,4 @@ specifically proxy.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L31)

@@ -58,7 +58,7 @@ SPDX-License-Identifier: Apache-2.0
 | Name | Type |
 | :------ | :------ |
 | `channel` | [`Channel`](../interfaces/internal_.Channel.md)\<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/internal_.Session.md)\<`ContextT`\> |
+| `session` | [`Session`](internal_.Session.md)\<`ContextT`\> |
 | `closeCallback?` | () => `Promise`\<`void`\> |
 
 #### Returns
@@ -103,7 +103,7 @@ ___
 
 ### session
 
-• `Readonly` **session**: [`Session`](../interfaces/internal_.Session.md)\<`ContextT`\>
+• `Readonly` **session**: [`Session`](internal_.Session.md)\<`ContextT`\>
 
 #### Defined in
 

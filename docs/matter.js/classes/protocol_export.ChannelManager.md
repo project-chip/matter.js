@@ -44,17 +44,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L22)
+[packages/matter.js/src/protocol/ChannelManager.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L22)
 
 ___
 
 ### paseChannels
 
-• `Private` `Readonly` **paseChannels**: `Map`\<[`Session`](../interfaces/session_export.Session.md)\<`any`\>, [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>\>
+• `Private` `Readonly` **paseChannels**: `Map`\<[`Session`](session_export.Session.md)\<`any`\>, [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L23)
+[packages/matter.js/src/protocol/ChannelManager.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L23)
 
 ## Methods
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:110](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L110)
+[packages/matter.js/src/protocol/ChannelManager.ts:110](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L110)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L45)
+[packages/matter.js/src/protocol/ChannelManager.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L45)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/session_export.Session.md)\<`any`\> |
+| `session` | [`Session`](session_export.Session.md)\<`any`\> |
 
 #### Returns
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:51](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L51)
+[packages/matter.js/src/protocol/ChannelManager.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L51)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L25)
+[packages/matter.js/src/protocol/ChannelManager.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L25)
 
 ___
 
@@ -143,7 +143,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `byteArrayChannel` | [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/session_export.Session.md)\<`any`\> |
+| `session` | [`Session`](session_export.Session.md)\<`any`\> |
 
 #### Returns
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:77](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L77)
+[packages/matter.js/src/protocol/ChannelManager.ts:77](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L77)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `byteArrayChannel` | [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/session_export.Session.md)\<`any`\> |
+| `session` | [`Session`](session_export.Session.md)\<`any`\> |
 
 #### Returns
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:87](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L87)
+[packages/matter.js/src/protocol/ChannelManager.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L87)
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:68](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L68)
+[packages/matter.js/src/protocol/ChannelManager.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L68)
 
 ___
 
@@ -215,4 +215,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ChannelManager.ts#L29)
+[packages/matter.js/src/protocol/ChannelManager.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ChannelManager.ts#L29)

@@ -14,9 +14,11 @@
 
 ## Hierarchy
 
-- [`Command`](../modules/exports_cluster.md#command)\<`RequestT`, `ResponseT`, `F`\>
+- [`Command`](exports_cluster.Command.md)\<`RequestT`, `ResponseT`, `F`\>
 
   ↳ **`OptionalCommand`**
+
+  ↳↳ [`ConditionalCommand`](exports_cluster.ConditionalCommand.md)
 
 ## Table of contents
 
@@ -41,7 +43,7 @@
 
 #### Inherited from
 
-Command.invokeAcl
+[Command](exports_cluster.Command.md).[invokeAcl](exports_cluster.Command.md#invokeacl)
 
 #### Defined in
 
@@ -55,7 +57,7 @@ ___
 
 #### Inherited from
 
-Command.isConditional
+[Command](exports_cluster.Command.md).[isConditional](exports_cluster.Command.md#isconditional)
 
 #### Defined in
 
@@ -69,7 +71,7 @@ ___
 
 #### Inherited from
 
-Command.mandatoryIf
+[Command](exports_cluster.Command.md).[mandatoryIf](exports_cluster.Command.md#mandatoryif)
 
 #### Defined in
 
@@ -83,7 +85,7 @@ ___
 
 #### Overrides
 
-Command.optional
+[Command](exports_cluster.Command.md).[optional](exports_cluster.Command.md#optional)
 
 #### Defined in
 
@@ -97,7 +99,7 @@ ___
 
 #### Inherited from
 
-Command.optionalIf
+[Command](exports_cluster.Command.md).[optionalIf](exports_cluster.Command.md#optionalif)
 
 #### Defined in
 
@@ -111,7 +113,7 @@ ___
 
 #### Inherited from
 
-Command.requestId
+[Command](exports_cluster.Command.md).[requestId](exports_cluster.Command.md#requestid)
 
 #### Defined in
 
@@ -125,7 +127,7 @@ ___
 
 #### Inherited from
 
-Command.requestSchema
+[Command](exports_cluster.Command.md).[requestSchema](exports_cluster.Command.md#requestschema)
 
 #### Defined in
 
@@ -139,7 +141,7 @@ ___
 
 #### Inherited from
 
-Command.responseId
+[Command](exports_cluster.Command.md).[responseId](exports_cluster.Command.md#responseid)
 
 #### Defined in
 
@@ -153,7 +155,7 @@ ___
 
 #### Inherited from
 
-Command.responseSchema
+[Command](exports_cluster.Command.md).[responseSchema](exports_cluster.Command.md#responseschema)
 
 #### Defined in
 
@@ -167,7 +169,7 @@ ___
 
 #### Inherited from
 
-Command.timed
+[Command](exports_cluster.Command.md).[timed](exports_cluster.Command.md#timed)
 
 #### Defined in
 

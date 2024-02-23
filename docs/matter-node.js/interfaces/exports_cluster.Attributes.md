@@ -6,4 +6,4 @@
 
 ## Indexable
 
-▪ [key: `string`]: [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\>
+▪ [key: `string`]: [`Attribute`](exports_cluster.Attribute.md)\<`any`, `any`\>

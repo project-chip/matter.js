@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:775](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L775)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:775](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L775)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:774](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L774)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:774](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L774)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:777](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L777)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:777](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L777)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:779](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L779)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:779](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L779)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:776](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L776)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:776](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L776)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:778](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L778)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:778](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L778)
 
 ___
 
@@ -84,4 +84,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:773](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L773)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:773](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L773)

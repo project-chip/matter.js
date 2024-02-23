@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`DimmableBaseDevice`](export._internal_.DimmableBaseDevice.md)
+- [`DimmableBaseDevice`](exports_device._internal_.DimmableBaseDevice.md)
 
   ↳ **`DimmablePluginUnitDevice`**
 
@@ -22,6 +22,7 @@
 - [deviceType](exports_device.DimmablePluginUnitDevice.md#devicetype)
 - [deviceTypes](exports_device.DimmablePluginUnitDevice.md#devicetypes)
 - [id](exports_device.DimmablePluginUnitDevice.md#id)
+- [isLighting](exports_device.DimmablePluginUnitDevice.md#islighting)
 - [name](exports_device.DimmablePluginUnitDevice.md#name)
 - [uniqueStorageKey](exports_device.DimmablePluginUnitDevice.md#uniquestoragekey)
 
@@ -77,8 +78,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../modules/exports_cluster.md#attribute)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>\>, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>\>\> |
-| `dimmableAttributeValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `currentLevel`: [`Attribute`](../modules/exports_cluster.md#attribute)\<``null`` \| `number`, `any`\> ; `defaultMoveRate`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)\<``null`` \| `number`, `any`\> ; `maxLevel`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)\<`number`, `any`\> ; `minLevel`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)\<`number`, `any`\> ; `offTransitionTime`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)\<``null`` \| `number`, `any`\> ; `onLevel`: [`WritableAttribute`](../modules/exports_cluster.md#writableattribute)\<``null`` \| `number`, `any`\> ; `onOffTransitionTime`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)\<`number`, `any`\> ; `onTransitionTime`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../modules/exports_cluster.md#writableattribute)\<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `executeIfOff`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)\<\{ `frequency`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `lighting`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `onOff`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>\>, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)\<\{ `frequency`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `lighting`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `onOff`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>\>\> |
+| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>\> |
+| `dimmableAttributeValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `currentLevel`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<``null`` \| `number`, `any`\> ; `defaultMoveRate`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `maxLevel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> ; `minLevel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> ; `offTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onLevel`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onOffTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `onTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `frequency`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `lighting`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `onOff`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `frequency`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `lighting`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `onOff`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>\> |
 | `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) |
 
 #### Returns
@@ -87,11 +88,11 @@
 
 #### Overrides
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[constructor](export._internal_.DimmableBaseDevice.md#constructor)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[constructor](exports_device._internal_.DimmableBaseDevice.md#constructor)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DimmableDevices.d.ts:38
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:42
 
 ## Properties
 
@@ -101,7 +102,7 @@ packages/matter.js/dist/esm/device/DimmableDevices.d.ts:38
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[commandHandler](export._internal_.DimmableBaseDevice.md#commandhandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[commandHandler](exports_device._internal_.DimmableBaseDevice.md#commandhandler)
 
 #### Defined in
 
@@ -115,7 +116,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[deviceType](export._internal_.DimmableBaseDevice.md#devicetype)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[deviceType](exports_device._internal_.DimmableBaseDevice.md#devicetype)
 
 #### Defined in
 
@@ -125,11 +126,11 @@ ___
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[deviceTypes](export._internal_.DimmableBaseDevice.md#devicetypes)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[deviceTypes](exports_device._internal_.DimmableBaseDevice.md#devicetypes)
 
 #### Defined in
 
@@ -143,11 +144,25 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[id](export._internal_.DimmableBaseDevice.md#id)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[id](exports_device._internal_.DimmableBaseDevice.md#id)
 
 #### Defined in
 
 packages/matter.js/dist/esm/device/Endpoint.d.ts:23
+
+___
+
+### isLighting
+
+• `Protected` **isLighting**: `boolean`
+
+#### Inherited from
+
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[isLighting](exports_device._internal_.DimmableBaseDevice.md#islighting)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:39
 
 ___
 
@@ -157,7 +172,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[name](export._internal_.DimmableBaseDevice.md#name)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[name](exports_device._internal_.DimmableBaseDevice.md#name)
 
 #### Defined in
 
@@ -171,7 +186,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[uniqueStorageKey](export._internal_.DimmableBaseDevice.md#uniquestoragekey)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[uniqueStorageKey](exports_device._internal_.DimmableBaseDevice.md#uniquestoragekey)
 
 #### Defined in
 
@@ -199,7 +214,7 @@ because needed public for derived classes.
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[_executeHandler](export._internal_.DimmableBaseDevice.md#_executehandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[_executeHandler](exports_device._internal_.DimmableBaseDevice.md#_executehandler)
 
 #### Defined in
 
@@ -211,14 +226,14 @@ packages/matter.js/dist/esm/device/Device.d.ts:114
 
 | Name | Type |
 | :------ | :------ |
-| `K_2` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K_2` | extends keyof [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K_2` |
-| `...args` | `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K_2`]\> |
+| `...args` | `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands)[`K_2`]\> |
 
 #### Returns
 
@@ -226,7 +241,7 @@ packages/matter.js/dist/esm/device/Device.d.ts:114
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[_executeHandler](export._internal_.DimmableBaseDevice.md#_executehandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[_executeHandler](exports_device._internal_.DimmableBaseDevice.md#_executehandler)
 
 #### Defined in
 
@@ -238,14 +253,14 @@ packages/matter.js/dist/esm/device/OnOffDevices.d.ts:33
 
 | Name | Type |
 | :------ | :------ |
-| `K_2` | extends keyof [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands) |
+| `K_2` | extends keyof [`DimmableDeviceCommands`](../modules/exports_device._internal_.md#dimmabledevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K_2` |
-| `...args` | `Parameters`\<[`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands)[`K_2`]\> |
+| `...args` | `Parameters`\<[`DimmableDeviceCommands`](../modules/exports_device._internal_.md#dimmabledevicecommands)[`K_2`]\> |
 
 #### Returns
 
@@ -253,11 +268,11 @@ packages/matter.js/dist/esm/device/OnOffDevices.d.ts:33
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[_executeHandler](export._internal_.DimmableBaseDevice.md#_executehandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[_executeHandler](exports_device._internal_.DimmableBaseDevice.md#_executehandler)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DimmableDevices.d.ts:22
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:23
 
 ___
 
@@ -277,7 +292,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addChildEndpoint](export._internal_.DimmableBaseDevice.md#addchildendpoint)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addChildEndpoint](exports_device._internal_.DimmableBaseDevice.md#addchildendpoint)
 
 #### Defined in
 
@@ -310,7 +325,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addClusterClient](export._internal_.DimmableBaseDevice.md#addclusterclient)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addClusterClient](exports_device._internal_.DimmableBaseDevice.md#addclusterclient)
 
 #### Defined in
 
@@ -341,7 +356,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addClusterServer](export._internal_.DimmableBaseDevice.md#addclusterserver)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addClusterServer](exports_device._internal_.DimmableBaseDevice.md#addclusterserver)
 
 #### Defined in
 
@@ -369,7 +384,7 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addCommandHandler](export._internal_.DimmableBaseDevice.md#addcommandhandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addCommandHandler](exports_device._internal_.DimmableBaseDevice.md#addcommandhandler)
 
 #### Defined in
 
@@ -381,14 +396,14 @@ packages/matter.js/dist/esm/device/Device.d.ts:97
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K` |
-| `handler` | [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`] |
+| `handler` | [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands)[`K`] |
 
 #### Returns
 
@@ -396,7 +411,7 @@ packages/matter.js/dist/esm/device/Device.d.ts:97
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addCommandHandler](export._internal_.DimmableBaseDevice.md#addcommandhandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addCommandHandler](exports_device._internal_.DimmableBaseDevice.md#addcommandhandler)
 
 #### Defined in
 
@@ -408,14 +423,14 @@ packages/matter.js/dist/esm/device/OnOffDevices.d.ts:31
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands) |
+| `K` | extends keyof [`DimmableDeviceCommands`](../modules/exports_device._internal_.md#dimmabledevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K` |
-| `handler` | [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands)[`K`] |
+| `handler` | [`DimmableDeviceCommands`](../modules/exports_device._internal_.md#dimmabledevicecommands)[`K`] |
 
 #### Returns
 
@@ -423,11 +438,11 @@ packages/matter.js/dist/esm/device/OnOffDevices.d.ts:31
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addCommandHandler](export._internal_.DimmableBaseDevice.md#addcommandhandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addCommandHandler](exports_device._internal_.DimmableBaseDevice.md#addcommandhandler)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DimmableDevices.d.ts:20
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:21
 
 ___
 
@@ -449,11 +464,11 @@ Adds a listener for the CurrentLevel attribute
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addCurrentLevelListener](export._internal_.DimmableBaseDevice.md#addcurrentlevellistener)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addCurrentLevelListener](exports_device._internal_.DimmableBaseDevice.md#addcurrentlevellistener)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DimmableDevices.d.ts:35
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:39
 
 ___
 
@@ -474,11 +489,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addDeviceClusters](export._internal_.DimmableBaseDevice.md#adddeviceclusters)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addDeviceClusters](exports_device._internal_.DimmableBaseDevice.md#adddeviceclusters)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DimmableDevices.d.ts:25
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:29
 
 ___
 
@@ -499,7 +514,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addFixedLabel](export._internal_.DimmableBaseDevice.md#addfixedlabel)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addFixedLabel](exports_device._internal_.DimmableBaseDevice.md#addfixedlabel)
 
 #### Defined in
 
@@ -526,11 +541,11 @@ This is an example of a convenient device class API to control the device withou
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addOnOffListener](export._internal_.DimmableBaseDevice.md#addonofflistener)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addOnOffListener](exports_device._internal_.DimmableBaseDevice.md#addonofflistener)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:79
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:81
 
 ___
 
@@ -551,7 +566,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addUserLabel](export._internal_.DimmableBaseDevice.md#adduserlabel)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[addUserLabel](exports_device._internal_.DimmableBaseDevice.md#adduserlabel)
 
 #### Defined in
 
@@ -577,7 +592,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -585,7 +600,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[createOptionalClusterClient](export._internal_.DimmableBaseDevice.md#createoptionalclusterclient)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[createOptionalClusterClient](exports_device._internal_.DimmableBaseDevice.md#createoptionalclusterclient)
 
 #### Defined in
 
@@ -611,7 +626,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -619,7 +634,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[createOptionalClusterServer](export._internal_.DimmableBaseDevice.md#createoptionalclusterserver)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[createOptionalClusterServer](exports_device._internal_.DimmableBaseDevice.md#createoptionalclusterserver)
 
 #### Defined in
 
@@ -637,7 +652,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[destroy](export._internal_.DimmableBaseDevice.md#destroy)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[destroy](exports_device._internal_.DimmableBaseDevice.md#destroy)
 
 #### Defined in
 
@@ -655,7 +670,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[determineUniqueID](export._internal_.DimmableBaseDevice.md#determineuniqueid)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[determineUniqueID](exports_device._internal_.DimmableBaseDevice.md#determineuniqueid)
 
 #### Defined in
 
@@ -673,7 +688,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getAllClusterClients](export._internal_.DimmableBaseDevice.md#getallclusterclients)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getAllClusterClients](exports_device._internal_.DimmableBaseDevice.md#getallclusterclients)
 
 #### Defined in
 
@@ -691,7 +706,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getAllClusterServers](export._internal_.DimmableBaseDevice.md#getallclusterservers)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getAllClusterServers](exports_device._internal_.DimmableBaseDevice.md#getallclusterservers)
 
 #### Defined in
 
@@ -715,7 +730,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getChildEndpoint](export._internal_.DimmableBaseDevice.md#getchildendpoint)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getChildEndpoint](exports_device._internal_.DimmableBaseDevice.md#getchildendpoint)
 
 #### Defined in
 
@@ -733,7 +748,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getChildEndpoints](export._internal_.DimmableBaseDevice.md#getchildendpoints)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getChildEndpoints](exports_device._internal_.DimmableBaseDevice.md#getchildendpoints)
 
 #### Defined in
 
@@ -759,7 +774,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -767,7 +782,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getClusterClient](export._internal_.DimmableBaseDevice.md#getclusterclient)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getClusterClient](exports_device._internal_.DimmableBaseDevice.md#getclusterclient)
 
 #### Defined in
 
@@ -791,7 +806,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getClusterClientById](export._internal_.DimmableBaseDevice.md#getclusterclientbyid)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getClusterClientById](exports_device._internal_.DimmableBaseDevice.md#getclusterclientbyid)
 
 #### Defined in
 
@@ -817,7 +832,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -825,7 +840,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getClusterServer](export._internal_.DimmableBaseDevice.md#getclusterserver)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getClusterServer](exports_device._internal_.DimmableBaseDevice.md#getclusterserver)
 
 #### Defined in
 
@@ -849,7 +864,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getClusterServerById](export._internal_.DimmableBaseDevice.md#getclusterserverbyid)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getClusterServerById](exports_device._internal_.DimmableBaseDevice.md#getclusterserverbyid)
 
 #### Defined in
 
@@ -867,25 +882,25 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getCurrentLevel](export._internal_.DimmableBaseDevice.md#getcurrentlevel)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getCurrentLevel](exports_device._internal_.DimmableBaseDevice.md#getcurrentlevel)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DimmableDevices.d.ts:28
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:32
 
 ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+[[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getDeviceTypes](export._internal_.DimmableBaseDevice.md#getdevicetypes)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getDeviceTypes](exports_device._internal_.DimmableBaseDevice.md#getdevicetypes)
 
 #### Defined in
 
@@ -903,7 +918,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getId](export._internal_.DimmableBaseDevice.md#getid)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getId](exports_device._internal_.DimmableBaseDevice.md#getid)
 
 #### Defined in
 
@@ -921,11 +936,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getOnOff](export._internal_.DimmableBaseDevice.md#getonoff)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getOnOff](exports_device._internal_.DimmableBaseDevice.md#getonoff)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:67
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:69
 
 ___
 
@@ -947,7 +962,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -955,7 +970,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[hasClusterClient](export._internal_.DimmableBaseDevice.md#hasclusterclient)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[hasClusterClient](exports_device._internal_.DimmableBaseDevice.md#hasclusterclient)
 
 #### Defined in
 
@@ -981,7 +996,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -989,7 +1004,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[hasClusterServer](export._internal_.DimmableBaseDevice.md#hasclusterserver)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[hasClusterServer](exports_device._internal_.DimmableBaseDevice.md#hasclusterserver)
 
 #### Defined in
 
@@ -1013,7 +1028,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeChildEndpoint](export._internal_.DimmableBaseDevice.md#removechildendpoint)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[removeChildEndpoint](exports_device._internal_.DimmableBaseDevice.md#removechildendpoint)
 
 #### Defined in
 
@@ -1041,7 +1056,7 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeCommandHandler](export._internal_.DimmableBaseDevice.md#removecommandhandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[removeCommandHandler](exports_device._internal_.DimmableBaseDevice.md#removecommandhandler)
 
 #### Defined in
 
@@ -1053,14 +1068,14 @@ packages/matter.js/dist/esm/device/Device.d.ts:105
 
 | Name | Type |
 | :------ | :------ |
-| `K_1` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K_1` | extends keyof [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K_1` |
-| `handler` | [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K_1`] |
+| `handler` | [`OnOffBaseDeviceCommands`](../modules/exports_device._internal_.md#onoffbasedevicecommands)[`K_1`] |
 
 #### Returns
 
@@ -1068,7 +1083,7 @@ packages/matter.js/dist/esm/device/Device.d.ts:105
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeCommandHandler](export._internal_.DimmableBaseDevice.md#removecommandhandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[removeCommandHandler](exports_device._internal_.DimmableBaseDevice.md#removecommandhandler)
 
 #### Defined in
 
@@ -1080,14 +1095,14 @@ packages/matter.js/dist/esm/device/OnOffDevices.d.ts:32
 
 | Name | Type |
 | :------ | :------ |
-| `K_1` | extends keyof [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands) |
+| `K_1` | extends keyof [`DimmableDeviceCommands`](../modules/exports_device._internal_.md#dimmabledevicecommands) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `action` | `K_1` |
-| `handler` | [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands)[`K_1`] |
+| `handler` | [`DimmableDeviceCommands`](../modules/exports_device._internal_.md#dimmabledevicecommands)[`K_1`] |
 
 #### Returns
 
@@ -1095,11 +1110,11 @@ packages/matter.js/dist/esm/device/OnOffDevices.d.ts:32
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeCommandHandler](export._internal_.DimmableBaseDevice.md#removecommandhandler)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[removeCommandHandler](exports_device._internal_.DimmableBaseDevice.md#removecommandhandler)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DimmableDevices.d.ts:21
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:22
 
 ___
 
@@ -1113,7 +1128,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeFromStructure](export._internal_.DimmableBaseDevice.md#removefromstructure)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[removeFromStructure](exports_device._internal_.DimmableBaseDevice.md#removefromstructure)
 
 #### Defined in
 
@@ -1140,7 +1155,7 @@ reachability needs to be set there.
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setBridgedDeviceReachability](export._internal_.DimmableBaseDevice.md#setbridgeddevicereachability)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[setBridgedDeviceReachability](exports_device._internal_.DimmableBaseDevice.md#setbridgeddevicereachability)
 
 #### Defined in
 
@@ -1164,11 +1179,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setCurrentLevel](export._internal_.DimmableBaseDevice.md#setcurrentlevel)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[setCurrentLevel](exports_device._internal_.DimmableBaseDevice.md#setcurrentlevel)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DimmableDevices.d.ts:29
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:33
 
 ___
 
@@ -1180,7 +1195,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] |
 
 #### Returns
 
@@ -1188,7 +1203,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setDeviceTypes](export._internal_.DimmableBaseDevice.md#setdevicetypes)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[setDeviceTypes](exports_device._internal_.DimmableBaseDevice.md#setdevicetypes)
 
 #### Defined in
 
@@ -1215,11 +1230,11 @@ This is an example f a convenient device class API to control the device without
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setOnOff](export._internal_.DimmableBaseDevice.md#setonoff)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[setOnOff](exports_device._internal_.DimmableBaseDevice.md#setonoff)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:66
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:68
 
 ___
 
@@ -1239,7 +1254,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setStructureChangedCallback](export._internal_.DimmableBaseDevice.md#setstructurechangedcallback)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[setStructureChangedCallback](exports_device._internal_.DimmableBaseDevice.md#setstructurechangedcallback)
 
 #### Defined in
 
@@ -1260,11 +1275,11 @@ This is an example f a convenient device class API to control the device without
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[toggle](export._internal_.DimmableBaseDevice.md#toggle)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[toggle](exports_device._internal_.DimmableBaseDevice.md#toggle)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/OnOffDevices.d.ts:72
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:74
 
 ___
 
@@ -1278,7 +1293,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[updatePartsList](export._internal_.DimmableBaseDevice.md#updatepartslist)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[updatePartsList](exports_device._internal_.DimmableBaseDevice.md#updatepartslist)
 
 #### Defined in
 
@@ -1296,7 +1311,7 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[verifyRequiredClusters](export._internal_.DimmableBaseDevice.md#verifyrequiredclusters)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[verifyRequiredClusters](exports_device._internal_.DimmableBaseDevice.md#verifyrequiredclusters)
 
 #### Defined in
 

@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](exports_tlv._internal_.md)
+
 ### Enumerations
 
 - [TlvLength](../enums/exports_tlv.TlvLength.md)
@@ -101,7 +105,7 @@
 
 ### ArrayAsChunked
 
-Ƭ **ArrayAsChunked**: [`ArrayChunkData`](export._internal_.md#arraychunkdata)[]
+Ƭ **ArrayAsChunked**: [`ArrayChunkData`](exports_tlv._internal_.md#arraychunkdata)[]
 
 #### Defined in
 
@@ -230,7 +234,7 @@ Converts [TlvType](../enums/exports_tlv.TlvType.md) to the js primitive type.
 | `0` | `bigint` \| `number` |
 | `10` | `number` |
 | `12` | `string` |
-| `16` | [`ByteArray`](util_export.md#bytearray-1) |
+| `16` | [`ByteArray`](util_export.md#bytearray) |
 | `20` | ``null`` |
 | `21` | `never` |
 | `22` | `never` |
@@ -259,7 +263,7 @@ ___
 
 ### TypeFromFields
 
-Ƭ **TypeFromFields**\<`F`\>: [`Merge`](util_export.md#merge)\<[`TypeForMandatoryFields`](export._internal_.md#typeformandatoryfields)\<`F`, [`MandatoryFieldNames`](export._internal_.md#mandatoryfieldnames)\<`F`\>\>, [`TypeForOptionalFields`](export._internal_.md#typeforoptionalfields)\<`F`, [`OptionalFieldNames`](export._internal_.md#optionalfieldnames)\<`F`\>\>\>
+Ƭ **TypeFromFields**\<`F`\>: [`Merge`](util_export.md#merge)\<[`TypeForMandatoryFields`](exports_tlv._internal_.md#typeformandatoryfields)\<`F`, [`MandatoryFieldNames`](exports_tlv._internal_.md#mandatoryfieldnames)\<`F`\>\>, [`TypeForOptionalFields`](exports_tlv._internal_.md#typeforoptionalfields)\<`F`, [`OptionalFieldNames`](exports_tlv._internal_.md#optionalfieldnames)\<`F`\>\>\>
 
 #### Type parameters
 

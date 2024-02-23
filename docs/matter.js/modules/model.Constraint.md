@@ -38,7 +38,7 @@ Parsed list structure.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Constraint.ts#L94)
+[packages/matter.js/src/model/aspects/Constraint.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Constraint.ts#L94)
 
 ___
 
@@ -50,7 +50,7 @@ These are all ways to describe a constraint.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:130](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Constraint.ts#L130)
+[packages/matter.js/src/model/aspects/Constraint.ts:130](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Constraint.ts#L130)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:89](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Constraint.ts#L89)
+[packages/matter.js/src/model/aspects/Constraint.ts:89](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Constraint.ts#L89)
 
 ## Functions
 
@@ -83,7 +83,7 @@ Parse constraint DSL.  Extremely lenient.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:229](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Constraint.ts#L229)
+[packages/matter.js/src/model/aspects/Constraint.ts:229](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Constraint.ts#L229)
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Constraint.ts:354](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Constraint.ts#L354)
+[packages/matter.js/src/model/aspects/Constraint.ts:354](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Constraint.ts#L354)

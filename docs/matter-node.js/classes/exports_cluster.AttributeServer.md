@@ -92,9 +92,9 @@ Attribute server for normal attributes that can be read and written.
 | `defaultValue` | `T` | - |
 | `getClusterDataVersion` | () => `number` | - |
 | `increaseClusterDataVersion` | () => `number` | - |
-| `getter?` | (`session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | - |
-| `setter?` | (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean` | Optional setter function to handle special requirements or the data are stored in different places. If a setter method is used for a writable attribute, the getter method must be implemented as well. The method needs to return if the stored value has changed or not. |
-| `validator?` | (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void` | Optional Validator function to handle special requirements for verification of stored data. The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is also returned to the client. If a setter is used then no validator should be used as the setter should handle the validation itself! |
+| `getter?` | (`session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | - |
+| `setter?` | (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean` | Optional setter function to handle special requirements or the data are stored in different places. If a setter method is used for a writable attribute, the getter method must be implemented as well. The method needs to return if the stored value has changed or not. **`Param`** the value to be set. **`Param`** the session that is requesting the value (if any). **`Param`** the endpoint the cluster server of this attribute is assigned to. |
+| `validator?` | (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void` | Optional Validator function to handle special requirements for verification of stored data. The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is also returned to the client. If a setter is used then no validator should be used as the setter should handle the validation itself! **`Param`** the value to be set. **`Param`** the session that is requesting the value (if any). **`Param`** the endpoint the cluster server of this attribute is assigned to. |
 
 #### Returns
 
@@ -162,7 +162,7 @@ ___
 
 ### getter
 
-• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
+• `Protected` `Readonly` **getter**: (`session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
 
 #### Type declaration
 
@@ -172,7 +172,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 | `isFabricFiltered?` | `boolean` |
 
@@ -308,7 +308,7 @@ ___
 
 ### setter
 
-• `Protected` `Readonly` **setter**: (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean`
+• `Protected` `Readonly` **setter**: (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean`
 
 #### Type declaration
 
@@ -319,7 +319,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 
 ##### Returns
@@ -334,7 +334,7 @@ ___
 
 ### validator
 
-• `Protected` `Readonly` **validator**: (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void`
+• `Protected` `Readonly` **validator**: (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void`
 
 #### Type declaration
 
@@ -345,7 +345,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 
 ##### Returns
@@ -484,7 +484,7 @@ If a getter is defined the value is determined by that getter method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -536,7 +536,7 @@ attributes.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -621,7 +621,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -699,7 +699,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -748,7 +748,7 @@ Method that contains the logic to set a value "from remote" (e.g. from a client)
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -800,7 +800,7 @@ ACL checks needs to be performed before calling this method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](exports_session.SecureSession.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`SecureSession`](exports_session.SecureSession.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 
 #### Returns
 

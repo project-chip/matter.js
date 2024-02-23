@@ -100,7 +100,7 @@ the corresponding element type.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:377](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L377)
+[packages/matter.js/src/model/models/Model.ts:377](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L377)
 
 ## Properties
 
@@ -110,7 +110,7 @@ the corresponding element type.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L46)
+[packages/matter.js/src/model/models/Model.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L46)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L47)
+[packages/matter.js/src/model/models/Model.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L47)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L26)
+[packages/matter.js/src/model/models/Model.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L26)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:27](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L27)
+[packages/matter.js/src/model/models/Model.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L27)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L29)
+[packages/matter.js/src/model/models/Model.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L29)
 
 ___
 
@@ -162,7 +162,7 @@ Flag set on elements loaded from Globals.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:34](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L34)
+[packages/matter.js/src/model/models/Model.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L34)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L23)
+[packages/matter.js/src/model/models/Model.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L23)
 
 ___
 
@@ -184,7 +184,7 @@ Indicates that an element defines a datatype.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L44)
+[packages/matter.js/src/model/models/Model.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L44)
 
 ___
 
@@ -196,7 +196,7 @@ Indicates that an element may have type definitions as children.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L39)
+[packages/matter.js/src/model/models/Model.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L39)
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L24)
+[packages/matter.js/src/model/models/Model.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L24)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L22)
+[packages/matter.js/src/model/models/Model.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L22)
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L25)
+[packages/matter.js/src/model/models/Model.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L25)
 
 ___
 
@@ -236,7 +236,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L28)
+[packages/matter.js/src/model/models/Model.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L28)
 
 ___
 
@@ -252,7 +252,7 @@ Factory support.  Populated by derivatives upon definition.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:192](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L192)
+[packages/matter.js/src/model/models/Model.ts:192](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L192)
 
 ## Accessors
 
@@ -268,7 +268,7 @@ The set of tags from which this model may derive.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:237](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L237)
+[packages/matter.js/src/model/models/Model.ts:237](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L237)
 
 ___
 
@@ -284,7 +284,7 @@ Get a Model for my base type, if any.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:207](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L207)
+[packages/matter.js/src/model/models/Model.ts:207](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L207)
 
 ___
 
@@ -300,7 +300,7 @@ Children of models are always models.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:127](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L127)
+[packages/matter.js/src/model/models/Model.ts:127](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L127)
 
 • `set` **children**(`children`): `void`
 
@@ -318,7 +318,7 @@ Children can be added as models or elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:137](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L137)
+[packages/matter.js/src/model/models/Model.ts:137](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L137)
 
 ___
 
@@ -334,7 +334,7 @@ Allows subclasses to pull a working ID from an alternate source.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:112](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L112)
+[packages/matter.js/src/model/models/Model.ts:112](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L112)
 
 ___
 
@@ -353,7 +353,7 @@ Does not recurse so only returns the direct base type.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:200](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L200)
+[packages/matter.js/src/model/models/Model.ts:200](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L200)
 
 ___
 
@@ -369,7 +369,7 @@ A local or parent xref.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:230](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L230)
+[packages/matter.js/src/model/models/Model.ts:230](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L230)
 
 ___
 
@@ -386,7 +386,7 @@ added as elements.  For JavaScript this is identical to children().
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:102](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L102)
+[packages/matter.js/src/model/models/Model.ts:102](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L102)
 
 ___
 
@@ -403,7 +403,7 @@ specific than the base primitive type.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:223](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L223)
+[packages/matter.js/src/model/models/Model.ts:223](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L223)
 
 ___
 
@@ -420,7 +420,7 @@ the effective ID but some models require a generated identifier.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:120](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L120)
+[packages/matter.js/src/model/models/Model.ts:120](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L120)
 
 ___
 
@@ -437,7 +437,7 @@ this element's definition.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:71](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L71)
+[packages/matter.js/src/model/models/Model.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L71)
 
 • `set` **parent**(`parent`): `void`
 
@@ -453,7 +453,7 @@ this element's definition.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:75](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L75)
+[packages/matter.js/src/model/models/Model.ts:75](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L75)
 
 ___
 
@@ -469,7 +469,7 @@ The full path ("." delimited) in the Matter tree.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:59](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L59)
+[packages/matter.js/src/model/models/Model.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L59)
 
 ___
 
@@ -486,7 +486,7 @@ inheritance hierarchy that I override.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:215](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L215)
+[packages/matter.js/src/model/models/Model.ts:215](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L215)
 
 ___
 
@@ -502,7 +502,7 @@ Did validation find errors?
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:52](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L52)
+[packages/matter.js/src/model/models/Model.ts:52](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L52)
 
 ## Methods
 
@@ -524,7 +524,7 @@ Add a child.  children.push works too but only accepts models.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:244](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L244)
+[packages/matter.js/src/model/models/Model.ts:244](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L244)
 
 ___
 
@@ -552,7 +552,7 @@ Retrieve all models of a specific element type from local scope.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:268](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L268)
+[packages/matter.js/src/model/models/Model.ts:268](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L268)
 
 ___
 
@@ -575,7 +575,7 @@ Record a validation error for this model.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:303](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L303)
+[packages/matter.js/src/model/models/Model.ts:303](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L303)
 
 ___
 
@@ -604,7 +604,7 @@ Retrieve a specific model by ID or name.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:275](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L275)
+[packages/matter.js/src/model/models/Model.ts:275](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L275)
 
 ___
 
@@ -626,7 +626,7 @@ Does this model derive from another?
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:373](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L373)
+[packages/matter.js/src/model/models/Model.ts:373](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L373)
 
 ___
 
@@ -640,7 +640,7 @@ Check identity of element by name or ID.
 
 | Name | Type |
 | :------ | :------ |
-| `key` | `undefined` \| [`ElementSelector`](../modules/export._internal_.ModelTraversal.md#elementselector) |
+| `key` | `undefined` \| [`ElementSelector`](../modules/model._internal_.ModelTraversal.md#elementselector) |
 
 #### Returns
 
@@ -648,7 +648,7 @@ Check identity of element by name or ID.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:291](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L291)
+[packages/matter.js/src/model/models/Model.ts:291](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L291)
 
 ___
 
@@ -662,7 +662,7 @@ Search the inheritance chain for a child property.
 
 | Name | Type |
 | :------ | :------ |
-| `key` | [`ElementSelector`](../modules/export._internal_.ModelTraversal.md#elementselector) |
+| `key` | [`ElementSelector`](../modules/model._internal_.ModelTraversal.md#elementselector) |
 | `allowedTags` | [`ElementTag`](../enums/model.ElementTag.md)[] |
 
 #### Returns
@@ -671,7 +671,7 @@ Search the inheritance chain for a child property.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:363](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L363)
+[packages/matter.js/src/model/models/Model.ts:363](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L363)
 
 ___
 
@@ -699,7 +699,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:284](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L284)
+[packages/matter.js/src/model/models/Model.ts:284](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L284)
 
 ___
 
@@ -721,7 +721,7 @@ Find all children that reference a specific type.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:356](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L356)
+[packages/matter.js/src/model/models/Model.ts:356](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L356)
 
 ___
 
@@ -737,7 +737,7 @@ Convert model to JSON.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:319](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L319)
+[packages/matter.js/src/model/models/Model.ts:319](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L319)
 
 ___
 
@@ -753,7 +753,7 @@ Convert to non-class structure.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:326](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L326)
+[packages/matter.js/src/model/models/Model.ts:326](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L326)
 
 ___
 
@@ -775,7 +775,7 @@ Apply a function to all tree elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:349](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L349)
+[packages/matter.js/src/model/models/Model.ts:349](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L349)
 
 ___
 
@@ -797,4 +797,4 @@ Create a model for an element.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:251](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/models/Model.ts#L251)
+[packages/matter.js/src/model/models/Model.ts:251](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L251)

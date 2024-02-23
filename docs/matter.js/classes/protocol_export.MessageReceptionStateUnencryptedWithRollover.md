@@ -54,7 +54,7 @@ back the window to the current location.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L29)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L33)
 
 ## Properties
 
@@ -68,7 +68,7 @@ back the window to the current location.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L26)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L30)
 
 ## Methods
 
@@ -99,7 +99,7 @@ Return number is:
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:176](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L176)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:181](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L181)
 
 ___
 
@@ -125,4 +125,4 @@ Returns true if the message counter is a duplicate.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:106](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L106)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:111](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L111)

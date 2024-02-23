@@ -74,7 +74,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L46)
+[packages/matter.js/src/session/SessionManager.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L53)
 
 ## Properties
 
@@ -84,7 +84,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L47)
+[packages/matter.js/src/session/SessionManager.ts:54](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L54)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L44)
+[packages/matter.js/src/session/SessionManager.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L51)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L41)
+[packages/matter.js/src/session/SessionManager.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L48)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L42)
+[packages/matter.js/src/session/SessionManager.ts:49](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L49)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L43)
+[packages/matter.js/src/session/SessionManager.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L50)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L40)
+[packages/matter.js/src/session/SessionManager.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L47)
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L39)
+[packages/matter.js/src/session/SessionManager.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L46)
 
 ## Methods
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:287](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L287)
+[packages/matter.js/src/session/SessionManager.ts:304](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L304)
 
 ___
 
@@ -171,16 +171,15 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `args` | `Object` |
-| `args.activeRetransmissionTimeoutMs?` | `number` |
 | `args.closeCallback?` | () => `Promise`\<`void`\> |
 | `args.fabric` | `undefined` \| [`Fabric`](fabric_export.Fabric.md) |
-| `args.idleRetransmissionTimeoutMs?` | `number` |
 | `args.isInitiator` | `boolean` |
 | `args.isResumption` | `boolean` |
 | `args.peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `args.peerSessionId` | `number` |
 | `args.salt` | `Uint8Array` |
 | `args.sessionId` | `number` |
+| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/session_export.SessionParameters.md)\> |
 | `args.sharedSecret` | `Uint8Array` |
 | `args.subscriptionChangedCallback?` | () => `void` |
 
@@ -190,19 +189,22 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:78](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L78)
+[packages/matter.js/src/session/SessionManager.ts:92](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L92)
 
 ___
 
 ### createUnsecureSession
 
-▸ **createUnsecureSession**(`initiatorNodeId?`): [`UnsecureSession`](session_export.UnsecureSession.md)\<`ContextT`\>
+▸ **createUnsecureSession**(`options`): [`UnsecureSession`](session_export.UnsecureSession.md)\<`ContextT`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initiatorNodeId?` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+| `options` | `Object` |
+| `options.initiatorNodeId?` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+| `options.isInitiator?` | `boolean` |
+| `options.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/session_export.SessionParameters.md)\> |
 
 #### Returns
 
@@ -210,7 +212,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:53](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L53)
+[packages/matter.js/src/session/SessionManager.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L60)
 
 ___
 
@@ -231,7 +233,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:208](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L208)
+[packages/matter.js/src/session/SessionManager.ts:219](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L219)
 
 ___
 
@@ -245,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:140](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L140)
+[packages/matter.js/src/session/SessionManager.ts:151](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L151)
 
 ___
 
@@ -265,7 +267,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:217](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L217)
+[packages/matter.js/src/session/SessionManager.ts:228](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L228)
 
 ___
 
@@ -285,7 +287,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:221](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L221)
+[packages/matter.js/src/session/SessionManager.ts:232](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L232)
 
 ___
 
@@ -299,7 +301,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:271](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L271)
+[packages/matter.js/src/session/SessionManager.ts:288](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L288)
 
 ___
 
@@ -313,7 +315,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:155](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L155)
+[packages/matter.js/src/session/SessionManager.ts:166](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L166)
 
 ___
 
@@ -327,7 +329,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:176](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L176)
+[packages/matter.js/src/session/SessionManager.ts:187](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L187)
 
 ___
 
@@ -347,7 +349,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:172](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L172)
+[packages/matter.js/src/session/SessionManager.ts:183](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L183)
 
 ___
 
@@ -368,7 +370,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:182](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L182)
+[packages/matter.js/src/session/SessionManager.ts:193](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L193)
 
 ___
 
@@ -388,7 +390,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:201](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L201)
+[packages/matter.js/src/session/SessionManager.ts:212](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L212)
 
 ___
 
@@ -408,7 +410,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:252](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L252)
+[packages/matter.js/src/session/SessionManager.ts:266](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L266)
 
 ___
 
@@ -429,7 +431,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:191](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L191)
+[packages/matter.js/src/session/SessionManager.ts:202](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L202)
 
 ___
 
@@ -449,7 +451,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:135](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L135)
+[packages/matter.js/src/session/SessionManager.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L146)
 
 ___
 
@@ -469,7 +471,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:131](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L131)
+[packages/matter.js/src/session/SessionManager.ts:142](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L142)
 
 ___
 
@@ -489,7 +491,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:225](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L225)
+[packages/matter.js/src/session/SessionManager.ts:236](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L236)
 
 ___
 
@@ -503,7 +505,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:239](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L239)
+[packages/matter.js/src/session/SessionManager.ts:250](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L250)
 
 ___
 
@@ -523,4 +525,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:230](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L230)
+[packages/matter.js/src/session/SessionManager.ts:241](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L241)

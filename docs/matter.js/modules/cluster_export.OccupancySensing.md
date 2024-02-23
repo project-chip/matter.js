@@ -20,7 +20,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `occupancy`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `occupied`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\> ; `occupancySensorType`: [`Attribute`](cluster_export.md#attribute)\<[`OccupancySensorType`](../enums/cluster_export.OccupancySensing.OccupancySensorType.md), `any`\> ; `occupancySensorTypeBitmap`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `physicalContact`: [`BitFlag`](schema_export.md#bitflag-1) ; `pir`: [`BitFlag`](schema_export.md#bitflag-1) ; `ultrasonic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\> ; `physicalContactOccupiedToUnoccupiedDelay`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<``null`` \| `number`, `any`\> ; `physicalContactUnoccupiedToOccupiedDelay`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<``null`` \| `number`, `any`\> ; `physicalContactUnoccupiedToOccupiedThreshold`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `pirOccupiedToUnoccupiedDelay`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `pirUnoccupiedToOccupiedDelay`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `pirUnoccupiedToOccupiedThreshold`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `ultrasonicOccupiedToUnoccupiedDelay`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `ultrasonicUnoccupiedToOccupiedDelay`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `ultrasonicUnoccupiedToOccupiedThreshold`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\>  } ; `id`: ``1030`` = 0x406; `name`: ``"OccupancySensing"`` = "OccupancySensing"; `revision`: ``3`` = 3 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `occupancy`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `occupied`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `occupancySensorType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`OccupancySensorType`](../enums/cluster_export.OccupancySensing.OccupancySensorType.md), `any`\> ; `occupancySensorTypeBitmap`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `physicalContact`: [`BitFlag`](schema_export.md#bitflag) ; `pir`: [`BitFlag`](schema_export.md#bitflag) ; `ultrasonic`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `physicalContactOccupiedToUnoccupiedDelay`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `physicalContactUnoccupiedToOccupiedDelay`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `physicalContactUnoccupiedToOccupiedThreshold`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `pirOccupiedToUnoccupiedDelay`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `pirUnoccupiedToOccupiedDelay`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `pirUnoccupiedToOccupiedThreshold`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `ultrasonicOccupiedToUnoccupiedDelay`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `ultrasonicUnoccupiedToOccupiedDelay`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `ultrasonicUnoccupiedToOccupiedThreshold`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>  } ; `id`: ``1030`` = 0x406; `name`: ``"OccupancySensing"`` = "OccupancySensing"; `revision`: ``3`` = 3 }\>
 
 Occupancy Sensing
 
@@ -32,7 +32,7 @@ Attributes and commands for configuring occupancy sensing, and reporting occupan
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:81](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L81)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L81)
 
 ___
 
@@ -50,11 +50,11 @@ All other bits are reserved.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `occupied` | [`BitFlag`](schema_export.md#bitflag-1) | Indicates the sensed occupancy state; 1 = occupied, 0 = unoccupied. |
+| `occupied` | [`BitFlag`](schema_export.md#bitflag) | Indicates the sensed occupancy state; 1 = occupied, 0 = unoccupied. |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L22)
 
 ___
 
@@ -70,10 +70,10 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `physicalContact` | [`BitFlag`](schema_export.md#bitflag-1) | Indicates a physical contact sensor. |
-| `pir` | [`BitFlag`](schema_export.md#bitflag-1) | Indicates a passive infrared sensor. |
-| `ultrasonic` | [`BitFlag`](schema_export.md#bitflag-1) | Indicates a ultrasonic sensor. |
+| `physicalContact` | [`BitFlag`](schema_export.md#bitflag) | Indicates a physical contact sensor. |
+| `pir` | [`BitFlag`](schema_export.md#bitflag) | Indicates a passive infrared sensor. |
+| `ultrasonic` | [`BitFlag`](schema_export.md#bitflag) | Indicates a ultrasonic sensor. |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:57](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L57)

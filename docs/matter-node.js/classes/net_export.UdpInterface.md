@@ -103,7 +103,7 @@ ___
 
 ### openChannel
 
-▸ **openChannel**(`address`): `Promise`\<[`UdpConnection`](export._internal_.UdpConnection.md)\>
+▸ **openChannel**(`address`): `Promise`\<[`UdpConnection`](net_export._internal_.UdpConnection.md)\>
 
 #### Parameters
 
@@ -113,7 +113,7 @@ ___
 
 #### Returns
 
-`Promise`\<[`UdpConnection`](export._internal_.UdpConnection.md)\>
+`Promise`\<[`UdpConnection`](net_export._internal_.UdpConnection.md)\>
 
 #### Implementation of
 

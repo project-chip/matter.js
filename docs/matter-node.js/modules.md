@@ -17,7 +17,6 @@
 - [exports/device](modules/exports_device.md)
 - [exports/fabric](modules/exports_fabric.md)
 - [exports/interaction](modules/exports_interaction.md)
-- [exports/log](modules/exports_log.md)
 - [exports/math](modules/exports_math.md)
 - [exports/mdns](modules/exports_mdns.md)
 - [exports/model](modules/exports_model.md)

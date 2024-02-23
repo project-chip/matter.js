@@ -23,6 +23,11 @@
 
 Ƭ **TimerCallback**: () => `any`
 
+**`License`**
+
+Copyright 2022-2023 Project CHIP Authors
+SPDX-License-Identifier: Apache-2.0
+
 #### Type declaration
 
 ▸ (): `any`
@@ -30,11 +35,6 @@
 ##### Returns
 
 `any`
-
-**`License`**
-
-Copyright 2022-2023 Project CHIP Authors
-SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 

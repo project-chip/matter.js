@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L23)
+[packages/matter.js/src/fabric/FabricManager.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L23)
 
 ## Properties
 
@@ -72,7 +72,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L25)
+[packages/matter.js/src/fabric/FabricManager.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L25)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L21)
+[packages/matter.js/src/fabric/FabricManager.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L21)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L20)
+[packages/matter.js/src/fabric/FabricManager.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L20)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L19)
+[packages/matter.js/src/fabric/FabricManager.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L19)
 
 ## Methods
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:52](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L52)
+[packages/matter.js/src/fabric/FabricManager.ts:52](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L52)
 
 ___
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:77](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L77)
+[packages/matter.js/src/fabric/FabricManager.ts:77](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L77)
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:73](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L73)
+[packages/matter.js/src/fabric/FabricManager.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L73)
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L33)
+[packages/matter.js/src/fabric/FabricManager.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L33)
 
 ___
 
@@ -185,7 +185,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L44)
+[packages/matter.js/src/fabric/FabricManager.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L44)
 
 ___
 
@@ -205,7 +205,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L62)
+[packages/matter.js/src/fabric/FabricManager.ts:62](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L62)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:97](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L97)
+[packages/matter.js/src/fabric/FabricManager.ts:97](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L97)
 
 ___
 
@@ -245,4 +245,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:87](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/fabric/FabricManager.ts#L87)
+[packages/matter.js/src/fabric/FabricManager.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/FabricManager.ts#L87)

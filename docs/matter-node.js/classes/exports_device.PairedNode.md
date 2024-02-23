@@ -346,7 +346,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) | EndpointNumber to get the cluster from |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
 
 #### Returns
 
@@ -379,7 +379,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) | EndpointNumber to get the cluster from |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
 
 #### Returns
 
@@ -466,7 +466,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
 
 #### Returns
 
@@ -498,7 +498,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
 
 #### Returns
 

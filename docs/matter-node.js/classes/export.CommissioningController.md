@@ -22,6 +22,8 @@ Controller class to commission and connect multiple nodes into one fabric.
 
 - [connectedNodes](export.CommissioningController.md#connectednodes)
 - [controllerInstance](export.CommissioningController.md#controllerinstance)
+- [enhanceDeviceDetailsFromCache](export.CommissioningController.md#enhancedevicedetailsfromcache)
+- [enhanceDeviceDetailsFromRemote](export.CommissioningController.md#enhancedevicedetailsfromremote)
 - [initializeController](export.CommissioningController.md#initializecontroller)
 - [ipv4Disabled](export.CommissioningController.md#ipv4disabled)
 - [listeningAddressIpv4](export.CommissioningController.md#listeningaddressipv4)
@@ -50,6 +52,7 @@ Controller class to commission and connect multiple nodes into one fabric.
 - [discoverCommissionableDevices](export.CommissioningController.md#discovercommissionabledevices)
 - [getActiveSessionInformation](export.CommissioningController.md#getactivesessioninformation)
 - [getCommissionedNodes](export.CommissioningController.md#getcommissionednodes)
+- [getCommissionedNodesDetails](export.CommissioningController.md#getcommissionednodesdetails)
 - [getConnectedNode](export.CommissioningController.md#getconnectednode)
 - [getPort](export.CommissioningController.md#getport)
 - [initialize](export.CommissioningController.md#initialize)
@@ -86,7 +89,7 @@ Creates a new CommissioningController instance
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:112
+packages/matter.js/dist/esm/CommissioningController.d.ts:113
 
 ## Properties
 
@@ -96,7 +99,7 @@ packages/matter.js/dist/esm/CommissioningController.d.ts:112
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:105
+packages/matter.js/dist/esm/CommissioningController.d.ts:106
 
 ___
 
@@ -106,7 +109,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:104
+packages/matter.js/dist/esm/CommissioningController.d.ts:105
+
+___
+
+### enhanceDeviceDetailsFromCache
+
+• `Private` **enhanceDeviceDetailsFromCache**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:142
+
+___
+
+### enhanceDeviceDetailsFromRemote
+
+• `Private` **enhanceDeviceDetailsFromRemote**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:143
 
 ___
 
@@ -118,7 +141,7 @@ Internal method to initialize a MatterController instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:120
+packages/matter.js/dist/esm/CommissioningController.d.ts:121
 
 ___
 
@@ -128,7 +151,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:99
+packages/matter.js/dist/esm/CommissioningController.d.ts:100
 
 ___
 
@@ -138,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:100
+packages/matter.js/dist/esm/CommissioningController.d.ts:101
 
 ___
 
@@ -148,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:101
+packages/matter.js/dist/esm/CommissioningController.d.ts:102
 
 ___
 
@@ -158,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:103
+packages/matter.js/dist/esm/CommissioningController.d.ts:104
 
 ___
 
@@ -168,7 +191,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:97
+packages/matter.js/dist/esm/CommissioningController.d.ts:98
 
 ___
 
@@ -178,7 +201,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:106
+packages/matter.js/dist/esm/CommissioningController.d.ts:107
 
 ___
 
@@ -188,7 +211,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:98
+packages/matter.js/dist/esm/CommissioningController.d.ts:99
 
 ___
 
@@ -198,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:102
+packages/matter.js/dist/esm/CommissioningController.d.ts:103
 
 ## Accessors
 
@@ -212,7 +235,7 @@ packages/matter.js/dist/esm/CommissioningController.d.ts:102
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:113
+packages/matter.js/dist/esm/CommissioningController.d.ts:114
 
 ## Methods
 
@@ -232,7 +255,7 @@ packages/matter.js/dist/esm/CommissioningController.d.ts:113
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:118
+packages/matter.js/dist/esm/CommissioningController.d.ts:119
 
 ___
 
@@ -251,7 +274,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:114
+packages/matter.js/dist/esm/CommissioningController.d.ts:115
 
 ___
 
@@ -264,7 +287,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `identifierData` | [`CommissionableDeviceIdentifiers`](../modules/exports_common.md#commissionabledeviceidentifiers) |
-| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\> |
+| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `onIpNetwork`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `softAccessPoint`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\> |
 
 #### Returns
 
@@ -272,7 +295,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:181
+packages/matter.js/dist/esm/CommissioningController.d.ts:191
 
 ___
 
@@ -292,7 +315,7 @@ Disconnects all connected nodes and Closes the network connections and other res
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:176
+packages/matter.js/dist/esm/CommissioningController.d.ts:186
 
 ___
 
@@ -315,16 +338,22 @@ paired node on success.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:125
+packages/matter.js/dist/esm/CommissioningController.d.ts:126
 
 ___
 
 ### connect
 
-▸ **connect**(): `Promise`\<[`PairedNode`](exports_device.PairedNode.md)[]\>
+▸ **connect**(`connectOptions?`): `Promise`\<[`PairedNode`](exports_device.PairedNode.md)[]\>
 
 Connects to all paired nodes.
 After connection the endpoint data of the device is analyzed and an object structure is created.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `connectOptions?` | [`CommissioningControllerNodeOptions`](../modules/exports_device.md#commissioningcontrollernodeoptions) |
 
 #### Returns
 
@@ -332,7 +361,7 @@ After connection the endpoint data of the device is analyzed and an object struc
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:145
+packages/matter.js/dist/esm/CommissioningController.d.ts:148
 
 ___
 
@@ -356,7 +385,7 @@ After connection the endpoint data of the device is analyzed and an object struc
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:140
+packages/matter.js/dist/esm/CommissioningController.d.ts:141
 
 ___
 
@@ -379,7 +408,7 @@ not be used directly. See the PairedNode class for the public API.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:170
+packages/matter.js/dist/esm/CommissioningController.d.ts:173
 
 ___
 
@@ -399,7 +428,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:135
+packages/matter.js/dist/esm/CommissioningController.d.ts:136
 
 ___
 
@@ -412,7 +441,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `identifierData` | [`CommissionableDeviceIdentifiers`](../modules/exports_common.md#commissionabledeviceidentifiers) |
-| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\> |
+| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `onIpNetwork`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `softAccessPoint`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\> |
 | `discoveredCallback?` | (`device`: [`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)) => `void` |
 | `timeoutSeconds?` | `number` |
 
@@ -422,7 +451,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:182
+packages/matter.js/dist/esm/CommissioningController.d.ts:192
 
 ___
 
@@ -438,7 +467,7 @@ Returns active session information for all connected nodes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:185
+packages/matter.js/dist/esm/CommissioningController.d.ts:195
 
 ___
 
@@ -454,7 +483,21 @@ Returns an array with the Node Ids for all commissioned nodes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:174
+packages/matter.js/dist/esm/CommissioningController.d.ts:177
+
+___
+
+### getCommissionedNodesDetails
+
+▸ **getCommissionedNodesDetails**(): \{ `advertisedName`: `undefined` \| `string` ; `basicInformationData`: `undefined` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> ; `discoveryData`: `undefined` \| [`DiscoveryData`](../modules/exports_common.md#discoverydata) ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `operationalAddress`: `undefined` \| `string`  }[]
+
+#### Returns
+
+\{ `advertisedName`: `undefined` \| `string` ; `basicInformationData`: `undefined` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> ; `discoveryData`: `undefined` \| [`DiscoveryData`](../modules/exports_common.md#discoverydata) ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `operationalAddress`: `undefined` \| `string`  }[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:178
 
 ___
 
@@ -476,7 +519,7 @@ Returns the PairedNode instance for a given node id, if this node is connected.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:172
+packages/matter.js/dist/esm/CommissioningController.d.ts:175
 
 ___
 
@@ -494,7 +537,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:177
+packages/matter.js/dist/esm/CommissioningController.d.ts:187
 
 ___
 
@@ -518,7 +561,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:178
+packages/matter.js/dist/esm/CommissioningController.d.ts:188
 
 ___
 
@@ -534,7 +577,7 @@ Returns true if t least one node is commissioned/paired with this controller ins
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:165
+packages/matter.js/dist/esm/CommissioningController.d.ts:168
 
 ___
 
@@ -556,7 +599,7 @@ Check if a given node id is commissioned on this controller.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:127
+packages/matter.js/dist/esm/CommissioningController.d.ts:128
 
 ___
 
@@ -582,7 +625,7 @@ use this in case of an error.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:134
+packages/matter.js/dist/esm/CommissioningController.d.ts:135
 
 ___
 
@@ -596,7 +639,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:183
+packages/matter.js/dist/esm/CommissioningController.d.ts:193
 
 ___
 
@@ -622,7 +665,7 @@ Set the MDNS Broadcaster instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:157
+packages/matter.js/dist/esm/CommissioningController.d.ts:160
 
 ___
 
@@ -648,7 +691,7 @@ Set the MDNS Scanner instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:151
+packages/matter.js/dist/esm/CommissioningController.d.ts:154
 
 ___
 
@@ -670,7 +713,7 @@ Set the Storage instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:163
+packages/matter.js/dist/esm/CommissioningController.d.ts:166
 
 ___
 
@@ -690,4 +733,4 @@ Initialize the controller and connect to all commissioned nodes if autoConnect i
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:180
+packages/matter.js/dist/esm/CommissioningController.d.ts:190

@@ -6,7 +6,7 @@
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>
+- [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\>
 
 ## Table of contents
 
@@ -55,7 +55,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:136](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L136)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:137](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L137)
 
 ## Properties
 
@@ -65,17 +65,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:130](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L130)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:131](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L131)
 
 ___
 
 ### eventHandler
 
-• `Private` **eventHandler**: [`EventHandler`](export._internal_.EventHandler.md)
+• `Private` **eventHandler**: [`EventHandler`](protocol_interaction_export._internal_.EventHandler.md)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:132](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L132)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:133](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L133)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:134](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L134)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:135](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L135)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:131](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L131)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:132](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L132)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:138](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L138)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:139](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L139)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:137](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L137)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:138](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L138)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:133](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L133)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:134](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L134)
 
 ## Methods
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:917](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L917)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:943](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L943)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:141](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L141)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:142](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L142)
 
 ___
 
@@ -173,7 +173,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
 | `«destructured»` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeRequests`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `commandFields`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `commandPath`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CommandId`](../modules/datatype_export.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\>  }\>\>  }\>[]\> ; `suppressResponse`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `timedRequest`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\>  }\> |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:728](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L728)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:749](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L749)
 
 ___
 
@@ -195,7 +195,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
 | `«destructured»` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeRequests`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]\> ; `dataVersionFilters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>[]\> ; `eventFilters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]\> ; `eventRequests`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `isFabricFiltered`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\>  }\> |
 
 #### Returns
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:173](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L173)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:174](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L174)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
 | `«destructured»` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeRequests`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]\> ; `dataVersionFilters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>[]\> ; `eventFilters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]\> ; `eventRequests`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `isFabricFiltered`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `keepSubscriptions`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `maxIntervalCeilingSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `minIntervalFloorSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\> |
 | `messenger` | [`InteractionServerMessenger`](protocol_interaction_export.InteractionServerMessenger.md) |
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:579](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L579)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:600](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L600)
 
 ___
 
@@ -238,7 +238,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
 | `«destructured»` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `timeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\> |
 
 #### Returns
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:905](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L905)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:931](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L931)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
 | `«destructured»` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `moreChunkedMessages`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `suppressResponse`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `timedRequest`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `writeRequests`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `data`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>[]\>  }\> |
 | `«destructured»` | [`Message`](../interfaces/codec_export.Message.md) |
 
@@ -269,7 +269,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:357](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L357)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:378](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L378)
 
 ___
 
@@ -281,7 +281,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -293,7 +293,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:162](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L162)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:163](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L163)
 
 ___
 
@@ -313,4 +313,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:145](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L145)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L146)

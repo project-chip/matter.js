@@ -61,7 +61,7 @@ Special AttributeClient class to allow identifying attributes that are supported
 
 | Name | Type |
 | :------ | :------ |
-| `attribute` | [`Attribute`](../modules/exports_cluster.md#attribute)\<`T`, `any`\> |
+| `attribute` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
@@ -83,7 +83,7 @@ packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:30
 
 ### attribute
 
-• `Readonly` **attribute**: [`Attribute`](../modules/exports_cluster.md#attribute)\<`T`, `any`\>
+• `Readonly` **attribute**: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`T`, `any`\>
 
 #### Inherited from
 

@@ -68,15 +68,15 @@
 
 ### createKeyPair
 
-▪ `Static` `Readonly` **createKeyPair**: () => [`PrivateKey`](../modules/crypto_export.md#privatekey)
+▪ `Static` `Readonly` **createKeyPair**: () => [`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
 #### Type declaration
 
-▸ (): [`PrivateKey`](../modules/crypto_export.md#privatekey)
+▸ (): [`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
 ##### Returns
 
-[`PrivateKey`](../modules/crypto_export.md#privatekey)
+[`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
 #### Defined in
 
@@ -512,11 +512,11 @@ packages/matter.js/dist/esm/crypto/Crypto.d.ts:62
 
 ### createKeyPair
 
-▸ **createKeyPair**(): [`PrivateKey`](../modules/crypto_export.md#privatekey)
+▸ **createKeyPair**(): [`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
 #### Returns
 
-[`PrivateKey`](../modules/crypto_export.md#privatekey)
+[`PrivateKey`](../interfaces/crypto_export.PrivateKey.md)
 
 #### Defined in
 

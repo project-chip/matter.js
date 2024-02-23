@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](exports_datatype._internal_.md)
+
 ### Namespaces
 
 - [CaseAuthenticatedTag](exports_datatype.CaseAuthenticatedTag.md)
@@ -329,7 +333,7 @@ ___
 
 ### TlvCaseAuthenticatedTag
 
-• `Const` **TlvCaseAuthenticatedTag**: [`TlvCaseAuthenticatedTagSchema`](../classes/export._internal_.TlvCaseAuthenticatedTagSchema.md)
+• `Const` **TlvCaseAuthenticatedTag**: [`TlvCaseAuthenticatedTagSchema`](../classes/exports_datatype._internal_.TlvCaseAuthenticatedTagSchema.md)
 
 #### Defined in
 
@@ -411,13 +415,13 @@ ___
 
 ### TlvFabricIndex
 
-• `Const` **TlvFabricIndex**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`FabricIndex`](exports_datatype.md#fabricindex), `number` \| `undefined`\>
+• `Const` **TlvFabricIndex**: [`FabricIndexTlvWrapper`](../classes/exports_datatype._internal_.FabricIndexTlvWrapper.md)
 
 Tlv Schema for a Fabric Index.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:25
+packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:29
 
 ___
 
@@ -447,7 +451,7 @@ ___
 
 ### TlvSubjectId
 
-• `Const` **TlvSubjectId**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvWrapper"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvWrapper_.md)
+• `Const` **TlvSubjectId**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvWrapper"`](exports_datatype._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvWrapper_.md)
 
 Tlv schema for a Subject Id
 

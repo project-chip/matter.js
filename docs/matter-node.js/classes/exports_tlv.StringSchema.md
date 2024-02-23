@@ -122,7 +122,7 @@ packages/matter.js/dist/esm/tlv/TlvString.d.ts:19
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`LengthConstraints`](../modules/export._internal_.md#lengthconstraints) |
+| `«destructured»` | [`LengthConstraints`](../modules/exports_tlv._internal_.md#lengthconstraints) |
 
 #### Returns
 
@@ -315,13 +315,14 @@ ___
 
 ### encodeTlv
 
-▸ **encodeTlv**(`value`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
+▸ **encodeTlv**(`value`, `forWriteInteraction?`): [`TlvStream`](../modules/exports_tlv.md#tlvstream)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | [`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`] |
+| `forWriteInteraction?` | `boolean` |
 
 #### Returns
 

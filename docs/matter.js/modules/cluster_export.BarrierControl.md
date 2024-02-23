@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `barrierCapabilities`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `barrierCloseEvents`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `barrierClosePeriod`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `barrierCommandCloseEvents`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `barrierCommandOpenEvents`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `barrierMovingState`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `barrierOpenEvents`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `barrierOpenPeriod`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `barrierPosition`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `barrierSafetyStatus`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\>  } ; `commands`: \{ `barrierControlGoToPercent`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `percentOpen`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `barrierControlStop`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `id`: ``259`` = 0x103; `name`: ``"BarrierControl"`` = "BarrierControl"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `barrierCapabilities`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `barrierCloseEvents`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `barrierClosePeriod`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `barrierCommandCloseEvents`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `barrierCommandOpenEvents`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `barrierMovingState`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `barrierOpenEvents`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `barrierOpenPeriod`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `barrierPosition`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `barrierSafetyStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `barrierControlGoToPercent`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `percentOpen`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `barrierControlStop`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``259`` = 0x103; `name`: ``"BarrierControl"`` = "BarrierControl"; `revision`: ``1`` = 1 }\>
 
 Barrier Control
 
@@ -23,7 +23,7 @@ This cluster provides control of a barrier (garage door).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L26)
 
 ___
 
@@ -35,4 +35,4 @@ Input to the BarrierControl barrierControlGoToPercent command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L19)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L19)

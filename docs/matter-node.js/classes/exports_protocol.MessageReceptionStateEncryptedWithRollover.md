@@ -52,7 +52,7 @@ considered a rollover and not a smaller value
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:19
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:22
 
 ## Properties
 
@@ -66,7 +66,7 @@ packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:19
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:17
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:20
 
 ## Methods
 
@@ -97,7 +97,7 @@ Return number is:
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:49
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:52
 
 ___
 
@@ -123,4 +123,4 @@ Returns true if the message counter is a duplicate.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:40
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:43

@@ -169,7 +169,7 @@ ___
 
 ### messageDiagnostics
 
-▸ **messageDiagnostics**(`«destructured»`, `isDuplicate?`): [`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
+▸ **messageDiagnostics**(`«destructured»`, `isDuplicate?`): [`DiagnosticDictionary`](exports_mdns._internal_.DiagnosticDictionary.md)
 
 #### Parameters
 
@@ -180,7 +180,7 @@ ___
 
 #### Returns
 
-[`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
+[`DiagnosticDictionary`](exports_mdns._internal_.DiagnosticDictionary.md)
 
 #### Defined in
 

@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](exports_mdns._internal_.md)
+
 ### Enumerations
 
 - [AnnouncementType](../enums/exports_mdns.AnnouncementType.md)

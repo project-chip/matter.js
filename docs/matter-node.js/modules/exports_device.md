@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](exports_device._internal_.md)
+
 ### Enumerations
 
 - [DeviceClasses](../enums/exports_device.DeviceClasses.md)
@@ -109,7 +113,7 @@ packages/matter.js/dist/esm/device/EndpointStructureLogger.d.ts:13
 
 #### Index signature
 
-▪ [key: `string`]: [`DeviceTypeDefinition`](exports_device.md#devicetypedefinition)
+▪ [key: `string`]: [`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md)
 
 #### Defined in
 
@@ -119,7 +123,7 @@ packages/matter.js/dist/esm/device/DeviceTypes.d.ts:74
 
 ### DeviceTypeDefinition
 
-▸ **DeviceTypeDefinition**(`«destructured»`): [`DeviceTypeDefinition`](exports_device.md#devicetypedefinition)
+▸ **DeviceTypeDefinition**(`«destructured»`): [`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md)
 
 #### Parameters
 
@@ -139,7 +143,7 @@ packages/matter.js/dist/esm/device/DeviceTypes.d.ts:74
 
 #### Returns
 
-[`DeviceTypeDefinition`](exports_device.md#devicetypedefinition)
+[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md)
 
 #### Defined in
 
@@ -149,7 +153,7 @@ ___
 
 ### UnknownDeviceType
 
-▸ **UnknownDeviceType**(`code`): [`DeviceTypeDefinition`](exports_device.md#devicetypedefinition)
+▸ **UnknownDeviceType**(`code`): [`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md)
 
 #### Parameters
 
@@ -159,7 +163,7 @@ ___
 
 #### Returns
 
-[`DeviceTypeDefinition`](exports_device.md#devicetypedefinition)
+[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md)
 
 #### Defined in
 
@@ -178,7 +182,7 @@ the custom ones are used if defined
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `C` | extends [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -219,7 +223,7 @@ for multiple clusters
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributeInitialValues` | `undefined` \| \{ `[key: ClusterId]`: [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)\<`any`\>;  } | Object with initial attribute values for automatically added clusters |
-| `cluster` | [`Cluster`](exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | Cluster to get the initial attribute values for |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> | Cluster to get the initial attribute values for |
 
 #### Returns
 
@@ -233,7 +237,7 @@ ___
 
 ### getDeviceTypeDefinitionByCode
 
-▸ **getDeviceTypeDefinitionByCode**(`code`): [`DeviceTypeDefinition`](exports_device.md#devicetypedefinition) \| `undefined`
+▸ **getDeviceTypeDefinitionByCode**(`code`): [`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md) \| `undefined`
 
 #### Parameters
 
@@ -243,7 +247,7 @@ ___
 
 #### Returns
 
-[`DeviceTypeDefinition`](exports_device.md#devicetypedefinition) \| `undefined`
+[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md) \| `undefined`
 
 #### Defined in
 

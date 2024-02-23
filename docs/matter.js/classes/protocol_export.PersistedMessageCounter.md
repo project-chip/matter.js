@@ -55,7 +55,7 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:80](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L80)
+[packages/matter.js/src/protocol/MessageCounter.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L80)
 
 ## Properties
 
@@ -77,7 +77,7 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:56](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L56)
+[packages/matter.js/src/protocol/MessageCounter.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L56)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L48)
+[packages/matter.js/src/protocol/MessageCounter.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L48)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:57](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L57)
+[packages/matter.js/src/protocol/MessageCounter.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L57)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:81](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L81)
+[packages/matter.js/src/protocol/MessageCounter.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L81)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:82](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L82)
+[packages/matter.js/src/protocol/MessageCounter.ts:82](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L82)
 
 ## Methods
 
@@ -143,4 +143,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:102](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L102)
+[packages/matter.js/src/protocol/MessageCounter.ts:102](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L102)

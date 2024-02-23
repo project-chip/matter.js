@@ -121,7 +121,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<`any`\> |
+| `session` | [`Session`](exports_session.Session.md)\<`any`\> |
 
 #### Returns
 
@@ -142,7 +142,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `byteArrayChannel` | [`Channel`](../interfaces/exports_common.Channel.md)\<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<`any`\> |
+| `session` | [`Session`](exports_session.Session.md)\<`any`\> |
 
 #### Returns
 

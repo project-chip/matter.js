@@ -24,7 +24,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `capabilityMinima`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `caseSessionsPerFabric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subscriptionsPerFabric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `dataModelRevision`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)\<`boolean`, `any`\> ; `location`: [`WritableAttribute`](cluster_export.md#writableattribute)\<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](cluster_export.md#writableattribute)\<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ProductFinish`](../enums/cluster_export.BasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`Color`](../enums/cluster_export.BasicInformation.Color.md)\>  }\>, `any`\> ; `productId`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `productName`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](cluster_export.md#optionalattribute)\<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`VendorId`](datatype_export.md#vendorid), `any`\> ; `vendorName`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`string`, `any`\>  } ; `events`: \{ `leave`: [`OptionalEvent`](cluster_export.md#optionalevent)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\>  }\>, `any`\> ; `reachableChanged`: [`OptionalEvent`](cluster_export.md#optionalevent)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `reachableNewValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](cluster_export.md#optionalevent)\<`void`, `any`\> ; `startUp`: [`Event`](cluster_export.md#event)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  } ; `id`: ``40`` = 0x28; `name`: ``"BasicInformation"`` = "BasicInformation"; `revision`: ``2`` = 2 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `capabilityMinima`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `caseSessionsPerFabric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subscriptionsPerFabric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `dataModelRevision`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`boolean`, `any`\> ; `location`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ProductFinish`](../enums/cluster_export.BasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| [`Color`](../enums/cluster_export.BasicInformation.Color.md)\>  }\>, `any`\> ; `productId`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productName`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`VendorId`](datatype_export.md#vendorid), `any`\> ; `vendorName`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`string`, `any`\>  } ; `events`: \{ `leave`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\>  }\>, `any`\> ; `reachableChanged`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `reachableNewValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<`void`, `any`\> ; `startUp`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  } ; `id`: ``40`` = 0x28; `name`: ``"BasicInformation"`` = "BasicInformation"; `revision`: ``2`` = 2 }\>
 
 Basic Information
 
@@ -38,7 +38,7 @@ number, which apply to the whole Node.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:151](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L151)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:151](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L151)
 
 ___
 
@@ -55,7 +55,7 @@ cluster-specific.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L38)
 
 ___
 
@@ -71,7 +71,7 @@ Body of the BasicInformation leave event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:119](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L119)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:119](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L119)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L94)
 
 ___
 
@@ -97,7 +97,7 @@ Body of the BasicInformation reachableChanged event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:133](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L133)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:133](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L133)
 
 ___
 
@@ -113,4 +113,4 @@ Body of the BasicInformation startUp event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:104](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L104)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:104](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L104)

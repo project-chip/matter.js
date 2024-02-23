@@ -164,11 +164,11 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:260
 
 ### session
 
-• `get` **session**(): [`Session`](../interfaces/exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+• `get` **session**(): [`Session`](exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Returns
 
-[`Session`](../interfaces/exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+[`Session`](exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 
@@ -265,7 +265,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\> |
+| `A` | extends [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -296,7 +296,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\> |
+| `A` | extends [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -328,7 +328,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/exports_cluster.md#event)\<`T`, `any`\> |
+| `E` | extends [`Event`](../interfaces/exports_cluster.Event.md)\<`T`, `any`\> |
 
 #### Parameters
 
@@ -430,7 +430,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](../modules/exports_cluster.md#command)\<`any`, `any`, `any`\> |
+| `C` | extends [`Command`](../interfaces/exports_cluster.Command.md)\<`any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -463,7 +463,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](../modules/exports_cluster.md#command)\<`any`, `any`, `any`\> |
+| `C` | extends [`Command`](../interfaces/exports_cluster.Command.md)\<`any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -545,7 +545,7 @@ ___
 | `options` | `Object` |
 | `options.asTimedRequest?` | `boolean` |
 | `options.attributeData` | `Object` |
-| `options.attributeData.attribute` | [`Attribute`](../modules/exports_cluster.md#attribute)\<`T`, `any`\> |
+| `options.attributeData.attribute` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`T`, `any`\> |
 | `options.attributeData.clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 | `options.attributeData.dataVersion?` | `number` |
 | `options.attributeData.endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
@@ -573,7 +573,7 @@ ___
 | :------ | :------ |
 | `options` | `Object` |
 | `options.asTimedRequest?` | `boolean` |
-| `options.attributes` | \{ `attribute`: [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/exports_datatype.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) ; `value`: `any`  }[] |
+| `options.attributes` | \{ `attribute`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/exports_datatype.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) ; `value`: `any`  }[] |
 | `options.suppressResponse?` | `boolean` |
 | `options.timedRequestTimeoutMs?` | `number` |
 
@@ -625,7 +625,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\> |
+| `A` | extends [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -662,7 +662,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/exports_cluster.md#event)\<`T`, `any`\> |
+| `E` | extends [`Event`](../interfaces/exports_cluster.Event.md)\<`T`, `any`\> |
 
 #### Parameters
 

@@ -32,7 +32,7 @@ Send out announcements for this instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:261
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:267
 
 ___
 
@@ -48,7 +48,7 @@ Expire all announcements.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:267
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:273
 
 ___
 
@@ -64,7 +64,7 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:265
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:271
 
 ___
 
@@ -80,7 +80,7 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:263
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:269
 
 ___
 
@@ -103,7 +103,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:252
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:258
 
 ___
 
@@ -125,7 +125,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:259
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:265
 
 ___
 
@@ -149,4 +149,4 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:257
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:263

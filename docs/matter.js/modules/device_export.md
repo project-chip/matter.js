@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](device_export._internal_.md)
+
 ### Enumerations
 
 - [DeviceClasses](../enums/device_export.DeviceClasses.md)
@@ -66,7 +70,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:91](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/PairedNode.ts#L91)
+[packages/matter.js/src/device/PairedNode.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/PairedNode.ts#L91)
 
 ___
 
@@ -99,7 +103,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
 
 ## Variables
 
@@ -109,47 +113,47 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Index signature
 
-▪ [key: `string`]: [`DeviceTypeDefinition`](device_export.md#devicetypedefinition)
+▪ [key: `string`]: [`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md)
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:113](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DeviceTypes.ts#L113)
+[packages/matter.js/src/device/DeviceTypes.ts:113](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L113)
 
 ## Functions
 
 ### DeviceTypeDefinition
 
-▸ **DeviceTypeDefinition**(`«destructured»`): [`DeviceTypeDefinition`](device_export.md#devicetypedefinition)
+▸ **DeviceTypeDefinition**(`«destructured»`): [`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `code` | `number` |
-| › `deviceClass` | [`DeviceClasses`](../enums/device_export.DeviceClasses.md) |
-| › `name` | `string` |
-| › `optionalClientClusters?` | [`ClusterId`](datatype_export.md#clusterid)[] |
-| › `optionalServerClusters?` | [`ClusterId`](datatype_export.md#clusterid)[] |
-| › `requiredClientClusters?` | [`ClusterId`](datatype_export.md#clusterid)[] |
-| › `requiredServerClusters?` | [`ClusterId`](datatype_export.md#clusterid)[] |
-| › `revision` | `number` |
-| › `superSet?` | `string` |
-| › `unknown?` | `boolean` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `«destructured»` | `Object` | `undefined` |
+| › `code` | `number` | `undefined` |
+| › `deviceClass` | [`DeviceClasses`](../enums/device_export.DeviceClasses.md) | `undefined` |
+| › `name` | `string` | `undefined` |
+| › `optionalClientClusters?` | [`ClusterId`](datatype_export.md#clusterid)[] | `[]` |
+| › `optionalServerClusters?` | [`ClusterId`](datatype_export.md#clusterid)[] | `[]` |
+| › `requiredClientClusters?` | [`ClusterId`](datatype_export.md#clusterid)[] | `[]` |
+| › `requiredServerClusters?` | [`ClusterId`](datatype_export.md#clusterid)[] | `[]` |
+| › `revision` | `number` | `undefined` |
+| › `superSet?` | `string` | `undefined` |
+| › `unknown?` | `boolean` | `false` |
 
 #### Returns
 
-[`DeviceTypeDefinition`](device_export.md#devicetypedefinition)
+[`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md)
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:78](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DeviceTypes.ts#L78)
+[packages/matter.js/src/device/DeviceTypes.ts:78](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L78)
 
 ___
 
 ### UnknownDeviceType
 
-▸ **UnknownDeviceType**(`code`): [`DeviceTypeDefinition`](device_export.md#devicetypedefinition)
+▸ **UnknownDeviceType**(`code`): [`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md)
 
 #### Parameters
 
@@ -159,11 +163,11 @@ ___
 
 #### Returns
 
-[`DeviceTypeDefinition`](device_export.md#devicetypedefinition)
+[`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md)
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:974](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DeviceTypes.ts#L974)
+[packages/matter.js/src/device/DeviceTypes.ts:983](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L983)
 
 ___
 
@@ -178,7 +182,7 @@ the custom ones are used if defined
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](cluster_export.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `C` | extends [`Cluster`](../interfaces/cluster_export.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -193,7 +197,7 @@ the custom ones are used if defined
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L29)
+[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L29)
 
 ___
 
@@ -219,7 +223,7 @@ for multiple clusters
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributeInitialValues` | `undefined` \| \{ `[key: ClusterId]`: [`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)\<`any`\>;  } | Object with initial attribute values for automatically added clusters |
-| `cluster` | [`Cluster`](cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | Cluster to get the initial attribute values for |
+| `cluster` | [`Cluster`](../interfaces/cluster_export.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> | Cluster to get the initial attribute values for |
 
 #### Returns
 
@@ -227,13 +231,13 @@ for multiple clusters
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/OnOffDevices.ts#L36)
+[packages/matter.js/src/device/OnOffDevices.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L34)
 
 ___
 
 ### getDeviceTypeDefinitionByCode
 
-▸ **getDeviceTypeDefinitionByCode**(`code`): [`DeviceTypeDefinition`](device_export.md#devicetypedefinition) \| `undefined`
+▸ **getDeviceTypeDefinitionByCode**(`code`): [`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md) \| `undefined`
 
 #### Parameters
 
@@ -243,11 +247,11 @@ ___
 
 #### Returns
 
-[`DeviceTypeDefinition`](device_export.md#devicetypedefinition) \| `undefined`
+[`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md) \| `undefined`
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:983](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DeviceTypes.ts#L983)
+[packages/matter.js/src/device/DeviceTypes.ts:992](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L992)
 
 ___
 
@@ -268,4 +272,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:235](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/EndpointStructureLogger.ts#L235)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:235](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/EndpointStructureLogger.ts#L235)

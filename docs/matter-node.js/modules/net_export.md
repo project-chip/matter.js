@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](net_export._internal_.md)
+
 ### Classes
 
 - [Network](../classes/net_export.Network.md)
@@ -39,7 +43,7 @@
 
 ### ListenerFunc
 
-Ƭ **ListenerFunc**: (`netInterface`: `string`, `peerAddress`: `string`, `peerPort`: `number`, `data`: [`ByteArray`](util_export.md#bytearray-1)) => `void`
+Ƭ **ListenerFunc**: (`netInterface`: `string`, `peerAddress`: `string`, `peerPort`: `number`, `data`: [`ByteArray`](util_export.md#bytearray)) => `void`
 
 #### Type declaration
 
@@ -52,7 +56,7 @@
 | `netInterface` | `string` |
 | `peerAddress` | `string` |
 | `peerPort` | `number` |
-| `data` | [`ByteArray`](util_export.md#bytearray-1) |
+| `data` | [`ByteArray`](util_export.md#bytearray) |
 
 ##### Returns
 

@@ -14,7 +14,7 @@
 
 ## Hierarchy
 
-- [`OptionalCommand`](../modules/exports_cluster.md#optionalcommand)\<`RequestT`, `ResponseT`, `F`\>
+- [`OptionalCommand`](exports_cluster.OptionalCommand.md)\<`RequestT`, `ResponseT`, `F`\>
 
   ↳ **`ConditionalCommand`**
 
@@ -41,7 +41,7 @@
 
 #### Inherited from
 
-OptionalCommand.invokeAcl
+[OptionalCommand](exports_cluster.OptionalCommand.md).[invokeAcl](exports_cluster.OptionalCommand.md#invokeacl)
 
 #### Defined in
 
@@ -55,7 +55,7 @@ ___
 
 #### Overrides
 
-OptionalCommand.isConditional
+[OptionalCommand](exports_cluster.OptionalCommand.md).[isConditional](exports_cluster.OptionalCommand.md#isconditional)
 
 #### Defined in
 
@@ -69,7 +69,7 @@ ___
 
 #### Inherited from
 
-OptionalCommand.mandatoryIf
+[OptionalCommand](exports_cluster.OptionalCommand.md).[mandatoryIf](exports_cluster.OptionalCommand.md#mandatoryif)
 
 #### Defined in
 
@@ -83,7 +83,7 @@ ___
 
 #### Inherited from
 
-OptionalCommand.optional
+[OptionalCommand](exports_cluster.OptionalCommand.md).[optional](exports_cluster.OptionalCommand.md#optional)
 
 #### Defined in
 
@@ -97,7 +97,7 @@ ___
 
 #### Inherited from
 
-OptionalCommand.optionalIf
+[OptionalCommand](exports_cluster.OptionalCommand.md).[optionalIf](exports_cluster.OptionalCommand.md#optionalif)
 
 #### Defined in
 
@@ -111,7 +111,7 @@ ___
 
 #### Inherited from
 
-OptionalCommand.requestId
+[OptionalCommand](exports_cluster.OptionalCommand.md).[requestId](exports_cluster.OptionalCommand.md#requestid)
 
 #### Defined in
 
@@ -125,7 +125,7 @@ ___
 
 #### Inherited from
 
-OptionalCommand.requestSchema
+[OptionalCommand](exports_cluster.OptionalCommand.md).[requestSchema](exports_cluster.OptionalCommand.md#requestschema)
 
 #### Defined in
 
@@ -139,7 +139,7 @@ ___
 
 #### Inherited from
 
-OptionalCommand.responseId
+[OptionalCommand](exports_cluster.OptionalCommand.md).[responseId](exports_cluster.OptionalCommand.md#responseid)
 
 #### Defined in
 
@@ -153,7 +153,7 @@ ___
 
 #### Inherited from
 
-OptionalCommand.responseSchema
+[OptionalCommand](exports_cluster.OptionalCommand.md).[responseSchema](exports_cluster.OptionalCommand.md#responseschema)
 
 #### Defined in
 
@@ -167,7 +167,7 @@ ___
 
 #### Inherited from
 
-OptionalCommand.timed
+[OptionalCommand](exports_cluster.OptionalCommand.md).[timed](exports_cluster.OptionalCommand.md#timed)
 
 #### Defined in
 
