@@ -5,6 +5,7 @@
  */
 
 import { NetworkCommissioning } from "@project-chip/matter-node.js/cluster";
+import { Logger } from "@project-chip/matter-node.js/log";
 import { ByteArray } from "@project-chip/matter-node.js/util";
 import { GeneralCommissioningBehavior } from "@project-chip/matter.js/behavior/definitions/general-commissioning";
 import {
@@ -39,20 +40,25 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
         const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
         this.state.lastNetworkingStatus = networkingStatus;
 
+        const threadScanResults = [
+            {
+                panId: this.endpoint.env.vars.number("ble.thread.panId"),
+                extendedPanId: BigInt(this.endpoint.env.vars.string("ble.thread.extendedPanId")),
+                networkName: this.endpoint.env.vars.string("ble.thread.networkName"),
+                channel: this.endpoint.env.vars.number("ble.thread.channel"),
+                version: 130,
+                extendedAddress: ByteArray.fromString(
+                    (this.endpoint.env.vars.string("ble.thread.address") ?? "000000000000").toLowerCase(),
+                ),
+                rssi: -50,
+                lqi: 50,
+            },
+        ];
+        console.log(Logger.toJSON(threadScanResults));
+
         return {
             networkingStatus,
-            threadScanResults: [
-                {
-                    panId: this.endpoint.env.vars.number("ble.thread.panId"),
-                    extendedPanId: this.endpoint.env.vars.number("ble.thread.extendedPanId"),
-                    networkName: this.endpoint.env.vars.string("ble.thread.networkName"),
-                    channel: this.endpoint.env.vars.number("ble.thread.channel"),
-                    version: 385,
-                    extendedAddress: ByteArray.fromString("00:00:00:00:00:00"),
-                    rssi: -50,
-                    lqi: 0,
-                },
-            ],
+            threadScanResults,
         };
     }
 
