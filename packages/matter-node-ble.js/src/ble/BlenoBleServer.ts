@@ -22,14 +22,14 @@ import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import { BleOptions } from "./BleNode.js";
 
 const logger = Logger.get("BlenoBleServer");
-let Bleno: typeof import("@abandonware/bleno");
+let Bleno: typeof import("@stoprocent/bleno");
 
 function initializeBleno(server: BlenoBleServer, hciId?: number) {
     // load Bleno driver with the correct device selected
     if (hciId !== undefined) {
         process.env.BLENO_HCI_DEVICE_ID = hciId.toString();
     }
-    Bleno = require("@abandonware/bleno");
+    Bleno = require("@stoprocent/bleno");
 
     class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
         constructor() {

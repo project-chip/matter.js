@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Peripheral } from "@abandonware/noble";
 import { BleError } from "@project-chip/matter.js/ble";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@project-chip/matter.js/common";
@@ -12,6 +11,7 @@ import { VendorId } from "@project-chip/matter.js/datatype";
 import { Logger } from "@project-chip/matter.js/log";
 import { Time, Timer } from "@project-chip/matter.js/time";
 import { ByteArray, createPromise } from "@project-chip/matter.js/util";
+import type { Peripheral } from "@stoprocent/noble";
 import { NobleBleClient } from "./NobleBleClient.js";
 
 const logger = Logger.get("BleScanner");
