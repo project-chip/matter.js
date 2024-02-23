@@ -107,7 +107,6 @@ export class BridgeTestInstance implements TestInstance {
                 commissioning: {
                     passcode: this.options.passcode ?? 20202021,
                     discriminator: this.options.discriminator ?? 3840,
-                    automaticAnnouncement: true,
                 },
                 productDescription: {
                     name: this.appName,
