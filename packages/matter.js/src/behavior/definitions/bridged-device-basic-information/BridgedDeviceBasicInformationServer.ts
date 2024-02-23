@@ -15,7 +15,7 @@ const BRIDGED_NODE_REVISION = 1;
 
 /**
  * This is the default server implementation of BridgedDeviceBasicInformationBehavior.
- * 
+ *
  * All attributes are optional except for the "reachable" attribute.
  */
 export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInformationBehavior {
@@ -23,7 +23,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
         if (this.endpoint.lifecycle.isInstalled) {
             this.#configurePart();
         } else {
-            this.reactTo(this.endpoint.lifecycle.installed, this.#configurePart, { once: true })
+            this.reactTo(this.endpoint.lifecycle.installed, this.#configurePart, { once: true });
         }
         this.reactTo(this.events.reachable$Change, this.#emitReachableChange);
     }
@@ -38,7 +38,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
     /**
      * Per the specification, BridgedDeviceBasicInformation may only appear on bridged nodes, and bridged nodes may only
      * appear under aggregator nodes.
-     * 
+     *
      * Therefore this default implementation of BridgedDeviceBasicInformation injects the BridgedNode device type on the
      * associated {@link Endpoint} and asserts that its parent is a {@link AggregatorEndpoint}.
      */
@@ -64,7 +64,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
 
 export namespace BridgedDeviceBasicInformationServer {
     export class State extends BridgedDeviceBasicInformationBehavior.State {
-        // TODO - need real-world feedback to determine best default
-        override reachable = false;
+        // Assume Device is online when it is added, but developers should set correctly if needed
+        override reachable = true;
     }
 }
