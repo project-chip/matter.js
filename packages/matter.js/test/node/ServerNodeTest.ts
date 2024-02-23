@@ -193,21 +193,23 @@ describe("ServerNode", () => {
 
         // Hrm always fun to configure pumps
         const pump = new Endpoint(
-            PumpDevice.with(PumpConfigurationAndControlServer.with("ConstantPressure").set({
-                effectiveControlMode: PumpConfigurationAndControl.ControlMode.ConstantPressure,
-                effectiveOperationMode: PumpConfigurationAndControl.OperationMode.Normal
-            })),
-            { owner: aggregator }
+            PumpDevice.with(
+                PumpConfigurationAndControlServer.with("ConstantPressure").set({
+                    effectiveControlMode: PumpConfigurationAndControl.ControlMode.ConstantPressure,
+                    effectiveOperationMode: PumpConfigurationAndControl.OperationMode.Normal,
+                }),
+            ),
+            { owner: aggregator },
         );
 
         const node = await MockServerNode.createOnline({ device: aggregator });
 
         await commission(node);
 
-        expect(node.stateOf(DescriptorBehavior).partsList).deep.equals([ aggregator.number, light.number, pump.number ]);
-        expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([ light.number, pump.number ]);
+        expect(node.stateOf(DescriptorBehavior).partsList).deep.equals([aggregator.number, light.number, pump.number]);
+        expect(aggregator.stateOf(DescriptorBehavior).partsList).deep.equals([light.number, pump.number]);
 
-        expect(light.stateOf(DescriptorBehavior).serverList).deep.equals([3,4,5,6,29]);
+        expect(light.stateOf(DescriptorBehavior).serverList).deep.equals([3, 4, 5, 6, 29]);
         expect(pump.stateOf(DescriptorBehavior).serverList).deep.equals([6, 3, 512, 29]);
 
         await node.close();

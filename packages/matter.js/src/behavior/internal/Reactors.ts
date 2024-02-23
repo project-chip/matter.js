@@ -115,7 +115,9 @@ class ReactorBacking<T extends any[], R> {
                         this.#destroying = true;
                         return MaybePromise.finally(
                             () => this.#react(args),
-                            () => { this.close() },
+                            () => {
+                                this.close();
+                            },
                         );
                     }
 

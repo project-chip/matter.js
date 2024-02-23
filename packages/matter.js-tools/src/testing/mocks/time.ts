@@ -54,9 +54,10 @@ class MockInterval extends MockTimer {
     }
 }
 
-type InterceptResult<T> = T extends Promise<T>
-    ? { resolve: Awaited<T>; reject?: undefined } | { resolve?: undefined; reject: {} }
-    : { resolve: T; reject?: undefined } | { resolve?: void; reject: {} };
+type InterceptResult<T> =
+    T extends Promise<T>
+        ? { resolve: Awaited<T>; reject?: undefined } | { resolve?: undefined; reject: {} }
+        : { resolve: T; reject?: undefined } | { resolve?: void; reject: {} };
 
 function isAsync(fn: (...args: any) => any): fn is (...args: any) => Promise<any> {
     return fn.constructor.name === "AsyncFunction";
@@ -113,7 +114,7 @@ export class MockTime {
             e => {
                 resolved = true;
                 error = e;
-            }
+            },
         );
 
         let timeAdvanced = 0;
@@ -130,7 +131,9 @@ export class MockTime {
 
             // If we've advanced more than one hour, assume we've hung
             if (timeAdvanced > 60 * 60 * 1000) {
-                throw new Error("Mock timeout: Promise did not resolve within one (virtual) hour, probably not going to happen");
+                throw new Error(
+                    "Mock timeout: Promise did not resolve within one (virtual) hour, probably not going to happen",
+                );
             }
 
             // Advance time exponentially, trying for granularity but also OK performance.  Note that we are not only

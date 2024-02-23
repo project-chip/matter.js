@@ -67,9 +67,8 @@ export type SignatureFromCommandSpec<C extends Command<any, any, any>> = (
         useExtendedFailSafeMessageResponseTimeout?: boolean;
     },
 ) => Promise<ResponseType<C>>;
-type GetterTypeFromSpec<A extends Attribute<any, any>> = A extends OptionalAttribute<infer T, any>
-    ? T | undefined
-    : AttributeJsType<A>;
+type GetterTypeFromSpec<A extends Attribute<any, any>> =
+    A extends OptionalAttribute<infer T, any> ? T | undefined : AttributeJsType<A>;
 type ClientAttributeGetters<A extends Attributes> = Omit<
     {
         [P in keyof A as `get${Capitalize<string & P>}Attribute`]: (

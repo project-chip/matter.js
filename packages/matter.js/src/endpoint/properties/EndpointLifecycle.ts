@@ -29,7 +29,9 @@ export class EndpointLifecycle {
     #ready = new Observable<[]>(error => this.emitError("ready", error));
     #treeReady = new Observable<[]>(error => this.emitError("treeReady", error));
     #destroyed = new Observable<[]>(error => this.emitError("destroyed", error));
-    #changed = new Observable<[type: EndpointLifecycle.Change, endpoint: Endpoint]>(error => this.emitError("changed", error));
+    #changed = new Observable<[type: EndpointLifecycle.Change, endpoint: Endpoint]>(error =>
+        this.emitError("changed", error),
+    );
     #reset = new Observable<[], MaybePromise>();
     #queuedUpdates?: Array<EndpointLifecycle.Change>;
 

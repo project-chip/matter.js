@@ -143,7 +143,9 @@ export class PartStoreFactory extends PartStoreService {
             while (this.#nextNumber < 1 || this.#allocatedNumbers.has(this.#nextNumber)) {
                 this.#nextNumber = (this.#nextNumber + 1) % 0xffff;
                 if (this.#nextNumber === startNumber) {
-                    throw new ImplementationError("Cannot add additional endpoints because endpoint numbers are exhausted");
+                    throw new ImplementationError(
+                        "Cannot add additional endpoints because endpoint numbers are exhausted",
+                    );
                 }
             }
 
@@ -166,7 +168,9 @@ export class PartStoreFactory extends PartStoreService {
             return this.storeForPart(endpoint.owner).childStoreFor(endpoint);
         }
         if (endpoint.number !== 0) {
-            throw new InternalError("Endpoint storage inaccessible because endpoint is not a node and is not owned by another endpoint");
+            throw new InternalError(
+                "Endpoint storage inaccessible because endpoint is not a node and is not owned by another endpoint",
+            );
         }
         if (!this.#root) {
             throw new InternalError("Endpoint storage accessed prior to initialization");

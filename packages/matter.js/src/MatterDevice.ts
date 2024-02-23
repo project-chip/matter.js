@@ -69,7 +69,7 @@ export class MatterDevice {
     readonly #fabricManager;
     readonly #sessionManager;
     #failsafeContext?: FailsafeContext;
-    
+
     // Currently we do not put much effort into synchronizing announcements as it probably isn't really necessary.  But
     // this mutex prevents automated announcements from piling up and allows us to ensure announcements are complete
     // on close
@@ -98,7 +98,7 @@ export class MatterDevice {
         this.announceInterval = Time.getPeriodicTimer("Server node announcement", DEVICE_ANNOUNCEMENT_INTERVAL_MS, () =>
             // Announcement needs to await a previous announcement because otherwise in testing at least announcement
             // may crash if started simultaneously
-            this.#announcementMutex.run(() => this.announce())
+            this.#announcementMutex.run(() => this.announce()),
         );
     }
 

@@ -17,8 +17,8 @@ import { ImplementationError, InternalError, NotImplementedError } from "../comm
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Diagnostic } from "../log/Diagnostic.js";
-import { EndpointInterface } from "./EndpointInterface.js";
 import { Endpoint } from "./Endpoint.js";
+import { EndpointInterface } from "./EndpointInterface.js";
 
 const SERVER = Symbol("server");
 interface ServerPart extends Endpoint {
@@ -50,7 +50,9 @@ export class EndpointServer implements EndpointInterface {
 
             // Sanity check
             if (this.#clusterServers.has(cluster.id)) {
-                throw new InternalError(`${this.#endpoint}.${cluster.id} cluster ${cluster.id} initialized multiple times`);
+                throw new InternalError(
+                    `${this.#endpoint}.${cluster.id} cluster ${cluster.id} initialized multiple times`,
+                );
             }
 
             backing = new ClusterServerBehaviorBacking(this, type as ClusterBehavior.Type);
@@ -195,7 +197,9 @@ export class EndpointServer implements EndpointInterface {
         const diagnostics = ["Endpoint", Diagnostic.strong(this.#endpoint.id), this.#endpoint.diagnosticDict];
         if (this.#endpoint.parts.size) {
             diagnostics.push(
-                Diagnostic.list([...this.#endpoint.parts].map(endpoint => EndpointServer.forEndpoint(endpoint)[Diagnostic.value])),
+                Diagnostic.list(
+                    [...this.#endpoint.parts].map(endpoint => EndpointServer.forEndpoint(endpoint)[Diagnostic.value]),
+                ),
             );
         }
         return diagnostics as unknown;
