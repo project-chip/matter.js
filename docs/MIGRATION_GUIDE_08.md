@@ -45,46 +45,52 @@ The environment related classes are exported unter `matter(-node).js/environment
 ### New:ServerNode <--> Legacy:CommissioningServer
 The `new CommissioningServer()` is replaced by `await ServerNode.create()` in the new API and both represent one Matter Server node that starts on a provided port, announces itself as Device in the network to be paired with Controllers. The instance also represents the Matter Root-Endpoint with all mandatory Root clusters. The configuration is provided in a comparable way to the ServerNode as before too and can contain node specific configurations (network, productDescription and commissioning details) and also Root endpoint cluster configurations.
 The create() method takes one or two parameters:
-* The definition of the RootEndpoint as first parameter. It can be omitted when it is the default RootEndpoint, or it is the definition including all relevant adjusted clusters or needed features. Check out [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/examples/DeviceNodeFull.ts) or the [Testing Apps](../chip-testing/src/AllClustersTestInstance.ts) on how to extend the Root Cluster. See also details and examples below when we present the "Part" component.
+* The definition of the RootEndpoint as first parameter. It can be omitted when it is the default RootEndpoint, or it is the definition including all relevant adjusted clusters or needed features. Check out [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/examples/DeviceNodeFull.ts) or the [Testing Apps](../chip-testing/src/AllClustersTestInstance.ts) on how to extend the Root Cluster. See also details and examples below when we show the "Endpoint" component.
 * The configuration of the node as second (or if definition above is omitted as first) parameter. Provide the default configuration for all relevant clusters and such here. The configuration should also contain a unique id property for the Node.
 
-When the node is created you add Endpoints to it (called "Part", see below) which is comparable to the Device instances added in the legacy API.
+When the node is created you add "Endpoints" to it which is comparable (and re-uses the name, but hs a different implementation and interface!) to the Device instances added in the legacy API. Please make sure to use the correct Endpoint class depending on if aou use the Legacy API or the new API!
 
 Afterward you start the node. Here you have two options:
 * **`node.run()`**: This registers the node as worker on the environment and runs the server and resolves when the node gets closed! SO there is no code executed after this await until the devices was closed. Use this if you just have such a single node in one Node.js process and nothing else is needed and all additional logic is done by event handlers that were attached earlier in code.
 * **`node.bringOnline()`**: This registers the node as worker on the environment and start the server. The promise resolves when the node is online and announced in the network, so additional code can be executed afterwards.
 
 The following methods are also existing on the ServerNode:
-* **`start()`**: This starts the node - mainly used internally
+* **`start()`**: This starts the node. Use only if the node was stopped before.
 * **`cancel()`**: This brings the node offline and removes all network sockets but leave state and structure intact, so it can be started again.
 * **`factoryReset()`**: This factory resets the device. If started it is stopped and restarted afterward.
 * **`destroy()`**: This destroys the node, taking it offline and removing it from the environment workers-
 
-### New:Part <--> Legacy:Endpoint and Device-Classes/Clusters
-A "Part" describes an endpoint which is added in the Matter endpoint structure.
+### New:Enpoint <--> Legacy:Endpoint and Device-Classes/Clusters
+A "Endpoint" describes an endpoint which is added in the Matter endpoint structure.
 
-As the ServerNode above each Part consists of an endpoint type definition and configuration for the part and the contained clusters.
+**Note**
+The name "Endpoint" is now defined twice - one time by both APIs, but have different exports and interfaces!
+* Legacy-API: Endpoint is on the "@project-chip/matter.js/device" export
+* New-API: Endpoint is on the "@project-chip/matter.js/endpoint" export 
+Do not mix them up! 
+
+As the ServerNode above each Endpoint consists of an endpoint type definition and configuration for the Endpoint and the contained clusters.
 
 The Device class exports to use for the new API are all located in "@project-chip/matter.js/devices/<Devicename>" and can be imported as needed to prevent importing too many classes.
 The main difference between the new and the legacy Device classes are that the new ones are working generically, so that special convenience shortcut methods like in the legacy classes do not exist. But the new API adds a lot more flexibility.
 
-There are several options to define and interact with the Parts that are described now.
+There are several options to define and interact with the Endpoints that are described now.
 
 #### Add a simple DeviceType
-The most simple way is to add a device endpoint to the server node and get the Part instance out of it
+The most simple way is to add a device endpoint to the server node and get the Endpoint instance out of it
 
 ```javascript
-const part = await serverNode.add(OnOffLightDevice, { id: "myonofflight" });
+const endpoint = await serverNode.add(OnOffLightDevice, { id: "myonofflight" });
 ```
 
-Alternatively the Part can be created beforehand and added then
+Alternatively the Endpoint can be created beforehand and added then
 
 ```javascript
-const part = new Part(OnOffLightDevice, { id: "myonofflight" });
-await serverNode.add(part);
+const endpoint = new Endpoint(OnOffLightDevice, { id: "myonofflight" });
+await serverNode.add(endpoint);
 ```
 
-The third alternative is to add the parts directly when configuring the ServerNode
+The third alternative is to add the endpoints directly when configuring the ServerNode
 
 ```javascript
 const serverNode = await ServerNode.create({
@@ -104,13 +110,13 @@ const serverNode = await ServerNode.create({
 ```
 
 **IMPORTANT**
-Please note that attribute change events can __not__ be added before the part is added to the node!
+Please note that attribute change events can __not__ be added before the endpoint is added to the node!
 
 #### Provide cluster properties/defaults with creation
 Each Device type has mandatory clusters that are added by default automatically and use their default values as defined by the Matter specification. To override these defaults you can add them as configuration when adding the node:
 
 ```javascript
-const part = await serverNode.add(OnOffLightDevice, { 
+const endpoint = await serverNode.add(OnOffLightDevice, { 
     id: "myonofflight",
     
     onOff: { // OnOff Cluster
@@ -135,7 +141,7 @@ class ReportingOnOffServer extends OnOffLightRequirements.OnOffServer {
 // Use the above defined OnOffServer for the OnOff cluster in the Device
 const ExampleLight = OnOffLightDevice.with(ReportingOnOffServer);
 
-const part = await serverNode.add(ExampleLight, { id: "myonofflight" });
+const endpoint = await serverNode.add(ExampleLight, { id: "myonofflight" });
 ```
 
 You can also add features for single clusters:
@@ -152,14 +158,14 @@ class RollerShade extends LiftingWindowCoveringServer {
 
 // Use the above defined WindowCovering cluster for the WindowCovering cluster in the Device
 // if you do not add an own implementation simply use `WindowCoveringDevice.with(LiftingWindowCoveringServer)`
-const part = await serverNode.add(WindowCoveringDevice.with(RollerShade), { id: "myrollershade" });
+const endpoint = await serverNode.add(WindowCoveringDevice.with(RollerShade), { id: "myrollershade" });
 ```
 
 To redefine multiple Clusters just separate them with comma in the with method
 
 ```javascript
 // Enable the query feature for Identify cluster and the Colortemperature feature for the ColorControl cluster
-const part = await serverNode.add(
+const endpoint = await serverNode.add(
     ExtendedColorLightDevice.with(IdentifyServer.with("Query"), ColorControlServer.with("ColorTemperature"))
 );
 ```
@@ -212,8 +218,8 @@ The DevicesFullNode.ts contains a [MyFancyFunctionality custom cluster](../packa
 To react to change events in your code outside of cluster implementations (there special rule might apply because of the transactionality) you do:
 
 ```javascript
-// Register for the change event of the onOff attribute for the OnOff cluster of the part
-part.events.onOff.onOff$Change.on(value => {
+// Register for the change event of the onOff attribute for the OnOff cluster of the endpoint
+endpoint.events.onOff.onOff$Change.on(value => {
     console.log(`OnOff is now ${value ? "ON" : "OFF"}`);
 });
 ```
@@ -224,26 +230,26 @@ state change handlers let the command fail! This also means that the transaction
 back automatically.
 
 ### Read or write attribute values
-The Part provides a direct structure to read attributes:
+The Endpoint provides a direct structure to read attributes:
 
 ```javascript
 // Read onOff attribute from onOff cluster
-const onOffValue = part.state.onOff.onOff;
+const onOffValue = endpoint.state.onOff.onOff;
 console.log(`current OnOff attribute: ${onOffValue}`);
 ```
 
-To set one or multiple (!) attributes use the set() method of the part:
+To set one or multiple (!) attributes use the set() method of the endpoint:
 
 ```javascript
 // Set onOff attribute from OnOff cluster
-await part.set({
+await endpoint.set({
     onOff: {
         onOff: false,
     },
 });
 ```
 
-You can provide multiple values also from multiple clusters within this part to set together. This means that they are set as a transaction - if one fails, all fail!
+You can provide multiple values also from multiple clusters within this endpoint to set together. This means that they are set as a transaction - if one fails, all fail!
 
 ### How to get QR Code and pairing details if device is not commissioned?
 ```javascript
@@ -268,17 +274,19 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 * The new Environment concept allows (for node.js) the handling of CLI parameters in parallel to (new) Environment variables and config file to pass in configurations
 * Introducing new High Level Device building API with full support for all Matter 1.1 device types
 * Add Transactionality ... Rollback on Exception
+* Add a specification fix for Network Commissioning Cluster
+* Change BLE library (Bleno/Noble) to a more maintained one
 
 
 ## TOPICS/DISCUSSIONS/TODOs:
-* Bug: State values that are undefined/optional in State defaults will never be taken over when config is initialized and stay undefined
-* Missing: multiple nodes duplicate port check missing
-* Missing: Re-Add Session changed callbacks
-* How: add a Controller to environment how?
-* How: how add custom cluster servers?
-* Discussion: Discuss and decide matter-node.js re-exports vs not
-* Discussion: change handlers should also allow async implementations
-* Discussion: act/actAsync to get rid of MaybePromise in some places vs "linter" and have more type safeness? (MaybePromise at all?)
+* (A) Fix: Dynamic added endpoints do not update root partsList - Greg
+* (A) Missing: Re-Add Session changed callbacks - Greg
+* (B) Missing: multiple nodes duplicate port check missing
+* (B) Have BLE package register itself when included- Greg
+* How: add a Controller to environment how? - Ingo: Make CommissioningController Environment aware.
+* Discussion: Make matter.js peerDep? - Ingo: Try to find out more
+* Todo: Greg: change/Observer handlers should also allow async implementations
+* Todo: Greg: act/actAsync to get rid of MaybePromise in some places vs "linter" and have more type safeness? (MaybePromise at all?)
 * Discussion: Go over Examples and discuss "convenience" for devs :-)
 * Discussion: async store?
 * Discussion: GHA tests runs? adjust for branch or start PR?
