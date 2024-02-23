@@ -57,8 +57,6 @@ export class NetworkServer extends NetworkBehavior {
             logger.warn("Soft access point commissioning is not supported yet");
         }
 
-        this.state.openAdvertisementWindowOnStartup = this.agent.get(CommissioningBehavior).state.automaticAnnouncement;
-
         this.reactTo((this.endpoint.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
 
         super.initialize();
@@ -71,8 +69,7 @@ export class NetworkServer extends NetworkBehavior {
      * If the node is uncommissioned it announces as commissionable on all available transports. Commissioned devices
      * only advertise for operational discovery via DNS-SD.
      *
-     * Advertisement begins at startup unless you set {@link NetworkServer.State.openAdvertisementWindowOnStartup} to
-     * false.
+     * Advertisement begins at startup.
      */
     openAdvertisementWindow() {
         if (!this.internal.runtime) {
@@ -107,7 +104,6 @@ export namespace NetworkServer {
     }
 
     export class State extends NetworkBehavior.State {
-        openAdvertisementWindowOnStartup = true;
         listeningAddressIpv4?: string = undefined;
         listeningAddressIpv6?: string = undefined;
         ipv4 = true;

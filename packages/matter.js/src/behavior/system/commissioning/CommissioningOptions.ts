@@ -43,10 +43,5 @@ export namespace CommissioningOptions {
          * Vendor-specific BLE advertisement data.
          */
         readonly additionalBleAdvertisementData?: ByteArray;
-
-        /**
-         * If false the device will not automatically announce itself for commissioning.
-         */
-        readonly automaticAnnouncement?: boolean;
     }
 }
