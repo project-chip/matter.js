@@ -271,15 +271,11 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 
 
 ## TOPICS/DISCUSSIONS/TODOs:
-* Bug: tear down - block events (to prevent reporting empty partsLists)
 * Bug: State values that are undefined/optional in State defaults will never be taken over when config is initialized and stay undefined
-* Bug: Greg: https://github.com/project-chip/matter.js/pull/696/files/5d428c568c3caf207799a2b5fabab45980dc1390#diff-5de6af6079ba8b41732bc937ce419016e66f110464eef7c130eacaa0f2874aac
-* Bug: Greg: https://github.com/project-chip/matter.js/pull/696/files/5d428c568c3caf207799a2b5fabab45980dc1390#diff-96ded3092330f11f54ce85d4a74a0b7e1110afde53889e826de64c65a7706ba7
 * Missing: multiple nodes duplicate port check missing
 * Missing: Re-Add Session changed callbacks
 * How: add a Controller to environment how?
 * How: how add custom cluster servers?
-* Discussion: readonly fields in Behavior State (Re https://github.com/project-chip/matter.js/pull/696/files/5d428c568c3caf207799a2b5fabab45980dc1390#diff-9bbc528df5309b02282e61c6068bb88e217d9142afd630b35afabf251ae2ce1f)
 * Discussion: Discuss and decide matter-node.js re-exports vs not
 * Discussion: change handlers should also allow async implementations
 * Discussion: act/actAsync to get rid of MaybePromise in some places vs "linter" and have more type safeness? (MaybePromise at all?)
