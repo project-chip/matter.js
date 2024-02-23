@@ -17,6 +17,7 @@ import {
 } from "@project-chip/matter.js/ble";
 import { Channel, InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
+import { ChannelNotConnectedError } from "@project-chip/matter.js/protocol";
 import { Time } from "@project-chip/matter.js/time";
 import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import { BleOptions } from "./BleNode.js";
@@ -391,7 +392,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
      */
     async send(data: ByteArray) {
         if (this.btpSession === undefined) {
-            throw new BtpFlowError(`Can not send data, no BTP session initialized`);
+            throw new ChannelNotConnectedError(`Can not send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }

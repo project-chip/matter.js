@@ -7,7 +7,7 @@
 import { MatterController } from "../MatterController.js";
 import { MAX_MESSAGE_SIZE, Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Channel } from "../common/Channel.js";
-import { ImplementationError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
+import { ImplementationError, MatterError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { Crypto } from "../crypto/Crypto.js";
@@ -28,6 +28,8 @@ import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureC
 import { SecureChannelMessenger } from "./securechannel/SecureChannelMessenger.js";
 
 const logger = Logger.get("ExchangeManager");
+
+export class ChannelNotConnectedError extends MatterError {}
 
 export class MessageChannel<ContextT> implements Channel<Message> {
     public closed = false;
@@ -303,7 +305,11 @@ export class ExchangeManager<ContextT> {
                         await messenger.sendCloseSession();
                         await messenger.close();
                     } catch (error) {
-                        logger.error("Error closing session", error);
+                        if (error instanceof ChannelNotConnectedError) {
+                            logger.debug("Session already closed because channel is disconnected.");
+                        } else {
+                            logger.error("Error closing session", error);
+                        }
                     }
                 }
                 await exchange.destroy();

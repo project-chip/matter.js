@@ -21,7 +21,7 @@ import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { createPromise } from "../util/Promises.js";
 import { Queue } from "../util/Queue.js";
-import { MessageChannel } from "./ExchangeManager.js";
+import { ChannelNotConnectedError, MessageChannel } from "./ExchangeManager.js";
 import { StatusCode, StatusResponseError } from "./interaction/StatusCode.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
@@ -397,7 +397,14 @@ export class MessageExchange<ContextT> {
                     this.retransmitMessage(message, retransmissionCount, notTimeoutBeforeTimeMs),
                 ).start();
             })
-            .catch(error => logger.error("An error happened when retransmitting a message", error));
+            .catch(error => {
+                logger.error("An error happened when retransmitting a message", error);
+                if (error instanceof ChannelNotConnectedError) {
+                    this.closeInternal().catch(error =>
+                        logger.error("An error happened when closing the exchange", error),
+                    );
+                }
+            });
     }
 
     async destroy() {
