@@ -106,7 +106,7 @@ export namespace NetworkServer {
         listeningAddressIpv4?: string = undefined;
         listeningAddressIpv6?: string = undefined;
         ipv4 = true;
-        ble = false;
+        ble?: boolean = undefined;
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = {
             onIpNetwork: true,
         };
