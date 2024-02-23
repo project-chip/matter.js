@@ -361,6 +361,8 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         },
     };
 
+    reference.toString = () => `ref<${resource}>`;
+
     return reference;
 
     function startWrite() {
