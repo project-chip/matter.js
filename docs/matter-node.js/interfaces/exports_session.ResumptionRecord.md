@@ -11,6 +11,7 @@
 - [fabric](exports_session.ResumptionRecord.md#fabric)
 - [peerNodeId](exports_session.ResumptionRecord.md#peernodeid)
 - [resumptionId](exports_session.ResumptionRecord.md#resumptionid)
+- [sessionParameters](exports_session.ResumptionRecord.md#sessionparameters)
 - [sharedSecret](exports_session.ResumptionRecord.md#sharedsecret)
 
 ## Properties
@@ -21,7 +22,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:17
+packages/matter.js/dist/esm/session/SessionManager.d.ts:18
 
 ___
 
@@ -31,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:18
+packages/matter.js/dist/esm/session/SessionManager.d.ts:19
 
 ___
 
@@ -41,7 +42,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:16
+packages/matter.js/dist/esm/session/SessionManager.d.ts:17
+
+___
+
+### sessionParameters
+
+• **sessionParameters**: [`SessionParameters`](exports_session.SessionParameters.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SessionManager.d.ts:20
 
 ___
 
@@ -51,4 +62,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:15
+packages/matter.js/dist/esm/session/SessionManager.d.ts:16

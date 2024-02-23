@@ -20,7 +20,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `failAtFault`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `numCallsToFail`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `numCallsToSkip`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `takeMutex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FaultType`](../enums/cluster_export.FaultInjection.FaultType.md)\>  }\>, `void`, `any`\> ; `failRandomlyAtFault`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `percentage`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FaultType`](../enums/cluster_export.FaultInjection.FaultType.md)\>  }\>, `void`, `any`\>  } ; `id`: ``4294048774`` = 0xfff1fc06; `name`: ``"FaultInjection"`` = "FaultInjection"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `failAtFault`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `numCallsToFail`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `numCallsToSkip`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `takeMutex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FaultType`](../enums/cluster_export.FaultInjection.FaultType.md)\>  }\>, `void`, `any`\> ; `failRandomlyAtFault`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `percentage`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FaultType`](../enums/cluster_export.FaultInjection.FaultType.md)\>  }\>, `void`, `any`\>  } ; `id`: ``4294048774`` = 0xfff1fc06; `name`: ``"FaultInjection"`` = "FaultInjection"; `revision`: ``1`` = 1 }\>
 
 Fault Injection
 
@@ -29,7 +29,7 @@ fault in the system).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:50](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L50)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L50)
 
 ___
 
@@ -41,7 +41,7 @@ Input to the FaultInjection failAtFault command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:27](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L27)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L27)
 
 ___
 
@@ -53,4 +53,4 @@ Input to the FaultInjection failRandomlyAtFault command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L38)

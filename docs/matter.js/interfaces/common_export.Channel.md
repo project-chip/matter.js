@@ -18,7 +18,7 @@ SPDX-License-Identifier: Apache-2.0
 ## Implemented by
 
 - [`MessageChannel`](../classes/protocol_export.MessageChannel.md)
-- [`UdpConnection`](../classes/export._internal_.UdpConnection.md)
+- [`UdpConnection`](../classes/net_export._internal_.UdpConnection.md)
 
 ## Table of contents
 
@@ -39,7 +39,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:8](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/Channel.ts#L8)
+[packages/matter.js/src/common/Channel.ts:8](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Channel.ts#L8)
 
 ## Methods
 
@@ -53,7 +53,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:10](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/Channel.ts#L10)
+[packages/matter.js/src/common/Channel.ts:10](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Channel.ts#L10)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:9](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/Channel.ts#L9)
+[packages/matter.js/src/common/Channel.ts:9](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Channel.ts#L9)

@@ -531,7 +531,7 @@ ___
 
 ### getCommissioningStepResult
 
-▸ **getCommissioningStepResult**(`stepNumber`, `subStepNumber`): `undefined` \| [`CommissioningStepResult`](../modules/export._internal_.md#commissioningstepresult)
+▸ **getCommissioningStepResult**(`stepNumber`, `subStepNumber`): `undefined` \| [`CommissioningStepResult`](../modules/exports_protocol._internal_.md#commissioningstepresult)
 
 #### Parameters
 
@@ -542,7 +542,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`CommissioningStepResult`](../modules/export._internal_.md#commissioningstepresult)
+`undefined` \| [`CommissioningStepResult`](../modules/exports_protocol._internal_.md#commissioningstepresult)
 
 #### Defined in
 

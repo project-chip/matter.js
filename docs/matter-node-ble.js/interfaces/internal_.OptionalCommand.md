@@ -14,7 +14,7 @@
 
 ## Hierarchy
 
-- [`Command`](../modules/internal_.md#command)\<`RequestT`, `ResponseT`, `F`\>
+- [`Command`](internal_.Command.md)\<`RequestT`, `ResponseT`, `F`\>
 
   ↳ **`OptionalCommand`**
 
@@ -41,7 +41,7 @@
 
 #### Inherited from
 
-Command.invokeAcl
+[Command](internal_.Command.md).[invokeAcl](internal_.Command.md#invokeacl)
 
 #### Defined in
 
@@ -55,7 +55,7 @@ ___
 
 #### Inherited from
 
-Command.isConditional
+[Command](internal_.Command.md).[isConditional](internal_.Command.md#isconditional)
 
 #### Defined in
 
@@ -69,7 +69,7 @@ ___
 
 #### Inherited from
 
-Command.mandatoryIf
+[Command](internal_.Command.md).[mandatoryIf](internal_.Command.md#mandatoryif)
 
 #### Defined in
 
@@ -83,7 +83,7 @@ ___
 
 #### Overrides
 
-Command.optional
+[Command](internal_.Command.md).[optional](internal_.Command.md#optional)
 
 #### Defined in
 
@@ -97,7 +97,7 @@ ___
 
 #### Inherited from
 
-Command.optionalIf
+[Command](internal_.Command.md).[optionalIf](internal_.Command.md#optionalif)
 
 #### Defined in
 
@@ -111,7 +111,7 @@ ___
 
 #### Inherited from
 
-Command.requestId
+[Command](internal_.Command.md).[requestId](internal_.Command.md#requestid)
 
 #### Defined in
 
@@ -125,7 +125,7 @@ ___
 
 #### Inherited from
 
-Command.requestSchema
+[Command](internal_.Command.md).[requestSchema](internal_.Command.md#requestschema)
 
 #### Defined in
 
@@ -139,7 +139,7 @@ ___
 
 #### Inherited from
 
-Command.responseId
+[Command](internal_.Command.md).[responseId](internal_.Command.md#responseid)
 
 #### Defined in
 
@@ -153,7 +153,7 @@ ___
 
 #### Inherited from
 
-Command.responseSchema
+[Command](internal_.Command.md).[responseSchema](internal_.Command.md#responseschema)
 
 #### Defined in
 
@@ -167,7 +167,7 @@ ___
 
 #### Inherited from
 
-Command.timed
+[Command](internal_.Command.md).[timed](internal_.Command.md#timed)
 
 #### Defined in
 

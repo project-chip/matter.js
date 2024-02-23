@@ -45,7 +45,7 @@ but the contained event is unknown.
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`Event`](../modules/exports_cluster.md#event)\<`any`, `any`\> |
+| `event` | [`Event`](../interfaces/exports_cluster.Event.md)\<`any`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
@@ -95,7 +95,7 @@ ___
 
 ### event
 
-• `Readonly` **event**: [`Event`](../modules/exports_cluster.md#event)\<`any`, `any`\>
+• `Readonly` **event**: [`Event`](../interfaces/exports_cluster.Event.md)\<`any`, `any`\>
 
 #### Inherited from
 

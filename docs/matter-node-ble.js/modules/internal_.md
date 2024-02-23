@@ -57,6 +57,7 @@
 - [BtpSessionHandler](../classes/internal_.BtpSessionHandler.md)
 - [ChannelManager](../classes/internal_.ChannelManager.md)
 - [CommandServer](../classes/internal_.CommandServer.md)
+- [DiagnosticDictionary](../classes/internal_.DiagnosticDictionary.md)
 - [Endpoint](../classes/internal_.Endpoint.md)
 - [EventClient](../classes/internal_.EventClient.md)
 - [EventHandler](../classes/internal_.EventHandler.md)
@@ -78,6 +79,7 @@
 - [MessageChannel](../classes/internal_.MessageChannel.md)
 - [MessageCounter](../classes/internal_.MessageCounter.md)
 - [MessageExchange](../classes/internal_.MessageExchange.md)
+- [MessageReceptionState](../classes/internal_.MessageReceptionState.md)
 - [NobleBleClient](../classes/internal_.NobleBleClient.md)
 - [PaseServer](../classes/internal_.PaseServer.md)
 - [PaseServerMessenger](../classes/internal_.PaseServerMessenger.md)
@@ -85,6 +87,7 @@
 - [Schema](../classes/internal_.Schema.md)
 - [SecureChannelMessenger](../classes/internal_.SecureChannelMessenger.md)
 - [SecureSession](../classes/internal_.SecureSession.md)
+- [Session](../classes/internal_.Session.md)
 - [SessionManager](../classes/internal_.SessionManager.md)
 - [Storage](../classes/internal_.Storage.md)
 - [StorageContext](../classes/internal_.StorageContext.md)
@@ -127,7 +130,6 @@
 - [Key](../interfaces/internal_.Key.md)
 - [Listener](../interfaces/internal_.Listener.md)
 - [Message](../interfaces/internal_.Message.md)
-- [MrpParameters](../interfaces/internal_.MrpParameters.md)
 - [NetInterface](../interfaces/internal_.NetInterface.md)
 - [OptionalAttribute](../interfaces/internal_.OptionalAttribute.md)
 - [OptionalCommand](../interfaces/internal_.OptionalCommand.md)
@@ -143,7 +145,7 @@
 - [ProtocolHandler](../interfaces/internal_.ProtocolHandler.md)
 - [ResumptionRecord](../interfaces/internal_.ResumptionRecord.md)
 - [Scanner](../interfaces/internal_.Scanner.md)
-- [Session](../interfaces/internal_.Session.md)
+- [SessionParameters](../interfaces/internal_.SessionParameters.md)
 - [Timer](../interfaces/internal_.Timer.md)
 - [TlvReader](../interfaces/internal_.TlvReader.md)
 - [TlvWriter](../interfaces/internal_.TlvWriter.md)
@@ -197,6 +199,8 @@
 - [DecodedEventData](internal_.md#decodedeventdata)
 - [DecodedEventReportValue](internal_.md#decodedeventreportvalue)
 - [DeviceTypeId](internal_.md#devicetypeid)
+- [DiscoverableDevice](internal_.md#discoverabledevice)
+- [DiscoveryData](internal_.md#discoverydata)
 - [EndpointNumber](internal_.md#endpointnumber)
 - [EventClients](internal_.md#eventclients)
 - [EventDataPayload](internal_.md#eventdatapayload)
@@ -218,10 +222,12 @@
 - [MandatoryAttributeServers](internal_.md#mandatoryattributeservers)
 - [MandatoryEventNames](internal_.md#mandatoryeventnames)
 - [MandatoryFieldNames](internal_.md#mandatoryfieldnames)
+- [MatterServerRecordWithExpire](internal_.md#matterserverrecordwithexpire)
 - [Merge](internal_.md#merge)
 - [NodeCommissioningOptions](internal_.md#nodecommissioningoptions)
 - [NodeId](internal_.md#nodeid)
 - [NonFixedAttributeNames](internal_.md#nonfixedattributenames)
+- [OperationalDevice](internal_.md#operationaldevice)
 - [OptionalAttributeNames](internal_.md#optionalattributenames)
 - [OptionalAttributeServers](internal_.md#optionalattributeservers)
 - [OptionalEventNames](internal_.md#optionaleventnames)
@@ -532,13 +538,13 @@ ___
 
 ### AttributeJsType
 
-Ƭ **AttributeJsType**\<`T`\>: `T` extends [`Attribute`](internal_.md#attribute)\<infer JsType, `any`\> ? `JsType` : `never`
+Ƭ **AttributeJsType**\<`T`\>: `T` extends [`Attribute`](../interfaces/internal_.Attribute.md)\<infer JsType, `any`\> ? `JsType` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Attribute`](internal_.md#attribute)\<`any`, `any`\> |
+| `T` | extends [`Attribute`](../interfaces/internal_.Attribute.md)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -582,8 +588,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `privateKey` | [`ByteArray`](internal_.md#bytearray-1) |
-| `publicKey` | [`ByteArray`](internal_.md#bytearray-1) |
+| `privateKey` | [`ByteArray`](internal_.md#bytearray) |
+| `publicKey` | [`ByteArray`](internal_.md#bytearray) |
 
 #### Defined in
 
@@ -593,7 +599,7 @@ ___
 
 ### BitField
 
-Ƭ **BitField**: [`BitRange`](internal_.md#bitrange-1)\<`number`, [`Number`](internal_.md#number)\>
+Ƭ **BitField**: [`BitRange`](internal_.md#bitrange)\<`number`, [`Number`](internal_.md#number)\>
 
 Defines the bit position and bit length of a numeric value.
 
@@ -607,7 +613,7 @@ ___
 
 ### BitFieldEnum
 
-Ƭ **BitFieldEnum**\<`E`\>: [`BitRange`](internal_.md#bitrange-1)\<`E`, [`Enum`](internal_.md#enum)\>
+Ƭ **BitFieldEnum**\<`E`\>: [`BitRange`](internal_.md#bitrange)\<`E`, [`Enum`](internal_.md#enum)\>
 
 Defines the bit position and bit length of an enum flag.
 
@@ -627,7 +633,7 @@ ___
 
 ### BitFlag
 
-Ƭ **BitFlag**: [`BitRange`](internal_.md#bitrange-1)\<`boolean`, [`Flag`](internal_.md#flag)\>
+Ƭ **BitFlag**: [`BitRange`](internal_.md#bitrange)\<`boolean`, [`Flag`](internal_.md#flag)\>
 
 Defines the bit position of a boolean flag.
 
@@ -673,7 +679,7 @@ ___
 
 #### Index signature
 
-▪ [key: `string`]: [`BitFlag`](internal_.md#bitflag-1) \| [`BitField`](internal_.md#bitfield-1) \| [`BitFieldEnum`](internal_.md#bitfieldenum-1)\<`any`\>
+▪ [key: `string`]: [`BitFlag`](internal_.md#bitflag) \| [`BitField`](internal_.md#bitfield) \| [`BitFieldEnum`](internal_.md#bitfieldenum)\<`any`\>
 
 #### Defined in
 
@@ -756,7 +762,7 @@ ___
 
 ### ClientAttributeGetters
 
-Ƭ **ClientAttributeGetters**\<`A`\>: `Omit`\<\{ [P in keyof A as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function }, keyof [`GlobalAttributes`](internal_.md#globalattributes-1)\<`any`\>\>
+Ƭ **ClientAttributeGetters**\<`A`\>: `Omit`\<\{ [P in keyof A as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function }, keyof [`GlobalAttributes`](internal_.md#globalattributes)\<`any`\>\>
 
 #### Type parameters
 
@@ -975,32 +981,11 @@ ___
 
 ### CommissionableDevice
 
-Ƭ **CommissionableDevice**: `Object`
-
-All information exposed by a commissionable device via announcements.
-The properties are named identical as in the Matter specification.
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `CM` | `number` | Commissioning Mode |
-| `D` | `number` | Discriminator |
-| `DN?` | `string` | Device advertising name |
-| `DT?` | `number` | Device type |
-| `PH?` | `number` | Pairing hint |
-| `PI?` | `string` | Pairing instructions |
-| `RI?` | `string` | Rotating device identifier |
-| `SAI?` | `number` | Sleep Active Interval |
-| `SII?` | `number` | Sleep Idle Interval |
-| `T?` | `number` | TCP supported |
-| `VP?` | `string` | VendorId + ProductId |
-| `addresses` | [`ServerAddress`](internal_.md#serveraddress)[] | The device's addresses IP/port pairs |
-| `deviceIdentifier` | `string` | - |
+Ƭ **CommissionableDevice**: [`DiscoverableDevice`](internal_.md#discoverabledevice)\<[`ServerAddress`](internal_.md#serveraddress)\> & \{ `CM`: `number` ; `D`: `number` ; `deviceIdentifier`: `string`  }
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:14
+matter.js/dist/esm/common/Scanner.d.ts:46
 
 ___
 
@@ -1010,7 +995,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
+[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
 
 ___
 
@@ -1023,7 +1008,7 @@ Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-matter.js/dist/esm/common/Scanner.d.ts:45
+matter.js/dist/esm/common/Scanner.d.ts:57
 
 ___
 
@@ -1038,13 +1023,14 @@ ___
 | `deviceName` | `string` | Device name for commissionable announcements. |
 | `deviceType?` | `number` | Device type for commissionable announcements. |
 | `productId` | `number` | Vendor ID for commissionable announcements. |
-| `sleepActiveInterval?` | `number` | Sleep Active Interval of the device for commissionable announcements. |
-| `sleepIdleInterval?` | `number` | Sleep Idle Interval of the device for commissionable announcements. |
+| `sessionActiveInterval?` | `number` | Session Active Interval of the device for commissionable announcements. |
+| `sessionActiveThreshold?` | `number` | This key defines the duration of time the node stays Active after the last network activity. * |
+| `sessionIdleInterval?` | `number` | Session Idle Interval of the device for commissionable announcements. |
 | `vendorId` | [`VendorId`](internal_.md#vendorid) | Device type for commissionable announcements. |
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:229
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:231
 
 ___
 
@@ -1083,8 +1069,9 @@ ___
 | `pairingHint?` | [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<typeof [`PairingHintBitmap`](internal_.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
 | `pairingInstructions?` | `string` | Pairing Instruction of the device for commissionable announcements. |
 | `productId` | `number` | Product ID for commissionable announcements. |
-| `sleepActiveInterval?` | `number` | Sleep Active Interval of the device for commissionable announcements. |
-| `sleepIdleInterval?` | `number` | Sleep Idle Interval of the device for commissionable announcements. |
+| `sessionActiveInterval?` | `number` | Session Active Interval of the device for commissionable announcements. |
+| `sessionActiveThreshold?` | `number` | Duration of time the node should stay Active after the last network activity. * |
+| `sessionIdleInterval?` | `number` | Session Idle Interval of the device for commissionable announcements. |
 | `vendorId` | [`VendorId`](internal_.md#vendorid) | Vendor ID for commissionable announcements. |
 
 #### Defined in
@@ -1252,6 +1239,51 @@ matter.js/dist/esm/datatype/DeviceTypeId.d.ts:13
 
 ___
 
+### DiscoverableDevice
+
+Ƭ **DiscoverableDevice**\<`SA`\>: [`DiscoveryData`](internal_.md#discoverydata) & \{ `addresses`: `SA`[]  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `SA` | extends [`ServerAddress`](internal_.md#serveraddress) |
+
+#### Defined in
+
+matter.js/dist/esm/common/Scanner.d.ts:38
+
+___
+
+### DiscoveryData
+
+Ƭ **DiscoveryData**: `Object`
+
+All information exposed by a commissionable device via announcements.
+The properties are named identical as in the Matter specification.
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `DN?` | `string` | Device advertising name |
+| `DT?` | `number` | Device type |
+| `ICD?` | `number` | ICD Long Idle Time operating mode supported |
+| `PH?` | `number` | Pairing hint |
+| `PI?` | `string` | Pairing instructions |
+| `RI?` | `string` | Rotating device identifier |
+| `SAI?` | `number` | Sleep Active Interval |
+| `SAT?` | `number` | Session active threshold |
+| `SII?` | `number` | Sleep Idle Interval |
+| `T?` | `number` | TCP supported |
+| `VP?` | `string` | VendorId + ProductId |
+
+#### Defined in
+
+matter.js/dist/esm/common/Scanner.d.ts:14
+
+___
+
 ### EndpointNumber
 
 Ƭ **EndpointNumber**: [`Branded`](internal_.md#branded)\<`number`, ``"EndpointNumber"``\>
@@ -1330,13 +1362,13 @@ ___
 
 ### EventType
 
-Ƭ **EventType**\<`T`\>: `T` extends [`OptionalEvent`](internal_.md#optionalevent)\<infer EventT, `any`\> ? `EventT` : `T` extends [`Event`](internal_.md#event)\<infer EventT, `any`\> ? `EventT` : `never`
+Ƭ **EventType**\<`T`\>: `T` extends [`OptionalEvent`](../interfaces/internal_.OptionalEvent.md)\<infer EventT, `any`\> ? `EventT` : `T` extends [`Event`](../interfaces/internal_.Event.md)\<infer EventT, `any`\> ? `EventT` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Event`](internal_.md#event)\<`any`, `any`\> |
+| `T` | extends [`Event`](../interfaces/internal_.Event.md)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -1353,6 +1385,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `expectAckOnly?` | `boolean` | The response to this send should be an ack only and no StatusResponse or such. If a StatusResponse is returned then this is handled as error. |
+| `includeAcknowledgeMessageId?` | `number` | Use the provided acknowledge MessageId instead checking the latest to send one |
 | `minimumResponseTimeoutMs?` | `number` | Define a minimum Response Timeout. This setting only increases the response timeout! The minimum four resubmissions are always done regardless of what is specified here. The logic will check if the timeout is reached after each resubmission, so it is not checked exact at the given timeout. |
 | `requiresAck?` | `boolean` | Allows to specify if the send message requires to be acknowledged by the receiver or not. |
 
@@ -1417,17 +1450,17 @@ ___
 | `caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](internal_.md#caseauthenticatedtag)[] |
 | `fabricId` | [`FabricId`](internal_.md#fabricid) |
 | `fabricIndex` | [`FabricIndex`](internal_.md#fabricindex) |
-| `identityProtectionKey` | [`ByteArray`](internal_.md#bytearray-1) |
-| `intermediateCACert` | [`ByteArray`](internal_.md#bytearray-1) \| `undefined` |
+| `identityProtectionKey` | [`ByteArray`](internal_.md#bytearray) |
+| `intermediateCACert` | [`ByteArray`](internal_.md#bytearray) \| `undefined` |
 | `keyPair` | [`BinaryKeyPair`](internal_.md#binarykeypair) |
 | `label` | `string` |
 | `nodeId` | [`NodeId`](internal_.md#nodeid) |
-| `operationalCert` | [`ByteArray`](internal_.md#bytearray-1) |
-| `operationalId` | [`ByteArray`](internal_.md#bytearray-1) |
-| `operationalIdentityProtectionKey` | [`ByteArray`](internal_.md#bytearray-1) |
-| `rootCert` | [`ByteArray`](internal_.md#bytearray-1) |
+| `operationalCert` | [`ByteArray`](internal_.md#bytearray) |
+| `operationalId` | [`ByteArray`](internal_.md#bytearray) |
+| `operationalIdentityProtectionKey` | [`ByteArray`](internal_.md#bytearray) |
+| `rootCert` | [`ByteArray`](internal_.md#bytearray) |
 | `rootNodeId` | [`NodeId`](internal_.md#nodeid) |
-| `rootPublicKey` | [`ByteArray`](internal_.md#bytearray-1) |
+| `rootPublicKey` | [`ByteArray`](internal_.md#bytearray) |
 | `rootVendorId` | [`VendorId`](internal_.md#vendorid) |
 | `scopedClusterData` | `Map`\<`number`, `Map`\<`string`, [`SupportedStorageTypes`](internal_.md#supportedstoragetypes)\>\> |
 
@@ -1455,13 +1488,13 @@ ___
 
 ### GetterTypeFromSpec
 
-Ƭ **GetterTypeFromSpec**\<`A`\>: `A` extends [`OptionalAttribute`](internal_.md#optionalattribute)\<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](internal_.md#attributejstype)\<`A`\>
+Ƭ **GetterTypeFromSpec**\<`A`\>: `A` extends [`OptionalAttribute`](../interfaces/internal_.OptionalAttribute.md)\<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](internal_.md#attributejstype)\<`A`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](internal_.md#attribute)\<`any`, `any`\> |
+| `A` | extends [`Attribute`](../interfaces/internal_.Attribute.md)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -1471,13 +1504,13 @@ ___
 
 ### GetterTypeFromSpec
 
-Ƭ **GetterTypeFromSpec**\<`A`\>: `A` extends [`OptionalAttribute`](internal_.md#optionalattribute)\<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](internal_.md#attributejstype)\<`A`\>
+Ƭ **GetterTypeFromSpec**\<`A`\>: `A` extends [`OptionalAttribute`](../interfaces/internal_.OptionalAttribute.md)\<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](internal_.md#attributejstype)\<`A`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](internal_.md#attribute)\<`any`, `any`\> |
+| `A` | extends [`Attribute`](../interfaces/internal_.Attribute.md)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -1487,7 +1520,7 @@ ___
 
 ### GlobalAttributeNames
 
-Ƭ **GlobalAttributeNames**\<`F`\>: keyof [`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>
+Ƭ **GlobalAttributeNames**\<`F`\>: keyof [`GlobalAttributes`](internal_.md#globalattributes)\<`F`\>
 
 #### Type parameters
 
@@ -1519,12 +1552,12 @@ MatterCoreSpecificationV1_1 § 7.13
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `acceptedCommandList` | [`Attribute`](internal_.md#attribute)\<[`CommandId`](internal_.md#commandid)[], `never`\> | List of client generated commands which are supported by this cluster server instance. |
-| `attributeList` | [`Attribute`](internal_.md#attribute)\<[`AttributeId`](internal_.md#attributeid)[], `never`\> | List of the attribute IDs of the attributes supported by the cluster instance. |
-| `clusterRevision` | [`Attribute`](internal_.md#attribute)\<`number`, `never`\> | Indicates the revision of the server cluster specification supported by the cluster instance. |
-| `eventList` | [`Attribute`](internal_.md#attribute)\<[`EventId`](internal_.md#eventid)[], `never`\> | List of the event IDs of the events supported by the cluster instance. |
-| `featureMap` | [`Attribute`](internal_.md#attribute)\<[`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<`F`\>, `never`\> | Indicates whether the server supports zero or more optional cluster features. |
-| `generatedCommandList` | [`Attribute`](internal_.md#attribute)\<[`CommandId`](internal_.md#commandid)[], `never`\> | List of server generated commands (server to client commands). |
+| `acceptedCommandList` | [`Attribute`](../interfaces/internal_.Attribute.md)\<[`CommandId`](internal_.md#commandid)[], `never`\> | List of client generated commands which are supported by this cluster server instance. |
+| `attributeList` | [`Attribute`](../interfaces/internal_.Attribute.md)\<[`AttributeId`](internal_.md#attributeid)[], `never`\> | List of the attribute IDs of the attributes supported by the cluster instance. |
+| `clusterRevision` | [`Attribute`](../interfaces/internal_.Attribute.md)\<`number`, `never`\> | Indicates the revision of the server cluster specification supported by the cluster instance. |
+| `eventList` | [`Attribute`](../interfaces/internal_.Attribute.md)\<[`EventId`](internal_.md#eventid)[], `never`\> | List of the event IDs of the events supported by the cluster instance. |
+| `featureMap` | [`Attribute`](../interfaces/internal_.Attribute.md)\<[`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<`F`\>, `never`\> | Indicates whether the server supports zero or more optional cluster features. |
+| `generatedCommandList` | [`Attribute`](../interfaces/internal_.Attribute.md)\<[`CommandId`](internal_.md#commandid)[], `never`\> | List of server generated commands (server to client commands). |
 
 #### Defined in
 
@@ -1595,7 +1628,7 @@ ___
 
 ### MandatoryAttributeServers
 
-Ƭ **MandatoryAttributeServers**\<`A`\>: `Omit`\<\{ [P in MandatoryAttributeNames\<A\>]: A[P] extends FabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends WritableFabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends FixedAttribute\<any, any\> ? FixedAttributeServer\<AttributeJsType\<A[P]\>\> : AttributeServer\<AttributeJsType\<A[P]\>\> }, keyof [`GlobalAttributes`](internal_.md#globalattributes-1)\<`any`\>\>
+Ƭ **MandatoryAttributeServers**\<`A`\>: `Omit`\<\{ [P in MandatoryAttributeNames\<A\>]: A[P] extends FabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends WritableFabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends FixedAttribute\<any, any\> ? FixedAttributeServer\<AttributeJsType\<A[P]\>\> : AttributeServer\<AttributeJsType\<A[P]\>\> }, keyof [`GlobalAttributes`](internal_.md#globalattributes)\<`any`\>\>
 
 Cluster attributes accessible on the cluster server
 
@@ -1643,6 +1676,16 @@ matter.js/dist/esm/tlv/TlvObject.d.ts:32
 
 ___
 
+### MatterServerRecordWithExpire
+
+Ƭ **MatterServerRecordWithExpire**: [`ServerAddressIp`](internal_.md#serveraddressip) & \{ `expires`: `number`  }
+
+#### Defined in
+
+matter.js/dist/esm/mdns/MdnsScanner.d.ts:12
+
+___
+
 ### Merge
 
 Ƭ **Merge**\<`A`, `B`\>: \{ [K in keyof A as K extends keyof B ? never : K]: A[K] } & `B`
@@ -1672,7 +1715,7 @@ Options needed to commission a new node
 
 #### Defined in
 
-matter.js/dist/esm/CommissioningController.d.ts:61
+matter.js/dist/esm/CommissioningController.d.ts:62
 
 ___
 
@@ -1710,6 +1753,16 @@ ___
 #### Defined in
 
 matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:115
+
+___
+
+### OperationalDevice
+
+Ƭ **OperationalDevice**: [`DiscoverableDevice`](internal_.md#discoverabledevice)\<[`ServerAddressIp`](internal_.md#serveraddressip)\> & \{ `deviceIdentifier`: `string`  }
+
+#### Defined in
+
+matter.js/dist/esm/common/Scanner.d.ts:43
 
 ___
 
@@ -1798,13 +1851,13 @@ ___
 
 ### RequestType
 
-Ƭ **RequestType**\<`T`\>: `T` extends [`OptionalCommand`](internal_.md#optionalcommand)\<infer RequestT, `any`, `any`\> ? `RequestT` : `T` extends [`Command`](internal_.md#command)\<infer RequestT, `any`, `any`\> ? `RequestT` : `never`
+Ƭ **RequestType**\<`T`\>: `T` extends [`OptionalCommand`](../interfaces/internal_.OptionalCommand.md)\<infer RequestT, `any`, `any`\> ? `RequestT` : `T` extends [`Command`](../interfaces/internal_.Command.md)\<infer RequestT, `any`, `any`\> ? `RequestT` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Command`](internal_.md#command)\<`any`, `any`, `any`\> |
+| `T` | extends [`Command`](../interfaces/internal_.Command.md)\<`any`, `any`, `any`\> |
 
 #### Defined in
 
@@ -1814,13 +1867,13 @@ ___
 
 ### ResponseType
 
-Ƭ **ResponseType**\<`T`\>: `T` extends [`OptionalCommand`](internal_.md#optionalcommand)\<`any`, infer ResponseT, `any`\> ? `ResponseT` : `T` extends [`Command`](internal_.md#command)\<`any`, infer ResponseT, `any`\> ? `ResponseT` : `never`
+Ƭ **ResponseType**\<`T`\>: `T` extends [`OptionalCommand`](../interfaces/internal_.OptionalCommand.md)\<`any`, infer ResponseT, `any`\> ? `ResponseT` : `T` extends [`Command`](../interfaces/internal_.Command.md)\<`any`, infer ResponseT, `any`\> ? `ResponseT` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Command`](internal_.md#command)\<`any`, `any`, `any`\> |
+| `T` | extends [`Command`](../interfaces/internal_.Command.md)\<`any`, `any`, `any`\> |
 
 #### Defined in
 
@@ -1950,7 +2003,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](internal_.md#command)\<`any`, `any`, `any`\> |
+| `C` | extends [`Command`](../interfaces/internal_.Command.md)\<`any`, `any`, `any`\> |
 
 #### Type declaration
 
@@ -1990,7 +2043,7 @@ ___
 
 ### SupportedStorageBaseTypes
 
-Ƭ **SupportedStorageBaseTypes**: `string` \| `number` \| `boolean` \| `bigint` \| [`ByteArray`](internal_.md#bytearray-1) \| [`AttributeId`](internal_.md#attributeid) \| [`ClusterId`](internal_.md#clusterid) \| [`CommandId`](internal_.md#commandid) \| [`EndpointNumber`](internal_.md#endpointnumber) \| [`EventId`](internal_.md#eventid) \| [`FabricId`](internal_.md#fabricid) \| [`FabricIndex`](internal_.md#fabricindex) \| [`GroupId`](internal_.md#groupid) \| [`NodeId`](internal_.md#nodeid) \| [`VendorId`](internal_.md#vendorid)
+Ƭ **SupportedStorageBaseTypes**: `string` \| `number` \| `boolean` \| `bigint` \| [`ByteArray`](internal_.md#bytearray) \| [`AttributeId`](internal_.md#attributeid) \| [`ClusterId`](internal_.md#clusterid) \| [`CommandId`](internal_.md#commandid) \| [`EndpointNumber`](internal_.md#endpointnumber) \| [`EventId`](internal_.md#eventid) \| [`FabricId`](internal_.md#fabricid) \| [`FabricIndex`](internal_.md#fabricindex) \| [`GroupId`](internal_.md#groupid) \| [`NodeId`](internal_.md#nodeid) \| [`VendorId`](internal_.md#vendorid)
 
 Supported base types to stringify the data for the storage that can be used as keys and also values.
 
@@ -2014,6 +2067,11 @@ ___
 
 Ƭ **TimerCallback**: () => `any`
 
+**`License`**
+
+Copyright 2022-2023 Project CHIP Authors
+SPDX-License-Identifier: Apache-2.0
+
 #### Type declaration
 
 ▸ (): `any`
@@ -2021,11 +2079,6 @@ ___
 ##### Returns
 
 `any`
-
-**`License`**
-
-Copyright 2022-2023 Project CHIP Authors
-SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
@@ -2113,7 +2166,7 @@ Converts TlvType to the js primitive type.
 | `0` | `bigint` \| `number` |
 | `10` | `number` |
 | `12` | `string` |
-| `16` | [`ByteArray`](internal_.md#bytearray-1) |
+| `16` | [`ByteArray`](internal_.md#bytearray) |
 | `20` | ``null`` |
 | `21` | `never` |
 | `22` | `never` |
@@ -2298,9 +2351,9 @@ See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 36
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ble` | [`BitFlag`](internal_.md#bitflag-1) | Device supports BLE for discovery when not commissioned. |
-| `onIpNetwork` | [`BitFlag`](internal_.md#bitflag-1) | Device is already on the IP network. |
-| `softAccessPoint` | [`BitFlag`](internal_.md#bitflag-1) | Device supports hosting a Soft-AP when not commissioned. |
+| `ble` | [`BitFlag`](internal_.md#bitflag) | Device supports BLE for discovery when not commissioned. |
+| `onIpNetwork` | [`BitFlag`](internal_.md#bitflag) | Device is already on the IP network. |
+| `softAccessPoint` | [`BitFlag`](internal_.md#bitflag) | Device supports hosting a Soft-AP when not commissioned. |
 
 #### Defined in
 
@@ -2316,26 +2369,26 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `administrator` | [`BitFlag`](internal_.md#bitflag-1) | The Device has been commissioned. Any Administrator that commissioned the device provides a user interface that may be used to put the device into Commissioning Mode. |
-| `customInstruction` | [`BitFlag`](internal_.md#bitflag-1) | The PI key/value pair describes a custom way to put the Device into Commissioning Mode. This Custom Instruction option is NOT recommended for use by a Device that does not have knowledge of the user’s language preference. |
-| `deviceManual` | [`BitFlag`](internal_.md#bitflag-1) | The Device Manual provides special instructions to put the Device into Commissioning Mode (see Section 11.22.5.8, “UserManualUrl”). This is a catch-all option to capture user interactions that are not codified by other options in this table. |
-| `deviceManufacturerUrl` | [`BitFlag`](internal_.md#bitflag-1) | This SHALL be set to 1 for devices requiring Custom Commissioning Flow before they can be available for Commissioning by any Commissioner. For such a flow, the user SHOULD be sent to the URL specified in the CommissioningCustomFlowUrl of the DeviceModel schema entry indexed by the Vendor ID and Product ID (e.g., as found in the announcement) in the Distributed Compliance Ledger. |
-| `powerCycle` | [`BitFlag`](internal_.md#bitflag-1) | The Device will automatically enter Commissioning Mode upon power cycle (unplug/re- plug, remove/re-insert batteries). This bit SHALL be set to 1 for devices using Standard Commissioning Flow, and set to 0 otherwise. |
-| `pressResetButton` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed. |
-| `pressResetButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
-| `pressResetButtonNumberOfTimes` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
-| `pressResetButtonUntilLightBlinks` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressResetButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressResetButtonWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed when applying power to it. |
-| `pressRestButtonForNumberOfSeconds` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButton` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed. |
-| `pressSetupButtonForNumberOfSeconds` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonNumberOfTimes` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonUntilLightBlinks` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressSetupButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressSetupButtonWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed when applying power to it. |
-| `settingsMenuOnNode` | [`BitFlag`](internal_.md#bitflag-1) | The settings menu on the Device provides instructions to put it into Commissioning Mode. |
+| `administrator` | [`BitFlag`](internal_.md#bitflag) | The Device has been commissioned. Any Administrator that commissioned the device provides a user interface that may be used to put the device into Commissioning Mode. |
+| `customInstruction` | [`BitFlag`](internal_.md#bitflag) | The PI key/value pair describes a custom way to put the Device into Commissioning Mode. This Custom Instruction option is NOT recommended for use by a Device that does not have knowledge of the user’s language preference. |
+| `deviceManual` | [`BitFlag`](internal_.md#bitflag) | The Device Manual provides special instructions to put the Device into Commissioning Mode (see Section 11.22.5.8, “UserManualUrl”). This is a catch-all option to capture user interactions that are not codified by other options in this table. |
+| `deviceManufacturerUrl` | [`BitFlag`](internal_.md#bitflag) | This SHALL be set to 1 for devices requiring Custom Commissioning Flow before they can be available for Commissioning by any Commissioner. For such a flow, the user SHOULD be sent to the URL specified in the CommissioningCustomFlowUrl of the DeviceModel schema entry indexed by the Vendor ID and Product ID (e.g., as found in the announcement) in the Distributed Compliance Ledger. |
+| `powerCycle` | [`BitFlag`](internal_.md#bitflag) | The Device will automatically enter Commissioning Mode upon power cycle (unplug/re- plug, remove/re-insert batteries). This bit SHALL be set to 1 for devices using Standard Commissioning Flow, and set to 0 otherwise. |
+| `pressResetButton` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed. |
+| `pressResetButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
+| `pressResetButtonNumberOfTimes` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
+| `pressResetButtonUntilLightBlinks` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
+| `pressResetButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
+| `pressResetButtonWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed when applying power to it. |
+| `pressRestButtonForNumberOfSeconds` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
+| `pressSetupButton` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed. |
+| `pressSetupButtonForNumberOfSeconds` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
+| `pressSetupButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
+| `pressSetupButtonNumberOfTimes` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
+| `pressSetupButtonUntilLightBlinks` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
+| `pressSetupButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
+| `pressSetupButtonWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed when applying power to it. |
+| `settingsMenuOnNode` | [`BitFlag`](internal_.md#bitflag) | The settings menu on the Device provides instructions to put it into Commissioning Mode. |
 
 #### Defined in
 
@@ -2425,7 +2478,7 @@ matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:151
 
 ### Attribute
 
-▸ **Attribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`Attribute`](internal_.md#attribute)\<`T`, `F`\>
+▸ **Attribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`Attribute`](../interfaces/internal_.Attribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2445,7 +2498,7 @@ matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:151
 
 #### Returns
 
-[`Attribute`](internal_.md#attribute)\<`T`, `F`\>
+[`Attribute`](../interfaces/internal_.Attribute.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -2475,7 +2528,7 @@ ___
 
 ### BitField
 
-▸ **BitField**(`offset`, `length`): [`BitField`](internal_.md#bitfield-1)
+▸ **BitField**(`offset`, `length`): [`BitField`](internal_.md#bitfield)
 
 #### Parameters
 
@@ -2486,7 +2539,7 @@ ___
 
 #### Returns
 
-[`BitField`](internal_.md#bitfield-1)
+[`BitField`](internal_.md#bitfield)
 
 #### Defined in
 
@@ -2496,7 +2549,7 @@ ___
 
 ### BitFieldEnum
 
-▸ **BitFieldEnum**\<`E`\>(`offset`, `length`): [`BitFieldEnum`](internal_.md#bitfieldenum-1)\<`E`\>
+▸ **BitFieldEnum**\<`E`\>(`offset`, `length`): [`BitFieldEnum`](internal_.md#bitfieldenum)\<`E`\>
 
 #### Type parameters
 
@@ -2513,7 +2566,7 @@ ___
 
 #### Returns
 
-[`BitFieldEnum`](internal_.md#bitfieldenum-1)\<`E`\>
+[`BitFieldEnum`](internal_.md#bitfieldenum)\<`E`\>
 
 #### Defined in
 
@@ -2523,7 +2576,7 @@ ___
 
 ### BitFlag
 
-▸ **BitFlag**(`offset`): [`BitFlag`](internal_.md#bitflag-1)
+▸ **BitFlag**(`offset`): [`BitFlag`](internal_.md#bitflag)
 
 #### Parameters
 
@@ -2533,7 +2586,7 @@ ___
 
 #### Returns
 
-[`BitFlag`](internal_.md#bitflag-1)
+[`BitFlag`](internal_.md#bitflag)
 
 #### Defined in
 
@@ -2543,7 +2596,7 @@ ___
 
 ### BitRange
 
-▸ **BitRange**\<`T`, `TType`\>(`type`, `offset`, `length`): [`BitRange`](internal_.md#bitrange-1)\<`T`, `TType`\>
+▸ **BitRange**\<`T`, `TType`\>(`type`, `offset`, `length`): [`BitRange`](internal_.md#bitrange)\<`T`, `TType`\>
 
 #### Type parameters
 
@@ -2562,7 +2615,7 @@ ___
 
 #### Returns
 
-[`BitRange`](internal_.md#bitrange-1)\<`T`, `TType`\>
+[`BitRange`](internal_.md#bitrange)\<`T`, `TType`\>
 
 #### Defined in
 
@@ -2592,7 +2645,7 @@ ___
 
 ### Cluster
 
-▸ **Cluster**\<`F`, `SF`, `A`, `C`, `E`\>(`«destructured»`): [`Cluster`](internal_.md#cluster)\<`F`, `SF`, [`Merge`](internal_.md#merge)\<`A`, [`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>\>, `C`, `E`\>
+▸ **Cluster**\<`F`, `SF`, `A`, `C`, `E`\>(`«destructured»`): [`Cluster`](../interfaces/internal_.Cluster.md)\<`F`, `SF`, [`Merge`](internal_.md#merge)\<`A`, [`GlobalAttributes`](internal_.md#globalattributes)\<`F`\>\>, `C`, `E`\>
 
 #### Type parameters
 
@@ -2621,7 +2674,7 @@ ___
 
 #### Returns
 
-[`Cluster`](internal_.md#cluster)\<`F`, `SF`, [`Merge`](internal_.md#merge)\<`A`, [`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>\>, `C`, `E`\>
+[`Cluster`](../interfaces/internal_.Cluster.md)\<`F`, `SF`, [`Merge`](internal_.md#merge)\<`A`, [`GlobalAttributes`](internal_.md#globalattributes)\<`F`\>\>, `C`, `E`\>
 
 #### Defined in
 
@@ -2651,7 +2704,7 @@ ___
 
 ### Command
 
-▸ **Command**\<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`Command`](internal_.md#command)\<`RequestT`, `ResponseT`, `F`\>
+▸ **Command**\<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`Command`](../interfaces/internal_.Command.md)\<`RequestT`, `ResponseT`, `F`\>
 
 #### Type parameters
 
@@ -2673,7 +2726,7 @@ ___
 
 #### Returns
 
-[`Command`](internal_.md#command)\<`RequestT`, `ResponseT`, `F`\>
+[`Command`](../interfaces/internal_.Command.md)\<`RequestT`, `ResponseT`, `F`\>
 
 #### Defined in
 
@@ -2703,7 +2756,7 @@ ___
 
 ### DeviceTypeDefinition
 
-▸ **DeviceTypeDefinition**(`«destructured»`): [`DeviceTypeDefinition`](internal_.md#devicetypedefinition)
+▸ **DeviceTypeDefinition**(`«destructured»`): [`DeviceTypeDefinition`](../interfaces/internal_.DeviceTypeDefinition.md)
 
 #### Parameters
 
@@ -2723,7 +2776,7 @@ ___
 
 #### Returns
 
-[`DeviceTypeDefinition`](internal_.md#devicetypedefinition)
+[`DeviceTypeDefinition`](../interfaces/internal_.DeviceTypeDefinition.md)
 
 #### Defined in
 
@@ -2773,7 +2826,7 @@ ___
 
 ### Event
 
-▸ **Event**\<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`Event`](internal_.md#event)\<`T`, `F`\>
+▸ **Event**\<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`Event`](../interfaces/internal_.Event.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2793,7 +2846,7 @@ ___
 
 #### Returns
 
-[`Event`](internal_.md#event)\<`T`, `F`\>
+[`Event`](../interfaces/internal_.Event.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -2863,7 +2916,7 @@ ___
 
 ### FabricScopedAttribute
 
-▸ **FabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`FabricScopedAttribute`](internal_.md#fabricscopedattribute)\<`T`, `F`\>
+▸ **FabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`FabricScopedAttribute`](../interfaces/internal_.FabricScopedAttribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2883,7 +2936,7 @@ ___
 
 #### Returns
 
-[`FabricScopedAttribute`](internal_.md#fabricscopedattribute)\<`T`, `F`\>
+[`FabricScopedAttribute`](../interfaces/internal_.FabricScopedAttribute.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -2893,7 +2946,7 @@ ___
 
 ### FixedAttribute
 
-▸ **FixedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`FixedAttribute`](internal_.md#fixedattribute)\<`T`, `F`\>
+▸ **FixedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`FixedAttribute`](../interfaces/internal_.FixedAttribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2913,7 +2966,7 @@ ___
 
 #### Returns
 
-[`FixedAttribute`](internal_.md#fixedattribute)\<`T`, `F`\>
+[`FixedAttribute`](../interfaces/internal_.FixedAttribute.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -2923,7 +2976,7 @@ ___
 
 ### GlobalAttributes
 
-▸ **GlobalAttributes**\<`F`\>(`features`): [`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>
+▸ **GlobalAttributes**\<`F`\>(`features`): [`GlobalAttributes`](internal_.md#globalattributes)\<`F`\>
 
 #### Type parameters
 
@@ -2939,7 +2992,7 @@ ___
 
 #### Returns
 
-[`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>
+[`GlobalAttributes`](internal_.md#globalattributes)\<`F`\>
 
 #### Defined in
 
@@ -2969,7 +3022,7 @@ ___
 
 ### Key
 
-▸ **Key**(`properties`): [`Key`](internal_.md#key)
+▸ **Key**(`properties`): [`Key`](../interfaces/internal_.Key.md)
 
 Generic key factory.
 
@@ -2977,11 +3030,11 @@ Generic key factory.
 
 | Name | Type |
 | :------ | :------ |
-| `properties` | `Partial`\<[`Key`](internal_.md#key)\> |
+| `properties` | `Partial`\<[`Key`](../interfaces/internal_.Key.md)\> |
 
 #### Returns
 
-[`Key`](internal_.md#key)
+[`Key`](../interfaces/internal_.Key.md)
 
 #### Defined in
 
@@ -3039,7 +3092,7 @@ ___
 
 ### OptionalAttribute
 
-▸ **OptionalAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalAttribute`](internal_.md#optionalattribute)\<`T`, `F`\>
+▸ **OptionalAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalAttribute`](../interfaces/internal_.OptionalAttribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3059,7 +3112,7 @@ ___
 
 #### Returns
 
-[`OptionalAttribute`](internal_.md#optionalattribute)\<`T`, `F`\>
+[`OptionalAttribute`](../interfaces/internal_.OptionalAttribute.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3069,7 +3122,7 @@ ___
 
 ### OptionalCommand
 
-▸ **OptionalCommand**\<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`OptionalCommand`](internal_.md#optionalcommand)\<`RequestT`, `ResponseT`, `F`\>
+▸ **OptionalCommand**\<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`OptionalCommand`](../interfaces/internal_.OptionalCommand.md)\<`RequestT`, `ResponseT`, `F`\>
 
 #### Type parameters
 
@@ -3091,7 +3144,7 @@ ___
 
 #### Returns
 
-[`OptionalCommand`](internal_.md#optionalcommand)\<`RequestT`, `ResponseT`, `F`\>
+[`OptionalCommand`](../interfaces/internal_.OptionalCommand.md)\<`RequestT`, `ResponseT`, `F`\>
 
 #### Defined in
 
@@ -3101,7 +3154,7 @@ ___
 
 ### OptionalEvent
 
-▸ **OptionalEvent**\<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`OptionalEvent`](internal_.md#optionalevent)\<`T`, `F`\>
+▸ **OptionalEvent**\<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`OptionalEvent`](../interfaces/internal_.OptionalEvent.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3121,7 +3174,7 @@ ___
 
 #### Returns
 
-[`OptionalEvent`](internal_.md#optionalevent)\<`T`, `F`\>
+[`OptionalEvent`](../interfaces/internal_.OptionalEvent.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3131,7 +3184,7 @@ ___
 
 ### OptionalFixedAttribute
 
-▸ **OptionalFixedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalFixedAttribute`](internal_.md#optionalfixedattribute)\<`T`, `F`\>
+▸ **OptionalFixedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalFixedAttribute`](../interfaces/internal_.OptionalFixedAttribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3151,7 +3204,7 @@ ___
 
 #### Returns
 
-[`OptionalFixedAttribute`](internal_.md#optionalfixedattribute)\<`T`, `F`\>
+[`OptionalFixedAttribute`](../interfaces/internal_.OptionalFixedAttribute.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3161,7 +3214,7 @@ ___
 
 ### OptionalWritableAttribute
 
-▸ **OptionalWritableAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalWritableAttribute`](internal_.md#optionalwritableattribute)\<`T`, `F`\>
+▸ **OptionalWritableAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalWritableAttribute`](../interfaces/internal_.OptionalWritableAttribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3181,7 +3234,7 @@ ___
 
 #### Returns
 
-[`OptionalWritableAttribute`](internal_.md#optionalwritableattribute)\<`T`, `F`\>
+[`OptionalWritableAttribute`](../interfaces/internal_.OptionalWritableAttribute.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3191,7 +3244,7 @@ ___
 
 ### OptionalWritableFabricScopedAttribute
 
-▸ **OptionalWritableFabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalWritableFabricScopedAttribute`](internal_.md#optionalwritablefabricscopedattribute)\<`T`, `F`\>
+▸ **OptionalWritableFabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalWritableFabricScopedAttribute`](../interfaces/internal_.OptionalWritableFabricScopedAttribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3211,7 +3264,7 @@ ___
 
 #### Returns
 
-[`OptionalWritableFabricScopedAttribute`](internal_.md#optionalwritablefabricscopedattribute)\<`T`, `F`\>
+[`OptionalWritableFabricScopedAttribute`](../interfaces/internal_.OptionalWritableFabricScopedAttribute.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3241,7 +3294,7 @@ ___
 
 ### WritableAttribute
 
-▸ **WritableAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`WritableAttribute`](internal_.md#writableattribute)\<`T`, `F`\>
+▸ **WritableAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`WritableAttribute`](../interfaces/internal_.WritableAttribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3261,7 +3314,7 @@ ___
 
 #### Returns
 
-[`WritableAttribute`](internal_.md#writableattribute)\<`T`, `F`\>
+[`WritableAttribute`](../interfaces/internal_.WritableAttribute.md)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3271,7 +3324,7 @@ ___
 
 ### WritableFabricScopedAttribute
 
-▸ **WritableFabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`WritableFabricScopedAttribute`](internal_.md#writablefabricscopedattribute)\<`T`, `F`\>
+▸ **WritableFabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`WritableFabricScopedAttribute`](../interfaces/internal_.WritableFabricScopedAttribute.md)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3291,7 +3344,7 @@ ___
 
 #### Returns
 
-[`WritableFabricScopedAttribute`](internal_.md#writablefabricscopedattribute)\<`T`, `F`\>
+[`WritableFabricScopedAttribute`](../interfaces/internal_.WritableFabricScopedAttribute.md)\<`T`, `F`\>
 
 #### Defined in
 

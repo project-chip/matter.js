@@ -12,11 +12,13 @@ offset is set to true. All other message counters SHALL be considered duplicate.
 
 ## Hierarchy
 
-- **`MessageReceptionStateEncryptedWithoutRollover`**
+- [`MessageReceptionState`](protocol_export.MessageReceptionState.md)
 
-  ↳ [`MessageReceptionStateEncryptedWithRollover`](protocol_export.MessageReceptionStateEncryptedWithRollover.md)
+  ↳ **`MessageReceptionStateEncryptedWithoutRollover`**
 
-  ↳ [`MessageReceptionStateUnencryptedWithRollover`](protocol_export.MessageReceptionStateUnencryptedWithRollover.md)
+  ↳↳ [`MessageReceptionStateEncryptedWithRollover`](protocol_export.MessageReceptionStateEncryptedWithRollover.md)
+
+  ↳↳ [`MessageReceptionStateUnencryptedWithRollover`](protocol_export.MessageReceptionStateUnencryptedWithRollover.md)
 
 ## Table of contents
 
@@ -54,9 +56,13 @@ offset is set to true. All other message counters SHALL be considered duplicate.
 
 [`MessageReceptionStateEncryptedWithoutRollover`](protocol_export.MessageReceptionStateEncryptedWithoutRollover.md)
 
+#### Overrides
+
+[MessageReceptionState](protocol_export.MessageReceptionState.md).[constructor](protocol_export.MessageReceptionState.md#constructor)
+
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L29)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L33)
 
 ## Properties
 
@@ -66,7 +72,7 @@ offset is set to true. All other message counters SHALL be considered duplicate.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L26)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L30)
 
 ___
 
@@ -76,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:27](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L27)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L31)
 
 ## Methods
 
@@ -103,7 +109,7 @@ Return number is:
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:49](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L49)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:54](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L54)
 
 ___
 
@@ -126,7 +132,7 @@ Update or move the message counter window.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:57](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L57)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:62](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L62)
 
 ___
 
@@ -148,7 +154,7 @@ Initialize the message counter state.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L36)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L41)
 
 ___
 
@@ -170,7 +176,7 @@ Check if the message counter is known in the bitmap.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:95](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L95)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:100](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L100)
 
 ___
 
@@ -190,9 +196,13 @@ Returns true if the message counter is a duplicate.
 
 `void`
 
+#### Overrides
+
+[MessageReceptionState](protocol_export.MessageReceptionState.md).[updateMessageCounter](protocol_export.MessageReceptionState.md#updatemessagecounter)
+
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:106](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L106)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:111](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L111)
 
 ___
 
@@ -215,4 +225,4 @@ Update the message counter and window.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:81](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageReceptionState.ts#L81)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:86](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L86)

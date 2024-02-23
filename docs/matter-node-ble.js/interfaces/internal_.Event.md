@@ -11,6 +11,12 @@
 | `T` | `T` |
 | `F` | extends [`BitSchema`](../modules/internal_.md#bitschema) |
 
+## Hierarchy
+
+- **`Event`**
+
+  ↳ [`OptionalEvent`](internal_.OptionalEvent.md)
+
 ## Table of contents
 
 ### Properties

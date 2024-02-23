@@ -56,7 +56,7 @@ They may converge over time but are fully compatible.
 
 ### Attribute
 
-Ƭ **Attribute**: [`Attribute`](exports_cluster.md#attribute)\<`any`, `any`\>
+Ƭ **Attribute**: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`any`, `any`\>
 
 Definition of a cluster attribute.
 
@@ -86,7 +86,7 @@ ___
 
 ### Command
 
-Ƭ **Command**: [`Command`](exports_cluster.md#command)\<`any`, `any`, `any`\>
+Ƭ **Command**: [`Command`](../interfaces/exports_cluster.Command.md)\<`any`, `any`, `any`\>
 
 Definition of a cluster command.
 
@@ -116,7 +116,7 @@ ___
 
 ### Definition
 
-Ƭ **Definition**\<`T`\>: \{ `attributes`: `T`[``"attributes"``] extends infer A ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](exports_cluster.md#globalattributes-1)\<`T`[``"features"``] extends {} ? `T`[``"features"``] : {}\>\> : {} ; `commands`: `T`[``"commands"``] extends {} ? `T`[``"commands"``] : {} ; `events`: `T`[``"events"``] extends {} ? `T`[``"events"``] : {} ; `features`: `T`[``"features"``] extends {} ? `T`[``"features"``] : {} ; `id`: [`Branded`](util_export.md#branded)\<`T`[``"id"``], ``"ClusterId"``\> ; `name`: `T`[``"name"``] ; `revision`: `T`[``"revision"``] ; `supportedFeatures`: `T`[``"supportedFeatures"``] extends {} ? `T`[``"supportedFeatures"``] : {} ; `unknown`: `T`[``"unknown"``] extends `boolean` ? `T`[``"unknown"``] : ``false``  } & `Omit`\<`T`, ``"attributes"``\>
+Ƭ **Definition**\<`T`\>: \{ `attributes`: `T`[``"attributes"``] extends infer A ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](exports_cluster.md#globalattributes)\<`T`[``"features"``] extends {} ? `T`[``"features"``] : {}\>\> : {} ; `commands`: `T`[``"commands"``] extends {} ? `T`[``"commands"``] : {} ; `events`: `T`[``"events"``] extends {} ? `T`[``"events"``] : {} ; `features`: `T`[``"features"``] extends {} ? `T`[``"features"``] : {} ; `id`: [`Branded`](util_export.md#branded)\<`T`[``"id"``], ``"ClusterId"``\> ; `name`: `T`[``"name"``] ; `revision`: `T`[``"revision"``] ; `supportedFeatures`: `T`[``"supportedFeatures"``] extends {} ? `T`[``"supportedFeatures"``] : {} ; `unknown`: `T`[``"unknown"``] extends `boolean` ? `T`[``"unknown"``] : ``false``  } & `Omit`\<`T`, ``"attributes"``\>
 
 A "definition" is the fully typed Cluster for a PartialDefinition.
 
@@ -167,7 +167,7 @@ ___
 
 ### Event
 
-Ƭ **Event**: [`Event`](exports_cluster.md#event)\<`any`, `any`\>
+Ƭ **Event**: [`Event`](../interfaces/exports_cluster.Event.md)\<`any`, `any`\>
 
 Definition of a cluster event.
 
@@ -199,12 +199,12 @@ ___
 
 Ƭ **Extender**: (...`features`: `any`) => [`Cluster`](../interfaces/exports_cluster.ClusterFactory.Cluster.md)
 
+An "extender" is a function that creates a cluster with specific
+features enabled.
+
 #### Type declaration
 
 ▸ (`...features`): [`Cluster`](../interfaces/exports_cluster.ClusterFactory.Cluster.md)
-
-An "extender" is a function that creates a cluster with specific
-features enabled.
 
 ##### Parameters
 
@@ -291,7 +291,7 @@ Define a cluster component.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends `Partial`\<[`Component`](exports_cluster.ClusterFactory.md#component)\> |
+| `T` | extends `Partial`\<[`Component`](../interfaces/exports_cluster.ClusterFactory.Component.md)\> |
 
 #### Parameters
 
@@ -339,7 +339,7 @@ ___
 
 ### Extensible
 
-▸ **Extensible**\<`DefinitionT`, `ExtenderT`\>(`definition`, `extender`): \{ `attributes`: `DefinitionT`[``"attributes"``] extends infer A ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](exports_cluster.md#globalattributes-1)\<`DefinitionT`[``"features"``] extends {} ? `DefinitionT`[``"features"``] : {}\>\> : {} ; `commands`: `DefinitionT`[``"commands"``] extends {} ? `DefinitionT`[``"commands"``] : {} ; `events`: `DefinitionT`[``"events"``] extends {} ? `DefinitionT`[``"events"``] : {} ; `features`: `DefinitionT`[``"features"``] extends {} ? `DefinitionT`[``"features"``] : {} ; `id`: [`Branded`](util_export.md#branded)\<`DefinitionT`[``"id"``], ``"ClusterId"``\> ; `name`: `DefinitionT`[``"name"``] ; `revision`: `DefinitionT`[``"revision"``] ; `supportedFeatures`: `DefinitionT`[``"supportedFeatures"``] extends {} ? `DefinitionT`[``"supportedFeatures"``] : {} ; `unknown`: `DefinitionT`[``"unknown"``] extends `boolean` ? `DefinitionT`[``"unknown"``] : ``false``  } & `Omit`\<`DefinitionT`, ``"attributes"``\> & \{ `with`: `ExtenderT`  }
+▸ **Extensible**\<`DefinitionT`, `ExtenderT`\>(`definition`, `extender`): \{ `attributes`: `DefinitionT`[``"attributes"``] extends infer A ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](exports_cluster.md#globalattributes)\<`DefinitionT`[``"features"``] extends {} ? `DefinitionT`[``"features"``] : {}\>\> : {} ; `commands`: `DefinitionT`[``"commands"``] extends {} ? `DefinitionT`[``"commands"``] : {} ; `events`: `DefinitionT`[``"events"``] extends {} ? `DefinitionT`[``"events"``] : {} ; `features`: `DefinitionT`[``"features"``] extends {} ? `DefinitionT`[``"features"``] : {} ; `id`: [`Branded`](util_export.md#branded)\<`DefinitionT`[``"id"``], ``"ClusterId"``\> ; `name`: `DefinitionT`[``"name"``] ; `revision`: `DefinitionT`[``"revision"``] ; `supportedFeatures`: `DefinitionT`[``"supportedFeatures"``] extends {} ? `DefinitionT`[``"supportedFeatures"``] : {} ; `unknown`: `DefinitionT`[``"unknown"``] extends `boolean` ? `DefinitionT`[``"unknown"``] : ``false``  } & `Omit`\<`DefinitionT`, ``"attributes"``\> & \{ `with`: `ExtenderT`  }
 
 Define an extensible cluster.
 
@@ -359,7 +359,7 @@ Define an extensible cluster.
 
 #### Returns
 
-\{ `attributes`: `DefinitionT`[``"attributes"``] extends infer A ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](exports_cluster.md#globalattributes-1)\<`DefinitionT`[``"features"``] extends {} ? `DefinitionT`[``"features"``] : {}\>\> : {} ; `commands`: `DefinitionT`[``"commands"``] extends {} ? `DefinitionT`[``"commands"``] : {} ; `events`: `DefinitionT`[``"events"``] extends {} ? `DefinitionT`[``"events"``] : {} ; `features`: `DefinitionT`[``"features"``] extends {} ? `DefinitionT`[``"features"``] : {} ; `id`: [`Branded`](util_export.md#branded)\<`DefinitionT`[``"id"``], ``"ClusterId"``\> ; `name`: `DefinitionT`[``"name"``] ; `revision`: `DefinitionT`[``"revision"``] ; `supportedFeatures`: `DefinitionT`[``"supportedFeatures"``] extends {} ? `DefinitionT`[``"supportedFeatures"``] : {} ; `unknown`: `DefinitionT`[``"unknown"``] extends `boolean` ? `DefinitionT`[``"unknown"``] : ``false``  } & `Omit`\<`DefinitionT`, ``"attributes"``\> & \{ `with`: `ExtenderT`  }
+\{ `attributes`: `DefinitionT`[``"attributes"``] extends infer A ? [`Merge`](util_export.md#merge)\<`A`, [`GlobalAttributes`](exports_cluster.md#globalattributes)\<`DefinitionT`[``"features"``] extends {} ? `DefinitionT`[``"features"``] : {}\>\> : {} ; `commands`: `DefinitionT`[``"commands"``] extends {} ? `DefinitionT`[``"commands"``] : {} ; `events`: `DefinitionT`[``"events"``] extends {} ? `DefinitionT`[``"events"``] : {} ; `features`: `DefinitionT`[``"features"``] extends {} ? `DefinitionT`[``"features"``] : {} ; `id`: [`Branded`](util_export.md#branded)\<`DefinitionT`[``"id"``], ``"ClusterId"``\> ; `name`: `DefinitionT`[``"name"``] ; `revision`: `DefinitionT`[``"revision"``] ; `supportedFeatures`: `DefinitionT`[``"supportedFeatures"``] extends {} ? `DefinitionT`[``"supportedFeatures"``] : {} ; `unknown`: `DefinitionT`[``"unknown"``] extends `boolean` ? `DefinitionT`[``"unknown"``] : ``false``  } & `Omit`\<`DefinitionT`, ``"attributes"``\> & \{ `with`: `ExtenderT`  }
 
 #### Defined in
 

@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`DimmableBaseDevice`](export._internal_.DimmableBaseDevice.md)
+- [`DimmableBaseDevice`](device_export._internal_.DimmableBaseDevice.md)
 
   ↳ **`DimmablePluginUnitDevice`**
 
@@ -22,6 +22,7 @@
 - [deviceType](device_export.DimmablePluginUnitDevice.md#devicetype)
 - [deviceTypes](device_export.DimmablePluginUnitDevice.md#devicetypes)
 - [id](device_export.DimmablePluginUnitDevice.md#id)
+- [isLighting](device_export.DimmablePluginUnitDevice.md#islighting)
 - [name](device_export.DimmablePluginUnitDevice.md#name)
 - [uniqueStorageKey](device_export.DimmablePluginUnitDevice.md#uniquestoragekey)
 
@@ -77,8 +78,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../modules/cluster_export.md#attribute)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\>\>\> |
-| `dimmableAttributeValues?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `currentLevel`: [`Attribute`](../modules/cluster_export.md#attribute)\<``null`` \| `number`, `any`\> ; `defaultMoveRate`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)\<``null`` \| `number`, `any`\> ; `maxLevel`: [`OptionalAttribute`](../modules/cluster_export.md#optionalattribute)\<`number`, `any`\> ; `minLevel`: [`OptionalAttribute`](../modules/cluster_export.md#optionalattribute)\<`number`, `any`\> ; `offTransitionTime`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)\<``null`` \| `number`, `any`\> ; `onLevel`: [`WritableAttribute`](../modules/cluster_export.md#writableattribute)\<``null`` \| `number`, `any`\> ; `onOffTransitionTime`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)\<`number`, `any`\> ; `onTransitionTime`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../modules/cluster_export.md#writableattribute)\<[`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\>, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)\<\{ `frequency`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `lighting`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `onOff`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)\<\{ `frequency`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `lighting`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `onOff`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\>\>\> |
+| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>\>\> |
+| `dimmableAttributeValues?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `currentLevel`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `defaultMoveRate`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `maxLevel`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `minLevel`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `offTransitionTime`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onLevel`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onOffTransitionTime`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `onTransitionTime`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<\{ `frequency`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `lighting`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `onOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<\{ `frequency`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `lighting`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `onOff`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>\>\> |
 | `options` | [`EndpointOptions`](../interfaces/device_export.EndpointOptions.md) |
 
 #### Returns
@@ -87,11 +88,11 @@
 
 #### Overrides
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[constructor](export._internal_.DimmableBaseDevice.md#constructor)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[constructor](device_export._internal_.DimmableBaseDevice.md#constructor)
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:77](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DimmableDevices.ts#L77)
+[packages/matter.js/src/device/DimmableDevices.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DimmableDevices.ts#L87)
 
 ## Properties
 
@@ -101,11 +102,11 @@
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[commandHandler](export._internal_.DimmableBaseDevice.md#commandhandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[commandHandler](device_export._internal_.DimmableBaseDevice.md#commandhandler)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:168](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L168)
+[packages/matter.js/src/device/Device.ts:168](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L168)
 
 ___
 
@@ -115,27 +116,27 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[deviceType](export._internal_.DimmableBaseDevice.md#devicetype)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[deviceType](device_export._internal_.DimmableBaseDevice.md#devicetype)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:167](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L167)
+[packages/matter.js/src/device/Device.ts:167](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L167)
 
 ___
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/device_export.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 One or multiple DeviceTypeDefinitions of the endpoint
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[deviceTypes](export._internal_.DimmableBaseDevice.md#devicetypes)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[deviceTypes](device_export._internal_.DimmableBaseDevice.md#devicetypes)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L53)
+[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L53)
 
 ___
 
@@ -145,11 +146,27 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[id](export._internal_.DimmableBaseDevice.md#id)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[id](device_export._internal_.DimmableBaseDevice.md#id)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L37)
+[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L37)
+
+___
+
+### isLighting
+
+• `Protected` **isLighting**: `boolean` = `false`
+
+Define if Lighting feature is set
+
+#### Inherited from
+
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[isLighting](device_export._internal_.DimmableBaseDevice.md#islighting)
+
+#### Defined in
+
+[packages/matter.js/src/device/OnOffDevices.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L65)
 
 ___
 
@@ -159,11 +176,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[name](export._internal_.DimmableBaseDevice.md#name)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[name](device_export._internal_.DimmableBaseDevice.md#name)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L39)
+[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L39)
 
 ___
 
@@ -173,11 +190,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[uniqueStorageKey](export._internal_.DimmableBaseDevice.md#uniquestoragekey)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[uniqueStorageKey](device_export._internal_.DimmableBaseDevice.md#uniquestoragekey)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L38)
+[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L38)
 
 ## Methods
 
@@ -201,11 +218,11 @@ because needed public for derived classes.
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[_executeHandler](export._internal_.DimmableBaseDevice.md#_executehandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[_executeHandler](device_export._internal_.DimmableBaseDevice.md#_executehandler)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:225](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L225)
+[packages/matter.js/src/device/Device.ts:225](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L225)
 
 ▸ **_executeHandler**\<`K`\>(`action`, `...args`): `Promise`\<`void`\>
 
@@ -216,14 +233,14 @@ because needed public for derived classes.
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/device_export._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `action` | `K` | - |
-| `...args` | `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]\> | Arguments to be passed to the handler |
+| `...args` | `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/device_export._internal_.md#onoffbasedevicecommands)[`K`]\> | Arguments to be passed to the handler |
 
 #### Returns
 
@@ -231,11 +248,11 @@ because needed public for derived classes.
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[_executeHandler](export._internal_.DimmableBaseDevice.md#_executehandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[_executeHandler](device_export._internal_.DimmableBaseDevice.md#_executehandler)
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/NamedHandler.ts#L42)
+[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L42)
 
 ▸ **_executeHandler**\<`K`\>(`action`, `...args`): `Promise`\<`void`\>
 
@@ -246,14 +263,14 @@ because needed public for derived classes.
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands) |
+| `K` | extends keyof [`DimmableDeviceCommands`](../modules/device_export._internal_.md#dimmabledevicecommands) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `action` | `K` | - |
-| `...args` | `Parameters`\<[`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands)[`K`]\> | Arguments to be passed to the handler |
+| `...args` | `Parameters`\<[`DimmableDeviceCommands`](../modules/device_export._internal_.md#dimmabledevicecommands)[`K`]\> | Arguments to be passed to the handler |
 
 #### Returns
 
@@ -261,11 +278,11 @@ because needed public for derived classes.
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[_executeHandler](export._internal_.DimmableBaseDevice.md#_executehandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[_executeHandler](device_export._internal_.DimmableBaseDevice.md#_executehandler)
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/NamedHandler.ts#L42)
+[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L42)
 
 ___
 
@@ -285,11 +302,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addChildEndpoint](export._internal_.DimmableBaseDevice.md#addchildendpoint)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addChildEndpoint](device_export._internal_.DimmableBaseDevice.md#addchildendpoint)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:256](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L256)
+[packages/matter.js/src/device/Endpoint.ts:256](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L256)
 
 ___
 
@@ -318,11 +335,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addClusterClient](export._internal_.DimmableBaseDevice.md#addclusterclient)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addClusterClient](device_export._internal_.DimmableBaseDevice.md#addclusterclient)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:173](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L173)
+[packages/matter.js/src/device/Endpoint.ts:173](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L173)
 
 ___
 
@@ -349,11 +366,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addClusterServer](export._internal_.DimmableBaseDevice.md#addclusterserver)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addClusterServer](device_export._internal_.DimmableBaseDevice.md#addclusterserver)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:146](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L146)
+[packages/matter.js/src/device/Endpoint.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L146)
 
 ___
 
@@ -377,11 +394,11 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addCommandHandler](export._internal_.DimmableBaseDevice.md#addcommandhandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addCommandHandler](device_export._internal_.DimmableBaseDevice.md#addcommandhandler)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:202](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L202)
+[packages/matter.js/src/device/Device.ts:202](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L202)
 
 ▸ **addCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
@@ -392,14 +409,14 @@ The base class do not expose any commands!
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/device_export._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `action` | `K` | - |
-| `handler` | [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`] | Handler function to be executed when the command is received |
+| `handler` | [`OnOffBaseDeviceCommands`](../modules/device_export._internal_.md#onoffbasedevicecommands)[`K`] | Handler function to be executed when the command is received |
 
 #### Returns
 
@@ -407,11 +424,11 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addCommandHandler](export._internal_.DimmableBaseDevice.md#addcommandhandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addCommandHandler](device_export._internal_.DimmableBaseDevice.md#addcommandhandler)
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/NamedHandler.ts#L40)
+[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L40)
 
 ▸ **addCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
@@ -422,14 +439,14 @@ The base class do not expose any commands!
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands) |
+| `K` | extends keyof [`DimmableDeviceCommands`](../modules/device_export._internal_.md#dimmabledevicecommands) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `action` | `K` | - |
-| `handler` | [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands)[`K`] | Handler function to be executed when the command is received |
+| `handler` | [`DimmableDeviceCommands`](../modules/device_export._internal_.md#dimmabledevicecommands)[`K`] | Handler function to be executed when the command is received |
 
 #### Returns
 
@@ -437,11 +454,11 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addCommandHandler](export._internal_.DimmableBaseDevice.md#addcommandhandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addCommandHandler](device_export._internal_.DimmableBaseDevice.md#addcommandhandler)
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/NamedHandler.ts#L40)
+[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L40)
 
 ___
 
@@ -463,11 +480,11 @@ Adds a listener for the CurrentLevel attribute
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addCurrentLevelListener](export._internal_.DimmableBaseDevice.md#addcurrentlevellistener)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addCurrentLevelListener](device_export._internal_.DimmableBaseDevice.md#addcurrentlevellistener)
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:71](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DimmableDevices.ts#L71)
+[packages/matter.js/src/device/DimmableDevices.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DimmableDevices.ts#L81)
 
 ___
 
@@ -488,11 +505,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addDeviceClusters](export._internal_.DimmableBaseDevice.md#adddeviceclusters)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addDeviceClusters](device_export._internal_.DimmableBaseDevice.md#adddeviceclusters)
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DimmableDevices.ts#L29)
+[packages/matter.js/src/device/DimmableDevices.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DimmableDevices.ts#L38)
 
 ___
 
@@ -513,11 +530,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addFixedLabel](export._internal_.DimmableBaseDevice.md#addfixedlabel)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addFixedLabel](device_export._internal_.DimmableBaseDevice.md#addfixedlabel)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L106)
+[packages/matter.js/src/device/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L106)
 
 ___
 
@@ -540,11 +557,11 @@ This is an example of a convenient device class API to control the device withou
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addOnOffListener](export._internal_.DimmableBaseDevice.md#addonofflistener)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addOnOffListener](device_export._internal_.DimmableBaseDevice.md#addonofflistener)
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:136](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/OnOffDevices.ts#L136)
+[packages/matter.js/src/device/OnOffDevices.ts:139](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L139)
 
 ___
 
@@ -565,11 +582,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[addUserLabel](export._internal_.DimmableBaseDevice.md#adduserlabel)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[addUserLabel](device_export._internal_.DimmableBaseDevice.md#adduserlabel)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:126](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L126)
+[packages/matter.js/src/device/Endpoint.ts:126](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L126)
 
 ___
 
@@ -591,7 +608,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../interfaces/cluster_export.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -599,11 +616,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[createOptionalClusterClient](export._internal_.DimmableBaseDevice.md#createoptionalclusterclient)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[createOptionalClusterClient](device_export._internal_.DimmableBaseDevice.md#createoptionalclusterclient)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:240](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L240)
+[packages/matter.js/src/device/Device.ts:240](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L240)
 
 ___
 
@@ -625,7 +642,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../interfaces/cluster_export.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -633,11 +650,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[createOptionalClusterServer](export._internal_.DimmableBaseDevice.md#createoptionalclusterserver)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[createOptionalClusterServer](device_export._internal_.DimmableBaseDevice.md#createoptionalclusterserver)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:229](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L229)
+[packages/matter.js/src/device/Device.ts:229](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L229)
 
 ___
 
@@ -651,11 +668,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[destroy](export._internal_.DimmableBaseDevice.md#destroy)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[destroy](device_export._internal_.DimmableBaseDevice.md#destroy)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:93](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L93)
+[packages/matter.js/src/device/Endpoint.ts:93](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L93)
 
 ___
 
@@ -669,11 +686,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[determineUniqueID](export._internal_.DimmableBaseDevice.md#determineuniqueid)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[determineUniqueID](device_export._internal_.DimmableBaseDevice.md#determineuniqueid)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:283](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L283)
+[packages/matter.js/src/device/Endpoint.ts:283](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L283)
 
 ___
 
@@ -687,11 +704,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getAllClusterClients](export._internal_.DimmableBaseDevice.md#getallclusterclients)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getAllClusterClients](device_export._internal_.DimmableBaseDevice.md#getallclusterclients)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:343](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L343)
+[packages/matter.js/src/device/Endpoint.ts:343](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L343)
 
 ___
 
@@ -705,11 +722,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getAllClusterServers](export._internal_.DimmableBaseDevice.md#getallclusterservers)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getAllClusterServers](device_export._internal_.DimmableBaseDevice.md#getallclusterservers)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:339](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L339)
+[packages/matter.js/src/device/Endpoint.ts:339](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L339)
 
 ___
 
@@ -729,11 +746,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getChildEndpoint](export._internal_.DimmableBaseDevice.md#getchildendpoint)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getChildEndpoint](device_export._internal_.DimmableBaseDevice.md#getchildendpoint)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:265](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L265)
+[packages/matter.js/src/device/Endpoint.ts:265](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L265)
 
 ___
 
@@ -747,11 +764,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getChildEndpoints](export._internal_.DimmableBaseDevice.md#getchildendpoints)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getChildEndpoints](device_export._internal_.DimmableBaseDevice.md#getchildendpoints)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:269](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L269)
+[packages/matter.js/src/device/Endpoint.ts:269](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L269)
 
 ___
 
@@ -773,7 +790,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/cluster_export.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -781,11 +798,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getClusterClient](export._internal_.DimmableBaseDevice.md#getclusterclient)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getClusterClient](device_export._internal_.DimmableBaseDevice.md#getclusterclient)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:271](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L271)
+[packages/matter.js/src/device/Device.ts:271](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L271)
 
 ___
 
@@ -805,11 +822,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getClusterClientById](export._internal_.DimmableBaseDevice.md#getclusterclientbyid)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getClusterClientById](device_export._internal_.DimmableBaseDevice.md#getclusterclientbyid)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:212](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L212)
+[packages/matter.js/src/device/Endpoint.ts:212](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L212)
 
 ___
 
@@ -831,7 +848,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/cluster_export.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -839,11 +856,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getClusterServer](export._internal_.DimmableBaseDevice.md#getclusterserver)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getClusterServer](device_export._internal_.DimmableBaseDevice.md#getclusterserver)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:251](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L251)
+[packages/matter.js/src/device/Device.ts:251](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L251)
 
 ___
 
@@ -863,11 +880,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getClusterServerById](export._internal_.DimmableBaseDevice.md#getclusterserverbyid)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getClusterServerById](device_export._internal_.DimmableBaseDevice.md#getclusterserverbyid)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:208](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L208)
+[packages/matter.js/src/device/Endpoint.ts:208](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L208)
 
 ___
 
@@ -881,29 +898,29 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getCurrentLevel](export._internal_.DimmableBaseDevice.md#getcurrentlevel)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getCurrentLevel](device_export._internal_.DimmableBaseDevice.md#getcurrentlevel)
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:58](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DimmableDevices.ts#L58)
+[packages/matter.js/src/device/DimmableDevices.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DimmableDevices.ts#L68)
 
 ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/device_export.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[[`DeviceTypeDefinition`](../modules/device_export.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+[[`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getDeviceTypes](export._internal_.DimmableBaseDevice.md#getdevicetypes)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getDeviceTypes](device_export._internal_.DimmableBaseDevice.md#getdevicetypes)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L236)
+[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L236)
 
 ___
 
@@ -917,11 +934,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getId](export._internal_.DimmableBaseDevice.md#getid)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getId](device_export._internal_.DimmableBaseDevice.md#getid)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L99)
+[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L99)
 
 ___
 
@@ -935,11 +952,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[getOnOff](export._internal_.DimmableBaseDevice.md#getonoff)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[getOnOff](device_export._internal_.DimmableBaseDevice.md#getonoff)
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:116](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/OnOffDevices.ts#L116)
+[packages/matter.js/src/device/OnOffDevices.ts:119](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L119)
 
 ___
 
@@ -961,7 +978,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/cluster_export.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -969,11 +986,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[hasClusterClient](export._internal_.DimmableBaseDevice.md#hasclusterclient)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[hasClusterClient](device_export._internal_.DimmableBaseDevice.md#hasclusterclient)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:226](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L226)
+[packages/matter.js/src/device/Endpoint.ts:226](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L226)
 
 ___
 
@@ -995,7 +1012,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/cluster_export.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -1003,11 +1020,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[hasClusterServer](export._internal_.DimmableBaseDevice.md#hasclusterserver)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[hasClusterServer](device_export._internal_.DimmableBaseDevice.md#hasclusterserver)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:216](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L216)
+[packages/matter.js/src/device/Endpoint.ts:216](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L216)
 
 ___
 
@@ -1027,11 +1044,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeChildEndpoint](export._internal_.DimmableBaseDevice.md#removechildendpoint)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[removeChildEndpoint](device_export._internal_.DimmableBaseDevice.md#removechildendpoint)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L273)
+[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L273)
 
 ___
 
@@ -1055,11 +1072,11 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeCommandHandler](export._internal_.DimmableBaseDevice.md#removecommandhandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[removeCommandHandler](device_export._internal_.DimmableBaseDevice.md#removecommandhandler)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:213](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L213)
+[packages/matter.js/src/device/Device.ts:213](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L213)
 
 ▸ **removeCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
@@ -1070,14 +1087,14 @@ The base class do not expose any commands!
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands) |
+| `K` | extends keyof [`OnOffBaseDeviceCommands`](../modules/device_export._internal_.md#onoffbasedevicecommands) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `action` | `K` | - |
-| `handler` | [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`] | Handler function to be removed |
+| `handler` | [`OnOffBaseDeviceCommands`](../modules/device_export._internal_.md#onoffbasedevicecommands)[`K`] | Handler function to be removed |
 
 #### Returns
 
@@ -1085,11 +1102,11 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeCommandHandler](export._internal_.DimmableBaseDevice.md#removecommandhandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[removeCommandHandler](device_export._internal_.DimmableBaseDevice.md#removecommandhandler)
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/NamedHandler.ts#L41)
+[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L41)
 
 ▸ **removeCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
@@ -1100,14 +1117,14 @@ The base class do not expose any commands!
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends keyof [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands) |
+| `K` | extends keyof [`DimmableDeviceCommands`](../modules/device_export._internal_.md#dimmabledevicecommands) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `action` | `K` | - |
-| `handler` | [`DimmableDeviceCommands`](../modules/export._internal_.md#dimmabledevicecommands)[`K`] | Handler function to be removed |
+| `handler` | [`DimmableDeviceCommands`](../modules/device_export._internal_.md#dimmabledevicecommands)[`K`] | Handler function to be removed |
 
 #### Returns
 
@@ -1115,11 +1132,11 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeCommandHandler](export._internal_.DimmableBaseDevice.md#removecommandhandler)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[removeCommandHandler](device_export._internal_.DimmableBaseDevice.md#removecommandhandler)
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/NamedHandler.ts#L41)
+[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L41)
 
 ___
 
@@ -1133,11 +1150,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[removeFromStructure](export._internal_.DimmableBaseDevice.md#removefromstructure)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[removeFromStructure](device_export._internal_.DimmableBaseDevice.md#removefromstructure)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L85)
+[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L85)
 
 ___
 
@@ -1160,11 +1177,11 @@ reachability needs to be set there.
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setBridgedDeviceReachability](export._internal_.DimmableBaseDevice.md#setbridgeddevicereachability)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[setBridgedDeviceReachability](device_export._internal_.DimmableBaseDevice.md#setbridgeddevicereachability)
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:296](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Device.ts#L296)
+[packages/matter.js/src/device/Device.ts:296](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L296)
 
 ___
 
@@ -1184,11 +1201,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setCurrentLevel](export._internal_.DimmableBaseDevice.md#setcurrentlevel)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[setCurrentLevel](device_export._internal_.DimmableBaseDevice.md#setcurrentlevel)
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DimmableDevices.ts#L62)
+[packages/matter.js/src/device/DimmableDevices.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DimmableDevices.ts#L72)
 
 ___
 
@@ -1200,7 +1217,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/device_export.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../interfaces/device_export.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] |
 
 #### Returns
 
@@ -1208,11 +1225,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setDeviceTypes](export._internal_.DimmableBaseDevice.md#setdevicetypes)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[setDeviceTypes](device_export._internal_.DimmableBaseDevice.md#setdevicetypes)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L240)
+[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L240)
 
 ___
 
@@ -1235,11 +1252,11 @@ This is an example f a convenient device class API to control the device without
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setOnOff](export._internal_.DimmableBaseDevice.md#setonoff)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[setOnOff](device_export._internal_.DimmableBaseDevice.md#setonoff)
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:112](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/OnOffDevices.ts#L112)
+[packages/matter.js/src/device/OnOffDevices.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L115)
 
 ___
 
@@ -1259,11 +1276,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setStructureChangedCallback](export._internal_.DimmableBaseDevice.md#setstructurechangedcallback)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[setStructureChangedCallback](device_export._internal_.DimmableBaseDevice.md#setstructurechangedcallback)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L80)
+[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L80)
 
 ___
 
@@ -1280,11 +1297,11 @@ This is an example f a convenient device class API to control the device without
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[toggle](export._internal_.DimmableBaseDevice.md#toggle)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[toggle](device_export._internal_.DimmableBaseDevice.md#toggle)
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:124](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/OnOffDevices.ts#L124)
+[packages/matter.js/src/device/OnOffDevices.ts:127](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L127)
 
 ___
 
@@ -1298,11 +1315,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[updatePartsList](export._internal_.DimmableBaseDevice.md#updatepartslist)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[updatePartsList](device_export._internal_.DimmableBaseDevice.md#updatepartslist)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L347)
+[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L347)
 
 ___
 
@@ -1316,8 +1333,8 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[verifyRequiredClusters](export._internal_.DimmableBaseDevice.md#verifyrequiredclusters)
+[DimmableBaseDevice](device_export._internal_.DimmableBaseDevice.md).[verifyRequiredClusters](device_export._internal_.DimmableBaseDevice.md#verifyrequiredclusters)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:305](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/Endpoint.ts#L305)
+[packages/matter.js/src/device/Endpoint.ts:305](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L305)

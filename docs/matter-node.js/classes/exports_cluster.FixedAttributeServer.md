@@ -80,7 +80,7 @@ Attribute server types.
 | `requiresTimedInteraction` | `boolean` | - |
 | `defaultValue` | `T` | - |
 | `getClusterDataVersion` | () => `number` | - |
-| `getter?` | (`session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | Optional getter function to handle special requirements or the data are stored in different places. |
+| `getter?` | (`session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | Optional getter function to handle special requirements or the data are stored in different places. **`Param`** the session that is requesting the value (if any). **`Param`** the endpoint the cluster server of this attribute is assigned to. **`Param`** whether the read request is fabric scoped or not |
 
 #### Returns
 
@@ -144,7 +144,7 @@ ___
 
 ### getter
 
-• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
+• `Protected` `Readonly` **getter**: (`session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
 
 #### Type declaration
 
@@ -154,7 +154,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 | `isFabricFiltered?` | `boolean` |
 
@@ -360,7 +360,7 @@ If a getter is defined the value is determined by that getter method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -404,7 +404,7 @@ attributes.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns

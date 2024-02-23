@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`InteractionMessenger`](export._internal_.InteractionMessenger.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+- [`InteractionMessenger`](protocol_interaction_export._internal_.InteractionMessenger.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
   ↳ **`IncomingInteractionClientMessenger`**
 
@@ -51,11 +51,11 @@
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[constructor](export._internal_.InteractionMessenger.md#constructor)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[constructor](protocol_interaction_export._internal_.InteractionMessenger.md#constructor)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:81](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L81)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L81)
 
 ## Properties
 
@@ -65,11 +65,11 @@
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[exchange](export._internal_.InteractionMessenger.md#exchange)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[exchange](protocol_interaction_export._internal_.InteractionMessenger.md#exchange)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:81](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L81)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L81)
 
 ## Methods
 
@@ -83,11 +83,11 @@
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[close](export._internal_.InteractionMessenger.md#close)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[close](protocol_interaction_export._internal_.InteractionMessenger.md#close)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:111](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L111)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:111](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L111)
 
 ___
 
@@ -101,11 +101,11 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[getExchangeChannelName](export._internal_.InteractionMessenger.md#getexchangechannelname)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[getExchangeChannelName](protocol_interaction_export._internal_.InteractionMessenger.md#getexchangechannelname)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:126](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L126)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:126](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L126)
 
 ___
 
@@ -125,11 +125,11 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[nextMessage](export._internal_.InteractionMessenger.md#nextmessage)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[nextMessage](protocol_interaction_export._internal_.InteractionMessenger.md#nextmessage)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:99](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L99)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:99](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L99)
 
 ___
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:330](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L330)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:330](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L330)
 
 ___
 
@@ -165,11 +165,11 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[send](export._internal_.InteractionMessenger.md#send)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[send](protocol_interaction_export._internal_.InteractionMessenger.md#send)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:83](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L83)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:83](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L83)
 
 ___
 
@@ -189,11 +189,11 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[sendStatus](export._internal_.InteractionMessenger.md#sendstatus)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[sendStatus](protocol_interaction_export._internal_.InteractionMessenger.md#sendstatus)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:87](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L87)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L87)
 
 ___
 
@@ -213,11 +213,11 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[throwIfErrorStatusMessage](export._internal_.InteractionMessenger.md#throwiferrorstatusmessage)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[throwIfErrorStatusMessage](protocol_interaction_export._internal_.InteractionMessenger.md#throwiferrorstatusmessage)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:115](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L115)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L115)
 
 ___
 
@@ -231,8 +231,8 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[waitForSuccess](export._internal_.InteractionMessenger.md#waitforsuccess)
+[InteractionMessenger](protocol_interaction_export._internal_.InteractionMessenger.md).[waitForSuccess](protocol_interaction_export._internal_.InteractionMessenger.md#waitforsuccess)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L94)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L94)

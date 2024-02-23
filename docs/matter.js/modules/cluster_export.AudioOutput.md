@@ -39,25 +39,25 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:184](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:184](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L184)
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentOutput`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `outputList`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  } ; `commands`: \{ `selectOutput`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1291`` = 0x50b; `name`: ``"AudioOutput"`` = "AudioOutput"; `revision`: ``1`` = 1 }\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentOutput`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  } ; `commands`: \{ `selectOutput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``1291`` = 0x50b; `name`: ``"AudioOutput"`` = "AudioOutput"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all AudioOutput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:97](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:97](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L97)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `currentOutput`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `outputList`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: \{ `selectOutput`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `events`: {} ; `features`: \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)\<``1291`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"AudioOutput"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentOutput`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `outputList`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  } ; `commands`: \{ `selectOutput`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1291`` = 0x50b; `name`: ``"AudioOutput"`` = "AudioOutput"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.AudioOutput.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
+• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `currentOutput`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  }\>\> ; `commands`: \{ `selectOutput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `events`: {} ; `features`: \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: [`Branded`](util_export.md#branded)\<``1291`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"AudioOutput"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentOutput`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  } ; `commands`: \{ `selectOutput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``1291`` = 0x50b; `name`: ``"AudioOutput"`` = "AudioOutput"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.AudioOutput.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  }, `T`\>\> = extender }
 
 Audio Output
 
@@ -72,13 +72,13 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:162](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L162)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:162](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L162)
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `currentOutput`: [`Attribute`](cluster_export.md#attribute)\<`number`, `any`\> ; `outputList`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> = Cluster.attributes; `commands`: \{ `renameOutput`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `nameUpdates`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `selectOutput`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``1291`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"AudioOutput"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `currentOutput`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  }\>\> = Cluster.attributes; `commands`: \{ `renameOutput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `nameUpdates`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `selectOutput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: ``1291`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"AudioOutput"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
 
 This cluster supports all AudioOutput features. It may support illegal feature combinations.
 
@@ -87,19 +87,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:196](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:196](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L196)
 
 ___
 
 ### NameUpdatesComponent
 
-• `Const` **NameUpdatesComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `renameOutput`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\>  }  }\>
+• `Const` **NameUpdatesComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `renameOutput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\>  }  }\>
 
 A AudioOutputCluster supports these elements if it supports feature NameUpdates.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:138](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:138](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L138)
 
 ___
 
@@ -115,7 +115,7 @@ This contains information about an output.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L42)
 
 ___
 
@@ -131,7 +131,7 @@ Input to the AudioOutput renameOutput command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:78](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:78](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L78)
 
 ___
 
@@ -147,4 +147,4 @@ Input to the AudioOutput selectOutput command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:71](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L71)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L71)

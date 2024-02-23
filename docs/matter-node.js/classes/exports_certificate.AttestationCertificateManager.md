@@ -201,7 +201,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `dac` | `Uint8Array` |
-| `keyPair` | [`PrivateKey`](../modules/crypto_export.md#privatekey) |
+| `keyPair` | [`PrivateKey`](../interfaces/crypto_export.PrivateKey.md) |
 
 #### Defined in
 

@@ -35,7 +35,7 @@
 
 ### getAllScenes
 
-▸ **getAllScenes**(`fabric`, `endpointId`, `groupId`): [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[]
+▸ **getAllScenes**(`fabric`, `endpointId`, `groupId`): [`scenesTableEntry`](../interfaces/exports_cluster._internal_.scenesTableEntry.md)[]
 
 #### Parameters
 
@@ -47,7 +47,7 @@
 
 #### Returns
 
-[`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[]
+[`scenesTableEntry`](../interfaces/exports_cluster._internal_.scenesTableEntry.md)[]
 
 #### Defined in
 
@@ -57,7 +57,7 @@ ___
 
 ### getEndpointScenes
 
-▸ **getEndpointScenes**(`fabric`, `endpointId`): `undefined` \| `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
+▸ **getEndpointScenes**(`fabric`, `endpointId`): `undefined` \| `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/exports_cluster._internal_.scenesTableEntry.md)\>\>
 
 #### Parameters
 
@@ -68,7 +68,7 @@ ___
 
 #### Returns
 
-`undefined` \| `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
+`undefined` \| `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/exports_cluster._internal_.scenesTableEntry.md)\>\>
 
 #### Defined in
 
@@ -78,7 +78,7 @@ ___
 
 ### getSceneEntry
 
-▸ **getSceneEntry**(`fabric`, `endpointId`, `groupId`, `sceneId`): `undefined` \| [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)
+▸ **getSceneEntry**(`fabric`, `endpointId`, `groupId`, `sceneId`): `undefined` \| [`scenesTableEntry`](../interfaces/exports_cluster._internal_.scenesTableEntry.md)
 
 #### Parameters
 
@@ -91,7 +91,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)
+`undefined` \| [`scenesTableEntry`](../interfaces/exports_cluster._internal_.scenesTableEntry.md)
 
 #### Defined in
 
@@ -175,7 +175,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `endpointScenes` | `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\> |
+| `endpointScenes` | `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/exports_cluster._internal_.scenesTableEntry.md)\>\> |
 
 #### Returns
 
@@ -197,7 +197,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `sceneEntries` | [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[] |
+| `sceneEntries` | [`scenesTableEntry`](../interfaces/exports_cluster._internal_.scenesTableEntry.md)[] |
 
 #### Returns
 

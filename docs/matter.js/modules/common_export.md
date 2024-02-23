@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](common_export._internal_.md)
+
 ### Classes
 
 - [FailSafeManager](../classes/common_export.FailSafeManager.md)
@@ -27,10 +31,14 @@
 
 ### Type Aliases
 
+- [AddressTypeFromDevice](common_export.md#addresstypefromdevice)
 - [CommissionableDevice](common_export.md#commissionabledevice)
 - [CommissionableDeviceIdentifiers](common_export.md#commissionabledeviceidentifiers)
 - [CommissionerInstanceData](common_export.md#commissionerinstancedata)
 - [CommissioningModeInstanceData](common_export.md#commissioningmodeinstancedata)
+- [DiscoverableDevice](common_export.md#discoverabledevice)
+- [DiscoveryData](common_export.md#discoverydata)
+- [OperationalDevice](common_export.md#operationaldevice)
 - [OperationalInstanceData](common_export.md#operationalinstancedata)
 - [ServerAddress](common_export.md#serveraddress)
 - [ServerAddressBle](common_export.md#serveraddressble)
@@ -49,34 +57,29 @@
 
 ## Type Aliases
 
-### CommissionableDevice
+### AddressTypeFromDevice
 
-Ƭ **CommissionableDevice**: `Object`
+Ƭ **AddressTypeFromDevice**\<`D`\>: `D` extends [`DiscoverableDevice`](common_export.md#discoverabledevice)\<infer SA\> ? `SA` : `never`
 
-All information exposed by a commissionable device via announcements.
-The properties are named identical as in the Matter specification.
+#### Type parameters
 
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `CM` | `number` | Commissioning Mode |
-| `D` | `number` | Discriminator |
-| `DN?` | `string` | Device advertising name |
-| `DT?` | `number` | Device type |
-| `PH?` | `number` | Pairing hint |
-| `PI?` | `string` | Pairing instructions |
-| `RI?` | `string` | Rotating device identifier |
-| `SAI?` | `number` | Sleep Active Interval |
-| `SII?` | `number` | Sleep Idle Interval |
-| `T?` | `number` | TCP supported |
-| `VP?` | `string` | VendorId + ProductId |
-| `addresses` | [`ServerAddress`](common_export.md#serveraddress)[] | The device's addresses IP/port pairs |
-| `deviceIdentifier` | `string` | - |
+| Name | Type |
+| :------ | :------ |
+| `D` | extends [`DiscoverableDevice`](common_export.md#discoverabledevice)\<`any`\> |
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/Scanner.ts#L16)
+[packages/matter.js/src/common/Scanner.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L56)
+
+___
+
+### CommissionableDevice
+
+Ƭ **CommissionableDevice**: [`DiscoverableDevice`](common_export.md#discoverabledevice)\<[`ServerAddress`](common_export.md#serveraddress)\> & \{ `CM`: `number` ; `D`: `number` ; `deviceIdentifier`: `string`  }
+
+#### Defined in
+
+[packages/matter.js/src/common/Scanner.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L63)
 
 ___
 
@@ -89,7 +92,7 @@ Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/Scanner.ts#L60)
+[packages/matter.js/src/common/Scanner.ts:77](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L77)
 
 ___
 
@@ -104,13 +107,14 @@ ___
 | `deviceName` | `string` | Device name for commissionable announcements. |
 | `deviceType?` | `number` | Device type for commissionable announcements. |
 | `productId` | `number` | Vendor ID for commissionable announcements. |
-| `sleepActiveInterval?` | `number` | Sleep Active Interval of the device for commissionable announcements. |
-| `sleepIdleInterval?` | `number` | Sleep Idle Interval of the device for commissionable announcements. |
+| `sessionActiveInterval?` | `number` | Session Active Interval of the device for commissionable announcements. |
+| `sessionActiveThreshold?` | `number` | This key defines the duration of time the node stays Active after the last network activity. * |
+| `sessionIdleInterval?` | `number` | Session Idle Interval of the device for commissionable announcements. |
 | `vendorId` | [`VendorId`](datatype_export.md#vendorid) | Device type for commissionable announcements. |
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:162](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/InstanceBroadcaster.ts#L162)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:165](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L165)
 
 ___
 
@@ -128,13 +132,69 @@ ___
 | `pairingHint?` | [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof [`PairingHintBitmap`](common_export.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
 | `pairingInstructions?` | `string` | Pairing Instruction of the device for commissionable announcements. |
 | `productId` | `number` | Product ID for commissionable announcements. |
-| `sleepActiveInterval?` | `number` | Sleep Active Interval of the device for commissionable announcements. |
-| `sleepIdleInterval?` | `number` | Sleep Idle Interval of the device for commissionable announcements. |
+| `sessionActiveInterval?` | `number` | Session Active Interval of the device for commissionable announcements. |
+| `sessionActiveThreshold?` | `number` | Duration of time the node should stay Active after the last network activity. * |
+| `sessionIdleInterval?` | `number` | Session Idle Interval of the device for commissionable announcements. |
 | `vendorId` | [`VendorId`](datatype_export.md#vendorid) | Vendor ID for commissionable announcements. |
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/InstanceBroadcaster.ts#L133)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L133)
+
+___
+
+### DiscoverableDevice
+
+Ƭ **DiscoverableDevice**\<`SA`\>: [`DiscoveryData`](common_export.md#discoverydata) & \{ `addresses`: `SA`[]  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `SA` | extends [`ServerAddress`](common_export.md#serveraddress) |
+
+#### Defined in
+
+[packages/matter.js/src/common/Scanner.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L51)
+
+___
+
+### DiscoveryData
+
+Ƭ **DiscoveryData**: `Object`
+
+All information exposed by a commissionable device via announcements.
+The properties are named identical as in the Matter specification.
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `DN?` | `string` | Device advertising name |
+| `DT?` | `number` | Device type |
+| `ICD?` | `number` | ICD Long Idle Time operating mode supported |
+| `PH?` | `number` | Pairing hint |
+| `PI?` | `string` | Pairing instructions |
+| `RI?` | `string` | Rotating device identifier |
+| `SAI?` | `number` | Sleep Active Interval |
+| `SAT?` | `number` | Session active threshold |
+| `SII?` | `number` | Sleep Idle Interval |
+| `T?` | `number` | TCP supported |
+| `VP?` | `string` | VendorId + ProductId |
+
+#### Defined in
+
+[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L16)
+
+___
+
+### OperationalDevice
+
+Ƭ **OperationalDevice**: [`DiscoverableDevice`](common_export.md#discoverabledevice)\<[`ServerAddressIp`](common_export.md#serveraddressip)\> & \{ `deviceIdentifier`: `string`  }
+
+#### Defined in
+
+[packages/matter.js/src/common/Scanner.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L59)
 
 ___
 
@@ -146,12 +206,13 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `sleepActiveInterval?` | `number` | Sleep Active Interval of the device for operational announcements. |
-| `sleepIdleInterval?` | `number` | Sleep Idle Interval of the device for operational announcements. |
+| `sessionActiveInterval?` | `number` | Session Active Interval of the device for operational announcements. |
+| `sessionActiveThreshold?` | `number` | This key defines the duration of time the node stays Active after the last network activity. * |
+| `sessionIdleInterval?` | `number` | Session Idle Interval of the device for operational announcements. |
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:182](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/InstanceBroadcaster.ts#L182)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:188](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L188)
 
 ___
 
@@ -161,7 +222,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/ServerAddress.ts#L18)
+[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ServerAddress.ts#L18)
 
 ___
 
@@ -178,7 +239,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/ServerAddress.ts#L13)
+[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ServerAddress.ts#L13)
 
 ___
 
@@ -201,7 +262,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/ServerAddress.ts#L7)
+[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ServerAddress.ts#L7)
 
 ## Variables
 
@@ -213,40 +274,40 @@ SPDX-License-Identifier: Apache-2.0
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `administrator` | [`BitFlag`](schema_export.md#bitflag-1) | The Device has been commissioned. Any Administrator that commissioned the device provides a user interface that may be used to put the device into Commissioning Mode. |
-| `customInstruction` | [`BitFlag`](schema_export.md#bitflag-1) | The PI key/value pair describes a custom way to put the Device into Commissioning Mode. This Custom Instruction option is NOT recommended for use by a Device that does not have knowledge of the user’s language preference. |
-| `deviceManual` | [`BitFlag`](schema_export.md#bitflag-1) | The Device Manual provides special instructions to put the Device into Commissioning Mode (see Section 11.22.5.8, “UserManualUrl”). This is a catch-all option to capture user interactions that are not codified by other options in this table. |
-| `deviceManufacturerUrl` | [`BitFlag`](schema_export.md#bitflag-1) | This SHALL be set to 1 for devices requiring Custom Commissioning Flow before they can be available for Commissioning by any Commissioner. For such a flow, the user SHOULD be sent to the URL specified in the CommissioningCustomFlowUrl of the DeviceModel schema entry indexed by the Vendor ID and Product ID (e.g., as found in the announcement) in the Distributed Compliance Ledger. |
-| `powerCycle` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will automatically enter Commissioning Mode upon power cycle (unplug/re- plug, remove/re-insert batteries). This bit SHALL be set to 1 for devices using Standard Commissioning Flow, and set to 0 otherwise. |
-| `pressResetButton` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed. |
-| `pressResetButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
-| `pressResetButtonNumberOfTimes` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
-| `pressResetButtonUntilLightBlinks` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressResetButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressResetButtonWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed when applying power to it. |
-| `pressRestButtonForNumberOfSeconds` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when reset button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButton` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed. |
-| `pressSetupButtonForNumberOfSeconds` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonNumberOfTimes` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonUntilLightBlinks` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressSetupButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressSetupButtonWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag-1) | The Device will enter Commissioning Mode when setup button is pressed when applying power to it. |
-| `settingsMenuOnNode` | [`BitFlag`](schema_export.md#bitflag-1) | The settings menu on the Device provides instructions to put it into Commissioning Mode. |
+| `administrator` | [`BitFlag`](schema_export.md#bitflag) | The Device has been commissioned. Any Administrator that commissioned the device provides a user interface that may be used to put the device into Commissioning Mode. |
+| `customInstruction` | [`BitFlag`](schema_export.md#bitflag) | The PI key/value pair describes a custom way to put the Device into Commissioning Mode. This Custom Instruction option is NOT recommended for use by a Device that does not have knowledge of the user’s language preference. |
+| `deviceManual` | [`BitFlag`](schema_export.md#bitflag) | The Device Manual provides special instructions to put the Device into Commissioning Mode (see Section 11.22.5.8, “UserManualUrl”). This is a catch-all option to capture user interactions that are not codified by other options in this table. |
+| `deviceManufacturerUrl` | [`BitFlag`](schema_export.md#bitflag) | This SHALL be set to 1 for devices requiring Custom Commissioning Flow before they can be available for Commissioning by any Commissioner. For such a flow, the user SHOULD be sent to the URL specified in the CommissioningCustomFlowUrl of the DeviceModel schema entry indexed by the Vendor ID and Product ID (e.g., as found in the announcement) in the Distributed Compliance Ledger. |
+| `powerCycle` | [`BitFlag`](schema_export.md#bitflag) | The Device will automatically enter Commissioning Mode upon power cycle (unplug/re- plug, remove/re-insert batteries). This bit SHALL be set to 1 for devices using Standard Commissioning Flow, and set to 0 otherwise. |
+| `pressResetButton` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed. |
+| `pressResetButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
+| `pressResetButtonNumberOfTimes` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
+| `pressResetButtonUntilLightBlinks` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
+| `pressResetButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
+| `pressResetButtonWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed when applying power to it. |
+| `pressRestButtonForNumberOfSeconds` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
+| `pressSetupButton` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed. |
+| `pressSetupButtonForNumberOfSeconds` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
+| `pressSetupButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
+| `pressSetupButtonNumberOfTimes` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
+| `pressSetupButtonUntilLightBlinks` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
+| `pressSetupButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
+| `pressSetupButtonWithApplicationOfPower` | [`BitFlag`](schema_export.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed when applying power to it. |
+| `settingsMenuOnNode` | [`BitFlag`](schema_export.md#bitflag) | The settings menu on the Device provides instructions to put it into Commissioning Mode. |
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:11](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/InstanceBroadcaster.ts#L11)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L11)
 
 ___
 
 ### PairingHintBitmapSchema
 
-• `Const` **PairingHintBitmapSchema**: [`BitmapSchemaInternal`](../classes/schema_export.BitmapSchemaInternal.md)\<\{ `administrator`: [`BitFlag`](schema_export.md#bitflag-1) ; `customInstruction`: [`BitFlag`](schema_export.md#bitflag-1) ; `deviceManual`: [`BitFlag`](schema_export.md#bitflag-1) ; `deviceManufacturerUrl`: [`BitFlag`](schema_export.md#bitflag-1) ; `powerCycle`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButton`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonNumberOfTimes`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinks`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressRestButtonForNumberOfSeconds`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButton`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSeconds`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonNumberOfTimes`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinks`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `settingsMenuOnNode`: [`BitFlag`](schema_export.md#bitflag-1)  }\>
+• `Const` **PairingHintBitmapSchema**: [`BitmapSchemaInternal`](../classes/schema_export.BitmapSchemaInternal.md)\<\{ `administrator`: [`BitFlag`](schema_export.md#bitflag) ; `customInstruction`: [`BitFlag`](schema_export.md#bitflag) ; `deviceManual`: [`BitFlag`](schema_export.md#bitflag) ; `deviceManufacturerUrl`: [`BitFlag`](schema_export.md#bitflag) ; `powerCycle`: [`BitFlag`](schema_export.md#bitflag) ; `pressResetButton`: [`BitFlag`](schema_export.md#bitflag) ; `pressResetButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag) ; `pressResetButtonNumberOfTimes`: [`BitFlag`](schema_export.md#bitflag) ; `pressResetButtonUntilLightBlinks`: [`BitFlag`](schema_export.md#bitflag) ; `pressResetButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag) ; `pressResetButtonWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag) ; `pressRestButtonForNumberOfSeconds`: [`BitFlag`](schema_export.md#bitflag) ; `pressSetupButton`: [`BitFlag`](schema_export.md#bitflag) ; `pressSetupButtonForNumberOfSeconds`: [`BitFlag`](schema_export.md#bitflag) ; `pressSetupButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag) ; `pressSetupButtonNumberOfTimes`: [`BitFlag`](schema_export.md#bitflag) ; `pressSetupButtonUntilLightBlinks`: [`BitFlag`](schema_export.md#bitflag) ; `pressSetupButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag) ; `pressSetupButtonWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag) ; `settingsMenuOnNode`: [`BitFlag`](schema_export.md#bitflag)  }\>
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:131](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/InstanceBroadcaster.ts#L131)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:131](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L131)
 
 ## Functions
 
@@ -266,7 +327,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/ServerAddress.ts#L20)
+[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ServerAddress.ts#L20)
 
 ___
 
@@ -291,7 +352,7 @@ If the function returns undefined or the error type do not match, the error is n
 | :------ | :------ | :------ |
 | `codeBlock` | () => `T` | Code block to execute |
 | `errorType` | [`ClassExtends`](util_export.md#classextends)\<`E`\> | Errortype to catch and handle |
-| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)\<`T`, `E`\> | Fallback value or function to compute the fallback value |
+| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](common_export._internal_.md#errorhandler)\<`T`, `E`\> | Fallback value or function to compute the fallback value |
 
 #### Returns
 
@@ -299,7 +360,7 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/TryCatchHandler.ts#L19)
+[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/TryCatchHandler.ts#L19)
 
 ___
 
@@ -324,7 +385,7 @@ If the function returns undefined or the error type do not match, the error is n
 | :------ | :------ | :------ |
 | `codeBlock` | () => `Promise`\<`T`\> | Async code block to execute |
 | `errorType` | [`ClassExtends`](util_export.md#classextends)\<`E`\> | Errortype to catch and handle |
-| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)\<`Promise`\<`T`\>, `E`\> | Fallback value or function to compute the fallback value |
+| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](common_export._internal_.md#errorhandler)\<`Promise`\<`T`\>, `E`\> | Fallback value or function to compute the fallback value |
 
 #### Returns
 
@@ -332,4 +393,4 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/TryCatchHandler.ts#L47)
+[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/TryCatchHandler.ts#L47)

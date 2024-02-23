@@ -10,7 +10,7 @@ A "typed component" is a component with detailed type information.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends `Partial`\<[`Component`](../modules/exports_cluster.ClusterFactory.md#component)\> |
+| `T` | extends `Partial`\<[`Component`](exports_cluster.ClusterFactory.Component.md)\> |
 
 ## Table of contents
 

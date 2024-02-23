@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L21)
+[packages/matter.js/src/tlv/TlvObject.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvObject.ts#L23)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L17)
+[packages/matter.js/src/tlv/TlvObject.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvObject.ts#L19)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L36)
+[packages/matter.js/src/tlv/TlvObject.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvObject.ts#L38)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L31)
+[packages/matter.js/src/tlv/TlvObject.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvObject.ts#L33)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L35)
+[packages/matter.js/src/tlv/TlvObject.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvObject.ts#L37)
 
 ___
 
@@ -105,4 +105,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L18)
+[packages/matter.js/src/tlv/TlvObject.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvObject.ts#L20)

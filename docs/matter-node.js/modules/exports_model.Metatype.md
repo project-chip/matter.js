@@ -32,7 +32,7 @@ packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:44
 
 ### cast
 
-▸ **cast**(`type`, `value`): [`FieldValue`](exports_model.md#fieldvalue) \| [`Invalid`](exports_model.FieldValue.md#invalid-1) \| `undefined`
+▸ **cast**(`type`, `value`): [`FieldValue`](exports_model.md#fieldvalue) \| [`Invalid`](exports_model.FieldValue.md#invalid) \| `undefined`
 
 Cast a value to a specific type.
 
@@ -45,7 +45,7 @@ Cast a value to a specific type.
 
 #### Returns
 
-[`FieldValue`](exports_model.md#fieldvalue) \| [`Invalid`](exports_model.FieldValue.md#invalid-1) \| `undefined`
+[`FieldValue`](exports_model.md#fieldvalue) \| [`Invalid`](exports_model.FieldValue.md#invalid) \| `undefined`
 
 the cast value or FieldValue.Invalid if cast is not possible
 

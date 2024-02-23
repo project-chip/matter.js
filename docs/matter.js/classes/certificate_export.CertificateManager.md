@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:570](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L570)
+[packages/matter.js/src/certificate/CertificateManager.ts:570](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L570)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `key` | [`Key`](../modules/crypto_export.md#key) |
+| `key` | [`Key`](../interfaces/crypto_export.Key.md) |
 
 #### Returns
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:601](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L601)
+[packages/matter.js/src/certificate/CertificateManager.ts:601](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L601)
 
 ___
 
@@ -85,8 +85,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)\<[`DeviceAttestationCertificate`](../interfaces/certificate_export.DeviceAttestationCertificate.md)\> |
-| `key` | [`Key`](../modules/crypto_export.md#key) |
+| `«destructured»` | [`Unsigned`](../modules/certificate_export._internal_.md#unsigned)\<[`DeviceAttestationCertificate`](../interfaces/certificate_export.DeviceAttestationCertificate.md)\> |
+| `key` | [`Key`](../interfaces/crypto_export.Key.md) |
 
 #### Returns
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:429](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L429)
+[packages/matter.js/src/certificate/CertificateManager.ts:429](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L429)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:616](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L616)
+[packages/matter.js/src/certificate/CertificateManager.ts:616](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L616)
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `isCa`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `notBefore`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subject`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `caseAuthenticatedTags`: [`OptionalRepeatedFieldType`](../interfaces/tlv_export.OptionalRepeatedFieldType.md)\<[`CaseAuthenticatedTag`](../modules/datatype_export.md#caseauthenticatedtag)[]\> ; `fabricId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricId`](../modules/datatype_export.md#fabricid)\> ; `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>\> |
+| `«destructured»` | [`Unsigned`](../modules/certificate_export._internal_.md#unsigned)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `isCa`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `notBefore`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subject`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `caseAuthenticatedTags`: [`OptionalRepeatedFieldType`](../interfaces/tlv_export.OptionalRepeatedFieldType.md)\<[`CaseAuthenticatedTag`](../modules/datatype_export.md#caseauthenticatedtag)[]\> ; `fabricId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricId`](../modules/datatype_export.md#fabricid)\> ; `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>\> |
 
 #### Returns
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:382](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L382)
+[packages/matter.js/src/certificate/CertificateManager.ts:382](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L382)
 
 ___
 
@@ -146,8 +146,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)\<[`ProductAttestationAuthorityCertificate`](../interfaces/certificate_export.ProductAttestationAuthorityCertificate.md)\> |
-| `key` | [`Key`](../modules/crypto_export.md#key) |
+| `«destructured»` | [`Unsigned`](../modules/certificate_export._internal_.md#unsigned)\<[`ProductAttestationAuthorityCertificate`](../interfaces/certificate_export.ProductAttestationAuthorityCertificate.md)\> |
+| `key` | [`Key`](../interfaces/crypto_export.Key.md) |
 
 #### Returns
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:522](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L522)
+[packages/matter.js/src/certificate/CertificateManager.ts:522](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L522)
 
 ___
 
@@ -167,8 +167,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)\<[`ProductAttestationIntermediateCertificate`](../interfaces/certificate_export.ProductAttestationIntermediateCertificate.md)\> |
-| `key` | [`Key`](../modules/crypto_export.md#key) |
+| `«destructured»` | [`Unsigned`](../modules/certificate_export._internal_.md#unsigned)\<[`ProductAttestationIntermediateCertificate`](../interfaces/certificate_export.ProductAttestationIntermediateCertificate.md)\> |
+| `key` | [`Key`](../interfaces/crypto_export.Key.md) |
 
 #### Returns
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:475](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L475)
+[packages/matter.js/src/certificate/CertificateManager.ts:475](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L475)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Unsigned`](../modules/export._internal_.md#unsigned)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `isCa`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `notBefore`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subject`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `rcacId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>\>  }\>\> |
+| `«destructured»` | [`Unsigned`](../modules/certificate_export._internal_.md#unsigned)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `isCa`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `pathLen`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `extendedKeyUsage`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`[]\> ; `futureExtension`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `keyUsage`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `notBefore`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `subject`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `rcacId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>\>  }\>\> |
 
 #### Returns
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:349](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L349)
+[packages/matter.js/src/certificate/CertificateManager.ts:349](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L349)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:597](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L597)
+[packages/matter.js/src/certificate/CertificateManager.ts:597](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L597)
 
 ___
 
@@ -237,4 +237,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:593](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L593)
+[packages/matter.js/src/certificate/CertificateManager.ts:593](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L593)

@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:318](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L318)
+[packages/matter.js/src/protocol/ExchangeManager.ts:333](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L333)
 
 ## Properties
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:320](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L320)
+[packages/matter.js/src/protocol/ExchangeManager.ts:335](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L335)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:319](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L319)
+[packages/matter.js/src/protocol/ExchangeManager.ts:334](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L334)
 
 ___
 
@@ -86,21 +86,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:321](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L321)
+[packages/matter.js/src/protocol/ExchangeManager.ts:336](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L336)
 
 ## Accessors
 
 ### session
 
-• `get` **session**(): [`Session`](../interfaces/session_export.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+• `get` **session**(): [`Session`](session_export.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Returns
 
-[`Session`](../interfaces/session_export.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+[`Session`](session_export.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:346](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L346)
+[packages/matter.js/src/protocol/ExchangeManager.ts:361](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L361)
 
 ## Methods
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:332](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L332)
+[packages/matter.js/src/protocol/ExchangeManager.ts:347](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L347)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:328](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L328)
+[packages/matter.js/src/protocol/ExchangeManager.ts:343](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L343)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:324](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L324)
+[packages/matter.js/src/protocol/ExchangeManager.ts:339](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L339)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:336](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L336)
+[packages/matter.js/src/protocol/ExchangeManager.ts:351](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L351)
 
 ___
 
@@ -188,4 +188,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:340](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L340)
+[packages/matter.js/src/protocol/ExchangeManager.ts:355](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L355)

@@ -6,4 +6,4 @@
 
 ## Indexable
 
-▪ [key: `string`]: [`Event`](../modules/cluster_export.md#event)\<`any`, `any`\>
+▪ [key: `string`]: [`Event`](cluster_export.Event.md)\<`any`, `any`\>

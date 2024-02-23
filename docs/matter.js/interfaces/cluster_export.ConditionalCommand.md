@@ -14,7 +14,7 @@
 
 ## Hierarchy
 
-- [`OptionalCommand`](../modules/cluster_export.md#optionalcommand)\<`RequestT`, `ResponseT`, `F`\>
+- [`OptionalCommand`](cluster_export.OptionalCommand.md)\<`RequestT`, `ResponseT`, `F`\>
 
   ↳ **`ConditionalCommand`**
 
@@ -41,11 +41,11 @@
 
 #### Inherited from
 
-OptionalCommand.invokeAcl
+[OptionalCommand](cluster_export.OptionalCommand.md).[invokeAcl](cluster_export.OptionalCommand.md#invokeacl)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:604](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L604)
+[packages/matter.js/src/cluster/Cluster.ts:604](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L604)
 
 ___
 
@@ -55,11 +55,11 @@ ___
 
 #### Overrides
 
-OptionalCommand.isConditional
+[OptionalCommand](cluster_export.OptionalCommand.md).[isConditional](cluster_export.OptionalCommand.md#isconditional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:617](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L617)
+[packages/matter.js/src/cluster/Cluster.ts:617](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L617)
 
 ___
 
@@ -69,11 +69,11 @@ ___
 
 #### Inherited from
 
-OptionalCommand.mandatoryIf
+[OptionalCommand](cluster_export.OptionalCommand.md).[mandatoryIf](cluster_export.OptionalCommand.md#mandatoryif)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:607](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L607)
+[packages/matter.js/src/cluster/Cluster.ts:607](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L607)
 
 ___
 
@@ -83,11 +83,11 @@ ___
 
 #### Inherited from
 
-OptionalCommand.optional
+[OptionalCommand](cluster_export.OptionalCommand.md).[optional](cluster_export.OptionalCommand.md#optional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:612](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L612)
+[packages/matter.js/src/cluster/Cluster.ts:612](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L612)
 
 ___
 
@@ -97,11 +97,11 @@ ___
 
 #### Inherited from
 
-OptionalCommand.optionalIf
+[OptionalCommand](cluster_export.OptionalCommand.md).[optionalIf](cluster_export.OptionalCommand.md#optionalif)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:608](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L608)
+[packages/matter.js/src/cluster/Cluster.ts:608](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L608)
 
 ___
 
@@ -111,11 +111,11 @@ ___
 
 #### Inherited from
 
-OptionalCommand.requestId
+[OptionalCommand](cluster_export.OptionalCommand.md).[requestId](cluster_export.OptionalCommand.md#requestid)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:600](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L600)
+[packages/matter.js/src/cluster/Cluster.ts:600](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L600)
 
 ___
 
@@ -125,11 +125,11 @@ ___
 
 #### Inherited from
 
-OptionalCommand.requestSchema
+[OptionalCommand](cluster_export.OptionalCommand.md).[requestSchema](cluster_export.OptionalCommand.md#requestschema)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:601](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L601)
+[packages/matter.js/src/cluster/Cluster.ts:601](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L601)
 
 ___
 
@@ -139,11 +139,11 @@ ___
 
 #### Inherited from
 
-OptionalCommand.responseId
+[OptionalCommand](cluster_export.OptionalCommand.md).[responseId](cluster_export.OptionalCommand.md#responseid)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:602](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L602)
+[packages/matter.js/src/cluster/Cluster.ts:602](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L602)
 
 ___
 
@@ -153,11 +153,11 @@ ___
 
 #### Inherited from
 
-OptionalCommand.responseSchema
+[OptionalCommand](cluster_export.OptionalCommand.md).[responseSchema](cluster_export.OptionalCommand.md#responseschema)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:603](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L603)
+[packages/matter.js/src/cluster/Cluster.ts:603](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L603)
 
 ___
 
@@ -167,8 +167,8 @@ ___
 
 #### Inherited from
 
-OptionalCommand.timed
+[OptionalCommand](cluster_export.OptionalCommand.md).[timed](cluster_export.OptionalCommand.md#timed)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:605](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L605)
+[packages/matter.js/src/cluster/Cluster.ts:605](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L605)

@@ -11,6 +11,7 @@
 - [fabric](session_export.ResumptionRecord.md#fabric)
 - [peerNodeId](session_export.ResumptionRecord.md#peernodeid)
 - [resumptionId](session_export.ResumptionRecord.md#resumptionid)
+- [sessionParameters](session_export.ResumptionRecord.md#sessionparameters)
 - [sharedSecret](session_export.ResumptionRecord.md#sharedsecret)
 
 ## Properties
@@ -21,7 +22,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L26)
+[packages/matter.js/src/session/SessionManager.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L27)
 
 ___
 
@@ -31,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:27](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L27)
+[packages/matter.js/src/session/SessionManager.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L28)
 
 ___
 
@@ -41,7 +42,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L25)
+[packages/matter.js/src/session/SessionManager.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L26)
+
+___
+
+### sessionParameters
+
+• **sessionParameters**: [`SessionParameters`](session_export.SessionParameters.md)
+
+#### Defined in
+
+[packages/matter.js/src/session/SessionManager.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L29)
 
 ___
 
@@ -51,4 +62,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/SessionManager.ts#L24)
+[packages/matter.js/src/session/SessionManager.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/SessionManager.ts#L25)

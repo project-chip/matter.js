@@ -69,7 +69,7 @@ packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:58
 
 ### clusterState
 
-• `Protected` **clusterState**: `undefined` \| [`ClusterState`](../modules/export._internal_.md#clusterstate)
+• `Protected` **clusterState**: `undefined` \| [`ClusterState`](../modules/exports_model._internal_.md#clusterstate)
 
 #### Defined in
 

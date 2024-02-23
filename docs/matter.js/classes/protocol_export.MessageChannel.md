@@ -58,7 +58,7 @@ SPDX-License-Identifier: Apache-2.0
 | Name | Type |
 | :------ | :------ |
 | `channel` | [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/session_export.Session.md)\<`ContextT`\> |
+| `session` | [`Session`](session_export.Session.md)\<`ContextT`\> |
 | `closeCallback?` | () => `Promise`\<`void`\> |
 
 #### Returns
@@ -67,7 +67,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:34](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L34)
+[packages/matter.js/src/protocol/ExchangeManager.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L34)
 
 ## Properties
 
@@ -77,7 +77,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L35)
+[packages/matter.js/src/protocol/ExchangeManager.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L35)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L37)
+[packages/matter.js/src/protocol/ExchangeManager.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L37)
 
 ___
 
@@ -105,17 +105,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L33)
+[packages/matter.js/src/protocol/ExchangeManager.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L33)
 
 ___
 
 ### session
 
-• `Readonly` **session**: [`Session`](../interfaces/session_export.Session.md)\<`ContextT`\>
+• `Readonly` **session**: [`Session`](session_export.Session.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L36)
+[packages/matter.js/src/protocol/ExchangeManager.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L36)
 
 ## Accessors
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L54)
+[packages/matter.js/src/protocol/ExchangeManager.ts:54](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L54)
 
 ## Methods
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:58](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L58)
+[packages/matter.js/src/protocol/ExchangeManager.ts:58](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L58)
 
 ___
 
@@ -175,4 +175,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ExchangeManager.ts#L40)
+[packages/matter.js/src/protocol/ExchangeManager.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ExchangeManager.ts#L40)

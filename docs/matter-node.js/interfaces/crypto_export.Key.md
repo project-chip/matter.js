@@ -19,6 +19,10 @@ Models keys as JWK.  Advantages of this format:
 
   ↳ **`Key`**
 
+  ↳↳ [`PublicKey`](crypto_export.PublicKey.md)
+
+  ↳↳ [`SymmetricKey`](crypto_export.SymmetricKey.md)
+
 ## Table of contents
 
 ### Constructors

@@ -51,14 +51,14 @@ Celsius value, typically .1°C or .01°C
 
 | Name | Type |
 | :------ | :------ |
-| `type` | [`celsius`](model.FieldValue.md#celsius-2) |
+| `type` | [`celsius`](model.FieldValue.md#celsius-1) |
 | `value` | `number` |
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:84](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L84)
+[packages/matter.js/src/model/definitions/FieldValue.ts:84](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L84)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:79](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L79)
+[packages/matter.js/src/model/definitions/FieldValue.ts:79](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L79)
 
 ___
 
@@ -68,9 +68,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:61](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L61)
+[packages/matter.js/src/model/definitions/FieldValue.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L61)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L62)
+[packages/matter.js/src/model/definitions/FieldValue.ts:62](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L62)
 
 ___
 
@@ -84,14 +84,14 @@ Percent value, units of either 1% (.01) or .01% (.0001)
 
 | Name | Type |
 | :------ | :------ |
-| `type` | [`percent`](model.FieldValue.md#percent-2) |
+| `type` | [`percent`](model.FieldValue.md#percent-1) |
 | `value` | `number` |
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:96](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L96)
+[packages/matter.js/src/model/definitions/FieldValue.ts:96](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L96)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:91](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L91)
+[packages/matter.js/src/model/definitions/FieldValue.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L91)
 
 ___
 
@@ -106,11 +106,11 @@ A set of struct property values keyed by name.
 | Name | Type |
 | :------ | :------ |
 | `properties` | \{ `[name: string]`: [`FieldValue`](model.md#fieldvalue);  } |
-| `type` | [`properties`](model.FieldValue.md#properties-2) |
+| `type` | [`properties`](model.FieldValue.md#properties-1) |
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:103](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L103)
+[packages/matter.js/src/model/definitions/FieldValue.ts:103](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L103)
 
 ___
 
@@ -125,26 +125,26 @@ Reference to a named field
 | Name | Type |
 | :------ | :------ |
 | `name` | `string` |
-| `type` | [`reference`](model.FieldValue.md#reference-2) |
+| `type` | [`reference`](model.FieldValue.md#reference-1) |
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:72](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L72)
+[packages/matter.js/src/model/definitions/FieldValue.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L72)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:67](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L67)
+[packages/matter.js/src/model/definitions/FieldValue.ts:67](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L67)
 
 ___
 
 ### Type
 
-Ƭ **Type**: [`percent`](model.FieldValue.md#percent-2) \| [`celsius`](model.FieldValue.md#celsius-2) \| [`reference`](model.FieldValue.md#reference-2) \| [`properties`](model.FieldValue.md#properties-2)
+Ƭ **Type**: [`percent`](model.FieldValue.md#percent-1) \| [`celsius`](model.FieldValue.md#celsius-1) \| [`reference`](model.FieldValue.md#reference-1) \| [`properties`](model.FieldValue.md#properties-1)
 
 If a field value isn't a primitive type, it's an object with a type
 field indicating one of these types.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L48)
+[packages/matter.js/src/model/definitions/FieldValue.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L48)
 
 ___
 
@@ -154,9 +154,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L35)
+[packages/matter.js/src/model/definitions/FieldValue.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L35)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L36)
+[packages/matter.js/src/model/definitions/FieldValue.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L36)
 
 ___
 
@@ -166,9 +166,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:32](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L32)
+[packages/matter.js/src/model/definitions/FieldValue.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L32)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L33)
+[packages/matter.js/src/model/definitions/FieldValue.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L33)
 
 ___
 
@@ -178,9 +178,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L41)
+[packages/matter.js/src/model/definitions/FieldValue.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L41)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L42)
+[packages/matter.js/src/model/definitions/FieldValue.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L42)
 
 ___
 
@@ -190,9 +190,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L38)
+[packages/matter.js/src/model/definitions/FieldValue.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L38)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L39)
+[packages/matter.js/src/model/definitions/FieldValue.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L39)
 
 ## Variables
 
@@ -205,9 +205,9 @@ returned when casting to a field value if the cast is impossible
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:61](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L61)
+[packages/matter.js/src/model/definitions/FieldValue.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L61)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L62)
+[packages/matter.js/src/model/definitions/FieldValue.ts:62](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L62)
 
 ___
 
@@ -217,9 +217,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L35)
+[packages/matter.js/src/model/definitions/FieldValue.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L35)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L36)
+[packages/matter.js/src/model/definitions/FieldValue.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L36)
 
 ___
 
@@ -229,9 +229,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:32](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L32)
+[packages/matter.js/src/model/definitions/FieldValue.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L32)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L33)
+[packages/matter.js/src/model/definitions/FieldValue.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L33)
 
 ___
 
@@ -241,9 +241,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L41)
+[packages/matter.js/src/model/definitions/FieldValue.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L41)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L42)
+[packages/matter.js/src/model/definitions/FieldValue.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L42)
 
 ___
 
@@ -253,9 +253,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L38)
+[packages/matter.js/src/model/definitions/FieldValue.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L38)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L39)
+[packages/matter.js/src/model/definitions/FieldValue.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L39)
 
 ## Functions
 
@@ -275,7 +275,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:84](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L84)
+[packages/matter.js/src/model/definitions/FieldValue.ts:84](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L84)
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:96](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L96)
+[packages/matter.js/src/model/definitions/FieldValue.ts:96](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L96)
 
 ___
 
@@ -315,7 +315,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:72](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L72)
+[packages/matter.js/src/model/definitions/FieldValue.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L72)
 
 ___
 
@@ -338,7 +338,7 @@ Test for one of the special placeholder types.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:53](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L53)
+[packages/matter.js/src/model/definitions/FieldValue.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L53)
 
 ___
 
@@ -362,7 +362,7 @@ number.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:134](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L134)
+[packages/matter.js/src/model/definitions/FieldValue.ts:134](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L134)
 
 ___
 
@@ -384,7 +384,7 @@ Extract object properties from the value.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:172](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L172)
+[packages/matter.js/src/model/definitions/FieldValue.ts:172](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L172)
 
 ___
 
@@ -406,7 +406,7 @@ Get the referenced name if the FieldValue is a reference.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:210](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L210)
+[packages/matter.js/src/model/definitions/FieldValue.ts:210](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L210)
 
 ___
 
@@ -428,7 +428,7 @@ Convert the field value to a "defacto-standard" form.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:111](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L111)
+[packages/matter.js/src/model/definitions/FieldValue.ts:111](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L111)
 
 ___
 
@@ -451,4 +451,4 @@ Unwrap wrapped values, leave others as-is.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:181](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FieldValue.ts#L181)
+[packages/matter.js/src/model/definitions/FieldValue.ts:181](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FieldValue.ts#L181)

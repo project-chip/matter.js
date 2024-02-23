@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](storage_export._internal_.md)
+
 ### Classes
 
 - [Storage](../classes/storage_export.Storage.md)
@@ -25,11 +29,11 @@
 
 ### SupportedStorageTypes
 
-Ƭ **SupportedStorageTypes**: [`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes)
+Ƭ **SupportedStorageTypes**: [`SupportedStorageBaseTypes`](storage_export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](storage_export._internal_.md#supportedcomplexstoragetypes)
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/storage/StringifyTools.ts#L47)
+[packages/matter.js/src/storage/StringifyTools.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StringifyTools.ts#L47)
 
 ## Functions
 
@@ -49,7 +53,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:82](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/storage/StringifyTools.ts#L82)
+[packages/matter.js/src/storage/StringifyTools.ts:82](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StringifyTools.ts#L82)
 
 ___
 
@@ -70,4 +74,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:55](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/storage/StringifyTools.ts#L55)
+[packages/matter.js/src/storage/StringifyTools.ts:55](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StringifyTools.ts#L55)

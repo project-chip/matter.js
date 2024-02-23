@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `maxMeasuredValue`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| `number`, `any`\> ; `measuredValue`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| `number`, `any`\> ; `minMeasuredValue`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| `number`, `any`\> ; `tolerance`: [`OptionalAttribute`](cluster_export.md#optionalattribute)\<`number`, `any`\>  } ; `id`: ``1031`` = 0x407; `name`: ``"LeafWetnessMeasurement"`` = "LeafWetnessMeasurement"; `revision`: ``3`` = 3 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `maxMeasuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `measuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `minMeasuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `tolerance`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>  } ; `id`: ``1031`` = 0x407; `name`: ``"LeafWetnessMeasurement"`` = "LeafWetnessMeasurement"; `revision`: ``3`` = 3 }\>
 
 This is a base cluster. The server cluster provides an interface to water content measurement functionality. The
 measurement is reportable and may be configured for reporting. Water content measurements include, but are not
@@ -26,4 +26,4 @@ limited to, leaf wetness, relative humidity, and soil moisture.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L23)

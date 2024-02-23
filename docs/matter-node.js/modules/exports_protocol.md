@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](exports_protocol._internal_.md)
+
 ### Enumerations
 
 - [MessageCounterTypes](../enums/exports_protocol.MessageCounterTypes.md)
@@ -22,6 +26,7 @@
 - [MessageChannel](../classes/exports_protocol.MessageChannel.md)
 - [MessageCounter](../classes/exports_protocol.MessageCounter.md)
 - [MessageExchange](../classes/exports_protocol.MessageExchange.md)
+- [MessageReceptionState](../classes/exports_protocol.MessageReceptionState.md)
 - [MessageReceptionStateEncryptedWithRollover](../classes/exports_protocol.MessageReceptionStateEncryptedWithRollover.md)
 - [MessageReceptionStateEncryptedWithoutRollover](../classes/exports_protocol.MessageReceptionStateEncryptedWithoutRollover.md)
 - [MessageReceptionStateUnencryptedWithRollover](../classes/exports_protocol.MessageReceptionStateUnencryptedWithRollover.md)
@@ -80,6 +85,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `expectAckOnly?` | `boolean` | The response to this send should be an ack only and no StatusResponse or such. If a StatusResponse is returned then this is handled as error. |
+| `includeAcknowledgeMessageId?` | `number` | Use the provided acknowledge MessageId instead checking the latest to send one |
 | `minimumResponseTimeoutMs?` | `number` | Define a minimum Response Timeout. This setting only increases the response timeout! The minimum four resubmissions are always done regardless of what is specified here. The logic will check if the timeout is reached after each resubmission, so it is not checked exact at the given timeout. |
 | `requiresAck?` | `boolean` | Allows to specify if the send message requires to be acknowledged by the receiver or not. |
 

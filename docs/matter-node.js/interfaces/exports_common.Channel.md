@@ -18,7 +18,7 @@ SPDX-License-Identifier: Apache-2.0
 ## Implemented by
 
 - [`MessageChannel`](../classes/exports_protocol.MessageChannel.md)
-- [`UdpConnection`](../classes/export._internal_.UdpConnection.md)
+- [`UdpConnection`](../classes/net_export._internal_.UdpConnection.md)
 
 ## Table of contents
 

@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalWritableAttribute`](../modules/internal_.md#optionalwritableattribute)\<`T`, `F`\>
+- [`OptionalWritableAttribute`](internal_.OptionalWritableAttribute.md)\<`T`, `F`\>
 
   ↳ **`OptionalWritableFabricScopedAttribute`**
 
@@ -47,7 +47,7 @@
 
 #### Inherited from
 
-OptionalWritableAttribute.default
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[default](internal_.OptionalWritableAttribute.md#default)
 
 #### Defined in
 
@@ -61,7 +61,7 @@ ___
 
 #### Overrides
 
-OptionalWritableAttribute.fabricScoped
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[fabricScoped](internal_.OptionalWritableAttribute.md#fabricscoped)
 
 #### Defined in
 
@@ -75,7 +75,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.fixed
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[fixed](internal_.OptionalWritableAttribute.md#fixed)
 
 #### Defined in
 
@@ -89,7 +89,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.id
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[id](internal_.OptionalWritableAttribute.md#id)
 
 #### Defined in
 
@@ -103,7 +103,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.isConditional
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[isConditional](internal_.OptionalWritableAttribute.md#isconditional)
 
 #### Defined in
 
@@ -117,7 +117,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.mandatoryIf
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[mandatoryIf](internal_.OptionalWritableAttribute.md#mandatoryif)
 
 #### Defined in
 
@@ -131,7 +131,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.omitChanges
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[omitChanges](internal_.OptionalWritableAttribute.md#omitchanges)
 
 #### Defined in
 
@@ -145,7 +145,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.optional
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[optional](internal_.OptionalWritableAttribute.md#optional)
 
 #### Defined in
 
@@ -159,7 +159,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.optionalIf
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[optionalIf](internal_.OptionalWritableAttribute.md#optionalif)
 
 #### Defined in
 
@@ -173,7 +173,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.persistent
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[persistent](internal_.OptionalWritableAttribute.md#persistent)
 
 #### Defined in
 
@@ -187,7 +187,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.readAcl
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[readAcl](internal_.OptionalWritableAttribute.md#readacl)
 
 #### Defined in
 
@@ -201,7 +201,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.scene
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[scene](internal_.OptionalWritableAttribute.md#scene)
 
 #### Defined in
 
@@ -215,7 +215,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.schema
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[schema](internal_.OptionalWritableAttribute.md#schema)
 
 #### Defined in
 
@@ -229,7 +229,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.timed
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[timed](internal_.OptionalWritableAttribute.md#timed)
 
 #### Defined in
 
@@ -243,7 +243,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.unknown
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[unknown](internal_.OptionalWritableAttribute.md#unknown)
 
 #### Defined in
 
@@ -257,7 +257,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.writable
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[writable](internal_.OptionalWritableAttribute.md#writable)
 
 #### Defined in
 
@@ -271,7 +271,7 @@ ___
 
 #### Inherited from
 
-OptionalWritableAttribute.writeAcl
+[OptionalWritableAttribute](internal_.OptionalWritableAttribute.md).[writeAcl](internal_.OptionalWritableAttribute.md#writeacl)
 
 #### Defined in
 

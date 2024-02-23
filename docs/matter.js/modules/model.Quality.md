@@ -36,7 +36,7 @@ Quality properties that apply to device types.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:190](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L190)
+[packages/matter.js/src/model/aspects/Quality.ts:190](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L190)
 
 ___
 
@@ -49,7 +49,7 @@ specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:211](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L211)
+[packages/matter.js/src/model/aspects/Quality.ts:211](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L211)
 
 ___
 
@@ -61,7 +61,7 @@ Quality values that apply to attributes.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:175](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L175)
+[packages/matter.js/src/model/aspects/Quality.ts:175](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L175)
 
 ___
 
@@ -73,7 +73,7 @@ Quality values that apply to attribute data.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:154](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L154)
+[packages/matter.js/src/model/aspects/Quality.ts:154](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L154)
 
 ___
 
@@ -91,7 +91,7 @@ Quality values that apply to data fields.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:142](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L142)
+[packages/matter.js/src/model/aspects/Quality.ts:142](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L142)
 
 ___
 
@@ -103,7 +103,7 @@ Various ways to define quality.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:101](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L101)
+[packages/matter.js/src/model/aspects/Quality.ts:101](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L101)
 
 ___
 
@@ -115,7 +115,7 @@ Quality values that apply to device types.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:200](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L200)
+[packages/matter.js/src/model/aspects/Quality.ts:200](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L200)
 
 ___
 
@@ -127,7 +127,7 @@ Valid "other quality" flags.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:132](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L132)
+[packages/matter.js/src/model/aspects/Quality.ts:132](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L132)
 
 ## Variables
 
@@ -139,4 +139,4 @@ Runtime version of QualityFlag.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:137](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L137)
+[packages/matter.js/src/model/aspects/Quality.ts:137](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Quality.ts#L137)

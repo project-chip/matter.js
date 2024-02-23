@@ -53,7 +53,7 @@ Set\&lt;FeatureSet.Flag\&gt;.constructor
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FeatureSet.ts#L16)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FeatureSet.ts#L16)
 
 ## Accessors
 
@@ -69,7 +69,7 @@ Access features as an array of feature names.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FeatureSet.ts#L28)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FeatureSet.ts#L28)
 
 ___
 
@@ -85,7 +85,7 @@ Access features as an object mapping feature name -> true.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FeatureSet.ts#L35)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FeatureSet.ts#L35)
 
 ## Methods
 
@@ -111,4 +111,4 @@ Access features as an object mapping feature name -> true.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/FeatureSet.ts#L39)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FeatureSet.ts#L39)

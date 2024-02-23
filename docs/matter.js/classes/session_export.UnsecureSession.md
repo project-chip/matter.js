@@ -10,9 +10,11 @@
 | :------ |
 | `T` |
 
-## Implements
+## Hierarchy
 
-- [`Session`](../interfaces/session_export.Session.md)\<`T`\>
+- [`Session`](session_export.Session.md)\<`T`\>
+
+  ↳ **`UnsecureSession`**
 
 ## Table of contents
 
@@ -22,12 +24,17 @@
 
 ### Properties
 
+- [activeIntervalMs](session_export.UnsecureSession.md#activeintervalms)
+- [activeThresholdMs](session_export.UnsecureSession.md#activethresholdms)
+- [activeTimestamp](session_export.UnsecureSession.md#activetimestamp)
 - [closeCallback](session_export.UnsecureSession.md#closecallback)
 - [closingAfterExchangeFinished](session_export.UnsecureSession.md#closingafterexchangefinished)
 - [context](session_export.UnsecureSession.md#context)
+- [idleIntervalMs](session_export.UnsecureSession.md#idleintervalms)
 - [initiatorNodeId](session_export.UnsecureSession.md#initiatornodeid)
 - [messageCounter](session_export.UnsecureSession.md#messagecounter)
 - [messageReceptionState](session_export.UnsecureSession.md#messagereceptionstate)
+- [timestamp](session_export.UnsecureSession.md#timestamp)
 
 ### Accessors
 
@@ -44,10 +51,10 @@
 - [getContext](session_export.UnsecureSession.md#getcontext)
 - [getId](session_export.UnsecureSession.md#getid)
 - [getIncrementedMessageCounter](session_export.UnsecureSession.md#getincrementedmessagecounter)
-- [getMrpParameters](session_export.UnsecureSession.md#getmrpparameters)
 - [getNodeId](session_export.UnsecureSession.md#getnodeid)
 - [getPeerNodeId](session_export.UnsecureSession.md#getpeernodeid)
 - [getPeerSessionId](session_export.UnsecureSession.md#getpeersessionid)
+- [getSessionParameters](session_export.UnsecureSession.md#getsessionparameters)
 - [isPase](session_export.UnsecureSession.md#ispase)
 - [isPeerActive](session_export.UnsecureSession.md#ispeeractive)
 - [isSecure](session_export.UnsecureSession.md#issecure)
@@ -59,7 +66,7 @@
 
 ### constructor
 
-• **new UnsecureSession**\<`T`\>(`context`, `messageCounter`, `closeCallback`, `initiatorNodeId?`): [`UnsecureSession`](session_export.UnsecureSession.md)\<`T`\>
+• **new UnsecureSession**\<`T`\>(`args`): [`UnsecureSession`](session_export.UnsecureSession.md)\<`T`\>
 
 #### Type parameters
 
@@ -71,36 +78,89 @@
 
 | Name | Type |
 | :------ | :------ |
-| `context` | `T` |
-| `messageCounter` | [`MessageCounter`](protocol_export.MessageCounter.md) |
-| `closeCallback` | () => `void` |
-| `initiatorNodeId?` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+| `args` | `Object` |
+| `args.closeCallback` | () => `Promise`\<`void`\> |
+| `args.context` | `T` |
+| `args.initiatorNodeId?` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+| `args.isInitiator?` | `boolean` |
+| `args.messageCounter` | [`MessageCounter`](protocol_export.MessageCounter.md) |
+| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/session_export.SessionParameters.md)\> |
 
 #### Returns
 
 [`UnsecureSession`](session_export.UnsecureSession.md)\<`T`\>
 
+#### Overrides
+
+[Session](session_export.Session.md).[constructor](session_export.Session.md#constructor)
+
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L28)
+[packages/matter.js/src/session/UnsecureSession.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L23)
 
 ## Properties
 
-### closeCallback
+### activeIntervalMs
 
-• `Private` `Readonly` **closeCallback**: () => `void`
+• `Protected` `Readonly` **activeIntervalMs**: `number`
 
-#### Type declaration
+#### Inherited from
 
-▸ (): `void`
-
-##### Returns
-
-`void`
+[Session](session_export.Session.md).[activeIntervalMs](session_export.Session.md#activeintervalms)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L31)
+[packages/matter.js/src/session/Session.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L44)
+
+___
+
+### activeThresholdMs
+
+• `Protected` `Readonly` **activeThresholdMs**: `number`
+
+#### Inherited from
+
+[Session](session_export.Session.md).[activeThresholdMs](session_export.Session.md#activethresholdms)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L45)
+
+___
+
+### activeTimestamp
+
+• **activeTimestamp**: `number` = `0`
+
+#### Inherited from
+
+[Session](session_export.Session.md).[activeTimestamp](session_export.Session.md#activetimestamp)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L42)
+
+___
+
+### closeCallback
+
+• `Protected` `Readonly` **closeCallback**: () => `Promise`\<`void`\>
+
+#### Type declaration
+
+▸ (): `Promise`\<`void`\>
+
+##### Returns
+
+`Promise`\<`void`\>
+
+#### Inherited from
+
+[Session](session_export.Session.md).[closeCallback](session_export.Session.md#closecallback)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L46)
 
 ___
 
@@ -108,13 +168,13 @@ ___
 
 • `Readonly` **closingAfterExchangeFinished**: ``false``
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[closingAfterExchangeFinished](../interfaces/session_export.Session.md#closingafterexchangefinished)
+[Session](session_export.Session.md).[closingAfterExchangeFinished](session_export.Session.md#closingafterexchangefinished)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L25)
+[packages/matter.js/src/session/UnsecureSession.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L20)
 
 ___
 
@@ -124,7 +184,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L29)
+[packages/matter.js/src/session/UnsecureSession.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L21)
+
+___
+
+### idleIntervalMs
+
+• `Protected` `Readonly` **idleIntervalMs**: `number`
+
+#### Inherited from
+
+[Session](session_export.Session.md).[idleIntervalMs](session_export.Session.md#idleintervalms)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L43)
 
 ___
 
@@ -134,27 +208,49 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L24)
+[packages/matter.js/src/session/UnsecureSession.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L19)
 
 ___
 
 ### messageCounter
 
-• `Private` `Readonly` **messageCounter**: [`MessageCounter`](protocol_export.MessageCounter.md)
+• `Protected` `Readonly` **messageCounter**: [`MessageCounter`](protocol_export.MessageCounter.md)
+
+#### Inherited from
+
+[Session](session_export.Session.md).[messageCounter](session_export.Session.md#messagecounter)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:30](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L30)
+[packages/matter.js/src/session/Session.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L47)
 
 ___
 
 ### messageReceptionState
 
-• `Private` `Readonly` **messageReceptionState**: [`MessageReceptionStateUnencryptedWithRollover`](protocol_export.MessageReceptionStateUnencryptedWithRollover.md)
+• `Protected` `Readonly` **messageReceptionState**: [`MessageReceptionState`](protocol_export.MessageReceptionState.md)
+
+#### Inherited from
+
+[Session](session_export.Session.md).[messageReceptionState](session_export.Session.md#messagereceptionstate)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L26)
+[packages/matter.js/src/session/Session.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L48)
+
+___
+
+### timestamp
+
+• **timestamp**: `number`
+
+#### Inherited from
+
+[Session](session_export.Session.md).[timestamp](session_export.Session.md#timestamp)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L41)
 
 ## Accessors
 
@@ -166,13 +262,13 @@ ___
 
 `string`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[name](../interfaces/session_export.Session.md#name)
+Session.name
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:70](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L70)
+[packages/matter.js/src/session/UnsecureSession.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L65)
 
 ## Methods
 
@@ -190,13 +286,13 @@ ___
 
 [`DecodedMessage`](../interfaces/codec_export.DecodedMessage.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[decode](../interfaces/session_export.Session.md#decode)
+[Session](session_export.Session.md).[decode](session_export.Session.md#decode)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L54)
+[packages/matter.js/src/session/UnsecureSession.ts:49](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L49)
 
 ___
 
@@ -208,13 +304,13 @@ ___
 
 `Promise`\<`void`\>
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[destroy](../interfaces/session_export.Session.md#destroy)
+[Session](session_export.Session.md).[destroy](session_export.Session.md#destroy)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:102](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L102)
+[packages/matter.js/src/session/UnsecureSession.ts:89](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L89)
 
 ___
 
@@ -232,13 +328,13 @@ ___
 
 [`Packet`](../interfaces/codec_export.Packet.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[encode](../interfaces/session_export.Session.md#encode)
+[Session](session_export.Session.md).[encode](session_export.Session.md#encode)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:58](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L58)
+[packages/matter.js/src/session/UnsecureSession.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L53)
 
 ___
 
@@ -250,13 +346,13 @@ ___
 
 `Promise`\<`void`\>
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[end](../interfaces/session_export.Session.md#end)
+[Session](session_export.Session.md).[end](session_export.Session.md#end)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:106](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L106)
+[packages/matter.js/src/session/UnsecureSession.ts:93](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L93)
 
 ___
 
@@ -268,13 +364,13 @@ ___
 
 [`Fabric`](fabric_export.Fabric.md)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[getAssociatedFabric](../interfaces/session_export.Session.md#getassociatedfabric)
+[Session](session_export.Session.md).[getAssociatedFabric](session_export.Session.md#getassociatedfabric)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:110](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L110)
+[packages/matter.js/src/session/UnsecureSession.ts:97](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L97)
 
 ___
 
@@ -288,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L62)
+[packages/matter.js/src/session/UnsecureSession.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L57)
 
 ___
 
@@ -300,13 +396,13 @@ ___
 
 `T`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[getContext](../interfaces/session_export.Session.md#getcontext)
+[Session](session_export.Session.md).[getContext](session_export.Session.md#getcontext)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:82](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L82)
+[packages/matter.js/src/session/UnsecureSession.ts:69](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L69)
 
 ___
 
@@ -318,13 +414,13 @@ ___
 
 `number`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[getId](../interfaces/session_export.Session.md#getid)
+[Session](session_export.Session.md).[getId](session_export.Session.md#getid)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:86](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L86)
+[packages/matter.js/src/session/UnsecureSession.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L73)
 
 ___
 
@@ -336,37 +432,13 @@ ___
 
 `number`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/session_export.Session.md).[getIncrementedMessageCounter](../interfaces/session_export.Session.md#getincrementedmessagecounter)
-
-#### Defined in
-
-[packages/matter.js/src/session/UnsecureSession.ts:114](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L114)
-
-___
-
-### getMrpParameters
-
-▸ **getMrpParameters**(): `Object`
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `activeRetransmissionTimeoutMs` | `number` |
-| `idleRetransmissionTimeoutMs` | `number` |
-| `retransmissionRetries` | `number` |
-
-#### Implementation of
-
-[Session](../interfaces/session_export.Session.md).[getMrpParameters](../interfaces/session_export.Session.md#getmrpparameters)
+[Session](session_export.Session.md).[getIncrementedMessageCounter](session_export.Session.md#getincrementedmessagecounter)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:74](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L74)
+[packages/matter.js/src/session/Session.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L91)
 
 ___
 
@@ -378,13 +450,13 @@ ___
 
 [`NodeId`](../modules/datatype_export.md#nodeid)
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[getNodeId](../interfaces/session_export.Session.md#getnodeid)
+[Session](session_export.Session.md).[getNodeId](session_export.Session.md#getnodeid)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L94)
+[packages/matter.js/src/session/UnsecureSession.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L81)
 
 ___
 
@@ -396,13 +468,13 @@ ___
 
 `undefined`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[getPeerNodeId](../interfaces/session_export.Session.md#getpeernodeid)
+[Session](session_export.Session.md).[getPeerNodeId](session_export.Session.md#getpeernodeid)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:98](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L98)
+[packages/matter.js/src/session/UnsecureSession.ts:85](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L85)
 
 ___
 
@@ -414,13 +486,31 @@ ___
 
 `number`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[getPeerSessionId](../interfaces/session_export.Session.md#getpeersessionid)
+[Session](session_export.Session.md).[getPeerSessionId](session_export.Session.md#getpeersessionid)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:90](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L90)
+[packages/matter.js/src/session/UnsecureSession.ts:77](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L77)
+
+___
+
+### getSessionParameters
+
+▸ **getSessionParameters**(): [`SessionParameters`](../interfaces/session_export.SessionParameters.md)
+
+#### Returns
+
+[`SessionParameters`](../interfaces/session_export.SessionParameters.md)
+
+#### Inherited from
+
+[Session](session_export.Session.md).[getSessionParameters](session_export.Session.md#getsessionparameters)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:99](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L99)
 
 ___
 
@@ -432,13 +522,13 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[isPase](../interfaces/session_export.Session.md#ispase)
+[Session](session_export.Session.md).[isPase](session_export.Session.md#ispase)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L42)
+[packages/matter.js/src/session/UnsecureSession.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L45)
 
 ___
 
@@ -450,13 +540,13 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/session_export.Session.md).[isPeerActive](../interfaces/session_export.Session.md#ispeeractive)
+[Session](session_export.Session.md).[isPeerActive](session_export.Session.md#ispeeractive)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:50](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L50)
+[packages/matter.js/src/session/Session.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L87)
 
 ___
 
@@ -468,37 +558,37 @@ ___
 
 `boolean`
 
-#### Implementation of
+#### Overrides
 
-[Session](../interfaces/session_export.Session.md).[isSecure](../interfaces/session_export.Session.md#issecure)
+[Session](session_export.Session.md).[isSecure](session_export.Session.md#issecure)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L38)
+[packages/matter.js/src/session/UnsecureSession.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L41)
 
 ___
 
 ### notifyActivity
 
-▸ **notifyActivity**(`_messageReceived`): `void`
+▸ **notifyActivity**(`messageReceived`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `_messageReceived` | `boolean` |
+| `messageReceived` | `boolean` |
 
 #### Returns
 
 `void`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/session_export.Session.md).[notifyActivity](../interfaces/session_export.Session.md#notifyactivity)
+[Session](session_export.Session.md).[notifyActivity](session_export.Session.md#notifyactivity)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L46)
+[packages/matter.js/src/session/Session.ts:79](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L79)
 
 ___
 
@@ -518,28 +608,29 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:66](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L66)
+[packages/matter.js/src/session/UnsecureSession.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/UnsecureSession.ts#L61)
 
 ___
 
 ### updateMessageCounter
 
-▸ **updateMessageCounter**(`messageCounter`): `void`
+▸ **updateMessageCounter**(`messageCounter`, `_sourceNodeId?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `messageCounter` | `number` |
+| `_sourceNodeId?` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 
 #### Returns
 
 `void`
 
-#### Implementation of
+#### Inherited from
 
-[Session](../interfaces/session_export.Session.md).[updateMessageCounter](../interfaces/session_export.Session.md#updatemessagecounter)
+[Session](session_export.Session.md).[updateMessageCounter](session_export.Session.md#updatemessagecounter)
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:118](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L118)
+[packages/matter.js/src/session/Session.ts:95](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L95)

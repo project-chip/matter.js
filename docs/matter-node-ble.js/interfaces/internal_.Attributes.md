@@ -6,4 +6,4 @@
 
 ## Indexable
 
-▪ [key: `string`]: [`Attribute`](../modules/internal_.md#attribute)\<`any`, `any`\>
+▪ [key: `string`]: [`Attribute`](internal_.Attribute.md)\<`any`, `any`\>

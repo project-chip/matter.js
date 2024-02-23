@@ -12,11 +12,13 @@ offset is set to true. All other message counters SHALL be considered duplicate.
 
 ## Hierarchy
 
-- **`MessageReceptionStateEncryptedWithoutRollover`**
+- [`MessageReceptionState`](exports_protocol.MessageReceptionState.md)
 
-  ↳ [`MessageReceptionStateEncryptedWithRollover`](exports_protocol.MessageReceptionStateEncryptedWithRollover.md)
+  ↳ **`MessageReceptionStateEncryptedWithoutRollover`**
 
-  ↳ [`MessageReceptionStateUnencryptedWithRollover`](exports_protocol.MessageReceptionStateUnencryptedWithRollover.md)
+  ↳↳ [`MessageReceptionStateEncryptedWithRollover`](exports_protocol.MessageReceptionStateEncryptedWithRollover.md)
+
+  ↳↳ [`MessageReceptionStateUnencryptedWithRollover`](exports_protocol.MessageReceptionStateUnencryptedWithRollover.md)
 
 ## Table of contents
 
@@ -54,9 +56,13 @@ offset is set to true. All other message counters SHALL be considered duplicate.
 
 [`MessageReceptionStateEncryptedWithoutRollover`](exports_protocol.MessageReceptionStateEncryptedWithoutRollover.md)
 
+#### Overrides
+
+[MessageReceptionState](exports_protocol.MessageReceptionState.md).[constructor](exports_protocol.MessageReceptionState.md#constructor)
+
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:19
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:22
 
 ## Properties
 
@@ -68,7 +74,7 @@ Update or move the message counter window.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:32
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:35
 
 ___
 
@@ -80,7 +86,7 @@ Initialize the message counter state.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:21
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:24
 
 ___
 
@@ -92,7 +98,7 @@ Check if the message counter is known in the bitmap.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:36
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:39
 
 ___
 
@@ -102,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:17
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:20
 
 ___
 
@@ -112,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:18
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:21
 
 ___
 
@@ -124,7 +130,7 @@ Update the message counter and window.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:34
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:37
 
 ## Methods
 
@@ -151,7 +157,7 @@ Return number is:
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:30
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:33
 
 ___
 
@@ -171,6 +177,10 @@ Returns true if the message counter is a duplicate.
 
 `void`
 
+#### Overrides
+
+[MessageReceptionState](exports_protocol.MessageReceptionState.md).[updateMessageCounter](exports_protocol.MessageReceptionState.md#updatemessagecounter)
+
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:40
+packages/matter.js/dist/esm/protocol/MessageReceptionState.d.ts:43

@@ -8,7 +8,7 @@ EC key with extractable private fields.
 
 ## Hierarchy
 
-- [`PublicKey`](../modules/crypto_export.md#publickey)
+- [`PublicKey`](crypto_export.PublicKey.md)
 
   ↳ **`PrivateKey`**
 
@@ -64,7 +64,7 @@ EC key with extractable private fields.
 
 #### Inherited from
 
-PublicKey.constructor
+[PublicKey](crypto_export.PublicKey.md).[constructor](crypto_export.PublicKey.md#constructor)
 
 ## Properties
 
@@ -74,11 +74,11 @@ PublicKey.constructor
 
 #### Inherited from
 
-PublicKey.alg
+[PublicKey](crypto_export.PublicKey.md).[alg](crypto_export.PublicKey.md#alg)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:107](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L107)
+[packages/matter.js/src/crypto/Key.ts:107](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L107)
 
 ___
 
@@ -90,11 +90,11 @@ The key algorithm, alias for JWK "alg" field.
 
 #### Inherited from
 
-PublicKey.algorithm
+[PublicKey](crypto_export.PublicKey.md).[algorithm](crypto_export.PublicKey.md#algorithm)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:79](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L79)
+[packages/matter.js/src/crypto/Key.ts:79](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L79)
 
 ___
 
@@ -104,11 +104,11 @@ ___
 
 #### Inherited from
 
-PublicKey.crv
+[PublicKey](crypto_export.PublicKey.md).[crv](crypto_export.PublicKey.md#crv)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:108](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L108)
+[packages/matter.js/src/crypto/Key.ts:108](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L108)
 
 ___
 
@@ -116,13 +116,15 @@ ___
 
 • **curve**: [`CurveType`](../enums/crypto_export.CurveType.md)
 
+The elliptic curve type, alias for JWK "crv" field.
+
 #### Inherited from
 
-PublicKey.curve
+[PublicKey](crypto_export.PublicKey.md).[curve](crypto_export.PublicKey.md#curve)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:192](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L192)
+[packages/matter.js/src/crypto/Key.ts:192](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L192)
 
 ___
 
@@ -132,11 +134,11 @@ ___
 
 #### Overrides
 
-PublicKey.d
+[PublicKey](crypto_export.PublicKey.md).[d](crypto_export.PublicKey.md#d)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:205](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L205)
+[packages/matter.js/src/crypto/Key.ts:205](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L205)
 
 ___
 
@@ -146,11 +148,11 @@ ___
 
 #### Inherited from
 
-PublicKey.dp
+[PublicKey](crypto_export.PublicKey.md).[dp](crypto_export.PublicKey.md#dp)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:110](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L110)
+[packages/matter.js/src/crypto/Key.ts:110](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L110)
 
 ___
 
@@ -160,11 +162,11 @@ ___
 
 #### Inherited from
 
-PublicKey.dq
+[PublicKey](crypto_export.PublicKey.md).[dq](crypto_export.PublicKey.md#dq)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:111](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L111)
+[packages/matter.js/src/crypto/Key.ts:111](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L111)
 
 ___
 
@@ -174,11 +176,11 @@ ___
 
 #### Inherited from
 
-PublicKey.e
+[PublicKey](crypto_export.PublicKey.md).[e](crypto_export.PublicKey.md#e)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:112](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L112)
+[packages/matter.js/src/crypto/Key.ts:112](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L112)
 
 ___
 
@@ -188,11 +190,11 @@ ___
 
 #### Inherited from
 
-PublicKey.ext
+[PublicKey](crypto_export.PublicKey.md).[ext](crypto_export.PublicKey.md#ext)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:113](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L113)
+[packages/matter.js/src/crypto/Key.ts:113](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L113)
 
 ___
 
@@ -205,11 +207,11 @@ field.
 
 #### Inherited from
 
-PublicKey.extractable
+[PublicKey](crypto_export.PublicKey.md).[extractable](crypto_export.PublicKey.md#extractable)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:105](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L105)
+[packages/matter.js/src/crypto/Key.ts:105](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L105)
 
 ___
 
@@ -219,11 +221,11 @@ ___
 
 #### Inherited from
 
-PublicKey.k
+[PublicKey](crypto_export.PublicKey.md).[k](crypto_export.PublicKey.md#k)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:114](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L114)
+[packages/matter.js/src/crypto/Key.ts:114](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L114)
 
 ___
 
@@ -231,13 +233,15 @@ ___
 
 • **keyPair**: [`BinaryKeyPair`](../modules/crypto_export.md#binarykeypair)
 
+Alias for keyPairBits that throws if a complete key pair is not present.
+
 #### Overrides
 
-PublicKey.keyPair
+[PublicKey](crypto_export.PublicKey.md).[keyPair](crypto_export.PublicKey.md#keypair)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:208](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L208)
+[packages/matter.js/src/crypto/Key.ts:208](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L208)
 
 ___
 
@@ -245,13 +249,16 @@ ___
 
 • **keyPairBits**: [`BinaryKeyPair`](../modules/crypto_export.md#binarykeypair)
 
+Import/export of BinaryKeyPair structure used as an alternate
+serialization format for legacy reasons.
+
 #### Overrides
 
-PublicKey.keyPairBits
+[PublicKey](crypto_export.PublicKey.md).[keyPairBits](crypto_export.PublicKey.md#keypairbits)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:209](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L209)
+[packages/matter.js/src/crypto/Key.ts:209](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L209)
 
 ___
 
@@ -261,11 +268,11 @@ ___
 
 #### Inherited from
 
-PublicKey.key\_ops
+[PublicKey](crypto_export.PublicKey.md).[key_ops](crypto_export.PublicKey.md#key_ops)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:115](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L115)
+[packages/matter.js/src/crypto/Key.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L115)
 
 ___
 
@@ -275,11 +282,11 @@ ___
 
 #### Inherited from
 
-PublicKey.kty
+[PublicKey](crypto_export.PublicKey.md).[kty](crypto_export.PublicKey.md#kty)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:116](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L116)
+[packages/matter.js/src/crypto/Key.ts:116](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L116)
 
 ___
 
@@ -289,11 +296,11 @@ ___
 
 #### Inherited from
 
-PublicKey.n
+[PublicKey](crypto_export.PublicKey.md).[n](crypto_export.PublicKey.md#n)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:117](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L117)
+[packages/matter.js/src/crypto/Key.ts:117](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L117)
 
 ___
 
@@ -305,11 +312,11 @@ Operations supported by the key, alias for JWK "key_ops" field.
 
 #### Inherited from
 
-PublicKey.operations
+[PublicKey](crypto_export.PublicKey.md).[operations](crypto_export.PublicKey.md#operations)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L94)
+[packages/matter.js/src/crypto/Key.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L94)
 
 ___
 
@@ -319,11 +326,11 @@ ___
 
 #### Inherited from
 
-PublicKey.oth
+[PublicKey](crypto_export.PublicKey.md).[oth](crypto_export.PublicKey.md#oth)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:118](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L118)
+[packages/matter.js/src/crypto/Key.ts:118](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L118)
 
 ___
 
@@ -333,11 +340,11 @@ ___
 
 #### Inherited from
 
-PublicKey.p
+[PublicKey](crypto_export.PublicKey.md).[p](crypto_export.PublicKey.md#p)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:119](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L119)
+[packages/matter.js/src/crypto/Key.ts:119](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L119)
 
 ___
 
@@ -349,11 +356,11 @@ Import (write-only) of private keys encoded in PKCS #8 format.
 
 #### Inherited from
 
-PublicKey.pkcs8
+[PublicKey](crypto_export.PublicKey.md).[pkcs8](crypto_export.PublicKey.md#pkcs8)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:152](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L152)
+[packages/matter.js/src/crypto/Key.ts:152](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L152)
 
 ___
 
@@ -361,13 +368,15 @@ ___
 
 • **private**: `string`
 
+The private key, alias for JWK "d" field.
+
 #### Overrides
 
-PublicKey.private
+[PublicKey](crypto_export.PublicKey.md).[private](crypto_export.PublicKey.md#private)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:204](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L204)
+[packages/matter.js/src/crypto/Key.ts:204](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L204)
 
 ___
 
@@ -375,13 +384,16 @@ ___
 
 • **privateBits**: `Uint8Array`
 
+Binary alias to private key field.  Automatically encodes/decodes the
+base-64 private key.
+
 #### Overrides
 
-PublicKey.privateBits
+[PublicKey](crypto_export.PublicKey.md).[privateBits](crypto_export.PublicKey.md#privatebits)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:206](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L206)
+[packages/matter.js/src/crypto/Key.ts:206](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L206)
 
 ___
 
@@ -389,13 +401,15 @@ ___
 
 • **privateKey**: `Uint8Array`
 
+Alias for privateBits that throws if no private key is present.
+
 #### Overrides
 
-PublicKey.privateKey
+[PublicKey](crypto_export.PublicKey.md).[privateKey](crypto_export.PublicKey.md#privatekey)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:207](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L207)
+[packages/matter.js/src/crypto/Key.ts:207](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L207)
 
 ___
 
@@ -403,13 +417,16 @@ ___
 
 • **publicBits**: `Uint8Array`
 
+Import/export of EC public key in SEC1/SPKI format.  Maps to x & y
+fields internally.
+
 #### Inherited from
 
-PublicKey.publicBits
+[PublicKey](crypto_export.PublicKey.md).[publicBits](crypto_export.PublicKey.md#publicbits)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:197](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L197)
+[packages/matter.js/src/crypto/Key.ts:197](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L197)
 
 ___
 
@@ -421,11 +438,11 @@ Alias for publicBits that throws if no public key is present.
 
 #### Inherited from
 
-PublicKey.publicKey
+[PublicKey](crypto_export.PublicKey.md).[publicKey](crypto_export.PublicKey.md#publickey)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:174](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L174)
+[packages/matter.js/src/crypto/Key.ts:174](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L174)
 
 ___
 
@@ -435,11 +452,11 @@ ___
 
 #### Inherited from
 
-PublicKey.q
+[PublicKey](crypto_export.PublicKey.md).[q](crypto_export.PublicKey.md#q)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:120](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L120)
+[packages/matter.js/src/crypto/Key.ts:120](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L120)
 
 ___
 
@@ -449,11 +466,11 @@ ___
 
 #### Inherited from
 
-PublicKey.qi
+[PublicKey](crypto_export.PublicKey.md).[qi](crypto_export.PublicKey.md#qi)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:121](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L121)
+[packages/matter.js/src/crypto/Key.ts:121](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L121)
 
 ___
 
@@ -465,11 +482,11 @@ Import (write-only) of private keys encoded in SEC1 format.
 
 #### Inherited from
 
-PublicKey.sec1
+[PublicKey](crypto_export.PublicKey.md).[sec1](crypto_export.PublicKey.md#sec1)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:147](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L147)
+[packages/matter.js/src/crypto/Key.ts:147](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L147)
 
 ___
 
@@ -481,11 +498,11 @@ Import (write-only) of public keys encoded in SPKI format.
 
 #### Inherited from
 
-PublicKey.spki
+[PublicKey](crypto_export.PublicKey.md).[spki](crypto_export.PublicKey.md#spki)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:157](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L157)
+[packages/matter.js/src/crypto/Key.ts:157](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L157)
 
 ___
 
@@ -493,13 +510,15 @@ ___
 
 • **type**: [`EC`](../enums/crypto_export.KeyType.md#ec)
 
+The key type, alias for JWK "kty" field.
+
 #### Inherited from
 
-PublicKey.type
+[PublicKey](crypto_export.PublicKey.md).[type](crypto_export.PublicKey.md#type)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:191](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L191)
+[packages/matter.js/src/crypto/Key.ts:191](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L191)
 
 ___
 
@@ -509,11 +528,11 @@ ___
 
 #### Inherited from
 
-PublicKey.use
+[PublicKey](crypto_export.PublicKey.md).[use](crypto_export.PublicKey.md#use)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:122](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L122)
+[packages/matter.js/src/crypto/Key.ts:122](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L122)
 
 ___
 
@@ -523,11 +542,11 @@ ___
 
 #### Inherited from
 
-PublicKey.x
+[PublicKey](crypto_export.PublicKey.md).[x](crypto_export.PublicKey.md#x)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:193](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L193)
+[packages/matter.js/src/crypto/Key.ts:193](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L193)
 
 ___
 
@@ -535,13 +554,16 @@ ___
 
 • **xBits**: `Uint8Array`
 
+Binary alias to the x field.  Automatically encodes/decodes the base-64
+x-point on EC public keys.
+
 #### Inherited from
 
-PublicKey.xBits
+[PublicKey](crypto_export.PublicKey.md).[xBits](crypto_export.PublicKey.md#xbits)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:195](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L195)
+[packages/matter.js/src/crypto/Key.ts:195](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L195)
 
 ___
 
@@ -551,11 +573,11 @@ ___
 
 #### Inherited from
 
-PublicKey.y
+[PublicKey](crypto_export.PublicKey.md).[y](crypto_export.PublicKey.md#y)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:194](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L194)
+[packages/matter.js/src/crypto/Key.ts:194](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L194)
 
 ___
 
@@ -563,10 +585,13 @@ ___
 
 • **yBits**: `Uint8Array`
 
+Binary alias to the y field.  Automatically encodes/decodes the base-64
+y-point on EC public keys.
+
 #### Inherited from
 
-PublicKey.yBits
+[PublicKey](crypto_export.PublicKey.md).[yBits](crypto_export.PublicKey.md#ybits)
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:196](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Key.ts#L196)
+[packages/matter.js/src/crypto/Key.ts:196](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L196)

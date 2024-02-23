@@ -38,6 +38,10 @@ and allows to override the certificates used for the OperationalCredentials clus
 
 • `Optional` **activeSessionsChangedCallback**: (`fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex)) => `void`
 
+This callback is called when sessions to the device are established, closed or subscriptions get added or
+removed. The provided fabricIndex can be used together with getActiveSessionInformation() to get more details
+about the open sessions and their status.
+
 #### Type declaration
 
 ▸ (`fabricIndex`): `void`
@@ -58,7 +62,7 @@ about the open sessions and their status.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:195](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L195)
+[packages/matter.js/src/CommissioningServer.ts:191](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L191)
 
 ___
 
@@ -70,20 +74,20 @@ Optional Vendor specific additional BLE Advertisement data.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:130](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L130)
+[packages/matter.js/src/CommissioningServer.ts:126](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L126)
 
 ___
 
 ### basicInformation
 
-• **basicInformation**: \{ `productId`: `number` ; `productName`: `string` ; `vendorId`: `number` ; `vendorName`: `string`  } \| [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `capabilityMinima`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `caseSessionsPerFabric`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `subscriptionsPerFabric`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `dataModelRevision`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)\<`boolean`, `any`\> ; `location`: [`WritableAttribute`](../modules/cluster_export.md#writableattribute)\<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](../modules/cluster_export.md#writableattribute)\<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `finish`: [`FieldType`](tlv_export.FieldType.md)\<[`ProductFinish`](../enums/cluster_export.BasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`Color`](../enums/cluster_export.BasicInformation.Color.md)\>  }\>, `any`\> ; `productId`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `productName`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](../modules/cluster_export.md#optionalattribute)\<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)\<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<[`VendorId`](../modules/datatype_export.md#vendorid), `any`\> ; `vendorName`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`string`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)\<{}\>\>\>
+• **basicInformation**: \{ `productId`: `number` ; `productName`: `string` ; `vendorId`: `number` ; `vendorName`: `string`  } \| [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `capabilityMinima`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `caseSessionsPerFabric`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `subscriptionsPerFabric`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `dataModelRevision`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](cluster_export.OptionalWritableAttribute.md)\<`boolean`, `any`\> ; `location`: [`WritableAttribute`](cluster_export.WritableAttribute.md)\<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](cluster_export.WritableAttribute.md)\<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](cluster_export.OptionalFixedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `finish`: [`FieldType`](tlv_export.FieldType.md)\<[`ProductFinish`](../enums/cluster_export.BasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](tlv_export.FieldType.md)\<``null`` \| [`Color`](../enums/cluster_export.BasicInformation.Color.md)\>  }\>, `any`\> ; `productId`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productName`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](cluster_export.OptionalAttribute.md)\<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<[`VendorId`](../modules/datatype_export.md#vendorid), `any`\> ; `vendorName`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`string`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<{}\>\>\>
 
 Device details to be used for the BasicInformation cluster. Some of the values are initialized with defaults if
 not set here.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:159](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L159)
+[packages/matter.js/src/CommissioningServer.ts:155](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L155)
 
 ___
 
@@ -96,13 +100,17 @@ Vendor specific certificates to be used for the OperationalCredentials cluster. 
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:172](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L172)
+[packages/matter.js/src/CommissioningServer.ts:168](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L168)
 
 ___
 
 ### commissioningChangedCallback
 
 • `Optional` **commissioningChangedCallback**: (`fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex)) => `void`
+
+This callback is called when the device is commissioned or decommissioned to a fabric/controller. The provided
+fabricIndex can be used together with getCommissionedFabricInformation() to get more details about the fabric
+(or if this fabricIndex is missing it was deleted).
 
 #### Type declaration
 
@@ -124,7 +132,7 @@ fabricIndex can be used together with getCommissionedFabricInformation() to get 
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:188](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L188)
+[packages/matter.js/src/CommissioningServer.ts:184](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L184)
 
 ___
 
@@ -136,7 +144,7 @@ Should the device directly be announced automatically by the MatterServer of man
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:133](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L133)
+[packages/matter.js/src/CommissioningServer.ts:129](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L129)
 
 ___
 
@@ -148,7 +156,7 @@ The device name to be used for the BasicInformation cluster.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:112](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L112)
+[packages/matter.js/src/CommissioningServer.ts:108](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L108)
 
 ___
 
@@ -160,7 +168,7 @@ The device type to be used for the BasicInformation cluster.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:115](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L115)
+[packages/matter.js/src/CommissioningServer.ts:111](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L111)
 
 ___
 
@@ -172,7 +180,7 @@ The Discriminator to use for initial commissioning.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:124](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L124)
+[packages/matter.js/src/CommissioningServer.ts:120](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L120)
 
 ___
 
@@ -184,20 +192,20 @@ The Flow type of the Commissioning flow used in announcements.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:127](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L127)
+[packages/matter.js/src/CommissioningServer.ts:123](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L123)
 
 ___
 
 ### generalCommissioning
 
-• `Optional` **generalCommissioning**: `Partial`\<[`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `basicCommissioningInfo`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `failSafeExpiryLengthSeconds`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `maxCumulativeFailsafeSeconds`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `breadcrumb`: [`WritableAttribute`](../modules/cluster_export.md#writableattribute)\<`number` \| `bigint`, `any`\> ; `locationCapability`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md), `any`\> ; `regulatoryConfig`: [`Attribute`](../modules/cluster_export.md#attribute)\<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md), `any`\> ; `supportsConcurrentConnection`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)\<{}\>\>\>\> & \{ `allowCountryCodeChange?`: `boolean` ; `countryCodeWhitelist?`: `string`[]  }
+• `Optional` **generalCommissioning**: `Partial`\<[`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `basicCommissioningInfo`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `failSafeExpiryLengthSeconds`: [`FieldType`](tlv_export.FieldType.md)\<`number`\> ; `maxCumulativeFailsafeSeconds`: [`FieldType`](tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `breadcrumb`: [`WritableAttribute`](cluster_export.WritableAttribute.md)\<`number` \| `bigint`, `any`\> ; `locationCapability`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md), `any`\> ; `regulatoryConfig`: [`Attribute`](cluster_export.Attribute.md)\<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md), `any`\> ; `supportsConcurrentConnection`: [`FixedAttribute`](cluster_export.FixedAttribute.md)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<{}\>\>\>\> & \{ `allowCountryCodeChange?`: `boolean` ; `countryCodeWhitelist?`: `string`[]  }
 
 Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
 Use these options to limit the allowed countries for regulatory configuration.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:178](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L178)
+[packages/matter.js/src/CommissioningServer.ts:174](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L174)
 
 ___
 
@@ -209,7 +217,7 @@ IPv4 listener address, defaults to all interfaces.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:106](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L106)
+[packages/matter.js/src/CommissioningServer.ts:102](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L102)
 
 ___
 
@@ -221,7 +229,7 @@ IPv6 listener address, defaults to all interfaces.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:109](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L109)
+[packages/matter.js/src/CommissioningServer.ts:105](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L105)
 
 ___
 
@@ -233,7 +241,7 @@ The next endpoint ID to be assigned to a new endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:118](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L118)
+[packages/matter.js/src/CommissioningServer.ts:114](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L114)
 
 ___
 
@@ -245,7 +253,7 @@ The passcode/pin of the device to use for initial commissioning.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:121](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L121)
+[packages/matter.js/src/CommissioningServer.ts:117](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L117)
 
 ___
 
@@ -257,7 +265,7 @@ Port of the server, normally automatically managed.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:103](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L103)
+[packages/matter.js/src/CommissioningServer.ts:99](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L99)
 
 ___
 
@@ -270,7 +278,7 @@ and inside the range requested by the connected controller.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:139](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L139)
+[packages/matter.js/src/CommissioningServer.ts:135](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L135)
 
 ___
 
@@ -284,7 +292,7 @@ limits.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:146](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L146)
+[packages/matter.js/src/CommissioningServer.ts:142](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L142)
 
 ___
 
@@ -298,4 +306,4 @@ powered on in parallel not all send at the same timepoint.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:153](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L153)
+[packages/matter.js/src/CommissioningServer.ts:149](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L149)

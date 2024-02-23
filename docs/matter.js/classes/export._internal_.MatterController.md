@@ -46,9 +46,11 @@
 - [connectOrDiscoverNode](export._internal_.MatterController.md#connectordiscovernode)
 - [createSecureSession](export._internal_.MatterController.md#createsecuresession)
 - [disconnect](export._internal_.MatterController.md#disconnect)
+- [enhanceCommissionedNodeDetails](export._internal_.MatterController.md#enhancecommissionednodedetails)
 - [findResumptionRecordByNodeId](export._internal_.MatterController.md#findresumptionrecordbynodeid)
 - [getActiveSessionInformation](export._internal_.MatterController.md#getactivesessioninformation)
 - [getCommissionedNodes](export._internal_.MatterController.md#getcommissionednodes)
+- [getCommissionedNodesDetails](export._internal_.MatterController.md#getcommissionednodesdetails)
 - [getLastOperationalAddress](export._internal_.MatterController.md#getlastoperationaladdress)
 - [getNextAvailableSessionId](export._internal_.MatterController.md#getnextavailablesessionid)
 - [getResumptionRecord](export._internal_.MatterController.md#getresumptionrecord)
@@ -59,8 +61,8 @@
 - [removeNode](export._internal_.MatterController.md#removenode)
 - [resume](export._internal_.MatterController.md#resume)
 - [saveResumptionRecord](export._internal_.MatterController.md#saveresumptionrecord)
-- [setOperationalServerAddress](export._internal_.MatterController.md#setoperationalserveraddress)
-- [storeCommisionedNodes](export._internal_.MatterController.md#storecommisionednodes)
+- [setOperationalDeviceData](export._internal_.MatterController.md#setoperationaldevicedata)
+- [storeCommissionedNodes](export._internal_.MatterController.md#storecommissionednodes)
 - [create](export._internal_.MatterController.md#create)
 
 ## Constructors
@@ -88,7 +90,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:150](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L150)
+[packages/matter.js/src/MatterController.ts:154](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L154)
 
 ## Properties
 
@@ -98,7 +100,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:157](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L157)
+[packages/matter.js/src/MatterController.ts:161](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L161)
 
 ___
 
@@ -108,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:147](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L147)
+[packages/matter.js/src/MatterController.ts:151](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L151)
 
 ___
 
@@ -118,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:144](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L144)
+[packages/matter.js/src/MatterController.ts:148](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L148)
 
 ___
 
@@ -128,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:154](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L154)
+[packages/matter.js/src/MatterController.ts:158](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L158)
 
 ___
 
@@ -138,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:141](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L141)
+[packages/matter.js/src/MatterController.ts:145](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L145)
 
 ___
 
@@ -148,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:148](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L148)
+[packages/matter.js/src/MatterController.ts:152](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L152)
 
 ___
 
@@ -158,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:145](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L145)
+[packages/matter.js/src/MatterController.ts:149](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L149)
 
 ___
 
@@ -168,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:142](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L142)
+[packages/matter.js/src/MatterController.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L146)
 
 ___
 
@@ -178,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:155](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L155)
+[packages/matter.js/src/MatterController.ts:159](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L159)
 
 ___
 
@@ -188,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:151](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L151)
+[packages/matter.js/src/MatterController.ts:155](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L155)
 
 ___
 
@@ -198,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:146](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L146)
+[packages/matter.js/src/MatterController.ts:150](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L150)
 
 ___
 
@@ -208,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:152](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L152)
+[packages/matter.js/src/MatterController.ts:156](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L156)
 
 ___
 
@@ -218,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:153](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L153)
+[packages/matter.js/src/MatterController.ts:157](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L157)
 
 ___
 
@@ -228,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:143](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L143)
+[packages/matter.js/src/MatterController.ts:147](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L147)
 
 ___
 
@@ -252,7 +254,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:158](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L158)
+[packages/matter.js/src/MatterController.ts:162](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L162)
 
 ___
 
@@ -262,7 +264,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:140](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L140)
+[packages/matter.js/src/MatterController.ts:144](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L144)
 
 ___
 
@@ -272,7 +274,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:156](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L156)
+[packages/matter.js/src/MatterController.ts:160](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L160)
 
 ## Accessors
 
@@ -286,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:193](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L193)
+[packages/matter.js/src/MatterController.ts:197](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L197)
 
 ## Methods
 
@@ -306,7 +308,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:197](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L197)
+[packages/matter.js/src/MatterController.ts:201](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L201)
 
 ___
 
@@ -320,7 +322,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:710](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L710)
+[packages/matter.js/src/MatterController.ts:800](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L800)
 
 ___
 
@@ -334,7 +336,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:714](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L714)
+[packages/matter.js/src/MatterController.ts:804](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L804)
 
 ___
 
@@ -346,7 +348,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `discoveryCapabilities` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\> |
+| `discoveryCapabilities` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `onIpNetwork`: [`BitFlag`](../modules/schema_export.md#bitflag) ; `softAccessPoint`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\> |
 
 #### Returns
 
@@ -354,7 +356,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:201](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L201)
+[packages/matter.js/src/MatterController.ts:205](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L205)
 
 ___
 
@@ -380,13 +382,13 @@ request or the passode did not match to any discovered device/address.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:242](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L242)
+[packages/matter.js/src/MatterController.ts:246](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L246)
 
 ___
 
 ### commissionDevice
 
-▸ **commissionDevice**(`paseSecureMessageChannel`, `commissioningOptions`): `Promise`\<[`NodeId`](../modules/datatype_export.md#nodeid)\>
+▸ **commissionDevice**(`paseSecureMessageChannel`, `commissioningOptions`, `discoveryData?`): `Promise`\<[`NodeId`](../modules/datatype_export.md#nodeid)\>
 
 Method to commission a device with a PASE secure channel. It returns the NodeId of the commissioned device on
 success.
@@ -397,6 +399,7 @@ success.
 | :------ | :------ |
 | `paseSecureMessageChannel` | [`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
 | `commissioningOptions` | [`CommissioningOptions`](../modules/protocol_export.md#commissioningoptions) |
+| `discoveryData?` | [`DiscoveryData`](../modules/common_export.md#discoverydata) |
 
 #### Returns
 
@@ -404,13 +407,13 @@ success.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:397](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L397)
+[packages/matter.js/src/MatterController.ts:411](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L411)
 
 ___
 
 ### connect
 
-▸ **connect**(`peerNodeId`, `timeoutSeconds?`): `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+▸ **connect**(`peerNodeId`, `timeoutSeconds?`, `discoveryData?`): `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 Connect to the device by opening a channel and creating a new CASE session if necessary.
 Returns a InteractionClient on success.
@@ -421,6 +424,7 @@ Returns a InteractionClient on success.
 | :------ | :------ |
 | `peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `timeoutSeconds?` | `number` |
+| `discoveryData?` | [`DiscoveryData`](../modules/common_export.md#discoverydata) |
 
 #### Returns
 
@@ -428,13 +432,13 @@ Returns a InteractionClient on success.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:647](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L647)
+[packages/matter.js/src/MatterController.ts:734](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L734)
 
 ___
 
 ### connectOrDiscoverNode
 
-▸ **connectOrDiscoverNode**(`peerNodeId`, `operationalAddress?`, `timeoutSeconds?`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
+▸ **connectOrDiscoverNode**(`peerNodeId`, `operationalAddress?`, `timeoutSeconds?`, `discoveryData?`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Parameters
 
@@ -443,6 +447,7 @@ ___
 | `peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `operationalAddress?` | [`ServerAddressIp`](../modules/common_export.md#serveraddressip) |
 | `timeoutSeconds?` | `number` |
+| `discoveryData?` | [`DiscoveryData`](../modules/common_export.md#discoverydata) |
 
 #### Returns
 
@@ -450,7 +455,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:485](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L485)
+[packages/matter.js/src/MatterController.ts:509](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L509)
 
 ___
 
@@ -463,15 +468,14 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `args` | `Object` |
-| `args.activeRetransmissionTimeoutMs?` | `number` |
 | `args.fabric` | `undefined` \| [`Fabric`](fabric_export.Fabric.md) |
-| `args.idleRetransmissionTimeoutMs?` | `number` |
 | `args.isInitiator` | `boolean` |
 | `args.isResumption` | `boolean` |
 | `args.peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `args.peerSessionId` | `number` |
 | `args.salt` | `Uint8Array` |
 | `args.sessionId` | `number` |
+| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/session_export.SessionParameters.md)\> |
 | `args.sharedSecret` | `Uint8Array` |
 
 #### Returns
@@ -480,7 +484,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:672](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L672)
+[packages/matter.js/src/MatterController.ts:763](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L763)
 
 ___
 
@@ -500,7 +504,29 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:325](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L325)
+[packages/matter.js/src/MatterController.ts:329](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L329)
+
+___
+
+### enhanceCommissionedNodeDetails
+
+▸ **enhanceCommissionedNodeDetails**(`nodeId`, `data`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+| `data` | `Object` |
+| `data.basicInformationData` | `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/MatterController.ts:708](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L708)
 
 ___
 
@@ -520,7 +546,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:702](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L702)
+[packages/matter.js/src/MatterController.ts:792](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L792)
 
 ___
 
@@ -534,7 +560,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:723](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L723)
+[packages/matter.js/src/MatterController.ts:813](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L813)
 
 ___
 
@@ -548,7 +574,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:624](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L624)
+[packages/matter.js/src/MatterController.ts:673](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L673)
+
+___
+
+### getCommissionedNodesDetails
+
+▸ **getCommissionedNodesDetails**(): \{ `advertisedName`: `undefined` \| `string` = discoveryData.DN; `basicInformationData`: `undefined` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> ; `discoveryData`: `undefined` \| [`DiscoveryData`](../modules/common_export.md#discoverydata) ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `operationalAddress`: `undefined` \| `string`  }[]
+
+#### Returns
+
+\{ `advertisedName`: `undefined` \| `string` = discoveryData.DN; `basicInformationData`: `undefined` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> ; `discoveryData`: `undefined` \| [`DiscoveryData`](../modules/common_export.md#discoverydata) ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `operationalAddress`: `undefined` \| `string`  }[]
+
+#### Defined in
+
+[packages/matter.js/src/MatterController.ts:677](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L677)
 
 ___
 
@@ -568,7 +608,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:635](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L635)
+[packages/matter.js/src/MatterController.ts:722](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L722)
 
 ___
 
@@ -582,7 +622,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:668](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L668)
+[packages/matter.js/src/MatterController.ts:759](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L759)
 
 ___
 
@@ -602,13 +642,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:698](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L698)
+[packages/matter.js/src/MatterController.ts:788](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L788)
 
 ___
 
 ### initializePaseSecureChannel
 
-▸ **initializePaseSecureChannel**(`address`, `passcode`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
+▸ **initializePaseSecureChannel**(`address`, `passcode`, `device?`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 Method to start commission process with a PASE pairing.
 If this not successful and throws an RetransmissionLimitReachedError the address is invalid or the passcode
@@ -620,6 +660,7 @@ is wrong.
 | :------ | :------ |
 | `address` | [`ServerAddress`](../modules/common_export.md#serveraddress) |
 | `passcode` | `number` |
+| `device?` | [`CommissionableDevice`](../modules/common_export.md#commissionabledevice) |
 
 #### Returns
 
@@ -627,7 +668,7 @@ is wrong.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:344](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L344)
+[packages/matter.js/src/MatterController.ts:348](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L348)
 
 ___
 
@@ -641,13 +682,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:620](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L620)
+[packages/matter.js/src/MatterController.ts:669](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L669)
 
 ___
 
 ### pair
 
-▸ **pair**(`peerNodeId`, `operationalServerAddress`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
+▸ **pair**(`peerNodeId`, `operationalServerAddress`, `discoveryData?`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 Pair with an operational device (already commissioned) and establish a CASE session.
 
@@ -657,6 +698,7 @@ Pair with an operational device (already commissioned) and establish a CASE sess
 | :------ | :------ |
 | `peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `operationalServerAddress` | [`ServerAddressIp`](../modules/common_export.md#serveraddressip) |
+| `discoveryData?` | [`DiscoveryData`](../modules/common_export.md#discoverydata) |
 
 #### Returns
 
@@ -664,13 +706,13 @@ Pair with an operational device (already commissioned) and establish a CASE sess
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:575](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L575)
+[packages/matter.js/src/MatterController.ts:617](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L617)
 
 ___
 
 ### reconnectLastKnownAddress
 
-▸ **reconnectLastKnownAddress**(`peerNodeId`, `operationalAddress`): `Promise`\<`undefined` \| [`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
+▸ **reconnectLastKnownAddress**(`peerNodeId`, `operationalAddress`, `discoveryData?`): `Promise`\<`undefined` \| [`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Parameters
 
@@ -678,6 +720,7 @@ ___
 | :------ | :------ |
 | `peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `operationalAddress` | [`ServerAddressIp`](../modules/common_export.md#serveraddressip) |
+| `discoveryData?` | [`DiscoveryData`](../modules/common_export.md#discoverydata) |
 
 #### Returns
 
@@ -685,7 +728,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:462](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L462)
+[packages/matter.js/src/MatterController.ts:485](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L485)
 
 ___
 
@@ -705,13 +748,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:330](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L330)
+[packages/matter.js/src/MatterController.ts:334](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L334)
 
 ___
 
 ### resume
 
-▸ **resume**(`peerNodeId`, `timeoutSeconds?`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
+▸ **resume**(`peerNodeId`, `timeoutSeconds?`, `discoveryData?`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 Resume a device connection and establish a CASE session that was previously paired with the controller. This
 method will try to connect to the device using the previously used server address (if set). If that fails, the
@@ -724,6 +767,7 @@ It returns the operational MessageChannel on success.
 | :------ | :------ |
 | `peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `timeoutSeconds?` | `number` |
+| `discoveryData?` | [`DiscoveryData`](../modules/common_export.md#discoverydata) |
 
 #### Returns
 
@@ -731,7 +775,7 @@ It returns the operational MessageChannel on success.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:556](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L556)
+[packages/matter.js/src/MatterController.ts:598](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L598)
 
 ___
 
@@ -751,13 +795,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:706](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L706)
+[packages/matter.js/src/MatterController.ts:796](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L796)
 
 ___
 
-### setOperationalServerAddress
+### setOperationalDeviceData
 
-▸ **setOperationalServerAddress**(`nodeId`, `operationalServerAddress`): `void`
+▸ **setOperationalDeviceData**(`nodeId`, `operationalServerAddress`, `discoveryData?`): `void`
 
 #### Parameters
 
@@ -765,6 +809,7 @@ ___
 | :------ | :------ |
 | `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `operationalServerAddress` | [`ServerAddressIp`](../modules/common_export.md#serveraddressip) |
+| `discoveryData?` | [`DiscoveryData`](../modules/common_export.md#discoverydata) |
 
 #### Returns
 
@@ -772,13 +817,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:628](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L628)
+[packages/matter.js/src/MatterController.ts:691](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L691)
 
 ___
 
-### storeCommisionedNodes
+### storeCommissionedNodes
 
-▸ **storeCommisionedNodes**(): `void`
+▸ **storeCommissionedNodes**(): `void`
 
 #### Returns
 
@@ -786,7 +831,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:639](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L639)
+[packages/matter.js/src/MatterController.ts:726](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L726)
 
 ___
 
@@ -814,4 +859,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:83](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L83)
+[packages/matter.js/src/MatterController.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L87)

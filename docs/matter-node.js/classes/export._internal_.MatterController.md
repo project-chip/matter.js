@@ -35,9 +35,9 @@
 - [resume](export._internal_.MatterController.md#resume)
 - [sessionClosedCallback](export._internal_.MatterController.md#sessionclosedcallback)
 - [sessionManager](export._internal_.MatterController.md#sessionmanager)
-- [setOperationalServerAddress](export._internal_.MatterController.md#setoperationalserveraddress)
+- [setOperationalDeviceData](export._internal_.MatterController.md#setoperationaldevicedata)
 - [storage](export._internal_.MatterController.md#storage)
-- [storeCommisionedNodes](export._internal_.MatterController.md#storecommisionednodes)
+- [storeCommissionedNodes](export._internal_.MatterController.md#storecommissionednodes)
 
 ### Accessors
 
@@ -53,9 +53,11 @@
 - [connect](export._internal_.MatterController.md#connect)
 - [createSecureSession](export._internal_.MatterController.md#createsecuresession)
 - [disconnect](export._internal_.MatterController.md#disconnect)
+- [enhanceCommissionedNodeDetails](export._internal_.MatterController.md#enhancecommissionednodedetails)
 - [findResumptionRecordByNodeId](export._internal_.MatterController.md#findresumptionrecordbynodeid)
 - [getActiveSessionInformation](export._internal_.MatterController.md#getactivesessioninformation)
 - [getCommissionedNodes](export._internal_.MatterController.md#getcommissionednodes)
+- [getCommissionedNodesDetails](export._internal_.MatterController.md#getcommissionednodesdetails)
 - [getNextAvailableSessionId](export._internal_.MatterController.md#getnextavailablesessionid)
 - [getResumptionRecord](export._internal_.MatterController.md#getresumptionrecord)
 - [isCommissioned](export._internal_.MatterController.md#iscommissioned)
@@ -88,7 +90,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:67
+packages/matter.js/dist/esm/MatterController.d.ts:71
 
 ## Properties
 
@@ -98,7 +100,7 @@ packages/matter.js/dist/esm/MatterController.d.ts:67
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:55
+packages/matter.js/dist/esm/MatterController.d.ts:59
 
 ___
 
@@ -108,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:65
+packages/matter.js/dist/esm/MatterController.d.ts:69
 
 ___
 
@@ -118,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:62
+packages/matter.js/dist/esm/MatterController.d.ts:66
 
 ___
 
@@ -128,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:52
+packages/matter.js/dist/esm/MatterController.d.ts:56
 
 ___
 
@@ -138,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:59
+packages/matter.js/dist/esm/MatterController.d.ts:63
 
 ___
 
@@ -151,7 +153,7 @@ success.
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:91
+packages/matter.js/dist/esm/MatterController.d.ts:95
 
 ___
 
@@ -161,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:66
+packages/matter.js/dist/esm/MatterController.d.ts:70
 
 ___
 
@@ -171,7 +173,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:93
+packages/matter.js/dist/esm/MatterController.d.ts:97
 
 ___
 
@@ -181,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:63
+packages/matter.js/dist/esm/MatterController.d.ts:67
 
 ___
 
@@ -191,7 +193,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:60
+packages/matter.js/dist/esm/MatterController.d.ts:64
 
 ___
 
@@ -201,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:53
+packages/matter.js/dist/esm/MatterController.d.ts:57
 
 ___
 
@@ -211,7 +213,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:106
+packages/matter.js/dist/esm/MatterController.d.ts:120
 
 ___
 
@@ -225,7 +227,7 @@ is wrong.
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:86
+packages/matter.js/dist/esm/MatterController.d.ts:90
 
 ___
 
@@ -235,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:49
+packages/matter.js/dist/esm/MatterController.d.ts:53
 
 ___
 
@@ -245,7 +247,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:64
+packages/matter.js/dist/esm/MatterController.d.ts:68
 
 ___
 
@@ -255,7 +257,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:50
+packages/matter.js/dist/esm/MatterController.d.ts:54
 
 ___
 
@@ -265,7 +267,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:51
+packages/matter.js/dist/esm/MatterController.d.ts:55
 
 ___
 
@@ -277,7 +279,7 @@ Pair with an operational device (already commissioned) and establish a CASE sess
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:102
+packages/matter.js/dist/esm/MatterController.d.ts:106
 
 ___
 
@@ -287,7 +289,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:61
+packages/matter.js/dist/esm/MatterController.d.ts:65
 
 ___
 
@@ -297,7 +299,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:92
+packages/matter.js/dist/esm/MatterController.d.ts:96
 
 ___
 
@@ -312,7 +314,7 @@ It returns the operational MessageChannel on success.
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:100
+packages/matter.js/dist/esm/MatterController.d.ts:104
 
 ___
 
@@ -322,7 +324,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:56
+packages/matter.js/dist/esm/MatterController.d.ts:60
 
 ___
 
@@ -332,17 +334,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:58
+packages/matter.js/dist/esm/MatterController.d.ts:62
 
 ___
 
-### setOperationalServerAddress
+### setOperationalDeviceData
 
-• `Private` **setOperationalServerAddress**: `any`
+• `Private` **setOperationalDeviceData**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:105
+packages/matter.js/dist/esm/MatterController.d.ts:116
 
 ___
 
@@ -352,17 +354,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:54
+packages/matter.js/dist/esm/MatterController.d.ts:58
 
 ___
 
-### storeCommisionedNodes
+### storeCommissionedNodes
 
-• `Private` **storeCommisionedNodes**: `any`
+• `Private` **storeCommissionedNodes**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:107
+packages/matter.js/dist/esm/MatterController.d.ts:121
 
 ## Accessors
 
@@ -376,7 +378,7 @@ packages/matter.js/dist/esm/MatterController.d.ts:107
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:68
+packages/matter.js/dist/esm/MatterController.d.ts:72
 
 ## Methods
 
@@ -396,7 +398,7 @@ packages/matter.js/dist/esm/MatterController.d.ts:68
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:69
+packages/matter.js/dist/esm/MatterController.d.ts:73
 
 ___
 
@@ -410,7 +412,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:129
+packages/matter.js/dist/esm/MatterController.d.ts:142
 
 ___
 
@@ -424,7 +426,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:130
+packages/matter.js/dist/esm/MatterController.d.ts:143
 
 ___
 
@@ -436,7 +438,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\> |
+| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `ble`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `onIpNetwork`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `softAccessPoint`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\> |
 
 #### Returns
 
@@ -444,7 +446,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:70
+packages/matter.js/dist/esm/MatterController.d.ts:74
 
 ___
 
@@ -470,13 +472,13 @@ request or the passode did not match to any discovered device/address.
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:78
+packages/matter.js/dist/esm/MatterController.d.ts:82
 
 ___
 
 ### connect
 
-▸ **connect**(`peerNodeId`, `timeoutSeconds?`): `Promise`\<[`InteractionClient`](exports_interaction.InteractionClient.md)\>
+▸ **connect**(`peerNodeId`, `timeoutSeconds?`, `discoveryData?`): `Promise`\<[`InteractionClient`](exports_interaction.InteractionClient.md)\>
 
 Connect to the device by opening a channel and creating a new CASE session if necessary.
 Returns a InteractionClient on success.
@@ -487,6 +489,7 @@ Returns a InteractionClient on success.
 | :------ | :------ |
 | `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `timeoutSeconds?` | `number` |
+| `discoveryData?` | [`DiscoveryData`](../modules/exports_common.md#discoverydata) |
 
 #### Returns
 
@@ -494,7 +497,7 @@ Returns a InteractionClient on success.
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:112
+packages/matter.js/dist/esm/MatterController.d.ts:126
 
 ___
 
@@ -507,15 +510,14 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `args` | `Object` |
-| `args.activeRetransmissionTimeoutMs?` | `number` |
 | `args.fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
-| `args.idleRetransmissionTimeoutMs?` | `number` |
 | `args.isInitiator` | `boolean` |
 | `args.isResumption` | `boolean` |
 | `args.peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `args.peerSessionId` | `number` |
 | `args.salt` | `Uint8Array` |
 | `args.sessionId` | `number` |
+| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/exports_session.SessionParameters.md)\> |
 | `args.sharedSecret` | `Uint8Array` |
 
 #### Returns
@@ -524,7 +526,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:114
+packages/matter.js/dist/esm/MatterController.d.ts:128
 
 ___
 
@@ -544,7 +546,29 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:79
+packages/matter.js/dist/esm/MatterController.d.ts:83
+
+___
+
+### enhanceCommissionedNodeDetails
+
+▸ **enhanceCommissionedNodeDetails**(`nodeId`, `data`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `data` | `Object` |
+| `data.basicInformationData` | `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterController.d.ts:117
 
 ___
 
@@ -564,7 +588,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:127
+packages/matter.js/dist/esm/MatterController.d.ts:140
 
 ___
 
@@ -578,7 +602,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:131
+packages/matter.js/dist/esm/MatterController.d.ts:144
 
 ___
 
@@ -592,7 +616,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:104
+packages/matter.js/dist/esm/MatterController.d.ts:108
+
+___
+
+### getCommissionedNodesDetails
+
+▸ **getCommissionedNodesDetails**(): \{ `advertisedName`: `undefined` \| `string` ; `basicInformationData`: `undefined` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> ; `discoveryData`: `undefined` \| [`DiscoveryData`](../modules/exports_common.md#discoverydata) ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `operationalAddress`: `undefined` \| `string`  }[]
+
+#### Returns
+
+\{ `advertisedName`: `undefined` \| `string` ; `basicInformationData`: `undefined` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> ; `discoveryData`: `undefined` \| [`DiscoveryData`](../modules/exports_common.md#discoverydata) ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `operationalAddress`: `undefined` \| `string`  }[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterController.d.ts:109
 
 ___
 
@@ -606,7 +644,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:113
+packages/matter.js/dist/esm/MatterController.d.ts:127
 
 ___
 
@@ -626,7 +664,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:126
+packages/matter.js/dist/esm/MatterController.d.ts:139
 
 ___
 
@@ -640,7 +678,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:103
+packages/matter.js/dist/esm/MatterController.d.ts:107
 
 ___
 
@@ -660,7 +698,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:80
+packages/matter.js/dist/esm/MatterController.d.ts:84
 
 ___
 
@@ -680,7 +718,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:128
+packages/matter.js/dist/esm/MatterController.d.ts:141
 
 ___
 
@@ -708,4 +746,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterController.d.ts:57
+packages/matter.js/dist/esm/MatterController.d.ts:61

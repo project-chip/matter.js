@@ -23,18 +23,20 @@ We encode this as StatusResponseError because in most places we want to return a
 
 - [clusterCode](exports_common.ValidationError.md#clustercode)
 - [code](exports_common.ValidationError.md#code)
+- [fieldName](exports_common.ValidationError.md#fieldname)
 
 ## Constructors
 
 ### constructor
 
-• **new ValidationError**(`message`): [`ValidationError`](exports_common.ValidationError.md)
+• **new ValidationError**(`message`, `fieldName?`): [`ValidationError`](exports_common.ValidationError.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `message` | `string` |
+| `fieldName?` | `string` |
 
 #### Returns
 
@@ -46,7 +48,7 @@ We encode this as StatusResponseError because in most places we want to return a
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/ValidationError.d.ts:12
+packages/matter.js/dist/esm/common/ValidationError.d.ts:13
 
 ## Properties
 
@@ -75,3 +77,13 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/interaction/StatusCode.d.ts:39
+
+___
+
+### fieldName
+
+• `Optional` **fieldName**: `string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/common/ValidationError.d.ts:12

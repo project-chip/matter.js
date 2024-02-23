@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`InteractionMessenger`](export._internal_.InteractionMessenger.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>
+- [`InteractionMessenger`](exports_interaction._internal_.InteractionMessenger.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
 
   ↳ **`InteractionServerMessenger`**
 
@@ -43,7 +43,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -51,7 +51,7 @@
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[constructor](export._internal_.InteractionMessenger.md#constructor)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[constructor](exports_interaction._internal_.InteractionMessenger.md#constructor)
 
 #### Defined in
 
@@ -61,11 +61,11 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:39
 
 ### exchange
 
-• `Protected` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>
+• `Protected` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[exchange](export._internal_.InteractionMessenger.md#exchange)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[exchange](exports_interaction._internal_.InteractionMessenger.md#exchange)
 
 #### Defined in
 
@@ -83,7 +83,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:38
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[close](export._internal_.InteractionMessenger.md#close)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[close](exports_interaction._internal_.InteractionMessenger.md#close)
 
 #### Defined in
 
@@ -101,7 +101,7 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[getExchangeChannelName](export._internal_.InteractionMessenger.md#getexchangechannelname)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[getExchangeChannelName](exports_interaction._internal_.InteractionMessenger.md#getexchangechannelname)
 
 #### Defined in
 
@@ -149,7 +149,7 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[nextMessage](export._internal_.InteractionMessenger.md#nextmessage)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[nextMessage](exports_interaction._internal_.InteractionMessenger.md#nextmessage)
 
 #### Defined in
 
@@ -175,7 +175,7 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[send](export._internal_.InteractionMessenger.md#send)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[send](exports_interaction._internal_.InteractionMessenger.md#send)
 
 #### Defined in
 
@@ -242,7 +242,7 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[sendStatus](export._internal_.InteractionMessenger.md#sendstatus)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[sendStatus](exports_interaction._internal_.InteractionMessenger.md#sendstatus)
 
 #### Defined in
 
@@ -266,7 +266,7 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[throwIfErrorStatusMessage](export._internal_.InteractionMessenger.md#throwiferrorstatusmessage)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[throwIfErrorStatusMessage](exports_interaction._internal_.InteractionMessenger.md#throwiferrorstatusmessage)
 
 #### Defined in
 
@@ -284,7 +284,7 @@ ___
 
 #### Inherited from
 
-[InteractionMessenger](export._internal_.InteractionMessenger.md).[waitForSuccess](export._internal_.InteractionMessenger.md#waitforsuccess)
+[InteractionMessenger](exports_interaction._internal_.InteractionMessenger.md).[waitForSuccess](exports_interaction._internal_.InteractionMessenger.md#waitforsuccess)
 
 #### Defined in
 

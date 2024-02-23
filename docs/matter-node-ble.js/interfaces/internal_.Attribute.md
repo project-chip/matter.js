@@ -11,6 +11,18 @@
 | `T` | `T` |
 | `F` | extends [`BitSchema`](../modules/internal_.md#bitschema) |
 
+## Hierarchy
+
+- **`Attribute`**
+
+  ↳ [`FabricScopedAttribute`](internal_.FabricScopedAttribute.md)
+
+  ↳ [`FixedAttribute`](internal_.FixedAttribute.md)
+
+  ↳ [`OptionalAttribute`](internal_.OptionalAttribute.md)
+
+  ↳ [`WritableAttribute`](internal_.WritableAttribute.md)
+
 ## Table of contents
 
 ### Properties

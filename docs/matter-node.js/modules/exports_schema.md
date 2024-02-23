@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](exports_schema._internal_.md)
+
 ### Enumerations
 
 - [CommissionningFlowType](../enums/exports_schema.CommissionningFlowType.md)
@@ -52,7 +56,7 @@
 
 ### BitField
 
-Ƭ **BitField**: [`BitRange`](export._internal_.md#bitrange-1)\<`number`, [`Number`](export._internal_.md#number)\>
+Ƭ **BitField**: [`BitRange`](exports_schema._internal_.md#bitrange)\<`number`, [`Number`](exports_schema._internal_.md#number)\>
 
 Defines the bit position and bit length of a numeric value.
 
@@ -66,7 +70,7 @@ ___
 
 ### BitFieldEnum
 
-Ƭ **BitFieldEnum**\<`E`\>: [`BitRange`](export._internal_.md#bitrange-1)\<`E`, [`Enum`](export._internal_.md#enum)\>
+Ƭ **BitFieldEnum**\<`E`\>: [`BitRange`](exports_schema._internal_.md#bitrange)\<`E`, [`Enum`](exports_schema._internal_.md#enum)\>
 
 Defines the bit position and bit length of an enum flag.
 
@@ -86,7 +90,7 @@ ___
 
 ### BitFlag
 
-Ƭ **BitFlag**: [`BitRange`](export._internal_.md#bitrange-1)\<`boolean`, [`Flag`](export._internal_.md#flag)\>
+Ƭ **BitFlag**: [`BitRange`](exports_schema._internal_.md#bitrange)\<`boolean`, [`Flag`](exports_schema._internal_.md#flag)\>
 
 Defines the bit position of a boolean flag.
 
@@ -125,7 +129,7 @@ ___
 
 #### Index signature
 
-▪ [key: `string`]: [`BitFlag`](exports_schema.md#bitflag-1) \| [`BitField`](exports_schema.md#bitfield-1) \| [`BitFieldEnum`](exports_schema.md#bitfieldenum-1)\<`any`\>
+▪ [key: `string`]: [`BitFlag`](exports_schema.md#bitflag) \| [`BitField`](exports_schema.md#bitfield) \| [`BitFieldEnum`](exports_schema.md#bitfieldenum)\<`any`\>
 
 #### Defined in
 
@@ -173,7 +177,7 @@ ___
 
 ### QrCodeData
 
-Ƭ **QrCodeData**: [`TypeFromBitmapSchema`](exports_schema.md#typefrombitmapschema)\<typeof [`QrCodeDataSchema`](export._internal_.md#qrcodedataschema)\>
+Ƭ **QrCodeData**: [`TypeFromBitmapSchema`](exports_schema.md#typefrombitmapschema)\<typeof [`QrCodeDataSchema`](exports_schema._internal_.md#qrcodedataschema)\>
 
 #### Defined in
 
@@ -231,7 +235,7 @@ packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:36
 
 ### Base38
 
-• `Const` **Base38**: [`Base38Schema`](../classes/export._internal_.Base38Schema.md)
+• `Const` **Base38**: [`Base38Schema`](../classes/exports_schema._internal_.Base38Schema.md)
 
 #### Defined in
 
@@ -249,9 +253,9 @@ See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 36
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ble` | [`BitFlag`](exports_schema.md#bitflag-1) | Device supports BLE for discovery when not commissioned. |
-| `onIpNetwork` | [`BitFlag`](exports_schema.md#bitflag-1) | Device is already on the IP network. |
-| `softAccessPoint` | [`BitFlag`](exports_schema.md#bitflag-1) | Device supports hosting a Soft-AP when not commissioned. |
+| `ble` | [`BitFlag`](exports_schema.md#bitflag) | Device supports BLE for discovery when not commissioned. |
+| `onIpNetwork` | [`BitFlag`](exports_schema.md#bitflag) | Device is already on the IP network. |
+| `softAccessPoint` | [`BitFlag`](exports_schema.md#bitflag) | Device supports hosting a Soft-AP when not commissioned. |
 
 #### Defined in
 
@@ -261,7 +265,7 @@ ___
 
 ### DiscoveryCapabilitiesSchema
 
-• `Const` **DiscoveryCapabilitiesSchema**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
+• `Const` **DiscoveryCapabilitiesSchema**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
 
 #### Defined in
 
@@ -271,7 +275,7 @@ ___
 
 ### ManualPairingCodeCodec
 
-• `Const` **ManualPairingCodeCodec**: [`ManualPairingCodeSchema`](../classes/export._internal_.ManualPairingCodeSchema.md)
+• `Const` **ManualPairingCodeCodec**: [`ManualPairingCodeSchema`](../classes/exports_schema._internal_.ManualPairingCodeSchema.md)
 
 #### Defined in
 
@@ -291,7 +295,7 @@ ___
 
 ### QrPairingCodeCodec
 
-• `Const` **QrPairingCodeCodec**: [`QrPairingCodeSchema`](../classes/export._internal_.QrPairingCodeSchema.md)
+• `Const` **QrPairingCodeCodec**: [`QrPairingCodeSchema`](../classes/exports_schema._internal_.QrPairingCodeSchema.md)
 
 #### Defined in
 
@@ -301,7 +305,7 @@ packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:50
 
 ### BitField
 
-▸ **BitField**(`offset`, `length`): [`BitField`](exports_schema.md#bitfield-1)
+▸ **BitField**(`offset`, `length`): [`BitField`](exports_schema.md#bitfield)
 
 #### Parameters
 
@@ -312,7 +316,7 @@ packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:50
 
 #### Returns
 
-[`BitField`](exports_schema.md#bitfield-1)
+[`BitField`](exports_schema.md#bitfield)
 
 #### Defined in
 
@@ -322,7 +326,7 @@ ___
 
 ### BitFieldEnum
 
-▸ **BitFieldEnum**\<`E`\>(`offset`, `length`): [`BitFieldEnum`](exports_schema.md#bitfieldenum-1)\<`E`\>
+▸ **BitFieldEnum**\<`E`\>(`offset`, `length`): [`BitFieldEnum`](exports_schema.md#bitfieldenum)\<`E`\>
 
 #### Type parameters
 
@@ -339,7 +343,7 @@ ___
 
 #### Returns
 
-[`BitFieldEnum`](exports_schema.md#bitfieldenum-1)\<`E`\>
+[`BitFieldEnum`](exports_schema.md#bitfieldenum)\<`E`\>
 
 #### Defined in
 
@@ -349,7 +353,7 @@ ___
 
 ### BitFlag
 
-▸ **BitFlag**(`offset`): [`BitFlag`](exports_schema.md#bitflag-1)
+▸ **BitFlag**(`offset`): [`BitFlag`](exports_schema.md#bitflag)
 
 #### Parameters
 
@@ -359,7 +363,7 @@ ___
 
 #### Returns
 
-[`BitFlag`](exports_schema.md#bitflag-1)
+[`BitFlag`](exports_schema.md#bitflag)
 
 #### Defined in
 

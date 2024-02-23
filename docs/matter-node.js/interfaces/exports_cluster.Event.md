@@ -11,6 +11,14 @@
 | `T` | `T` |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
 
+## Hierarchy
+
+- **`Event`**
+
+  ↳ [`UnknownEvent`](exports_cluster.UnknownEvent.md)
+
+  ↳ [`OptionalEvent`](exports_cluster.OptionalEvent.md)
+
 ## Table of contents
 
 ### Properties

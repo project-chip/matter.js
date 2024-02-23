@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`T`, `F`\>
+- [`OptionalFixedAttribute`](exports_cluster.OptionalFixedAttribute.md)\<`T`, `F`\>
 
   ↳ **`ConditionalFixedAttribute`**
 
@@ -47,7 +47,7 @@
 
 #### Inherited from
 
-OptionalFixedAttribute.default
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[default](exports_cluster.OptionalFixedAttribute.md#default)
 
 #### Defined in
 
@@ -61,7 +61,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.fabricScoped
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[fabricScoped](exports_cluster.OptionalFixedAttribute.md#fabricscoped)
 
 #### Defined in
 
@@ -75,7 +75,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.fixed
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[fixed](exports_cluster.OptionalFixedAttribute.md#fixed)
 
 #### Defined in
 
@@ -89,7 +89,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.id
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[id](exports_cluster.OptionalFixedAttribute.md#id)
 
 #### Defined in
 
@@ -103,7 +103,7 @@ ___
 
 #### Overrides
 
-OptionalFixedAttribute.isConditional
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[isConditional](exports_cluster.OptionalFixedAttribute.md#isconditional)
 
 #### Defined in
 
@@ -117,7 +117,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.mandatoryIf
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[mandatoryIf](exports_cluster.OptionalFixedAttribute.md#mandatoryif)
 
 #### Defined in
 
@@ -131,7 +131,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.omitChanges
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[omitChanges](exports_cluster.OptionalFixedAttribute.md#omitchanges)
 
 #### Defined in
 
@@ -145,7 +145,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.optional
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[optional](exports_cluster.OptionalFixedAttribute.md#optional)
 
 #### Defined in
 
@@ -159,7 +159,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.optionalIf
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[optionalIf](exports_cluster.OptionalFixedAttribute.md#optionalif)
 
 #### Defined in
 
@@ -173,7 +173,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.persistent
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[persistent](exports_cluster.OptionalFixedAttribute.md#persistent)
 
 #### Defined in
 
@@ -187,7 +187,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.readAcl
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[readAcl](exports_cluster.OptionalFixedAttribute.md#readacl)
 
 #### Defined in
 
@@ -201,7 +201,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.scene
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[scene](exports_cluster.OptionalFixedAttribute.md#scene)
 
 #### Defined in
 
@@ -215,7 +215,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.schema
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[schema](exports_cluster.OptionalFixedAttribute.md#schema)
 
 #### Defined in
 
@@ -229,7 +229,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.timed
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[timed](exports_cluster.OptionalFixedAttribute.md#timed)
 
 #### Defined in
 
@@ -243,7 +243,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.unknown
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[unknown](exports_cluster.OptionalFixedAttribute.md#unknown)
 
 #### Defined in
 
@@ -257,7 +257,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.writable
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[writable](exports_cluster.OptionalFixedAttribute.md#writable)
 
 #### Defined in
 
@@ -271,7 +271,7 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.writeAcl
+[OptionalFixedAttribute](exports_cluster.OptionalFixedAttribute.md).[writeAcl](exports_cluster.OptionalFixedAttribute.md#writeacl)
 
 #### Defined in
 

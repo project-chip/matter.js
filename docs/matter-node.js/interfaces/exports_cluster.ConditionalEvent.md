@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalEvent`](../modules/exports_cluster.md#optionalevent)\<`T`, `F`\>
+- [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<`T`, `F`\>
 
   ↳ **`ConditionalEvent`**
 
@@ -39,7 +39,7 @@
 
 #### Inherited from
 
-OptionalEvent.id
+[OptionalEvent](exports_cluster.OptionalEvent.md).[id](exports_cluster.OptionalEvent.md#id)
 
 #### Defined in
 
@@ -53,7 +53,7 @@ ___
 
 #### Overrides
 
-OptionalEvent.isConditional
+[OptionalEvent](exports_cluster.OptionalEvent.md).[isConditional](exports_cluster.OptionalEvent.md#isconditional)
 
 #### Defined in
 
@@ -67,7 +67,7 @@ ___
 
 #### Inherited from
 
-OptionalEvent.mandatoryIf
+[OptionalEvent](exports_cluster.OptionalEvent.md).[mandatoryIf](exports_cluster.OptionalEvent.md#mandatoryif)
 
 #### Defined in
 
@@ -81,7 +81,7 @@ ___
 
 #### Inherited from
 
-OptionalEvent.optional
+[OptionalEvent](exports_cluster.OptionalEvent.md).[optional](exports_cluster.OptionalEvent.md#optional)
 
 #### Defined in
 
@@ -95,7 +95,7 @@ ___
 
 #### Inherited from
 
-OptionalEvent.optionalIf
+[OptionalEvent](exports_cluster.OptionalEvent.md).[optionalIf](exports_cluster.OptionalEvent.md#optionalif)
 
 #### Defined in
 
@@ -109,7 +109,7 @@ ___
 
 #### Inherited from
 
-OptionalEvent.priority
+[OptionalEvent](exports_cluster.OptionalEvent.md).[priority](exports_cluster.OptionalEvent.md#priority)
 
 #### Defined in
 
@@ -123,7 +123,7 @@ ___
 
 #### Inherited from
 
-OptionalEvent.readAcl
+[OptionalEvent](exports_cluster.OptionalEvent.md).[readAcl](exports_cluster.OptionalEvent.md#readacl)
 
 #### Defined in
 
@@ -137,7 +137,7 @@ ___
 
 #### Inherited from
 
-OptionalEvent.schema
+[OptionalEvent](exports_cluster.OptionalEvent.md).[schema](exports_cluster.OptionalEvent.md#schema)
 
 #### Defined in
 
@@ -151,7 +151,7 @@ ___
 
 #### Inherited from
 
-OptionalEvent.unknown
+[OptionalEvent](exports_cluster.OptionalEvent.md).[unknown](exports_cluster.OptionalEvent.md#unknown)
 
 #### Defined in
 

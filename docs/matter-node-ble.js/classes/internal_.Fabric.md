@@ -73,7 +73,7 @@
 | `rootNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
 | `operationalId` | `Uint8Array` |
 | `rootPublicKey` | `Uint8Array` |
-| `keyPair` | [`Key`](../modules/internal_.md#key) |
+| `keyPair` | [`Key`](../interfaces/internal_.Key.md) |
 | `rootVendorId` | [`VendorId`](../modules/internal_.md#vendorid) |
 | `rootCert` | `Uint8Array` |
 | `identityProtectionKey` | `Uint8Array` |
@@ -352,7 +352,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Returns
 
@@ -372,7 +372,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -451,7 +451,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Returns
 
@@ -477,7 +477,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -498,7 +498,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -640,7 +640,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../interfaces/internal_.Cluster.md)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 | `value` | `T` |
 

@@ -93,7 +93,7 @@ packages/matter.js/dist/esm/device/Aggregator.d.ts:25
 
 ### deviceTypes
 
-• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+• `Protected` **deviceTypes**: [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -161,7 +161,7 @@ on the device!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `device` | [`Device`](exports_device.Device.md) \| [`ComposedDevice`](exports_device.ComposedDevice.md) | Device instance to add |
-| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)\<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)\<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)\<{}\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
+| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `hardwareVersion`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `reachable`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<{}\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
 
 #### Returns
 
@@ -187,7 +187,7 @@ The required clusters PowerSourceConfigurationCluster and PowerSourceCluster nee
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `device` | [`Device`](exports_device.Device.md) \| [`ComposedDevice`](exports_device.ComposedDevice.md) | Device instance to add |
-| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)\<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)\<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)\<{}\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
+| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `hardwareVersion`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `reachable`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<{}\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
 
 #### Returns
 
@@ -487,7 +487,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -545,7 +545,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -587,11 +587,11 @@ ___
 
 ### getDeviceTypes
 
-▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+▸ **getDeviceTypes**(): [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Returns
 
-[[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]]
+[[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]]
 
 #### Inherited from
 
@@ -639,7 +639,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -673,7 +673,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../interfaces/exports_cluster.Cluster.md)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -759,7 +759,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `deviceTypes` | [[`DeviceTypeDefinition`](../modules/exports_device.md#devicetypedefinition), ...DeviceTypeDefinition[]] |
+| `deviceTypes` | [[`DeviceTypeDefinition`](../interfaces/exports_device.DeviceTypeDefinition.md), ...DeviceTypeDefinition[]] |
 
 #### Returns
 

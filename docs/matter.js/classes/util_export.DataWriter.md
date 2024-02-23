@@ -63,7 +63,7 @@ Writer that auto-increments its offset after each write.
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L17)
+[packages/matter.js/src/util/DataWriter.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L17)
 
 ## Properties
 
@@ -73,7 +73,7 @@ Writer that auto-increments its offset after each write.
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:15](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L15)
+[packages/matter.js/src/util/DataWriter.ts:15](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L15)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:14](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L14)
+[packages/matter.js/src/util/DataWriter.ts:14](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L14)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:13](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L13)
+[packages/matter.js/src/util/DataWriter.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L13)
 
 ## Methods
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L94)
+[packages/matter.js/src/util/DataWriter.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L94)
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:89](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L89)
+[packages/matter.js/src/util/DataWriter.ts:89](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L89)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:82](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L82)
+[packages/matter.js/src/util/DataWriter.ts:82](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L82)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:75](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L75)
+[packages/matter.js/src/util/DataWriter.ts:75](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L75)
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L54)
+[packages/matter.js/src/util/DataWriter.ts:54](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L54)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:61](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L61)
+[packages/matter.js/src/util/DataWriter.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L61)
 
 ___
 
@@ -227,7 +227,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:68](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L68)
+[packages/matter.js/src/util/DataWriter.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L68)
 
 ___
 
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L47)
+[packages/matter.js/src/util/DataWriter.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L47)
 
 ___
 
@@ -267,7 +267,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L26)
+[packages/matter.js/src/util/DataWriter.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L26)
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L33)
+[packages/matter.js/src/util/DataWriter.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L33)
 
 ___
 
@@ -307,7 +307,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L40)
+[packages/matter.js/src/util/DataWriter.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L40)
 
 ___
 
@@ -327,4 +327,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataWriter.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/DataWriter.ts#L21)
+[packages/matter.js/src/util/DataWriter.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataWriter.ts#L21)

@@ -28,8 +28,8 @@ MatterApplicationClusterSpecificationV1_1 § 3.3.6.3
 
 | Name | Type |
 | :------ | :------ |
-| `ballastNonOperational` | [`BitFlag`](exports_schema.md#bitflag-1) |
-| `lampFailure` | [`BitFlag`](exports_schema.md#bitflag-1) |
+| `ballastNonOperational` | [`BitFlag`](exports_schema.md#bitflag) |
+| `lampFailure` | [`BitFlag`](exports_schema.md#bitflag) |
 
 #### Defined in
 
@@ -39,7 +39,7 @@ ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `ballastFactorAdjustment`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<`number` \| ``null``, `any`\> ; `ballastStatus`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `intrinsicBallastFactor`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<`number` \| ``null``, `any`\> ; `lampAlarmMode`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `lampBurnHours`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<`number` \| ``null``, `any`\> ; `lampBurnHoursTripPoint`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<`number` \| ``null``, `any`\> ; `lampManufacturer`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<`string`, `any`\> ; `lampQuantity`: [`Attribute`](exports_cluster.md#attribute)\<`number`, `any`\> ; `lampRatedHours`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<`number` \| ``null``, `any`\> ; `lampType`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<`string`, `any`\> ; `maxLevel`: [`WritableAttribute`](exports_cluster.md#writableattribute)\<`number`, `any`\> ; `minLevel`: [`WritableAttribute`](exports_cluster.md#writableattribute)\<`number`, `any`\> ; `physicalMaxLevel`: [`Attribute`](exports_cluster.md#attribute)\<`number`, `any`\> ; `physicalMinLevel`: [`Attribute`](exports_cluster.md#attribute)\<`number`, `any`\>  } ; `id`: ``769`` ; `name`: ``"BallastConfiguration"`` ; `revision`: ``4``  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `ballastFactorAdjustment`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `ballastStatus`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `intrinsicBallastFactor`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `lampAlarmMode`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `lampBurnHours`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `lampBurnHoursTripPoint`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `lampManufacturer`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`string`, `any`\> ; `lampQuantity`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `lampRatedHours`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `lampType`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`string`, `any`\> ; `maxLevel`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `minLevel`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `physicalMaxLevel`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalMinLevel`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\>  } ; `id`: ``769`` ; `name`: ``"BallastConfiguration"`` ; `revision`: ``4``  }\>
 
 Ballast Configuration
 
@@ -69,7 +69,7 @@ MatterApplicationClusterSpecificationV1_1 § 3.3.9.5
 
 | Name | Type |
 | :------ | :------ |
-| `lampBurnHours` | [`BitFlag`](exports_schema.md#bitflag-1) |
+| `lampBurnHours` | [`BitFlag`](exports_schema.md#bitflag) |
 
 #### Defined in
 

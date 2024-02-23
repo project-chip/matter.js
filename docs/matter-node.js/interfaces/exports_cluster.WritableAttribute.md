@@ -13,9 +13,13 @@
 
 ## Hierarchy
 
-- [`Attribute`](../modules/exports_cluster.md#attribute)\<`T`, `F`\>
+- [`Attribute`](exports_cluster.Attribute.md)\<`T`, `F`\>
 
   ↳ **`WritableAttribute`**
+
+  ↳↳ [`WritableFabricScopedAttribute`](exports_cluster.WritableFabricScopedAttribute.md)
+
+  ↳↳ [`WritableFixedAttribute`](exports_cluster.WritableFixedAttribute.md)
 
 ## Table of contents
 
@@ -47,7 +51,7 @@
 
 #### Inherited from
 
-Attribute.default
+[Attribute](exports_cluster.Attribute.md).[default](exports_cluster.Attribute.md#default)
 
 #### Defined in
 
@@ -61,7 +65,7 @@ ___
 
 #### Inherited from
 
-Attribute.fabricScoped
+[Attribute](exports_cluster.Attribute.md).[fabricScoped](exports_cluster.Attribute.md#fabricscoped)
 
 #### Defined in
 
@@ -75,7 +79,7 @@ ___
 
 #### Inherited from
 
-Attribute.fixed
+[Attribute](exports_cluster.Attribute.md).[fixed](exports_cluster.Attribute.md#fixed)
 
 #### Defined in
 
@@ -89,7 +93,7 @@ ___
 
 #### Inherited from
 
-Attribute.id
+[Attribute](exports_cluster.Attribute.md).[id](exports_cluster.Attribute.md#id)
 
 #### Defined in
 
@@ -103,7 +107,7 @@ ___
 
 #### Inherited from
 
-Attribute.isConditional
+[Attribute](exports_cluster.Attribute.md).[isConditional](exports_cluster.Attribute.md#isconditional)
 
 #### Defined in
 
@@ -117,7 +121,7 @@ ___
 
 #### Inherited from
 
-Attribute.mandatoryIf
+[Attribute](exports_cluster.Attribute.md).[mandatoryIf](exports_cluster.Attribute.md#mandatoryif)
 
 #### Defined in
 
@@ -131,7 +135,7 @@ ___
 
 #### Inherited from
 
-Attribute.omitChanges
+[Attribute](exports_cluster.Attribute.md).[omitChanges](exports_cluster.Attribute.md#omitchanges)
 
 #### Defined in
 
@@ -145,7 +149,7 @@ ___
 
 #### Inherited from
 
-Attribute.optional
+[Attribute](exports_cluster.Attribute.md).[optional](exports_cluster.Attribute.md#optional)
 
 #### Defined in
 
@@ -159,7 +163,7 @@ ___
 
 #### Inherited from
 
-Attribute.optionalIf
+[Attribute](exports_cluster.Attribute.md).[optionalIf](exports_cluster.Attribute.md#optionalif)
 
 #### Defined in
 
@@ -173,7 +177,7 @@ ___
 
 #### Inherited from
 
-Attribute.persistent
+[Attribute](exports_cluster.Attribute.md).[persistent](exports_cluster.Attribute.md#persistent)
 
 #### Defined in
 
@@ -187,7 +191,7 @@ ___
 
 #### Inherited from
 
-Attribute.readAcl
+[Attribute](exports_cluster.Attribute.md).[readAcl](exports_cluster.Attribute.md#readacl)
 
 #### Defined in
 
@@ -201,7 +205,7 @@ ___
 
 #### Inherited from
 
-Attribute.scene
+[Attribute](exports_cluster.Attribute.md).[scene](exports_cluster.Attribute.md#scene)
 
 #### Defined in
 
@@ -215,7 +219,7 @@ ___
 
 #### Inherited from
 
-Attribute.schema
+[Attribute](exports_cluster.Attribute.md).[schema](exports_cluster.Attribute.md#schema)
 
 #### Defined in
 
@@ -229,7 +233,7 @@ ___
 
 #### Inherited from
 
-Attribute.timed
+[Attribute](exports_cluster.Attribute.md).[timed](exports_cluster.Attribute.md#timed)
 
 #### Defined in
 
@@ -243,7 +247,7 @@ ___
 
 #### Inherited from
 
-Attribute.unknown
+[Attribute](exports_cluster.Attribute.md).[unknown](exports_cluster.Attribute.md#unknown)
 
 #### Defined in
 
@@ -257,7 +261,7 @@ ___
 
 #### Overrides
 
-Attribute.writable
+[Attribute](exports_cluster.Attribute.md).[writable](exports_cluster.Attribute.md#writable)
 
 #### Defined in
 
@@ -271,7 +275,7 @@ ___
 
 #### Inherited from
 
-Attribute.writeAcl
+[Attribute](exports_cluster.Attribute.md).[writeAcl](exports_cluster.Attribute.md#writeacl)
 
 #### Defined in
 

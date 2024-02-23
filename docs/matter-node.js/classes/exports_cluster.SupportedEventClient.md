@@ -56,7 +56,7 @@ Special EventClient class to allow identifying events that are supported because
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`Event`](../modules/exports_cluster.md#event)\<`T`, `any`\> |
+| `event` | [`Event`](../interfaces/exports_cluster.Event.md)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
@@ -106,7 +106,7 @@ ___
 
 ### event
 
-• `Readonly` **event**: [`Event`](../modules/exports_cluster.md#event)\<`T`, `any`\>
+• `Readonly` **event**: [`Event`](../interfaces/exports_cluster.Event.md)\<`T`, `any`\>
 
 #### Inherited from
 

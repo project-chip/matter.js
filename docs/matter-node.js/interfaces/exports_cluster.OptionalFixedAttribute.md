@@ -13,9 +13,11 @@
 
 ## Hierarchy
 
-- [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)\<`T`, `F`\>
+- [`OptionalAttribute`](exports_cluster.OptionalAttribute.md)\<`T`, `F`\>
 
   ↳ **`OptionalFixedAttribute`**
+
+  ↳↳ [`ConditionalFixedAttribute`](exports_cluster.ConditionalFixedAttribute.md)
 
 ## Table of contents
 
@@ -47,7 +49,7 @@
 
 #### Inherited from
 
-OptionalAttribute.default
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[default](exports_cluster.OptionalAttribute.md#default)
 
 #### Defined in
 
@@ -61,7 +63,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.fabricScoped
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[fabricScoped](exports_cluster.OptionalAttribute.md#fabricscoped)
 
 #### Defined in
 
@@ -75,7 +77,7 @@ ___
 
 #### Overrides
 
-OptionalAttribute.fixed
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[fixed](exports_cluster.OptionalAttribute.md#fixed)
 
 #### Defined in
 
@@ -89,7 +91,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.id
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[id](exports_cluster.OptionalAttribute.md#id)
 
 #### Defined in
 
@@ -103,7 +105,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.isConditional
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[isConditional](exports_cluster.OptionalAttribute.md#isconditional)
 
 #### Defined in
 
@@ -117,7 +119,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.mandatoryIf
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[mandatoryIf](exports_cluster.OptionalAttribute.md#mandatoryif)
 
 #### Defined in
 
@@ -131,7 +133,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.omitChanges
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[omitChanges](exports_cluster.OptionalAttribute.md#omitchanges)
 
 #### Defined in
 
@@ -145,7 +147,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.optional
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[optional](exports_cluster.OptionalAttribute.md#optional)
 
 #### Defined in
 
@@ -159,7 +161,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.optionalIf
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[optionalIf](exports_cluster.OptionalAttribute.md#optionalif)
 
 #### Defined in
 
@@ -173,7 +175,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.persistent
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[persistent](exports_cluster.OptionalAttribute.md#persistent)
 
 #### Defined in
 
@@ -187,7 +189,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.readAcl
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[readAcl](exports_cluster.OptionalAttribute.md#readacl)
 
 #### Defined in
 
@@ -201,7 +203,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.scene
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[scene](exports_cluster.OptionalAttribute.md#scene)
 
 #### Defined in
 
@@ -215,7 +217,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.schema
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[schema](exports_cluster.OptionalAttribute.md#schema)
 
 #### Defined in
 
@@ -229,7 +231,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.timed
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[timed](exports_cluster.OptionalAttribute.md#timed)
 
 #### Defined in
 
@@ -243,7 +245,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.unknown
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[unknown](exports_cluster.OptionalAttribute.md#unknown)
 
 #### Defined in
 
@@ -257,7 +259,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.writable
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[writable](exports_cluster.OptionalAttribute.md#writable)
 
 #### Defined in
 
@@ -271,7 +273,7 @@ ___
 
 #### Inherited from
 
-OptionalAttribute.writeAcl
+[OptionalAttribute](exports_cluster.OptionalAttribute.md).[writeAcl](exports_cluster.OptionalAttribute.md#writeacl)
 
 #### Defined in
 

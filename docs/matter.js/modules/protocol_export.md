@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Modules
+
+- [\<internal\>](protocol_export._internal_.md)
+
 ### Enumerations
 
 - [MessageCounterTypes](../enums/protocol_export.MessageCounterTypes.md)
@@ -22,6 +26,7 @@
 - [MessageChannel](../classes/protocol_export.MessageChannel.md)
 - [MessageCounter](../classes/protocol_export.MessageCounter.md)
 - [MessageExchange](../classes/protocol_export.MessageExchange.md)
+- [MessageReceptionState](../classes/protocol_export.MessageReceptionState.md)
 - [MessageReceptionStateEncryptedWithRollover](../classes/protocol_export.MessageReceptionStateEncryptedWithRollover.md)
 - [MessageReceptionStateEncryptedWithoutRollover](../classes/protocol_export.MessageReceptionStateEncryptedWithoutRollover.md)
 - [MessageReceptionStateUnencryptedWithRollover](../classes/protocol_export.MessageReceptionStateUnencryptedWithRollover.md)
@@ -67,7 +72,7 @@ User specific options for the Commissioning process
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ControllerCommissioner.ts#L38)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ControllerCommissioner.ts#L39)
 
 ___
 
@@ -80,12 +85,13 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `expectAckOnly?` | `boolean` | The response to this send should be an ack only and no StatusResponse or such. If a StatusResponse is returned then this is handled as error. |
+| `includeAcknowledgeMessageId?` | `number` | Use the provided acknowledge MessageId instead checking the latest to send one |
 | `minimumResponseTimeoutMs?` | `number` | Define a minimum Response Timeout. This setting only increases the response timeout! The minimum four resubmissions are always done regardless of what is specified here. The logic will check if the timeout is reached after each resubmission, so it is not checked exact at the given timeout. |
 | `requiresAck?` | `boolean` | Allows to specify if the send message requires to be acknowledged by the receiver or not. |
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageExchange.ts#L35)
+[packages/matter.js/src/protocol/MessageExchange.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageExchange.ts#L41)
 
 ## Variables
 
@@ -97,4 +103,4 @@ Maximum 32 bit counter value.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:12](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L12)
+[packages/matter.js/src/protocol/MessageCounter.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L12)

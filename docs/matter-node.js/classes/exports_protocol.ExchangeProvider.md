@@ -84,11 +84,11 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:56
 
 ### session
 
-• `get` **session**(): [`Session`](../interfaces/exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+• `get` **session**(): [`Session`](exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Returns
 
-[`Session`](../interfaces/exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+[`Session`](exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 

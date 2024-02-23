@@ -13,9 +13,13 @@
 
 ## Hierarchy
 
-- [`Attribute`](../modules/internal_.md#attribute)\<`T`, `F`\>
+- [`Attribute`](internal_.Attribute.md)\<`T`, `F`\>
 
   ↳ **`OptionalAttribute`**
+
+  ↳↳ [`OptionalFixedAttribute`](internal_.OptionalFixedAttribute.md)
+
+  ↳↳ [`OptionalWritableAttribute`](internal_.OptionalWritableAttribute.md)
 
 ## Table of contents
 
@@ -47,7 +51,7 @@
 
 #### Inherited from
 
-Attribute.default
+[Attribute](internal_.Attribute.md).[default](internal_.Attribute.md#default)
 
 #### Defined in
 
@@ -61,7 +65,7 @@ ___
 
 #### Inherited from
 
-Attribute.fabricScoped
+[Attribute](internal_.Attribute.md).[fabricScoped](internal_.Attribute.md#fabricscoped)
 
 #### Defined in
 
@@ -75,7 +79,7 @@ ___
 
 #### Inherited from
 
-Attribute.fixed
+[Attribute](internal_.Attribute.md).[fixed](internal_.Attribute.md#fixed)
 
 #### Defined in
 
@@ -89,7 +93,7 @@ ___
 
 #### Inherited from
 
-Attribute.id
+[Attribute](internal_.Attribute.md).[id](internal_.Attribute.md#id)
 
 #### Defined in
 
@@ -103,7 +107,7 @@ ___
 
 #### Inherited from
 
-Attribute.isConditional
+[Attribute](internal_.Attribute.md).[isConditional](internal_.Attribute.md#isconditional)
 
 #### Defined in
 
@@ -117,7 +121,7 @@ ___
 
 #### Inherited from
 
-Attribute.mandatoryIf
+[Attribute](internal_.Attribute.md).[mandatoryIf](internal_.Attribute.md#mandatoryif)
 
 #### Defined in
 
@@ -131,7 +135,7 @@ ___
 
 #### Inherited from
 
-Attribute.omitChanges
+[Attribute](internal_.Attribute.md).[omitChanges](internal_.Attribute.md#omitchanges)
 
 #### Defined in
 
@@ -145,7 +149,7 @@ ___
 
 #### Overrides
 
-Attribute.optional
+[Attribute](internal_.Attribute.md).[optional](internal_.Attribute.md#optional)
 
 #### Defined in
 
@@ -159,7 +163,7 @@ ___
 
 #### Inherited from
 
-Attribute.optionalIf
+[Attribute](internal_.Attribute.md).[optionalIf](internal_.Attribute.md#optionalif)
 
 #### Defined in
 
@@ -173,7 +177,7 @@ ___
 
 #### Inherited from
 
-Attribute.persistent
+[Attribute](internal_.Attribute.md).[persistent](internal_.Attribute.md#persistent)
 
 #### Defined in
 
@@ -187,7 +191,7 @@ ___
 
 #### Inherited from
 
-Attribute.readAcl
+[Attribute](internal_.Attribute.md).[readAcl](internal_.Attribute.md#readacl)
 
 #### Defined in
 
@@ -201,7 +205,7 @@ ___
 
 #### Inherited from
 
-Attribute.scene
+[Attribute](internal_.Attribute.md).[scene](internal_.Attribute.md#scene)
 
 #### Defined in
 
@@ -215,7 +219,7 @@ ___
 
 #### Inherited from
 
-Attribute.schema
+[Attribute](internal_.Attribute.md).[schema](internal_.Attribute.md#schema)
 
 #### Defined in
 
@@ -229,7 +233,7 @@ ___
 
 #### Inherited from
 
-Attribute.timed
+[Attribute](internal_.Attribute.md).[timed](internal_.Attribute.md#timed)
 
 #### Defined in
 
@@ -243,7 +247,7 @@ ___
 
 #### Inherited from
 
-Attribute.unknown
+[Attribute](internal_.Attribute.md).[unknown](internal_.Attribute.md#unknown)
 
 #### Defined in
 
@@ -257,7 +261,7 @@ ___
 
 #### Inherited from
 
-Attribute.writable
+[Attribute](internal_.Attribute.md).[writable](internal_.Attribute.md#writable)
 
 #### Defined in
 
@@ -271,7 +275,7 @@ ___
 
 #### Inherited from
 
-Attribute.writeAcl
+[Attribute](internal_.Attribute.md).[writeAcl](internal_.Attribute.md#writeacl)
 
 #### Defined in
 

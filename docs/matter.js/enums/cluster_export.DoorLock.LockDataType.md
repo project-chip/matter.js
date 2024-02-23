@@ -36,7 +36,7 @@ Lock user face information was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:875](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L875)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:875](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L875)
 
 ___
 
@@ -48,7 +48,7 @@ Lock user finger-vein information was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:870](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L870)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:870](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L870)
 
 ___
 
@@ -60,7 +60,7 @@ Lock user fingerprint was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:865](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L865)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:865](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L865)
 
 ___
 
@@ -72,7 +72,7 @@ Lock holiday schedule was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:850](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L850)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:850](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L850)
 
 ___
 
@@ -84,7 +84,7 @@ Lock user PIN code was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:855](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L855)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:855](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L855)
 
 ___
 
@@ -96,7 +96,7 @@ Lock programming PIN code was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:830](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L830)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:830](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L830)
 
 ___
 
@@ -108,7 +108,7 @@ Lock user RFID code was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:860](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L860)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:860](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L860)
 
 ___
 
@@ -120,7 +120,7 @@ Unspecified or manufacturer specific lock user data added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:825](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L825)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:825](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L825)
 
 ___
 
@@ -132,7 +132,7 @@ Lock user index was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:835](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L835)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:835](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L835)
 
 ___
 
@@ -144,7 +144,7 @@ Lock user week day schedule was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:840](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L840)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:840](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L840)
 
 ___
 
@@ -156,4 +156,4 @@ Lock user year day schedule was added, cleared, or modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:845](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L845)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:845](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L845)

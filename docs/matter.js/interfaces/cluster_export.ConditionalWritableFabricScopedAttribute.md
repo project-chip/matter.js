@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalWritableFabricScopedAttribute`](../modules/cluster_export.md#optionalwritablefabricscopedattribute)\<`T`, `F`\>
+- [`OptionalWritableFabricScopedAttribute`](cluster_export.OptionalWritableFabricScopedAttribute.md)\<`T`, `F`\>
 
   ↳ **`ConditionalWritableFabricScopedAttribute`**
 
@@ -47,11 +47,11 @@
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.default
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[default](cluster_export.OptionalWritableFabricScopedAttribute.md#default)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L48)
+[packages/matter.js/src/cluster/Cluster.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L48)
 
 ___
 
@@ -61,11 +61,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.fabricScoped
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[fabricScoped](cluster_export.OptionalWritableFabricScopedAttribute.md#fabricscoped)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:84](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L84)
+[packages/matter.js/src/cluster/Cluster.ts:84](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L84)
 
 ___
 
@@ -75,11 +75,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.fixed
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[fixed](cluster_export.OptionalWritableFabricScopedAttribute.md#fixed)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L44)
+[packages/matter.js/src/cluster/Cluster.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L44)
 
 ___
 
@@ -89,11 +89,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.id
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[id](cluster_export.OptionalWritableFabricScopedAttribute.md#id)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L36)
+[packages/matter.js/src/cluster/Cluster.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L36)
 
 ___
 
@@ -103,11 +103,11 @@ ___
 
 #### Overrides
 
-OptionalWritableFabricScopedAttribute.isConditional
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[isConditional](cluster_export.OptionalWritableFabricScopedAttribute.md#isconditional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:89](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L89)
+[packages/matter.js/src/cluster/Cluster.ts:89](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L89)
 
 ___
 
@@ -117,11 +117,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.mandatoryIf
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[mandatoryIf](cluster_export.OptionalWritableFabricScopedAttribute.md#mandatoryif)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:51](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L51)
+[packages/matter.js/src/cluster/Cluster.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L51)
 
 ___
 
@@ -131,11 +131,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.omitChanges
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[omitChanges](cluster_export.OptionalWritableFabricScopedAttribute.md#omitchanges)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L46)
+[packages/matter.js/src/cluster/Cluster.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L46)
 
 ___
 
@@ -145,11 +145,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.optional
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[optional](cluster_export.OptionalWritableFabricScopedAttribute.md#optional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:56](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L56)
+[packages/matter.js/src/cluster/Cluster.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L56)
 
 ___
 
@@ -159,11 +159,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.optionalIf
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[optionalIf](cluster_export.OptionalWritableFabricScopedAttribute.md#optionalif)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:50](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L50)
+[packages/matter.js/src/cluster/Cluster.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L50)
 
 ___
 
@@ -173,11 +173,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.persistent
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[persistent](cluster_export.OptionalWritableFabricScopedAttribute.md#persistent)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L42)
+[packages/matter.js/src/cluster/Cluster.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L42)
 
 ___
 
@@ -187,11 +187,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.readAcl
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[readAcl](cluster_export.OptionalWritableFabricScopedAttribute.md#readacl)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L39)
+[packages/matter.js/src/cluster/Cluster.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L39)
 
 ___
 
@@ -201,11 +201,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.scene
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[scene](cluster_export.OptionalWritableFabricScopedAttribute.md#scene)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L41)
+[packages/matter.js/src/cluster/Cluster.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L41)
 
 ___
 
@@ -215,11 +215,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.schema
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[schema](cluster_export.OptionalWritableFabricScopedAttribute.md#schema)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L37)
+[packages/matter.js/src/cluster/Cluster.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L37)
 
 ___
 
@@ -229,11 +229,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.timed
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[timed](cluster_export.OptionalWritableFabricScopedAttribute.md#timed)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L43)
+[packages/matter.js/src/cluster/Cluster.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L43)
 
 ___
 
@@ -243,11 +243,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.unknown
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[unknown](cluster_export.OptionalWritableFabricScopedAttribute.md#unknown)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:52](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L52)
+[packages/matter.js/src/cluster/Cluster.ts:52](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L52)
 
 ___
 
@@ -257,11 +257,11 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.writable
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[writable](cluster_export.OptionalWritableFabricScopedAttribute.md#writable)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:68](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L68)
+[packages/matter.js/src/cluster/Cluster.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L68)
 
 ___
 
@@ -271,8 +271,8 @@ ___
 
 #### Inherited from
 
-OptionalWritableFabricScopedAttribute.writeAcl
+[OptionalWritableFabricScopedAttribute](cluster_export.OptionalWritableFabricScopedAttribute.md).[writeAcl](cluster_export.OptionalWritableFabricScopedAttribute.md#writeacl)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L47)
+[packages/matter.js/src/cluster/Cluster.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L47)

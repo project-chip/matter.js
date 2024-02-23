@@ -90,7 +90,7 @@ ___
 
 ### eventHandler
 
-• `Protected` `Optional` **eventHandler**: [`EventHandler`](export._internal_.EventHandler.md)
+• `Protected` `Optional` **eventHandler**: [`EventHandler`](exports_interaction._internal_.EventHandler.md)
 
 #### Defined in
 
@@ -166,7 +166,7 @@ packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:16
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/exports_interaction._internal_.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -206,7 +206,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `eventHandler` | [`EventHandler`](export._internal_.EventHandler.md) |
+| `eventHandler` | [`EventHandler`](exports_interaction._internal_.EventHandler.md) |
 
 #### Returns
 
@@ -226,7 +226,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/exports_interaction._internal_.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 

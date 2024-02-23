@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `sources`: [`Attribute`](cluster_export.md#attribute)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[], `any`\>  } ; `id`: ``46`` = 0x2e; `name`: ``"PowerSourceConfiguration"`` = "PowerSourceConfiguration"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `sources`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[], `any`\>  } ; `id`: ``46`` = 0x2e; `name`: ``"PowerSourceConfiguration"`` = "PowerSourceConfiguration"; `revision`: ``1`` = 1 }\>
 
 Power Source Configuration
 
@@ -27,4 +27,4 @@ ordering overview as well as linking to the one or more endpoints each supportin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L24)

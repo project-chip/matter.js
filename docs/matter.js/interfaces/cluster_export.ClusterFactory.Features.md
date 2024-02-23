@@ -34,7 +34,7 @@ Cluster "features" describe the features supported by a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:93](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L93)
+[packages/matter.js/src/cluster/ClusterFactory.ts:93](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L93)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L94)
+[packages/matter.js/src/cluster/ClusterFactory.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L94)
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:95](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L95)
+[packages/matter.js/src/cluster/ClusterFactory.ts:95](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L95)

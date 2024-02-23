@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/pase/PaseMessenger.d.ts:33
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:34
 
 ___
 
@@ -193,17 +193,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/pase/PaseMessenger.d.ts:37
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:38
 
 ___
 
 ### readPbkdfParamRequest
 
-▸ **readPbkdfParamRequest**(): `Promise`\<\{ `request`: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\>  }\> ; `requestPayload`: `Uint8Array`  }\>
+▸ **readPbkdfParamRequest**(): `Promise`\<\{ `request`: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`boolean`\> ; `passcodeId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\>  }\> ; `requestPayload`: `Uint8Array`  }\>
 
 #### Returns
 
-`Promise`\<\{ `request`: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\>  }\> ; `requestPayload`: `Uint8Array`  }\>
+`Promise`\<\{ `request`: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`boolean`\> ; `passcodeId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\>  }\> ; `requestPayload`: `Uint8Array`  }\>
 
 #### Defined in
 
@@ -301,7 +301,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/pase/PaseMessenger.d.ts:36
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:37
 
 ___
 
@@ -313,7 +313,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `response` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\>  }\> |
+| `response` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `pbkdfParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `sessionParams`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeIntervalMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `activeThresholdMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleIntervalMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\>  }\> |
 
 #### Returns
 
@@ -321,7 +321,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/pase/PaseMessenger.d.ts:32
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:33
 
 ___
 

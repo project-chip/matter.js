@@ -107,7 +107,7 @@ Constructor options for the CommissioningController class
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:26
+packages/matter.js/dist/esm/CommissioningController.d.ts:27
 
 ___
 
@@ -137,7 +137,7 @@ Options needed to commission a new node
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:61
+packages/matter.js/dist/esm/CommissioningController.d.ts:62
 
 ___
 

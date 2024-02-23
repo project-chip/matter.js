@@ -52,7 +52,7 @@ General class for EventClients
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`Event`](../modules/internal_.md#event)\<`T`, `any`\> |
+| `event` | [`Event`](../interfaces/internal_.Event.md)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
@@ -90,7 +90,7 @@ ___
 
 ### event
 
-• `Readonly` **event**: [`Event`](../modules/internal_.md#event)\<`T`, `any`\>
+• `Readonly` **event**: [`Event`](../interfaces/internal_.Event.md)\<`T`, `any`\>
 
 #### Defined in
 

@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)\<`T`, `F`\>
+- [`OptionalFixedAttribute`](cluster_export.OptionalFixedAttribute.md)\<`T`, `F`\>
 
   ↳ **`ConditionalFixedAttribute`**
 
@@ -47,11 +47,11 @@
 
 #### Inherited from
 
-OptionalFixedAttribute.default
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[default](cluster_export.OptionalFixedAttribute.md#default)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L48)
+[packages/matter.js/src/cluster/Cluster.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L48)
 
 ___
 
@@ -61,11 +61,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.fabricScoped
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[fabricScoped](cluster_export.OptionalFixedAttribute.md#fabricscoped)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L45)
+[packages/matter.js/src/cluster/Cluster.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L45)
 
 ___
 
@@ -75,11 +75,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.fixed
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[fixed](cluster_export.OptionalFixedAttribute.md#fixed)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:101](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L101)
+[packages/matter.js/src/cluster/Cluster.ts:101](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L101)
 
 ___
 
@@ -89,11 +89,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.id
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[id](cluster_export.OptionalFixedAttribute.md#id)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L36)
+[packages/matter.js/src/cluster/Cluster.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L36)
 
 ___
 
@@ -103,11 +103,11 @@ ___
 
 #### Overrides
 
-OptionalFixedAttribute.isConditional
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[isConditional](cluster_export.OptionalFixedAttribute.md#isconditional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:105](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L105)
+[packages/matter.js/src/cluster/Cluster.ts:105](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L105)
 
 ___
 
@@ -117,11 +117,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.mandatoryIf
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[mandatoryIf](cluster_export.OptionalFixedAttribute.md#mandatoryif)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:51](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L51)
+[packages/matter.js/src/cluster/Cluster.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L51)
 
 ___
 
@@ -131,11 +131,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.omitChanges
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[omitChanges](cluster_export.OptionalFixedAttribute.md#omitchanges)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L46)
+[packages/matter.js/src/cluster/Cluster.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L46)
 
 ___
 
@@ -145,11 +145,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.optional
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[optional](cluster_export.OptionalFixedAttribute.md#optional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:56](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L56)
+[packages/matter.js/src/cluster/Cluster.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L56)
 
 ___
 
@@ -159,11 +159,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.optionalIf
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[optionalIf](cluster_export.OptionalFixedAttribute.md#optionalif)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:50](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L50)
+[packages/matter.js/src/cluster/Cluster.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L50)
 
 ___
 
@@ -173,11 +173,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.persistent
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[persistent](cluster_export.OptionalFixedAttribute.md#persistent)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L42)
+[packages/matter.js/src/cluster/Cluster.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L42)
 
 ___
 
@@ -187,11 +187,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.readAcl
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[readAcl](cluster_export.OptionalFixedAttribute.md#readacl)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L39)
+[packages/matter.js/src/cluster/Cluster.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L39)
 
 ___
 
@@ -201,11 +201,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.scene
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[scene](cluster_export.OptionalFixedAttribute.md#scene)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L41)
+[packages/matter.js/src/cluster/Cluster.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L41)
 
 ___
 
@@ -215,11 +215,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.schema
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[schema](cluster_export.OptionalFixedAttribute.md#schema)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L37)
+[packages/matter.js/src/cluster/Cluster.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L37)
 
 ___
 
@@ -229,11 +229,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.timed
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[timed](cluster_export.OptionalFixedAttribute.md#timed)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L43)
+[packages/matter.js/src/cluster/Cluster.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L43)
 
 ___
 
@@ -243,11 +243,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.unknown
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[unknown](cluster_export.OptionalFixedAttribute.md#unknown)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:52](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L52)
+[packages/matter.js/src/cluster/Cluster.ts:52](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L52)
 
 ___
 
@@ -257,11 +257,11 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.writable
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[writable](cluster_export.OptionalFixedAttribute.md#writable)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L40)
+[packages/matter.js/src/cluster/Cluster.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L40)
 
 ___
 
@@ -271,8 +271,8 @@ ___
 
 #### Inherited from
 
-OptionalFixedAttribute.writeAcl
+[OptionalFixedAttribute](cluster_export.OptionalFixedAttribute.md).[writeAcl](cluster_export.OptionalFixedAttribute.md#writeacl)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L47)
+[packages/matter.js/src/cluster/Cluster.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L47)

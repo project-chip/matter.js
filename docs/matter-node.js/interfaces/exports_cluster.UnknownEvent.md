@@ -12,7 +12,7 @@
 
 ## Hierarchy
 
-- [`Event`](../modules/exports_cluster.md#event)\<`any`, `F`\>
+- [`Event`](exports_cluster.Event.md)\<`any`, `F`\>
 
   ↳ **`UnknownEvent`**
 
@@ -38,7 +38,7 @@
 
 #### Inherited from
 
-Event.id
+[Event](exports_cluster.Event.md).[id](exports_cluster.Event.md#id)
 
 #### Defined in
 
@@ -52,7 +52,7 @@ ___
 
 #### Inherited from
 
-Event.isConditional
+[Event](exports_cluster.Event.md).[isConditional](exports_cluster.Event.md#isconditional)
 
 #### Defined in
 
@@ -66,7 +66,7 @@ ___
 
 #### Inherited from
 
-Event.mandatoryIf
+[Event](exports_cluster.Event.md).[mandatoryIf](exports_cluster.Event.md#mandatoryif)
 
 #### Defined in
 
@@ -80,7 +80,7 @@ ___
 
 #### Inherited from
 
-Event.optional
+[Event](exports_cluster.Event.md).[optional](exports_cluster.Event.md#optional)
 
 #### Defined in
 
@@ -94,7 +94,7 @@ ___
 
 #### Inherited from
 
-Event.optionalIf
+[Event](exports_cluster.Event.md).[optionalIf](exports_cluster.Event.md#optionalif)
 
 #### Defined in
 
@@ -108,7 +108,7 @@ ___
 
 #### Inherited from
 
-Event.priority
+[Event](exports_cluster.Event.md).[priority](exports_cluster.Event.md#priority)
 
 #### Defined in
 
@@ -122,7 +122,7 @@ ___
 
 #### Inherited from
 
-Event.readAcl
+[Event](exports_cluster.Event.md).[readAcl](exports_cluster.Event.md#readacl)
 
 #### Defined in
 
@@ -136,7 +136,7 @@ ___
 
 #### Inherited from
 
-Event.schema
+[Event](exports_cluster.Event.md).[schema](exports_cluster.Event.md#schema)
 
 #### Defined in
 
@@ -150,7 +150,7 @@ ___
 
 #### Overrides
 
-Event.unknown
+[Event](exports_cluster.Event.md).[unknown](exports_cluster.Event.md#unknown)
 
 #### Defined in
 

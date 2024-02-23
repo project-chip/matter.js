@@ -6,4 +6,4 @@
 
 ## Indexable
 
-▪ [key: `string`]: [`Event`](../modules/internal_.md#event)\<`any`, `any`\>
+▪ [key: `string`]: [`Event`](internal_.Event.md)\<`any`, `any`\>

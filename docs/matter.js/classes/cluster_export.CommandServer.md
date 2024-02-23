@@ -54,7 +54,7 @@
 | `requestSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
-| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/session_export.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
+| `handler` | (`request`: `RequestT`, `session`: [`Session`](session_export.Session.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
 
 #### Returns
 
@@ -62,13 +62,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L21)
+[packages/matter.js/src/cluster/server/CommandServer.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L21)
 
 ## Properties
 
 ### handler
 
-• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/session_export.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
+• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](session_export.Session.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Type declaration
 
@@ -79,7 +79,7 @@
 | Name | Type |
 | :------ | :------ |
 | `request` | `RequestT` |
-| `session` | [`Session`](../interfaces/session_export.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](session_export.Session.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 | `endpoint` | [`Endpoint`](device_export.Endpoint.md) |
 
@@ -89,7 +89,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L28)
+[packages/matter.js/src/cluster/server/CommandServer.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L28)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
+[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
+[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
+[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:27](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L27)
+[packages/matter.js/src/cluster/server/CommandServer.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L27)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L23)
+[packages/matter.js/src/cluster/server/CommandServer.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L23)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L26)
+[packages/matter.js/src/cluster/server/CommandServer.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L26)
 
 ## Methods
 
@@ -161,7 +161,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/session_export.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](session_export.Session.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
 | `args` | [`TlvStream`](../modules/tlv_export.md#tlvstream) |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 | `endpoint` | [`Endpoint`](device_export.Endpoint.md) |
@@ -172,4 +172,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/CommandServer.ts#L36)
+[packages/matter.js/src/cluster/server/CommandServer.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/CommandServer.ts#L36)

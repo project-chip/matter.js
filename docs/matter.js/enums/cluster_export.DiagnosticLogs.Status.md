@@ -35,7 +35,7 @@ Client SHOULD re-attempt the request later.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:180](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L180)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:180](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L180)
 
 ___
 
@@ -53,7 +53,7 @@ shall be used if the Node is denying the current transfer of diagnostic logs for
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:189](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L189)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:189](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L189)
 
 ___
 
@@ -73,7 +73,7 @@ LogContent field.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:160](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L160)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:160](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L160)
 
 ___
 
@@ -92,7 +92,7 @@ transfer.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:170](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:170](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L170)
 
 ___
 
@@ -110,4 +110,4 @@ shall be used if diagnostic logs will be or are being transferred.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:149](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L149)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:149](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L149)

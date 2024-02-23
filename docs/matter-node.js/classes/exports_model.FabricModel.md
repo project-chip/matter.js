@@ -795,7 +795,7 @@ Check identity of element by name or ID.
 
 | Name | Type |
 | :------ | :------ |
-| `key` | `undefined` \| [`ElementSelector`](../modules/export._internal_.md#elementselector) |
+| `key` | `undefined` \| [`ElementSelector`](../modules/exports_model._internal_.md#elementselector) |
 
 #### Returns
 
@@ -821,7 +821,7 @@ Search the inheritance chain for a child property.
 
 | Name | Type |
 | :------ | :------ |
-| `key` | [`ElementSelector`](../modules/export._internal_.md#elementselector) |
+| `key` | [`ElementSelector`](../modules/exports_model._internal_.md#elementselector) |
 | `allowedTags?` | [`ElementTag`](../enums/exports_model.ElementTag.md)[] |
 
 #### Returns

@@ -28,7 +28,7 @@ These fields uniquely identify a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:59](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L59)
+[packages/matter.js/src/cluster/ClusterFactory.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L59)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L60)
+[packages/matter.js/src/cluster/ClusterFactory.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L60)
 
 ___
 
@@ -48,4 +48,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:61](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/ClusterFactory.ts#L61)
+[packages/matter.js/src/cluster/ClusterFactory.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterFactory.ts#L61)

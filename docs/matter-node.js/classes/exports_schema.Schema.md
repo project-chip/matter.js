@@ -27,11 +27,11 @@ Define a schema to encode / decode convert type T to type E.
 
   ↳ [`TlvSchema`](exports_tlv.TlvSchema.md)
 
-  ↳ [`Base38Schema`](export._internal_.Base38Schema.md)
+  ↳ [`Base38Schema`](exports_schema._internal_.Base38Schema.md)
 
-  ↳ [`QrPairingCodeSchema`](export._internal_.QrPairingCodeSchema.md)
+  ↳ [`QrPairingCodeSchema`](exports_schema._internal_.QrPairingCodeSchema.md)
 
-  ↳ [`ManualPairingCodeSchema`](export._internal_.ManualPairingCodeSchema.md)
+  ↳ [`ManualPairingCodeSchema`](exports_schema._internal_.ManualPairingCodeSchema.md)
 
 ## Table of contents
 

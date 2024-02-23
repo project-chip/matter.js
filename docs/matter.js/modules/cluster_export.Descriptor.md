@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `clientList`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`ClusterId`](datatype_export.md#clusterid)[], `any`\> ; `deviceTypeList`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`DeviceTypeId`](datatype_export.md#devicetypeid)\> ; `revision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>[], `any`\> ; `partsList`: [`Attribute`](cluster_export.md#attribute)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[], `any`\> ; `serverList`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`ClusterId`](datatype_export.md#clusterid)[], `any`\>  } ; `id`: ``29`` = 0x1d; `name`: ``"Descriptor"`` = "Descriptor"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `clientList`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`ClusterId`](datatype_export.md#clusterid)[], `any`\> ; `deviceTypeList`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`DeviceTypeId`](datatype_export.md#devicetypeid)\> ; `revision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>[], `any`\> ; `partsList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[], `any`\> ; `serverList`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`ClusterId`](datatype_export.md#clusterid)[], `any`\>  } ; `id`: ``29`` = 0x1d; `name`: ``"Descriptor"`` = "Descriptor"; `revision`: ``1`` = 1 }\>
 
 Descriptor
 
@@ -37,7 +37,7 @@ type.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:61](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L61)
 
 ___
 
@@ -54,4 +54,4 @@ Model specification for more information.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L26)

@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalEvent`](../modules/cluster_export.md#optionalevent)\<`T`, `F`\>
+- [`OptionalEvent`](cluster_export.OptionalEvent.md)\<`T`, `F`\>
 
   ↳ **`ConditionalEvent`**
 
@@ -39,11 +39,11 @@
 
 #### Inherited from
 
-OptionalEvent.id
+[OptionalEvent](cluster_export.OptionalEvent.md).[id](cluster_export.OptionalEvent.md#id)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:714](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L714)
+[packages/matter.js/src/cluster/Cluster.ts:716](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L716)
 
 ___
 
@@ -53,11 +53,11 @@ ___
 
 #### Overrides
 
-OptionalEvent.isConditional
+[OptionalEvent](cluster_export.OptionalEvent.md).[isConditional](cluster_export.OptionalEvent.md#isconditional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:743](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L743)
+[packages/matter.js/src/cluster/Cluster.ts:745](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L745)
 
 ___
 
@@ -67,11 +67,11 @@ ___
 
 #### Inherited from
 
-OptionalEvent.mandatoryIf
+[OptionalEvent](cluster_export.OptionalEvent.md).[mandatoryIf](cluster_export.OptionalEvent.md#mandatoryif)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:721](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L721)
+[packages/matter.js/src/cluster/Cluster.ts:723](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L723)
 
 ___
 
@@ -81,11 +81,11 @@ ___
 
 #### Inherited from
 
-OptionalEvent.optional
+[OptionalEvent](cluster_export.OptionalEvent.md).[optional](cluster_export.OptionalEvent.md#optional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:739](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L739)
+[packages/matter.js/src/cluster/Cluster.ts:741](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L741)
 
 ___
 
@@ -95,11 +95,11 @@ ___
 
 #### Inherited from
 
-OptionalEvent.optionalIf
+[OptionalEvent](cluster_export.OptionalEvent.md).[optionalIf](cluster_export.OptionalEvent.md#optionalif)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:720](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L720)
+[packages/matter.js/src/cluster/Cluster.ts:722](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L722)
 
 ___
 
@@ -109,11 +109,11 @@ ___
 
 #### Inherited from
 
-OptionalEvent.priority
+[OptionalEvent](cluster_export.OptionalEvent.md).[priority](cluster_export.OptionalEvent.md#priority)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:716](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L716)
+[packages/matter.js/src/cluster/Cluster.ts:718](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L718)
 
 ___
 
@@ -123,11 +123,11 @@ ___
 
 #### Inherited from
 
-OptionalEvent.readAcl
+[OptionalEvent](cluster_export.OptionalEvent.md).[readAcl](cluster_export.OptionalEvent.md#readacl)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:718](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L718)
+[packages/matter.js/src/cluster/Cluster.ts:720](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L720)
 
 ___
 
@@ -137,11 +137,11 @@ ___
 
 #### Inherited from
 
-OptionalEvent.schema
+[OptionalEvent](cluster_export.OptionalEvent.md).[schema](cluster_export.OptionalEvent.md#schema)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:715](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L715)
+[packages/matter.js/src/cluster/Cluster.ts:717](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L717)
 
 ___
 
@@ -151,8 +151,8 @@ ___
 
 #### Inherited from
 
-OptionalEvent.unknown
+[OptionalEvent](cluster_export.OptionalEvent.md).[unknown](cluster_export.OptionalEvent.md#unknown)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:722](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L722)
+[packages/matter.js/src/cluster/Cluster.ts:724](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/Cluster.ts#L724)

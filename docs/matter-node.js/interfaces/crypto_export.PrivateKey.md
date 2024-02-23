@@ -8,7 +8,7 @@ EC key with extractable private fields.
 
 ## Hierarchy
 
-- [`PublicKey`](../modules/crypto_export.md#publickey)
+- [`PublicKey`](crypto_export.PublicKey.md)
 
   ↳ **`PrivateKey`**
 
@@ -64,7 +64,7 @@ EC key with extractable private fields.
 
 #### Inherited from
 
-PublicKey.constructor
+[PublicKey](crypto_export.PublicKey.md).[constructor](crypto_export.PublicKey.md#constructor)
 
 ## Properties
 
@@ -74,7 +74,7 @@ PublicKey.constructor
 
 #### Inherited from
 
-PublicKey.alg
+[PublicKey](crypto_export.PublicKey.md).[alg](crypto_export.PublicKey.md#alg)
 
 #### Defined in
 
@@ -90,7 +90,7 @@ The key algorithm, alias for JWK "alg" field.
 
 #### Inherited from
 
-PublicKey.algorithm
+[PublicKey](crypto_export.PublicKey.md).[algorithm](crypto_export.PublicKey.md#algorithm)
 
 #### Defined in
 
@@ -104,7 +104,7 @@ ___
 
 #### Inherited from
 
-PublicKey.crv
+[PublicKey](crypto_export.PublicKey.md).[crv](crypto_export.PublicKey.md#crv)
 
 #### Defined in
 
@@ -116,9 +116,11 @@ ___
 
 • **curve**: [`CurveType`](../enums/crypto_export.CurveType.md)
 
+The elliptic curve type, alias for JWK "crv" field.
+
 #### Inherited from
 
-PublicKey.curve
+[PublicKey](crypto_export.PublicKey.md).[curve](crypto_export.PublicKey.md#curve)
 
 #### Defined in
 
@@ -132,7 +134,7 @@ ___
 
 #### Overrides
 
-PublicKey.d
+[PublicKey](crypto_export.PublicKey.md).[d](crypto_export.PublicKey.md#d)
 
 #### Defined in
 
@@ -146,7 +148,7 @@ ___
 
 #### Inherited from
 
-PublicKey.dp
+[PublicKey](crypto_export.PublicKey.md).[dp](crypto_export.PublicKey.md#dp)
 
 #### Defined in
 
@@ -160,7 +162,7 @@ ___
 
 #### Inherited from
 
-PublicKey.dq
+[PublicKey](crypto_export.PublicKey.md).[dq](crypto_export.PublicKey.md#dq)
 
 #### Defined in
 
@@ -174,7 +176,7 @@ ___
 
 #### Inherited from
 
-PublicKey.e
+[PublicKey](crypto_export.PublicKey.md).[e](crypto_export.PublicKey.md#e)
 
 #### Defined in
 
@@ -188,7 +190,7 @@ ___
 
 #### Inherited from
 
-PublicKey.ext
+[PublicKey](crypto_export.PublicKey.md).[ext](crypto_export.PublicKey.md#ext)
 
 #### Defined in
 
@@ -205,7 +207,7 @@ field.
 
 #### Inherited from
 
-PublicKey.extractable
+[PublicKey](crypto_export.PublicKey.md).[extractable](crypto_export.PublicKey.md#extractable)
 
 #### Defined in
 
@@ -219,7 +221,7 @@ ___
 
 #### Inherited from
 
-PublicKey.k
+[PublicKey](crypto_export.PublicKey.md).[k](crypto_export.PublicKey.md#k)
 
 #### Defined in
 
@@ -231,9 +233,11 @@ ___
 
 • **keyPair**: [`BinaryKeyPair`](../modules/crypto_export.md#binarykeypair)
 
+Alias for keyPairBits that throws if a complete key pair is not present.
+
 #### Overrides
 
-PublicKey.keyPair
+[PublicKey](crypto_export.PublicKey.md).[keyPair](crypto_export.PublicKey.md#keypair)
 
 #### Defined in
 
@@ -245,9 +249,12 @@ ___
 
 • **keyPairBits**: [`BinaryKeyPair`](../modules/crypto_export.md#binarykeypair)
 
+Import/export of BinaryKeyPair structure used as an alternate
+serialization format for legacy reasons.
+
 #### Overrides
 
-PublicKey.keyPairBits
+[PublicKey](crypto_export.PublicKey.md).[keyPairBits](crypto_export.PublicKey.md#keypairbits)
 
 #### Defined in
 
@@ -261,7 +268,7 @@ ___
 
 #### Inherited from
 
-PublicKey.key\_ops
+[PublicKey](crypto_export.PublicKey.md).[key_ops](crypto_export.PublicKey.md#key_ops)
 
 #### Defined in
 
@@ -275,7 +282,7 @@ ___
 
 #### Inherited from
 
-PublicKey.kty
+[PublicKey](crypto_export.PublicKey.md).[kty](crypto_export.PublicKey.md#kty)
 
 #### Defined in
 
@@ -289,7 +296,7 @@ ___
 
 #### Inherited from
 
-PublicKey.n
+[PublicKey](crypto_export.PublicKey.md).[n](crypto_export.PublicKey.md#n)
 
 #### Defined in
 
@@ -305,7 +312,7 @@ Operations supported by the key, alias for JWK "key_ops" field.
 
 #### Inherited from
 
-PublicKey.operations
+[PublicKey](crypto_export.PublicKey.md).[operations](crypto_export.PublicKey.md#operations)
 
 #### Defined in
 
@@ -319,7 +326,7 @@ ___
 
 #### Inherited from
 
-PublicKey.oth
+[PublicKey](crypto_export.PublicKey.md).[oth](crypto_export.PublicKey.md#oth)
 
 #### Defined in
 
@@ -333,7 +340,7 @@ ___
 
 #### Inherited from
 
-PublicKey.p
+[PublicKey](crypto_export.PublicKey.md).[p](crypto_export.PublicKey.md#p)
 
 #### Defined in
 
@@ -349,7 +356,7 @@ Import (write-only) of private keys encoded in PKCS #8 format.
 
 #### Inherited from
 
-PublicKey.pkcs8
+[PublicKey](crypto_export.PublicKey.md).[pkcs8](crypto_export.PublicKey.md#pkcs8)
 
 #### Defined in
 
@@ -361,9 +368,11 @@ ___
 
 • **private**: `string`
 
+The private key, alias for JWK "d" field.
+
 #### Overrides
 
-PublicKey.private
+[PublicKey](crypto_export.PublicKey.md).[private](crypto_export.PublicKey.md#private)
 
 #### Defined in
 
@@ -375,9 +384,12 @@ ___
 
 • **privateBits**: `Uint8Array`
 
+Binary alias to private key field.  Automatically encodes/decodes the
+base-64 private key.
+
 #### Overrides
 
-PublicKey.privateBits
+[PublicKey](crypto_export.PublicKey.md).[privateBits](crypto_export.PublicKey.md#privatebits)
 
 #### Defined in
 
@@ -389,9 +401,11 @@ ___
 
 • **privateKey**: `Uint8Array`
 
+Alias for privateBits that throws if no private key is present.
+
 #### Overrides
 
-PublicKey.privateKey
+[PublicKey](crypto_export.PublicKey.md).[privateKey](crypto_export.PublicKey.md#privatekey)
 
 #### Defined in
 
@@ -403,9 +417,12 @@ ___
 
 • **publicBits**: `Uint8Array`
 
+Import/export of EC public key in SEC1/SPKI format.  Maps to x & y
+fields internally.
+
 #### Inherited from
 
-PublicKey.publicBits
+[PublicKey](crypto_export.PublicKey.md).[publicBits](crypto_export.PublicKey.md#publicbits)
 
 #### Defined in
 
@@ -421,7 +438,7 @@ Alias for publicBits that throws if no public key is present.
 
 #### Inherited from
 
-PublicKey.publicKey
+[PublicKey](crypto_export.PublicKey.md).[publicKey](crypto_export.PublicKey.md#publickey)
 
 #### Defined in
 
@@ -435,7 +452,7 @@ ___
 
 #### Inherited from
 
-PublicKey.q
+[PublicKey](crypto_export.PublicKey.md).[q](crypto_export.PublicKey.md#q)
 
 #### Defined in
 
@@ -449,7 +466,7 @@ ___
 
 #### Inherited from
 
-PublicKey.qi
+[PublicKey](crypto_export.PublicKey.md).[qi](crypto_export.PublicKey.md#qi)
 
 #### Defined in
 
@@ -465,7 +482,7 @@ Import (write-only) of private keys encoded in SEC1 format.
 
 #### Inherited from
 
-PublicKey.sec1
+[PublicKey](crypto_export.PublicKey.md).[sec1](crypto_export.PublicKey.md#sec1)
 
 #### Defined in
 
@@ -481,7 +498,7 @@ Import (write-only) of public keys encoded in SPKI format.
 
 #### Inherited from
 
-PublicKey.spki
+[PublicKey](crypto_export.PublicKey.md).[spki](crypto_export.PublicKey.md#spki)
 
 #### Defined in
 
@@ -493,9 +510,11 @@ ___
 
 • **type**: [`EC`](../enums/crypto_export.KeyType.md#ec)
 
+The key type, alias for JWK "kty" field.
+
 #### Inherited from
 
-PublicKey.type
+[PublicKey](crypto_export.PublicKey.md).[type](crypto_export.PublicKey.md#type)
 
 #### Defined in
 
@@ -509,7 +528,7 @@ ___
 
 #### Inherited from
 
-PublicKey.use
+[PublicKey](crypto_export.PublicKey.md).[use](crypto_export.PublicKey.md#use)
 
 #### Defined in
 
@@ -523,7 +542,7 @@ ___
 
 #### Inherited from
 
-PublicKey.x
+[PublicKey](crypto_export.PublicKey.md).[x](crypto_export.PublicKey.md#x)
 
 #### Defined in
 
@@ -535,9 +554,12 @@ ___
 
 • **xBits**: `Uint8Array`
 
+Binary alias to the x field.  Automatically encodes/decodes the base-64
+x-point on EC public keys.
+
 #### Inherited from
 
-PublicKey.xBits
+[PublicKey](crypto_export.PublicKey.md).[xBits](crypto_export.PublicKey.md#xbits)
 
 #### Defined in
 
@@ -551,7 +573,7 @@ ___
 
 #### Inherited from
 
-PublicKey.y
+[PublicKey](crypto_export.PublicKey.md).[y](crypto_export.PublicKey.md#y)
 
 #### Defined in
 
@@ -563,9 +585,12 @@ ___
 
 • **yBits**: `Uint8Array`
 
+Binary alias to the y field.  Automatically encodes/decodes the base-64
+y-point on EC public keys.
+
 #### Inherited from
 
-PublicKey.yBits
+[PublicKey](crypto_export.PublicKey.md).[yBits](crypto_export.PublicKey.md#ybits)
 
 #### Defined in
 

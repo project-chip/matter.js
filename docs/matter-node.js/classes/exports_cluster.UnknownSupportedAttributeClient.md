@@ -48,7 +48,7 @@ but the contained attribute is unknown.
 
 | Name | Type |
 | :------ | :------ |
-| `attribute` | [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\> |
+| `attribute` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`any`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
@@ -70,7 +70,7 @@ packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:30
 
 ### attribute
 
-• `Readonly` **attribute**: [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\>
+• `Readonly` **attribute**: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`any`, `any`\>
 
 #### Inherited from
 

@@ -34,7 +34,7 @@ TLV element types.
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L39)
+[packages/matter.js/src/tlv/TlvCodec.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L39)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L33)
+[packages/matter.js/src/tlv/TlvCodec.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L33)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L36)
+[packages/matter.js/src/tlv/TlvCodec.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L36)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L41)
+[packages/matter.js/src/tlv/TlvCodec.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L41)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:34](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L34)
+[packages/matter.js/src/tlv/TlvCodec.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L34)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L40)
+[packages/matter.js/src/tlv/TlvCodec.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L40)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L37)
+[packages/matter.js/src/tlv/TlvCodec.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L37)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L31)
+[packages/matter.js/src/tlv/TlvCodec.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L31)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L38)
+[packages/matter.js/src/tlv/TlvCodec.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L38)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:32](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L32)
+[packages/matter.js/src/tlv/TlvCodec.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L32)
 
 ___
 
@@ -134,4 +134,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvCodec.ts#L35)
+[packages/matter.js/src/tlv/TlvCodec.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/tlv/TlvCodec.ts#L35)

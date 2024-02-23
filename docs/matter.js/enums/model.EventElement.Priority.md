@@ -22,7 +22,7 @@ Event priority as defined in Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/EventElement.ts#L37)
+[packages/matter.js/src/model/elements/EventElement.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/EventElement.ts#L37)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/EventElement.ts#L35)
+[packages/matter.js/src/model/elements/EventElement.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/EventElement.ts#L35)
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/EventElement.ts#L36)
+[packages/matter.js/src/model/elements/EventElement.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/EventElement.ts#L36)

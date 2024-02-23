@@ -51,7 +51,7 @@ Celsius value, typically .1°C or .01°C
 
 | Name | Type |
 | :------ | :------ |
-| `type` | [`celsius`](exports_model.FieldValue.md#celsius-2) |
+| `type` | [`celsius`](exports_model.FieldValue.md#celsius-1) |
 | `value` | `number` |
 
 #### Defined in
@@ -84,7 +84,7 @@ Percent value, units of either 1% (.01) or .01% (.0001)
 
 | Name | Type |
 | :------ | :------ |
-| `type` | [`percent`](exports_model.FieldValue.md#percent-2) |
+| `type` | [`percent`](exports_model.FieldValue.md#percent-1) |
 | `value` | `number` |
 
 #### Defined in
@@ -106,7 +106,7 @@ A set of struct property values keyed by name.
 | Name | Type |
 | :------ | :------ |
 | `properties` | \{ `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } |
-| `type` | [`properties`](exports_model.FieldValue.md#properties-2) |
+| `type` | [`properties`](exports_model.FieldValue.md#properties-1) |
 
 #### Defined in
 
@@ -125,7 +125,7 @@ Reference to a named field
 | Name | Type |
 | :------ | :------ |
 | `name` | `string` |
-| `type` | [`reference`](exports_model.FieldValue.md#reference-2) |
+| `type` | [`reference`](exports_model.FieldValue.md#reference-1) |
 
 #### Defined in
 
@@ -137,7 +137,7 @@ ___
 
 ### Type
 
-Ƭ **Type**: [`percent`](exports_model.FieldValue.md#percent-2) \| [`celsius`](exports_model.FieldValue.md#celsius-2) \| [`reference`](exports_model.FieldValue.md#reference-2) \| [`properties`](exports_model.FieldValue.md#properties-2)
+Ƭ **Type**: [`percent`](exports_model.FieldValue.md#percent-1) \| [`celsius`](exports_model.FieldValue.md#celsius-1) \| [`reference`](exports_model.FieldValue.md#reference-1) \| [`properties`](exports_model.FieldValue.md#properties-1)
 
 If a field value isn't a primitive type, it's an object with a type
 field indicating one of these types.

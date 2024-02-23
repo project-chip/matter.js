@@ -23,18 +23,20 @@ We encode this as StatusResponseError because in most places we want to return a
 
 - [clusterCode](common_export.ValidationError.md#clustercode)
 - [code](common_export.ValidationError.md#code)
+- [fieldName](common_export.ValidationError.md#fieldname)
 
 ## Constructors
 
 ### constructor
 
-• **new ValidationError**(`message`): [`ValidationError`](common_export.ValidationError.md)
+• **new ValidationError**(`message`, `fieldName?`): [`ValidationError`](common_export.ValidationError.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `message` | `string` |
+| `fieldName?` | `string` |
 
 #### Returns
 
@@ -46,7 +48,7 @@ We encode this as StatusResponseError because in most places we want to return a
 
 #### Defined in
 
-[packages/matter.js/src/common/ValidationError.ts:14](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/ValidationError.ts#L14)
+[packages/matter.js/src/common/ValidationError.ts:14](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ValidationError.ts#L14)
 
 ## Properties
 
@@ -60,7 +62,7 @@ We encode this as StatusResponseError because in most places we want to return a
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/StatusCode.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/StatusCode.ts#L45)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/StatusCode.ts#L45)
 
 ___
 
@@ -74,4 +76,14 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/StatusCode.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/StatusCode.ts#L44)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/StatusCode.ts#L44)
+
+___
+
+### fieldName
+
+• `Optional` **fieldName**: `string`
+
+#### Defined in
+
+[packages/matter.js/src/common/ValidationError.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ValidationError.ts#L16)
