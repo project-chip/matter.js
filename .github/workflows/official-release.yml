@@ -57,7 +57,6 @@ jobs:
             '
 
       - name: Cleanup chip tests
-        if: steps.changes.outputs.result == 'ok'
         id: cleanup-chip-tests
         shell: bash
         run: |
