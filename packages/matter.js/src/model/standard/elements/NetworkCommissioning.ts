@@ -229,7 +229,7 @@ Matter.children.push(Cluster({
 
             children: [
                 Field({
-                    name: "Ssid", id: 0x0, type: "octstr", conformance: "[WI]", constraint: "1 to 32", default: null,
+                    name: "Ssid", id: 0x0, type: "octstr", conformance: "[WI]", constraint: "0 to 32", default: null,
                     quality: "X",
                     details: "This field, if present, shall contain the SSID for a directed scan of that particular Wi-Fi SSID. " +
                         "Otherwise, if the field is absent, or it is null, this shall indicate scanning of all BSSID in " +

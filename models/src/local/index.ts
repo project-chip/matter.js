@@ -21,6 +21,7 @@ import "./GroupKeyManagementOverrides.js";
 import "./GroupsOverrides.js";
 import "./IlluminanceMeasurementOverrides.js";
 import "./ModeSelectOverrides.js";
+import "./NetworkCommissioningOverrides.js";
 import "./OperationalCredentialsOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
 import "./ScenesOverrides.js";

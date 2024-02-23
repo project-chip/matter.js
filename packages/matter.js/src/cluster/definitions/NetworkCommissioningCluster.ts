@@ -34,7 +34,7 @@ export namespace NetworkCommissioning {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1.1
          */
-        ssid: TlvOptionalField(0, TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 32 }))),
+        ssid: TlvOptionalField(0, TlvNullable(TlvByteString.bound({ minLength: 0, maxLength: 32 }))),
 
         /**
          * The Breadcrumb field, if present, shall be used to atomically set the Breadcrumb attribute in the General
