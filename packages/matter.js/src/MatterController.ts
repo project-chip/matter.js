@@ -191,7 +191,7 @@ export class MatterController {
                 await this.exchangeManager.closeSession(session);
             }
             this.sessionClosedCallback?.(session.peerNodeId);
-        })        
+        });
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
         this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());

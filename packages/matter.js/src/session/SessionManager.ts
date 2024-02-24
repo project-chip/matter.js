@@ -15,9 +15,9 @@ import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Observable } from "../util/Observable.js";
 import { BasicSet } from "../util/Set.js";
+import { InsecureSession } from "./InsecureSession.js";
 import { SecureSession } from "./SecureSession.js";
 import { SessionParameterOptions, SessionParameters } from "./Session.js";
-import { InsecureSession } from "./InsecureSession.js";
 
 const logger = Logger.get("SessionManager");
 
@@ -51,9 +51,9 @@ export class SessionManager<ContextT> {
     #resumptionRecords = new Map<NodeId, ResumptionRecord>();
     readonly #sessionStorage: StorageContext;
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
-    readonly #subscriptionsChanged = new Observable<[session: SecureSession<ContextT>]>;
-    readonly #sessionOpened = new Observable<[session: SecureSession<ContextT>]>;
-    readonly #sessionClosed = new Observable<[session: SecureSession<ContextT>], Promise<void> | void>;
+    readonly #subscriptionsChanged = new Observable<[session: SecureSession<ContextT>]>();
+    readonly #sessionOpened = new Observable<[session: SecureSession<ContextT>]>();
+    readonly #sessionClosed = new Observable<[session: SecureSession<ContextT>], Promise<void> | void>();
 
     constructor(
         private readonly context: ContextT,
@@ -145,9 +145,9 @@ export class SessionManager<ContextT> {
             },
             sessionParameters,
             subscriptionChangedCallback: () => {
-                this.#subscriptionsChanged.emit(session)
+                this.#subscriptionsChanged.emit(session);
             },
-        })
+        });
 
         this.#sessions.add(session);
         this.#sessionOpened.emit(session);
@@ -192,7 +192,7 @@ export class SessionManager<ContextT> {
                 return id;
             }
         }
-        
+
         // All session ids are taken, search for the oldest unused session, and close it and re-use its ID
         const oldestSession = this.findOldestInactiveSession();
         await oldestSession.end(true, false);

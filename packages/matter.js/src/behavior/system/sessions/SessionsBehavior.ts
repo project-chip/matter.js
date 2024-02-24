@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ServerNode } from "../../../node/ServerNode.js";
-import { Behavior } from "../../Behavior.js";
-import { EventEmitter, Observable } from "../../../util/Observable.js";
-import { SessionManager } from "../../../session/SessionManager.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { NodeId } from "../../../datatype/NodeId.js";
+import type { ServerNode } from "../../../node/ServerNode.js";
+import { SessionManager } from "../../../session/SessionManager.js";
+import { EventEmitter, Observable } from "../../../util/Observable.js";
+import { Behavior } from "../../Behavior.js";
 
 /**
  * Active {@link ServerNode} client sessions.
@@ -38,7 +38,7 @@ export class SessionsBehavior extends Behavior {
                 type: session.isPase ? SessionsBehavior.SessionType.Pase : SessionsBehavior.SessionType.Case,
                 fabricIndex: session.fabric?.fabricIndex,
                 peerNodeId: session.peerNodeId,
-            }
+            };
         });
 
         this.reactTo(sessions.sessionClosed, session => {
@@ -69,7 +69,7 @@ export namespace SessionsBehavior {
     }
 
     export class Events extends EventEmitter {
-        opened = Observable<[ session: Session ]>;
-        closed = Observable<[ session: Session ]>;
+        opened = Observable<[session: Session]>;
+        closed = Observable<[session: Session]>;
     }
 }
