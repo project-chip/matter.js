@@ -611,9 +611,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
 
                 if (isFabricFiltered === true) {
                     assertSecureSession(session);
-                    return this.getLocalForFabric(session.getAssociatedFabric());
+                    return this.getLocalForFabric(session.associatedFabric);
                 } else {
-                    const fabrics = session.getContext().getFabrics();
+                    const fabrics = session.context.getFabrics();
                     const values = new Array<any>();
                     for (const fabric of fabrics) {
                         const value = this.getLocalForFabric(fabric);
@@ -638,7 +638,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                     throw new FabricScopeError(`Session is required for fabric scoped attribute "${name}".`);
 
                 assertSecureSession(session);
-                const fabric = session.getAssociatedFabric();
+                const fabric = session.associatedFabric;
 
                 const oldData = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
                 const oldValue = oldData?.value ?? this.defaultValue;
@@ -689,7 +689,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         value = this.schema.injectField(
             value,
             <number>Globals.FabricIndex.id,
-            session.getAssociatedFabric().fabricIndex,
+            session.associatedFabric.fabricIndex,
             existingFieldIndex => existingFieldIndex === undefined,
         );
 

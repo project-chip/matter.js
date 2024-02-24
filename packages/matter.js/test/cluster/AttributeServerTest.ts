@@ -550,7 +550,7 @@ describe("AttributeServerTest", () => {
 
         it("should return value from getter when used non-locally", () => {
             const server = create({ getter: () => 7 });
-            const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
+            const testSession = { associatedFabric: testFabric } as SecureSession<MatterDevice>;
             testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             expect(server.get(testSession, true)).equal(7);
         });
@@ -561,7 +561,7 @@ describe("AttributeServerTest", () => {
                 getter: () => 7,
                 setter: () => true,
             });
-            const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
+            const testSession = { associatedFabric: testFabric } as SecureSession<MatterDevice>;
 
             let valueTriggered: number | undefined = undefined;
             let versionTriggered: number | undefined = undefined;

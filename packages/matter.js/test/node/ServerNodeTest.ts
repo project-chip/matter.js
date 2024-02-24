@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../src/MatterDevice.js";
 import { DescriptorBehavior } from "../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { PumpConfigurationAndControlServer } from "../../src/behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlServer.js";
 import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
@@ -16,8 +15,9 @@ import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { PumpDevice } from "../../src/endpoint/definitions/device/PumpDevice.js";
 import { AggregatorEndpoint } from "../../src/endpoint/definitions/system/AggregatorEndpoint.js";
+import { FabricManager } from "../../src/fabric/FabricManager.js";
 import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
-import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
+import { ServerNode } from "../../src/node/ServerNode.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { MockServerNode } from "./mock-server-node.js";
 
@@ -75,7 +75,7 @@ describe("ServerNode", () => {
 
         const node = await MockServerNode.createOnline({
             config: {
-                type: ServerRootEndpoint,
+                type: ServerNode.RootEndpoint,
                 network: { port: 0 },
                 commissioning: { discriminator: 2002 },
                 basicInformation: { vendorId: 65501 },
@@ -272,7 +272,7 @@ async function commission(existingNode?: MockServerNode) {
     const { node } = await almostCommission(existingNode);
 
     // Do not reuse session from initial commissioning because we must now move from CASE to PASE
-    const fabric = node.env.get(MatterDevice).fabricManager.getFabrics()[0];
+    const fabric = node.env.get(FabricManager).getFabrics()[0];
     const context = {
         session: await node.createSession({
             fabric,

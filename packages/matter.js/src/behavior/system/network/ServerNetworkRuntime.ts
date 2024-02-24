@@ -12,12 +12,14 @@ import { TransportInterface } from "../../../common/TransportInterface.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
+import { FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
 import { Network } from "../../../net/Network.js";
 import { UdpInterface } from "../../../net/UdpInterface.js";
 import type { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
 import { ServerStore } from "../../../node/server/storage/ServerStore.js";
+import { SessionManager } from "../../../session/SessionManager.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
 
 /**
@@ -230,7 +232,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             .addScanner(mdnsScanner);
 
         // MatterDevice is the interface to a broad array of functionality that other modules require access to
-        this.owner.env.set(MatterDevice, this.#matterDevice);
+        this.owner.env.set(SessionManager, this.#matterDevice.sessionManager);
+        this.owner.env.set(FabricManager, this.#matterDevice.fabricManager);
 
         await this.addTransports(this.#matterDevice);
         await this.addBroadcasters(this.#matterDevice);
@@ -245,7 +248,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     protected override async stop() {
         if (this.#matterDevice) {
-            this.owner.env.delete(MatterDevice);
+            this.owner.env.delete(SessionManager, this.#matterDevice.sessionManager);
+            this.owner.env.delete(FabricManager, this.#matterDevice.fabricManager);
 
             await this.#matterDevice.close();
 

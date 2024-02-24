@@ -33,10 +33,10 @@ export function OnlineContext(options: OnlineContext.Options) {
 
             if (session) {
                 assertSecureSession(session);
-                fabric = session.getFabric()?.fabricIndex;
+                fabric = session.fabric?.fabricIndex;
 
                 // TODO - group subject
-                subject = session.getPeerNodeId();
+                subject = session.peerNodeId;
             } else {
                 fabric = options.fabric;
                 subject = options.subject;

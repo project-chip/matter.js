@@ -76,6 +76,7 @@ describe("SessionManager", () => {
         it("verify that oldest session gets closed when no more ids are available", async () => {
             const first = await sessionManager.getNextAvailableSessionId();
             let firstClosed = false;
+            sessionManager.sessionClosed.on(() => { firstClosed = true })
             await sessionManager.createSecureSession({
                 sessionId: first,
                 fabric: undefined,
@@ -85,9 +86,6 @@ describe("SessionManager", () => {
                 salt: DUMMY_BYTEARRAY,
                 isInitiator: false,
                 isResumption: false,
-                closeCallback: async () => {
-                    firstClosed = true;
-                },
             });
             await MockTime.advance(1000);
             for (let i = 0; i < 0xfffe; i++) {

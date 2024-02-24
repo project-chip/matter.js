@@ -8,6 +8,7 @@ import { UnsupportedDependencyError } from "../common/Lifecycle.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
 import { Time } from "../time/Time.js";
+import { Observable } from "../util/Observable.js";
 import { Environmental } from "./Environmental.js";
 import { RuntimeService } from "./RuntimeService.js";
 import { VariableService } from "./VariableService.js";
@@ -30,6 +31,9 @@ export class Environment {
     #services?: Map<abstract new (...args: any[]) => any, Environmental.Service>;
     #name: string;
     #parent?: Environment;
+    #added = new Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>;
+    #deleted = new Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>;
+    #serviceEvents = new Map<abstract new (...args: any[]) => any, Environmental.ServiceEvents<any>>;
 
     constructor(name: string, parent?: Environment) {
         this.#name = name;
@@ -73,6 +77,13 @@ export class Environment {
         }
         this.#services?.delete(type);
         this.#parent?.delete(type);
+
+        this.#deleted.emit(type, instance);
+
+        const serviceEvents = this.#serviceEvents.get(type);
+        if (serviceEvents) {
+            serviceEvents.deleted.emit(instance);
+        }
     }
 
     /**
@@ -87,11 +98,16 @@ export class Environment {
     /**
      * Install a preinitialized version of an environmental service.
      */
-    set<T>(type: abstract new (...args: any[]) => T, instance: T) {
+    set<T extends {}>(type: abstract new (...args: any[]) => T, instance: T) {
         if (!this.#services) {
             this.#services = new Map();
         }
         this.#services.set(type, instance as Environmental.Service);
+        this.#added.emit(type, instance);
+        const serviceEvents = this.#serviceEvents.get(type);
+        if (serviceEvents) {
+            serviceEvents.added.emit(instance);
+        }
     }
 
     /**
@@ -102,7 +118,43 @@ export class Environment {
     }
 
     /**
+     * Emits on service add.
+     * 
+     * Currently only emits for services owned directly by this environment.
+     */
+    get added() {
+        return this.#added;
+    }
+
+    /**
+     * Emits on service delete.
+     * 
+     * Currently only emits for services owned directly by this environment.
+     */
+    get deleted() {
+        return this.#deleted;
+    }
+
+    /**
+     * Obtain an object with events that trigger when a specific service is added or deleted.
+     * 
+     * This is a more convenient way to observe a specific service than {@link added} and {@link deleted}.
+     */
+    eventsFor<T extends Environmental.Factory<any>>(type: T) {
+        let events = this.#serviceEvents.get(type);
+        if (events === undefined) {
+            events = {
+                added: new Observable,
+                deleted: new Observable,
+            }
+        }
+        return events as Environmental.ServiceEvents<T>;
+    }
+
+    /**
      * The default environment.
+     * 
+     * Currently only emits for services owned directly by this environment.
      */
     static get default() {
         return global;

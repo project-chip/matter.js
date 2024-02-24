@@ -20,8 +20,8 @@ import { InteractionServer } from "../../protocol/interaction/InteractionServer.
 import { StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { Session } from "../../session/Session.js";
 import { MaybePromise, track } from "../../util/Promises.js";
-import { ServerRootEndpoint } from "./ServerRootEndpoint.js";
 import { ServerStore } from "./storage/ServerStore.js";
+import { ServerNode } from "../ServerNode.js";
 
 /**
  * Wire up an InteractionServer that initializes an InvocationContext earlier than the cluster API supports.
@@ -41,7 +41,7 @@ export class TransactionalInteractionServer extends InteractionServer {
     #endpoint: Endpoint;
     #tracer?: ActionTracer;
 
-    constructor(endpoint: Endpoint<ServerRootEndpoint>) {
+    constructor(endpoint: Endpoint<ServerNode.RootEndpoint>) {
         const structure = new InteractionEndpointStructure();
 
         super({

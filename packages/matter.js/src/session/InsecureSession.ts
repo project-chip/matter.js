@@ -15,10 +15,10 @@ import { NoAssociatedFabricError } from "./SecureSession.js";
 import { Session, SessionParameterOptions } from "./Session.js";
 import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 
-export class UnsecureSession<T> extends Session<T> {
-    private readonly initiatorNodeId: NodeId;
+export class InsecureSession<T> extends Session<T> {
+    readonly #initiatorNodeId: NodeId;
     readonly closingAfterExchangeFinished = false;
-    private readonly context: T;
+    readonly #context: T;
 
     constructor(args: {
         context: T;
@@ -34,15 +34,15 @@ export class UnsecureSession<T> extends Session<T> {
             setActiveTimestamp: !isInitiator, // When we are the initiator we assume the node is in idle mode
             messageReceptionState: new MessageReceptionStateUnencryptedWithRollover(),
         });
-        this.context = context;
-        this.initiatorNodeId = initiatorNodeId ?? NodeId.getRandomOperationalNodeId();
+        this.#context = context;
+        this.#initiatorNodeId = initiatorNodeId ?? NodeId.getRandomOperationalNodeId();
     }
 
-    isSecure(): boolean {
+    get isSecure() {
         return false;
     }
 
-    isPase(): boolean {
+    get isPase() {
         return false;
     }
 
@@ -63,27 +63,31 @@ export class UnsecureSession<T> extends Session<T> {
     }
 
     get name() {
-        return `unsecure/${this.initiatorNodeId}`;
+        return `insecure/${this.#initiatorNodeId}`;
     }
 
-    getContext() {
-        return this.context;
+    get context() {
+        return this.#context;
     }
 
-    getId(): number {
+    get id(): number {
         return UNICAST_UNSECURE_SESSION_ID;
     }
 
-    getPeerSessionId(): number {
+    get peerSessionId(): number {
         return UNICAST_UNSECURE_SESSION_ID;
     }
 
-    getNodeId() {
-        return this.initiatorNodeId;
+    get nodeId() {
+        return this.#initiatorNodeId;
     }
 
-    getPeerNodeId() {
+    get peerNodeId() {
         return undefined;
+    }
+
+    get associatedFabric(): Fabric {
+        throw new NoAssociatedFabricError("Session needs to be a secure session");
     }
 
     async destroy() {
@@ -92,9 +96,5 @@ export class UnsecureSession<T> extends Session<T> {
 
     async end() {
         await this.closeCallback?.();
-    }
-
-    getAssociatedFabric(): Fabric {
-        throw new NoAssociatedFabricError("Session needs to be a secure session");
     }
 }

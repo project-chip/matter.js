@@ -43,7 +43,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 
     override async armFailSafe({ breadcrumb, expiryLengthSeconds }: ArmFailSafeRequest) {
         assertSecureSession(this.session, "armFailSafe can only be called on a secure session");
-        const device = this.session.getContext();
+        const device = this.session.context;
 
         try {
             // If the fail-safe timer is not currently armed, the commissioning window is open, and the command was
@@ -55,13 +55,13 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 !device.isFailsafeArmed() &&
                 this.agent.get(AdministratorCommissioningServer).state.windowStatus !==
                     AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen &&
-                !this.session.isPase()
+                !this.session.isPase
             ) {
                 throw new MatterFlowError("Failed to arm failsafe using CASE while commissioning window is opened.");
             }
 
             if (device.isFailsafeArmed()) {
-                await device.failsafeContext.extend(this.session.getFabric(), expiryLengthSeconds);
+                await device.failsafeContext.extend(this.session.fabric, expiryLengthSeconds);
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
                 // to a success response with no side effect against the fail-safe context.
@@ -73,7 +73,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                         sessions: device.sessionManager,
                         expiryLengthSeconds,
                         maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
-                        associatedFabric: this.session.getFabric(),
+                        associatedFabric: this.session.fabric,
                     }),
                 );
             }
@@ -171,16 +171,16 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     }
 
     override async commissioningComplete() {
-        if (this.session.isPase()) {
+        if (this.session.isPase) {
             return {
                 errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
                 debugText: "Command not executed over CASE session.",
             };
         }
 
-        const fabric = this.session.getAssociatedFabric();
+        const fabric = this.session.associatedFabric;
 
-        const device = this.session.getContext();
+        const device = this.session.context;
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
         }

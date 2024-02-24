@@ -61,7 +61,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
             `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${operationalDataset.toHex()} ${breadcrumb}`,
         );
 
-        this.session.getContext().assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+        this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
         // Simulate successful add or update
         if (breadcrumb !== undefined) {
@@ -82,7 +82,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
     override removeNetwork({ networkId, breadcrumb }: RemoveNetworkRequest) {
         console.log(`---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
 
-        this.session.getContext().assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+        this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
         // Simulate successful add or update
         if (breadcrumb !== undefined) {
@@ -103,7 +103,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
     override async connectNetwork({ networkId, breadcrumb }: ConnectNetworkRequest) {
         console.log(`---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`);
 
-        this.session.getContext().assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+        this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
         // Simulate successful connection
         if (breadcrumb !== undefined) {
@@ -119,7 +119,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
         this.state.lastConnectErrorValue = null;
 
         // Announce operational in IP network
-        const device = this.session.getContext();
+        const device = this.session.context;
         await device.startAnnouncement();
 
         return {

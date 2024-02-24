@@ -74,7 +74,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
                 `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${ssid.toHex()} ${credentials.toHex()} ${breadcrumb}`,
             );
 
-            session.getContext().assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+            session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
             // Simulate successful add or update
             if (breadcrumb !== undefined) {
@@ -101,7 +101,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
                 `---> removeNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
             );
 
-            session.getContext().assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+            session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
             // Simulate successful add or update
             if (breadcrumb !== undefined) {
@@ -128,7 +128,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
                 `---> connectNetwork called on NetworkCommissioning cluster: ${networkId.toHex()} ${breadcrumb}`,
             );
 
-            session.getContext().assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
+            session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");
 
             // Simulate successful connection
             if (breadcrumb !== undefined) {
@@ -146,7 +146,7 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
             lastConnectErrorValue?.setLocal(null);
 
             // Announce operational in IP network
-            const device = session.getContext();
+            const device = session.context;
             await device.startAnnouncement();
 
             return {

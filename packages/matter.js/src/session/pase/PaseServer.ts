@@ -54,7 +54,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
         const messenger = new PaseServerMessenger(exchange);
         try {
-            await this.handlePairingRequest(exchange.session.getContext(), messenger);
+            await this.handlePairingRequest(exchange.session.context, messenger);
         } catch (error) {
             this.pairingErrors++;
             logger.error("An error occurred during the PASE commissioning.", error);
@@ -131,7 +131,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         }
 
         // All good! Creating the secure PASE session
-        await server.createSecureSession({
+        await server.sessionManager.createSecureSession({
             sessionId,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,

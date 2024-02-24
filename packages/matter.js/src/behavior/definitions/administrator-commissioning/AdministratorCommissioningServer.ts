@@ -7,6 +7,7 @@
 import { MatterDevice } from "../../../MatterDevice.js";
 import { AccessLevel, Command, TlvNoResponse } from "../../../cluster/Cluster.js";
 import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
+import { FailsafeContext } from "../../../common/FailsafeContext.js";
 import { InternalError } from "../../../common/MatterError.js";
 import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
@@ -96,7 +97,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             );
         }
 
-        const device = this.session?.getContext();
+        const device = this.session?.context;
 
         this.#assertCommissioningWindowRequirements(commissioningTimeout, device);
 
@@ -115,7 +116,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
     // TODO - fix ClusterBehavior.for so this is hidden as it only applies when basic feature is enabled
     async openBasicCommissioningWindow({ commissioningTimeout }: OpenBasicCommissioningWindowRequest) {
-        const device = this.session.getContext();
+        const device = this.session.context;
 
         this.#assertCommissioningWindowRequirements(commissioningTimeout, device);
 
@@ -141,9 +142,9 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         await this.#closeCommissioningWindow();
 
-        const device = this.endpoint.env.get(MatterDevice);
-        if (device.isFailsafeArmed()) {
-            await device.failsafeContext.close();
+        const failsafeContext = this.endpoint.env.get(FailsafeContext);
+        if (failsafeContext) {
+            await failsafeContext.close();
         }
     }
 
@@ -168,7 +169,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             this.callback(this.#commissioningTimeout),
         ).start();
 
-        const adminFabric = this.session.getAssociatedFabric();
+        const adminFabric = this.session.associatedFabric;
 
         this.state.windowStatus = windowStatus;
         this.state.adminFabricIndex = adminFabric.fabricIndex;
@@ -180,7 +181,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             adminFabric.deleteRemoveCallback(removeCallback);
         };
 
-        this.session.getAssociatedFabric().addRemoveCallback(removeCallback);
+        this.session.associatedFabric.addRemoveCallback(removeCallback);
     }
 
     /**
@@ -241,7 +242,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     async #closeCommissioningWindow() {
         this.callback(this.#endCommissioning);
-        await this.endpoint.env.get(MatterDevice).endCommissioning();
+        await this.session.context.endCommissioning();
     }
 
     /**
