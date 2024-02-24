@@ -36,7 +36,7 @@ export interface ObservableSet<T> {
  * An interface for index set lookup.
  */
 export interface IndexedSet<T> {
-    get(field: string, value: any): T | undefined;
+    get<F extends keyof T>(field: F, value: T[F]): T | undefined;
 }
 
 /**
@@ -92,7 +92,7 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
         this.#added?.emit(created);
     }
 
-    get(key: string, field: keyof T) {
+    get<F extends keyof T>(field: F, value: T[F]) {
         if (!this.#indices) {
             this.#indices = {};
         }
@@ -101,14 +101,14 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
             index = new Map<any, T>();
             for (const item of this) {
                 const value = item[field];
-                if (value === undefined || index.has(key)) {
+                if (value === undefined || index.has(value)) {
                     continue;
                 }
                 index.set(value, item);
             }
             this.#indices[field] = index;
         }
-        return index?.get(key);
+        return index?.get(value);
     }
 
     delete(item: T) {

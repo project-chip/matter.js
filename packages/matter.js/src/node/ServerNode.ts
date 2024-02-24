@@ -5,9 +5,10 @@
  */
 
 import { CommissioningBehavior } from "../behavior/system/commissioning/CommissioningBehavior.js";
-import { NetworkServer } from "../behavior/system/networking/NetworkServer.js";
-import { ServerNetworkRuntime } from "../behavior/system/networking/ServerNetworkRuntime.js";
+import { NetworkServer } from "../behavior/system/network/NetworkServer.js";
+import { ServerNetworkRuntime } from "../behavior/system/network/ServerNetworkRuntime.js";
 import { ProductDescriptionServer } from "../behavior/system/product-description/ProductDescriptionServer.js";
+import { SessionsBehavior } from "../behavior/system/sessions/SessionsBehavior.js";
 import { Agent } from "../endpoint/Agent.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { EndpointServer } from "../endpoint/EndpointServer.js";
@@ -222,7 +223,12 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 }
 
 export namespace ServerNode {
-    export const RootEndpoint = BaseRootEndpoint.with(CommissioningBehavior, NetworkServer, ProductDescriptionServer);
+    export const RootEndpoint = BaseRootEndpoint.with(
+        CommissioningBehavior,
+        NetworkServer,
+        ProductDescriptionServer,
+        SessionsBehavior,
+    );
 
     export interface RootEndpoint extends Identity<typeof RootEndpoint> {}
 }

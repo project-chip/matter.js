@@ -39,7 +39,6 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChann
 import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
-import { SessionParameterOptions } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
@@ -141,7 +140,7 @@ export class MatterController {
         }
     }
 
-    private readonly sessionManager;
+    readonly sessionManager;
     private readonly channelManager = new ChannelManager();
     private readonly exchangeManager;
     private readonly paseClient = new PaseClient();
@@ -185,6 +184,14 @@ export class MatterController {
 
         this.sessionManager = new SessionManager(this, this.storage);
         this.sessionManager.initFromStorage([this.fabric]);
+
+        this.sessionManager.sessionClosed.on(async session => {
+            if (!session.closingAfterExchangeFinished) {
+                // Delayed closing is executed when exchange is closed
+                await this.exchangeManager.closeSession(session);
+            }
+            this.sessionClosedCallback?.(session.peerNodeId);
+        })        
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
         this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
@@ -762,31 +769,6 @@ export class MatterController {
 
     async getNextAvailableSessionId() {
         return this.sessionManager.getNextAvailableSessionId();
-    }
-
-    async createSecureSession(args: {
-        sessionId: number;
-        fabric: Fabric | undefined;
-        peerNodeId: NodeId;
-        peerSessionId: number;
-        sharedSecret: ByteArray;
-        salt: ByteArray;
-        isInitiator: boolean;
-        isResumption: boolean;
-        sessionParameters?: SessionParameterOptions;
-    }) {
-        const session = await this.sessionManager.createSecureSession({
-            ...args,
-            closeCallback: async () => {
-                logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
-                if (!session.closingAfterExchangeFinished) {
-                    // Delayed closing is executed when exchange is closed
-                    await this.exchangeManager.closeSession(session);
-                }
-                this.sessionClosedCallback?.(args.peerNodeId);
-            },
-        });
-        return session;
     }
 
     getResumptionRecord(resumptionId: ByteArray) {

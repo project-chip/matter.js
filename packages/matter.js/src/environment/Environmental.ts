@@ -5,6 +5,7 @@
  */
 
 import { Diagnostic } from "../log/Diagnostic.js";
+import { Observable } from "../util/Observable.js";
 import type { Environment } from "./Environment.js";
 
 export namespace Environmental {
@@ -47,5 +48,13 @@ export namespace Environmental {
          * The environment will create the service automatically if the factory supports {@link create}.
          */
         [create]?: (environment: Environment) => T;
+    }
+
+    /**
+     * Events related to service lifecycle.
+     */
+    export interface ServiceEvents<T extends abstract new (...args: any[]) => T> {
+        added: Observable<[instance: InstanceType<T>]>;
+        deleted: Observable<[instance: InstanceType<T>]>;
     }
 }

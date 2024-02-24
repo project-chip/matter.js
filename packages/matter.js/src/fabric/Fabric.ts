@@ -179,7 +179,7 @@ export class Fabric {
     async remove(currentSessionId?: number) {
         this.removeCallbacks.forEach(callback => callback());
         for (const session of [...this.sessions]) {
-            await session.destroy(false, session.getId() === currentSessionId); // Delay Close for current session only
+            await session.destroy(false, session.id === currentSessionId); // Delay Close for current session only
         }
     }
 

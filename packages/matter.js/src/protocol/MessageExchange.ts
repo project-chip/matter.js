@@ -90,7 +90,7 @@ export class MessageExchange<ContextT> {
             session,
             channel,
             false,
-            session.getId(),
+            session.id,
             initialMessage.packetHeader.destNodeId,
             initialMessage.packetHeader.sourceNodeId,
             initialMessage.payloadHeader.exchangeId,
@@ -110,9 +110,9 @@ export class MessageExchange<ContextT> {
             session,
             channel,
             true,
-            session.getPeerSessionId(),
-            session.getNodeId(),
-            session.getPeerNodeId(),
+            session.peerSessionId,
+            session.nodeId,
+            session.peerNodeId,
             exchangeId,
             protocolId,
             closeCallback,
@@ -383,7 +383,7 @@ export class MessageExchange<ContextT> {
         this.session.notifyActivity(false);
 
         if (retransmissionCount === 1) {
-            // this.session.getContext().announce(); // TODO: announce
+            // this.session.context.announce(); // TODO: announce
         }
         const resubmissionBackoffTime = this.getResubmissionBackOffTime(retransmissionCount);
         logger.debug(

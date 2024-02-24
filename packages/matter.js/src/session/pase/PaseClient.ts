@@ -75,7 +75,7 @@ export class PaseClient {
 
         // All good! Creating the secure session
         await messenger.waitForSuccess();
-        const secureSession = await client.createSecureSession({
+        const secureSession = await client.sessionManager.createSecureSession({
             sessionId,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,

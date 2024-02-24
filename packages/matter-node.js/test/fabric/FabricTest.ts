@@ -157,7 +157,7 @@ describe("Fabric", () => {
                 removeCallbackCalled = true;
             });
 
-            await fabric.remove(secureSession2.getId());
+            await fabric.remove(secureSession2.id);
 
             assert.equal(session1Destroyed, true);
             assert.equal(secureSession1.closingAfterExchangeFinished, false);

@@ -19,8 +19,8 @@ import { Network } from "../../src/net/Network.js";
 import { NetworkFake } from "../../src/net/fake/NetworkFake.js";
 import { Node } from "../../src/node/Node.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
-import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
 import { MessageExchange } from "../../src/protocol/MessageExchange.js";
+import { SessionManager } from "../../src/session/SessionManager.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { MaybePromise } from "../../src/util/Promises.js";
@@ -43,8 +43,8 @@ Crypto.get().hkdf = async () => {
     return new ByteArray(16);
 };
 
-export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> extends ServerNode<T> {
-    constructor(type: T = ServerRootEndpoint as T, options?: Node.Options<T>) {
+export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends ServerNode<T> {
+    constructor(type: T = ServerNode.RootEndpoint as T, options?: Node.Options<T>) {
         const environment = new Environment("test");
 
         const storage = environment.get(StorageService);
@@ -80,14 +80,14 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
         return OnlineContext(options as OnlineContext.Options).act(context => actor(context.agentFor(this)));
     }
 
-    static async createOnline<T extends ServerRootEndpoint = ServerRootEndpoint>(options?: MockServerNode.Options<T>) {
+    static async createOnline<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(options?: MockServerNode.Options<T>) {
         let { online, config, device } = options ?? {};
 
         if (!config) {
-            config = { type: ServerRootEndpoint as T } as Node.Configuration<T>;
+            config = { type: ServerNode.RootEndpoint as T } as Node.Configuration<T>;
         }
 
-        const node = new MockServerNode<ServerRootEndpoint>(config.type, config);
+        const node = new MockServerNode<ServerNode.RootEndpoint>(config.type, config);
 
         if (device === undefined && options && !("device" in options)) {
             device = OnOffLightDevice;
@@ -119,8 +119,8 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
         ]);
     }
 
-    async createSession(options?: Partial<Parameters<MatterDevice["createSecureSession"]>[0]>) {
-        return await this.env.get(MatterDevice).createSecureSession({
+    async createSession(options?: Partial<Parameters<SessionManager<MatterDevice>["createSecureSession"]>[0]>) {
+        return await this.env.get(SessionManager).createSecureSession({
             sessionId: 1,
             fabric: undefined,
             peerNodeId: NodeId(0),
@@ -133,7 +133,7 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
         });
     }
 
-    async createExchange(options?: Partial<Parameters<MatterDevice["createSecureSession"]>[0]>) {
+    async createExchange(options?: Partial<Parameters<SessionManager<MatterDevice>["createSecureSession"]>[0]>) {
         return {
             channel: { name: "test" },
             clearTimedInteraction: () => {},
@@ -150,7 +150,7 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
 }
 
 export namespace MockServerNode {
-    export interface Options<T extends ServerRootEndpoint> {
+    export interface Options<T extends ServerNode.RootEndpoint> {
         online?: boolean;
         config?: Node.Configuration<T>;
         device?: Endpoint.Definition;

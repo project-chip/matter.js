@@ -35,7 +35,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         endpoint,
     }) => {
         assertSecureSession(session, "armFailSafe can only be called on a secure session");
-        const device = session.getContext();
+        const device = session.context;
 
         try {
             // If the fail-safe timer is not currently armed, the commissioning window is open, and the command was
@@ -47,13 +47,13 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 !device.isFailsafeArmed() &&
                 endpoint.getClusterServer(AdministratorCommissioning.Cluster)?.getWindowStatusAttribute() !==
                     AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen &&
-                !session.isPase()
+                !session.isPase
             ) {
                 throw new MatterFlowError("Failed to arm failsafe using CASE while commissioning window is opened.");
             }
 
             if (device.isFailsafeArmed()) {
-                await device.failsafeContext.extend(session.getFabric(), expiryLengthSeconds);
+                await device.failsafeContext.extend(session.fabric, expiryLengthSeconds);
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL
                 // lead to a success response with no side effect against the fail-safe context.
@@ -65,7 +65,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
                         sessions: device.sessionManager,
                         expiryLengthSeconds,
                         maxCumulativeFailsafeSeconds: basicCommissioningInfo.getLocal().maxCumulativeFailsafeSeconds,
-                        associatedFabric: session.getFabric(),
+                        associatedFabric: session.fabric,
                     }),
                 );
             }
@@ -162,21 +162,21 @@ export const GeneralCommissioningClusterHandler: (options?: {
 
     commissioningComplete: async ({ session, attributes: { breadcrumb } }) => {
         const fabric = tryCatch(
-            () => session.getAssociatedFabric(),
+            () => session.associatedFabric,
             NoAssociatedFabricError,
             () => {
                 throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
             },
         );
 
-        if (session.isPase()) {
+        if (session.isPase) {
             return {
                 errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
                 debugText: "Command not executed over CASE session.",
             };
         }
 
-        const device = session.getContext();
+        const device = session.context;
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
         }

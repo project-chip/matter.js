@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../../MatterDevice.js";
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
@@ -68,24 +67,24 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override csrRequest({ csrNonce, isForUpdateNoc }: CsrRequest) {
-        if (isForUpdateNoc && this.session.isPase()) {
+        if (isForUpdateNoc && this.session.isPase) {
             throw new StatusResponseError(
                 "csrRequest for UpdateNoc received on a PASE session.",
                 StatusCode.InvalidCommand,
             );
         }
 
-        const timedOp = this.endpoint.env.get(MatterDevice).failsafeContext;
-        if (timedOp.fabricIndex !== undefined) {
+        const failsafeContext = this.session.context.failsafeContext;
+        if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `csrRequest received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `csrRequest received after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        const certSigningRequest = timedOp.createCertificateSigningRequest(
+        const certSigningRequest = failsafeContext.createCertificateSigningRequest(
             isForUpdateNoc ?? false,
-            this.session.getId(),
+            this.session.id,
         );
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
         return { nocsrElements, attestationSignature: this.#certification.sign(this.session, nocsrElements) };
@@ -116,30 +115,30 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         //        SHALL be InvalidNodeOpId if the matter-node-id attribute in the subject DN of the NOC has a value
         //        outside the Operational Node ID range and InvalidNOC for all other failures.
 
-        const timedOp = this.endpoint.env.get(MatterDevice).failsafeContext;
+        const failsafeContext = this.session.context.failsafeContext;
 
-        if (timedOp.fabricIndex !== undefined) {
+        if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `addNoc received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `addNoc received after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        if (!timedOp.hasRootCert) {
+        if (!failsafeContext.hasRootCert) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
                 debugText: "Root certificate not found.",
             };
         }
 
-        if (timedOp.csrSessionId !== this.session.getId()) {
+        if (failsafeContext.csrSessionId !== this.session.id) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
                 debugText: "CSR not found in failsafe context.",
             };
         }
 
-        if (timedOp.forUpdateNoc) {
+        if (failsafeContext.forUpdateNoc) {
             throw new StatusResponseError(
                 `addNoc received after csr request was invoked for UpdateNOC.`,
                 StatusCode.ConstraintError,
@@ -156,7 +155,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         let fabric: Fabric;
         try {
-            fabric = await timedOp.buildFabric({
+            fabric = await failsafeContext.buildFabric({
                 nocValue,
                 icacValue,
                 adminVendorId,
@@ -179,10 +178,10 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             }
         }
 
-        await timedOp.addFabric(fabric);
+        await failsafeContext.addFabric(fabric);
 
         try {
-            if (this.session.isPase()) {
+            if (this.session.isPase) {
                 logger.debug(`Add Fabric ${fabric.fabricIndex} to PASE session ${this.session.name}.`);
                 this.session.addAssociatedFabric(fabric);
             }
@@ -218,7 +217,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             await this.context.transaction.commit();
         } catch (e) {
             // Fabric insertion into MatterDevice is not currently transactional so we need to remove manually
-            await fabric.remove(this.session.getId());
+            await fabric.remove(this.session.id);
             throw e;
         }
 
@@ -245,7 +244,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     override async updateNoc({ nocValue, icacValue }: UpdateNocRequest) {
         assertSecureSession(this.session);
 
-        const device = this.session.getContext();
+        const device = this.session.context;
 
         const timedOp = device.failsafeContext;
 
@@ -274,7 +273,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             throw new StatusResponseError("csrRequest not invoked for UpdateNOC.", StatusCode.ConstraintError);
         }
 
-        if (this.session.getAssociatedFabric().fabricIndex !== timedOp.associatedFabric?.fabricIndex) {
+        if (this.session.associatedFabric.fabricIndex !== timedOp.associatedFabric?.fabricIndex) {
             throw new StatusResponseError(
                 "Fabric of this session and the failsafe context do not match.",
                 StatusCode.ConstraintError,
@@ -307,10 +306,10 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override updateFabricLabel({ label }: UpdateFabricLabelRequest) {
-        const fabric = this.session.getAssociatedFabric();
+        const fabric = this.session.associatedFabric;
 
         const currentFabricIndex = fabric.fabricIndex;
-        const device = this.session.getContext();
+        const device = this.session.context;
         const conflictingLabelFabric = device
             .getFabrics()
             .find(f => f.label === label && f.fabricIndex !== currentFabricIndex);
@@ -333,7 +332,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override async removeFabric({ fabricIndex }: RemoveFabricRequest) {
-        const device = this.session.getContext();
+        const device = this.session.context;
 
         const fabric = device.getFabricByIndex(fabricIndex);
 
@@ -347,7 +346,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const bi = this.agent.get(BasicInformationBehavior);
         bi.events.leave?.emit({ fabricIndex }, this.context);
 
-        await fabric.remove(this.session.getId());
+        await fabric.remove(this.session.id);
 
         this.#deleteFabric(fabricIndex);
 
@@ -358,24 +357,23 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override addTrustedRootCertificate({ rootCaCertificate }: AddTrustedRootCertificateRequest) {
-        const device = this.endpoint.env.get(MatterDevice);
-        const timedOp = device.failsafeContext;
+        const failsafeContext = this.session.context.failsafeContext;
 
-        if (timedOp.hasRootCert) {
+        if (failsafeContext.hasRootCert) {
             throw new StatusResponseError(
                 "Trusted root certificate already added in this FailSafe context.",
                 StatusCode.ConstraintError,
             );
         }
 
-        if (timedOp.fabricIndex !== undefined) {
+        if (failsafeContext.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `Can not add trusted root certificates after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
+                `Can not add trusted root certificates after ${failsafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        timedOp.setRootCert(rootCaCertificate);
+        failsafeContext.setRootCert(rootCaCertificate);
     }
 
     #deleteFabric(fabricIndex: FabricIndex) {
@@ -385,8 +383,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 array.splice(index, 1);
             }
         }
-        this.state.trustedRootCertificates = this.endpoint.env
-            .get(MatterDevice)
+        this.state.trustedRootCertificates = this.session.context
             .getFabrics()
             .map(f => f.rootCert);
         this.state.commissionedFabrics = this.state.fabrics.length;

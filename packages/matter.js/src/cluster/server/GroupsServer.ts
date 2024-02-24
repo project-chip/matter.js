@@ -93,7 +93,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
     return {
         addGroup: async ({ request: { groupId, groupName }, session, endpoint }) => {
             assertSecureSession(session);
-            return addGroupLogic(groupId, groupName, session.getAssociatedFabric(), endpoint.getNumber());
+            return addGroupLogic(groupId, groupName, session.associatedFabric, endpoint.getNumber());
         },
 
         viewGroup: async ({ request: { groupId }, session, endpoint }) => {
@@ -102,7 +102,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             assertSecureSession(session);
-            const groupName = GroupsManager.getGroupName(session.getAssociatedFabric(), endpoint.getNumber(), groupId);
+            const groupName = GroupsManager.getGroupName(session.associatedFabric, endpoint.getNumber(), groupId);
             if (groupName !== undefined) {
                 return { status: StatusCode.Success, groupId, groupName: groupName };
             }
@@ -115,7 +115,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             //  then the GroupList field SHALL contain only as many groups as will fit.
 
             assertSecureSession(session);
-            const endpointGroups = GroupsManager.getGroups(session.getAssociatedFabric(), endpoint.getNumber());
+            const endpointGroups = GroupsManager.getGroups(session.associatedFabric, endpoint.getNumber());
             const fabricGroupsList = Array.from(endpointGroups.keys());
             const capacity = fabricGroupsList.length < 0xff ? 0xfe - fabricGroupsList.length : 0;
             if (groupList.length === 0) {
@@ -134,8 +134,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             }
 
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
-            if (GroupsManager.removeGroup(session.getAssociatedFabric(), endpoint.getNumber(), groupId)) {
+            const fabric = session.associatedFabric;
+            if (GroupsManager.removeGroup(session.associatedFabric, endpoint.getNumber(), groupId)) {
                 ScenesManager.removeAllScenesForGroup(fabric, endpoint.getNumber(), groupId);
                 return { status: StatusCode.Success, groupId };
             }
@@ -144,7 +144,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
         removeAllGroups: async ({ session, endpoint }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
             GroupsManager.removeAllGroups(fabric, endpoint.getNumber());
             ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.getNumber());
 
@@ -157,7 +157,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 if (identifyCluster.attributes.identifyTime.getLocal() > 0) {
                     // We identify ourselves currently
                     assertSecureSession(session);
-                    addGroupLogic(groupId, groupName, session.getAssociatedFabric(), endpoint.getNumber());
+                    addGroupLogic(groupId, groupName, session.associatedFabric, endpoint.getNumber());
                 }
             }
 

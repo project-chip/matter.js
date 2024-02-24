@@ -14,7 +14,7 @@ import { Behavior } from "../Behavior.js";
 import type { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import type { RootSupervisor } from "../supervision/RootSupervisor.js";
 import { Schema } from "../supervision/Schema.js";
-import { NetworkBehavior } from "../system/networking/NetworkBehavior.js";
+import { NetworkBehavior } from "../system/network/NetworkBehavior.js";
 import { createType, type ClusterOf } from "./ClusterBehaviorUtil.js";
 import type { ClusterEvents } from "./ClusterEvents.js";
 import { ClusterInterface } from "./ClusterInterface.js";

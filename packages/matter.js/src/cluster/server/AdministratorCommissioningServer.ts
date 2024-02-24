@@ -89,9 +89,9 @@ class AdministratorCommissioningManager {
             async () => await this.closeCommissioningWindow(session),
         ).start();
 
-        this.adminFabricIndexAttribute.setLocal(session.getAssociatedFabric().fabricIndex);
-        this.adminVendorIdAttribute.setLocal(session.getAssociatedFabric().rootVendorId);
-        session.getAssociatedFabric().addRemoveCallback(this.fabricRemoveHandler);
+        this.adminFabricIndexAttribute.setLocal(session.associatedFabric.fabricIndex);
+        this.adminVendorIdAttribute.setLocal(session.associatedFabric.rootVendorId);
+        session.associatedFabric.addRemoveCallback(this.fabricRemoveHandler);
     }
 
     /**
@@ -162,7 +162,7 @@ class AdministratorCommissioningManager {
             );
         }
 
-        const device = session.getContext();
+        const device = session.context;
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
@@ -173,7 +173,7 @@ class AdministratorCommissioningManager {
             discriminator,
             PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }),
             () => {
-                session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
+                session.associatedFabric.deleteRemoveCallback(this.fabricRemoveHandler);
                 this.endCommissioning();
             },
         );
@@ -181,7 +181,7 @@ class AdministratorCommissioningManager {
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
     async openBasicCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
-        const device = session.getContext();
+        const device = session.context;
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
@@ -189,7 +189,7 @@ class AdministratorCommissioningManager {
         this.initializeCommissioningWindow(commissioningTimeout, session);
 
         await device.allowBasicCommissioning(() => {
-            session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
+            session.associatedFabric.deleteRemoveCallback(this.fabricRemoveHandler);
             this.endCommissioning();
         });
     }
@@ -213,7 +213,7 @@ class AdministratorCommissioningManager {
     /** This method is used to close a commissioning window. */
     async closeCommissioningWindow(session: Session<MatterDevice>) {
         this.endCommissioning();
-        await session.getContext().endCommissioning();
+        await session.context.endCommissioning();
     }
 
     /** This method is used to revoke a commissioning window. */
@@ -228,7 +228,7 @@ class AdministratorCommissioningManager {
         logger.debug("Revoking commissioning window.");
         await this.closeCommissioningWindow(session);
 
-        const device = session.getContext();
+        const device = session.context;
         if (device.isFailsafeArmed()) {
             await device.failsafeContext.close();
         }

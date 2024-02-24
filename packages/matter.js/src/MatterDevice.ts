@@ -38,7 +38,7 @@ import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
 import { StatusCode, StatusResponseError } from "./protocol/interaction/StatusCode.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
-import { Session, SessionParameterOptions } from "./session/Session.js";
+import { Session } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { StorageContext } from "./storage/StorageContext.js";
@@ -100,6 +100,31 @@ export class MatterDevice {
             // may crash if started simultaneously
             this.#announcementMutex.run(() => this.announce()),
         );
+
+        this.#sessionManager.sessionOpened.on(session => {
+            if (session.fabric) {
+                this.sessionChangedCallback(session.fabric.fabricIndex);
+            }
+        });
+
+        this.#sessionManager.sessionClosed.on(async session => {
+            if (!session.closingAfterExchangeFinished) {
+                // Delayed closing is executed when exchange is closed
+                await this.exchangeManager.closeSession(session);
+            }
+            const currentFabric = session.fabric;
+            if (currentFabric !== undefined) {
+                this.sessionChangedCallback(currentFabric.fabricIndex);
+            }
+            await this.startAnnouncement();
+        });
+
+        this.#sessionManager.subscriptionsChanged.on(session => {
+            const currentFabric = session.fabric;
+            if (currentFabric !== undefined) {
+                this.sessionChangedCallback(currentFabric.fabricIndex);
+            }
+        });
     }
 
     get fabricManager() {
@@ -237,7 +262,7 @@ export class MatterDevice {
             let fabricsWithoutSessions = 0;
             for (const fabric of fabrics) {
                 const session = this.#sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
-                if (session === undefined || !session.isSecure() || session.numberOfActiveSubscriptions === 0) {
+                if (session === undefined || !session.isSecure || session.numberOfActiveSubscriptions === 0) {
                     fabricsWithoutSessions++;
                     logger.debug("Announcing", Diagnostic.dict({ fabric: fabric.fabricId }));
                 }
@@ -301,45 +326,6 @@ export class MatterDevice {
 
     async getNextAvailableSessionId() {
         return this.#sessionManager.getNextAvailableSessionId();
-    }
-
-    async createSecureSession(args: {
-        sessionId: number;
-        fabric: Fabric | undefined;
-        peerNodeId: NodeId;
-        peerSessionId: number;
-        sharedSecret: ByteArray;
-        salt: ByteArray;
-        isInitiator: boolean;
-        isResumption: boolean;
-        sessionParameters?: SessionParameterOptions;
-    }) {
-        const { fabric } = args;
-        const session = await this.#sessionManager.createSecureSession({
-            ...args,
-            closeCallback: async () => {
-                logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
-                if (!session.closingAfterExchangeFinished) {
-                    // Delayed closing is executed when exchange is closed
-                    await this.exchangeManager.closeSession(session);
-                }
-                const currentFabric = session.getFabric();
-                if (currentFabric !== undefined) {
-                    this.sessionChangedCallback(currentFabric.fabricIndex);
-                }
-                await this.startAnnouncement();
-            },
-            subscriptionChangedCallback: () => {
-                const currentFabric = session.getFabric();
-                if (currentFabric !== undefined) {
-                    this.sessionChangedCallback(currentFabric.fabricIndex);
-                }
-            },
-        });
-        if (fabric !== undefined) {
-            this.sessionChangedCallback(fabric.fabricIndex);
-        }
-        return session;
     }
 
     findFabricFromDestinationId(destinationId: ByteArray, peerRandom: ByteArray) {
