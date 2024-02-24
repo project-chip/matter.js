@@ -69,8 +69,7 @@ export class MatterDevice {
     readonly #fabricManager;
     readonly #sessionManager;
     #failsafeContext?: FailsafeContext;
-// Processor for closed sessions
-
+    // Processor for closed sessions
 
     // Currently we do not put much effort into synchronizing announcements as it probably isn't really necessary.  But
     // this mutex prevents automated announcements from piling up and allows us to ensure announcements are complete

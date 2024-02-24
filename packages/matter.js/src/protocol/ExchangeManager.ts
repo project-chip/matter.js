@@ -194,8 +194,7 @@ export class ExchangeManager<ContextT> {
 
         if (
             exchange !== undefined &&
-            (exchange.session.id !== session.id ||
-                exchange.isInitiator === message.payloadHeader.isInitiatorMessage) // Should always be ok, but just in case
+            (exchange.session.id !== session.id || exchange.isInitiator === message.payloadHeader.isInitiatorMessage) // Should always be ok, but just in case
         ) {
             exchange = undefined;
         }

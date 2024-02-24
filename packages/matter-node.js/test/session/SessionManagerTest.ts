@@ -76,7 +76,9 @@ describe("SessionManager", () => {
         it("verify that oldest session gets closed when no more ids are available", async () => {
             const first = await sessionManager.getNextAvailableSessionId();
             let firstClosed = false;
-            sessionManager.sessionClosed.on(() => { firstClosed = true })
+            sessionManager.sessionClosed.on(() => {
+                firstClosed = true;
+            });
             await sessionManager.createSecureSession({
                 sessionId: first,
                 fabric: undefined,

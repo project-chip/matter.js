@@ -31,9 +31,9 @@ export class Environment {
     #services?: Map<abstract new (...args: any[]) => any, Environmental.Service>;
     #name: string;
     #parent?: Environment;
-    #added = new Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>;
-    #deleted = new Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>;
-    #serviceEvents = new Map<abstract new (...args: any[]) => any, Environmental.ServiceEvents<any>>;
+    #added = new Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>();
+    #deleted = new Observable<[type: abstract new (...args: any[]) => {}, instance: {}]>();
+    #serviceEvents = new Map<abstract new (...args: any[]) => any, Environmental.ServiceEvents<any>>();
 
     constructor(name: string, parent?: Environment) {
         this.#name = name;
@@ -119,7 +119,7 @@ export class Environment {
 
     /**
      * Emits on service add.
-     * 
+     *
      * Currently only emits for services owned directly by this environment.
      */
     get added() {
@@ -128,7 +128,7 @@ export class Environment {
 
     /**
      * Emits on service delete.
-     * 
+     *
      * Currently only emits for services owned directly by this environment.
      */
     get deleted() {
@@ -137,23 +137,23 @@ export class Environment {
 
     /**
      * Obtain an object with events that trigger when a specific service is added or deleted.
-     * 
+     *
      * This is a more convenient way to observe a specific service than {@link added} and {@link deleted}.
      */
     eventsFor<T extends Environmental.Factory<any>>(type: T) {
         let events = this.#serviceEvents.get(type);
         if (events === undefined) {
             events = {
-                added: new Observable,
-                deleted: new Observable,
-            }
+                added: new Observable(),
+                deleted: new Observable(),
+            };
         }
         return events as Environmental.ServiceEvents<T>;
     }
 
     /**
      * The default environment.
-     * 
+     *
      * Currently only emits for services owned directly by this environment.
      */
     static get default() {
