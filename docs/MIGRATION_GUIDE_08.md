@@ -13,7 +13,7 @@ The Controller API is still the same as before, but will be also adjusted in the
 applicable.
 
 This document tries to give an overview how the commonly used components and classes from the legacy API need to be 
-adjusted for the new API.
+adjusted for the new API. Please also check out the FAQ at the end of this document.
 
 ## Examples
 Matter.js contains several examples to show how devices are built that also can be used in practice as CLI scripts.
@@ -267,7 +267,11 @@ if (!serverNode.lifecycle.isCommissioned) {
 ### More options?
 Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/examples/DeviceNodeFull.ts) example for more interaction points.
 
+## FAQ
 
+### Are the Devices created by the new API compatible with the legacy API?
+The devices itself and functionality are at least equal - if not better with the new API because we also did some fixes that were not in the 7.7.x versions.
+But most important is that the storage structure has changed between legacy and New API - this means that data are stored in a different way and so a device commissioned with the Legacy API will not work with the new API. You need to delete and recommission the device when migrating!
 
 
 ## Changelog 0.8 (WIP)
