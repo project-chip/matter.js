@@ -103,9 +103,9 @@ export class SubscriptionHandler {
         private readonly cancelCallback: () => void,
         subscriptionOptions: SubscriptionOptions.Configuration,
     ) {
-        this.server = this.session.getContext();
-        this.fabric = this.session.getAssociatedFabric();
-        this.peerNodeId = this.session.getPeerNodeId();
+        this.server = this.session.context;
+        this.fabric = this.session.associatedFabric;
+        this.peerNodeId = this.session.peerNodeId;
         this.minIntervalFloorMs = minIntervalFloor * 1000;
         this.maxIntervalCeilingMs = maxIntervalCeiling * 1000;
 
@@ -613,7 +613,7 @@ export class SubscriptionHandler {
         this.session.removeSubscription(this.subscriptionId);
         this.cancelCallback();
         if (cancelledByPeer) {
-            await this.session.getContext().startAnnouncement();
+            await this.session.context.startAnnouncement();
         }
     }
 

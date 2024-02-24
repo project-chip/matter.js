@@ -14,7 +14,7 @@ export * from "./case/CaseServer.js";
 export * from "./SecureSession.js";
 export * from "./Session.js";
 export * from "./SessionManager.js";
-export * from "./UnsecureSession.js";
+export * from "./InsecureSession.js";
 export * from "./pase/PaseClient.js";
 export * from "./pase/PaseMessages.js";
 export * from "./pase/PaseMessenger.js";

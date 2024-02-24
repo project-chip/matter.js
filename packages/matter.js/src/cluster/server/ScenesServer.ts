@@ -184,7 +184,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 sceneName,
                 extensionFieldSets,
                 0,
-                session.getAssociatedFabric(),
+                session.associatedFabric,
             );
             if (result.status === StatusCode.Success) {
                 sceneCount.updated(session);
@@ -194,7 +194,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         viewScene: async ({ request: { groupId, sceneId }, session, endpoint }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             if (groupId !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
@@ -218,7 +218,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         removeScene: async ({ request: { groupId, sceneId }, attributes: { sceneCount }, session, endpoint }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             if (groupId !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
@@ -233,7 +233,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         removeAllScenes: async ({ request: { groupId }, session, endpoint }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             if (groupId !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId };
@@ -251,7 +251,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             endpoint,
         }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             if (groupId !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
@@ -296,7 +296,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             endpoint,
         }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             if (groupId !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupId)) {
                 throw new StatusResponseError(
@@ -333,7 +333,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         getSceneMembership: async ({ request: { groupId }, session, endpoint }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             const endpointScenes = ScenesManager.getAllScenes(fabric, endpoint.getNumber(), groupId);
             const capacity = endpointScenes.length < 0xff ? 0xfe - endpointScenes.length : 0;
@@ -361,7 +361,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 sceneName,
                 extensionFieldSets,
                 transitionTime % 10,
-                session.getAssociatedFabric(),
+                session.associatedFabric,
             );
             if (result.status === StatusCode.Success) {
                 sceneCount.updated(session);
@@ -371,7 +371,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
 
         enhancedViewScene: async ({ request: { groupId, sceneId }, session, endpoint }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             if (groupId !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupId)) {
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
@@ -399,7 +399,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             endpoint,
         }) => {
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             if (
                 groupIdentifierFrom !== 0 &&
@@ -458,7 +458,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 return false;
             }
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
 
             const existingSceneEntry = ScenesManager.getSceneEntry(
                 fabric,
@@ -488,7 +488,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             }
 
             assertSecureSession(session);
-            const fabric = session.getAssociatedFabric();
+            const fabric = session.associatedFabric;
             const endpointScenes = ScenesManager.getEndpointScenes(fabric, endpoint.getNumber());
             if (endpointScenes === undefined) return 0;
             let sceneCount = 0;

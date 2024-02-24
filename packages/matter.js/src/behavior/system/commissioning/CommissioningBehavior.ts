@@ -26,7 +26,7 @@ import { ByteArray } from "../../../util/ByteArray.js";
 import { Behavior } from "../../Behavior.js";
 import { BasicInformationBehavior } from "../../definitions/basic-information/BasicInformationBehavior.js";
 import { OperationalCredentialsBehavior } from "../../definitions/operational-credentials/OperationalCredentialsBehavior.js";
-import { NetworkServer } from "../networking/NetworkServer.js";
+import { NetworkServer } from "../network/NetworkServer.js";
 import { CommissioningOptions } from "./CommissioningOptions.js";
 
 const logger = Logger.get("Commissioning");

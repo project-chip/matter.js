@@ -20,7 +20,6 @@ import { StorageService } from "../../src/environment/StorageService.js";
 import { Node } from "../../src/node/Node.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";
-import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
 import { PartStoreService } from "../../src/node/server/storage/PartStoreService.js";
 import { ServerStore } from "../../src/node/server/storage/ServerStore.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
@@ -124,10 +123,10 @@ export class MockServerStore extends ServerStore {
 
 // TODO - this was intended as client/server-independent node but ended up converting to server out of expediency.
 // Should probably either convert to extending directly from Node or just replace uses with MockServerNode
-export class MockNode<T extends ServerRootEndpoint = ServerRootEndpoint> extends ServerNode<T> {
+export class MockNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends ServerNode<T> {
     #storage = new StorageManager(new StorageBackendMemory());
 
-    constructor(type: T = ServerRootEndpoint as T) {
+    constructor(type: T = ServerNode.RootEndpoint as T) {
         const environment = new Environment("test");
 
         const config = {

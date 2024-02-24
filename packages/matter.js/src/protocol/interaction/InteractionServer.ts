@@ -516,7 +516,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
                 if (
                     attribute instanceof FabricScopedAttributeServer &&
-                    (!exchange.session.isSecure() || !(exchange.session as SecureSession<MatterDevice>).getFabric())
+                    (!exchange.session.isSecure || !(exchange.session as SecureSession<MatterDevice>).fabric)
                 ) {
                     logger.debug(`This write requires a secure session with a fabric assigned which is missing.`);
                     writeResults.push({ path, statusCode: StatusCode.UnsupportedAccess });
@@ -685,7 +685,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
-        const fabric = session.getFabric();
+        const fabric = session.fabric;
         if (fabric === undefined)
             throw new StatusResponseError(
                 "Subscriptions are only implemented after a fabric has been assigned",
@@ -769,7 +769,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
         } catch (error: any) {
             logger.error(
-                `Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports`,
+                `Subscription ${subscriptionId} for Session ${session.id}: Error while sending initial data reports`,
                 error,
             );
             await subscriptionHandler.cancel(); // Cleanup
@@ -788,7 +788,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const maxInterval = subscriptionHandler.getMaxInterval();
         logger.info(
-            `Successfully created subscription ${subscriptionId} for Session ${session.getId()}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
+            `Successfully created subscription ${subscriptionId} for Session ${session.id}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
         );
         // Then send the subscription response
         await messenger.send(

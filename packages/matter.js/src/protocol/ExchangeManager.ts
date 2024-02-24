@@ -194,7 +194,7 @@ export class ExchangeManager<ContextT> {
 
         if (
             exchange !== undefined &&
-            (exchange.session.getId() !== session.getId() ||
+            (exchange.session.id !== session.id ||
                 exchange.isInitiator === message.payloadHeader.isInitiatorMessage) // Should always be ok, but just in case
         ) {
             exchange = undefined;
@@ -264,7 +264,7 @@ export class ExchangeManager<ContextT> {
             return;
         }
         const { session } = exchange;
-        if (session.isSecure() && session.closingAfterExchangeFinished) {
+        if (session.isSecure && session.closingAfterExchangeFinished) {
             logger.debug(
                 `Exchange index ${exchangeIndex} Session ${session.name} is already marked for closure. Close session now.`,
             );
@@ -278,7 +278,7 @@ export class ExchangeManager<ContextT> {
     }
 
     async closeSession(session: SecureSession<any>) {
-        const sessionId = session.getId();
+        const sessionId = session.id;
         const sessionName = session.name;
         if (this.sessionManager.getSession(sessionId) === undefined) {
             // Session already removed, so we do not need to close again
@@ -289,7 +289,7 @@ export class ExchangeManager<ContextT> {
         }
         this.closingSessions.add(sessionId);
         for (const [_exchangeIndex, exchange] of this.exchanges.entries()) {
-            if (exchange.session.getId() === sessionId) {
+            if (exchange.session.id === sessionId) {
                 await exchange.destroy();
             }
         }

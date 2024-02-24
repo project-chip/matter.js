@@ -77,7 +77,7 @@ export class AttributeClient<T> {
             );
             value = tryCatch(
                 () => {
-                    const sessionFabric = this.interactionClient.session.getAssociatedFabric();
+                    const sessionFabric = this.interactionClient.session.associatedFabric;
                     // also remove fabric index if it is the same as the session fabric
                     return this.schema.removeField(
                         value,

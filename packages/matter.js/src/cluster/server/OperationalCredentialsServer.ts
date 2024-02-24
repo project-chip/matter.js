@@ -40,13 +40,13 @@ export const OperationalCredentialsClusterHandler: (
 
     csrRequest: async ({ request: { csrNonce, isForUpdateNoc }, session }) => {
         assertSecureSession(session);
-        if (isForUpdateNoc && session.isPase()) {
+        if (isForUpdateNoc && session.isPase) {
             throw new StatusResponseError(
                 "csrRequest for UpdateNoc received on a PASE session.",
                 StatusCode.InvalidCommand,
             );
         }
-        const device = session.getContext();
+        const device = session.context;
         device.assertFailSafeArmed("csrRequest received while failsafe is not armed.");
 
         const timedOp = device.failsafeContext;
@@ -57,7 +57,7 @@ export const OperationalCredentialsClusterHandler: (
             );
         }
 
-        const certSigningRequest = timedOp.createCertificateSigningRequest(isForUpdateNoc ?? false, session.getId());
+        const certSigningRequest = timedOp.createCertificateSigningRequest(isForUpdateNoc ?? false, session.id);
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
         return { nocsrElements, attestationSignature: cert.sign(session, nocsrElements) };
     },
@@ -78,7 +78,7 @@ export const OperationalCredentialsClusterHandler: (
         attributes: { nocs, commissionedFabrics, fabrics, trustedRootCertificates, supportedFabrics },
         session,
     }) => {
-        if (!session.isSecure()) throw new MatterFlowError("addOperationalCert should be called on a secure session.");
+        if (!session.isSecure) throw new MatterFlowError("addOperationalCert should be called on a secure session.");
 
         // TODO 1. Verify the NOC using:
         //         a. Crypto_VerifyChain(certificates = [NOCValue, ICACValue, RootCACertificate]) if ICACValue is present,
@@ -93,7 +93,7 @@ export const OperationalCredentialsClusterHandler: (
         //        SHALL be InvalidNodeOpId if the matter-node-id attribute in the subject DN of the NOC has a value
         //        outside the Operational Node ID range and InvalidNOC for all other failures.
 
-        const device = session.getContext();
+        const device = session.context;
 
         const failsafeContext = device.failsafeContext;
 
@@ -111,7 +111,7 @@ export const OperationalCredentialsClusterHandler: (
             };
         }
 
-        if (failsafeContext.csrSessionId !== session.getId()) {
+        if (failsafeContext.csrSessionId !== session.id) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
                 debugText: "CSR not found in failsafe context.",
@@ -159,7 +159,7 @@ export const OperationalCredentialsClusterHandler: (
         await failsafeContext.addFabric(fabric);
 
         assertSecureSession(session);
-        if (session.isPase()) {
+        if (session.isPase) {
             logger.debug(`Add Fabric with index ${fabric.fabricIndex} to PASE session ${session.name}.`);
             session.addAssociatedFabric(fabric);
         }
@@ -188,8 +188,8 @@ export const OperationalCredentialsClusterHandler: (
     },
 
     fabricsAttributeGetter: ({ session, isFabricFiltered }) => {
-        if (session === undefined || !session.isSecure()) return []; // ???
-        const fabrics = isFabricFiltered ? [session.getAssociatedFabric()] : session.getContext().getFabrics();
+        if (session === undefined || !session.isSecure) return []; // ???
+        const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
 
         return fabrics.map(fabric => ({
             fabricId: fabric.fabricId,
@@ -207,8 +207,8 @@ export const OperationalCredentialsClusterHandler: (
     },
 
     nocsAttributeGetter: ({ session, isFabricFiltered }) => {
-        if (session === undefined || !session.isSecure()) return []; // ???
-        const fabrics = isFabricFiltered ? [session.getAssociatedFabric()] : session.getContext().getFabrics();
+        if (session === undefined || !session.isSecure) return []; // ???
+        const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
         return fabrics.map(fabric => ({
             noc: fabric.operationalCert,
             icac: fabric.intermediateCACert ?? null,
@@ -222,34 +222,34 @@ export const OperationalCredentialsClusterHandler: (
     },
 
     commissionedFabricsAttributeGetter: ({ session }) => {
-        if (session === undefined || !session.isSecure()) return 0; // ???
-        return session.getContext().getFabrics().length;
+        if (session === undefined || !session.isSecure) return 0; // ???
+        return session.context.getFabrics().length;
     },
 
     trustedRootCertificatesAttributeGetter: ({ session, isFabricFiltered }) => {
-        if (session === undefined || !session.isSecure()) return []; // ???
-        const fabrics = isFabricFiltered ? [session.getAssociatedFabric()] : session.getContext().getFabrics();
+        if (session === undefined || !session.isSecure) return []; // ???
+        const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
         return fabrics.map(fabric => fabric.rootCert);
     },
 
     currentFabricIndexAttributeGetter: ({ session }) => {
-        if (session === undefined || !session.isSecure()) return FabricIndex.NO_FABRIC;
+        if (session === undefined || !session.isSecure) return FabricIndex.NO_FABRIC;
         assertSecureSession(session);
-        return session.getFabric()?.fabricIndex ?? FabricIndex.NO_FABRIC;
+        return session.fabric?.fabricIndex ?? FabricIndex.NO_FABRIC;
     },
 
     updateNoc: async ({ request: { nocValue, icacValue }, attributes: { nocs, fabrics }, session }) => {
         assertSecureSession(session);
 
         tryCatch(
-            () => session.getAssociatedFabric(),
+            () => session.associatedFabric,
             NoAssociatedFabricError,
             () => {
                 throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
             },
         );
 
-        const device = session.getContext();
+        const device = session.context;
 
         const failsafeContext = device.failsafeContext;
 
@@ -278,7 +278,7 @@ export const OperationalCredentialsClusterHandler: (
             throw new StatusResponseError("csrRequest not invoked for UpdateNOC.", StatusCode.ConstraintError);
         }
 
-        if (session.getAssociatedFabric().fabricIndex !== failsafeContext.associatedFabric?.fabricIndex) {
+        if (session.associatedFabric.fabricIndex !== failsafeContext.associatedFabric?.fabricIndex) {
             throw new StatusResponseError(
                 "Fabric of this session and the failsafe context do not match.",
                 StatusCode.ConstraintError,
@@ -305,7 +305,7 @@ export const OperationalCredentialsClusterHandler: (
         assertSecureSession(session, "updateOperationalCert should be called on a secure session.");
 
         const fabric = tryCatch(
-            () => session.getAssociatedFabric(),
+            () => session.associatedFabric,
             NoAssociatedFabricError,
             () => {
                 throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
@@ -313,7 +313,7 @@ export const OperationalCredentialsClusterHandler: (
         );
 
         const currentFabricIndex = fabric.fabricIndex;
-        const device = session.getContext();
+        const device = session.context;
         const conflictingLabelFabric = device
             .getFabrics()
             .find(f => f.label === label && f.fabricIndex !== currentFabricIndex);
@@ -337,7 +337,7 @@ export const OperationalCredentialsClusterHandler: (
         session,
         endpoint,
     }) => {
-        const device = session.getContext();
+        const device = session.context;
 
         const fabric = device.getFabricByIndex(fabricIndex);
 
@@ -353,7 +353,7 @@ export const OperationalCredentialsClusterHandler: (
 
         assertSecureSession(session);
 
-        await fabric.remove(session.getId());
+        await fabric.remove(session.id);
         nocs.updated(session);
         commissionedFabrics.updated(session);
         fabrics.updated(session);
@@ -366,7 +366,7 @@ export const OperationalCredentialsClusterHandler: (
     },
 
     addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {
-        const failsafeContext = session.getContext().failsafeContext;
+        const failsafeContext = session.context.failsafeContext;
 
         if (failsafeContext.hasRootCert) {
             throw new StatusResponseError(

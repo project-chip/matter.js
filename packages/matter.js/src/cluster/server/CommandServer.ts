@@ -54,13 +54,13 @@ export class CommandServer<RequestT, ResponseT> {
         let request = this.requestSchema.decodeTlv(args);
 
         // Inject fabric index into structures in general if undefined, if set it will be used
-        if (session.isSecure()) {
-            const fabric = (session as SecureSession<any>).getFabric();
+        if (session.isSecure) {
+            const fabric = (session as SecureSession<any>).fabric;
             if (fabric) {
                 request = this.requestSchema.injectField(
                     request,
                     <number>Globals.FabricIndex.id,
-                    session.getAssociatedFabric().fabricIndex,
+                    session.associatedFabric.fabricIndex,
                     existingFieldIndex => existingFieldIndex === undefined,
                 );
             }
