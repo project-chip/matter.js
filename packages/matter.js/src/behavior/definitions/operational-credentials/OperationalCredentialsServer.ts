@@ -383,9 +383,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 array.splice(index, 1);
             }
         }
-        this.state.trustedRootCertificates = this.session.context
-            .getFabrics()
-            .map(f => f.rootCert);
+        this.state.trustedRootCertificates = this.session.context.getFabrics().map(f => f.rootCert);
         this.state.commissionedFabrics = this.state.fabrics.length;
     }
 
