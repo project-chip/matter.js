@@ -5,8 +5,18 @@
  */
 
 /**
+ * This example is not optimized for simplicity, but to show all the advanced use cases for matter.js.
+ * If you want to see a simple minimalistic and more standard example please look at DeviceNode.ts or the other examples.
+ *
  * This example shows how to create a simple on-off Matter device as a light or as a socket.
  * It can be used as CLI script and starting point for your own device node implementation.
+ * Additional to this it shows the following:
+ * * How to modify the existing clusters on Root and also Device Endpoints
+ * * How to add own Cluster implementations for Standard clusters
+ * * How to add a custom Cluster to an Endpoint
+ * * Which events are available to get status information from the Node aon commissioning and session/subscription changes
+ * * How to get cluster state values
+ * * How to set one or multiple state values in a transaction.
  */
 
 /**
@@ -392,7 +402,8 @@ if (!server.lifecycle.isCommissioned) {
  */
 process.on("SIGINT", () => {
     // Clean up on CTRL-C
-    server[Symbol.asyncDispose]()
+    server
+        .destroy()
         .then(() => process.exit(0))
         .catch(err => console.error(err));
 });
