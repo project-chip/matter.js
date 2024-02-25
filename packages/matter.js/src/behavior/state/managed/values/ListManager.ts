@@ -353,7 +353,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
         }
     }
 
-    return new Proxy([], {
+    return new Proxy(reference.value, {
         get(_target, property, receiver) {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
                 sublocation.path.id = property;

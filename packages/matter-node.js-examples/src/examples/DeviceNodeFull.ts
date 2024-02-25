@@ -354,6 +354,8 @@ logEndpoint(EndpointServer.forEndpoint(server));
  */
 await server.bringOnline();
 
+console.log("Initial Fabrics", server.state.operationalCredentials.fabrics);
+
 /**
  * If the node is not commissioned already we display the QR code on console. The QR code is also logged
  */
