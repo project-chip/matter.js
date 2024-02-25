@@ -45,7 +45,7 @@ type ResumptionStorageRecord = {
 };
 
 export class SessionManager<ContextT> {
-    readonly #unsecureSessions = new Map<NodeId, InsecureSession<ContextT>>();
+    readonly #insecureSessions = new Map<NodeId, InsecureSession<ContextT>>();
     readonly #sessions = new BasicSet<SecureSession<ContextT>>();
     #nextSessionId = Crypto.getRandomUInt16();
     #resumptionRecords = new Map<NodeId, ResumptionRecord>();
@@ -81,7 +81,7 @@ export class SessionManager<ContextT> {
     }) {
         const { initiatorNodeId, sessionParameters, isInitiator } = options;
         if (initiatorNodeId !== undefined) {
-            if (this.#unsecureSessions.has(initiatorNodeId)) {
+            if (this.#insecureSessions.has(initiatorNodeId)) {
                 throw new MatterFlowError(`UnsecureSession with NodeId ${initiatorNodeId} already exists.`);
             }
         }
@@ -91,7 +91,7 @@ export class SessionManager<ContextT> {
                 messageCounter: this.#globalUnencryptedMessageCounter,
                 closeCallback: async () => {
                     logger.info(`End insecure session ${session.name}`);
-                    this.#unsecureSessions.delete(session.nodeId);
+                    this.#insecureSessions.delete(session.nodeId);
                 },
                 initiatorNodeId,
                 sessionParameters,
@@ -99,9 +99,9 @@ export class SessionManager<ContextT> {
             });
 
             const ephermalNodeId = session.nodeId;
-            if (this.#unsecureSessions.has(ephermalNodeId)) continue;
+            if (this.#insecureSessions.has(ephermalNodeId)) continue;
 
-            this.#unsecureSessions.set(ephermalNodeId, session);
+            this.#insecureSessions.set(ephermalNodeId, session);
             return session;
         }
     }
@@ -231,9 +231,9 @@ export class SessionManager<ContextT> {
 
     getUnsecureSession(sourceNodeId?: NodeId) {
         if (sourceNodeId === undefined) {
-            return this.#unsecureSessions.get(NodeId.UNSPECIFIED_NODE_ID);
+            return this.#insecureSessions.get(NodeId.UNSPECIFIED_NODE_ID);
         }
-        return this.#unsecureSessions.get(sourceNodeId);
+        return this.#insecureSessions.get(sourceNodeId);
     }
 
     findGroupSession(groupId: number, groupSessionId: number) {
@@ -327,9 +327,9 @@ export class SessionManager<ContextT> {
             await session?.end(false);
             this.#sessions.delete(session);
         }
-        for (const session of this.#unsecureSessions.values()) {
+        for (const session of this.#insecureSessions.values()) {
             await session?.end();
-            this.#unsecureSessions.delete(session.nodeId);
+            this.#insecureSessions.delete(session.nodeId);
         }
     }
 }
