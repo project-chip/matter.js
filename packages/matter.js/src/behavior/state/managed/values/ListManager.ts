@@ -256,6 +256,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                     const entry = reference.value[i] as undefined | { fabricIndex?: number };
                     if (
                         typeof entry === "object" &&
+                        entry !== null &&
                         (session.offline || !entry.fabricIndex || entry.fabricIndex === session.fabric)
                     ) {
                         length++;
