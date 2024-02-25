@@ -403,7 +403,7 @@ if (!server.lifecycle.isCommissioned) {
 process.on("SIGINT", () => {
     // Clean up on CTRL-C
     server
-        .destroy()
+        .close()
         .then(() => process.exit(0))
         .catch(err => console.error(err));
 });
