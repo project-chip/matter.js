@@ -147,6 +147,7 @@ export class Environment {
                 added: new Observable(),
                 deleted: new Observable(),
             };
+            this.#serviceEvents.set(type, events);
         }
         return events as Environmental.ServiceEvents<T>;
     }
