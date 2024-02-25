@@ -20,6 +20,7 @@ import type { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
 import { ServerStore } from "../../../node/server/storage/ServerStore.js";
 import { SessionManager } from "../../../session/SessionManager.js";
+import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
 
 /**
@@ -254,6 +255,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         // MatterDevice is the interface to a broad array of functionality that other modules require access to
         this.owner.env.set(SessionManager, this.#matterDevice.sessionManager);
         this.owner.env.set(FabricManager, this.#matterDevice.fabricManager);
+
+        this.owner.act(agent => agent.load(SessionsBehavior));
 
         await this.addTransports(this.#matterDevice);
         await this.addBroadcasters(this.#matterDevice);
