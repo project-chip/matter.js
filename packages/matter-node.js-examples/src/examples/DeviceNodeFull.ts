@@ -286,25 +286,37 @@ const server = await ServerNode.create(RootEndpoint, {
 const endpoint = new Endpoint(OnOffDevice, { id: "onoff" });
 await server.add(endpoint);
 
-/*
-activeSessionsChangedCallback: fabricIndex => {
-        console.log(
-            `activeSessionsChangedCallback: Active sessions changed on Fabric ${fabricIndex}`,
-            commissioningServer.getActiveSessionInformation(fabricIndex),
-        );
-    },
-    commissioningChangedCallback: fabricIndex => {
-        console.log(
-            `commissioningChangedCallback: Commissioning changed on Fabric ${fabricIndex}`,
-            commissioningServer.getCommissionedFabricInformation(fabricIndex)[0],
-        );
-    },
+/**
+ * This event is triggered when the device is initially commissioned successfully.
+ * This means: It is added to the first fabric.
  */
+server.lifecycle.commissioned.on(() => console.log("Server was initially commissioned successfully!"));
 
-server.lifecycle.commissioned.on(() => console.log("Server was commissioned successfully!"));
-server.lifecycle.decommissioned.on(() => console.log("Server was decommissioned successfully!"));
+/** This event is triggered when all fabrics are removed from the device, usually it also does a factory reset then. */
+server.lifecycle.decommissioned.on(() => console.log("Server was fully decommissioned successfully!"));
+
+/** This event is triggered when the device went online. This means that it is discoverable in the network. */
 server.lifecycle.online.on(() => console.log("Server is online"));
+
+/** This event is triggered when the device went offline. it is not longer discoverable or connectable in the network. */
 server.lifecycle.offline.on(() => console.log("Server is offline"));
+
+/**
+ * This event is triggered when an operative new session was opened by a Controller.
+ * It is not triggered for the initial commissioning process, just afterwards for real connections.
+ */
+server.events.sessions.opened.on(session => console.log(`Session opened`, session));
+
+/**
+ * This event is triggered when an operative session is closed by a Controller or because the Device goes offline.
+ */
+server.events.sessions.closed.on(session => console.log(`Session closed`, session));
+
+/** This event is triggered when a subscription gets added or removed on an operative session. */
+server.events.sessions.subscriptionsChanged.on(session => console.log(`Session subscriptions changed`, session));
+
+// TODO Adjust next to not need to read fabrics here but have commissioning events
+server.events.operationalCredentials.fabrics$Change.on(fabrics => console.log("Fabrics changed", fabrics));
 
 // React on a change of identificationTime to do Identify stuff for the own device
 let isIdentifying = false;
@@ -354,16 +366,25 @@ if (!server.lifecycle.isCommissioned) {
     const onOffValue = endpoint.state.onOff.onOff;
     console.log(`current OnOff attribute: ${onOffValue}`);
 
-    // Set onOff attribute from OnOff cluster
-    await endpoint.set({
-        onOff: {
-            onOff: !onOffValue,
-        },
-        // @ts-expect-error conditional
-        myFancyOwnFunctionality: {
-            myFancyValue: 36,
-        },
-    });
+    if (vendorId === 0xfff4) {
+        // Set onOff attribute from OnOff cluster AND the myFancyValue of the MyFancyOwnFunctionality cluster together
+        await endpoint.set({
+            onOff: {
+                onOff: !onOffValue,
+            },
+            // @ts-expect-error Needed because the Fancy cluster is added conditionally, so TS do not get that it's there.
+            myFancyOwnFunctionality: {
+                myFancyValue: 36,
+            },
+        });
+    } else {
+        // Set onOff attribute from OnOff cluster only
+        await endpoint.set({
+            onOff: {
+                onOff: !onOffValue,
+            },
+        });
+    }
 }
 
 /**
