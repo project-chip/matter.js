@@ -312,7 +312,7 @@ export class SessionManager<ContextT> {
                 name: session.name,
                 nodeId: session.nodeId,
                 peerNodeId: session.peerNodeId,
-                fabric: session instanceof SecureSession ? session.fabric?.getExternalInformation() : undefined,
+                fabric: session instanceof SecureSession ? session.fabric?.externalInformation : undefined,
                 isPeerActive: session.isPeerActive(),
                 secure: session.isSecure,
                 lastInteractionTimestamp: session instanceof SecureSession ? session.timestamp : undefined,

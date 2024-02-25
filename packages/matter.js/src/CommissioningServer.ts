@@ -1025,7 +1025,7 @@ export class CommissioningServer extends MatterNode {
         if (!this.isCommissioned()) return [];
         const allFabrics = this.deviceInstance?.getFabrics() ?? [];
         const fabrics = fabricIndex === undefined ? allFabrics : allFabrics.filter(f => f.fabricIndex === fabricIndex);
-        return fabrics.map(fabric => fabric.getExternalInformation()) ?? [];
+        return fabrics.map(fabric => fabric.externalInformation) ?? [];
     }
 
     /**

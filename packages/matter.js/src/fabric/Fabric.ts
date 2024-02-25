@@ -48,6 +48,15 @@ export type FabricJsonObject = {
     scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>;
 };
 
+export type ExposedFabricInformation = {
+    fabricIndex: FabricIndex;
+    fabricId: FabricId;
+    nodeId: NodeId;
+    rootNodeId: NodeId;
+    rootVendorId: VendorId;
+    label: string;
+};
+
 export class Fabric {
     private readonly sessions = new Array<SecureSession<any>>();
 
@@ -227,7 +236,7 @@ export class Fabric {
         return Array.from(this.scopedClusterData.get(cluster.id).keys());
     }
 
-    getExternalInformation() {
+    get externalInformation(): ExposedFabricInformation {
         return {
             fabricIndex: this.fabricIndex,
             fabricId: this.fabricId,
