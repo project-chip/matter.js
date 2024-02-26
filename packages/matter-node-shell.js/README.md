@@ -27,6 +27,12 @@ The shell currently just supports Controller side and so the port is not used an
 npm shell <nodenum>
 ```
 
+If you need to specify more parameters, e.g. enabling BLE you need to provide an additional "--" to separate the command line parameters:
+
+```
+npm shell <nodenum> -- --ble
+```
+
 ## General usage
 
 The shell offers and interactive prompt that can execute commands. If you just enter the command name that has sub commands (with or without followed by "help"), it will display the command options. If you enter the command name followed by the options, it will execute the command, with "help" after the command name it will show the detailed help for this command.
