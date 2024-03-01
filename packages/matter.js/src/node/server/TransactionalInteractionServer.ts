@@ -128,6 +128,8 @@ export class TransactionalInteractionServer extends InteractionServer {
         endpoint: EndpointInterface,
         timed = false,
     ) {
+        const invoke = () => super.invokeCommand(command, session, commandFields, message, endpoint, timed);
+
         return this.#transact(
             "Invoke",
             {
@@ -137,7 +139,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                 message,
                 session,
             },
-            () => super.invokeCommand(command, session, commandFields, message, endpoint, timed),
+            invoke,
         );
     }
 

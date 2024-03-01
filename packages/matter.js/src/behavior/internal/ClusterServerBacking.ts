@@ -153,11 +153,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
     }
 }
 
-function withBehavior<T>(
-    backing: ClusterServerBehaviorBacking,
-    message: Message | undefined,
-    fn: (behavior: ClusterBehavior) => T,
-): T {
+function behaviorFor(backing: ClusterServerBehaviorBacking, message: Message | undefined) {
     const context = Contextual.contextOf(message);
     if (!context) {
         throw new InternalError("Message context not installed");
@@ -165,17 +161,17 @@ function withBehavior<T>(
 
     const agent = context.agentFor(backing.endpoint);
 
-    return fn(agent.get(backing.type));
+    return agent.get(backing.type);
 }
 
-function createCommandHandler(backing: ClusterServerBehaviorBacking, name: string): CommandHandler<any, any, any> {
+function createCommandHandler(backing: ClusterServerBehaviorBacking, name: string) {
     const schema = backing.type.schema?.get(CommandModel, camelize(name, true));
     if (schema === undefined) {
         throw new ImplementationError(`There is no metadata for command ${name}`);
     }
     const access = AccessControl(schema);
 
-    return ({ request, message }) => {
+    const handleCommand: CommandHandler<any, any, any> = ({ request, message }) => {
         let requestDiagnostic: unknown;
         if (request && typeof request === "object") {
             requestDiagnostic = Diagnostic.dict(request);
@@ -185,43 +181,40 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
             requestDiagnostic = Diagnostic.weak("(no payload)");
         }
 
-        return withBehavior(backing, message, behavior => {
-            const path = backing.path.at(name);
+        const behavior = behaviorFor(backing, message);
 
-            const trace = behavior.context.trace;
-            if (trace) {
-                trace.path = backing.path.at(name);
-                trace.input = request;
-            }
+        const path = backing.path.at(name);
 
-            logger.info(
-                "Invoke",
-                Diagnostic.strong(path.toString()),
-                behavior.context.transaction.via,
-                requestDiagnostic,
-            );
+        const trace = behavior.context.trace;
+        if (trace) {
+            trace.path = backing.path.at(name);
+            trace.input = request;
+        }
 
-            access.authorizeInvoke(behavior.context, {
-                path,
-                cluster: behavior.cluster.id,
-            });
+        logger.info("Invoke", Diagnostic.strong(path.toString()), behavior.context.transaction.via, requestDiagnostic);
 
-            let result = (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
-
-            if (trace) {
-                result = MaybePromise.then(
-                    result,
-
-                    output => {
-                        trace.output = result;
-                        return output;
-                    },
-                );
-            }
-
-            return result;
+        access.authorizeInvoke(behavior.context, {
+            path,
+            cluster: behavior.cluster.id,
         });
+
+        let result = (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
+
+        if (trace) {
+            result = MaybePromise.then(
+                result,
+
+                output => {
+                    trace.output = result;
+                    return output;
+                },
+            );
+        }
+
+        return result;
     };
+
+    return handleCommand;
 }
 
 function createAttributeAccessors(
@@ -238,54 +231,54 @@ function createAttributeAccessors(
                 return (backing.datasource.view as unknown as Val.Struct)[name];
             }
 
-            return withBehavior(backing, message, behavior => {
-                const trace = behavior.context.trace;
-                if (trace) {
-                    trace.path = backing.path.at(name);
-                }
+            const behavior = behaviorFor(backing, message);
 
-                logger.debug(
-                    "Read",
-                    Diagnostic.strong(`${backing}.state.${name}`),
-                    "via",
-                    behavior.context.transaction.via,
-                );
+            const trace = behavior.context.trace;
+            if (trace) {
+                trace.path = backing.path.at(name);
+            }
 
-                const state = behavior.state as Val.Struct;
+            logger.debug(
+                "Read",
+                Diagnostic.strong(`${backing}.state.${name}`),
+                "via",
+                behavior.context.transaction.via,
+            );
 
-                StructManager.assertDirectReadAuthorized(state, name);
+            const state = behavior.state as Val.Struct;
 
-                if (trace) {
-                    trace.output = state[name];
-                }
+            StructManager.assertDirectReadAuthorized(state, name);
 
-                return state[name];
-            });
+            if (trace) {
+                trace.output = state[name];
+            }
+
+            return state[name];
         },
 
         set(value, { message }) {
-            return withBehavior(backing, message, behavior => {
-                logger.info(
-                    "Write",
-                    Diagnostic.strong(`${backing}.state.${name}`),
-                    "via",
-                    behavior.context.transaction.via,
-                );
+            const behavior = behaviorFor(backing, message);
 
-                const trace = behavior.context.trace;
-                if (trace) {
-                    trace.path = backing.path.at(name);
-                    trace.input = value;
-                }
+            logger.info(
+                "Write",
+                Diagnostic.strong(`${backing}.state.${name}`),
+                "via",
+                behavior.context.transaction.via,
+            );
 
-                const state = behavior.state as Record<string, any>;
+            const trace = behavior.context.trace;
+            if (trace) {
+                trace.path = backing.path.at(name);
+                trace.input = value;
+            }
 
-                state[name] = value;
+            const state = behavior.state as Record<string, any>;
 
-                // If the transaction is a write transaction, report that
-                // the attribute is updated
-                return behavior.context.transaction?.status === Status.Exclusive;
-            });
+            state[name] = value;
+
+            // If the transaction is a write transaction, report that
+            // the attribute is updated
+            return behavior.context.transaction?.status === Status.Exclusive;
         },
     };
 }
