@@ -174,7 +174,7 @@ export class BridgeTestInstance implements TestInstance {
 
         await serverNode.add(aggregator);
 
-        aggregator.parts.add(bridgedLight);
+        await aggregator.add(bridgedLight);
 
         return serverNode;
     }
