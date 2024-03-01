@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
+import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import { NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as dgram from "dgram";
-import { Diagnostic } from "../exports/log.js";
 import { NetworkNode } from "./NetworkNode.js";
 
 const logger = Logger.get("UdpChannelNode");

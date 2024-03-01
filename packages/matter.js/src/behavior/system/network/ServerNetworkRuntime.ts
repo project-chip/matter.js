@@ -256,7 +256,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.owner.env.set(SessionManager, this.#matterDevice.sessionManager);
         this.owner.env.set(FabricManager, this.#matterDevice.fabricManager);
 
-        this.owner.act(agent => agent.load(SessionsBehavior));
+        await this.owner.act(agent => agent.load(SessionsBehavior));
 
         await this.addTransports(this.#matterDevice);
         await this.addBroadcasters(this.#matterDevice);

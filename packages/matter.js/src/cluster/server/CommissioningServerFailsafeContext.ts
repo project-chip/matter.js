@@ -8,15 +8,12 @@ import { FailsafeContext } from "../../common/FailsafeContext.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { Logger } from "../../log/Logger.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { asyncNew } from "../../util/AsyncConstruction.js";
 import { BasicInformation } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning } from "../definitions/GeneralCommissioningCluster.js";
 import { NetworkCommissioning } from "../definitions/NetworkCommissioningCluster.js";
 import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
-
-const logger = Logger.get("ClusterServerFailsafeContext");
 
 /**
  * {@link FailsafeContext} implementation for {@link EndpointInterface} API.
@@ -89,10 +86,6 @@ export class CommissioningServerFailsafeContext extends FailsafeContext {
             const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);
             if (networkCluster !== undefined) {
                 networkCluster.setNetworksAttribute(networkState);
-            } else {
-                logger.warn(
-                    `NetworkCluster not found for endpoint ${endpointId}, but expected. Can not restore network data!`,
-                );
             }
             this.#storedNetworkClusterState.delete(endpointId);
         }

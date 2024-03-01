@@ -13,7 +13,7 @@ import { AdministratorCommissioning } from "../definitions/AdministratorCommissi
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { CommissioningServerFailsafeContext } from "./CommissiongServerFailsafeContext.js";
+import { CommissioningServerFailsafeContext } from "./CommissioningServerFailsafeContext.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");

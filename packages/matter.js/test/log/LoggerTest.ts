@@ -17,19 +17,20 @@ type LogOptions = {
     format?: Format.Type;
     levels?: typeof Logger.logLevels;
     method?: "notice" | "info" | "debug" | "warn" | "error" | "fatal";
+    fromLogger?: string;
 };
 
 describe("Logger", () => {
     const logger = Logger.get(LOGGER_NAME);
 
-    function capture(fn: () => void, { format, levels }: LogOptions) {
+    function capture(fn: () => void, { format, levels, fromLogger = "default" }: LogOptions) {
         return captureLog(() => {
-            Logger.format = format ?? Format.PLAIN;
+            Logger.setFormatForLogger(fromLogger, format ?? Format.PLAIN);
             if (levels) {
-                Logger.logLevels = levels;
+                Logger.setLogLevelsForLogger(fromLogger, levels);
             }
             fn();
-        });
+        }, fromLogger);
     }
 
     function logTestLine(options: LogOptions = {}) {
@@ -132,6 +133,35 @@ describe("Logger", () => {
         });
     });
 
+    describe("second logger with info/debug mix", () => {
+        before(() => {
+            Logger.addLogger("second", () => {}, { defaultLogLevel: Level.INFO });
+        });
+
+        it("logs a message if level is info", () => {
+            const result = logTestLine({
+                method: "info",
+                fromLogger: "second",
+            });
+
+            expect(result?.level).equal(Level.INFO);
+        });
+
+        it("doesn't log a message if level is above info", () => {
+            const result = logTestLine({
+                method: "info",
+                levels: { [LOGGER_NAME]: Level.ERROR },
+                fromLogger: "second",
+            });
+
+            expect(result).equal(undefined);
+        });
+
+        after(() => {
+            Logger.removeLogger("second");
+        });
+    });
+
     describe("nesting", () => {
         it("nests once", () => {
             Logger.nest(() => {
@@ -201,7 +231,10 @@ describe("Logger", () => {
 
         it("accepts custom formatters", () => {
             const result = captureLog(() => {
-                Logger.logFormatter = (_now, _level, _logger, _prefix, values) => `${values[0]}`;
+                Logger.setLogFormatterForLogger(
+                    "default",
+                    (_now, _level, _facility, _nestingPrefix, values) => `${values[0]}`,
+                );
                 logger.debug("test");
             });
 
