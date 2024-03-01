@@ -60,7 +60,7 @@ The following methods are also existing on the ServerNode:
 * **`factoryReset()`**: This factory resets the device. If started it is stopped and restarted afterward.
 * **`destroy()`**: This destroys the node, taking it offline and removing it from the environment workers-
 
-### New:Enpoint <--> Legacy:Endpoint and Device-Classes/Clusters
+### New:Endpoint <--> Legacy:Endpoint and Device-Classes/Clusters
 A "Endpoint" describes an endpoint which is added in the Matter endpoint structure.
 
 **Note**
@@ -295,3 +295,4 @@ But most important is that the storage structure has changed between legacy and 
 * Discussion: async store?
 * Discussion: GHA tests runs? adjust for branch or start PR?
 * Later: Generator options for custom clusters into own projects
+* Later: Collect and Expose Code coverage, ideally including chip tests 
