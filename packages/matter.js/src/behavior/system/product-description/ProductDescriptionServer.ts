@@ -94,6 +94,10 @@ export namespace ProductDescriptionServer {
 }
 
 function inferDeviceType(agent: Agent): DeviceTypeId | undefined {
+    if (!agent.endpoint.behaviors.isActive(DescriptorBehavior)) {
+        return;
+    }
+
     let recurse = false;
     for (const dt of agent.get(DescriptorBehavior).state.deviceTypeList) {
         switch (dt.deviceType) {

@@ -4,12 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterError } from "../../common/MatterError.js";
 import { IdentityConflictError, IdentityService } from "../../node/server/IdentityService.js";
 import { BasicSet, MutableSet, ObservableSet } from "../../util/Set.js";
 import { Agent } from "../Agent.js";
 import { Endpoint } from "../Endpoint.js";
 import { EndpointType } from "../type/EndpointType.js";
 import { EndpointLifecycle } from "./EndpointLifecycle.js";
+
+/**
+ * Thrown when a requested child {@link Endpoint} does not exist.
+ */
+class PartNotFoundError extends MatterError {}
 
 /**
  * Manages parent-child relationship between endpoints.
@@ -41,14 +47,6 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
         });
     }
 
-    get(id: string) {
-        for (const endpoint of this) {
-            if (endpoint.lifecycle.hasId && endpoint.id === id) {
-                return endpoint;
-            }
-        }
-    }
-
     add(child: Endpoint.Definition | Agent) {
         const endpoint = this.#endpointFor(child);
         this.#children.add(endpoint);
@@ -63,8 +61,43 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
         this.#children.clear();
     }
 
-    has(child: Endpoint | Agent) {
-        return this.#children.has(this.#endpointFor(child));
+    get(id: string) {
+        for (const child of this.#children) {
+            if (child.maybeId === id) {
+                return child;
+            }
+        }
+    }
+
+    require(id: string) {
+        const part = this.get(id);
+
+        if (part === undefined) {
+            throw new PartNotFoundError(`Endpoint ${this.#endpoint} has no part ${id}`);
+        }
+
+        return part;
+    }
+
+    #get(id: string) {
+        for (const child of this.#children) {
+            if (child.maybeId === id) {
+                return child;
+            }
+        }
+    }
+
+    has(identity: string | Endpoint | Agent) {
+        if (typeof identity === "string") {
+            for (const child of this.#children) {
+                if (child.maybeId === identity) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return this.#children.has(this.#endpointFor(identity));
     }
 
     get areReady() {
@@ -105,7 +138,7 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
      * Confirm availability of an ID amongst the endpoint's children.
      */
     assertIdAvailable(id: string, endpoint: Endpoint) {
-        const other = this.get(id);
+        const other = this.#get(id);
         if (other && other !== endpoint) {
             throw new IdentityConflictError(`${other} is already defined; endpoint IDs must be unique within parent`);
         }

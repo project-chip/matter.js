@@ -69,14 +69,13 @@ export class Agent {
     }
 
     /**
-     * Obtain a {@link Behavior} supported by this agent.  Throws an error if
-     * the {@link Behavior.Type} isn't supported or is still initializing.
+     * Obtain a {@link Behavior} supported by this agent.  Throws an error if the {@link Behavior.Type} isn't supported
+     * or is still initializing.
      *
-     * You may also access behaviors using normal property access, e.g.
-     * `agent.descriptor` is the same as `agent.get(DescriptorBehavior)`.
+     * You may also access behaviors using normal property access, e.g. `agent.descriptor` is the same as
+     * `agent.get(DescriptorBehavior)`.
      *
-     * Property access is available in TypeScript when the set of behaviors
-     * is defined statically.
+     * Property access is available in TypeScript when the set of behaviors is defined statically.
      */
     get<T extends Behavior.Type>(type: T) {
         let behavior = this.#behaviors[type.id];
@@ -87,9 +86,8 @@ export class Agent {
     }
 
     /**
-     * Obtain a behavior supported by this agent.  Throws an error if the
-     * {@link Behavior.Type} isn't supported.  Waits if the behavior is not yet
-     * initialized.
+     * Obtain a behavior supported by this agent.  Throws an error if the {@link Behavior.Type} isn't supported.  Waits
+     * if the behavior is not yet initialized.
      */
     load<T extends Behavior.Type>(type: T): MaybePromise<InstanceType<T>> {
         const behavior = this.#behaviors[type.id];
@@ -156,13 +154,10 @@ export class Agent {
 
 export namespace Agent {
     /**
-     * Static type for {@link Agent} with a property for each statically
-     * defined behavior.
+     * Static type for {@link Agent} with a property for each statically defined behavior.
      *
-     * Behaviors available at construction time are available as instance
-     * properties.  You must use {@link Agent.get} or
-     * {@link Agent.require} to acquire behaviors added via
-     * {@link Agent.require}.
+     * Behaviors available at construction time are available as instance properties.  You must use {@link Agent.get} or
+     * {@link Agent.require} to acquire behaviors added via {@link Agent.require}.
      */
     export interface Type<T extends EndpointType = EndpointType.Empty> {
         new (endpoint: Endpoint, context: ActionContext): Instance<T>;

@@ -19,9 +19,10 @@ const BRIDGED_NODE_REVISION = 1;
  * All attributes are optional except for the "reachable" attribute.
  */
 export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInformationBehavior {
-    override initialize() {
+    override async initialize() {
         if (this.endpoint.lifecycle.isInstalled) {
-            this.#configurePart();
+            await this.agent.load(DescriptorServer);
+            await this.#configurePart();
         } else {
             this.reactTo(this.endpoint.lifecycle.installed, this.#configurePart, { once: true });
         }
@@ -42,7 +43,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
      * Therefore this default implementation of BridgedDeviceBasicInformation injects the BridgedNode device type on the
      * associated {@link Endpoint} and asserts that its parent is a {@link AggregatorEndpoint}.
      */
-    #configurePart() {
+    async #configurePart() {
         // Obtain endpoint's owner.  This method should only be invoked after owner is known
         const owner = this.agent.owner;
         if (owner === undefined) {

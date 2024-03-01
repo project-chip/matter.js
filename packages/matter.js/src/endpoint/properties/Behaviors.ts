@@ -365,9 +365,19 @@ export class Behaviors {
      *
      * Internal state is not stable API and not intended for consumption outside of the behavior.  However it is not
      * truly private and may be accessed by tightly coupled implementation.
+     *
+     * As this API is intended for use by "friendly" code, it does not perform the same initialization assertions as
+     * does access to {@link Behavior.State} and {@link Behavior.Events}.
      */
     internalsOf<T extends Behavior.Type>(type: T) {
-        const backing = this.#backingFor("internals", type);
+        let backing = this.#backings[type.id];
+        if (!backing) {
+            this.#activateLate(type);
+            backing = this.#backings[type.id];
+            if (backing === undefined) {
+                throw new InternalError(`Behavior ${this.#endpoint}.${type.id} late activation did not create backing`);
+            }
+        }
         return backing.getInternal() as InstanceType<T["Internal"]>;
     }
 

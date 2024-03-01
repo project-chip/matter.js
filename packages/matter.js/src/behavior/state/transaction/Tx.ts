@@ -61,7 +61,7 @@ export function act<T>(via: string, actor: (transaction: Transaction) => T): T {
             throw error;
         }
 
-        logger.error("Rolling back", tx.via, "due to error:", error);
+        logger.error("Rolling back", tx.via, "due to error:", Diagnostic.weak(error?.message || `${error}`));
 
         try {
             const result = tx.rollback();

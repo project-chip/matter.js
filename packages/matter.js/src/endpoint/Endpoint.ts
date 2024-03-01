@@ -70,6 +70,13 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
+     * The endpoint ID or undefined if not yet assigned.
+     */
+    get maybeId() {
+        return this.#id;
+    }
+
+    /**
      * The Matter {@link EndpointNumber} of the endpoint.  This uniquely identifies the {@link Endpoint} in the scope of the
      * Matter node.
      */
@@ -80,6 +87,13 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
                 "endpoint number is not yet assigned; set number or await endpoint.construction to avoid this error",
             );
         }
+        return this.#number;
+    }
+
+    /**
+     * The endpoint number or undefined if not yet assigned.
+     */
+    get maybeNumber() {
         return this.#number;
     }
 
@@ -398,6 +412,10 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         definition: T | Endpoint<T> | Endpoint.Configuration<T>,
         options?: Endpoint.Options<T>,
     ) {
+        if (!this.lifecycle.isInstalled) {
+            throw new ImplementationError(`You may not use add() here because ${this} is not installed in a Node`);
+        }
+
         let endpoint;
         if (definition instanceof Endpoint) {
             endpoint = definition;

@@ -59,11 +59,14 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
     }
 
     protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
-        return MaybePromise.then(
-            () => super.invokeInitializer(behavior, options),
+        const result = super.invokeInitializer(behavior, options);
 
-            () => this.#createClusterServer(behavior),
-        );
+        if (MaybePromise.is(result)) {
+            const createClusterServer = () => this.#createClusterServer(behavior);
+            return result.then(createClusterServer);
+        }
+
+        this.#createClusterServer(behavior);
     }
 
     protected override get datasourceOptions() {

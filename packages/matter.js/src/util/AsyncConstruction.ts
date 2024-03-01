@@ -174,7 +174,12 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     }
 
     function setStatus(newStatus: Lifecycle.Status) {
+        if (status === newStatus) {
+            return;
+        }
+
         status = newStatus;
+
         if (change) {
             change.emit(status, subject);
         }

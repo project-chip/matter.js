@@ -71,7 +71,7 @@ export function ManagedReference(
         },
 
         get rootOwner() {
-            return parent.rootOwner();
+            return parent.rootOwner;
         },
 
         set value(newValue: Val) {
