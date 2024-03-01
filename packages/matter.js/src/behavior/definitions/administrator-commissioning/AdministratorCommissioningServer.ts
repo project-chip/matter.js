@@ -143,9 +143,11 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         await this.#closeCommissioningWindow();
 
-        const failsafeContext = this.endpoint.env.get(FailsafeContext);
-        if (failsafeContext) {
-            await failsafeContext.close();
+        if (this.endpoint.env.has(FailsafeContext)) {
+            const failsafeContext = this.endpoint.env.get(FailsafeContext);
+            if (failsafeContext) {
+                await failsafeContext.close();
+            }
         }
     }
 
