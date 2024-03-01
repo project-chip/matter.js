@@ -117,7 +117,6 @@ const node = new ServerNode({
         {
             type: WindowCoveringDevice.with(RollerShade),
             id: "shade",
-            number: 1,
         },
 
         {
