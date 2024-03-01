@@ -181,8 +181,9 @@ export class Logger {
      * @param format the name of the formatter (see Format enum)
      */
     static set format(format: string) {
-        Logger.setFormatForLogger("default", format);
+        Logger.setLogFormatterForLogger("default", Format(format));
     }
+
     /**
      * Set facility loglevels for the default logger.
      * @param levels The levels to set
