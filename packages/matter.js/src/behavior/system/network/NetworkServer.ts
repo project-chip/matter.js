@@ -90,6 +90,12 @@ export class NetworkServer extends NetworkBehavior {
         this.endpoint.env.runtime.addWorker(this.internal.runtime.announceNow());
     }
 
+    async endCommissioning() {
+        if (this.internal.runtime) {
+            return this.internal.runtime.endCommissioning();
+        }
+    }
+
     #endUncommissionedMode() {
         if (this.internal.runtime) {
             this.internal.runtime.endUncommissionedMode();
