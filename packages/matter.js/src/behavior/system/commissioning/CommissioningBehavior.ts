@@ -7,6 +7,7 @@
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
 import { Lifecycle } from "../../../common/Lifecycle.js";
 import { ImplementationError } from "../../../common/MatterError.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import type { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
@@ -26,6 +27,7 @@ import { ByteArray } from "../../../util/ByteArray.js";
 import { Behavior } from "../../Behavior.js";
 import { BasicInformationBehavior } from "../../definitions/basic-information/BasicInformationBehavior.js";
 import { OperationalCredentialsBehavior } from "../../definitions/operational-credentials/OperationalCredentialsBehavior.js";
+import { Val } from "../../state/Val.js";
 import { NetworkServer } from "../network/NetworkServer.js";
 import { CommissioningOptions } from "./CommissioningOptions.js";
 
@@ -97,7 +99,7 @@ export class CommissioningBehavior extends Behavior {
         }
     }
 
-    async #monitorFailsafe(failsafe: FailsafeContext) {
+    #monitorFailsafe(failsafe: FailsafeContext) {
         if (this.internal.unregisterFailsafeListener) {
             return;
         }
@@ -130,7 +132,7 @@ export class CommissioningBehavior extends Behavior {
     initiateCommissioning() {
         const { passcode, discriminator } = this.state;
 
-        const { qrPairingCode, manualPairingCode } = this.pairingCodes;
+        const { qrPairingCode, manualPairingCode } = this.state.pairingCodes;
 
         logger.notice(
             Diagnostic.strong(this.endpoint.toString()),
@@ -148,27 +150,27 @@ export class CommissioningBehavior extends Behavior {
     }
 
     /**
-     * Obtain pairing codes.
+     * Obtain pairing codes for a node.
      */
-    get pairingCodes() {
-        const bi = this.agent.get(BasicInformationBehavior).state;
+    static pairingCodesFor(node: Endpoint) {
+        const bi = node.stateOf(BasicInformationBehavior);
+        const comm = node.stateOf(CommissioningBehavior);
+        const net = node.stateOf(NetworkServer);
 
         const qrPairingCode = QrPairingCodeCodec.encode({
             version: 0,
             vendorId: bi.vendorId,
             productId: bi.productId,
-            flowType: this.state.flowType,
-            discriminator: this.state.discriminator,
-            passcode: this.state.passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
-                this.agent.get(NetworkServer).state.discoveryCapabilities,
-            ),
+            flowType: comm.flowType,
+            discriminator: comm.discriminator,
+            passcode: comm.passcode,
+            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(net.discoveryCapabilities),
         });
 
         return {
             manualPairingCode: ManualPairingCodeCodec.encode({
-                discriminator: this.state.discriminator,
-                passcode: this.state.passcode,
+                discriminator: comm.discriminator,
+                passcode: comm.passcode,
             }),
             qrPairingCode,
         };
@@ -199,6 +201,11 @@ export class CommissioningBehavior extends Behavior {
 }
 
 export namespace CommissioningBehavior {
+    export interface PairingCodes {
+        manualPairingCode: string;
+        qrPairingCode: string;
+    }
+
     export class Internal {
         unregisterFailsafeListener?: () => void = undefined;
     }
@@ -209,5 +216,14 @@ export namespace CommissioningBehavior {
         discriminator = -1;
         flowType = CommissioningFlowType.Standard;
         additionalBleAdvertisementData?: ByteArray = undefined;
+        pairingCodes = {} as PairingCodes;
+
+        [Val.properties](endpoint: Endpoint) {
+            return {
+                get pairingCodes() {
+                    return CommissioningBehavior.pairingCodesFor(endpoint);
+                },
+            };
+        }
     }
 }

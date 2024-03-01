@@ -106,8 +106,9 @@ function join3(options?: JoinOptions) {
 /**
  * Run a test against {@link transaction}.
  */
-function test(what: string, actor: () => MaybePromise) {
-    it(what, () =>
+function test(what: string, actor: () => MaybePromise, only?: boolean) {
+    const initiator = only ? it.only : it;
+    initiator(what, () =>
         Transaction.act("test", tx => {
             transaction = tx;
             return actor();
@@ -115,39 +116,52 @@ function test(what: string, actor: () => MaybePromise) {
     );
 }
 
+test.only = (what: string, actor: () => MaybePromise) => test(what, actor, true);
+
 /**
  * Run a test against {@link transaction} and {@link transaction2}.
  */
-function test2(what: string, actor: () => MaybePromise) {
-    test(what, () =>
-        Transaction.act("test2", tx => {
-            transaction2 = tx;
-            return actor();
-        }),
+function test2(what: string, actor: () => MaybePromise, only?: boolean) {
+    test(
+        what,
+        () =>
+            Transaction.act("test2", tx => {
+                transaction2 = tx;
+                return actor();
+            }),
+        only,
     );
 }
+
+test2.only = (what: string, actor: () => MaybePromise) => test2(what, actor, true);
 
 /**
  * Run a test against all three transactions.
  */
-function test3(what: string, actor: () => MaybePromise) {
-    test2(what, () =>
-        Transaction.act("test3", tx => {
-            transaction3 = tx;
-            return actor();
-        }),
+function test3(what: string, actor: () => MaybePromise, only?: boolean) {
+    test2(
+        what,
+        () =>
+            Transaction.act("test3", tx => {
+                transaction3 = tx;
+                return actor();
+            }),
+        only,
     );
 }
+
+test3.only = (what: string, actor: () => MaybePromise) => test3(what, actor, true);
 
 describe("Transaction", () => {
     describe("automatic resolution", () => {
         it("commits synchronously", () => {
             const p = TestParticipant();
 
-            Transaction.act("test", tx => {
+            const result = Transaction.act("test", tx => {
                 tx.addParticipants(p);
                 tx.beginSync();
             });
+            expect(result).undefined;
 
             p.expect("commit1", "commit2");
         });
@@ -170,9 +184,9 @@ describe("Transaction", () => {
                 Transaction.act("test", tx => {
                     tx.addParticipants(p);
                     tx.beginSync();
-                    throw "oops";
+                    throw new Error("oops in sync actor");
                 }),
-            ).throws("oops");
+            ).throws("oops in sync actor");
 
             p.expect("rollback");
         });
@@ -184,9 +198,9 @@ describe("Transaction", () => {
                 Transaction.act("test", async tx => {
                     tx.addParticipants(p);
                     tx.beginSync();
-                    throw "oops";
+                    throw new Error("oops in async actor");
                 }),
-            ).rejectedWith("oops");
+            ).rejectedWith("oops in async actor");
 
             p.expect("rollback");
         });
@@ -230,25 +244,27 @@ describe("Transaction", () => {
         p.expect("rollback");
     });
 
-    describe("keeps its promises", () => {
+    describe("invokes onShared", () => {
         test("after commit", async () => {
             join();
 
             await transaction.begin();
-            const promise = transaction.promise;
-            transaction.commit();
 
-            await expect(promise).eventually.equals(undefined);
+            const promise = new Promise<void>(resolve => transaction.onShared(resolve));
+            await transaction.commit();
+
+            await expect(promise).eventually.undefined;
         });
 
         test("after rolling back", async () => {
             join();
 
             await transaction.begin();
-            const promise = transaction.promise;
+
+            const promise = new Promise<void>(resolve => transaction.onShared(resolve));
             await transaction.rollback();
 
-            await expect(promise).eventually.equals(undefined);
+            await expect(promise).eventually.undefined;
         });
     });
 
@@ -256,7 +272,7 @@ describe("Transaction", () => {
         test("synchronously", () => {
             const p = join({
                 commit1() {
-                    throw new Error("oops");
+                    throw new Error("oops in sync participant");
                 },
             });
 
@@ -270,7 +286,7 @@ describe("Transaction", () => {
         test("asychonously", async () => {
             const p = join({
                 async commit1() {
-                    throw new Error("oops");
+                    throw new Error("oops in async participant");
                 },
 
                 async rollback() {},
@@ -389,7 +405,6 @@ describe("Transaction", () => {
 
                 expect(resource.lockedBy).equals(transaction);
                 await transaction.commit();
-                expect(resource.lockedBy).equals(undefined);
                 await t2begin;
                 expect(resource.lockedBy).equals(transaction2);
             });
@@ -461,17 +476,25 @@ describe("Transaction", () => {
     });
 
     describe("after destruction", () => {
-        function destroyedSync(description: string, fn: () => void) {
+        function destroyedSync(description: string, fn: () => MaybePromise<void>) {
             it(description, () => {
-                Transaction.act("destroyedSync", tx => (transaction = tx));
+                const result = Transaction.act("destroyedSync", tx => {
+                    transaction = tx;
+                });
+                expect(result).undefined;
 
-                expect(fn).throws("Transaction destroyedSync is destroyed");
+                expect(() => {
+                    const result = fn();
+                    expect(result).undefined;
+                }).throws("Transaction destroyedSync is destroyed");
             });
         }
 
-        async function destroyedAsync(description: string, fn: () => Promise<void>) {
+        function destroyedAsync(description: string, fn: () => Promise<void>) {
             it(description, async () => {
-                Transaction.act("destroyedAsync", tx => (transaction = tx));
+                await Transaction.act("destroyedAsync", async tx => {
+                    transaction = tx;
+                });
 
                 await expect(fn()).rejectedWith("Transaction destroyedAsync is destroyed");
             });
@@ -489,15 +512,18 @@ describe("Transaction", () => {
     });
 
     describe("read-only", () => {
-        function readonlySync(description: string, fn: () => void) {
+        function readonlySync(description: string, fn: () => MaybePromise<void>) {
             it(description, () => {
                 transaction = Transaction.ReadOnly;
 
-                expect(fn).throws("This view is read-only");
+                expect(() => {
+                    const result = fn();
+                    expect(result).undefined;
+                }).throws("This view is read-only");
             });
         }
 
-        async function readonlyAsync(description: string, fn: () => Promise<void>) {
+        function readonlyAsync(description: string, fn: () => Promise<void>) {
             it(description, async () => {
                 transaction = Transaction.ReadOnly;
 

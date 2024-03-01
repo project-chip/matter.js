@@ -13,7 +13,7 @@ import { Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { Observable } from "../util/Observable.js";
+import { AsyncObservable, Observable } from "../util/Observable.js";
 import { BasicSet } from "../util/Set.js";
 import { InsecureSession } from "./InsecureSession.js";
 import { SecureSession } from "./SecureSession.js";
@@ -53,7 +53,7 @@ export class SessionManager<ContextT> {
     readonly #globalUnencryptedMessageCounter = new MessageCounter();
     readonly #subscriptionsChanged = new Observable<[session: SecureSession<ContextT>]>();
     readonly #sessionOpened = new Observable<[session: SecureSession<ContextT>]>();
-    readonly #sessionClosed = new Observable<[session: SecureSession<ContextT>], Promise<void> | void>();
+    readonly #sessionClosed = new AsyncObservable<[session: SecureSession<ContextT>], void>();
 
     constructor(
         private readonly context: ContextT,
@@ -170,9 +170,8 @@ export class SessionManager<ContextT> {
 
     findOldestInactiveSession() {
         let oldestSession: SecureSession<ContextT> | undefined = undefined;
-        let oldestActiveTimestamp = Number.MAX_SAFE_INTEGER;
         for (const session of this.#sessions) {
-            if (!oldestSession || session.activeTimestamp < oldestActiveTimestamp) {
+            if (!oldestSession || session.activeTimestamp < oldestSession.activeTimestamp) {
                 oldestSession = session;
             }
         }

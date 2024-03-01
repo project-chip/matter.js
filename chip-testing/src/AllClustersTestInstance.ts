@@ -56,7 +56,7 @@ export class AllClustersTestInstance implements TestInstance {
 
         try {
             await this.serverNode.bringOnline();
-            const { qrPairingCode } = await this.serverNode.act(agent => agent.commissioning.pairingCodes);
+            const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;
             // Magic logging chip testing waits for
             console.log(`SetupQRCode: [${qrPairingCode}]`);
             console.log();

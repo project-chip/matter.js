@@ -50,7 +50,7 @@ export interface ValueSupervisor {
     /**
      * Perform validation.
      */
-    readonly validate: ValueSupervisor.Validate;
+    readonly validate: ValueSupervisor.Validate | undefined;
 
     /**
      * Create a managed instance of a value.

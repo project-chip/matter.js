@@ -2,7 +2,7 @@ import { Behavior } from "../../src/behavior/Behavior.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
 import { MockEndpointType } from "../behavior/mock-behavior.js";
-import { MockNode } from "../node/mock-node.js";
+import { MockServerNode } from "../node/mock-server-node.js";
 
 export class MockBehavior1 extends Behavior {
     static override readonly id = "one";
@@ -44,7 +44,7 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
         const config = Endpoint.configurationFor(definition, options);
 
         if (!("owner" in config)) {
-            config.owner = new MockNode();
+            config.owner = new MockServerNode();
         }
 
         super(config);

@@ -13,7 +13,9 @@ import { Progress } from "./progress.js";
 function findJson(filename: string, path: string = ".", title?: string) {
     path = resolve(path);
     while (true) {
-        const json = ignoreErrorSync("ENOENT", () => JSON.parse(readFileSync(resolve(path, filename)).toString()));
+        const json = ignoreErrorSync(["ENOENT", "ENOTDIR"], () =>
+            JSON.parse(readFileSync(resolve(path, filename)).toString()),
+        );
         if (json) {
             if (title === undefined || json.name === title) {
                 return { root: path, json };

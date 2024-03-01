@@ -14,12 +14,10 @@ const CHILDREN = Symbol("children");
 const PARENT = Symbol("parent");
 
 /**
- * A "model" is a class that implements runtime functionality associated with
- * the corresponding element type.
+ * A "model" is a class that implements runtime functionality associated with the corresponding element type.
  */
 export abstract class Model {
-    // These fields are defined in BaseElement.  This base class does not
-    // implement an element but subclasses do
+    // These fields are defined in BaseElement.  This base class does not implement an element but subclasses do
     abstract readonly tag: ElementTag;
     id?: number;
     name!: string;
@@ -57,8 +55,7 @@ export abstract class Model {
     /**
      * The path ("." delimited) in the Matter tree.
      *
-     * This is informational and generally tries to adhere to JS API
-     * conventions.
+     * This is informational and generally tries to adhere to JS API conventions.
      */
     get path(): string {
         if (this.parent && this.parent.tag !== ElementTag.Matter) {
@@ -86,8 +83,7 @@ export abstract class Model {
     }
 
     /**
-     * The structural parent.  This is the model for the element that contains
-     * this element's definition.
+     * The structural parent.  This is the model for the element that contains this element's definition.
      */
     get parent(): Model | undefined {
         return this[PARENT];
@@ -117,8 +113,8 @@ export abstract class Model {
     }
 
     /**
-     * Element view of children.  For TypeScript this allows children to be
-     * added as elements.  For JavaScript this is identical to children().
+     * Element view of children.  For TypeScript this allows children to be added as elements.  For JavaScript this is
+     * identical to children().
      */
     get elements(): AnyElement[] {
         if (!this[CHILDREN]) {
@@ -135,8 +131,8 @@ export abstract class Model {
     }
 
     /**
-     * Get a string that uniquely identifies this model.  This is normally
-     * the effective ID but some models require a generated identifier.
+     * Get a string that uniquely identifies this model.  This is normally the effective ID but some models require a
+     * generated identifier.
      */
     get key() {
         return this.effectiveId?.toString();
@@ -213,8 +209,7 @@ export abstract class Model {
     static constructors = {} as { [type: string]: new (definition: any) => Model };
 
     /**
-     * In some circumstances the base type can be inferred.  This inference
-     * happens here.
+     * In some circumstances the base type can be inferred.  This inference happens here.
      *
      * Does not recurse so only returns the direct base type.
      */
@@ -230,16 +225,14 @@ export abstract class Model {
     }
 
     /**
-     * Get shadow model, if any.  A "shadow" is an element in my parent's
-     * inheritance hierarchy that I override.
+     * Get shadow model, if any.  A "shadow" is an element in my parent's inheritance hierarchy that I override.
      */
     get shadow() {
         return new ModelTraversal().findShadow(this);
     }
 
     /**
-     * Get the first global base type.  This may have semantic meaning more
-     * specific than the base primitive type.
+     * Get the first global base type.  This may have semantic meaning more specific than the base primitive type.
      */
     get globalBase() {
         return new ModelTraversal().findGlobalBase(this);
@@ -396,8 +389,7 @@ export abstract class Model {
     }
 
     /**
-     * Clone the model.  This deep copies all descendant child models but
-     * not other properties.
+     * Clone the model.  This deep copies all descendant child models but not other properties.
      */
     clone<This extends Model>(this: This): This {
         const clone = Object.create(Object.getPrototypeOf(this));
@@ -417,10 +409,8 @@ export abstract class Model {
     }
 
     constructor(definition: BaseElement) {
-        // Copy all definition properties.  Types will be wrong for some of
-        // them but constructors correct this.  Properties for which type is
-        // correct are suffixed with "!" to indicate no further initialization
-        // is necessary
+        // Copy all definition properties.  Types will be wrong for some of them but constructors correct this.
+        // Properties for which type is correct are suffixed with "!" to indicate no further initialization is necessary
         for (const [k, v] of Object.entries(definition)) {
             if (v !== undefined) {
                 (this as any)[k] = v;

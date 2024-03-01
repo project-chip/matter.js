@@ -83,13 +83,13 @@ export class ValidatedElements {
         let crashed = false;
 
         for (const error of this.errors) {
-            const diagnostic = Diagnostic.squash("in ", Diagnostic.strong(error.element), ": ", error.message);
+            const diagnostic = Diagnostic.squash("Error in ", Diagnostic.strong(error.element), ": ", error.message);
 
             if (error.fatal) {
                 crashed = true;
-                logger.error("Error", diagnostic);
+                logger.error(diagnostic);
             } else {
-                logger.info("Non-fatal error", diagnostic);
+                logger.warn(diagnostic);
             }
         }
 
@@ -191,6 +191,12 @@ export class ValidatedElements {
 
             if (implementations[name] === Behavior.unimplemented) {
                 if (!command.optional) {
+                    // TODO - do not pollute the logs with these as Matter spec is in flux (should this include groups
+                    // or just scenes?)
+                    if (this.#name.match(/^(?:Groups|Scenes|GroupKeyManagement)(?:Server|Behavior)/)) {
+                        continue;
+                    }
+
                     // We treat this error as a warning
                     this.error(name, `Throws unimplemented exception`, false);
                 }

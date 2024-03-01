@@ -58,25 +58,22 @@ export abstract class BehaviorBacking {
      * Called by Behaviors class once the backing is installed.
      */
     initialize(agent: Agent) {
-        return MaybePromise.then(
-            () =>
-                this.construction.start(() => {
-                    // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
-                    // will throw if the behavior isn't initialized
-                    const behavior = this.#lifecycleInstance(agent);
+        this.construction.start(() => {
+            // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
+            // will throw if the behavior isn't initialized
+            const behavior = this.#lifecycleInstance(agent);
 
-                    // Perform actual initialization
-                    return this.invokeInitializer(behavior, this.#options);
-                }),
-            undefined,
-            e => {
-                // This is the only error we should see here...
-                if (!(e instanceof CrashedDependencyError)) {
-                    // ...but if not, log
-                    logger.error("Unhandled error initializing behavior", e);
-                }
-            },
-        );
+            // Perform actual initialization
+            return this.invokeInitializer(behavior, this.#options);
+        });
+
+        this.construction.onError(e => {
+            // This is the only error we should see here...
+            if (!(e instanceof CrashedDependencyError)) {
+                // ...but if not, log
+                logger.error("Unhandled error initializing behavior", e);
+            }
+        });
     }
 
     /**
@@ -164,6 +161,7 @@ export abstract class BehaviorBacking {
             defaults: this.#endpoint.behaviors.defaultsFor(this.type),
             store: this.store,
             versioning: this.type.versioning,
+            owner: this.#endpoint,
         };
     }
 

@@ -20,8 +20,7 @@ export class FieldModel extends PropertyModel implements FieldElement {
     }
 
     /**
-     * Fields may omit their ID.  In this case we use their index within the
-     * parent as the ID.
+     * Fields may omit their ID.  In this case we use their index within the parent as the ID.
      */
     override get effectiveId() {
         if (this.id !== undefined) {
@@ -36,8 +35,8 @@ export class FieldModel extends PropertyModel implements FieldElement {
     }
 
     /**
-     * The key for bitmap fields is actually the constraint which defines the
-     * bit range.  All other datatypes use the default key.
+     * The key for bitmap fields is actually the constraint which defines the bit range.  All other datatypes use the
+     * default key.
      */
     override get key() {
         if (this.parent instanceof ValueModel && this.parent.effectiveMetatype === Metatype.bitmap) {

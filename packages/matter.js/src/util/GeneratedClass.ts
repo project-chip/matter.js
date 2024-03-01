@@ -121,8 +121,6 @@ function createConstructor({ name, base, args, mixins }: ConstructorOptions) {
     const _InternalError = InternalError;
     _InternalError;
 
-    //
-
     // Have to use eval if we don't want every class to be called
     // "GeneratedClass" in the debugger but we can ensure this won't be
     // abused.

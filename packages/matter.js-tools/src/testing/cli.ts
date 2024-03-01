@@ -43,7 +43,7 @@ export async function main(argv = process.argv) {
             type: "array",
             string: true,
             describe: "One or more paths of tests to run",
-            default: "test/**/*Test.ts",
+            default: "./test/**/*Test.ts",
         })
         .option("fgrep", { alias: "f", type: "string", describe: "Only run tests matching this string" })
         .option("grep", { alias: "g", type: "string", describe: "Only run tests matching this regexp" })
@@ -52,6 +52,7 @@ export async function main(argv = process.argv) {
         .option("all-logs", { type: "boolean", describe: "Emit log messages in real time" })
         .option("force-exit", { type: "boolean", describe: "Force Node to exit after tests complete" })
         .option("wtf", { type: "boolean", describe: "Enlist wtfnode to detect test leaks" })
+        .option("debug", { type: "boolean", describe: "Enable Mocha debugging" })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
@@ -62,7 +63,14 @@ export async function main(argv = process.argv) {
         })
         .strict().argv;
 
-    const project = new Project(args.prefix);
+    // If spec specified and prefix is default, use the spec file to locate the package
+    let packageLocation = args.prefix;
+    if (packageLocation === "." && args.spec) {
+        const firstSpec = Array.isArray(args.spec) ? args.spec[0] : args.spec;
+        packageLocation = firstSpec;
+    }
+
+    const project = new Project(packageLocation);
 
     // If no test types are specified explicitly, run all enabled types
     if (!testTypes.size) {
@@ -78,7 +86,7 @@ export async function main(argv = process.argv) {
     }
 
     const builder = new Builder();
-    const dependencies = await Graph.forProject(args.prefix);
+    const dependencies = await Graph.forProject(packageLocation);
     await dependencies.build(builder, false);
 
     const progress = project.pkg.start("Testing");

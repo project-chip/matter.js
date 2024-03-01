@@ -197,7 +197,7 @@ export class RuntimeService {
         };
 
         if (worker.construction) {
-            return Promise.resolve(worker.construction).finally(cancel);
+            worker.construction.onSuccess(cancel);
         }
 
         return cancel();
@@ -222,7 +222,9 @@ export class RuntimeService {
 
         // No workers except helpers; cancel helpers and exit
         this.cancel();
-        this.inactive.then(() => this.#stopped.emit());
+
+        // Emit stopped event when all activity stops.  Safe to ignore rejection because this promise can't reject
+        void this.inactive.finally(() => this.#stopped.emit());
     }
 
     #crash(cause?: Error) {

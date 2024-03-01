@@ -7,11 +7,9 @@
 import type { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointLifecycle } from "../../../endpoint/properties/EndpointLifecycle.js";
 import { IdentityService } from "../../../node/server/IdentityService.js";
-import { Time, Timer } from "../../../time/Time.js";
+import { Timer } from "../../../time/Time.js";
 import { EventEmitter, Observable } from "../../../util/Observable.js";
 import { Behavior } from "../../Behavior.js";
-import { ActionContext } from "../../context/ActionContext.js";
-import { OfflineContext } from "../../context/server/OfflineContext.js";
 
 /**
  * This behavior indexes all descendents of a {@link Endpoint} by number.
@@ -63,10 +61,12 @@ export class IndexBehavior extends Behavior {
             case EndpointLifecycle.Change.NumberAssigned:
             case EndpointLifecycle.Change.Installed:
                 this.#add(endpoint);
+                this.#change();
                 break;
 
             case EndpointLifecycle.Change.Destroyed:
                 this.#remove(endpoint);
+                this.#change();
                 break;
         }
     }
@@ -81,8 +81,6 @@ export class IndexBehavior extends Behavior {
         for (const child of endpoint.parts) {
             this.#add(child);
         }
-
-        this.#change();
     }
 
     #remove(endpoint: Endpoint) {
@@ -101,26 +99,18 @@ export class IndexBehavior extends Behavior {
         this.#change();
     }
 
+    /**
+     * Trigger change event lazily so transactions complete and we can coalesce into fewer events.
+     */
     #change() {
         if (this.internal.changeBroadcaster) {
             return;
         }
-        broadcastChange(`Update ${this.endpoint} index`, this.internal, this.events.change);
-    }
-}
 
-/**
- * Trigger change event lazily so transactions complete and we can coalesce into fewer events.
- */
-function broadcastChange(name: string, internal: IndexBehavior.Internal, change: Observable<[context: ActionContext]>) {
-    if (internal.changeBroadcaster) {
-        return;
+        void Promise.resolve().then(() => {
+            this.events.change.emit();
+        });
     }
-
-    internal.changeBroadcaster = Time.getTimer(name, 0, () => {
-        delete internal.changeBroadcaster;
-        OfflineContext.act("index-change", context => change.emit(context));
-    });
 }
 
 export namespace IndexBehavior {
@@ -142,6 +132,6 @@ export namespace IndexBehavior {
         /**
          * Emitted when the index changes.
          */
-        change = new Observable<[context: ActionContext]>();
+        change = new Observable<[]>();
     }
 }

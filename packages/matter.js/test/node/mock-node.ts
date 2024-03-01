@@ -56,10 +56,10 @@ class MockPartStore implements PartStore {
 
     async set(values: Record<string, Val.Struct>) {
         for (const behaviorId in values) {
-            if (values[behaviorId]) {
-                Object.assign(values[behaviorId]);
+            if (this.values[behaviorId]) {
+                Object.assign(this.values[behaviorId], values[behaviorId]);
             } else {
-                values[behaviorId] = values[behaviorId];
+                this.values[behaviorId] = values[behaviorId];
             }
         }
     }

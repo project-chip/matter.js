@@ -71,7 +71,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
 
     // Perform validation
     try {
-        manager.validate(record ?? {}, OfflineContext.ReadOnly, { path: DataModelPath(cluster.path) });
+        manager.validate?.(record ?? {}, OfflineContext.ReadOnly, { path: DataModelPath(cluster.path) });
         expect(error).undefined;
     } catch (e) {
         if (!error || (e as any).constructor.name === "AssertionError") {

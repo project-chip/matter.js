@@ -18,6 +18,8 @@ export function ContextAgents(context: ActionContext) {
     const agents = new Map<Endpoint, Agent>();
 
     return {
+        [Symbol.toStringTag]: "ContextAgents",
+
         agentFor<const T extends EndpointType>(endpoint: Endpoint<T>): Agent.Instance<T> {
             let agent = agents.get(endpoint) as undefined | Agent.Instance<T>;
             if (agent === undefined) {

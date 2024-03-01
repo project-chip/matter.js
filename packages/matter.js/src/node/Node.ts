@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NodeActivity } from "../behavior/context/server/NodeActivity.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
@@ -35,6 +36,8 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
 
         // We create a local environment so nodes can offer node-specific services via the environment
         this.#environment = new Environment(config.id, parentEnvironment);
+
+        this.#environment.set(NodeActivity, new NodeActivity());
 
         if (this.lifecycle.hasNumber) {
             if (this.number !== 0) {

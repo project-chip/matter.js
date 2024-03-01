@@ -71,9 +71,9 @@ export class OnOffServer extends Base {
      */
     override toggle() {
         if (this.state.onOff) {
-            this.off();
+            return this.off();
         } else {
-            this.on();
+            return this.on();
         }
     }
 
@@ -82,7 +82,7 @@ export class OnOffServer extends Base {
             // TODO Store state in global scene
             this.state.globalSceneControl = false;
         }
-        this.off();
+        return this.off();
     }
 
     override onWithRecallGlobalScene() {
@@ -117,7 +117,7 @@ export class OnOffServer extends Base {
             // Specs talk about 0xffff aka "uint16 overflow", we set to 0 if negative
             this.timedOnTimer.start();
         }
-        this.on();
+        return this.on();
     }
 
     protected get timedOnTimer() {

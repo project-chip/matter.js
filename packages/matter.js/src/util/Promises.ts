@@ -6,9 +6,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../common/MatterError.js";
-import { Diagnostic } from "../log/Diagnostic.js";
-import { DiagnosticSource } from "../log/DiagnosticSource.js";
+import { InternalError, MatterError } from "../common/MatterError.js";
+import { Time } from "../time/Time.js";
 
 /**
  * Obtain a promise with functions to resolve and reject.
@@ -62,6 +61,65 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
                 });
         }
     });
+}
+
+/**
+ * Thrown when a timed promise times out.
+ */
+export class PromiseTimeoutError extends MatterError {
+    constructor(message = "Operation timed out") {
+        super(message);
+    }
+}
+
+/**
+ * Create a promise with a timeout.
+ *
+ * By default rejects with {@link PromiseTimeoutError} on timeout but you can override by supplying {@link cancel}.
+ *
+ * @param timeoutMs the timeout in milliseconds
+ * @param promise a promise that resolves or rejects when the timed task completes
+ * @param cancel invoked on timeout (default implementation throws {@link PromiseTimeoutError})
+ */
+export async function withTimeout<T>(timeoutMs: number, promise: Promise<T>, cancel?: () => void): Promise<T> {
+    if (!cancel) {
+        cancel = () => {
+            throw new PromiseTimeoutError();
+        };
+    }
+
+    let cancelTimer: undefined | (() => void);
+
+    // Sub-promise 1, the timer
+    const timeout = new Promise<void>((resolve, reject) => {
+        const timer = Time.getTimer("promise-timeout", timeoutMs, () => reject(cancel));
+
+        cancelTimer = () => {
+            timer.stop();
+            resolve();
+        };
+
+        timer.start();
+    });
+
+    let result: undefined | T;
+
+    // Sub-promise 2, captures result and cancels timer
+    const producer = promise.then(
+        r => {
+            cancelTimer?.();
+            result = r;
+        },
+        e => {
+            cancelTimer?.();
+            throw e;
+        },
+    );
+
+    // Output promise, resolves like input promise unless timed out
+    await Promise.all([timeout, producer]);
+
+    return result as T;
 }
 
 /**
@@ -147,16 +205,20 @@ export const MaybePromise = {
         producer: MaybePromise<T> | (() => MaybePromise<T>),
         onfinally?: (() => MaybePromise<void>) | undefined | null,
     ): MaybePromise<T> {
+        let result: MaybePromise<T> | undefined;
         try {
             if (typeof producer === "function") {
-                producer = (producer as () => MaybePromise<T>)();
+                result = (producer as () => MaybePromise<T>)();
+            } else {
+                result = producer;
             }
         } finally {
-            if (MaybePromise.is(producer)) {
-                if (typeof (producer as Promise<any>).finally === "function") {
-                    return (producer as Promise<T>).finally(onfinally);
+            if (MaybePromise.is(result)) {
+                // Use native finally or fake via then
+                if (typeof (result as Promise<any>).finally === "function") {
+                    result = (result as Promise<T>).finally(onfinally);
                 } else {
-                    producer = producer.then(
+                    result = result.then(
                         value =>
                             MaybePromise.then(
                                 () => onfinally?.(),
@@ -172,130 +234,19 @@ export const MaybePromise = {
                     );
                 }
             } else {
-                onfinally?.();
+                // The only return value from onfinally that should affect results is a rejected promise, so if we
+                // receive a return value chain such that it either throws or we return the actual result
+                const finallyResult = onfinally?.();
+                if (MaybePromise.is(finallyResult)) {
+                    const actualResult = result as T;
+                    result = finallyResult.then(() => actualResult);
+                }
             }
         }
-        return producer;
+        return result;
     },
 
-    toString() {
-        return "MaybePromise";
-    },
+    [Symbol.toStringTag]: "MaybePromise",
 };
 
-/**
- * A registry for promises.
- *
- * Stores unfulfilled promises with metadata useful for diagnosing process state.
- */
-export class Tracker {
-    #parent: Tracker | undefined;
-    #tracked = new Map<PromiseLike<unknown>, Tracker.Descriptor>();
-
-    get name() {
-        return "Unfulfilled tracked promises";
-    }
-
-    get [Diagnostic.value]() {
-        if (!this.#tracked?.size) {
-            return Diagnostic.list(["(none)"]);
-        }
-        return ["Unfulfilled tracked promises", Diagnostic.list(this.#tracked.values())];
-    }
-
-    static global = new Tracker(undefined);
-
-    /**
-     * Create a new tracker.
-     *
-     * @param parent if supplied, promises will be tracked by parent too
-     */
-    constructor(parent: Tracker | undefined = Tracker.global) {
-        this.#parent = parent;
-    }
-
-    /**
-     * Create a tracked promise.
-     */
-    of<T>(executor: Tracker.Executor<T>, detail?: {}) {
-        return this.track(new Promise(executor), detail);
-    }
-
-    /**
-     * Track a promise.
-     */
-    track<T>(promise: MaybePromise<T>, detail?: unknown): MaybePromise<T> {
-        if (!MaybePromise.is(promise)) {
-            return promise;
-        }
-        if (this.#parent) {
-            promise = this.#parent?.track(promise, detail) as Promise<T>;
-        }
-        this.#tracked.set(promise, {
-            promise,
-            detail,
-            elapsed: Diagnostic.elapsed(),
-
-            get [Diagnostic.value]() {
-                let label = labelFor(this.detail);
-                if (label === undefined) {
-                    label = labelFor(this.promise);
-                    if (label === undefined) {
-                        label = "(anon)";
-                    }
-                }
-                return [label, Diagnostic.dict({ uptime: this.elapsed })];
-            },
-        });
-
-        return MaybePromise.finally(promise, () => {
-            this.#tracked.delete(promise as Promise<T>);
-        });
-    }
-}
-
-function labelFor(value: unknown) {
-    if (value === undefined || value === null || value === "") {
-        return undefined;
-    }
-    if ((value as Diagnostic)[Diagnostic.value]) {
-        return (value as Diagnostic)[Diagnostic.value];
-    }
-    if (typeof value !== "object") {
-        return value.toString();
-    }
-    if ("description" in value) {
-        return labelFor((value as { description: unknown }).description);
-    }
-    return value.toString();
-}
-
-export namespace Tracker {
-    /**
-     * Information about a tracked promise.
-     */
-    export interface Descriptor {
-        promise: PromiseLike<any>;
-        detail?: unknown;
-        elapsed: Diagnostic.Elapsed;
-        [Diagnostic.value]: unknown;
-    }
-
-    export interface Executor<T> {
-        (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void): PromiseLike<T>;
-    }
-}
-
-/**
- * Track a {@link Promise}}.
- *
- * Registers the promise with the default {@link Tracker}.
- */
-export function track<const T>(value: MaybePromise<T>, what?: {}): MaybePromise<T> {
-    if (MaybePromise.is(value)) {
-        return Tracker.global.track(value, what) as T;
-    }
-    return value;
-}
-
-DiagnosticSource.add(Tracker.global);
+MaybePromise.toString = () => "MaybePromise";

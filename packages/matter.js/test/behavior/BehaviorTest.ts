@@ -34,7 +34,7 @@ namespace TestBehavior {
 function test(what: string, fn: (behavior: TestBehavior) => void) {
     it(what, async () => {
         const endpoint = await MockEndpoint.createWith(TestBehavior);
-        endpoint.act(agent => {
+        await endpoint.act(agent => {
             const behavior = agent.test;
             fn(behavior);
         });
@@ -73,7 +73,7 @@ describe("Behavior", () => {
         NewBehavior.id satisfies "test";
 
         const endpoint = await MockEndpoint.createWith(NewBehavior);
-        endpoint.act(agent => {
+        await endpoint.act(agent => {
             const behavior = agent.test;
 
             const state = behavior.state;

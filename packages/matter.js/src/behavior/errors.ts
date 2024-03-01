@@ -102,7 +102,12 @@ export class ConformanceError extends ValidateError {
  */
 export class ExpiredReferenceError extends SchemaViolationError {
     constructor(path: SchemaErrorPath) {
-        super("Referencing", path, "Reference invalidated by context exit", StatusCode.Failure);
+        super(
+            "Referencing",
+            path,
+            "This value is no longer available because its context has exited",
+            StatusCode.Failure,
+        );
     }
 }
 

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { NodeActivity } from "../behavior/context/server/NodeActivity.js";
 import { CommissioningBehavior } from "../behavior/system/commissioning/CommissioningBehavior.js";
 import { NetworkServer } from "../behavior/system/network/NetworkServer.js";
 import { ServerNetworkRuntime } from "../behavior/system/network/ServerNetworkRuntime.js";
@@ -66,29 +67,37 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * @param type the variation of {@link RootEndpoint} that defines the root endpoint's behavior
      * @param options root endpoint configuration and, optionally, the node's environment
      */
-    static async create<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(
-        type?: T,
-        options?: Node.Options<T>,
-    ): Promise<ServerNode<T>>;
+    static async create<
+        This extends typeof ServerNode<any>,
+        T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint,
+    >(this: This, type?: T, options?: Node.Options<T>): Promise<ServerNode<T>>;
 
     /**
      * Create a new ServerNode.
      *
      * @param config root endpoint configuration and, optionally, the node's {@link Environment}
      */
-    static async create<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(
-        config: Partial<Node.Configuration<T>>,
-    ): Promise<ServerNode<T>>;
+    static async create<
+        This extends typeof ServerNode<any>,
+        T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint,
+    >(this: This, config: Partial<Node.Configuration<T>>): Promise<ServerNode<T>>;
 
-    static async create<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(
-        definition?: T | Node.Configuration<T>,
-        options?: Node.Options<T>,
-    ) {
-        const node = new ServerNode<T>(definition as any, options);
+    static async create<
+        This extends typeof ServerNode<any>,
+        T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint,
+    >(this: This, definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
+        const node = new this(definition, options);
 
-        await node.construction;
+        if (!node.lifecycle.isTreeReady) {
+            await node.lifecycle.treeReady;
+        }
 
-        return node;
+        const activity = node.env.get(NodeActivity);
+        if (activity.isActive) {
+            await activity.inactive;
+        }
+
+        return node as ServerNode<T>;
     }
 
     /**
@@ -118,12 +127,14 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * This happens automatically on close.
      */
     cancel() {
-        let network: ServerNetworkRuntime | undefined;
-        this.act(agent => (network = agent.network.internal.runtime));
-        if (network) {
-            // Note if runtime is present we call close() immediately, not once the mutex is free, because the mutex is
-            // probably held by the network's run() promise
-            this.#mutex.run(network.close());
+        if (this.behaviors.isActive(NetworkServer)) {
+            const runtime = this.behaviors.internalsOf(NetworkServer).runtime;
+
+            if (runtime) {
+                // Note that we call close() immediately -- not once the mutex is free -- because the mutex is probably
+                // held by the network's run() promise
+                this.#mutex.run(runtime.close());
+            }
         }
     }
 
@@ -218,7 +229,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     #reportCrashTermination() {
         logger.info("Aborting", Diagnostic.strong(this.toString()), "due to endpoint error");
-        this.construction.then(() => this.construction.crashed(new Error(`Aborted ${this} due to error`), false));
+        this.construction.onSuccess(() => this.construction.crashed(new Error(`Aborted ${this} due to error`), false));
     }
 }
 

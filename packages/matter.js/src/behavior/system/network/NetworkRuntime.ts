@@ -24,20 +24,18 @@ export abstract class NetworkRuntime {
         this.#closed = promise;
         this.#resolveClosed = resolver;
 
-        owner.act(agent => {
-            const internal = agent.get(NetworkBehavior).internal;
-            if (internal.runtime) {
-                throw new ImplementationError("Network is already active");
-            }
-            internal.runtime = this;
-        });
+        const internals = owner.behaviors.internalsOf(NetworkBehavior);
+        if (internals.runtime) {
+            throw new ImplementationError("Network is already active");
+        }
+        internals.runtime = this;
     }
 
     async run() {
         try {
             await this.start();
 
-            this.#owner.act(agent => this.owner.lifecycle.online.emit(agent.context));
+            await this.#owner.act(agent => this.owner.lifecycle.online.emit(agent.context));
         } catch (e) {
             await this.#stop();
             throw e;
@@ -48,7 +46,7 @@ export abstract class NetworkRuntime {
         try {
             await this.stop();
         } finally {
-            this.#owner.act(agent => this.owner.lifecycle.offline.emit(agent.context));
+            await this.#owner.act(agent => this.owner.lifecycle.offline.emit(agent.context));
         }
     }
 
@@ -60,7 +58,7 @@ export abstract class NetworkRuntime {
         try {
             await this.stop();
         } finally {
-            this.#owner.act(agent => (agent.get(NetworkBehavior).internal.runtime = undefined));
+            await this.#owner.act(agent => (agent.get(NetworkBehavior).internal.runtime = undefined));
         }
     }
 

@@ -210,6 +210,7 @@ export abstract class Behavior {
 
     /**
      * Install a {@link Reactor}.
+     *
      * Important: The reactor MUST be a real JS function - arrow functions will not work!
      */
     protected reactTo<O extends Observable<any[], any>>(

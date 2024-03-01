@@ -70,6 +70,10 @@ export function ManagedReference(
             location = loc;
         },
 
+        get rootOwner() {
+            return parent.rootOwner();
+        },
+
         set value(newValue: Val) {
             if (value === newValue) {
                 return;

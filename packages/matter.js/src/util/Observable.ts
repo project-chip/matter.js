@@ -51,6 +51,13 @@ export interface Observable<T extends any[] = any[], R = void> extends AsyncIter
     once(observer: Observer<T, R>): void;
 
     /**
+     * This flag indicates whether the observable is asynchronous.  Any observable that accepts promise returns may
+     * be asynchronous but this information is not available at runtime unless you specify here, typically via
+     * {@link AsyncObservable}.
+     */
+    isAsync?: boolean;
+
+    /**
      * Observable supports standard "for await (const value of observable").
      *
      * Using an observer in this manner limits your listener to the first parameter normally emitted and your observer
@@ -64,6 +71,13 @@ export interface Observable<T extends any[] = any[], R = void> extends AsyncIter
     [Symbol.dispose](): void;
 }
 
+/**
+ * An {@link Observable} that explicitly supports asynchronous observers.
+ */
+export interface AsyncObservable<T extends any[], R> extends Observable<T, MaybePromise<R>> {
+    isAsync: true;
+}
+
 function defaultErrorHandler(error: Error) {
     throw error;
 }
@@ -74,19 +88,29 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
     #errorHandler: ObserverErrorHandler;
     #observers?: Set<Observer<T, R>>;
     #once?: Set<Observer<T, R>>;
+    #isAsync?: boolean;
 
     #joinIteration?: () => Promise<Next<T>>;
     #removeIterator?: () => void;
     #stopIteration?: () => void;
 
-    constructor(errorHandler?: ObserverErrorHandler) {
+    constructor(errorHandler?: ObserverErrorHandler, isAsync?: boolean) {
         this.#errorHandler = errorHandler ?? defaultErrorHandler;
+        this.#isAsync = isAsync;
     }
 
     [Symbol.dispose]() {
         this.#observers = this.#once = undefined;
 
         this.#stopIteration?.();
+    }
+
+    get isAsync() {
+        return this.#isAsync;
+    }
+
+    set isAsync(isAsync: boolean | undefined) {
+        this.#isAsync = isAsync;
     }
 
     emit(...payload: T): R | undefined {
@@ -97,30 +121,26 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
         // Iterate over a clone of observers so we do not trigger new observers added during observation
         const iterator = [...this.#observers][Symbol.iterator]();
 
-        const emitOne = (observer: Observer<T, R>) => {
-            let result;
-
-            try {
-                result = observer(...payload);
-            } catch (e) {
-                if (e instanceof Error) {
-                    this.#errorHandler(e, observer);
-                } else {
-                    this.#errorHandler(new Error(`${e}`), observer);
-                }
-            }
-
-            if (this.#once?.has(observer)) {
-                this.#once.delete(observer);
-                this.#observers?.delete(observer);
-            }
-
-            return result;
-        };
-
-        function emitNext(): R | undefined {
+        const emitNext = (): R | undefined => {
             for (let iteration = iterator.next(); !iteration.done; iteration = iterator.next()) {
-                const result = emitOne(iteration.value);
+                let result;
+
+                const observer = iteration.value;
+
+                try {
+                    result = observer(...payload);
+                } catch (e) {
+                    if (e instanceof Error) {
+                        this.#errorHandler(e, observer);
+                    } else {
+                        this.#errorHandler(new Error(`${e}`), observer);
+                    }
+                }
+
+                if (this.#once?.has(observer)) {
+                    this.#once.delete(observer);
+                    this.#observers?.delete(observer);
+                }
 
                 if (result === undefined) {
                     continue;
@@ -137,7 +157,7 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
 
                 return result;
             }
-        }
+        };
 
         return emitNext();
     }
@@ -242,6 +262,18 @@ function constructObservable(errorHandler?: ObserverErrorHandler) {
 export const Observable = constructObservable as unknown as {
     new <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
     <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
+};
+
+function constructAsyncObservable(errorHandler?: ObserverErrorHandler) {
+    return new Emitter(errorHandler, true);
+}
+
+/**
+ * An {@link Observable} that explicitly supports asynchronous results
+ */
+export const AsyncObservable = constructAsyncObservable as unknown as {
+    new <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): AsyncObservable<T, R>;
+    <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): AsyncObservable<T, R>;
 };
 
 function event<E, N extends string>(emitter: E, name: N) {

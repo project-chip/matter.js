@@ -200,7 +200,7 @@ class MyFancyOwnFunctionalityServer extends MyFancyOwnFunctionalityBehavior {
 //
 // In this case we are using with() to install our On/Off cluster behavior.
 // .with("LevelControlForLighting") not needed because we always have it in by default because we have default implementation
-let OnOffDevice = isSocket
+const OnOffDevice = isSocket
     ? vendorId === 0xfff4
         ? OnOffPlugInUnitDevice.with(OnOffShellExecServer, MyFancyOwnFunctionalityServer)
         : OnOffPlugInUnitDevice.with(OnOffShellExecServer)
@@ -360,7 +360,7 @@ console.log("Initial Fabrics", server.state.operationalCredentials.fabrics);
  * If the node is not commissioned already we display the QR code on console. The QR code is also logged
  */
 if (!server.lifecycle.isCommissioned) {
-    const { qrPairingCode, manualPairingCode } = await server.act(agent => agent.commissioning.pairingCodes);
+    const { qrPairingCode, manualPairingCode } = server.state.commissioning.pairingCodes;
 
     console.log(QrCode.get(qrPairingCode));
     logger.info(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);

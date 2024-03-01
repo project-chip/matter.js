@@ -5,7 +5,9 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
+import { ActionContext } from "../behavior/context/ActionContext.js";
 import { ActionTracer } from "../behavior/context/ActionTracer.js";
+import { NodeActivity } from "../behavior/context/server/NodeActivity.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
 import { CrashedDependencyError, Lifecycle, UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
@@ -50,6 +52,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #construction: AsyncConstruction<Endpoint<T>>;
     #stateView = {} as SupportedBehaviors.StateOf<T["behaviors"]>;
     #eventsView = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
+    #activity?: NodeActivity;
 
     /**
      * A string that uniquely identifies an endpoint.
@@ -271,9 +274,20 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
             // Deferred initialization -- wait for installation
             return new Promise<void>((fulfilled, rejected) => {
-                this.lifecycle.installed.once(() => {
-                    MaybePromise.then(() => this.#initialize(), fulfilled, rejected);
-                });
+                const initializeOnInstall = () => {
+                    try {
+                        const result = this.#initialize();
+                        if (MaybePromise.is(result)) {
+                            result.then(fulfilled, rejected);
+                            return;
+                        }
+                    } catch (e) {
+                        rejected(e);
+                    }
+                    fulfilled();
+                };
+
+                this.lifecycle.installed.once(initializeOnInstall);
             });
         });
     }
@@ -456,11 +470,18 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      *
      * The {@link Agent} is destroyed after {@link actor} exits so you should not maintain references to the agent, its
      * behaviors or associated state.
+     *
+     * {@link actor} may be async.  If so, the acting context will remain open until the returned {@link Promise}
+     * resolves.
      */
     act<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
-        this.construction.assert("Endpoint");
+        this.construction.assert(this.toString());
 
-        return OfflineContext.act("offline", context => {
+        if (!this.#activity) {
+            this.#activity = this.env.get(NodeActivity);
+        }
+
+        return OfflineContext.act("offline", this.#activity, context => {
             return actor(context.agentFor(this));
         });
     }
@@ -555,7 +576,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * The default implementation crashes the endpoint.
      */
     protected behaviorCrash() {
-        this.construction.then(() => {
+        this.construction.onSuccess(() => {
             logger.info(
                 "Endpoint",
                 Diagnostic.strong(this.toString()),
@@ -572,34 +593,36 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     #initialize() {
-        let trace: ActionTracer.Action;
-        if (this.env.has(ActionTracer)) {
-            trace = {
-                type: ActionTracer.ActionType.Initialize,
-            };
+        const trace: ActionTracer.Action | undefined = this.env.has(ActionTracer)
+            ? { type: ActionTracer.ActionType.Initialize }
+            : undefined;
+
+        const initializeEndpoint = (context: ActionContext) => this.initialize(context.agentFor(this));
+
+        if (!this.#activity) {
+            this.#activity = this.env.get(NodeActivity);
         }
 
-        return MaybePromise.then(
-            // Initialize myself and behaviors in a single offline transaction
-            () =>
-                OfflineContext.act(`initialize`, context => this.initialize(context.agentFor(this)), {
-                    unversionedVolatiles: true,
-                    trace,
-                }),
+        const result = OfflineContext.act("initialize", this.#activity, initializeEndpoint, {
+            unversionedVolatiles: true,
+            trace,
+        });
 
-            // Update lifecycle indicating initialization is complete
-            () => {
-                this.lifecycle.change(EndpointLifecycle.Change.Ready);
-                if (trace) {
-                    trace.path = this.path;
-                    this.env.get(ActionTracer).record(trace);
-                }
+        const afterEndpointInitialized = () => {
+            this.lifecycle.change(EndpointLifecycle.Change.Ready);
+            if (trace) {
+                trace.path = this.path;
+                this.env.get(ActionTracer).record(trace);
+            }
 
-                if (this.behaviors.hasCrashed) {
-                    this.behaviorCrash();
-                }
-            },
-        );
+            if (this.behaviors.hasCrashed) {
+                this.behaviorCrash();
+            }
+        };
+
+        this.#construction.onSuccess(afterEndpointInitialized);
+
+        return result;
     }
 
     #logReady() {

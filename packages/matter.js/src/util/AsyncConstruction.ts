@@ -8,7 +8,7 @@ import { CrashedDependencyError, Lifecycle } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { Logger } from "../log/Logger.js";
 import { Observable } from "./Observable.js";
-import { MaybePromise, Tracker } from "./Promises.js";
+import { MaybePromise } from "./Promises.js";
 
 /**
  * Create an instance of a class implementing the {@link AsyncConstructable} pattern.
@@ -76,7 +76,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
      * If you omit the initializer parameter to {@link AsyncConstruction} execution is deferred until you invoke this
      * method.
      */
-    start(initializer?: () => MaybePromise): this;
+    start(initializer?: () => MaybePromise): void;
 
     /**
      * Invoke destruction logic then move to destroyed status.
@@ -107,12 +107,33 @@ export interface AsyncConstruction<T> extends Promise<T> {
      *
      * This method fails if initialization is ongoing; await completion first.
      */
-    setStatus(status: Lifecycle.Status): this;
+    setStatus(status: Lifecycle.Status): void;
 
     /**
      * Force "crashed" state with the specified error.
      */
-    crashed(cause: any, invokeDefaultHandler?: boolean): this;
+    crashed(cause: any, invokeDefaultHandler?: boolean): void;
+
+    /**
+     * Invoke a method after construction completes successfully.
+     *
+     * Any error in this callback will crash construction.
+     */
+    onSuccess(actor: () => MaybePromise<void>): void;
+
+    /**
+     * Invoke a method after construction completes unsuccessfully.
+     *
+     * Any error in this callback will replace the crash cause.
+     */
+    onError(actor: (error: Error) => MaybePromise<void>): void;
+
+    /**
+     * Invoke a method after construction completes successfully or onsuccessfully.
+     *
+     * Any error in this callback will crash construction or replace the crash cause.
+     */
+    onCompletion(actor: () => void): void;
 
     toString(): string;
 }
@@ -122,7 +143,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     initializer?: () => MaybePromise,
     options?: AsyncConstruction.Options,
 ): AsyncConstruction<T> {
-    let promise: MaybePromise;
+    let promise: Promise<void> | undefined;
     let error: any;
     let started = false;
     let ready = false;
@@ -144,7 +165,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     // captures the original error but also the trace for the secondary error.
     function crashedError() {
         let what;
-        if (subject.toString === Object.toString) {
+        if (subject.toString === Object.prototype.toString) {
             what = subject.constructor.name;
         } else {
             what = subject.toString();
@@ -160,9 +181,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     }
 
     const self: AsyncConstruction<any> = {
-        toString() {
-            return `construction<${subject}>`;
-        },
+        [Symbol.toStringTag]: "AsyncConstruction",
 
         get ready() {
             return ready;
@@ -213,25 +232,28 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
             if (MaybePromise.is(initialization)) {
                 ready = false;
-                initialization = initialization.then(
-                    () => {
-                        ready = true;
-                        if (status === Lifecycle.Status.Initializing) {
-                            setStatus(Lifecycle.Status.Active);
-                        }
-                    },
-                    e => {
-                        ready = true;
-                        if (status !== Lifecycle.Status.Destroying && status !== Lifecycle.Status.Destroyed) {
-                            this.crashed(e);
-                        }
-                        throw crashedError();
-                    },
-                );
+
+                const initSuccess = () => {
+                    ready = true;
+                    if (status === Lifecycle.Status.Initializing) {
+                        setStatus(Lifecycle.Status.Active);
+                    }
+                };
+
+                const initFailure = (cause: any) => {
+                    ready = true;
+                    if (status !== Lifecycle.Status.Destroying && status !== Lifecycle.Status.Destroyed) {
+                        this.crashed(cause);
+                    }
+                    throw crashedError();
+                };
+
+                initialization = initialization.then(initSuccess, initFailure);
+
                 if (promise) {
-                    initialization.then(placeholderResolve, placeholderReject);
+                    void initialization.then(placeholderResolve, placeholderReject);
                 } else {
-                    promise = Tracker.global.track(initialization, `${subject.constructor.name} construction`);
+                    promise = Promise.resolve(initialization);
                 }
             } else {
                 ready = true;
@@ -245,8 +267,6 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                     resolve();
                 }
             }
-
-            return this;
         },
 
         cancel: () => {
@@ -274,13 +294,14 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                     throw new ImplementationError(`Property is undefined`);
                 }
             } catch (e) {
-                if (!(e instanceof Error)) {
-                    e = new ImplementationError((e ?? "(unknown error)").toString());
-                }
+                let error;
                 if (e instanceof Error) {
-                    e.message = `Cannot access ${description}: ${e.message}`;
+                    error = e;
+                } else {
+                    error = new ImplementationError(e?.toString() ?? "(unknown error)");
                 }
-                throw e;
+                error.message = `Cannot access ${description}: ${error.message}`;
+                throw error;
             }
             return dependency;
         },
@@ -289,36 +310,82 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
             onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
         ): Promise<TResult1 | TResult2> {
+            // If initialization has not started we need to create a placeholder promise
             if (!started) {
-                // Initialization has not started so we need to create a
-                // placeholder promise
-
                 promise = new Promise((resolve, reject) => {
                     placeholderResolve = resolve;
                     placeholderReject = reject;
                 });
-
-                promise = Tracker.global.track(promise, `${subject.constructor.name} construction`);
             }
+
+            // If there is a promise then construction is ongoing
             if (promise) {
-                return Promise.resolve(promise)
-                    .then(() => subject)
-                    .then(onfulfilled, onrejected);
+                return Promise.resolve(promise.then(() => subject).then(onfulfilled, onrejected));
             }
 
+            // If there is an error then construction crashed
             if (error) {
-                onrejected?.(error);
-            } else {
-                onfulfilled?.(subject);
+                return Promise.reject(error).catch(onrejected);
             }
 
-            return this;
+            // Construction is complete
+            return Promise.resolve(subject).then(onfulfilled);
         },
 
         catch<TResult = never>(
             onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
         ): Promise<T | TResult> {
             return this.then(undefined, onrejected);
+        },
+
+        onSuccess(actor: () => MaybePromise<void>) {
+            const onSuccess = () => {
+                const errorHandler = hookErrorHandler("onSuccess");
+
+                try {
+                    const result = actor();
+                    if (MaybePromise.is(result)) {
+                        return Promise.resolve(result).catch(errorHandler);
+                    }
+                } catch (e) {
+                    errorHandler(e);
+                }
+            };
+
+            // Do not catch this "promise" because we catch hook errors and other errors are handled elsewhere or are
+            // uncuaght
+            void this.then(onSuccess);
+        },
+
+        onError(actor: (error: Error) => MaybePromise<void>) {
+            const onError = (error: any) => {
+                const errorHandler = hookErrorHandler("onError");
+
+                try {
+                    const result = actor(error);
+                    if (MaybePromise.is(result)) {
+                        return Promise.resolve(result).catch(errorHandler);
+                    }
+                } catch (e) {
+                    errorHandler(e);
+                }
+            };
+
+            this.catch(onError);
+        },
+
+        onCompletion(actor: () => void) {
+            const onCompletion = () => {
+                const errorHandler = hookErrorHandler("onCompletion");
+
+                try {
+                    actor();
+                } catch (e) {
+                    errorHandler(e);
+                }
+            };
+
+            this.finally(onCompletion);
         },
 
         close(destructor) {
@@ -328,7 +395,8 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
             error = undefined;
             status = Lifecycle.Status.Destroying;
-            promise = MaybePromise.finally(
+
+            const destruction = MaybePromise.finally(
                 promise,
 
                 () =>
@@ -337,6 +405,10 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                         () => setStatus(Lifecycle.Status.Destroyed),
                     ),
             );
+
+            if (destruction) {
+                promise = Promise.resolve(destruction);
+            }
 
             return this;
         },
@@ -349,12 +421,11 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             error = cause;
             setStatus(Lifecycle.Status.Crashed);
             onerror(error);
-            return this;
         },
 
         setStatus(newStatus: Lifecycle.Status) {
             if (this.status === newStatus) {
-                return this;
+                return;
             }
 
             if (status === Lifecycle.Status.Destroyed) {
@@ -390,14 +461,19 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
 
             setStatus(status);
-
-            return this;
-        },
-
-        get [Symbol.toStringTag]() {
-            return "Promise";
         },
     };
+
+    function hookErrorHandler(name: string) {
+        return (e: any) => {
+            if (e instanceof Error) {
+                e.message = `Uhandled error in ${self}.${name} hook: ${e.message}`;
+            } else {
+                e = new Error(`Unhandled error in ${self}.${name} hook: ${e}`);
+            }
+            self.crashed(e);
+        };
+    }
 
     if (initializer) {
         self.start(initializer);

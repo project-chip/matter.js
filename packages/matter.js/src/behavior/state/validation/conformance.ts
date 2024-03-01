@@ -19,8 +19,12 @@ export function createConformanceValidator(
     featureMap: ValueModel,
     supportedFeatures: FeatureSet,
     nextValidator?: ValueSupervisor.Validate,
-): ValueSupervisor.Validate {
+): ValueSupervisor.Validate | undefined {
     const validate = astToFunction(schema, featureMap, supportedFeatures);
+
+    if (!validate && !nextValidator) {
+        return undefined;
+    }
 
     return (value, session, location) => {
         validate?.(value, session, location);

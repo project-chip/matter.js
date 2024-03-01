@@ -13,16 +13,13 @@ import { type CommandModel, type Model, type ValueModel } from "../models/index.
 const OPERATION_DEPTH_LIMIT = 20;
 
 /**
- * This class performs lookups of models in the scope of a specific model.  We
- * use a class so the lookup can maintain state and guard against circular
- * references.
+ * This class performs lookups of models in the scope of a specific model.  We use a class so the lookup can maintain
+ * state and guard against circular references.
  *
- * Any logic that requires traversal of a multi-model ownership or inheritance
- * should use this class.
+ * Any logic that requires traversal of a multi-model ownership or inheritance should use this class.
  *
- * Note that we don't currently utilize any kind of index when we perform
- * search.  Not currently a problem but may need to address if it becomes too
- * inefficient.
+ * Note that we don't currently utilize any kind of index when we perform search.  Not currently a problem but may need
+ * to address if it becomes too inefficient.
  */
 export class ModelTraversal {
     private operationDepth = 0;
@@ -53,17 +50,15 @@ export class ModelTraversal {
     }
 
     /**
-     * Perform an operation with a model dismissed from consideration for type
-     * lookup.
+     * Perform an operation with a model dismissed from consideration for type lookup.
      */
     operationWithDismissal<T>(toDismiss: Model | undefined, operator: () => T): T {
         return this.operation(operator, toDismiss);
     }
 
     /**
-     * Determine the type for a model.  This is the string name of the base
-     * model.  Usually this is simply the type field but we infer the type of
-     * some datatypes based on their parent's type.
+     * Determine the type for a model.  This is the string name of the base model.  Usually this is simply the type
+     * field but we infer the type of some datatypes based on their parent's type.
      */
     getTypeName(model: Model | undefined): string | undefined {
         if (!model) {
@@ -106,8 +101,7 @@ export class ModelTraversal {
                     }
                 }
 
-                // If I override a field my type is the same as the overridden
-                // field
+                // If I override a field my type is the same as the overridden field
                 const overridden = this.findLocal(ancestor, name, [model.tag]);
                 if (overridden?.type) {
                     result = overridden.type;
@@ -120,8 +114,8 @@ export class ModelTraversal {
     }
 
     /**
-     * Find the model in my inheritance hierarchy that has semantic meaning.
-     * This will be the first inherited model with a metatype.
+     * Find the model in my inheritance hierarchy that has semantic meaning. This will be the first inherited model with
+     * a metatype.
      */
     findMetabase(model: Model | undefined): Model | undefined {
         return this.operation(() => {
@@ -228,8 +222,7 @@ export class ModelTraversal {
     }
 
     /**
-     * Find a child in the parent's inheritance hierarchy with the same tag
-     * and ID/name.
+     * Find a child in the parent's inheritance hierarchy with the same tag and ID/name.
      */
     findShadow(model: Model | undefined): Model | undefined {
         if (model === undefined) {
@@ -255,11 +248,9 @@ export class ModelTraversal {
     }
 
     /**
-     * Get an aspect that reflects extension of any shadowed aspects.  Note
-     * that this searches the parent's inheritance and the model's inheritance.
-     * This is because aspects can be inherited by overriding an element in
-     * the parent or by direct type inheritance.  Aspects in shadowed elements
-     * take priority as they are presumably more specific.
+     * Get an aspect that reflects extension of any shadowed aspects.  Note that this searches the parent's inheritance
+     * and the model's inheritance. This is because aspects can be inherited by overriding an element in the parent or
+     * by direct type inheritance.  Aspects in shadowed elements take priority as they are presumably more specific.
      */
     findAspect(model: Model | undefined, symbol: symbol): Aspect<any> | undefined {
         if (!model) {
@@ -292,8 +283,7 @@ export class ModelTraversal {
     }
 
     /**
-     * Constraint aspects are specialized because we infer constraint fields
-     * that are referenced in other models.
+     * Constraint aspects are specialized because we infer constraint fields that are referenced in other models.
      */
     findConstraint(model: ValueModel, symbol: symbol, field?: "value" | "min" | "max"): Constraint | undefined {
         return this.operation(() => {
@@ -325,10 +315,9 @@ export class ModelTraversal {
                 }
             };
 
-            // The only reason the field filter exists is that some fields
-            // referenced in constraints are circularly constrained (e.g. min
-            // of max field is max of min field and vice versa).  By only
-            // loading the field of interest we avoid infinite loops
+            // The only reason the field filter exists is that some fields referenced in constraints are circularly
+            // constrained (e.g. min of max field is max of min field and vice versa).  By only loading the field of
+            // interest we avoid infinite loops
             if (field) {
                 resolve(field);
             } else {
@@ -346,8 +335,7 @@ export class ModelTraversal {
     }
 
     /**
-     * Access aspects are specialized because access controls are inherited
-     * from the owner if not otherwise defined.
+     * Access aspects are specialized because access controls are inherited from the owner if not otherwise defined.
      *
      * That means access controls may come from 5 places, in order of priority:
      *
@@ -357,8 +345,8 @@ export class ModelTraversal {
      *   4. A model in the parent hierarchy
      *   5. Access.Default
      *
-     * This method uses {@link findAspect} for 1-3 then extends the result with
-     * 4 & 5 as necessary until {@link Access.complete} is true.
+     * This method uses {@link findAspect} for 1-3 then extends the result with 4 & 5 as necessary until
+     * {@link Access.complete} is true.
      */
     findAccess(model: ValueModel | undefined, symbol: symbol, VM: typeof ValueModel): Access {
         if (model === undefined) {

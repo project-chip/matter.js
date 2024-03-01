@@ -21,7 +21,7 @@ export class NetworkBehavior extends Behavior {
     declare state: NetworkBehavior.State;
 
     [Symbol.asyncDispose]() {
-        this.internal.runtime?.close();
+        return this.internal.runtime?.close();
     }
 }
 

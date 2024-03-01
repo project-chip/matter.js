@@ -37,7 +37,7 @@ import { Resource } from "./state/transaction/Resource.js";
  * If {@link observable} is a high-volume emitter, it would be better to implement synchronous or very fast asynchronous
  * reactors to avoid accumulating too many deferred reactions.
  */
-export type Reactor<T extends any[] = any[], R = any> = (...args: T) => R extends void ? MaybePromise : R;
+export type Reactor<T extends any[] = any[], R = any> = (...args: T) => MaybePromise<R>;
 
 export namespace Reactor {
     /**

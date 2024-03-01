@@ -10,6 +10,7 @@ import { ActionContext } from "../ActionContext.js";
 import { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
 import { ContextAgents } from "./ContextAgents.js";
+import { NodeActivity } from "./NodeActivity.js";
 
 export let nextInternalId = 1;
 
@@ -18,7 +19,7 @@ export let nextInternalId = 1;
  *
  * You can also use {@link OfflineContext.ReadOnly} for read-only {@link Agent} access.
  */
-export namespace OfflineContext {
+export const OfflineContext = {
     /**
      * Operate in offline context.  Interactions with private Matter.js APIs happen in an offline context.
      *
@@ -30,8 +31,9 @@ export namespace OfflineContext {
      *
      * Offline context is very permissive.  You should use carefully.
      */
-    export function act<T>(
+    act<T>(
         purpose: string,
+        activity: NodeActivity | undefined,
         actor: (context: ActionContext) => MaybePromise<T>,
         options?: OfflineContext.Options,
     ): MaybePromise<T> {
@@ -39,15 +41,36 @@ export namespace OfflineContext {
         nextInternalId = (nextInternalId + 1) % 65535;
         const via = Diagnostic.via(`${purpose}#${id.toString(16)}`);
 
-        return Transaction.act(via, transaction => {
-            const context = createOfflineContext(transaction, options);
+        let context: ActionContext | undefined;
 
+        const actOffline = (transaction: Transaction) => {
+            context = createOfflineContext(transaction, options);
             return actor(context);
-        });
-    }
-}
+        };
 
-export namespace OfflineContext {
+        let isAsync = false;
+        try {
+            activity?.add(via);
+
+            const result = Transaction.act(via, actOffline);
+
+            if (MaybePromise.is(result)) {
+                isAsync = true;
+                return Promise.resolve(result).finally(() => {
+                    if (context) {
+                        activity?.delete(via);
+                    }
+                }) as T;
+            }
+
+            return result;
+        } finally {
+            if (!isAsync) {
+                activity?.delete(via);
+            }
+        }
+    },
+
     /**
      * Normally you need to use {@link OfflineContext.act} to work with behaviors, and you can only interact with the
      * behaviors in the actor function.  This {@link ActionContext} allows you to create offline agents that remain
@@ -55,8 +78,12 @@ export namespace OfflineContext {
      *
      * Write operations will throw an error with this context.
      */
-    export const ReadOnly = createOfflineContext(ReadOnlyTransaction);
+    ReadOnly: createOfflineContext(ReadOnlyTransaction),
 
+    [Symbol.toStringTag]: "OfflineContext",
+};
+
+export namespace OfflineContext {
     /**
      * {@link OfflineContext} configuration options.
      */
@@ -92,6 +119,8 @@ function createOfflineContext(transaction: Transaction, options?: OfflineContext
         get [Contextual.context]() {
             return this;
         },
+
+        [Symbol.toStringTag]: "OfflineContext",
     });
 
     return context;

@@ -12,4 +12,6 @@ import "./crypto/register.js";
 
 import "./environment/register.js";
 
+import "./behavior/register.js";
+
 export * from "@project-chip/matter.js";

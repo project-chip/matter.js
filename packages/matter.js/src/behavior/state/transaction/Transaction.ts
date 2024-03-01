@@ -8,7 +8,7 @@ import { MaybePromise } from "../../../util/Promises.js";
 import { Participant } from "./Participant.js";
 import type { Resource } from "./Resource.js";
 import { Status } from "./Status.js";
-import { ReadOnlyTransaction, executeTransaction } from "./Tx.js";
+import { ReadOnlyTransaction, act } from "./Tx.js";
 
 /**
  * By default, Matter.js state is transactional.
@@ -54,17 +54,14 @@ export interface Transaction {
     readonly waitingOn: Iterable<Transaction> | undefined;
 
     /**
-     * Resolves when the transaction commits or rolls back.
-     *
-     * When the transaction commits or rolls back it returns to a shared state and the promise is replaced.  So this is
-     * only useful prior to commit or rollback.
+     * Listen for transaction commit or roll back.  This may occur more than once for a given.
      */
-    readonly promise: Promise<void>;
+    onShared(actor: () => void, once?: boolean): void;
 
     /**
-     * Resolves when the {@link Transaction.status} becomes {@link Status.Destroyed}.
+     * Listen for {@link Transaction.status} close.
      */
-    readonly destroyed: Promise<void>;
+    onClose(actor: () => void): void;
 
     /**
      * Add {@link Resources} to the transaction.
@@ -144,8 +141,10 @@ export interface Transaction {
 
     /**
      * Wait for a set of transactions to complete.
+     *
+     * @param others the set of transactions to await; cleared on return
      */
-    waitFor(others: Iterable<Transaction>): Promise<void>;
+    waitFor(others: Set<Transaction>): Promise<void>;
 }
 
 type StatusType = Status;
@@ -153,7 +152,7 @@ const StatusEnum = Status;
 type ResourceType = Resource;
 type ParticipantType = Participant;
 
-export namespace Transaction {
+export const Transaction = {
     /**
      * Perform a transactional operation.  This is the only way to obtain a read/write transaction.
      *
@@ -162,16 +161,25 @@ export namespace Transaction {
      * The transaction is destroyed when {@link act} returns.  You will receive an error if you access it after it is
      * destroyed.
      */
-    export function act<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
-        return executeTransaction(via, actor);
-    }
+    act<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
+        // This function is replaced below so do not edit
+        return act(via, actor);
+    },
 
     /**
      * A read-only transaction you may use without context.
      */
-    export const ReadOnly = ReadOnlyTransaction;
+    ReadOnly: ReadOnlyTransaction,
 
-    export const Status = StatusEnum;
+    Status: StatusEnum,
+
+    [Symbol.toStringTag]: "Transaction",
+};
+
+// This is functionally equivalent to the definition above but removes a stack frame
+Transaction.act = act;
+
+export namespace Transaction {
     export type Status = StatusType;
 
     export type Resource = ResourceType;

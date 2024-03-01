@@ -5,8 +5,8 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { ActionContext } from "../../behavior/context/ActionContext.js";
 import { ActionTracer } from "../../behavior/context/ActionTracer.js";
+import { NodeActivity } from "../../behavior/context/server/NodeActivity.js";
 import { OnlineContext } from "../../behavior/context/server/OnlineContext.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
@@ -19,7 +19,7 @@ import { InteractionEndpointStructure } from "../../protocol/interaction/Interac
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { Session } from "../../session/Session.js";
-import { MaybePromise, track } from "../../util/Promises.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { ServerNode } from "../ServerNode.js";
 import { ServerStore } from "./storage/ServerStore.js";
 
@@ -40,6 +40,7 @@ export class TransactionalInteractionServer extends InteractionServer {
     #changeListener: (type: EndpointLifecycle.Change) => void;
     #endpoint: Endpoint;
     #tracer?: ActionTracer;
+    #activity: NodeActivity;
 
     constructor(endpoint: Endpoint<ServerNode.RootEndpoint>) {
         const structure = new InteractionEndpointStructure();
@@ -49,6 +50,8 @@ export class TransactionalInteractionServer extends InteractionServer {
             endpointStructure: structure,
             subscriptionOptions: endpoint.state.network.subscriptionOptions,
         });
+
+        this.#activity = endpoint.env.get(NodeActivity);
 
         if (endpoint.env.has(ActionTracer)) {
             this.#tracer = endpoint.env.get(ActionTracer);
@@ -88,6 +91,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         return this.#transact(
             "Read",
             {
+                activity: this.#activity,
                 fabricFiltered,
                 message,
                 session,
@@ -106,6 +110,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         return this.#transact(
             "Write",
             {
+                activity: this.#activity,
                 timed,
                 message,
                 session,
@@ -126,6 +131,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         return this.#transact(
             "Invoke",
             {
+                activity: this.#activity,
                 command: true,
                 timed,
                 message,
@@ -145,9 +151,8 @@ export class TransactionalInteractionServer extends InteractionServer {
     async #transact<T extends Promise<any>>(
         why: "Read" | "Write" | "Invoke",
         options: OnlineContext.Options,
-        fn: () => T,
+        actor: () => T,
     ) {
-        const actor = (context: ActionContext) => track(fn(), [why, context.transaction.via]);
         if (!this.#tracer) {
             return OnlineContext(options).act(actor);
         }

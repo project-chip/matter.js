@@ -41,7 +41,7 @@ describe("ServerNode", () => {
             });
         }
 
-        node.add(OnOffLightDevice);
+        await node.add(OnOffLightDevice);
 
         await MockTime.resolve(node.run());
 

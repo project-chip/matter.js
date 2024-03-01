@@ -19,9 +19,9 @@ import { Val } from "../../Val.js";
  */
 export function ValuePatcher(schema: Schema, owner: RootSupervisor) {
     switch (schema.effectiveMetatype) {
-        case Metatype.any:
         // "any" means the schema defines no type.  Assume it's an object since ValuePatcher is only invoked where
         // an object is expected naturally
+        case Metatype.any:
         case Metatype.object:
             return StructPatcher(schema as ValueModel, owner);
 

@@ -15,6 +15,24 @@ import type { TestRunner } from "./runner.js";
 import "./global-definitions.js";
 
 export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
+    // Grr Mocha (as of 10.2.0) classifies certain unhandled rejections as "mocha".  For others, it uninstalls its
+    // unhandled rejection handler and re-emits the "unhandledRejection" event.  But since it already handled the event,
+    // Node knows nothing about this and the event disappears silently.
+    //
+    // So we must add our own unhandledRejection handler, but only process exceptions if Mocha's handler is not
+    // installed, because the code that Mocha uses to determine if an error is a "mocha" error is not exported.
+    process.on("unhandledRejection", e => {
+        if (process.listenerCount("unhandledRejection") === 1) {
+            let message: string, stack: string | undefined;
+            if (e instanceof Error) {
+                ({ message, stack } = e);
+            } else {
+                message = `${e}`;
+            }
+            runner.reporter.failRun(`Unhandled rejection (ignored by Mocha): ${message}`, stack);
+        }
+    });
+
     generalSetup(Mocha);
 
     const mocha = new Mocha({

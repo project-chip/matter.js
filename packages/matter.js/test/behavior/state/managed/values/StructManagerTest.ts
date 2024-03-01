@@ -5,6 +5,7 @@
  */
 
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
+import { NodeActivity } from "../../../../../src/behavior/context/server/NodeActivity.js";
 import { Val } from "../../../../../src/behavior/state/Val.js";
 import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
@@ -19,6 +20,7 @@ export type Nested = {
 };
 
 const TestContext = {
+    activity: new NodeActivity(),
     fabric: FabricIndex(1),
     subject: NodeId(1),
 };
@@ -47,8 +49,15 @@ function testNested(
 }
 
 describe("StructManager", () => {
-    it("applies nested defaults", () => {
-        testNested(({ ref }) => {
+    it("deep equals according to mocha", async () => {
+        // If this fails the rest of the tests are just going to be annoying
+        await testNested(({ ref }) => {
+            expect(ref.substruct).deep.equals({ foo: "bar" });
+        });
+    });
+
+    it("applies nested defaults", async () => {
+        await testNested(({ ref }) => {
             expect(typeof ref.substruct).equals("object");
             expect(ref.substruct.foo).equals("bar");
         });

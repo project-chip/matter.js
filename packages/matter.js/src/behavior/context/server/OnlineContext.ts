@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { MatterDevice } from "../../../MatterDevice.js";
 import { AccessLevel } from "../../../cluster/Cluster.js";
 import type { Message } from "../../../codec/MessageCodec.js";
@@ -17,6 +23,7 @@ import { ActionContext } from "../ActionContext.js";
 import { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
 import { ContextAgents } from "./ContextAgents.js";
+import { NodeActivity } from "./NodeActivity.js";
 
 /**
  * Operate in online context.  Public Matter API interactions happen in online context.
@@ -51,8 +58,19 @@ export function OnlineContext(options: OnlineContext.Options) {
                 `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subject.toString(16)}`,
             );
 
-            return Transaction.act(via, transaction => {
-                const context = {
+            let context: undefined | ActionContext;
+
+            const close = () => {
+                if (message) {
+                    Contextual.setContextOf(message, undefined);
+                }
+                if (context) {
+                    options.activity.delete(via);
+                }
+            };
+
+            const actOnline = (transaction: Transaction) => {
+                context = {
                     ...options,
                     session,
                     subject,
@@ -82,20 +100,32 @@ export function OnlineContext(options: OnlineContext.Options) {
                     Contextual.setContextOf(message, context);
                 }
 
-                try {
-                    return actor(context);
-                } finally {
-                    if (message) {
-                        Contextual.setContextOf(message, undefined);
-                    }
+                return actor(context);
+            };
+
+            let isAsync = false;
+            try {
+                options.activity.add(via);
+                const result = Transaction.act(via, actOnline);
+                if (MaybePromise.is(result)) {
+                    isAsync = true;
+                    return Promise.resolve(result).finally(close);
                 }
-            });
+                return result;
+            } finally {
+                if (!isAsync && context) {
+                    close();
+                }
+            }
         },
+
+        [Symbol.toStringTag]: "OnlineContext",
     };
 }
 
 export namespace OnlineContext {
     export type Options = {
+        activity: NodeActivity;
         command?: boolean;
         timed?: boolean;
         fabricFiltered?: boolean;

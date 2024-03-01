@@ -6,7 +6,6 @@
 
 import { Logger } from "../log/Logger.js";
 import { AsyncConstructable } from "./AsyncConstruction.js";
-import { MaybePromiseLike } from "./Promises.js";
 
 const logger = Logger.get("Mutex");
 
@@ -44,7 +43,7 @@ export class Mutex implements PromiseLike<unknown> {
      * If {@link task} is a function it runs when current activity completes.  If it is a promise then the mutex will
      * not clear until {@link task} resolves.
      */
-    run(task: MaybePromiseLike<unknown> | (() => PromiseLike<unknown>), cancel?: () => void) {
+    run(task: PromiseLike<unknown> | (() => PromiseLike<unknown>), cancel?: () => void) {
         if (this.#canceled) {
             cancel?.();
             return;
@@ -103,7 +102,7 @@ export class Mutex implements PromiseLike<unknown> {
     /**
      * Execute a task immediately if it is a function.
      */
-    protected async initiateTask(task: MaybePromiseLike<unknown> | (() => PromiseLike<unknown>)) {
+    protected async initiateTask(task: PromiseLike<unknown> | (() => PromiseLike<unknown>)) {
         if (typeof task === "function") {
             task = task();
         }

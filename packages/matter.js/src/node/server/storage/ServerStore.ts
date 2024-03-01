@@ -54,7 +54,7 @@ export class ServerStore implements Destructable {
         this.#location = storage.location ?? "(unknown location)";
         this.#nodeId = nodeId;
 
-        this.#construction = AsyncConstruction(this, async () => {
+        const initializeStorage = async () => {
             this.#storageManager = await storage.open(nodeId);
 
             this.#rootStore = await asyncNew(PartStoreFactory, {
@@ -62,7 +62,9 @@ export class ServerStore implements Destructable {
             });
 
             this.#logChange("Opened");
-        });
+        };
+
+        this.#construction = AsyncConstruction(this, initializeStorage);
     }
 
     static async create(environment: Environment, nodeId: string) {

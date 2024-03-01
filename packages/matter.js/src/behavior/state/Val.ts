@@ -76,6 +76,11 @@ export namespace Val {
          * The managed value that owns the reference.
          */
         owner?: T;
+
+        /**
+         * The object that owns the root managed value.
+         */
+        rootOwner?: any;
     }
 
     export const properties = Symbol("properties");
@@ -84,11 +89,14 @@ export namespace Val {
      * Unmanaged raw state classes have no contextual information.  They may implement this interface to provide an
      * alternate context-aware object for property read, write and validation.
      */
-    export interface Dynamic extends Struct {
+    export interface Dynamic<O = any, S extends ValueSupervisor.Session = ValueSupervisor.Session> extends Struct {
         /**
          * Obtain a context-aware property source (and sink).  Supervision will read/write properties from here if
          * present.  Otherwise they're read from static state as normal.
+         *
+         * @param owner the owner of the root reference of the managed value
+         * @param session the {@link ValueSupervisor.Session} accessing the value
          */
-        [properties]<This extends Val.Struct>(this: This, session: ValueSupervisor.Session): Partial<This>;
+        [properties]<This extends Val.Struct>(this: This, owner: O, session: S): Partial<This>;
     }
 }

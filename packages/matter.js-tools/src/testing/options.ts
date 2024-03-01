@@ -12,6 +12,7 @@ export type TestOptions = {
     invert?: boolean;
     allLogs?: boolean;
     wtf?: boolean;
+    debug?: boolean;
 };
 
 function option<T extends keyof TestOptions>(options: TestOptions, name: T) {

@@ -175,7 +175,7 @@ export class Parts implements MutableSet<Endpoint, Endpoint | Agent>, Observable
         if (!usedNumbers) {
             usedNumbers = new Set();
         }
-        if (endpoint.number) {
+        if (endpoint.lifecycle.hasNumber) {
             usedNumbers.add(endpoint.number);
         }
 

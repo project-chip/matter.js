@@ -14,7 +14,7 @@ import { SecureSession } from "../session/SecureSession.js";
 import { SessionManager } from "../session/SessionManager.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { Observable } from "../util/Observable.js";
+import { AsyncObservable, Observable } from "../util/Observable.js";
 import { FailsafeTimer, MatterFabricConflictError } from "./FailsafeTimer.js";
 import { MatterFlowError } from "./MatterError.js";
 
@@ -42,7 +42,7 @@ export abstract class FailsafeContext {
     #events = {
         fabricAdded: Observable<[fabric: Fabric]>(),
         fabricUpdated: Observable<[fabric: Fabric]>(),
-        commissioned: Observable<[], Promise<void>>(),
+        commissioned: AsyncObservable<[], void>(),
     };
 
     constructor(options: FailsafeContext.Options) {

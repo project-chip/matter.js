@@ -167,20 +167,28 @@ export namespace Diagnostic {
             if (line === "") {
                 continue;
             }
-            const match = line.match(/^at\s+(.+)\s+\(([^)]+)\)$/);
-            if (!match) {
-                lines.push(line);
+
+            const match1 = line.match(/^at\s+(.+)\s+\(([^)]+)\)$/);
+            if (match1) {
+                lines.push(
+                    Diagnostic.squash(
+                        Diagnostic.weak("at "),
+                        match1[1],
+                        Diagnostic.weak(" ("),
+                        Diagnostic.weak(match1[2]),
+                        Diagnostic.weak(")"),
+                    ),
+                );
                 continue;
             }
-            lines.push(
-                Diagnostic.squash(
-                    Diagnostic.weak("at "),
-                    match[1],
-                    Diagnostic.weak(" ("),
-                    Diagnostic.weak(match[2]),
-                    Diagnostic.weak(")"),
-                ),
-            );
+
+            const match2 = line.match(/^at\s+(.+)(:\d+:\d+)$/);
+            if (match2) {
+                lines.push(Diagnostic.squash(Diagnostic.weak("at "), match2[1], Diagnostic.weak(match2[2])));
+                continue;
+            }
+
+            lines.push(line);
         }
 
         // Node helpfully gives us this if there's no message.  It's not even the name of the error class, just "Error"

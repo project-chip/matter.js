@@ -215,13 +215,13 @@ export namespace ClusterType {
     export type AttributeValues<T> = ValuesOfAttributes<ClusterType.AttributesOf<T>>;
 
     export type ValuesOfAttributes<AttrsT extends { [K: string]: Attribute }> = {
-        [K in keyof AttrsT as [AttrsT[K]] extends [never | { optional: true }] ? never : K]: AttrsT[K] extends {
+        [K in keyof AttrsT as [AttrsT[K]] extends [{ optional: true }] ? never : K]: AttrsT[K] extends {
             schema: TlvSchema<infer T>;
         }
             ? T
             : never;
     } & {
-        [K in keyof AttrsT as [AttrsT[K]] extends [never | { optional: true }] ? K : never]?: AttrsT[K] extends {
+        [K in keyof AttrsT as [AttrsT[K]] extends [{ optional: true }] ? K : never]?: AttrsT[K] extends {
             schema: TlvSchema<infer T>;
         }
             ? T

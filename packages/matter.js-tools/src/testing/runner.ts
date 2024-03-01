@@ -5,6 +5,7 @@
  */
 
 import colors from "ansi-colors";
+import debug from "debug";
 import { glob } from "glob";
 import { relative } from "path";
 import { Package } from "../util/package.js";
@@ -39,6 +40,10 @@ export class TestRunner {
             this.spec = options.spec;
         } else {
             this.spec = [options.spec];
+        }
+
+        if (options.debug) {
+            debug.enable("mocha:*");
         }
     }
 

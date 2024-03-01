@@ -789,7 +789,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const maxInterval = subscriptionHandler.getMaxInterval();
         logger.info(
-            `Successfully created subscription ${subscriptionId} for Session ${session.id}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
+            `Successfully created subscription ${subscriptionId} for Session ${
+                session.id
+            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
         );
         // Then send the subscription response
         await messenger.send(

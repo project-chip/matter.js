@@ -12,6 +12,7 @@ import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { Schema } from "../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
+import { Internal } from "../managed/Internal.js";
 import {
     assertArray,
     assertBoolean,
@@ -31,7 +32,7 @@ import { ValidationLocation } from "./location.js";
  * @param schema the schema against which we validate
  * @param factory used to retrieve validators for sub-properties
  */
-export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSupervisor.Validate {
+export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSupervisor.Validate | undefined {
     if (schema instanceof ClusterModel) {
         return createStructValidator(schema, factory) ?? (() => {});
     }
@@ -94,7 +95,7 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
     validator = createConformanceValidator(schema, factory.featureMap, factory.supportedFeatures, validator);
 
-    return validator || (() => {});
+    return validator;
 }
 
 function createNullValidator(
@@ -192,8 +193,10 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
         if (field.isGlobalAttribute || field.deprecated) {
             continue;
         }
-
-        validators[camelize(field.name)] = factory.get(field).validate;
+        const validate = factory.get(field).validate;
+        if (validate) {
+            validators[camelize(field.name)] = validate;
+        }
     }
 
     return (struct, session, location) => {
@@ -208,7 +211,8 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
             let value;
 
             if ((struct as Val.Dynamic)[Val.properties]) {
-                const properties = (struct as Val.Dynamic)[Val.properties](session);
+                const rootOwner = (struct as unknown as Internal.Collection)[Internal.reference];
+                const properties = (struct as Val.Dynamic)[Val.properties](rootOwner, session);
                 if (name in properties) {
                     value = properties[name];
                 } else {
@@ -252,27 +256,29 @@ function createListValidator(schema: ValueModel, factory: RootSupervisor): Value
     if (entry) {
         const entryValidator = factory.get(entry).validate;
 
-        validateEntries = (list: Val, session: ValueSupervisor.Session, location: ValidationLocation) => {
-            if (!list || typeof (list as Iterable<unknown>)[Symbol.iterator] !== "function") {
-                throw new DatatypeError(location, "a list", list);
-            }
-
-            let index = 0;
-            const sublocation = {
-                path: location.path.at(""),
-            };
-            for (const e of list as Iterable<unknown>) {
-                if (e === undefined || e === null) {
-                    // Accept nullish
-                    continue;
+        if (entryValidator) {
+            validateEntries = (list: Val, session: ValueSupervisor.Session, location: ValidationLocation) => {
+                if (!list || typeof (list as Iterable<unknown>)[Symbol.iterator] !== "function") {
+                    throw new DatatypeError(location, "a list", list);
                 }
 
-                sublocation.path.id = index;
-                entryValidator(e, session, sublocation);
+                let index = 0;
+                const sublocation = {
+                    path: location.path.at(""),
+                };
+                for (const e of list as Iterable<unknown>) {
+                    if (e === undefined || e === null) {
+                        // Accept nullish
+                        continue;
+                    }
 
-                index++;
-            }
-        };
+                    sublocation.path.id = index;
+                    entryValidator(e, session, sublocation);
+
+                    index++;
+                }
+            };
+        }
     }
 
     const validateConstraint = createConstraintValidator(schema.constraint, schema);

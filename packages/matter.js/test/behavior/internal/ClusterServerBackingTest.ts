@@ -5,6 +5,7 @@
  */
 
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
+import { NetworkServer } from "../../../src/behavior/system/network/NetworkServer.js";
 import { AccessControl } from "../../../src/cluster/definitions/AccessControlCluster.js";
 import { NetworkCommissioning } from "../../../src/cluster/definitions/NetworkCommissioningCluster.js";
 import { Message, SessionType } from "../../../src/codec/MessageCodec.js";
@@ -63,7 +64,7 @@ async function performWrite(
 ) {
     const exchange = await node.createExchange({ fabric });
 
-    const interactionServer = await node.act(agent => agent.network.internal.runtime.interactionServer);
+    const interactionServer = node.behaviors.internalsOf(NetworkServer).runtime.interactionServer;
 
     await interactionServer.handleWriteRequest(
         exchange,
@@ -87,7 +88,7 @@ async function performRead(
 ) {
     const exchange = await node.createExchange({ fabric });
 
-    const interactionServer = await node.act(agent => agent.network.internal.runtime.interactionServer);
+    const interactionServer = node.behaviors.internalsOf(NetworkServer).runtime.interactionServer;
 
     const result = await interactionServer.handleReadRequest(
         exchange,

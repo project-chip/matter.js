@@ -46,7 +46,7 @@ export function DerivedState<const Base extends StateType, const Extension exten
     let newDefaults: undefined | Val.Struct;
     for (const key in values) {
         const value = (values as Val.Struct)[key];
-        if (!oldDefaults.hasOwnProperty(key) || oldDefaults[key] !== value) {
+        if (!Object.prototype.hasOwnProperty.call(oldDefaults, key) || oldDefaults[key] !== value) {
             if (!newDefaults) {
                 newDefaults = {};
             }

@@ -115,7 +115,10 @@
         // This is highly inconvenient and breaks basic language features.  I don't think we've ever actually unbound
         // a method unintentionally and we do it quite often intentionally.  Perhaps its useful if you aren't authoring
         // a library
-        "@typescript-eslint/unbound-method": "off"
+        "@typescript-eslint/unbound-method": "off",
+
+        // Umm, this mattered for IE <= 8??
+        "no-ex-assign": "off"
     },
     "settings": {
         "import/extensions": [".ts"],

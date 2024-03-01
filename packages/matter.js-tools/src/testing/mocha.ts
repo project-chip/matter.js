@@ -17,8 +17,8 @@ export function generalSetup(Mocha: typeof MochaType) {
     // White text, 16-bit and 256-bit red background
     Mocha.reporters.Base.colors["diff removed inline"] = "97;41;48;5;52" as any;
 
-    // Some of our test suites have setup/teardown logic that logs profusely.
-    // Hide these logs unless something goes wrong
+    // Some of our test suites have setup/teardown logic that logs profusely. Hide these logs unless something goes
+    // wrong
     async function onlyLogFailure(fn: () => any) {
         if (!MatterHooks) {
             throw new Error("Matter hooks not loaded");
@@ -53,9 +53,8 @@ export function generalSetup(Mocha: typeof MochaType) {
     filterLogs("beforeEach");
     filterLogs("afterEach");
 
-    // Reset mocks before each suite.  Suites could conceivably have callbacks
-    // that occur across tests.  If individual tests need a reset the suite
-    // needs to handle itself.
+    // Reset mocks before each suite.  Suites could conceivably have callbacks that occur across tests.  If individual
+    // tests need a reset the suite needs to handle itself.
     const actualBeforeAll = Mocha.Suite.prototype.beforeAll;
     Mocha.Suite.prototype.beforeAll = function (this: Mocha.Context, ...args: any) {
         MockTime.reset();
@@ -194,8 +193,7 @@ export function browserSetup(mocha: BrowserMocha) {
             return mocha.run();
         },
 
-        // Start Mocha, proxying reporting through console to Playwright and
-        // completing once Mocha has finished
+        // Start Mocha, proxying reporting through console to Playwright and completing once Mocha has finished
         auto: async function (options: TestOptions) {
             TestOptions.apply(mocha, options);
             mocha.reporter(adaptReporter(Mocha, "Web", new ConsoleProxyReporter()));
