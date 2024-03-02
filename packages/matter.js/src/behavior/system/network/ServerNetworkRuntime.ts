@@ -220,6 +220,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#primaryNetInterface?.port ?? 0;
     }
 
+    async endCommissioning() {
+        if (this.#matterDevice !== undefined) {
+            return this.#matterDevice.endCommissioning();
+        }
+    }
+
     protected override async start() {
         const mdnsScanner = (await this.owner.env.load(MdnsService)).scanner;
 

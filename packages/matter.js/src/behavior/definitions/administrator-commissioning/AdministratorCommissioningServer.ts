@@ -16,6 +16,7 @@ import { Time, Timer } from "../../../time/Time.js";
 import { TlvUInt16, TlvUInt32 } from "../../../tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../../tlv/TlvObject.js";
 import { TlvByteString } from "../../../tlv/TlvString.js";
+import { NetworkServer } from "../../system/network/NetworkServer.js";
 import { AdministratorCommissioningBehavior } from "./AdministratorCommissioningBehavior.js";
 import {
     MAXIMUM_COMMISSIONING_TIMEOUT_S,
@@ -142,9 +143,11 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         await this.#closeCommissioningWindow();
 
-        const failsafeContext = this.endpoint.env.get(FailsafeContext);
-        if (failsafeContext) {
-            await failsafeContext.close();
+        if (this.endpoint.env.has(FailsafeContext)) {
+            const failsafeContext = this.endpoint.env.get(FailsafeContext);
+            if (failsafeContext) {
+                await failsafeContext.close();
+            }
         }
     }
 
@@ -242,7 +245,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     async #closeCommissioningWindow() {
         this.callback(this.#endCommissioning);
-        await this.session.context.endCommissioning();
+        await this.agent.get(NetworkServer).endCommissioning();
     }
 
     /**
