@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -30,8 +30,15 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         super();
     }
 
+    static override async create(path: string) {
+        const storage = new this(path);
+        await storage.initialize();
+        return storage;
+    }
+
     override async initialize() {
         if (this.initialized) throw new StorageError("Storage already initialized!");
+        await super.initialize();
         try {
             this.store = this.fromJson(await readFile(this.path, "utf-8"));
         } catch (error: any) {

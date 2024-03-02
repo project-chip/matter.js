@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,6 +11,12 @@ export class StorageBackendMemory implements Storage {
     #initialized = false;
 
     constructor(protected store: any = {}) {}
+
+    static async create(store: any = {}) {
+        const storage = new StorageBackendMemory(store);
+        await storage.initialize();
+        return storage;
+    }
 
     private createContextKey(contexts: string[]) {
         const key = contexts.join(".");

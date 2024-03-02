@@ -72,6 +72,8 @@ export async function main(argv = process.argv) {
 
     const project = new Project(packageLocation);
 
+    process.chdir(project.pkg.path);
+
     // If no test types are specified explicitly, run all enabled types
     if (!testTypes.size) {
         if (project.pkg.esm) {
