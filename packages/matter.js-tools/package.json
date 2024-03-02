@@ -55,8 +55,7 @@
         "yargs": "^17.7.2"
     },
     "optionalDependencies": {
-        "v8-profiler-next": "^1.10.0",
-        "@esbuild/darwin-x64": "^0.20.1"
+        "v8-profiler-next": "^1.10.0"
     },
     "devDependencies": {
         "@types/chai": "^4.3.11",
