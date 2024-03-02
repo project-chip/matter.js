@@ -204,24 +204,25 @@ export class PairedNode {
      * was closed or the device wen offline and was detected as being online again.
      */
     async reconnect() {
-        if (this.interactionClient !== undefined) {
-            this.interactionClient.close();
-            this.interactionClient = undefined;
-        }
-        this.setConnectionState(NodeStateInformation.Reconnecting);
-        try {
-            await this.initialize();
-        } catch (error) {
-            if (error instanceof MatterError) {
-                // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
-                if (this.connectionState === NodeStateInformation.Disconnected) {
-                    return;
+        while (true) {
+            if (this.interactionClient !== undefined) {
+                this.interactionClient.close();
+                this.interactionClient = undefined;
+            }
+            this.setConnectionState(NodeStateInformation.Reconnecting);
+            try {
+                await this.initialize();
+            } catch (error) {
+                if (error instanceof MatterError) {
+                    // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
+                    if (this.connectionState === NodeStateInformation.Disconnected) {
+                        return;
+                    }
+                    logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
+                    this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+                } else {
+                    throw error;
                 }
-                logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
-                this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
-                await this.reconnect();
-            } else {
-                throw error;
             }
         }
     }
