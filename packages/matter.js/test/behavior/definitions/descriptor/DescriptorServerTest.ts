@@ -87,7 +87,9 @@ describe("DescriptorServer", () => {
     it("adds parts automatically", async () => {
         const { parent } = await createFamily();
 
-        await parent.events.descriptor.partsList$Change;
+        if (!parent.state.descriptor.partsList.length) {
+            await parent.events.descriptor.partsList$Change;
+        }
 
         const partsList = parent.state.descriptor.partsList;
         expect(partsList).deep.equals([2]);
@@ -96,7 +98,9 @@ describe("DescriptorServer", () => {
     it("removes parts automatically", async () => {
         const { parent, child } = await createFamily();
 
-        await parent.events.descriptor.partsList$Change;
+        if (!parent.state.descriptor.partsList.length) {
+            await parent.events.descriptor.partsList$Change;
+        }
 
         const partsState = parent.state.descriptor;
         expect(partsState.partsList).deep.equals([2]);
