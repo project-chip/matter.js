@@ -24,8 +24,7 @@ export function createPromise<T>(): {
     });
 
     if (!resolver || !rejecter) {
-        // This doesn't happen but asserts that resolver and rejecter are
-        // defined.
+        // This doesn't happen but asserts that resolver and rejecter are defined.
         throw new InternalError("Failed to extract resolve/reject from Promise context");
     }
 
@@ -165,8 +164,8 @@ export const MaybePromise = {
                     resolve,
                     reject
                         ? error => {
-                              // If reject() is not async then we will catch rejection errors below but should not reject
-                              // again
+                              // If reject() is not async then we will catch rejection errors below but should not
+                              // reject again
                               rejected = true;
 
                               return reject?.(error);

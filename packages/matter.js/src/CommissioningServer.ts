@@ -227,6 +227,7 @@ export class CommissioningServer extends MatterNode {
     private storage?: StorageContext;
     private endpointStructureStorage?: StorageContext;
     private mdnsScanner?: MdnsScanner;
+    private mdnsBroadcaster?: MdnsBroadcaster;
     private mdnsInstanceBroadcaster?: MdnsInstanceBroadcaster;
 
     private deviceInstance?: MatterDevice;
@@ -570,7 +571,7 @@ export class CommissioningServer extends MatterNode {
      */
     async advertise(limitTo?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
         if (
-            this.mdnsInstanceBroadcaster === undefined ||
+            this.mdnsBroadcaster === undefined ||
             this.mdnsScanner === undefined ||
             this.storage === undefined ||
             this.eventHandler === undefined ||
@@ -585,6 +586,8 @@ export class CommissioningServer extends MatterNode {
             await this.deviceInstance.announce();
             return;
         }
+
+        this.mdnsInstanceBroadcaster = this.mdnsBroadcaster.createInstanceBroadcaster(this.port);
 
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
@@ -860,7 +863,7 @@ export class CommissioningServer extends MatterNode {
         if (this.port === undefined) {
             throw new ImplementationError("Port must be set before setting the MDNS broadcaster!");
         }
-        this.mdnsInstanceBroadcaster = mdnsBroadcaster.createInstanceBroadcaster(this.port);
+        this.mdnsBroadcaster = mdnsBroadcaster;
     }
 
     /**
@@ -909,6 +912,7 @@ export class CommissioningServer extends MatterNode {
         await this.deviceInstance?.close();
         this.deviceInstance = undefined;
         await this.mdnsInstanceBroadcaster?.close();
+        this.mdnsInstanceBroadcaster = undefined;
     }
 
     async factoryReset() {
