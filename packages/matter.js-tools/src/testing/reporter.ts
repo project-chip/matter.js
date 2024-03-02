@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -52,8 +52,7 @@ export abstract class ProgressReporter implements Reporter {
     }
 
     beginTest(_name: string, stats: Stats): void {
-        // Only update once per suite to keep the line count down in GH action
-        // logs
+        // Only update once per suite to keep the line count down in GH action logs
         const title = this.suite[0];
         if (this.lastTitle !== title) {
             this.lastTitle = title;
