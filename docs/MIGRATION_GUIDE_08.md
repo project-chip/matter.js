@@ -283,15 +283,13 @@ But most important is that the storage structure has changed between legacy and 
 
 
 ## TOPICS/DISCUSSIONS/TODOs:
-* (A) Fix: Dynamic added endpoints do not update root partsList - Greg
+* (A) Fix: Dynamic added endpoints do not update root partsList - Verify by Ingo
 * (A) Missing: Adjust Commissioning Callbacks - Ingo
 * (A) Make CommissioningController Environment aware - Ingo
-* (A) Todo: Greg: act/actAsync to get rid of MaybePromise in some places vs "linter" and have more type safeness? (MaybePromise at all?)
-* (A) Adjust anything so that linter pass (else GHA fail) - Greg
 * (A) Make matter.js peerDep? - Ingo
 * (B) Missing: multiple nodes duplicate port check missing
 * (B) Have BLE package register itself when included - Greg
-* (B) Todo: Greg: change/Observer handlers should also allow async implementations
+* (B) Todo: Greg: change/Observer handlers should also allow async implementations - Ingo verify
 * Discussion: async store?
 * Discussion: GHA tests runs? adjust for branch or start PR?
 * Later: Generator options for custom clusters into own projects
