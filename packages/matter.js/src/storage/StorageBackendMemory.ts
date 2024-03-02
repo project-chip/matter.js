@@ -12,6 +12,12 @@ export class StorageBackendMemory implements Storage {
 
     constructor(protected store: any = {}) {}
 
+    static async create(store: any = {}) {
+        const storage = new StorageBackendMemory(store);
+        await storage.initialize();
+        return storage;
+    }
+
     private createContextKey(contexts: string[]) {
         const key = contexts.join(".");
         if (!key.length || key.includes("..") || key.startsWith(".") || key.endsWith("."))
