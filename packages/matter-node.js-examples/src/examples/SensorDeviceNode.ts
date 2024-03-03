@@ -104,7 +104,7 @@ async function main() {
     } else {
         endpoint = new Endpoint(HumiditySensorDevice, {
             id: "humsensor",
-            relativeHumidityMeasurement: { measuredValue: getIntValueFromCommandOrRandom("value") },
+            relativeHumidityMeasurement: { measuredValue: getIntValueFromCommandOrRandom("value", false) },
         });
     }
 
@@ -125,7 +125,7 @@ async function main() {
         } else {
             endpoint.set({
                 relativeHumidityMeasurement: {
-                    measuredValue: getIntValueFromCommandOrRandom("value"),
+                    measuredValue: getIntValueFromCommandOrRandom("value", false),
                 },
             });
         }
@@ -150,14 +150,19 @@ main().catch(error => console.error(error));
 
 /** Defined a shell command from an environment variable and execute it and log the response. */
 
-function getIntValueFromCommandOrRandom(scriptParamName: string) {
+function getIntValueFromCommandOrRandom(scriptParamName: string, allowNegativeValues = true) {
     const script = Environment.default.vars.string(scriptParamName);
-    if (script === undefined) return (Math.round(Math.random() * 100) - 50) * 100;
+    if (script === undefined) {
+        if (allowNegativeValues) return Math.round(Math.random() * 100);
+        return (Math.round(Math.random() * 100) - 50) * 100;
+    }
     let result = execSync(script).toString().trim();
     if ((result.startsWith("'") && result.endsWith("'")) || (result.startsWith('"') && result.endsWith('"')))
         result = result.slice(1, -1);
     console.log(`Command result: ${result}`);
-    return Math.round(parseFloat(result));
+    let value = Math.round(parseFloat(result));
+    if (!allowNegativeValues && value < 0) value = 0;
+    return value;
 }
 
 async function getConfiguration() {
@@ -179,7 +184,7 @@ async function getConfiguration() {
     );
     const deviceStorage = (await storageService.open("device")).createContext("data");
 
-    const isTemperature = deviceStorage.get("isTemperature", environment.vars.get("type") === "temperature");
+    const isTemperature = deviceStorage.get("isTemperature", environment.vars.get("type") !== "humidity");
     if (deviceStorage.has("isTemperature")) {
         console.log(
             `Device type ${isTemperature ? "temperature" : "humidity"} found in storage. --type parameter is ignored.`,
