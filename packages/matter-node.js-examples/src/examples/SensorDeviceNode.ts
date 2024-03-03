@@ -156,6 +156,7 @@ function getIntValueFromCommandOrRandom(scriptParamName: string) {
     let result = execSync(script).toString().trim();
     if ((result.startsWith("'") && result.endsWith("'")) || (result.startsWith('"') && result.endsWith('"')))
         result = result.slice(1, -1);
+    console.log(`Command result: ${result}`);
     return Math.round(parseFloat(result));
 }
 
