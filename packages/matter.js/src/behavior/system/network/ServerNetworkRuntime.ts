@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FabricAction, MatterDevice } from "../../../MatterDevice.js";
+import { MatterDevice } from "../../../MatterDevice.js";
 import { Ble } from "../../../ble/Ble.js";
 import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
@@ -12,7 +12,7 @@ import { TransportInterface } from "../../../common/TransportInterface.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { EndpointServer } from "../../../endpoint/EndpointServer.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
-import { FabricManager } from "../../../fabric/FabricManager.js";
+import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
 import { Network } from "../../../net/Network.js";
 import { UdpInterface } from "../../../net/UdpInterface.js";
@@ -20,6 +20,7 @@ import type { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
 import { ServerStore } from "../../../node/server/storage/ServerStore.js";
 import { SessionManager } from "../../../session/SessionManager.js";
+import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
 
@@ -241,28 +242,33 @@ export class ServerNetworkRuntime extends NetworkRuntime {
                 productDescription: this.owner.state.productDescription,
                 ble: !!this.owner.state.network.ble,
             }),
-            (fabricIndex: FabricIndex, fabricAction: FabricAction) => {
-                const fabrics = this.#matterDevice?.getFabrics() ?? [];
-                if (
-                    fabricAction === FabricAction.Added &&
-                    fabrics.length === 1 &&
-                    fabrics[0].fabricIndex === fabricIndex
-                ) {
-                    this.enableMdnsBroadcasting();
-                }
+            (_fabricIndex: FabricIndex, _fabricAction: FabricAction) => {
+                // We use events directly
             },
             (_fabricIndex: FabricIndex) => {
-                // TODO - this is "sessionChangeCallback" - add root behavior for accessing sessions
+                // Wired differently using SessionBehavior
             },
         )
             .addProtocolHandler(this.#interactionServer)
             .addScanner(mdnsScanner);
+
+        this.#matterDevice.fabricManager.events.added.on(fabric => {
+            const fabrics = this.#matterDevice?.fabricManager.getFabrics() ?? [];
+            if (fabrics.length === 1 && fabrics[0].fabricIndex === fabric.fabricIndex) {
+                this.enableMdnsBroadcasting();
+            }
+        });
 
         // MatterDevice is the interface to a broad array of functionality that other modules require access to
         this.owner.env.set(SessionManager, this.#matterDevice.sessionManager);
         this.owner.env.set(FabricManager, this.#matterDevice.fabricManager);
 
         await this.owner.act(agent => agent.load(SessionsBehavior));
+        this.owner.act(agent =>
+            agent
+                .get(CommissioningBehavior)
+                .events.commissioned.on((this.#commissionedListener = () => this.endUncommissionedMode())),
+        );
 
         await this.addTransports(this.#matterDevice);
         await this.addBroadcasters(this.#matterDevice);
@@ -270,8 +276,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.owner.set({ network: { operationalPort: this.operationalPort } });
 
         await this.openAdvertisementWindow();
-
-        this.owner.lifecycle.commissioned.on((this.#commissionedListener = () => this.endUncommissionedMode()));
     }
 
     protected override async stop() {
@@ -298,7 +302,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.#rootServer = undefined;
 
         if (this.#commissionedListener) {
-            this.owner.lifecycle.commissioned.off(this.#commissionedListener);
+            const commissionedListener = this.#commissionedListener;
+            this.#commissionedListener = undefined;
+            this.owner.act(agent => agent.get(CommissioningBehavior).events.commissioned.off(commissionedListener));
         }
     }
 }
