@@ -153,7 +153,7 @@ main().catch(error => console.error(error));
 function getIntValueFromCommandOrRandom(scriptParamName: string, allowNegativeValues = true) {
     const script = Environment.default.vars.string(scriptParamName);
     if (script === undefined) {
-        if (allowNegativeValues) return Math.round(Math.random() * 100);
+        if (!allowNegativeValues) return Math.round(Math.random() * 100);
         return (Math.round(Math.random() * 100) - 50) * 100;
     }
     let result = execSync(script).toString().trim();
