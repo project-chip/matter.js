@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,11 +10,11 @@
 // Also do not use TS as it would require the code invoking bootstrap to do a
 // meta-bootstrap. 🙄
 
+import { spawn } from "child_process";
+import { stat } from "fs/promises";
+import { platform } from "os";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-import { spawn } from "child_process";
-import { platform } from "os";
-import { stat } from "fs/promises";
 
 function fatal(why, error) {
     console.error(`Cannot bootstrap matter.js tooling because ${why}.`);
@@ -67,21 +67,16 @@ try {
         esbuild = "esbuild";
     }
 
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
         const proc = spawn(
             esbuild,
-            [
-                "src/**/*.ts",
-                "--outdir=dist/esm",
-                "--format=esm",
-                "--log-level=warning",
-            ],
-            options
+            ["src/**/*.ts", "--outdir=dist/esm", "--format=esm", "--log-level=warning"],
+            options,
         );
 
         proc.on("error", e => {
             if (e.code === "ENOENT") {
-                fatal("esbuild is not found.\nYou probably need to run \"npm install\" in the root of the repository");
+                fatal('esbuild is not found.\nYou probably need to run "npm install" in the root of the repository');
             }
             fatal("an unexpected error occurred running esbuild", e);
         });
@@ -93,7 +88,7 @@ try {
                 fatal(`esbuild existing with code ${code}`);
             }
         });
-    })
+    });
 } catch (e) {
     fatal("an unexpected error occurred", e);
 }

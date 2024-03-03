@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,7 @@ import { asObjectKey, wordWrap } from "./string.js";
 
 const HEADER = `/**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 

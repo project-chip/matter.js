@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -24,7 +24,7 @@ export class MdnsService {
 
     constructor(environment: Environment, options?: MdnsService.Options) {
         environment.set(MdnsService, this);
-        environment.runtime.addWorker(this);
+        environment.runtime.add(this);
 
         this.#construction = AsyncConstruction(this, async () => {
             const vars = environment.get(VariableService);

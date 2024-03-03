@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -27,7 +27,7 @@ import {
     FlowMeasurementBehavior as BaseFlowMeasurementBehavior
 } from "../../../behavior/definitions/flow-measurement/FlowMeasurementBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
-import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 

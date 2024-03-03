@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -87,7 +87,7 @@ export class NetworkServer extends NetworkBehavior {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
-        this.endpoint.env.runtime.addWorker(this.internal.runtime.announceNow());
+        this.endpoint.env.runtime.add(this.internal.runtime.announceNow());
     }
 
     async endCommissioning() {

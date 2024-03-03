@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,7 +14,7 @@ import {
 } from "../../../behavior/definitions/ota-software-update-provider/OtaSoftwareUpdateProviderBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
-import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 

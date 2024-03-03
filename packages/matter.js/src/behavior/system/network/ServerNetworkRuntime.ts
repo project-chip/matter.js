@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -182,12 +182,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
      */
     endUncommissionedMode() {
         if (this.#bleBroadcaster) {
-            this.owner.env.runtime.addWorker(this.#removeBleBroadcaster(this.#bleBroadcaster));
+            this.owner.env.runtime.add(this.#removeBleBroadcaster(this.#bleBroadcaster));
             this.#bleBroadcaster = undefined;
         }
 
         if (this.#bleTransport) {
-            this.owner.env.runtime.addWorker(this.#removeBleTransport(this.#bleTransport));
+            this.owner.env.runtime.add(this.#removeBleTransport(this.#bleTransport));
             this.#bleTransport = undefined;
         }
     }

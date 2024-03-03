@@ -1,11 +1,14 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { ImplementationError } from "../common/MatterError.js";
+import { Logger } from "../log/Logger.js";
 import { MaybePromise } from "./Promises.js";
+
+const logger = Logger.get("Observable");
 
 /**
  * A callback function for observables.
@@ -21,7 +24,7 @@ import { MaybePromise } from "./Promises.js";
  *
  * @param payload a list of arguments to be emitted
  */
-export type Observer<T extends any[] = any[], R = void> = (...payload: T) => R | undefined;
+export type Observer<T extends any[] = any[], R = void> = (...payload: T) => MaybePromise<R | undefined>;
 
 /**
  * A discrete event that may be monitored via callback.  Could call it "event" but that could be confused with Matter
@@ -147,6 +150,21 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
                 }
 
                 if (MaybePromise.is(result)) {
+                    if (!this.isAsync) {
+                        let identity: string;
+                        if (observer.name) {
+                            identity = ` "${observer.name}"`;
+                        } else {
+                            identity = "";
+                        }
+
+                        result.then(undefined, error =>
+                            logger.error(`Unhandled error in async observer${identity}:`, error),
+                        );
+
+                        continue;
+                    }
+
                     return result.then(result => {
                         if (result === undefined) {
                             return emitNext();

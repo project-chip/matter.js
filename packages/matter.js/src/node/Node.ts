@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -83,7 +83,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
     async bringOnline() {
         const runtime = this.env.runtime;
 
-        runtime.addWorker(this);
+        runtime.add(this);
 
         await this.lifecycle.online;
     }
@@ -97,7 +97,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
     async run() {
         const runtime = this.env.runtime;
 
-        runtime.addWorker(this);
+        runtime.add(this);
 
         await runtime.inactive;
     }
