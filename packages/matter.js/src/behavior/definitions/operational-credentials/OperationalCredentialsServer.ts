@@ -400,7 +400,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const fabricManager = this.endpoint.env.get(FabricManager);
         this.reactTo(fabricManager.events.added, this.#handleAddedFabric);
         this.reactTo(fabricManager.events.updated, this.#handleUpdatedFabric);
-        this.reactTo(fabricManager.events.removed, this.#handleRemovedFabric);
+        this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric);
         await this.#updateFabrics();
     }
 }

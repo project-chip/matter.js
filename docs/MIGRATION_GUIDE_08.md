@@ -295,7 +295,7 @@ server.lifecycle.commissioned.on(() => console.log("Server was initially commiss
 server.lifecycle.decommissioned.on(() => console.log("Server was fully decommissioned successfully!"));
 ```
 
-These events will not trigger if the not gets added to another controller. If you need these information the relevant event is available on the Commissioning Behavior of the ServerNode.
+These events will not trigger if the node gets added to another controller. If you need these information the relevant event is available on the Commissioning Behavior of the ServerNode.
 
 ```javascript
 /**
@@ -320,7 +320,7 @@ server.events.commissioning.commissionedFabricsChanged.on((fabricIndex, fabricAc
 });
 ```
 
-### Which events are available to get notified that a not is online or offline?
+### Which events are available to get notified that a node is online or offline?
 The new API provides this information also via events on the ServerNode instance.
 
 ```javascript

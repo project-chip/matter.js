@@ -29,7 +29,7 @@ export class FabricManager {
     #events = {
         added: Observable<[fabric: Fabric]>(),
         updated: Observable<[fabric: Fabric]>(),
-        removed: Observable<[fabric: Fabric]>(),
+        deleted: Observable<[fabric: Fabric]>(),
     };
 
     constructor(fabricStorage: StorageContext) {
@@ -87,7 +87,7 @@ export class FabricManager {
             );
         this.#fabrics.delete(fabricIndex);
         this.persistFabrics();
-        this.#events.removed.emit(fabric);
+        this.#events.deleted.emit(fabric);
     }
 
     getFabrics() {

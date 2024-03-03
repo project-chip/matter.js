@@ -77,7 +77,7 @@ export class MatterDevice {
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
         this.#fabricManager = new FabricManager(fabricStorage);
-        this.#fabricManager.events.removed.on(fabric => {
+        this.#fabricManager.events.deleted.on(fabric => {
             const { fabricIndex, rootNodeId } = fabric;
             // When fabric is removed, also remove the resumption record
             this.#sessionManager.removeResumptionRecord(rootNodeId);
