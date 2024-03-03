@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,6 +8,7 @@ import { Cancellable, Destructable, Lifecycle, Startable } from "../common/Lifec
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
+import { Multiplex } from "../util/Multiplex.js";
 import { Observable } from "../util/Observable.js";
 import type { Environment } from "./Environment.js";
 import { Environmental } from "./Environmental.js";
@@ -17,7 +18,7 @@ const logger = Logger.get("Runtime");
 /**
  * Handles execution and lifecycle management of other components.
  */
-export class RuntimeService {
+export class RuntimeService implements Multiplex {
     #workers = new Set<RuntimeService.Worker>();
     #cancelled = new Set<RuntimeService.Worker>();
     #workerDeleted = Observable<[]>();
@@ -38,7 +39,7 @@ export class RuntimeService {
      * A worker must either be {@link PromiseLike} or {@link AsyncConstructable} for the runtime to detect completion.
      * On completion the worker is removed and destroyed if the worker is {@link Destructable}.
      */
-    addWorker(worker: RuntimeService.Worker | void) {
+    add(worker: RuntimeService.Worker | void) {
         if (!worker) {
             return;
         }
@@ -136,7 +137,7 @@ export class RuntimeService {
         for (const worker of this.#workers) {
             const disposal = this.#cancelWorker(worker);
             if (disposal) {
-                this.addWorker(disposal);
+                this.add(disposal);
             }
         }
     }
@@ -160,9 +161,13 @@ export class RuntimeService {
         });
     }
 
-    async [Symbol.asyncDispose]() {
+    async close() {
         this.cancel();
         await this.inactive;
+    }
+
+    [Symbol.asyncDispose]() {
+        return this.close();
     }
 
     get [Diagnostic.value]() {

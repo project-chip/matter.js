@@ -27,6 +27,8 @@
         "clean": "matter-build clean",
         "build": "matter-build",
         "build-clean": "matter-build --clean",
+        "light": "matter-run src/examples/LightDevice.ts",
+        "excelsior1000": "matter-run src/examples/IlluminatedRollerShade.ts",
         "matter-device": "matter-run src/examples/DeviceNode.ts",
         "matter-bridge": "matter-run src/examples/BridgedDevicesNode.ts",
         "matter-composeddevice": "matter-run src/examples/ComposedDeviceNode.ts",

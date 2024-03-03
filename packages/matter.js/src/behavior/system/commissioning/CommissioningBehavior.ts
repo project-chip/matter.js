@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -93,7 +93,7 @@ export class CommissioningBehavior extends Behavior {
         } else {
             (this.endpoint.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
 
-            this.endpoint.env.runtime.addWorker(
+            this.endpoint.env.runtime.add(
                 (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
             );
         }
@@ -107,7 +107,7 @@ export class CommissioningBehavior extends Behavior {
         // Callback that listens to the failsafe for destruction and triggers commissioning status update
         const listener = this.callback(function (this: CommissioningBehavior, status: Lifecycle.Status) {
             if (status === Lifecycle.Status.Destroyed) {
-                this.endpoint.env.runtime.addWorker(this.#updateCommissioningStatus());
+                this.endpoint.env.runtime.add(this.#updateCommissioningStatus());
                 this.internal.unregisterFailsafeListener?.();
             }
         });

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -29,7 +29,7 @@ export class NodeJsActionTracer extends ActionTracer {
 
         const tracer = new NodeJsActionTracer(path);
         env.set(ActionTracer, tracer);
-        env.runtime.addWorker(tracer);
+        env.runtime.add(tracer);
     }
 
     [Symbol.asyncDispose]() {

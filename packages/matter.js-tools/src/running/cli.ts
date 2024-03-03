@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -69,6 +69,10 @@ export async function main(argv = process.argv) {
         // This will not transpile properly to commonjs but we only use this module from ESM so that's OK
         await import(script);
     } else {
+        // Our behavior in response to SIGINT should mirror the child process's.  So ignore the signal locally, only
+        // quitting once the child process does
+        process.on("SIGINT", () => {});
+
         process.exitCode = await executeNode(script, argv);
     }
 }

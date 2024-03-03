@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2024 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -422,7 +422,7 @@ export class MatterDevice {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireCommissioningAnnouncement();
         }
-        logger.info("All Announcements expired");
+        logger.info("All announcements expired");
     }
 
     existsOpenPaseSession() {
