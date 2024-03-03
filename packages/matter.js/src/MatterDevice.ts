@@ -118,6 +118,9 @@ export class MatterDevice {
             if (currentFabric !== undefined) {
                 this.sessionChangedCallback(currentFabric.fabricIndex);
             }
+            if (this.isClosing) {
+                return;
+            }
             await this.startAnnouncement();
         });
 
