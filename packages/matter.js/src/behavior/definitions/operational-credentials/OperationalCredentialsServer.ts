@@ -9,12 +9,14 @@ import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Fabric } from "../../../fabric/Fabric.js";
-import { FabricTableFullError } from "../../../fabric/FabricManager.js";
+import { FabricAction, FabricManager, FabricTableFullError } from "../../../fabric/FabricManager.js";
 import { Logger } from "../../../log/Logger.js";
+import type { Node } from "../../../node/Node.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
+import { CommissioningBehavior } from "../../system/commissioning/CommissioningBehavior.js";
 import { ProductDescriptionServer } from "../../system/product-description/ProductDescriptionServer.js";
 import { BasicInformationBehavior } from "../basic-information/BasicInformationBehavior.js";
 import { DeviceCertification } from "./DeviceCertification.js";
@@ -50,8 +52,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         if (this.state.supportedFabrics === undefined) {
             this.state.supportedFabrics = 254;
         }
-
         this.state.commissionedFabrics = this.state.fabrics.length;
+
+        this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {
@@ -194,27 +197,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                     `FabricIndex ${fabric.fabricIndex} already exists in state. This should not happen.`,
                 );
             }
-
-            this.state.fabrics.push({
-                fabricId: fabric.fabricId,
-                label: fabric.label,
-                nodeId: fabric.nodeId,
-                rootPublicKey: fabric.rootPublicKey,
-                vendorId: fabric.rootVendorId,
-                fabricIndex: fabric.fabricIndex,
-            });
-
-            this.state.nocs.push({
-                noc: fabric.operationalCert,
-                icac: fabric.intermediateCACert ?? null,
-                fabricIndex: fabric.fabricIndex,
-            });
-
-            this.state.trustedRootCertificates.push(fabric.rootCert);
-
-            this.state.commissionedFabrics = this.state.fabrics.length;
-
-            await this.context.transaction.commit();
         } catch (e) {
             // Fabric insertion into MatterDevice is not currently transactional so we need to remove manually
             await fabric.remove(this.session.id);
@@ -292,12 +274,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 `FabricIndex ${updateFabric.fabricIndex} not found in state. This should not happen.`,
             );
         }
-        // Update attributes
-        this.state.nocs[nocIndex] = {
-            noc: updateFabric.operationalCert,
-            icac: updateFabric.intermediateCACert ?? null,
-            fabricIndex: updateFabric.fabricIndex,
-        };
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
@@ -322,12 +298,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         fabric.setLabel(label);
 
-        const fabricEntry = this.state.fabrics.find(f => f.fabricIndex === currentFabricIndex);
-        if (fabricEntry === undefined) {
-            throw new MatterFlowError(`Fabric ${currentFabricIndex} not found in state. This should not happen.`);
-        }
-        fabricEntry.label = label;
-
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     }
 
@@ -347,8 +317,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         bi.events.leave?.emit({ fabricIndex }, this.context);
 
         await fabric.remove(this.session.id);
-
-        this.#deleteFabric(fabricIndex);
+        // The state is updated on removal via commissionedFabricChanged event, see constructor
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
@@ -376,15 +345,28 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         failsafeContext.setRootCert(rootCaCertificate);
     }
 
-    #deleteFabric(fabricIndex: FabricIndex) {
-        for (const array of [this.state.fabrics, this.state.nocs]) {
-            const index = array.findIndex(f => f.fabricIndex === fabricIndex);
-            if (index !== -1) {
-                array.splice(index, 1);
-            }
-        }
-        this.state.trustedRootCertificates = this.session.context.getFabrics().map(f => f.rootCert);
-        this.state.commissionedFabrics = this.state.fabrics.length;
+    async #updateFabrics() {
+        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        this.state.fabrics = fabrics.map(fabric => ({
+            fabricId: fabric.fabricId,
+            label: fabric.label,
+            nodeId: fabric.nodeId,
+            rootPublicKey: fabric.rootPublicKey,
+            vendorId: fabric.rootVendorId,
+            fabricIndex: fabric.fabricIndex,
+        }));
+
+        this.state.nocs = fabrics.map(fabric => ({
+            noc: fabric.operationalCert,
+            icac: fabric.intermediateCACert ?? null,
+            fabricIndex: fabric.fabricIndex,
+        }));
+
+        this.state.trustedRootCertificates = fabrics.map(fabric => fabric.rootCert);
+
+        this.state.commissionedFabrics = fabrics.length;
+
+        await this.context.transaction.commit();
     }
 
     get #certification() {
@@ -397,6 +379,29 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             this.state.certification,
             this.agent.get(ProductDescriptionServer).state,
         ));
+    }
+
+    async #handleAddedFabric({ fabricIndex }: Fabric) {
+        await this.#updateFabrics();
+        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Added);
+    }
+
+    async #handleUpdatedFabric({ fabricIndex }: Fabric) {
+        await this.#updateFabrics();
+        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Updated);
+    }
+
+    async #handleRemovedFabric({ fabricIndex }: Fabric) {
+        await this.#updateFabrics();
+        this.agent.get(CommissioningBehavior).handleFabricChange(fabricIndex, FabricAction.Removed);
+    }
+
+    async #nodeOnline() {
+        const fabricManager = this.endpoint.env.get(FabricManager);
+        this.reactTo(fabricManager.events.added, this.#handleAddedFabric);
+        this.reactTo(fabricManager.events.updated, this.#handleUpdatedFabric);
+        this.reactTo(fabricManager.events.removed, this.#handleRemovedFabric);
+        await this.#updateFabrics();
     }
 }
 
