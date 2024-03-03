@@ -6,9 +6,11 @@
 
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
 import { Lifecycle } from "../../../common/Lifecycle.js";
-import { ImplementationError } from "../../../common/MatterError.js";
+import { ImplementationError, MatterFlowError } from "../../../common/MatterError.js";
+import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import type { EndpointServer } from "../../../endpoint/EndpointServer.js";
+import { FabricAction } from "../../../fabric/FabricManager.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { DatatypeModel, FieldElement } from "../../../model/index.js";
@@ -24,7 +26,9 @@ import {
 import { QrCode } from "../../../schema/QrCodeSchema.js";
 import { PaseClient } from "../../../session/pase/PaseClient.js";
 import { ByteArray } from "../../../util/ByteArray.js";
+import { EventEmitter, Observable } from "../../../util/Observable.js";
 import { Behavior } from "../../Behavior.js";
+import { ActionContext } from "../../context/ActionContext.js";
 import { BasicInformationBehavior } from "../../definitions/basic-information/BasicInformationBehavior.js";
 import { OperationalCredentialsBehavior } from "../../definitions/operational-credentials/OperationalCredentialsBehavior.js";
 import { Val } from "../../state/Val.js";
@@ -42,6 +46,7 @@ export class CommissioningBehavior extends Behavior {
     static override readonly id = "commissioning";
 
     declare state: CommissioningBehavior.State;
+    declare events: CommissioningBehavior.Events;
     declare internal: CommissioningBehavior.Internal;
 
     static override early = true;
@@ -60,43 +65,56 @@ export class CommissioningBehavior extends Behavior {
         this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
 
         this.reactTo((this.endpoint as Node).lifecycle.treeReady, this.#initializeNode);
-
-        this.reactTo(
-            this.agent.get(OperationalCredentialsBehavior).events.commissionedFabrics$Change,
-            this.#updateCommissioningStatus,
-        );
     }
 
     override [Symbol.asyncDispose]() {
         this.internal.unregisterFailsafeListener?.();
     }
 
-    async #updateCommissioningStatus() {
-        const commissioned = !!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics;
-        if (commissioned === this.state.commissioned) {
-            return;
-        }
-
+    handleFabricChange(fabricIndex: FabricIndex, fabricAction: FabricAction) {
         // Do not consider commissioned so long as there is an active failsafe timer as commissioning may not be
         // complete and could still be rolled back
         if (this.endpoint.env.has(FailsafeContext)) {
             const failsafe = this.endpoint.env.get(FailsafeContext);
-            if (failsafe.construction.status !== Lifecycle.Status.Destroyed) {
-                this.#monitorFailsafe(failsafe);
-                return;
+            if (fabricAction === FabricAction.Added || fabricAction === FabricAction.Updated) {
+                // Added or updated fabric with active Failsafe are temporary and should not be considered until failsafe ends
+                if (failsafe.construction.status !== Lifecycle.Status.Destroyed) {
+                    if (failsafe.fabricIndex === fabricIndex) {
+                        this.#monitorFailsafe(failsafe);
+                        return;
+                    } else {
+                        throw new MatterFlowError(
+                            `Failsafe owns a different fabricIndex then ${failsafe.forUpdateNoc ? "updated" : "added"}.`,
+                        );
+                    }
+                }
+            } else if (fabricAction === FabricAction.Removed) {
+                // Removed fabric with active Failsafe are ignored but should match the failsafe one
+                if (failsafe.fabricIndex !== fabricIndex) {
+                    throw new MatterFlowError("Failsafe owns a different fabricIndex then removed.");
+                }
             }
         }
 
-        this.state.commissioned = commissioned;
-        if (commissioned) {
-            (this.endpoint.lifecycle as NodeLifecycle).commissioned.emit(this.context);
-        } else {
-            (this.endpoint.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
+        // We get the real state of Fabrics from FabricManager directly - the mirrored Fabrics state could be not yet uptodate
+        const commissioned = !!this.agent.get(OperationalCredentialsBehavior).state.fabrics.length; //!!this.endpoint.env.get(FabricManager).getFabrics().length;
 
-            this.endpoint.env.runtime.add(
-                (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
-            );
+        if (commissioned !== this.state.commissioned) {
+            this.state.commissioned = commissioned;
+            if (commissioned) {
+                this.events.commissioned.emit(this.context);
+                (this.endpoint.lifecycle as NodeLifecycle).commissioned.emit(this.context);
+            } else {
+                this.events.decommissioned.emit(this.context);
+                (this.endpoint.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
+
+                this.endpoint.env.runtime.add(
+                    (this.endpoint as ServerNode).factoryReset().then(this.callback(this.initiateCommissioning)),
+                );
+            }
         }
+
+        this.events.commissionedFabricsChanged.emit(fabricIndex, fabricAction);
     }
 
     #monitorFailsafe(failsafe: FailsafeContext) {
@@ -107,7 +125,12 @@ export class CommissioningBehavior extends Behavior {
         // Callback that listens to the failsafe for destruction and triggers commissioning status update
         const listener = this.callback(function (this: CommissioningBehavior, status: Lifecycle.Status) {
             if (status === Lifecycle.Status.Destroyed) {
-                this.endpoint.env.runtime.add(this.#updateCommissioningStatus());
+                if (failsafe.fabricIndex !== undefined) {
+                    this.handleFabricChange(
+                        failsafe.fabricIndex,
+                        failsafe.forUpdateNoc ? FabricAction.Updated : FabricAction.Added,
+                    );
+                }
                 this.internal.unregisterFailsafeListener?.();
             }
         });
@@ -195,8 +218,8 @@ export class CommissioningBehavior extends Behavior {
     }
 
     #initializeNode() {
-        const isCommissioned = !!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics;
-        (this.endpoint.lifecycle as NodeLifecycle).initialized.emit(isCommissioned);
+        this.state.commissioned = !!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics;
+        (this.endpoint.lifecycle as NodeLifecycle).initialized.emit(this.state.commissioned);
     }
 }
 
@@ -225,5 +248,11 @@ export namespace CommissioningBehavior {
                 },
             };
         }
+    }
+
+    export class Events extends EventEmitter {
+        commissioned = Observable<[session: ActionContext]>();
+        decommissioned = Observable<[session: ActionContext]>();
+        commissionedFabricsChanged = Observable<[fabricIndex: FabricIndex, action: FabricAction]>();
     }
 }
