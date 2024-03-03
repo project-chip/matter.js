@@ -275,7 +275,7 @@ You can provide multiple values also from multiple clusters within this endpoint
 
 ```javascript
 if (!serverNode.lifecycle.isCommissioned) {
-    const { qrPairingCode, manualPairingCode } = await serverNode.act(agent => agent.commissioning.pairingCodes);
+    const { qrPairingCode, manualPairingCode } = server.state.commissioning.pairingCodes;
 
     console.log(QrCode.get(qrPairingCode));
     logger.info(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
@@ -284,6 +284,73 @@ if (!serverNode.lifecycle.isCommissioned) {
     logger.info("Device is already commissioned. Waiting for controllers to connect ...");
 }
 ```
+
+### Which events are available to get notified on commissioning changes?
+The Lagacy API used callbacks included in the CommissioningServer configuration. The new API uses the `lifecycle` property of the ServerNode to get notified on commissioning changes.
+
+```javascript
+server.lifecycle.commissioned.on(() => console.log("Server was initially commissioned successfully!"));
+
+/** This event is triggered when all fabrics are removed from the device, usually it also does a factory reset then. */
+server.lifecycle.decommissioned.on(() => console.log("Server was fully decommissioned successfully!"));
+```
+
+These events will not trigger if the not gets added to another controller. If you need these information the relevant event is available on the Commissioning Behavior of the ServerNode.
+
+```javascript
+/**
+ * This event is triggered when a fabric is added, removed or updated on the device. Use this if more granular
+ * information is needed.
+ */
+server.events.commissioning.commissionedFabricsChanged.on((fabricIndex, fabricAction) => {
+    let action = "";
+    switch (fabricAction) {
+        case FabricAction.Added:
+            action = "added";
+            break;
+        case FabricAction.Removed:
+            action = "removed";
+            break;
+        case FabricAction.Updated:
+            action = "updated";
+            break;
+    }
+    console.log(`Commissioned Fabrics changed event (${action}) for ${fabricIndex} triggered`);
+    console.log(server.state.operationalCredentials.fabrics);
+});
+```
+
+### Which events are available to get notified that a not is online or offline?
+The new API provides this information also via events on the ServerNode instance.
+
+```javascript
+/** This event is triggered when the device went online. This means that it is discoverable in the network. */
+server.lifecycle.online.on(() => console.log("Server is online"));
+
+/** This event is triggered when the device went offline. it is not longer discoverable or connectable in the network. */
+server.lifecycle.offline.on(() => console.log("Server is offline"));
+```
+
+### Which events are available to get an overview on controller connections/sessions that are established?
+Events on session changes are available on the sessions behavior of the ServerNode instance.
+
+```javascript
+/**
+ * This event is triggered when an operative new session was opened by a Controller.
+ * It is not triggered for the initial commissioning process, just afterwards for real connections.
+ */
+server.events.sessions.opened.on(session => console.log(`Session opened`, session));
+
+/**
+ * This event is triggered when an operative session is closed by a Controller or because the Device goes offline.
+ */
+server.events.sessions.closed.on(session => console.log(`Session closed`, session));
+
+/** This event is triggered when a subscription gets added or removed on an operative session. */
+server.events.sessions.subscriptionsChanged.on(session => console.log(`Session subscriptions changed`, session));
+```
+
+With `server.state.sessions.sessions` you can get a list of all currently active sessions including the relevant information.
 
 ### More options?
 
