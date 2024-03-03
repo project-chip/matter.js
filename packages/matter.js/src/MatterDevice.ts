@@ -28,7 +28,7 @@ import { Crypto } from "./crypto/Crypto.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { Fabric } from "./fabric/Fabric.js";
-import { FabricManager } from "./fabric/FabricManager.js";
+import { FabricAction, FabricManager } from "./fabric/FabricManager.js";
 import { Diagnostic } from "./log/Diagnostic.js";
 import { Logger } from "./log/Logger.js";
 import { NetInterface, isNetworkInterface } from "./net/NetInterface.js";
@@ -47,12 +47,6 @@ import { ByteArray } from "./util/ByteArray.js";
 import { Mutex } from "./util/Mutex.js";
 
 const logger = Logger.get("MatterDevice");
-
-export enum FabricAction {
-    Added,
-    Removed,
-    Updated,
-}
 
 export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
@@ -82,11 +76,19 @@ export class MatterDevice {
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
-        this.#fabricManager = new FabricManager(fabricStorage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
+        this.#fabricManager = new FabricManager(fabricStorage);
+        this.#fabricManager.events.removed.on(fabric => {
+            const { fabricIndex, rootNodeId } = fabric;
             // When fabric is removed, also remove the resumption record
-            this.#sessionManager.removeResumptionRecord(peerNodeId);
+            this.#sessionManager.removeResumptionRecord(rootNodeId);
             this.commissioningChangedCallback(fabricIndex, FabricAction.Removed);
         });
+        this.#fabricManager.events.added.on(({ fabricIndex }) =>
+            this.commissioningChangedCallback(fabricIndex, FabricAction.Added),
+        );
+        this.#fabricManager.events.updated.on(({ fabricIndex }) =>
+            this.commissioningChangedCallback(fabricIndex, FabricAction.Updated),
+        );
 
         this.#sessionManager = new SessionManager(this, sessionStorage);
         this.#sessionManager.initFromStorage(this.#fabricManager.getFabrics());
@@ -145,8 +147,7 @@ export class MatterDevice {
 
         this.#failsafeContext = failsafeContext;
 
-        failsafeContext.events.fabricAdded.on(fabric => {
-            this.commissioningChangedCallback(fabric.fabricIndex, FabricAction.Added);
+        this.#fabricManager.events.added.on(fabric => {
             const fabrics = this.#fabricManager.getFabrics();
             this.sendFabricAnnouncements(fabrics, true).catch(error =>
                 logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
@@ -154,11 +155,7 @@ export class MatterDevice {
             logger.info("Announce done", Diagnostic.dict({ fabric: fabric.fabricId, fabricIndex: fabric.fabricIndex }));
         });
 
-        failsafeContext.events.fabricUpdated.on(fabric => {
-            this.commissioningChangedCallback(fabric.fabricIndex, FabricAction.Updated);
-        });
-
-        failsafeContext.events.commissioned.on(async () => await this.endCommissioning());
+        failsafeContext.commissioned.on(async () => await this.endCommissioning());
 
         failsafeContext.construction.change.on(status => {
             if (status === Lifecycle.Status.Destroyed) {

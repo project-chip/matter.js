@@ -39,11 +39,7 @@ export abstract class FailsafeContext {
     #forUpdateNoc?: boolean;
     #fabricBuilder = new FabricBuilder();
 
-    #events = {
-        fabricAdded: Observable<[fabric: Fabric]>(),
-        fabricUpdated: Observable<[fabric: Fabric]>(),
-        commissioned: AsyncObservable<[], void>(),
-    };
+    #commissioned = AsyncObservable<[], void>();
 
     constructor(options: FailsafeContext.Options) {
         const { expiryLengthSeconds, associatedFabric, maxCumulativeFailsafeSeconds } = options;
@@ -86,8 +82,8 @@ export abstract class FailsafeContext {
         return this.#construction;
     }
 
-    get events() {
-        return this.#events;
+    get commissioned() {
+        return this.#commissioned;
     }
 
     get associatedFabric() {
@@ -120,7 +116,7 @@ export abstract class FailsafeContext {
         this.#failsafe = undefined;
 
         // 2. The commissioning window at the Server SHALL be closed.
-        await this.events.commissioned.emit();
+        await this.commissioned.emit();
 
         // TODO 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
 
@@ -144,14 +140,12 @@ export abstract class FailsafeContext {
         if (this.#failsafe !== undefined) {
             this.#associatedFabric = this.#failsafe.associatedFabric = fabric;
         }
-        this.#events.fabricAdded.emit(fabric);
         return fabric.fabricIndex;
     }
 
     updateFabric(fabric: Fabric) {
         this.#fabrics.updateFabric(fabric);
         this.#sessions.updateFabricForResumptionRecords(fabric);
-        this.#events.fabricUpdated.emit(fabric);
     }
 
     /**
