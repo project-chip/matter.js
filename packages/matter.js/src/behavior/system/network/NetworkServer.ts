@@ -7,10 +7,10 @@
 import { Ble } from "../../../ble/Ble.js";
 import { ImplementationError } from "../../../common/MatterError.js";
 import { Logger } from "../../../log/Logger.js";
-import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "../../../schema/PairingCodeSchema.js";
+import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 import { ServerNetworkRuntime } from "./ServerNetworkRuntime.js";
 
@@ -56,7 +56,7 @@ export class NetworkServer extends NetworkBehavior {
             logger.warn("Soft access point commissioning is not supported yet");
         }
 
-        this.reactTo((this.endpoint.lifecycle as NodeLifecycle).commissioned, this.#endUncommissionedMode);
+        this.reactTo(this.agent.get(CommissioningBehavior).events.commissioned, this.#endUncommissionedMode);
 
         return super.initialize();
     }

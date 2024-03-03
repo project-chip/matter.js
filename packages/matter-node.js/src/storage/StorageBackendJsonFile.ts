@@ -23,7 +23,6 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         this.commit(),
     );
     private closed = false;
-    private initialized = false;
     private resolveCommitted?: () => void;
 
     constructor(private readonly path: string) {

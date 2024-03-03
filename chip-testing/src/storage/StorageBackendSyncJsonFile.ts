@@ -4,26 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    fromJson,
-    StorageBackendMemory,
-    StorageError,
-    SupportedStorageTypes,
-    toJson,
-} from "@project-chip/matter.js/storage";
+import { fromJson, StorageBackendMemory, SupportedStorageTypes, toJson } from "@project-chip/matter.js/storage";
 import { readFileSync, writeFileSync } from "fs";
 
 export class StorageBackendSyncJsonFile extends StorageBackendMemory {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */
     private closed = false;
-    private initialized = false;
 
     constructor(private readonly path: string) {
         super();
     }
 
     override async initialize() {
-        if (this.initialized) throw new StorageError("Storage already initialized!");
+        super.initialize();
         try {
             this.store = this.fromJson(readFileSync(this.path, "utf-8"));
         } catch (error: any) {
@@ -34,7 +27,6 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
             console.log("StorageBackendSyncJsonFile: File does not exist yet, initializing with empty store.");
             this.store = {};
         }
-        this.initialized = true;
     }
 
     override set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
@@ -61,7 +53,7 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
     override async close() {
         this.commit();
         this.closed = true;
-        this.initialized = false;
+        super.close();
     }
 
     private toJson(object: any): string {
