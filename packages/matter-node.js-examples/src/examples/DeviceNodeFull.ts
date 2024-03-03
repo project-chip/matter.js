@@ -30,7 +30,8 @@ import { Ble } from "@project-chip/matter-node.js/ble";
 import { NetworkCommissioning } from "@project-chip/matter-node.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter-node.js/datatype";
 import { logEndpoint } from "@project-chip/matter-node.js/device";
-import { Logger } from "@project-chip/matter-node.js/log";
+import { FabricAction } from "@project-chip/matter-node.js/fabric";
+import { createFileLogger } from "@project-chip/matter-node.js/log";
 import { QrCode } from "@project-chip/matter-node.js/schema";
 import { Time } from "@project-chip/matter-node.js/time";
 import { ByteArray, requireMinNodeVersion, singleton } from "@project-chip/matter-node.js/util";
@@ -42,6 +43,7 @@ import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlug
 import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { RootRequirements } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
+import { Level, Logger, levelFromString } from "@project-chip/matter.js/log";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { execSync } from "child_process";
 import { DummyThreadNetworkCommissioningServer } from "./cluster/DummyThreadNetworkCommissioningServer.js";
@@ -51,8 +53,6 @@ import {
     MyFancyCommandResponse,
     MyFancyOwnFunctionalityBehavior,
 } from "./cluster/MyFancyOwnFunctionality.js";
-
-const logger = Logger.get("Device");
 
 /**
  * The following code brings some convenience to the CLI script. It allows to set the log level and format via
@@ -99,16 +99,23 @@ function executeCommand(scriptParamName: string) {
  * (so maybe better not do it ;-)).
  */
 
+const logFile = environment.vars.string("logfile.filename");
+if (logFile !== undefined) {
+    Logger.addLogger("filelogger", await createFileLogger(logFile), {
+        defaultLogLevel: levelFromString(environment.vars.string("logfile.loglevel")) ?? Level.DEBUG,
+    });
+}
+
 const storageService = environment.get(StorageService);
-logger.info(`Storage location: ${storageService.location} (Directory)`);
-logger.info(
+console.log(`Storage location: ${storageService.location} (Directory)`);
+console.log(
     'Use the parameter "--storage-path=NAME-OR-PATH" to specify a different storage location in this directory, use --storage-clear to start with an empty storage.',
 );
 
 const deviceStorage = (await storageService.open("device")).createContext("data");
 
 if (deviceStorage.has("isSocket")) {
-    logger.info("Device type found in storage. --type parameter is ignored.");
+    console.log("Device type found in storage. --type parameter is ignored.");
 }
 const isSocket = deviceStorage.get("isSocket", environment.vars.string("type") === "socket");
 const deviceName = "Matter test device";
@@ -164,7 +171,7 @@ class TestGeneralDiagnosticsServer extends RootRequirements.GeneralDiagnosticsSe
     }
 
     override testEventTrigger({ enableKey, eventTrigger }: TestEventTriggerRequest) {
-        logger.info(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`);
+        console.log(`testEventTrigger called on GeneralDiagnostic cluster: ${enableKey} ${eventTrigger}`);
     }
 }
 
@@ -312,6 +319,27 @@ server.lifecycle.online.on(() => console.log("Server is online"));
 server.lifecycle.offline.on(() => console.log("Server is offline"));
 
 /**
+ * This event is triggered when a fabric is added, removed or updated on the device. Use this if more granular
+ * information is needed.
+ */
+server.events.commissioning.commissionedFabricsChanged.on((fabricIndex, fabricAction) => {
+    let action = "";
+    switch (fabricAction) {
+        case FabricAction.Added:
+            action = "added";
+            break;
+        case FabricAction.Removed:
+            action = "removed";
+            break;
+        case FabricAction.Updated:
+            action = "updated";
+            break;
+    }
+    console.log(`Commissioned Fabrics changed event (${action}) for ${fabricIndex} triggered`);
+    console.log(server.state.operationalCredentials.fabrics);
+});
+
+/**
  * This event is triggered when an operative new session was opened by a Controller.
  * It is not triggered for the initial commissioning process, just afterwards for real connections.
  */
@@ -323,20 +351,20 @@ server.events.sessions.opened.on(session => console.log(`Session opened`, sessio
 server.events.sessions.closed.on(session => console.log(`Session closed`, session));
 
 /** This event is triggered when a subscription gets added or removed on an operative session. */
-server.events.sessions.subscriptionsChanged.on(session => console.log(`Session subscriptions changed`, session));
-
-// TODO Adjust next to not need to read fabrics here but have commissioning events
-server.events.operationalCredentials.fabrics$Change.on(fabrics => console.log("Fabrics changed", fabrics));
+server.events.sessions.subscriptionsChanged.on(session => {
+    console.log(`Session subscriptions changed`, session);
+    console.log(`Status of all sessions`, server.state.sessions.sessions);
+});
 
 // React on a change of identificationTime to do Identify stuff for the own device
 let isIdentifying = false;
 endpoint.events.identify.identifyTime$Change.on(value => {
     if (value > 0 && !isIdentifying) {
         isIdentifying = true;
-        logger.info(`Run identify logic, ideally blink a light every 0.5s ...`);
+        console.log(`Run identify logic, ideally blink a light every 0.5s ...`);
     } else if (value === 0) {
         isIdentifying = false;
-        logger.info(`Stop identify logic ...`);
+        console.log(`Stop identify logic ...`);
     }
 });
 
@@ -363,10 +391,10 @@ if (!server.lifecycle.isCommissioned) {
     const { qrPairingCode, manualPairingCode } = server.state.commissioning.pairingCodes;
 
     console.log(QrCode.get(qrPairingCode));
-    logger.info(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
-    logger.info(`Manual pairing code: ${manualPairingCode}`);
+    console.log(`QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`);
+    console.log(`Manual pairing code: ${manualPairingCode}`);
 } else {
-    logger.info("Device is already commissioned. Waiting for controllers to connect ...");
+    console.log("Device is already commissioned. Waiting for controllers to connect ...");
 
     /**
      * Sometimes reading or writing attributes is required. The following code shows how this works.
