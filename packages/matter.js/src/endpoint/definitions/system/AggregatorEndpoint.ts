@@ -11,7 +11,7 @@ import { IndexBehavior } from "../../../behavior/system/index/IndexBehavior.js";
 import { ActionsServer as BaseActionsServer } from "../../../behavior/definitions/actions/ActionsServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
-import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 

@@ -311,7 +311,6 @@ But most important is that the storage structure has changed between legacy and 
 -   (A) Make matter.js peerDep? - Ingo
 -   (B) Missing: multiple nodes duplicate port check missing
 -   (B) Have BLE package register itself when included - Greg
--   (B) Todo: Greg: change/Observer handlers should also allow async implementations
 -   Discussion: async store?
 -   Discussion: GHA tests runs? adjust for branch or start PR?
 -   Later: Generator options for custom clusters into own projects

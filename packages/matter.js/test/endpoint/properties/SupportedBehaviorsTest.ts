@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterBehavior } from "../../src/behavior/cluster/ClusterBehavior.js";
-import { ColorControl } from "../../src/cluster/definitions/ColorControlCluster.js";
-import { OnOff } from "../../src/cluster/definitions/OnOffCluster.js";
-import { WindowCovering } from "../../src/cluster/definitions/WindowCoveringCluster.js";
-import { SupportedBehaviors } from "../../src/endpoint/properties/SupportedBehaviors.js";
+import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
+import { ColorControl } from "../../../src/cluster/definitions/ColorControlCluster.js";
+import { OnOff } from "../../../src/cluster/definitions/OnOffCluster.js";
+import { WindowCovering } from "../../../src/cluster/definitions/WindowCoveringCluster.js";
+import { SupportedBehaviors } from "../../../src/endpoint/properties/SupportedBehaviors.js";
 
 const WC1 = ClusterBehavior.for(WindowCovering.Cluster.with("Lift"));
 const WC2 = ClusterBehavior.for(WindowCovering.Cluster.with("Tilt", "PositionAwareTilt"));

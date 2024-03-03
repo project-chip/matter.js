@@ -24,7 +24,7 @@ import {
     AudioOutputServer as BaseAudioOutputServer
 } from "../../../behavior/definitions/audio-output/AudioOutputServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
-import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
+import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 

@@ -106,7 +106,7 @@ export class EndpointFile extends TsFile {
         definition.atom("deviceRevision", this.model.revision);
         this.addDeviceClass(definition);
 
-        this.addImport("endpoint/part/SupportedBehaviors.js", "SupportedBehaviors");
+        this.addImport("endpoint/properties/SupportedBehaviors.js", "SupportedBehaviors");
         definition.atom(`requirements: ${this.requirementsName}`);
         const behaviors = definition.expressions("behaviors: SupportedBehaviors(", ")");
 
