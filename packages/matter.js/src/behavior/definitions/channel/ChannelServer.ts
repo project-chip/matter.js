@@ -11,4 +11,5 @@ import { ChannelBehavior } from "./ChannelBehavior.js";
 /**
  * This is the default server implementation of {@link ChannelBehavior}.
  */
-export class ChannelServer extends ChannelBehavior {}
+export class ChannelServer extends ChannelBehavior {
+}

@@ -11,4 +11,5 @@ import { DiagnosticLogsBehavior } from "./DiagnosticLogsBehavior.js";
 /**
  * This is the default server implementation of {@link DiagnosticLogsBehavior}.
  */
-export class DiagnosticLogsServer extends DiagnosticLogsBehavior {}
+export class DiagnosticLogsServer extends DiagnosticLogsBehavior {
+}

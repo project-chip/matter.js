@@ -11,4 +11,5 @@ import { ProxyConfigurationBehavior } from "./ProxyConfigurationBehavior.js";
 /**
  * This is the default server implementation of {@link ProxyConfigurationBehavior}.
  */
-export class ProxyConfigurationServer extends ProxyConfigurationBehavior {}
+export class ProxyConfigurationServer extends ProxyConfigurationBehavior {
+}

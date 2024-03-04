@@ -11,4 +11,5 @@ import { GroupsBehavior } from "./GroupsBehavior.js";
 /**
  * This is the default server implementation of {@link GroupsBehavior}.
  */
-export class GroupsServer extends GroupsBehavior {}
+export class GroupsServer extends GroupsBehavior {
+}

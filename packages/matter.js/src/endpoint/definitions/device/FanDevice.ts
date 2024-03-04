@@ -14,6 +14,15 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance to the Fan device type.
+ *
+ * NOTE Support for Fan device type is provisional.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.3
+ */
+export interface FanDevice extends Identity<typeof FanDeviceDefinition> {}
+
 export namespace FanRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -53,14 +62,5 @@ export const FanDeviceDefinition = MutableEndpoint({
         FanRequirements.server.mandatory.FanControl
     )
 });
-
-/**
- * This defines conformance to the Fan device type.
- *
- * NOTE Support for Fan device type is provisional.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.3
- */
-export interface FanDevice extends Identity<typeof FanDeviceDefinition> {}
 
 export const FanDevice: FanDevice = FanDeviceDefinition;

@@ -22,6 +22,16 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Heating/Cooling Unit is a device capable of heating or cooling a space in a house. It is not mandatory to provide
+ * both functionalities (for example, the device may just heat but not cool). It may be an indoor air handler.
+ *
+ * NOTE Heating/Cooling Unit device type is provisional.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.1
+ */
+export interface HeatingCoolingUnitDevice extends Identity<typeof HeatingCoolingUnitDeviceDefinition> {}
+
 export namespace HeatingCoolingUnitRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -97,15 +107,5 @@ export const HeatingCoolingUnitDeviceDefinition = MutableEndpoint({
         HeatingCoolingUnitRequirements.server.mandatory.OnOff
     )
 });
-
-/**
- * A Heating/Cooling Unit is a device capable of heating or cooling a space in a house. It is not mandatory to provide
- * both functionalities (for example, the device may just heat but not cool). It may be an indoor air handler.
- *
- * NOTE Heating/Cooling Unit device type is provisional.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.1
- */
-export interface HeatingCoolingUnitDevice extends Identity<typeof HeatingCoolingUnitDeviceDefinition> {}
 
 export const HeatingCoolingUnitDevice: HeatingCoolingUnitDevice = HeatingCoolingUnitDeviceDefinition;

@@ -18,6 +18,14 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Dimmer Switch is a controller device that, when bound to a lighting device such as a Dimmable Light, is capable of
+ * being used to switch the device on or off and adjust the intensity of the light being emitted.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.2
+ */
+export interface DimmerSwitchDevice extends Identity<typeof DimmerSwitchDeviceDefinition> {}
+
 export namespace DimmerSwitchRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -70,13 +78,5 @@ export const DimmerSwitchDeviceDefinition = MutableEndpoint({
     requirements: DimmerSwitchRequirements,
     behaviors: SupportedBehaviors()
 });
-
-/**
- * A Dimmer Switch is a controller device that, when bound to a lighting device such as a Dimmable Light, is capable of
- * being used to switch the device on or off and adjust the intensity of the light being emitted.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.2
- */
-export interface DimmerSwitchDevice extends Identity<typeof DimmerSwitchDeviceDefinition> {}
 
 export const DimmerSwitchDevice: DimmerSwitchDevice = DimmerSwitchDeviceDefinition;

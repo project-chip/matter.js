@@ -15,6 +15,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Temperature Sensor device reports measurements of temperature.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.4
+ */
+export interface TemperatureSensorDevice extends Identity<typeof TemperatureSensorDeviceDefinition> {}
+
 export namespace TemperatureSensorRequirements {
     /**
      * The {@link TemperatureMeasurement} cluster is required by the Matter specification
@@ -46,12 +53,5 @@ export const TemperatureSensorDeviceDefinition = MutableEndpoint({
         TemperatureSensorRequirements.server.mandatory.Identify
     )
 });
-
-/**
- * A Temperature Sensor device reports measurements of temperature.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.4
- */
-export interface TemperatureSensorDevice extends Identity<typeof TemperatureSensorDeviceDefinition> {}
 
 export const TemperatureSensorDevice: TemperatureSensorDevice = TemperatureSensorDeviceDefinition;

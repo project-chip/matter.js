@@ -21,6 +21,17 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * An Extended Color Light is a lighting device that is capable of being switched on or off, the intensity of its light
+ * adjusted, and its color adjusted by means of a bound controller device such as a Color Dimmer Switch or Control
+ * Bridge. The device supports adjustment of color by means of hue/saturation, enhanced hue, color looping, XY
+ * coordinates, and color temperature. In addition, the extended color light is also capable of being switched by means
+ * of a bound occupancy sensor.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.4
+ */
+export interface ExtendedColorLightDevice extends Identity<typeof ExtendedColorLightDeviceDefinition> {}
+
 export namespace ExtendedColorLightRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -111,16 +122,5 @@ export const ExtendedColorLightDeviceDefinition = MutableEndpoint({
         ExtendedColorLightRequirements.server.mandatory.ColorControl
     )
 });
-
-/**
- * An Extended Color Light is a lighting device that is capable of being switched on or off, the intensity of its light
- * adjusted, and its color adjusted by means of a bound controller device such as a Color Dimmer Switch or Control
- * Bridge. The device supports adjustment of color by means of hue/saturation, enhanced hue, color looping, XY
- * coordinates, and color temperature. In addition, the extended color light is also capable of being switched by means
- * of a bound occupancy sensor.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.4
- */
-export interface ExtendedColorLightDevice extends Identity<typeof ExtendedColorLightDeviceDefinition> {}
 
 export const ExtendedColorLightDevice: ExtendedColorLightDevice = ExtendedColorLightDeviceDefinition;

@@ -31,6 +31,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Pump Controller device is capable of configuring and controlling a Pump device.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.5
+ */
+export interface PumpControllerDevice extends Identity<typeof PumpControllerDeviceDefinition> {}
+
 export namespace PumpControllerRequirements {
     /**
      * The {@link Binding} cluster is required by the Matter specification
@@ -131,12 +138,5 @@ export const PumpControllerDeviceDefinition = MutableEndpoint({
     requirements: PumpControllerRequirements,
     behaviors: SupportedBehaviors()
 });
-
-/**
- * A Pump Controller device is capable of configuring and controlling a Pump device.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.5
- */
-export interface PumpControllerDevice extends Identity<typeof PumpControllerDeviceDefinition> {}
 
 export const PumpControllerDevice: PumpControllerDevice = PumpControllerDeviceDefinition;

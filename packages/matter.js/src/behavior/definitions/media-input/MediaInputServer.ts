@@ -11,4 +11,5 @@ import { MediaInputBehavior } from "./MediaInputBehavior.js";
 /**
  * This is the default server implementation of {@link MediaInputBehavior}.
  */
-export class MediaInputServer extends MediaInputBehavior {}
+export class MediaInputServer extends MediaInputBehavior {
+}

@@ -15,6 +15,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Flow Sensor device measures and reports the flow rate of a fluid.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.6
+ */
+export interface FlowSensorDevice extends Identity<typeof FlowSensorDeviceDefinition> {}
+
 export namespace FlowSensorRequirements {
     /**
      * The {@link FlowMeasurement} cluster is required by the Matter specification
@@ -46,12 +53,5 @@ export const FlowSensorDeviceDefinition = MutableEndpoint({
         FlowSensorRequirements.server.mandatory.Identify
     )
 });
-
-/**
- * A Flow Sensor device measures and reports the flow rate of a fluid.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.6
- */
-export interface FlowSensorDevice extends Identity<typeof FlowSensorDeviceDefinition> {}
 
 export const FlowSensorDevice: FlowSensorDevice = FlowSensorDeviceDefinition;

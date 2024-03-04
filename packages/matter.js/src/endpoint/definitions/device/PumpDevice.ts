@@ -33,6 +33,17 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Pump device is a pump that may have variable speed. It may have optional built-in sensors and a regulation
+ * mechanism. It is typically used for pumping fluids like water.
+ *
+ * PumpDevice requires PumpConfigurationAndControl cluster but PumpConfigurationAndControl is not added by default
+ * because you must select the features your device supports. You can add manually using PumpDevice.with().
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 5.3
+ */
+export interface PumpDevice extends Identity<typeof PumpDeviceDefinition> {}
+
 export namespace PumpRequirements {
     /**
      * The {@link OnOff} cluster is required by the Matter specification
@@ -138,16 +149,5 @@ export const PumpDeviceDefinition = MutableEndpoint({
     requirements: PumpRequirements,
     behaviors: SupportedBehaviors(PumpRequirements.server.mandatory.OnOff, PumpRequirements.server.mandatory.Identify)
 });
-
-/**
- * A Pump device is a pump that may have variable speed. It may have optional built-in sensors and a regulation
- * mechanism. It is typically used for pumping fluids like water.
- *
- * PumpDevice requires PumpConfigurationAndControl cluster but PumpConfigurationAndControl is not added by default
- * because you must select the features your device supports. You can add manually using PumpDevice.with().
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 5.3
- */
-export interface PumpDevice extends Identity<typeof PumpDeviceDefinition> {}
 
 export const PumpDevice: PumpDevice = PumpDeviceDefinition;

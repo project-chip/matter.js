@@ -11,4 +11,5 @@ import { WakeOnLanBehavior } from "./WakeOnLanBehavior.js";
 /**
  * This is the default server implementation of {@link WakeOnLanBehavior}.
  */
-export class WakeOnLanServer extends WakeOnLanBehavior {}
+export class WakeOnLanServer extends WakeOnLanBehavior {
+}

@@ -11,4 +11,5 @@ import { LeafWetnessMeasurementBehavior } from "./LeafWetnessMeasurementBehavior
 /**
  * This is the default server implementation of {@link LeafWetnessMeasurementBehavior}.
  */
-export class LeafWetnessMeasurementServer extends LeafWetnessMeasurementBehavior {}
+export class LeafWetnessMeasurementServer extends LeafWetnessMeasurementBehavior {
+}

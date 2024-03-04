@@ -11,4 +11,5 @@ import { ModeSelectBehavior } from "./ModeSelectBehavior.js";
 /**
  * This is the default server implementation of {@link ModeSelectBehavior}.
  */
-export class ModeSelectServer extends ModeSelectBehavior {}
+export class ModeSelectServer extends ModeSelectBehavior {
+}

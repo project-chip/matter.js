@@ -11,4 +11,5 @@ import { SoftwareDiagnosticsBehavior } from "./SoftwareDiagnosticsBehavior.js";
 /**
  * This is the default server implementation of {@link SoftwareDiagnosticsBehavior}.
  */
-export class SoftwareDiagnosticsServer extends SoftwareDiagnosticsBehavior {}
+export class SoftwareDiagnosticsServer extends SoftwareDiagnosticsBehavior {
+}

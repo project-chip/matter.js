@@ -66,6 +66,20 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance for a root node endpoint (see System Model specification). This endpoint is akin to a "read
+ * me first" endpoint that describes itself and the other endpoints that make up the node.
+ *
+ *   • Device types with Endpoint scope shall NOT be supported on the same endpoint as this device type.
+ *
+ *   • Clusters with an Application role shall NOT be supported on the same endpoint as this device type.
+ *
+ *   • Other device types with Node scope may be supported on the same endpoint as this device type.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.1
+ */
+export interface RootEndpoint extends Identity<typeof RootEndpointDefinition> {}
+
 export namespace RootRequirements {
     /**
      * The {@link BasicInformation} cluster is required by the Matter specification
@@ -244,19 +258,5 @@ export const RootEndpointDefinition = MutableEndpoint({
         RootRequirements.server.mandatory.GeneralDiagnostics
     )
 });
-
-/**
- * This defines conformance for a root node endpoint (see System Model specification). This endpoint is akin to a "read
- * me first" endpoint that describes itself and the other endpoints that make up the node.
- *
- *   • Device types with Endpoint scope shall NOT be supported on the same endpoint as this device type.
- *
- *   • Clusters with an Application role shall NOT be supported on the same endpoint as this device type.
- *
- *   • Other device types with Node scope may be supported on the same endpoint as this device type.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.1
- */
-export interface RootEndpoint extends Identity<typeof RootEndpointDefinition> {}
 
 export const RootEndpoint: RootEndpoint = RootEndpointDefinition;

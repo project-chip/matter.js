@@ -33,6 +33,16 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance to the Content App device type.
+ *
+ * A Content App is usually an application built by a Content Provider. A Casting Video Player with a Content App
+ * Platform is able to launch Content Apps and represent these apps as separate endpoints.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.5
+ */
+export interface ContentAppDevice extends Identity<typeof ContentAppDeviceDefinition> {}
+
 export namespace ContentAppRequirements {
     /**
      * The {@link KeypadInput} cluster is required by the Matter specification
@@ -121,15 +131,5 @@ export const ContentAppDeviceDefinition = MutableEndpoint({
         ContentAppRequirements.server.mandatory.ApplicationBasic
     )
 });
-
-/**
- * This defines conformance to the Content App device type.
- *
- * A Content App is usually an application built by a Content Provider. A Casting Video Player with a Content App
- * Platform is able to launch Content Apps and represent these apps as separate endpoints.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.5
- */
-export interface ContentAppDevice extends Identity<typeof ContentAppDeviceDefinition> {}
 
 export const ContentAppDevice: ContentAppDevice = ContentAppDeviceDefinition;

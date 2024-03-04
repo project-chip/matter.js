@@ -11,4 +11,5 @@ import { EthernetNetworkDiagnosticsBehavior } from "./EthernetNetworkDiagnostics
 /**
  * This is the default server implementation of {@link EthernetNetworkDiagnosticsBehavior}.
  */
-export class EthernetNetworkDiagnosticsServer extends EthernetNetworkDiagnosticsBehavior {}
+export class EthernetNetworkDiagnosticsServer extends EthernetNetworkDiagnosticsBehavior {
+}

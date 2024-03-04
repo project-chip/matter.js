@@ -14,6 +14,16 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance for the Generic Switch device type.
+ *
+ * GenericSwitchDevice requires Switch cluster but Switch is not added by default because you must select the features
+ * your device supports. You can add manually using GenericSwitchDevice.with().
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.6
+ */
+export interface GenericSwitchDevice extends Identity<typeof GenericSwitchDeviceDefinition> {}
+
 export namespace GenericSwitchRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -52,15 +62,5 @@ export const GenericSwitchDeviceDefinition = MutableEndpoint({
     requirements: GenericSwitchRequirements,
     behaviors: SupportedBehaviors(GenericSwitchRequirements.server.mandatory.Identify)
 });
-
-/**
- * This defines conformance for the Generic Switch device type.
- *
- * GenericSwitchDevice requires Switch cluster but Switch is not added by default because you must select the features
- * your device supports. You can add manually using GenericSwitchDevice.with().
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.6
- */
-export interface GenericSwitchDevice extends Identity<typeof GenericSwitchDeviceDefinition> {}
 
 export const GenericSwitchDevice: GenericSwitchDevice = GenericSwitchDeviceDefinition;

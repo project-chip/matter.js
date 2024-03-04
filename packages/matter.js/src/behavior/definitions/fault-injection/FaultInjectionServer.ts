@@ -11,4 +11,5 @@ import { FaultInjectionBehavior } from "./FaultInjectionBehavior.js";
 /**
  * This is the default server implementation of {@link FaultInjectionBehavior}.
  */
-export class FaultInjectionServer extends FaultInjectionBehavior {}
+export class FaultInjectionServer extends FaultInjectionBehavior {
+}

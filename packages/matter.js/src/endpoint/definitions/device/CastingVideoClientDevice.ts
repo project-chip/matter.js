@@ -45,6 +45,16 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance to the Casting Video Client device type.
+ *
+ * A Casting Video Client is a client that can launch content on a Casting Video Player, for example, a Smart Speaker
+ * or a Content Provider phone app.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.6
+ */
+export interface CastingVideoClientDevice extends Identity<typeof CastingVideoClientDeviceDefinition> {}
+
 export namespace CastingVideoClientRequirements {
     /**
      * The {@link OnOff} cluster is required by the Matter specification
@@ -177,15 +187,5 @@ export const CastingVideoClientDeviceDefinition = MutableEndpoint({
     requirements: CastingVideoClientRequirements,
     behaviors: SupportedBehaviors()
 });
-
-/**
- * This defines conformance to the Casting Video Client device type.
- *
- * A Casting Video Client is a client that can launch content on a Casting Video Player, for example, a Smart Speaker
- * or a Content Provider phone app.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.6
- */
-export interface CastingVideoClientDevice extends Identity<typeof CastingVideoClientDeviceDefinition> {}
 
 export const CastingVideoClientDevice: CastingVideoClientDevice = CastingVideoClientDeviceDefinition;

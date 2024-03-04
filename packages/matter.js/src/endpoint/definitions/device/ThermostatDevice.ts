@@ -31,6 +31,19 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Thermostat device is capable of having either built-in or separate sensors for temperature, humidity or occupancy.
+ * It allows the desired temperature to be set either remotely or locally. The thermostat is capable of sending heating
+ * and/or cooling requirement notifications to a heating/cooling unit (for example, an indoor air handler) or is
+ * capable of including a mechanism to control a heating or cooling unit directly.
+ *
+ * ThermostatDevice requires Thermostat cluster but Thermostat is not added by default because you must select the
+ * features your device supports. You can add manually using ThermostatDevice.with().
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.2
+ */
+export interface ThermostatDevice extends Identity<typeof ThermostatDeviceDefinition> {}
+
 export namespace ThermostatRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -137,18 +150,5 @@ export const ThermostatDeviceDefinition = MutableEndpoint({
     requirements: ThermostatRequirements,
     behaviors: SupportedBehaviors(ThermostatRequirements.server.mandatory.Identify)
 });
-
-/**
- * A Thermostat device is capable of having either built-in or separate sensors for temperature, humidity or occupancy.
- * It allows the desired temperature to be set either remotely or locally. The thermostat is capable of sending heating
- * and/or cooling requirement notifications to a heating/cooling unit (for example, an indoor air handler) or is
- * capable of including a mechanism to control a heating or cooling unit directly.
- *
- * ThermostatDevice requires Thermostat cluster but Thermostat is not added by default because you must select the
- * features your device supports. You can add manually using ThermostatDevice.with().
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.2
- */
-export interface ThermostatDevice extends Identity<typeof ThermostatDeviceDefinition> {}
 
 export const ThermostatDevice: ThermostatDevice = ThermostatDeviceDefinition;

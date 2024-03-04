@@ -18,6 +18,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * An OTA Provider is a node that is capable of providing an OTA software update to other nodes on the same fabric.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.4
+ */
+export interface OtaProviderEndpoint extends Identity<typeof OtaProviderEndpointDefinition> {}
+
 export namespace OtaProviderRequirements {
     /**
      * The {@link OtaSoftwareUpdateProvider} cluster is required by the Matter specification
@@ -55,12 +62,5 @@ export const OtaProviderEndpointDefinition = MutableEndpoint({
     requirements: OtaProviderRequirements,
     behaviors: SupportedBehaviors(OtaProviderRequirements.server.mandatory.OtaSoftwareUpdateProvider)
 });
-
-/**
- * An OTA Provider is a node that is capable of providing an OTA software update to other nodes on the same fabric.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.4
- */
-export interface OtaProviderEndpoint extends Identity<typeof OtaProviderEndpointDefinition> {}
 
 export const OtaProviderEndpoint: OtaProviderEndpoint = OtaProviderEndpointDefinition;

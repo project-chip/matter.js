@@ -17,6 +17,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Window Covering Controller is a device that controls an automatic window covering.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.4
+ */
+export interface WindowCoveringControllerDevice extends Identity<typeof WindowCoveringControllerDeviceDefinition> {}
+
 export namespace WindowCoveringControllerRequirements {
     /**
      * The {@link WindowCovering} cluster is required by the Matter specification
@@ -62,12 +69,5 @@ export const WindowCoveringControllerDeviceDefinition = MutableEndpoint({
     requirements: WindowCoveringControllerRequirements,
     behaviors: SupportedBehaviors()
 });
-
-/**
- * A Window Covering Controller is a device that controls an automatic window covering.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.4
- */
-export interface WindowCoveringControllerDevice extends Identity<typeof WindowCoveringControllerDeviceDefinition> {}
 
 export const WindowCoveringControllerDevice: WindowCoveringControllerDevice = WindowCoveringControllerDeviceDefinition;

@@ -21,6 +21,15 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Color Temperature Light is a lighting device that is capable of being switched on or off, the intensity of its
+ * light adjusted, and its color temperature adjusted by means of a bound controller device such as a Color Dimmer
+ * Switch.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.3
+ */
+export interface ColorTemperatureLightDevice extends Identity<typeof ColorTemperatureLightDeviceDefinition> {}
+
 export namespace ColorTemperatureLightRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -111,14 +120,5 @@ export const ColorTemperatureLightDeviceDefinition = MutableEndpoint({
         ColorTemperatureLightRequirements.server.mandatory.ColorControl
     )
 });
-
-/**
- * A Color Temperature Light is a lighting device that is capable of being switched on or off, the intensity of its
- * light adjusted, and its color temperature adjusted by means of a bound controller device such as a Color Dimmer
- * Switch.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.3
- */
-export interface ColorTemperatureLightDevice extends Identity<typeof ColorTemperatureLightDeviceDefinition> {}
 
 export const ColorTemperatureLightDevice: ColorTemperatureLightDevice = ColorTemperatureLightDeviceDefinition;

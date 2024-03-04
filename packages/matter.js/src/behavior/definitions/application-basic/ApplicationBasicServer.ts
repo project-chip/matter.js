@@ -11,4 +11,5 @@ import { ApplicationBasicBehavior } from "./ApplicationBasicBehavior.js";
 /**
  * This is the default server implementation of {@link ApplicationBasicBehavior}.
  */
-export class ApplicationBasicServer extends ApplicationBasicBehavior {}
+export class ApplicationBasicServer extends ApplicationBasicBehavior {
+}

@@ -16,6 +16,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Door Lock Controller is a device capable of controlling a door lock.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.2
+ */
+export interface DoorLockControllerDevice extends Identity<typeof DoorLockControllerDeviceDefinition> {}
+
 export namespace DoorLockControllerRequirements {
     /**
      * The {@link TimeSync} cluster is optional per the Matter specification
@@ -73,12 +80,5 @@ export const DoorLockControllerDeviceDefinition = MutableEndpoint({
     requirements: DoorLockControllerRequirements,
     behaviors: SupportedBehaviors()
 });
-
-/**
- * A Door Lock Controller is a device capable of controlling a door lock.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.2
- */
-export interface DoorLockControllerDevice extends Identity<typeof DoorLockControllerDeviceDefinition> {}
 
 export const DoorLockControllerDevice: DoorLockControllerDevice = DoorLockControllerDeviceDefinition;

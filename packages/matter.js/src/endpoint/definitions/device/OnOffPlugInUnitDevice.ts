@@ -18,6 +18,16 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * An On/Off Plug-in Unit is a device that is capable of being switched on or off by means of a bound controller device
+ * such as an On/Off Light Switch or a Dimmer Switch. The On/Off Plug-in Unit is typically used to control a
+ * conventional non-communicating light by switching its mains connection. Other appliances can be controlled this way
+ * as well.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 5.1
+ */
+export interface OnOffPlugInUnitDevice extends Identity<typeof OnOffPlugInUnitDeviceDefinition> {}
+
 export namespace OnOffPlugInUnitRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -76,15 +86,5 @@ export const OnOffPlugInUnitDeviceDefinition = MutableEndpoint({
         OnOffPlugInUnitRequirements.server.mandatory.OnOff
     )
 });
-
-/**
- * An On/Off Plug-in Unit is a device that is capable of being switched on or off by means of a bound controller device
- * such as an On/Off Light Switch or a Dimmer Switch. The On/Off Plug-in Unit is typically used to control a
- * conventional non-communicating light by switching its mains connection. Other appliances can be controlled this way
- * as well.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 5.1
- */
-export interface OnOffPlugInUnitDevice extends Identity<typeof OnOffPlugInUnitDeviceDefinition> {}
 
 export const OnOffPlugInUnitDevice: OnOffPlugInUnitDevice = OnOffPlugInUnitDeviceDefinition;

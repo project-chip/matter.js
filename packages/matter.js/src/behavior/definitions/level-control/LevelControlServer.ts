@@ -11,4 +11,5 @@ import { LevelControlBehavior } from "./LevelControlBehavior.js";
 /**
  * This is the default server implementation of {@link LevelControlBehavior}.
  */
-export class LevelControlServer extends LevelControlBehavior {}
+export class LevelControlServer extends LevelControlBehavior {
+}

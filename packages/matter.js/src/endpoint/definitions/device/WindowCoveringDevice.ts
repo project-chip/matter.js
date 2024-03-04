@@ -17,6 +17,16 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance to the Window Covering device type.
+ *
+ * WindowCoveringDevice requires WindowCovering cluster but WindowCovering is not added by default because you must
+ * select the features your device supports. You can add manually using WindowCoveringDevice.with().
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.3
+ */
+export interface WindowCoveringDevice extends Identity<typeof WindowCoveringDeviceDefinition> {}
+
 export namespace WindowCoveringRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -62,15 +72,5 @@ export const WindowCoveringDeviceDefinition = MutableEndpoint({
     requirements: WindowCoveringRequirements,
     behaviors: SupportedBehaviors(WindowCoveringRequirements.server.mandatory.Identify)
 });
-
-/**
- * This defines conformance to the Window Covering device type.
- *
- * WindowCoveringDevice requires WindowCovering cluster but WindowCovering is not added by default because you must
- * select the features your device supports. You can add manually using WindowCoveringDevice.with().
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.3
- */
-export interface WindowCoveringDevice extends Identity<typeof WindowCoveringDeviceDefinition> {}
 
 export const WindowCoveringDevice: WindowCoveringDevice = WindowCoveringDeviceDefinition;

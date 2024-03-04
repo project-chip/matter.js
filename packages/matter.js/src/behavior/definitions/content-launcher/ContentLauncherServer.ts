@@ -11,4 +11,5 @@ import { ContentLauncherBehavior } from "./ContentLauncherBehavior.js";
 /**
  * This is the default server implementation of {@link ContentLauncherBehavior}.
  */
-export class ContentLauncherServer extends ContentLauncherBehavior {}
+export class ContentLauncherServer extends ContentLauncherBehavior {
+}

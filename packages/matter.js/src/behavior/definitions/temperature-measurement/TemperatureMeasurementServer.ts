@@ -11,4 +11,5 @@ import { TemperatureMeasurementBehavior } from "./TemperatureMeasurementBehavior
 /**
  * This is the default server implementation of {@link TemperatureMeasurementBehavior}.
  */
-export class TemperatureMeasurementServer extends TemperatureMeasurementBehavior {}
+export class TemperatureMeasurementServer extends TemperatureMeasurementBehavior {
+}

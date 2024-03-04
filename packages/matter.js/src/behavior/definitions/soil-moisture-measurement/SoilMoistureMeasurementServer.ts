@@ -11,4 +11,5 @@ import { SoilMoistureMeasurementBehavior } from "./SoilMoistureMeasurementBehavi
 /**
  * This is the default server implementation of {@link SoilMoistureMeasurementBehavior}.
  */
-export class SoilMoistureMeasurementServer extends SoilMoistureMeasurementBehavior {}
+export class SoilMoistureMeasurementServer extends SoilMoistureMeasurementBehavior {
+}

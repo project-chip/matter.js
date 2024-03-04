@@ -11,4 +11,5 @@ import { AudioOutputBehavior } from "./AudioOutputBehavior.js";
 /**
  * This is the default server implementation of {@link AudioOutputBehavior}.
  */
-export class AudioOutputServer extends AudioOutputBehavior {}
+export class AudioOutputServer extends AudioOutputBehavior {
+}

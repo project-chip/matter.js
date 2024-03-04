@@ -11,4 +11,5 @@ import { PulseWidthModulationBehavior } from "./PulseWidthModulationBehavior.js"
 /**
  * This is the default server implementation of {@link PulseWidthModulationBehavior}.
  */
-export class PulseWidthModulationServer extends PulseWidthModulationBehavior {}
+export class PulseWidthModulationServer extends PulseWidthModulationBehavior {
+}

@@ -11,4 +11,5 @@ import { TimeFormatLocalizationBehavior } from "./TimeFormatLocalizationBehavior
 /**
  * This is the default server implementation of {@link TimeFormatLocalizationBehavior}.
  */
-export class TimeFormatLocalizationServer extends TimeFormatLocalizationBehavior {}
+export class TimeFormatLocalizationServer extends TimeFormatLocalizationBehavior {
+}

@@ -15,6 +15,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance to the Contact Sensor device type.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.1
+ */
+export interface ContactSensorDevice extends Identity<typeof ContactSensorDeviceDefinition> {}
+
 export namespace ContactSensorRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -46,12 +53,5 @@ export const ContactSensorDeviceDefinition = MutableEndpoint({
         ContactSensorRequirements.server.mandatory.BooleanState
     )
 });
-
-/**
- * This defines conformance to the Contact Sensor device type.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.1
- */
-export interface ContactSensorDevice extends Identity<typeof ContactSensorDeviceDefinition> {}
 
 export const ContactSensorDevice: ContactSensorDevice = ContactSensorDeviceDefinition;

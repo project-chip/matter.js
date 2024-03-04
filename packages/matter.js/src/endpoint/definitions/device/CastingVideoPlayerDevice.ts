@@ -37,6 +37,25 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance to the Casting Video Player device type.
+ *
+ * A Video Player (either Basic or Casting) represents a device that is able to play media to a physical output or to a
+ * display screen which is part of the device.
+ *
+ * A Casting Video Player has basic controls for playback (play, pause, etc.) and keypad input (up, down, number
+ * input), and is able to launch content.
+ *
+ * For example, a Casting Video Player can be a smart TV device, a TV Set Top Box, or a content streaming device that
+ * provides input to another device like a TV or computer monitor.
+ *
+ * Please see Video Player Architecture for additional Casting Video Player requirements relating to Video Player
+ * device endpoint composition, commissioning, feature representation in clusters, and UI context.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.3
+ */
+export interface CastingVideoPlayerDevice extends Identity<typeof CastingVideoPlayerDeviceDefinition> {}
+
 export namespace CastingVideoPlayerRequirements {
     /**
      * The {@link OnOff} cluster is required by the Matter specification
@@ -159,24 +178,5 @@ export const CastingVideoPlayerDeviceDefinition = MutableEndpoint({
         CastingVideoPlayerRequirements.server.mandatory.ContentLauncher
     )
 });
-
-/**
- * This defines conformance to the Casting Video Player device type.
- *
- * A Video Player (either Basic or Casting) represents a device that is able to play media to a physical output or to a
- * display screen which is part of the device.
- *
- * A Casting Video Player has basic controls for playback (play, pause, etc.) and keypad input (up, down, number
- * input), and is able to launch content.
- *
- * For example, a Casting Video Player can be a smart TV device, a TV Set Top Box, or a content streaming device that
- * provides input to another device like a TV or computer monitor.
- *
- * Please see Video Player Architecture for additional Casting Video Player requirements relating to Video Player
- * device endpoint composition, commissioning, feature representation in clusters, and UI context.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.3
- */
-export interface CastingVideoPlayerDevice extends Identity<typeof CastingVideoPlayerDeviceDefinition> {}
 
 export const CastingVideoPlayerDevice: CastingVideoPlayerDevice = CastingVideoPlayerDeviceDefinition;

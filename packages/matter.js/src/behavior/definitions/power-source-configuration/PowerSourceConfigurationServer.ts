@@ -11,4 +11,5 @@ import { PowerSourceConfigurationBehavior } from "./PowerSourceConfigurationBeha
 /**
  * This is the default server implementation of {@link PowerSourceConfigurationBehavior}.
  */
-export class PowerSourceConfigurationServer extends PowerSourceConfigurationBehavior {}
+export class PowerSourceConfigurationServer extends PowerSourceConfigurationBehavior {
+}

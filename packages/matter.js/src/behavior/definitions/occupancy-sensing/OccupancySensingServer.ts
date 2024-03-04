@@ -11,4 +11,5 @@ import { OccupancySensingBehavior } from "./OccupancySensingBehavior.js";
 /**
  * This is the default server implementation of {@link OccupancySensingBehavior}.
  */
-export class OccupancySensingServer extends OccupancySensingBehavior {}
+export class OccupancySensingServer extends OccupancySensingBehavior {
+}

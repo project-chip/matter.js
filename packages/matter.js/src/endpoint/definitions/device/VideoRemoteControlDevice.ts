@@ -42,6 +42,16 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * This defines conformance to the Video Remote Control device type.
+ *
+ * A Video Remote Control is a client that can control a Video Player, for example, a traditional universal remote
+ * control.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.7
+ */
+export interface VideoRemoteControlDevice extends Identity<typeof VideoRemoteControlDeviceDefinition> {}
+
 export namespace VideoRemoteControlRequirements {
     /**
      * The {@link OnOff} cluster is required by the Matter specification
@@ -162,15 +172,5 @@ export const VideoRemoteControlDeviceDefinition = MutableEndpoint({
     requirements: VideoRemoteControlRequirements,
     behaviors: SupportedBehaviors()
 });
-
-/**
- * This defines conformance to the Video Remote Control device type.
- *
- * A Video Remote Control is a client that can control a Video Player, for example, a traditional universal remote
- * control.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.7
- */
-export interface VideoRemoteControlDevice extends Identity<typeof VideoRemoteControlDeviceDefinition> {}
 
 export const VideoRemoteControlDevice: VideoRemoteControlDevice = VideoRemoteControlDeviceDefinition;

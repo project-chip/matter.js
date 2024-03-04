@@ -20,6 +20,7 @@ export class EndpointFile extends TsFile {
     requirementsName: string;
     requirements: Block;
     definitions: Block;
+    interfaceLocation: Block;
 
     constructor(public model: DeviceTypeModel) {
         let path;
@@ -45,6 +46,8 @@ export class EndpointFile extends TsFile {
         this.definitionName = name;
         this.definitionPath = path;
         this.requirementsName = `${specName}Requirements`;
+
+        this.interfaceLocation = this.section();
 
         this.requirements = this.statements(`export namespace ${this.requirementsName} {`, "}");
         this.definitions = this.requirements.section();
@@ -117,7 +120,7 @@ export class EndpointFile extends TsFile {
         }
 
         this.addImport("util/Type.js", "Identity");
-        const intf = this.atom(
+        const intf = this.interfaceLocation.atom(
             `export interface ${this.definitionName} extends Identity<typeof ${this.definitionName}Definition> {}`,
         );
         this.undefine(this.definitionName);

@@ -11,4 +11,5 @@ import { LowPowerBehavior } from "./LowPowerBehavior.js";
 /**
  * This is the default server implementation of {@link LowPowerBehavior}.
  */
-export class LowPowerServer extends LowPowerBehavior {}
+export class LowPowerServer extends LowPowerBehavior {
+}

@@ -11,4 +11,5 @@ import { ThreadNetworkDiagnosticsBehavior } from "./ThreadNetworkDiagnosticsBeha
 /**
  * This is the default server implementation of {@link ThreadNetworkDiagnosticsBehavior}.
  */
-export class ThreadNetworkDiagnosticsServer extends ThreadNetworkDiagnosticsBehavior {}
+export class ThreadNetworkDiagnosticsServer extends ThreadNetworkDiagnosticsBehavior {
+}

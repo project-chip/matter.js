@@ -11,4 +11,5 @@ import { IlluminanceMeasurementBehavior } from "./IlluminanceMeasurementBehavior
 /**
  * This is the default server implementation of {@link IlluminanceMeasurementBehavior}.
  */
-export class IlluminanceMeasurementServer extends IlluminanceMeasurementBehavior {}
+export class IlluminanceMeasurementServer extends IlluminanceMeasurementBehavior {
+}

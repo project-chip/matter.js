@@ -15,6 +15,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Pressure Sensor device measures and reports the pressure of a fluid.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.5
+ */
+export interface PressureSensorDevice extends Identity<typeof PressureSensorDeviceDefinition> {}
+
 export namespace PressureSensorRequirements {
     /**
      * The {@link PressureMeasurement} cluster is required by the Matter specification
@@ -46,12 +53,5 @@ export const PressureSensorDeviceDefinition = MutableEndpoint({
         PressureSensorRequirements.server.mandatory.Identify
     )
 });
-
-/**
- * A Pressure Sensor device measures and reports the pressure of a fluid.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.5
- */
-export interface PressureSensorDevice extends Identity<typeof PressureSensorDeviceDefinition> {}
 
 export const PressureSensorDevice: PressureSensorDevice = PressureSensorDeviceDefinition;

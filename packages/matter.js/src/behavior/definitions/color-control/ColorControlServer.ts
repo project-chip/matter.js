@@ -11,4 +11,5 @@ import { ColorControlBehavior } from "./ColorControlBehavior.js";
 /**
  * This is the default server implementation of {@link ColorControlBehavior}.
  */
-export class ColorControlServer extends ColorControlBehavior {}
+export class ColorControlServer extends ColorControlBehavior {
+}

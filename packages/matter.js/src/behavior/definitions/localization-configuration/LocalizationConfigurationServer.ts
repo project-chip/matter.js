@@ -11,4 +11,5 @@ import { LocalizationConfigurationBehavior } from "./LocalizationConfigurationBe
 /**
  * This is the default server implementation of {@link LocalizationConfigurationBehavior}.
  */
-export class LocalizationConfigurationServer extends LocalizationConfigurationBehavior {}
+export class LocalizationConfigurationServer extends LocalizationConfigurationBehavior {
+}

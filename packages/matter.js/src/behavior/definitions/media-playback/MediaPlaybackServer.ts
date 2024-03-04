@@ -11,4 +11,5 @@ import { MediaPlaybackBehavior } from "./MediaPlaybackBehavior.js";
 /**
  * This is the default server implementation of {@link MediaPlaybackBehavior}.
  */
-export class MediaPlaybackServer extends MediaPlaybackBehavior {}
+export class MediaPlaybackServer extends MediaPlaybackBehavior {
+}

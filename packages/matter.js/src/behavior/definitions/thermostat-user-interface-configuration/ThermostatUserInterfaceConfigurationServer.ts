@@ -11,4 +11,5 @@ import { ThermostatUserInterfaceConfigurationBehavior } from "./ThermostatUserIn
 /**
  * This is the default server implementation of {@link ThermostatUserInterfaceConfigurationBehavior}.
  */
-export class ThermostatUserInterfaceConfigurationServer extends ThermostatUserInterfaceConfigurationBehavior {}
+export class ThermostatUserInterfaceConfigurationServer extends ThermostatUserInterfaceConfigurationBehavior {
+}

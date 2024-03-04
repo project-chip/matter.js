@@ -18,6 +18,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * An OTA Requestor is a device that is capable of receiving an OTA software update.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.3
+ */
+export interface OtaRequestorEndpoint extends Identity<typeof OtaRequestorEndpointDefinition> {}
+
 export namespace OtaRequestorRequirements {
     /**
      * The {@link OtaSoftwareUpdateRequestor} cluster is required by the Matter specification
@@ -52,12 +59,5 @@ export const OtaRequestorEndpointDefinition = MutableEndpoint({
     requirements: OtaRequestorRequirements,
     behaviors: SupportedBehaviors(OtaRequestorRequirements.server.mandatory.OtaSoftwareUpdateRequestor)
 });
-
-/**
- * An OTA Requestor is a device that is capable of receiving an OTA software update.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.3
- */
-export interface OtaRequestorEndpoint extends Identity<typeof OtaRequestorEndpointDefinition> {}
 
 export const OtaRequestorEndpoint: OtaRequestorEndpoint = OtaRequestorEndpointDefinition;

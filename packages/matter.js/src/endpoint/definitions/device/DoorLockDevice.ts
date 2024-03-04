@@ -14,6 +14,14 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or
+ * a remote method.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.1
+ */
+export interface DoorLockDevice extends Identity<typeof DoorLockDeviceDefinition> {}
+
 export namespace DoorLockRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -57,13 +65,5 @@ export const DoorLockDeviceDefinition = MutableEndpoint({
         DoorLockRequirements.server.mandatory.DoorLock
     )
 });
-
-/**
- * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or
- * a remote method.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.1
- */
-export interface DoorLockDevice extends Identity<typeof DoorLockDeviceDefinition> {}
 
 export const DoorLockDevice: DoorLockDevice = DoorLockDeviceDefinition;

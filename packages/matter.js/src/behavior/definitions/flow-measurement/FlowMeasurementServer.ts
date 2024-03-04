@@ -11,4 +11,5 @@ import { FlowMeasurementBehavior } from "./FlowMeasurementBehavior.js";
 /**
  * This is the default server implementation of {@link FlowMeasurementBehavior}.
  */
-export class FlowMeasurementServer extends FlowMeasurementBehavior {}
+export class FlowMeasurementServer extends FlowMeasurementBehavior {
+}

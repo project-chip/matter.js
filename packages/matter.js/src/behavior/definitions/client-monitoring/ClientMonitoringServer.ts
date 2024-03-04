@@ -11,4 +11,5 @@ import { ClientMonitoringBehavior } from "./ClientMonitoringBehavior.js";
 /**
  * This is the default server implementation of {@link ClientMonitoringBehavior}.
  */
-export class ClientMonitoringServer extends ClientMonitoringBehavior {}
+export class ClientMonitoringServer extends ClientMonitoringBehavior {
+}

@@ -21,6 +21,14 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A Color Dimmer Switch is a controller device that, when bound to a lighting device such as an Extended Color Light,
+ * is capable of being used to adjust the color of the light being emitted.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.3
+ */
+export interface ColorDimmerSwitchDevice extends Identity<typeof ColorDimmerSwitchDeviceDefinition> {}
+
 export namespace ColorDimmerSwitchRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -86,13 +94,5 @@ export const ColorDimmerSwitchDeviceDefinition = MutableEndpoint({
     requirements: ColorDimmerSwitchRequirements,
     behaviors: SupportedBehaviors()
 });
-
-/**
- * A Color Dimmer Switch is a controller device that, when bound to a lighting device such as an Extended Color Light,
- * is capable of being used to adjust the color of the light being emitted.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.3
- */
-export interface ColorDimmerSwitchDevice extends Identity<typeof ColorDimmerSwitchDeviceDefinition> {}
 
 export const ColorDimmerSwitchDevice: ColorDimmerSwitchDevice = ColorDimmerSwitchDeviceDefinition;

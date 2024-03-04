@@ -15,6 +15,13 @@ import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
+/**
+ * A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.
+ *
+ * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.7
+ */
+export interface HumiditySensorDevice extends Identity<typeof HumiditySensorDeviceDefinition> {}
+
 export namespace HumiditySensorRequirements {
     /**
      * The {@link Identify} cluster is required by the Matter specification
@@ -48,12 +55,5 @@ export const HumiditySensorDeviceDefinition = MutableEndpoint({
         HumiditySensorRequirements.server.mandatory.RelativeHumidityMeasurement
     )
 });
-
-/**
- * A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.
- *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.7
- */
-export interface HumiditySensorDevice extends Identity<typeof HumiditySensorDeviceDefinition> {}
 
 export const HumiditySensorDevice: HumiditySensorDevice = HumiditySensorDeviceDefinition;
