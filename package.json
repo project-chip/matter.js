@@ -40,7 +40,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
     "semver": "^7.5.4",
-    "typedoc": "^0.25.7",
+    "typedoc": "^0.25.10",
     "typedoc-plugin-markdown": "^3.17.1",
     "typedoc-plugin-missing-exports": "^2.2.0",
     "typescript": "^5.3.3"
