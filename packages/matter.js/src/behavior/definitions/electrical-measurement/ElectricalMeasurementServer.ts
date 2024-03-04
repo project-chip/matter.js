@@ -11,5 +11,4 @@ import { ElectricalMeasurementBehavior } from "./ElectricalMeasurementBehavior.j
 /**
  * This is the default server implementation of {@link ElectricalMeasurementBehavior}.
  */
-export class ElectricalMeasurementServer extends ElectricalMeasurementBehavior {
-}
+export class ElectricalMeasurementServer extends ElectricalMeasurementBehavior {}

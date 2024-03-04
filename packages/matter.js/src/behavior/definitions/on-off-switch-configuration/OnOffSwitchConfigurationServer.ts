@@ -11,5 +11,4 @@ import { OnOffSwitchConfigurationBehavior } from "./OnOffSwitchConfigurationBeha
 /**
  * This is the default server implementation of {@link OnOffSwitchConfigurationBehavior}.
  */
-export class OnOffSwitchConfigurationServer extends OnOffSwitchConfigurationBehavior {
-}
+export class OnOffSwitchConfigurationServer extends OnOffSwitchConfigurationBehavior {}

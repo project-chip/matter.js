@@ -11,5 +11,4 @@ import { FanControlBehavior } from "./FanControlBehavior.js";
 /**
  * This is the default server implementation of {@link FanControlBehavior}.
  */
-export class FanControlServer extends FanControlBehavior {
-}
+export class FanControlServer extends FanControlBehavior {}

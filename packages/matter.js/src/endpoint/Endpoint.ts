@@ -532,13 +532,25 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * Apply a depth-first visitor function to myself and all descendents.
      */
-    visit(visitor: (endpoint: Endpoint) => void) {
-        visitor(this);
-        if (this.hasParts) {
-            for (const part of this.parts) {
-                part.visit(visitor);
+    visit<T extends void | PromiseLike<void>>(visitor: (endpoint: Endpoint) => T): T {
+        const promise = visitor(this);
+
+        const childIterator = this.parts[Symbol.iterator]();
+
+        const visitChildren = (): MaybePromise => {
+            for (let next = childIterator.next(); !next.done; next = childIterator.next()) {
+                const promise = next.value.visit(visitor);
+                if (MaybePromise.is(promise)) {
+                    return promise.then(visitChildren);
+                }
             }
+        };
+
+        if (MaybePromise.is(promise)) {
+            return promise.then(visitChildren) as T;
         }
+
+        return visitChildren() as T;
     }
 
     async close() {

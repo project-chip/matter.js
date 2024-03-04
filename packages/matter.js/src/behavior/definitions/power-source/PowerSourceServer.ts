@@ -11,5 +11,4 @@ import { PowerSourceBehavior } from "./PowerSourceBehavior.js";
 /**
  * This is the default server implementation of {@link PowerSourceBehavior}.
  */
-export class PowerSourceServer extends PowerSourceBehavior {
-}
+export class PowerSourceServer extends PowerSourceBehavior {}

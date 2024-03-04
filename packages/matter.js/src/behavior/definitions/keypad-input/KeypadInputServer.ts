@@ -11,5 +11,4 @@ import { KeypadInputBehavior } from "./KeypadInputBehavior.js";
 /**
  * This is the default server implementation of {@link KeypadInputBehavior}.
  */
-export class KeypadInputServer extends KeypadInputBehavior {
-}
+export class KeypadInputServer extends KeypadInputBehavior {}

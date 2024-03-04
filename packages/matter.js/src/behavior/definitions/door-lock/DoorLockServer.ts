@@ -11,5 +11,4 @@ import { DoorLockBehavior } from "./DoorLockBehavior.js";
 /**
  * This is the default server implementation of {@link DoorLockBehavior}.
  */
-export class DoorLockServer extends DoorLockBehavior {
-}
+export class DoorLockServer extends DoorLockBehavior {}

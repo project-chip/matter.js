@@ -7,11 +7,11 @@
 import { MatterDevice } from "../../../MatterDevice.js";
 import { AttestationCertificateManager } from "../../../certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "../../../certificate/CertificationDeclarationManager.js";
-import { SecureSession } from "../../../session/SecureSession.js";
-import { ByteArray } from "../../../util/ByteArray.js";
+import { ImplementationError } from "../../../common/MatterError.js";
 import { Crypto } from "../../../crypto/Crypto.js";
 import { PrivateKey } from "../../../crypto/Key.js";
-import { ImplementationError } from "../../../common/MatterError.js";
+import { SecureSession } from "../../../session/SecureSession.js";
+import { ByteArray } from "../../../util/ByteArray.js";
 import { ProductDescription } from "../../system/product-description/ProductDescription.js";
 
 /**
@@ -35,14 +35,10 @@ export class DeviceCertification {
         return this.#declaration;
     }
 
-    constructor(
-        config?: DeviceCertification.Configuration,
-        product?: ProductDescription,
-    ) {
+    constructor(config?: DeviceCertification.Configuration, product?: ProductDescription) {
         if (config) {
-            this.#privateKey = config.privateKey instanceof ByteArray
-                ? PrivateKey(config.privateKey)
-                : config.privateKey;
+            this.#privateKey =
+                config.privateKey instanceof ByteArray ? PrivateKey(config.privateKey) : config.privateKey;
             this.#certificate = config.certificate;
             this.#intermediateCertificate = config.intermediateCertificate;
             this.#declaration = config.declaration;
@@ -57,21 +53,12 @@ export class DeviceCertification {
             this.#privateKey = PrivateKey(dacKeyPair.privateKey);
             this.#certificate = dac;
             this.#intermediateCertificate = paa.getPAICert();
-            this.#declaration = CertificationDeclarationManager.generate(
-                product.vendorId,
-                product.productId
-            );
+            this.#declaration = CertificationDeclarationManager.generate(product.vendorId, product.productId);
         }
     }
 
     sign(session: SecureSession<MatterDevice>, data: ByteArray) {
-        return Crypto.sign(
-            this.#privateKey,
-            [
-                data,
-                session.getAttestationChallengeKey(),
-            ]
-        )
+        return Crypto.sign(this.#privateKey, [data, session.getAttestationChallengeKey()]);
     }
 }
 

@@ -125,7 +125,8 @@ export class DescriptorServer extends DescriptorBehavior {
             }
         } else if (endpoint.hasParts) {
             // No IndexBehavior, just direct descendents
-            numbers = [...endpoint.parts].map(endpoint => endpoint.lifecycle.hasNumber ? endpoint.number : undefined)
+            numbers = [...endpoint.parts]
+                .map(endpoint => (endpoint.lifecycle.hasNumber ? endpoint.number : undefined))
                 .filter(n => n !== undefined) as number[];
         } else {
             // No sub-parts
@@ -133,7 +134,7 @@ export class DescriptorServer extends DescriptorBehavior {
         }
 
         numbers.sort();
-        
+
         // Do a quick deep equal so we can avoid updating state since the filtering on events that trigger this function
         // is rather lazy
         if (this.state.partsList.length === numbers.length) {
@@ -147,7 +148,7 @@ export class DescriptorServer extends DescriptorBehavior {
                 return;
             }
         }
-        
+
         await this.context.transaction.addResources(this);
         await this.context.transaction.begin();
 

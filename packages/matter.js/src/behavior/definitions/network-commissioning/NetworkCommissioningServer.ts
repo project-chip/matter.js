@@ -15,5 +15,4 @@ import { NetworkCommissioningBehavior } from "./NetworkCommissioningBehavior.js"
  * You should use {@link NetworkCommissioningServer.with} to specialize the class for the features your implementation
  * supports.
  */
-export class NetworkCommissioningServer extends NetworkCommissioningBehavior {
-}
+export class NetworkCommissioningServer extends NetworkCommissioningBehavior {}

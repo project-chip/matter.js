@@ -6,6 +6,7 @@
 
 import { FailsafeContext } from "../../../common/FailsafeContext.js";
 import { Lifecycle } from "../../../common/Lifecycle.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { Node } from "../../../node/Node.js";
 import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
@@ -18,7 +19,7 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     #node: Node;
     #operationalCredentialsRestored = false;
     #storedState?: {
-        networks?: NetworkCommissioningBehavior.State["networks"];
+        networks: Map<Endpoint, NetworkCommissioningBehavior.State["networks"]>;
         nocs: OperationalCredentialsBehavior.State["nocs"];
         fabrics: OperationalCredentialsBehavior.State["fabrics"];
         trustedRootCertificates: OperationalCredentialsBehavior.State["trustedRootCertificates"];
@@ -35,19 +36,35 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
         });
     }
 
+    /**
+     * Persist endpoint credentials and network configurations for restoration if commissioning does not complete.
+     *
+     * The Matter 1.2 specification makes it pretty clear that Matter supports configuration of multiple network
+     * interfaces (e.g. @see {@link MatterCoreSpecificationV1_1} § 11.8.8 and § 2.3.2).
+     * {@link NetworkCommissioningCluster} of the primary interface is on the root endpoint.  However it's not clear
+     * where {@link NetworkCommissioningCluster} instances for secondary interfaces reside.  To be on the safe side
+     * we just assume any endpoint may support {@link NetworkCommissioningCluster}.
+     *
+     * TODO - it's recommended to reset all state if commissioning bails; currently we perform mandatory restore
+     */
     override async storeEndpointState() {
         const opcreds = this.#node.state.operationalCredentials;
         this.#storedState = {
             nocs: opcreds.nocs.map(noc => ({ ...noc })),
             fabrics: opcreds.fabrics.map(fabric => ({ ...fabric })),
             trustedRootCertificates: [...opcreds.trustedRootCertificates],
-        }
+            networks: new Map(),
+        };
 
         if (!this.#node.behaviors.has(NetworkCommissioningBehavior)) {
             return;
         }
 
-        this.#storedState.networks = this.#node.stateOf(NetworkCommissioningBehavior).networks;
+        this.#node.visit(endpoint => {
+            if (endpoint.behaviors.has(NetworkCommissioningBehavior)) {
+                this.#storedState?.networks.set(endpoint, endpoint.stateOf(NetworkCommissioningBehavior).networks);
+            }
+        });
     }
 
     override async restoreFabric() {
@@ -55,13 +72,16 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     }
 
     override async restoreNetworkState() {
-        const networks = this.#storedState?.networks;
-        if (networks) {
-            await this.#node.act(agent => {
-                const networkCommissioning = agent.get(NetworkCommissioningBehavior);
-                networkCommissioning.state.networks = networks;
+        await this.#node.act(async agent => {
+            const context = agent.context;
+
+            await this.#node.visit(async endpoint => {
+                const networks = this.#storedState?.networks.get(endpoint);
+                if (networks) {
+                    context.agentFor(endpoint).get(NetworkCommissioningBehavior).state.networks = networks;
+                }
             });
-        }
+        });
     }
 
     override async revokeFabric(fabric: Fabric) {

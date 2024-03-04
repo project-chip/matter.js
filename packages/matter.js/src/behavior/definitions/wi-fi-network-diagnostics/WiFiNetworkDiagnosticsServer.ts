@@ -11,5 +11,4 @@ import { WiFiNetworkDiagnosticsBehavior } from "./WiFiNetworkDiagnosticsBehavior
 /**
  * This is the default server implementation of {@link WiFiNetworkDiagnosticsBehavior}.
  */
-export class WiFiNetworkDiagnosticsServer extends WiFiNetworkDiagnosticsBehavior {
-}
+export class WiFiNetworkDiagnosticsServer extends WiFiNetworkDiagnosticsBehavior {}

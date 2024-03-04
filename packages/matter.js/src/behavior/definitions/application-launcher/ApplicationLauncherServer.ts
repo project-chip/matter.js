@@ -11,5 +11,4 @@ import { ApplicationLauncherBehavior } from "./ApplicationLauncherBehavior.js";
 /**
  * This is the default server implementation of {@link ApplicationLauncherBehavior}.
  */
-export class ApplicationLauncherServer extends ApplicationLauncherBehavior {
-}
+export class ApplicationLauncherServer extends ApplicationLauncherBehavior {}

@@ -14,5 +14,4 @@ import { SwitchBehavior } from "./SwitchBehavior.js";
  * The Matter specification requires the Switch cluster to support features we do not enable by default. You should use
  * {@link SwitchServer.with} to specialize the class for the features your implementation supports.
  */
-export class SwitchServer extends SwitchBehavior {
-}
+export class SwitchServer extends SwitchBehavior {}
