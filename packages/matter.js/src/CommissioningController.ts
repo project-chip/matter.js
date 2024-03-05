@@ -18,6 +18,8 @@ import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedNode.js";
+import { Environment } from "./environment/Environment.js";
+import { MdnsService } from "./environment/MdnsService.js";
 import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
@@ -80,6 +82,12 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * Maximum 3 tags are supported.
      */
     readonly caseAuthenticatedTags?: CaseAuthenticatedTag[];
+
+    /**
+     * When used with the new API Environment set the environment here and the CommissioningServer will self-register
+     * on the environment when you call start(). So do this instead of adding it to a MatterServer.
+     */
+    readonly environment?: Environment;
 };
 
 /** Options needed to commission a new node */
@@ -458,7 +466,23 @@ export class CommissioningController extends MatterNode {
     /** Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false. */
     async start() {
         if (this.ipv4Disabled === undefined) {
-            throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
+            if (this.options.environment === undefined) {
+                throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
+            }
+            // TODO Init Storage ... ideally in a way that we can keep it afterwards
+            //  In fact from MatterController.ts:
+            //  * sessions aka SessionManager
+            //  * fabric and root certificate (separately or "as the same storage")
+            //  * commissioned nodes maybe today as full array (that compatible with current), later as array of nodeids and extra sub structure
+
+            const mdnsService = await this.options.environment.load(MdnsService);
+            this.ipv4Disabled = !mdnsService.enableIpv4;
+            console.log("Init ipv4: ", this.ipv4Disabled);
+            this.setMdnsBroadcaster(mdnsService.broadcaster);
+            this.setMdnsScanner(mdnsService.scanner);
+
+            const runtime = this.options.environment.runtime;
+            runtime.add(this);
         }
         this.started = true;
         if (this.controllerInstance === undefined) {

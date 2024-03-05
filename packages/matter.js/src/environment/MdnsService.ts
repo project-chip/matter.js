@@ -20,25 +20,32 @@ const logger = Logger.get("MDNS");
 export class MdnsService {
     #broadcaster?: MdnsBroadcaster;
     #scanner?: MdnsScanner;
-    #construction: AsyncConstruction<MdnsService>;
+    readonly #construction: AsyncConstruction<MdnsService>;
+    readonly #enableIpv4: boolean;
+
+    get enableIpv4() {
+        return this.#enableIpv4;
+    }
 
     constructor(environment: Environment, options?: MdnsService.Options) {
         environment.set(MdnsService, this);
         environment.runtime.add(this);
+
+        const vars = environment.get(VariableService);
+        this.#enableIpv4 = vars.boolean("mdns.ipv4") ?? options?.ipv4 ?? true;
 
         this.#construction = AsyncConstruction(this, async () => {
             const vars = environment.get(VariableService);
             const network = environment.get(Network);
 
             const netInterface = vars.get("mdns.networkInterface", options?.networkInterface);
-            const enableIpv4 = vars.boolean("mdns.ipv4") ?? options?.ipv4 ?? true;
             this.#broadcaster = await MdnsBroadcaster.create(network, {
-                enableIpv4,
+                enableIpv4: this.enableIpv4,
                 multicastInterface: netInterface,
             });
 
             this.#scanner = await MdnsScanner.create(network, {
-                enableIpv4,
+                enableIpv4: this.enableIpv4,
                 netInterface: netInterface,
             });
         });

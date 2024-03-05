@@ -2,7 +2,7 @@
 
 /**
  * @license
- * Copyright 2022-2024 Matter.js Authors
+ * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,7 +16,7 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter-node.js";
+import { CommissioningController, MatterServer, NodeCommissioningOptions } from "@project-chip/matter-node.js";
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
@@ -39,7 +39,6 @@ import {
     requireMinNodeVersion,
     singleton,
 } from "@project-chip/matter-node.js/util";
-import { Environment } from "@project-chip/matter.js/environment";
 
 const logger = Logger.get("Controller");
 
@@ -180,11 +179,11 @@ class ControllerNode {
          * are called.
          */
 
-        const environment = Environment.default;
+        const matterServer = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
-            environment,
             autoConnect: false,
         });
+        await matterServer.addCommissioningController(commissioningController);
 
         /**
          * Start the Matter Server
@@ -192,7 +191,8 @@ class ControllerNode {
          * After everything was plugged together we can start the server. When not delayed announcement is set for the
          * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
-        await commissioningController.start();
+
+        await matterServer.start();
 
         if (!commissioningController.isCommissioned()) {
             const options = {
