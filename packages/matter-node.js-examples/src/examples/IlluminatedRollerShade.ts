@@ -59,10 +59,9 @@ class RollerShade extends LiftingWindowCoveringServer {
         this.targetPos = this.currentPos;
     }
 
-    // TODO - grr, interface not working right here so have to define as instance member for TS
-    override goToLiftPercentage = function (this: RollerShade, request: GoToLiftPercentageRequest) {
+    override goToLiftPercentage(this: RollerShade, request: GoToLiftPercentageRequest) {
         this.targetPos = request.liftPercent100thsValue;
-    };
+    }
 
     protected async writeTargetToMotor() {
         // For this contrived example we just log the target position and don't actually animate our fake roller shade

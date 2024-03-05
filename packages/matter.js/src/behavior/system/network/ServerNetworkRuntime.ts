@@ -264,11 +264,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         this.owner.env.set(FabricManager, this.#matterDevice.fabricManager);
 
         await this.owner.act(agent => agent.load(SessionsBehavior));
-        this.owner.act(agent =>
-            agent
-                .get(CommissioningBehavior)
-                .events.commissioned.on((this.#commissionedListener = () => this.endUncommissionedMode())),
-        );
+        this.owner.eventsOf(CommissioningBehavior).commissioned.on(() => this.endUncommissionedMode());
 
         await this.addTransports(this.#matterDevice);
         await this.addBroadcasters(this.#matterDevice);
@@ -304,7 +300,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         if (this.#commissionedListener) {
             const commissionedListener = this.#commissionedListener;
             this.#commissionedListener = undefined;
-            this.owner.act(agent => agent.get(CommissioningBehavior).events.commissioned.off(commissionedListener));
+            this.owner.eventsOf(CommissioningBehavior).commissioned.off(commissionedListener);
         }
     }
 }

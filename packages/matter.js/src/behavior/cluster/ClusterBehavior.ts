@@ -36,8 +36,6 @@ import type { ClusterState } from "./ClusterState.js";
  * in a runtime error but it will not cause a type error during development.
  */
 export class ClusterBehavior extends Behavior {
-    #cluster: ClusterType;
-
     /**
      * The ID of ClusterBehavior implementations is the uncapitalized cluster name.
      */
@@ -47,7 +45,7 @@ export class ClusterBehavior extends Behavior {
      * The cluster implemented by this behavior.
      */
     get cluster() {
-        return this.#cluster;
+        return (this.constructor as typeof ClusterBehavior).cluster;
     }
 
     /**
@@ -89,7 +87,6 @@ export class ClusterBehavior extends Behavior {
         if (!cluster) {
             throw new ImplementationError("ClusterBehavior class has no cluster defined");
         }
-        this.#cluster = cluster;
     }
 
     /**
