@@ -9,6 +9,21 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* IMPORTANT - Packaging change!
+  * ... peer deps
+  * Changed BLE library (Bleno/Noble) to a more maintained one
+  * TBD
+* Matter-Core functionality:
+  * Added temporary fix for Network Commissioning Cluster to also accept SSIDs as empty stri ng
+  * TBD
+* matter.js API:
+  * IMPORTANT: Introduction of new High level API, see [migration guide](./docs/MIGRATION_GUIDE_08.md)
+  * The new Environment concept allows (for node.js) the handling of CLI parameters in parallel to (new) Environment variables and config file to pass in configurations
+  * Introducing new High Level Device building API with full support for all Matter 1.1 device types
+  * Added Transactional layer in high level API ... Rollback on Exception
+  * TBD
+
 ## 0.7.5 (2024-02-23)
 * Matter-Core functionality:
   * Feature: Allowed multiple Loggers and log targets to be registered. Logging to console is still default
