@@ -209,7 +209,7 @@ export class MatterServer {
 
                 if (destroyStorage) {
                     // Destroy storage
-                    commissioningController.resetStorage();
+                    await commissioningController.resetStorage();
                 }
                 return;
             }
