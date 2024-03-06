@@ -64,7 +64,7 @@ export class GroupsManager {
         );
         if (endpointGroups !== undefined) {
             if (endpointGroups.delete(groupId)) {
-                fabric.persist(); // persist scoped cluster data changes
+                fabric.persist(false); // persist scoped cluster data changes
                 return true;
             }
         }
