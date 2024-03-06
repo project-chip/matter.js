@@ -63,7 +63,7 @@ export class Fabric {
     private readonly scopedClusterData: Map<number, any>;
 
     private removeCallbacks = new Array<() => void>();
-    private persistCallback: (() => void) | undefined;
+    private persistCallback: ((isUpdate?: boolean) => void) | undefined;
 
     constructor(
         readonly fabricIndex: FabricIndex,
@@ -181,7 +181,8 @@ export class Fabric {
         }
     }
 
-    setPersistCallback(callback: () => void) {
+    setPersistCallback(callback: (isUpdate?: boolean) => void) {
+        // TODO Remove "isUpdate" as soon as the fabric scoped data are removed from here/legacy API gets removed
         this.persistCallback = callback;
     }
 
@@ -192,8 +193,8 @@ export class Fabric {
         }
     }
 
-    persist() {
-        this.persistCallback?.();
+    persist(isUpdate = true) {
+        this.persistCallback?.(isUpdate);
     }
 
     getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string): T | undefined {
@@ -209,7 +210,7 @@ export class Fabric {
             this.scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
         }
         this.scopedClusterData.get(cluster.id).set(clusterDataKey, value);
-        this.persist();
+        this.persist(false);
     }
 
     deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
@@ -217,7 +218,7 @@ export class Fabric {
             return;
         }
         this.scopedClusterData.get(cluster.id).delete(clusterDataKey);
-        this.persist();
+        this.persist(false);
     }
 
     hasScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
@@ -226,7 +227,7 @@ export class Fabric {
 
     deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
         this.scopedClusterData.delete(cluster.id);
-        this.persist();
+        this.persist(false);
     }
 
     getScopedClusterDataKeys(cluster: Cluster<any, any, any, any, any>): string[] {
