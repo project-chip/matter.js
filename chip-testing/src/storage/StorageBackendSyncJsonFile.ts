@@ -16,7 +16,7 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
     }
 
     override async initialize() {
-        super.initialize();
+        await super.initialize();
         try {
             this.store = this.fromJson(readFileSync(this.path, "utf-8"));
         } catch (error: any) {
@@ -53,7 +53,7 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
     override async close() {
         this.commit();
         this.closed = true;
-        super.close();
+        await super.close();
     }
 
     private toJson(object: any): string {

@@ -21,9 +21,8 @@ const logger = Logger.get("ServerStore");
 /**
  * Non-volatile state management for a {@link NodeServer}.
  *
- * The default implementation for matter.js uses synchronous APIs for storage.
- * However, this will change in the future, and other implementations may be
- * backed by asynchronous storage.  So the public API is asynchronous.
+ * The default implementation for matter.js uses synchronous APIs for storage. However, this will change in the future,
+ * and other implementations may be backed by asynchronous storage.  So the public API is asynchronous.
  */
 export class ServerStore implements Destructable {
     #location: string;

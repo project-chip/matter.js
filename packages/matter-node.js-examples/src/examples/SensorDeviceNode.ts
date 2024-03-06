@@ -116,19 +116,21 @@ async function main() {
     logEndpoint(EndpointServer.forEndpoint(server));
 
     const updateInterval = setInterval(() => {
+        let setter: Promise<void>;
         if (isTemperature) {
-            endpoint.set({
+            setter = endpoint.set({
                 temperatureMeasurement: {
                     measuredValue: getIntValueFromCommandOrRandom("value"),
                 },
             });
         } else {
-            endpoint.set({
+            setter = endpoint.set({
                 relativeHumidityMeasurement: {
                     measuredValue: getIntValueFromCommandOrRandom("value", false),
                 },
             });
         }
+        setter.catch(error => console.error("Error updating measured value:", error));
     }, interval * 1000);
 
     // Cleanup our update interval when node goes offline
