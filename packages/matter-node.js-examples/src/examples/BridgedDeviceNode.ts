@@ -17,17 +17,17 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import "@project-chip/matter-node.js";
 
-import { DeviceTypeId, VendorId } from "@project-chip/matter-node.js/datatype";
-import { logEndpoint } from "@project-chip/matter-node.js/device";
-import { Time } from "@project-chip/matter-node.js/time";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
+import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
+import { logEndpoint } from "@project-chip/matter.js/device";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
 import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { AggregatorEndpoint } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
+import { Time } from "@project-chip/matter.js/time";
 import { execSync } from "child_process";
 
 requireMinNodeVersion(16);
@@ -150,8 +150,9 @@ await server.bringOnline();
  */
 logEndpoint(EndpointServer.forEndpoint(server));
 
-setTimeout(async () => {
-    console.log("Adding Light 3 now!!");
+/*
+  If you want to dynamically add another device during runtime you can do so by doing the following:
+
     const name = `OnOff Light 3`;
 
     const endpoint = new Endpoint(OnOffLightDevice.with(BridgedDeviceBasicInformationServer), {
@@ -171,16 +172,16 @@ setTimeout(async () => {
         console.log(`${name} is now ${value ? "ON" : "OFF"}`);
     });
 
-    setTimeout(() => logEndpoint(EndpointServer.forEndpoint(server)), 10_000);
+ */
 
-    setTimeout(async () => {
+/*
+   To remove a device during runtime you can do so by doing the following:
         console.log("Removing Light 3 now!!");
 
         await endpoint.close();
 
-        logEndpoint(EndpointServer.forEndpoint(server));
-    }, 300_000);
-}, 120_000);
+   This will automatically remove the endpoint from the bridge.
+ */
 
 /*********************************************************************************************************
  * Convenience Methods

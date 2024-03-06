@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { getParameter } from "@project-chip/matter-node.js/util";
 import {
     ClusterServer,
     ClusterServerObjForCluster,
     GeneralCommissioningCluster,
     NetworkCommissioning,
-} from "@project-chip/matter-node.js/cluster";
-import { ByteArray, getParameter } from "@project-chip/matter-node.js/util";
+} from "@project-chip/matter.js/cluster";
+import { ByteArray } from "@project-chip/matter.js/util";
 
 const firstNetworkId = new ByteArray(32);
 

@@ -6,11 +6,11 @@
 
 // This demonstrates bringing a "light" device online with matter.js.
 
+// Include this first to auto-register Crypto, Network and Time Node.js implementations
+import "@project-chip/matter-node.js";
+
 import { OnOffLightDevice, OnOffLightRequirements } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { ServerNode } from "@project-chip/matter.js/node";
-
-// Install Matter.js extensions for Node.js
-import "@project-chip/matter-node.js";
 
 // Matter exposes functionality in groups called "clusters".  For this example device we override the matter.js "On/Off"
 // cluster implementation to print status to the console.
