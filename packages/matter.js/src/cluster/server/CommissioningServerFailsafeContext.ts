@@ -39,6 +39,7 @@ export class CommissioningServerFailsafeContext extends FailsafeContext {
     }
 
     override async restoreFabric(fabric: Fabric) {
+        await super.restoreFabric(fabric);
         const operationalCredentialsCluster = this.#rootEndpoint.getClusterServer(OperationalCredentials.Cluster);
         operationalCredentialsCluster?.attributes.nocs.updatedLocalForFabric(fabric);
         operationalCredentialsCluster?.attributes.fabrics.updatedLocalForFabric(fabric);

@@ -10,19 +10,14 @@ import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { Node } from "../../../node/Node.js";
 import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
-import { OperationalCredentialsBehavior } from "../operational-credentials/OperationalCredentialsBehavior.js";
 
 /**
  * {@link FailsafeContext} for {@link Node} API.
  */
 export class ServerNodeFailsafeContext extends FailsafeContext {
     #node: Node;
-    #operationalCredentialsRestored = false;
     #storedState?: {
         networks: Map<Endpoint, NetworkCommissioningBehavior.State["networks"]>;
-        nocs: OperationalCredentialsBehavior.State["nocs"];
-        fabrics: OperationalCredentialsBehavior.State["fabrics"];
-        trustedRootCertificates: OperationalCredentialsBehavior.State["trustedRootCertificates"];
     };
 
     constructor(node: Node, options: FailsafeContext.Options) {
@@ -48,11 +43,7 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
      * TODO - it's recommended to reset all state if commissioning bails; currently we perform mandatory restore
      */
     override async storeEndpointState() {
-        const opcreds = this.#node.state.operationalCredentials;
         this.#storedState = {
-            nocs: opcreds.nocs.map(noc => ({ ...noc })),
-            fabrics: opcreds.fabrics.map(fabric => ({ ...fabric })),
-            trustedRootCertificates: [...opcreds.trustedRootCertificates],
             networks: new Map(),
         };
 
@@ -65,10 +56,6 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
                 this.#storedState?.networks.set(endpoint, endpoint.stateOf(NetworkCommissioningBehavior).networks);
             }
         });
-    }
-
-    override async restoreFabric() {
-        await this.#restoreOperationalCredentials();
     }
 
     override async restoreNetworkState() {
@@ -90,32 +77,11 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
         });
 
         await fabric.remove();
-
-        await this.#restoreOperationalCredentials();
     }
 
     override async restoreBreadcrumb() {
         await this.#node.act(agent => {
             agent.generalCommissioning.state.breadcrumb = 0;
         });
-    }
-
-    async #restoreOperationalCredentials() {
-        if (this.#operationalCredentialsRestored) {
-            return;
-        }
-
-        const state = this.#storedState;
-        if (state) {
-            await this.#node.act(agent => {
-                const opcreds = agent.operationalCredentials.state;
-                opcreds.nocs = state.nocs;
-                opcreds.fabrics = state.fabrics;
-                opcreds.commissionedFabrics = opcreds.fabrics.length;
-                opcreds.trustedRootCertificates = state.trustedRootCertificates;
-            });
-        }
-
-        this.#operationalCredentialsRestored = true;
     }
 }

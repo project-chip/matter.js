@@ -278,18 +278,14 @@ export abstract class FailsafeContext {
         // 5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair, NOC and
         //    ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index that was
         //    the subject of the UpdateNOC command.
-        if (this.associatedFabric !== undefined) {
-            if (this.#forUpdateNoc) {
-                // update FabricManager and Resumption records but leave current session intact
-                this.updateFabric(this.associatedFabric);
-            }
-
+        if (this.#forUpdateNoc && this.associatedFabric !== undefined) {
+            // update FabricManager and Resumption records but leave current session intact
             await this.restoreFabric(this.associatedFabric);
         }
 
         // 6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking the RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the Fabric Index that was the subject of the AddNOC command. This SHALL remove all associations to that Fabric including all fabric-scoped data, and MAY possibly factory-reset the device depending on current device state. This SHALL only apply to Fabrics added during the fail-safe period as the result of the AddNOC command.
         // 7. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced by any entry in the Fabrics attribute.
-        if (fabric !== undefined) {
+        if (!this.#forUpdateNoc && fabric !== undefined) {
             const fabricIndex = this.fabricIndex;
             if (fabricIndex !== undefined) {
                 const fabric = this.#fabrics.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
@@ -304,6 +300,7 @@ export abstract class FailsafeContext {
 
         // TODO 9. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the
         //  Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.
+        //  In theory happens automatically by revoking last fabric
     }
 
     abstract storeEndpointState(): Promise<void>;
@@ -311,7 +308,9 @@ export abstract class FailsafeContext {
     /** Restore Cluster data when the FailSafe context expired. */
     abstract restoreNetworkState(): Promise<void>;
 
-    abstract restoreFabric(fabric: Fabric): Promise<void>;
+    async restoreFabric(fabric: Fabric) {
+        this.updateFabric(fabric);
+    }
 
     abstract revokeFabric(fabric: Fabric): Promise<void>;
 
