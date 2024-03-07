@@ -4,12 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Identify } from "../../../cluster/definitions/IdentifyCluster.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { IdentifyBehavior } from "./IdentifyBehavior.js";
 import { IdentifyQueryResponse, IdentifyRequest } from "./IdentifyInterface.js";
-
-const Base = IdentifyBehavior.with(Identify.Feature.Query);
 
 /**
  * This is the default server implementation of IdentifyBehavior.
@@ -17,7 +14,7 @@ const Base = IdentifyBehavior.with(Identify.Feature.Query);
  * This implementation includes all features of Identify.Cluster. You should use IdentifyServer.with to specialize the
  * class for the features your implementation supports.
  */
-export class IdentifyServer extends Base {
+export class IdentifyServer extends IdentifyBehavior {
     protected declare internal: IdentifyServer.Internal;
 
     override initialize() {
@@ -59,7 +56,8 @@ export class IdentifyServer extends Base {
         this.state.identifyTime = identifyTime;
     }
 
-    override identifyQuery(): IdentifyQueryResponse {
+    // TODO - don't think we need this as it's Zigbee only (and dumb - just returns attribute value)
+    identifyQuery(): IdentifyQueryResponse {
         return { timeout: this.state.identifyTime };
     }
 }
