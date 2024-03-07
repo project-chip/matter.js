@@ -18,6 +18,17 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     #node: Node;
     #storedState?: {
         networks: Map<Endpoint, NetworkCommissioningBehavior.State["networks"]>;
+        /*
+
+        When Fabrics are no longer managed centrally in FabricManager we need this. Maybe we change to this later,
+        but now it is just here for reference because these changes are realized by events that are triggered by Fabric
+        object changes. See also other commented out sections in this class.
+
+        nocs: OperationalCredentialsBehavior.State["nocs"];
+        fabrics: OperationalCredentialsBehavior.State["fabrics"];
+        trustedRootCertificates: OperationalCredentialsBehavior.State["trustedRootCertificates"];
+
+         */
     };
 
     constructor(node: Node, options: FailsafeContext.Options) {
@@ -43,8 +54,14 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
      * TODO - it's recommended to reset all state if commissioning bails; currently we perform mandatory restore
      */
     override async storeEndpointState() {
+        // const opcreds = this.#node.state.operationalCredentials;
         this.#storedState = {
             networks: new Map(),
+            /*
+            nocs: opcreds.nocs.map(noc => ({ ...noc })),
+            fabrics: opcreds.fabrics.map(fabric => ({ ...fabric })),
+            trustedRootCertificates: [...opcreds.trustedRootCertificates],
+             */
         };
 
         if (!this.#node.behaviors.has(NetworkCommissioningBehavior)) {
@@ -77,6 +94,8 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
         });
 
         await fabric.remove();
+
+        // await this.#restoreOperationalCredentials();
     }
 
     override async restoreBreadcrumb() {
@@ -84,4 +103,30 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
             agent.generalCommissioning.state.breadcrumb = 0;
         });
     }
+
+    /*
+    override async restoreFabric() {
+        await super.restoreFabric();
+        await this.#restoreOperationalCredentials();
+    }
+
+    async #restoreOperationalCredentials() {
+        if (this.#operationalCredentialsRestored) {
+            return;
+        }
+
+        const state = this.#storedState;
+        if (state) {
+            await this.#node.act(agent => {
+                const opcreds = agent.operationalCredentials.state;
+                opcreds.nocs = state.nocs;
+                opcreds.fabrics = state.fabrics;
+                opcreds.commissionedFabrics = opcreds.fabrics.length;
+                opcreds.trustedRootCertificates = state.trustedRootCertificates;
+            });
+        }
+
+        this.#operationalCredentialsRestored = true;
+    }
+    */
 }
