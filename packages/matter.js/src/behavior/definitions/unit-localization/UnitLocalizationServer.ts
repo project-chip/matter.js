@@ -11,5 +11,4 @@ import { UnitLocalizationBehavior } from "./UnitLocalizationBehavior.js";
 /**
  * This is the default server implementation of {@link UnitLocalizationBehavior}.
  */
-export class UnitLocalizationServer extends UnitLocalizationBehavior {
-}
+export class UnitLocalizationServer extends UnitLocalizationBehavior {}

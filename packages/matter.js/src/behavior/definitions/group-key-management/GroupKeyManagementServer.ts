@@ -11,5 +11,4 @@ import { GroupKeyManagementBehavior } from "./GroupKeyManagementBehavior.js";
 /**
  * This is the default server implementation of {@link GroupKeyManagementBehavior}.
  */
-export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
-}
+export class GroupKeyManagementServer extends GroupKeyManagementBehavior {}

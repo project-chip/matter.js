@@ -11,5 +11,4 @@ import { TimeSyncBehavior } from "./TimeSyncBehavior.js";
 /**
  * This is the default server implementation of {@link TimeSyncBehavior}.
  */
-export class TimeSyncServer extends TimeSyncBehavior {
-}
+export class TimeSyncServer extends TimeSyncBehavior {}

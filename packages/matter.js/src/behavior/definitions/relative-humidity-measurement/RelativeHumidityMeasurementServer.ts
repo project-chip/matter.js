@@ -11,5 +11,4 @@ import { RelativeHumidityMeasurementBehavior } from "./RelativeHumidityMeasureme
 /**
  * This is the default server implementation of {@link RelativeHumidityMeasurementBehavior}.
  */
-export class RelativeHumidityMeasurementServer extends RelativeHumidityMeasurementBehavior {
-}
+export class RelativeHumidityMeasurementServer extends RelativeHumidityMeasurementBehavior {}

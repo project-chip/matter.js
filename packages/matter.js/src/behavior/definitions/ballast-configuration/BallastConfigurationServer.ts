@@ -11,5 +11,4 @@ import { BallastConfigurationBehavior } from "./BallastConfigurationBehavior.js"
 /**
  * This is the default server implementation of {@link BallastConfigurationBehavior}.
  */
-export class BallastConfigurationServer extends BallastConfigurationBehavior {
-}
+export class BallastConfigurationServer extends BallastConfigurationBehavior {}

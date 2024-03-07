@@ -15,5 +15,4 @@ import { PumpConfigurationAndControlBehavior } from "./PumpConfigurationAndContr
  * default. You should use {@link PumpConfigurationAndControlServer.with} to specialize the class for the features your
  * implementation supports.
  */
-export class PumpConfigurationAndControlServer extends PumpConfigurationAndControlBehavior {
-}
+export class PumpConfigurationAndControlServer extends PumpConfigurationAndControlBehavior {}

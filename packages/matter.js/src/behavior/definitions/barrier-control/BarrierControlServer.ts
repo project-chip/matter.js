@@ -11,5 +11,4 @@ import { BarrierControlBehavior } from "./BarrierControlBehavior.js";
 /**
  * This is the default server implementation of {@link BarrierControlBehavior}.
  */
-export class BarrierControlServer extends BarrierControlBehavior {
-}
+export class BarrierControlServer extends BarrierControlBehavior {}

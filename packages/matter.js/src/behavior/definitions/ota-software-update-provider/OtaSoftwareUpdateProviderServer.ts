@@ -11,5 +11,4 @@ import { OtaSoftwareUpdateProviderBehavior } from "./OtaSoftwareUpdateProviderBe
 /**
  * This is the default server implementation of {@link OtaSoftwareUpdateProviderBehavior}.
  */
-export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBehavior {
-}
+export class OtaSoftwareUpdateProviderServer extends OtaSoftwareUpdateProviderBehavior {}

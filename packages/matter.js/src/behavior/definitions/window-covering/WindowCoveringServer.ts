@@ -14,5 +14,4 @@ import { WindowCoveringBehavior } from "./WindowCoveringBehavior.js";
  * The Matter specification requires the WindowCovering cluster to support features we do not enable by default. You
  * should use {@link WindowCoveringServer.with} to specialize the class for the features your implementation supports.
  */
-export class WindowCoveringServer extends WindowCoveringBehavior {
-}
+export class WindowCoveringServer extends WindowCoveringBehavior {}

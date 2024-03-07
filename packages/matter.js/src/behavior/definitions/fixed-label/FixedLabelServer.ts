@@ -11,5 +11,4 @@ import { FixedLabelBehavior } from "./FixedLabelBehavior.js";
 /**
  * This is the default server implementation of {@link FixedLabelBehavior}.
  */
-export class FixedLabelServer extends FixedLabelBehavior {
-}
+export class FixedLabelServer extends FixedLabelBehavior {}

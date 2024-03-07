@@ -11,5 +11,4 @@ import { AccountLoginBehavior } from "./AccountLoginBehavior.js";
 /**
  * This is the default server implementation of {@link AccountLoginBehavior}.
  */
-export class AccountLoginServer extends AccountLoginBehavior {
-}
+export class AccountLoginServer extends AccountLoginBehavior {}

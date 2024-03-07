@@ -11,5 +11,4 @@ import { ScenesBehavior } from "./ScenesBehavior.js";
 /**
  * This is the default server implementation of {@link ScenesBehavior}.
  */
-export class ScenesServer extends ScenesBehavior {
-}
+export class ScenesServer extends ScenesBehavior {}

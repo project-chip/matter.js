@@ -11,5 +11,4 @@ import { PressureMeasurementBehavior } from "./PressureMeasurementBehavior.js";
 /**
  * This is the default server implementation of {@link PressureMeasurementBehavior}.
  */
-export class PressureMeasurementServer extends PressureMeasurementBehavior {
-}
+export class PressureMeasurementServer extends PressureMeasurementBehavior {}

@@ -11,5 +11,4 @@ import { BinaryInputBasicBehavior } from "./BinaryInputBasicBehavior.js";
 /**
  * This is the default server implementation of {@link BinaryInputBasicBehavior}.
  */
-export class BinaryInputBasicServer extends BinaryInputBasicBehavior {
-}
+export class BinaryInputBasicServer extends BinaryInputBasicBehavior {}

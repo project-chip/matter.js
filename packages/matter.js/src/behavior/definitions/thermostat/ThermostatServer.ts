@@ -14,5 +14,4 @@ import { ThermostatBehavior } from "./ThermostatBehavior.js";
  * The Matter specification requires the Thermostat cluster to support features we do not enable by default. You should
  * use {@link ThermostatServer.with} to specialize the class for the features your implementation supports.
  */
-export class ThermostatServer extends ThermostatBehavior {
-}
+export class ThermostatServer extends ThermostatBehavior {}
