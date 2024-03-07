@@ -215,18 +215,7 @@ export const MaybePromise = {
             if (MaybePromise.is(result)) {
                 // Use native finally or fake via then
                 if (typeof (result as Promise<any>).finally === "function") {
-                    result = (result as Promise<T>).finally(() => {
-                        if (MaybePromise.is(onfinally)) {
-                            onfinally.then(
-                                () => {},
-                                error => {
-                                    throw error;
-                                },
-                            );
-                        } else {
-                            void onfinally?.();
-                        }
-                    });
+                    result = (result as Promise<T>).finally(onfinally);
                 } else {
                     result = result.then(
                         value =>
