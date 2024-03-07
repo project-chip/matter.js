@@ -40,8 +40,10 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
-        "@project-chip/matter.js": "0.7.5",
         "node-localstorage": "^3.0.5"
+    },
+    "peerDependencies": {
+        "@project-chip/matter.js": "0.7.5"
     },
     "engines": {
         "_comment": "For Crypto.hkdf support",

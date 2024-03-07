@@ -54,6 +54,10 @@ export class AllClustersTestInstance implements TestInstance {
     async start() {
         if (!this.serverNode) throw new Error("serverNode not initialized on start");
 
+        // TODO: Throw out
+        const env = Environment.default;
+        env.vars.set("mdns.networkInterface", "en0");
+
         try {
             await this.serverNode.bringOnline();
             const { qrPairingCode } = this.serverNode.state.commissioning.pairingCodes;

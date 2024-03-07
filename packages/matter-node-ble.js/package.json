@@ -33,7 +33,7 @@
         "ts-node": "^10.9.2",
         "typescript": "^5.3.3"
     },
-    "dependencies": {
+    "peerDependencies": {
         "@project-chip/matter.js": "0.7.5"
     },
     "optionalDependencies": {

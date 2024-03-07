@@ -5,7 +5,7 @@
             "stream": true
         },
         "version": {
-            "allowBranch": ["main", "*.x"],
+            "allowBranch": ["main", "*.x", "peer-deps"],
             "ignoreChanges": ["*.md"],
             "exact": true
         }
