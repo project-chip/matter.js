@@ -16,15 +16,15 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import "@project-chip/matter-node.js";
 
-import { DeviceTypeId, VendorId } from "@project-chip/matter-node.js/datatype";
-import { logEndpoint } from "@project-chip/matter-node.js/device";
-import { Time } from "@project-chip/matter-node.js/time";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
+import { logEndpoint } from "@project-chip/matter.js/device";
 import { HumiditySensorDevice } from "@project-chip/matter.js/devices/HumiditySensorDevice";
 import { TemperatureSensorDevice } from "@project-chip/matter.js/devices/TemperatureSensorDevice";
 import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { ServerNode } from "@project-chip/matter.js/node";
+import { Time } from "@project-chip/matter.js/time";
 import { execSync } from "child_process";
 
 requireMinNodeVersion(16);

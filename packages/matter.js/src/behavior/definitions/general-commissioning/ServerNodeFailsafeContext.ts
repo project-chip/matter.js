@@ -10,19 +10,25 @@ import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { Node } from "../../../node/Node.js";
 import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
-import { OperationalCredentialsBehavior } from "../operational-credentials/OperationalCredentialsBehavior.js";
 
 /**
  * {@link FailsafeContext} for {@link Node} API.
  */
 export class ServerNodeFailsafeContext extends FailsafeContext {
     #node: Node;
-    #operationalCredentialsRestored = false;
     #storedState?: {
         networks: Map<Endpoint, NetworkCommissioningBehavior.State["networks"]>;
+        /*
+
+        When Fabrics are no longer managed centrally in FabricManager we need this. Maybe we change to this later,
+        but now it is just here for reference because these changes are realized by events that are triggered by Fabric
+        object changes. See also other commented out sections in this class.
+
         nocs: OperationalCredentialsBehavior.State["nocs"];
         fabrics: OperationalCredentialsBehavior.State["fabrics"];
         trustedRootCertificates: OperationalCredentialsBehavior.State["trustedRootCertificates"];
+
+         */
     };
 
     constructor(node: Node, options: FailsafeContext.Options) {
@@ -48,12 +54,14 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
      * TODO - it's recommended to reset all state if commissioning bails; currently we perform mandatory restore
      */
     override async storeEndpointState() {
-        const opcreds = this.#node.state.operationalCredentials;
+        // const opcreds = this.#node.state.operationalCredentials;
         this.#storedState = {
+            networks: new Map(),
+            /*
             nocs: opcreds.nocs.map(noc => ({ ...noc })),
             fabrics: opcreds.fabrics.map(fabric => ({ ...fabric })),
             trustedRootCertificates: [...opcreds.trustedRootCertificates],
-            networks: new Map(),
+             */
         };
 
         if (!this.#node.behaviors.has(NetworkCommissioningBehavior)) {
@@ -65,10 +73,6 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
                 this.#storedState?.networks.set(endpoint, endpoint.stateOf(NetworkCommissioningBehavior).networks);
             }
         });
-    }
-
-    override async restoreFabric() {
-        await this.#restoreOperationalCredentials();
     }
 
     override async restoreNetworkState() {
@@ -91,13 +95,19 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
 
         await fabric.remove();
 
-        await this.#restoreOperationalCredentials();
+        // await this.#restoreOperationalCredentials();
     }
 
     override async restoreBreadcrumb() {
         await this.#node.act(agent => {
             agent.generalCommissioning.state.breadcrumb = 0;
         });
+    }
+
+    /*
+    override async restoreFabric() {
+        await super.restoreFabric();
+        await this.#restoreOperationalCredentials();
     }
 
     async #restoreOperationalCredentials() {
@@ -118,4 +128,5 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
 
         this.#operationalCredentialsRestored = true;
     }
+    */
 }

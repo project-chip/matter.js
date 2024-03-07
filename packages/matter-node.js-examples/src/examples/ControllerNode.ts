@@ -16,30 +16,29 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter-node.js";
+// Include this first to auto-register Crypto, Network and Time Node.js implementations
+import "@project-chip/matter-node.js";
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import { Ble } from "@project-chip/matter-node.js/ble";
+import { StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { getIntParameter, getParameter, hasParameter, requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
+import { Ble } from "@project-chip/matter.js/ble";
 import {
     BasicInformationCluster,
     DescriptorCluster,
     GeneralCommissioning,
     OnOffCluster,
-} from "@project-chip/matter-node.js/cluster";
-import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { NodeStateInformation } from "@project-chip/matter-node.js/device";
-import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
-import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
-import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
-import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
-import {
-    getIntParameter,
-    getParameter,
-    hasParameter,
-    requireMinNodeVersion,
-    singleton,
-} from "@project-chip/matter-node.js/util";
+} from "@project-chip/matter.js/cluster";
+import { NodeId } from "@project-chip/matter.js/datatype";
+import { NodeStateInformation } from "@project-chip/matter.js/device";
 import { Environment } from "@project-chip/matter.js/environment";
+import { Format, Level, Logger } from "@project-chip/matter.js/log";
+import { CommissioningOptions } from "@project-chip/matter.js/protocol";
+import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
+import { StorageManager } from "@project-chip/matter.js/storage";
+import { Time } from "@project-chip/matter.js/time";
+import { singleton } from "@project-chip/matter.js/util";
 
 const logger = Logger.get("Controller");
 
@@ -117,6 +116,10 @@ class ControllerNode {
         const controllerStorage = storageManager.createContext("Controller");
         const ip = controllerStorage.has("ip") ? controllerStorage.get<string>("ip") : getParameter("ip");
         const port = controllerStorage.has("port") ? controllerStorage.get<number>("port") : getIntParameter("port");
+        const uniqueId = controllerStorage.has("uniqueid")
+            ? controllerStorage.get<string>("uniqueid")
+            : getParameter("uniqueid") ?? Time.nowMs().toString();
+        controllerStorage.set("uniqueid", uniqueId);
 
         const pairingCode = getParameter("pairingcode");
         let longDiscriminator, setupPin, shortDiscriminator;
@@ -182,7 +185,10 @@ class ControllerNode {
 
         const environment = Environment.default;
         const commissioningController = new CommissioningController({
-            environment,
+            environment: {
+                environment,
+                id: uniqueId,
+            },
             autoConnect: false,
         });
 

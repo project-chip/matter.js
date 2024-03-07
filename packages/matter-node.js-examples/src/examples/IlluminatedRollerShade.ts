@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Include this first to auto-register Crypto, Network and Time Node.js implementations
 import "@project-chip/matter-node.js";
+
 import { GoToLiftPercentageRequest, WindowCoveringServer } from "@project-chip/matter.js/behaviors/window-covering";
 import { OnOffLightDevice, OnOffLightRequirements } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { WindowCoveringDevice } from "@project-chip/matter.js/devices/WindowCoveringDevice";

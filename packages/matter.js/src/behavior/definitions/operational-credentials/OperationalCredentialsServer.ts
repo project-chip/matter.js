@@ -268,13 +268,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         // update FabricManager and Resumption records but leave current session intact
         timedOp.updateFabric(updateFabric);
 
-        const nocIndex = this.state.nocs.findIndex(n => n.fabricIndex === updateFabric.fabricIndex);
-        if (nocIndex === -1) {
-            throw new MatterFlowError(
-                `FabricIndex ${updateFabric.fabricIndex} not found in state. This should not happen.`,
-            );
-        }
-
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
             fabricIndex: updateFabric.fabricIndex,

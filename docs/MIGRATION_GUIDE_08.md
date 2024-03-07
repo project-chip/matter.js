@@ -363,20 +363,10 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 The devices itself and functionality are at least equal - if not better with the new API because we also did some fixes that were not in the 7.7.x versions.
 But most important is that the storage structure has changed between legacy and New API - this means that data are stored in a different way and so a device commissioned with the Legacy API will not work with the new API. You need to delete and recommission the device when migrating!
 
-## Changelog 0.8 (WIP)
--   The new Environment concept allows (for node.js) the handling of CLI parameters in parallel to (new) Environment variables and config file to pass in configurations
--   Introducing new High Level Device building API with full support for all Matter 1.1 device types
--   Add Transactionality ... Rollback on Exception
--   Add a specification fix for Network Commissioning Cluster
--   Change BLE library (Bleno/Noble) to a more maintained one
-
 ## TOPICS/DISCUSSIONS/TODOs:
--   (A) Missing: Adjust Commissioning Callbacks - Ingo
--   (A) Make CommissioningController Environment aware - Ingo
 -   (A) Make matter.js peerDep? - Ingo
 -   (B) Missing: multiple nodes duplicate port check missing
 -   (B) Have BLE package register itself when included - Greg
 -   Discussion: async store?
--   Discussion: GHA tests runs? adjust for branch or start PR?
 -   Later: Generator options for custom clusters into own projects
 -   Later: Collect and Expose Code coverage, ideally including chip tests

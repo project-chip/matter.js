@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterId, VendorId } from "@project-chip/matter-node.js/datatype";
 import { ClusterBehavior } from "@project-chip/matter.js/behavior/cluster";
 import {
     Attribute,
@@ -14,6 +13,7 @@ import {
     EventPriority,
     MutableCluster,
 } from "@project-chip/matter.js/cluster";
+import { ClusterId, VendorId } from "@project-chip/matter.js/datatype";
 import {
     AttributeElement,
     ClusterElement,

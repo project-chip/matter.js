@@ -70,9 +70,11 @@ export class FabricManager {
         }
         this.#fabrics.set(fabricIndex, fabric);
         fabric.addRemoveCallback(() => this.removeFabric(fabricIndex));
-        fabric.setPersistCallback(() => {
+        fabric.setPersistCallback((isUpdate = true) => {
             this.persistFabrics();
-            this.#events.updated.emit(fabric); // Assume Fabric got updated when persist callback is called
+            if (isUpdate) {
+                this.#events.updated.emit(fabric); // Assume Fabric got updated when persist callback is called
+            }
         });
         if (this.#initializationDone) {
             this.#events.added.emit(fabric);

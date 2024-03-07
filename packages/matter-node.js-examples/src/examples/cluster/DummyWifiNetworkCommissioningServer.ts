@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetworkCommissioning } from "@project-chip/matter-node.js/cluster";
-import { ByteArray } from "@project-chip/matter-node.js/util";
 import { GeneralCommissioningBehavior } from "@project-chip/matter.js/behavior/definitions/general-commissioning";
 import {
     AddOrUpdateWiFiNetworkRequest,
@@ -15,6 +13,8 @@ import {
     ReorderNetworkRequest,
     ScanNetworksRequest,
 } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
+import { NetworkCommissioning } from "@project-chip/matter.js/cluster";
+import { ByteArray } from "@project-chip/matter.js/util";
 
 const firstNetworkId = new ByteArray(32);
 
