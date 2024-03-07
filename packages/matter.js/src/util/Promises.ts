@@ -215,6 +215,23 @@ export const MaybePromise = {
             if (MaybePromise.is(result)) {
                 // Use native finally or fake via then
                 if (typeof (result as Promise<any>).finally === "function") {
+                    // TypeScript's types are wrong for finally, they specify the callback as () => void rather than
+                    // accepting a promise return.  TS itself somehow doesn't mind this because a function returning
+                    // something can be assigned to a promise returning void.
+                    //
+                    // The TS folks rationalize this here:
+                    //
+                    //      https://github.com/microsoft/TypeScript/issues/44980
+                    //
+                    // Eslint used to work around this sometimes (was never sure when or whether it was intentional) but
+                    // something broke when we updated typescript-eslint to 7.1.1.
+                    //
+                    // The eslint folks blow this off here.  Includes a comment referencing a TS playground that
+                    // demonstrates eslint behavior is incorrect:
+                    //
+                    //      https://github.com/typescript-eslint/typescript-eslint/issues/7276
+                    //
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     result = (result as Promise<T>).finally(onfinally);
                 } else {
                     result = result.then(
