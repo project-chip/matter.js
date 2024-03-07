@@ -30,9 +30,11 @@
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.8.0-alpha.0",
-        "@project-chip/matter.js": "0.8.0-alpha.0",
         "ts-node": "^10.9.2",
         "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "@project-chip/matter.js": "0.8.0-alpha.0"
     },
     "optionalDependencies": {
         "@stoprocent/bleno": "^0.7.6",

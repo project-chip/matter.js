@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { IdentifyCluster } from "@project-chip/matter-node.js/cluster";
+import { IdentifyCluster } from "@project-chip/matter.js/cluster";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode.js";
 

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterError } from "@project-chip/matter-node.js/common";
-import { commandlineParser } from "@project-chip/matter-node.js/util";
+import { MatterError } from "@project-chip/matter.js/common";
+import { commandlineParser } from "@project-chip/matter.js/util";
 import readline from "readline";
 import type { Argv } from "yargs";
 import yargs from "yargs/yargs";
