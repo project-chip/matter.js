@@ -248,6 +248,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
             // TODO - bring across fixes from synchronous version of this code
             for (const { path, attribute } of attributes) {
+                const { nodeId, endpointId, clusterId } = path;
+
                 const { value, version } = await tryCatchAsync(
                     async () => this.readAttribute(attribute, exchange.session, isFabricFiltered, message),
                     NoAssociatedFabricError,
@@ -270,7 +272,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         };
                     },
                 );
-                const { nodeId, endpointId, clusterId } = path;
 
                 const versionFilterValue =
                     endpointId !== undefined && clusterId !== undefined
