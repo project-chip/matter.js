@@ -189,22 +189,16 @@ export const OperationalCredentialsClusterHandler: (
 
     fabricsAttributeGetter: ({ session, isFabricFiltered }) => {
         if (session === undefined || !session.isSecure) return []; // ???
-        return tryCatch(
-            () => {
-                const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
+        const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
 
-                return fabrics.map(fabric => ({
-                    fabricId: fabric.fabricId,
-                    label: fabric.label,
-                    nodeId: fabric.nodeId,
-                    rootPublicKey: fabric.rootPublicKey,
-                    vendorId: fabric.rootVendorId,
-                    fabricIndex: fabric.fabricIndex,
-                }));
-            },
-            NoAssociatedFabricError,
-            [],
-        );
+        return fabrics.map(fabric => ({
+            fabricId: fabric.fabricId,
+            label: fabric.label,
+            nodeId: fabric.nodeId,
+            rootPublicKey: fabric.rootPublicKey,
+            vendorId: fabric.rootVendorId,
+            fabricIndex: fabric.fabricIndex,
+        }));
     },
 
     // Needed because FabricScopedAttributeServer clas requires both getter and setter if custom
@@ -214,18 +208,12 @@ export const OperationalCredentialsClusterHandler: (
 
     nocsAttributeGetter: ({ session, isFabricFiltered }) => {
         if (session === undefined || !session.isSecure) return []; // ???
-        return tryCatch(
-            () => {
-                const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
-                return fabrics.map(fabric => ({
-                    noc: fabric.operationalCert,
-                    icac: fabric.intermediateCACert ?? null,
-                    fabricIndex: fabric.fabricIndex,
-                }));
-            },
-            NoAssociatedFabricError,
-            [],
-        );
+        const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
+        return fabrics.map(fabric => ({
+            noc: fabric.operationalCert,
+            icac: fabric.intermediateCACert ?? null,
+            fabricIndex: fabric.fabricIndex,
+        }));
     },
 
     // Needed because FabricScopedAttributeServer clas requires both getter and setter if custom
@@ -240,14 +228,8 @@ export const OperationalCredentialsClusterHandler: (
 
     trustedRootCertificatesAttributeGetter: ({ session, isFabricFiltered }) => {
         if (session === undefined || !session.isSecure) return []; // ???
-        return tryCatch(
-            () => {
-                const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
-                return fabrics.map(fabric => fabric.rootCert);
-            },
-            NoAssociatedFabricError,
-            [],
-        );
+        const fabrics = isFabricFiltered ? [session.associatedFabric] : session.context.getFabrics();
+        return fabrics.map(fabric => fabric.rootCert);
     },
 
     currentFabricIndexAttributeGetter: ({ session }) => {

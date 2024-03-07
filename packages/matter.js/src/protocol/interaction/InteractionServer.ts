@@ -14,7 +14,7 @@ import {
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { InternalError } from "../../common/MatterError.js";
+import { InternalError, MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
 import { Crypto } from "../../crypto/Crypto.js";
@@ -28,7 +28,7 @@ import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
-import { SecureSession, assertSecureSession } from "../../session/SecureSession.js";
+import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -248,11 +248,27 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
             // TODO - bring across fixes from synchronous version of this code
             for (const { path, attribute } of attributes) {
-                const { value, version } = await this.readAttribute(
-                    attribute,
-                    exchange.session,
-                    isFabricFiltered,
-                    message,
+                const { value, version } = await tryCatchAsync(
+                    async () => this.readAttribute(attribute, exchange.session, isFabricFiltered, message),
+                    NoAssociatedFabricError,
+                    async () => {
+                        // TODO: Remove when we remove legacy API
+                        //  This is not fully correct but should be sufficient for now
+                        //  This is fixed in the new API already, so this error should never throw
+                        //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
+                        //  Assume for now that in this place we only need to handle fabric sensitive case
+                        if (endpointId === undefined || clusterId === undefined) {
+                            throw new MatterFlowError("Should never happen");
+                        }
+                        const cluster = this.#endpointStructure.getClusterServer(endpointId, clusterId);
+                        if (cluster === undefined || cluster.datasource == undefined) {
+                            throw new MatterFlowError("Should never happen");
+                        }
+                        return {
+                            version: cluster.datasource.version,
+                            value: [],
+                        };
+                    },
                 );
                 const { nodeId, endpointId, clusterId } = path;
 
