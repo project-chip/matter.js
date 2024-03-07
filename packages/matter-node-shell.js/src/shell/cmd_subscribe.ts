@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter-node.js/log";
+import { Logger } from "@project-chip/matter.js/log";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode.js";
 

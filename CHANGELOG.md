@@ -10,8 +10,8 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 ## __WORK IN PROGRESS__
-* IMPORTANT - Packaging change!
-  * ... peer deps
+* IMPORTANT
+  * make sure to have matter.js and also matter-node.js in your deps with same version
   * Changed BLE library (Bleno/Noble) to a more maintained one
   * TBD
 * Matter-Core functionality:

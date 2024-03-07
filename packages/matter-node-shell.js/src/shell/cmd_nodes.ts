@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter-node.js/device";
-import { Logger } from "@project-chip/matter-node.js/log";
+import { NodeId } from "@project-chip/matter.js/datatype";
+import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
+import { Logger } from "@project-chip/matter.js/log";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 

@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterId } from "@project-chip/matter-node.js/datatype";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { ClusterModel, CommandModel, MatterModel } from "@project-chip/matter-node.js/model";
+import { ValidationError } from "@project-chip/matter.js/common";
+import { ClusterId } from "@project-chip/matter.js/datatype";
+import { Logger } from "@project-chip/matter.js/log";
+import { ClusterModel, CommandModel, MatterModel } from "@project-chip/matter.js/model";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
-
-import { ValidationError } from "@project-chip/matter-node.js/common";
 import { convertJsonDataWithModel } from "../util/Json";
 import { camelize } from "../util/String";
 
