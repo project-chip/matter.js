@@ -438,7 +438,7 @@ class BuilderBlock extends NestedBlock {
 
     override serialize(linePrefix = "") {
         const first = this.entries[0]?.toString(linePrefix);
-        if (!first === undefined) {
+        if (first === undefined) {
             return "";
         }
         if (this.entries.length === 1) {

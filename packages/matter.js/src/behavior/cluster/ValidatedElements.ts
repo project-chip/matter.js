@@ -123,11 +123,6 @@ export class ValidatedElements {
             return;
         }
 
-        if (!defaults) {
-            this.error("State", "Implementation missing", true);
-            return;
-        }
-
         for (const name in attributes) {
             const attr = attributes[name];
             if (!attr) {

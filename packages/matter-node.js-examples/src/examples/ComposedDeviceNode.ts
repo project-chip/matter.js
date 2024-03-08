@@ -85,7 +85,7 @@ const server = await ServerNode.create({
  * to see how to customize the command handlers.
  */
 
-for (let idx = 0; idx <= isSocket.length; idx++) {
+for (let idx = 0; idx < isSocket.length; idx++) {
     const i = idx + 1;
     const isASocket = isSocket[idx]; // Is the Device we add a Socket or a Light?
     const endpoint = new Endpoint(isASocket ? OnOffPlugInUnitDevice : OnOffLightDevice, { id: `onoff-${i}` });

@@ -30,7 +30,7 @@ export function introspectionInstanceOf(type: Behavior.Type) {
 export function createType<const C extends ClusterType>(cluster: C, base: Behavior.Type, schema?: Schema) {
     const namesUsed = new Set<string>();
 
-    if (!schema) {
+    if (schema === undefined) {
         if (base.schema) {
             schema = base.schema;
         }
@@ -39,9 +39,7 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
         }
     }
 
-    if (schema) {
-        schema = syncFeatures(schema, cluster);
-    }
+    schema = syncFeatures(schema, cluster);
 
     return GeneratedClass({
         name: `${cluster.name}Behavior`,
