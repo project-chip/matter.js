@@ -296,9 +296,7 @@ export class Behaviors {
             }
         };
 
-        await OfflineContext.act("dispose-behaviors", this.#endpoint.env.get(NodeActivity), dispose, {
-            unversionedVolatiles: true,
-        });
+        await OfflineContext.act("dispose-behaviors", this.#endpoint.env.get(NodeActivity), dispose);
     }
 
     /**
@@ -398,13 +396,8 @@ export class Behaviors {
     }
 
     #activateLate(type: Behavior.Type) {
-        const result = OfflineContext.act(
-            "behavior-late-activation",
-            this.#endpoint.env.get(NodeActivity),
-            context => this.activate(type, context.agentFor(this.#endpoint)),
-            {
-                unversionedVolatiles: true,
-            },
+        const result = OfflineContext.act("behavior-late-activation", this.#endpoint.env.get(NodeActivity), context =>
+            this.activate(type, context.agentFor(this.#endpoint)),
         );
 
         if (MaybePromise.is(result)) {

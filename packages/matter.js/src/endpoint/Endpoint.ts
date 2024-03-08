@@ -634,7 +634,6 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         }
 
         const result = OfflineContext.act("initialize", this.#activity, initializeEndpoint, {
-            unversionedVolatiles: true,
             trace,
         });
 

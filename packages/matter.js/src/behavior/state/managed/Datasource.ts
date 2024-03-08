@@ -18,12 +18,9 @@ import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { StateType } from "../StateType.js";
 import type { Val } from "../Val.js";
-import { SynchronousTransactionConflictError } from "../transaction/Errors.js";
 import { Resource } from "../transaction/Resource.js";
 import { Transaction } from "../transaction/Transaction.js";
 import { ReadOnlyTransaction } from "../transaction/Tx.js";
-
-const VERSION_KEY = "__version__";
 
 const logger = Logger.get("Datasource");
 
@@ -141,12 +138,6 @@ export namespace Datasource {
         defaults?: Val.Struct;
 
         /**
-         * Enable versioning of data.  When enabled the Datasource maintains a version that increments for every state
-         * change.
-         */
-        versioning?: boolean;
-
-        /**
          * Optional storage for non-volatile values.
          */
         store?: Store;
@@ -190,7 +181,6 @@ interface Internals extends Datasource.Options {
     path: DataModelPath;
     values: Val.Struct;
     version: number;
-    persistedVersion?: number;
     changed?: Observable<[oldValues: Val.Struct]>;
 }
 
@@ -210,32 +200,13 @@ function configure(options: Datasource.Options): Internals {
         ...options.store?.initialValues,
     };
 
-    let version: number | undefined;
-    let persistedVersion: number | undefined;
-
     for (const key in initialValues) {
-        if (key === VERSION_KEY) {
-            if (options.versioning) {
-                version = persistedVersion = initialValues[key] as number;
-            }
-        } else {
-            values[key] = initialValues[key];
-        }
-    }
-
-    if (version === undefined) {
-        if (options.versioning) {
-            version = Crypto.getRandomUInt32();
-        } else {
-            // We still track version, it just doesn't persist or adhere to Matter rules
-            version = 1;
-        }
+        values[key] = initialValues[key];
     }
 
     return {
         ...options,
-        version,
-        persistedVersion,
+        version: Crypto.getRandomUInt32(),
         values: values,
     };
 }
@@ -304,26 +275,6 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
     const fields = internals.supervisor.memberNames;
     const persistentFields = internals.supervisor.persistentNames;
-
-    // If the version number is dirty, immediately join the transaction.  But we don't want this to prevent generation
-    // of the reference so just log a warning if the resource cannot be locked
-    if (
-        session.transaction !== Transaction.ReadOnly &&
-        internals.versioning &&
-        internals.version !== internals.persistedVersion
-    ) {
-        try {
-            startWrite();
-        } catch (e) {
-            if (e instanceof SynchronousTransactionConflictError) {
-                logger.warn(
-                    `Datasource ${internals.path} lock unavailable for persisting version number, will retry on next write`,
-                );
-            } else {
-                throw e;
-            }
-        }
-    }
 
     // This is the actual reference
     const reference: Val.Reference<Val.Struct> = {
@@ -432,10 +383,6 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     function computeChanges() {
         changes = undefined;
 
-        if (internals.versioning && internals.persistedVersion !== internals.version) {
-            changes = { notifications: [], persistent: { [VERSION_KEY]: internals.version } };
-        }
-
         if (internals.values === values) {
             return changes;
         }
@@ -466,17 +413,9 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         }
 
         // Increment version if necessary
-        if (changes && (!session.unversionedVolatiles || changes.persistent)) {
+        if (changes) {
             // We don't revert the version number on rollback.  Should be OK
             incrementVersion();
-
-            if (internals.versioning) {
-                if (changes.persistent === undefined) {
-                    changes.persistent = {};
-                }
-
-                changes.persistent[VERSION_KEY] = internals.version;
-            }
         }
     }
 
@@ -499,12 +438,6 @@ function createRootReference(resource: Resource, internals: Internals, session: 
      * For commit phase two we make the working values canonical and notify listeners.
      */
     function commit2() {
-        const persistedVersion = changes?.persistent?.[VERSION_KEY] as number | undefined;
-        if (persistedVersion !== undefined) {
-            internals.persistedVersion = persistedVersion;
-            delete values[VERSION_KEY];
-        }
-
         if (!changes) {
             return;
         }
