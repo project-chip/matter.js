@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,16 +11,16 @@ import {
     AccessControlCluster,
     AccessLevel,
     AdministratorCommissioning,
+    Attributes,
     BasicInformation,
     BasicInformationCluster,
     ClusterServer,
-    ClusterServerObjForCluster,
-    GeneralCommissioning,
+    ClusterServerObj,
+    Events,
     OnOffCluster,
     WritableAttribute,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
-import { ValidationError } from "@project-chip/matter.js/common";
 import {
     AttributeId,
     ClusterId,
@@ -39,7 +39,9 @@ import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/mat
 import { Fabric } from "@project-chip/matter.js/fabric";
 import {
     DataReportPayload,
+    EventHandler,
     INTERACTION_MODEL_REVISION,
+    InteractionEndpointStructure,
     InteractionServer,
     InteractionServerMessenger,
     InvokeRequest,
@@ -448,13 +450,13 @@ const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
     ],
 };
 
-const MASS_WRITE_REQUEST: WriteRequest = {
+const ILLEGAL_MASS_WRITE_REQUEST: WriteRequest = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     writeRequests: [
         {
-            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) },
+            path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         },
@@ -464,7 +466,21 @@ const MASS_WRITE_REQUEST: WriteRequest = {
             dataVersion: 0,
         },
         {
-            path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28) },
+            path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
+            data: TlvString.encodeTlv("test"),
+            dataVersion: 0,
+        },
+    ],
+    moreChunkedMessages: false,
+};
+
+const MASS_WRITE_REQUEST: WriteRequest = {
+    interactionModelRevision: INTERACTION_MODEL_REVISION,
+    suppressResponse: false,
+    timedRequest: false,
+    writeRequests: [
+        {
+            path: { clusterId: ClusterId(0x28), attributeId: AttributeId(0x5) },
             data: TlvString.encodeTlv("test"),
             dataVersion: 0,
         },
@@ -477,14 +493,6 @@ const MASS_WRITE_RESPONSE: WriteResponse = {
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { clusterStatus: undefined, status: 0 },
-        },
-        {
-            path: { attributeId: AttributeId(6), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
-            status: { clusterStatus: undefined, status: 0 },
-        },
-        {
-            path: { attributeId: AttributeId(16), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
             status: { clusterStatus: undefined, status: 0 },
         },
     ],
@@ -675,33 +683,6 @@ const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
     ],
 };
 
-const INVOKE_COMMAND_REQUEST_VALIDATION_ERROR: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
-    timedRequest: false,
-    invokeRequests: [
-        {
-            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(2) },
-        },
-    ],
-};
-
-const INVOKE_COMMAND_REQUEST_VALIDATION_ERROR_DATA: InvokeRequest = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
-    timedRequest: false,
-    invokeRequests: [
-        {
-            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x30), commandId: CommandId(0x2) },
-            commandFields: GeneralCommissioning.TlvSetRegulatoryConfigRequest.encodeTlv({
-                newRegulatoryConfig: 1,
-                countryCode: "XXX",
-                breadcrumb: 0,
-            }),
-        },
-    ],
-};
-
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
@@ -723,32 +704,6 @@ const INVOKE_COMMAND_RESPONSE_BUSY: InvokeResponse = {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
                 status: { clusterStatus: undefined, status: 0x9c },
-            },
-        },
-    ],
-};
-
-const INVOKE_COMMAND_RESPONSE_VALIDATION_ERROR: InvokeResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
-    invokeResponses: [
-        {
-            status: {
-                commandPath: { clusterId: ClusterId(6), commandId: CommandId(2), endpointId: EndpointNumber(0) },
-                status: { status: 0x87, clusterStatus: undefined },
-            },
-        },
-    ],
-};
-
-const INVOKE_COMMAND_RESPONSE_VALIDATION_ERROR_DATA: InvokeResponse = {
-    interactionModelRevision: INTERACTION_MODEL_REVISION,
-    suppressResponse: false,
-    invokeResponses: [
-        {
-            status: {
-                commandPath: { clusterId: ClusterId(0x30), commandId: CommandId(0x2), endpointId: EndpointNumber(0) },
-                status: { status: 0x87, clusterStatus: undefined },
             },
         },
     ],
@@ -865,11 +820,9 @@ async function getDummyMessageExchange(
 }
 
 describe("InteractionProtocol", () => {
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     let realGetRandomData = Crypto.get().getRandomData;
 
     before(() => {
-        // eslint-disable-next-line @typescript-eslint/unbound-method
         realGetRandomData = Crypto.get().getRandomData;
         Crypto.get().getRandomData = (length: number) => {
             return new Uint8Array(length);
@@ -881,173 +834,47 @@ describe("InteractionProtocol", () => {
         Crypto.get().getRandomData = realGetRandomData;
     });
 
-    describe("handleReadRequest", () => {
-        let storageManager: StorageManager;
-        let storageContext: StorageContext;
-        let endpoint: Endpoint;
-        let interactionProtocol: InteractionServer;
-        const basicInfoClusterServer = () =>
-            ClusterServer(
-                BasicInformationCluster,
-                {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 100,
-                        subscriptionsPerFabric: 100,
-                    },
+    let storageManager: StorageManager;
+    let storageContext: StorageContext;
+    let endpoint: Endpoint;
+    let endpointStructure: InteractionEndpointStructure;
+    let interactionProtocol: InteractionServer;
+    let eventHandler: EventHandler;
+    let basicInfoClusterServer: ClusterServerObj<
+        BasicInformationCluster["attributes"],
+        BasicInformationCluster["events"]
+    >;
+
+    function withClusters<A extends Attributes, E extends Events, A2 extends Attributes, E2 extends Events>(
+        cluster?: ClusterServerObj<A, E>,
+        cluster2?: ClusterServerObj<A2, E2>,
+    ) {
+        function addClusterServer(cluster: ClusterServerObj<any, any>) {
+            endpoint.addClusterServer(cluster);
+            let version = 0;
+            cluster.datasource = {
+                get version() {
+                    return version;
                 },
-                {},
-                {
-                    startUp: true,
+
+                get eventHandler() {
+                    return eventHandler;
                 },
-            );
 
-        beforeEach(async () => {
-            storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            storageContext = storageManager.createContext("test");
-            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            interactionProtocol = new InteractionServer(storageContext);
-        });
-
-        it("replies with attribute values", async () => {
-            const basicInfoServer = basicInfoClusterServer();
-
-            endpoint.addClusterServer(basicInfoServer);
-            interactionProtocol.setRootEndpoint(endpoint);
-
-            basicInfoServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoServer.triggerStartUpEvent({ softwareVersion: 2 });
-
-            const result = interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST);
-
-            assert.deepEqual(result, READ_RESPONSE);
-        });
-
-        it("replies with attribute values using (unused) version filter", async () => {
-            const basicInfoServer = basicInfoClusterServer();
-
-            endpoint.addClusterServer(basicInfoServer);
-            interactionProtocol.setRootEndpoint(endpoint);
-
-            basicInfoServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoServer.triggerStartUpEvent({ softwareVersion: 2 });
-
-            const result = interactionProtocol.handleReadRequest(
-                await getDummyMessageExchange(),
-                READ_REQUEST_WITH_UNUSED_FILTER,
-            );
-
-            assert.deepEqual(result, READ_RESPONSE);
-        });
-
-        it("replies with attribute values with active version filter", async () => {
-            const basicInfoServer = basicInfoClusterServer();
-
-            endpoint.addClusterServer(basicInfoServer);
-            interactionProtocol.setRootEndpoint(endpoint);
-
-            basicInfoServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoServer.triggerStartUpEvent({ softwareVersion: 2 });
-
-            const result = interactionProtocol.handleReadRequest(
-                await getDummyMessageExchange(),
-                READ_REQUEST_WITH_FILTER,
-            );
-
-            assert.deepEqual(result, READ_RESPONSE_WITH_FILTER);
-        });
-    });
-
-    describe("handleSubscribeRequest", () => {
-        let storageManager: StorageManager;
-        let storageContext: StorageContext;
-        let endpoint: Endpoint;
-        let interactionProtocol: InteractionServer;
-        const basicInfoClusterServer = () =>
-            ClusterServer(
-                BasicInformationCluster,
-                {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 100,
-                        subscriptionsPerFabric: 100,
-                    },
+                increaseVersion() {
+                    return ++version;
                 },
-                {},
-                {
-                    startUp: true,
-                },
-            );
 
-        beforeEach(async () => {
-            storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            storageContext = storageManager.createContext("test");
-            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            interactionProtocol = new InteractionServer(storageContext);
-        });
+                changed() {},
+            };
+        }
 
-        // Success case is tested in Integration test
-        it("errors when no path match the requested path's", async () => {
-            endpoint.addClusterServer(basicInfoClusterServer());
-            interactionProtocol.setRootEndpoint(endpoint);
-
-            let statusSent = -1;
-            let closed = false;
-            await interactionProtocol.handleSubscribeRequest(
-                await getDummyMessageExchange(),
-                INVALID_SUBSCRIBE_REQUEST,
-                {
-                    sendStatus: (code: StatusCode) => {
-                        statusSent = code;
-                    },
-
-                    close: async () => {
-                        closed = true;
-                    },
-                } as unknown as InteractionServerMessenger,
-            );
-            assert.equal(statusSent, 128);
-            assert.equal(closed, true);
-        });
-    });
-
-    describe("handleWriteRequest", () => {
-        let storageManager: StorageManager;
-        let storageContext: StorageContext;
-        let endpoint: Endpoint;
-        let interactionProtocol: InteractionServer;
-        let basicInfoClusterServer: ClusterServerObjForCluster<BasicInformationCluster>;
-
-        beforeEach(async () => {
-            storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            storageContext = storageManager.createContext("test");
-            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            interactionProtocol = new InteractionServer(storageContext);
+        if (cluster) {
+            addClusterServer(cluster as any);
+            if (cluster2) {
+                addClusterServer(cluster2 as any);
+            }
+        } else {
             basicInfoClusterServer = ClusterServer(
                 BasicInformationCluster,
                 {
@@ -1073,18 +900,111 @@ describe("InteractionProtocol", () => {
                     startUp: true,
                 },
             );
+            addClusterServer(basicInfoClusterServer as ClusterServerObj<any, any>);
+        }
+
+        endpointStructure.initializeFromEndpoint(endpoint);
+    }
+
+    beforeEach(async () => {
+        storageManager = new StorageManager(new StorageBackendMemory());
+        await storageManager.initialize();
+        storageContext = storageManager.createContext("test");
+        endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+        endpointStructure = new InteractionEndpointStructure();
+        interactionProtocol = new InteractionServer({
+            endpointStructure: endpointStructure,
+            eventHandler: (eventHandler = new EventHandler(storageContext.createContext("EventHandler"))),
+        });
+    });
+
+    describe("handleReadRequest", () => {
+        it("replies with attributes and events", async () => {
+            withClusters();
+
+            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
+            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+
+            const result = await interactionProtocol.handleReadRequest(
+                await getDummyMessageExchange(),
+                READ_REQUEST,
+                {} as Message,
+            );
+
+            assert.deepEqual(result, READ_RESPONSE);
         });
 
-        it("write values and return errors on invalid values", async () => {
-            endpoint.addClusterServer(basicInfoClusterServer);
-            interactionProtocol.setRootEndpoint(endpoint);
+        it("replies with attributes and events using (unused) version filter", async () => {
+            withClusters();
 
-            const result = interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), WRITE_REQUEST, {
-                packetHeader: { sessionType: SessionType.Unicast },
-            } as Message);
+            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
+            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+
+            const result = await interactionProtocol.handleReadRequest(
+                await getDummyMessageExchange(),
+                READ_REQUEST_WITH_UNUSED_FILTER,
+                {} as Message,
+            );
+
+            assert.deepEqual(result, READ_RESPONSE);
+        });
+
+        it("replies with attributes and events with active version filter", async () => {
+            withClusters();
+
+            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
+            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+
+            const result = await interactionProtocol.handleReadRequest(
+                await getDummyMessageExchange(),
+                READ_REQUEST_WITH_FILTER,
+                {} as Message,
+            );
+
+            assert.deepEqual(result, READ_RESPONSE_WITH_FILTER);
+        });
+    });
+
+    describe("handleSubscribeRequest", () => {
+        // Success case is tested in Integration test
+        it("errors when no path match the requested path's", async () => {
+            withClusters();
+
+            let statusSent = -1;
+            let closed = false;
+            await interactionProtocol.handleSubscribeRequest(
+                await getDummyMessageExchange(),
+                INVALID_SUBSCRIBE_REQUEST,
+                {
+                    sendStatus: code => {
+                        statusSent = code;
+                    },
+
+                    close: async () => {
+                        closed = true;
+                    },
+                } as InteractionServerMessenger,
+                {} as Message,
+            );
+            assert.equal(statusSent, 128);
+            assert.equal(closed, true);
+        });
+    });
+
+    describe("handleWriteRequest", () => {
+        it("write values and return errors on invalid values", async () => {
+            withClusters();
+
+            const result = await interactionProtocol.handleWriteRequest(
+                await getDummyMessageExchange(),
+                WRITE_REQUEST,
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
+            );
 
             assert.deepEqual(result, WRITE_RESPONSE);
-            assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
+            assert.equal(endpoint.getClusterServer(BasicInformationCluster)?.attributes.nodeLabel.getLocal(), "test");
         });
 
         it("write chunked array values with Fabric Index handling", async () => {
@@ -1104,10 +1024,9 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            endpoint.addClusterServer(accessControlCluster);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters(accessControlCluster);
 
-            const result = interactionProtocol.handleWriteRequest(
+            const result = await interactionProtocol.handleWriteRequest(
                 await getDummyMessageExchange(),
                 CHUNKED_ARRAY_WRITE_REQUEST,
                 { packetHeader: { sessionType: SessionType.Unicast } } as Message,
@@ -1139,33 +1058,47 @@ describe("InteractionProtocol", () => {
             ]);
         });
 
-        it("mass write values and only set the one allowed", async () => {
-            endpoint.addClusterServer(basicInfoClusterServer);
-            interactionProtocol.setRootEndpoint(endpoint);
+        it("rejects mass write with wildcard attribute", async () => {
+            withClusters();
 
-            const result = interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), MASS_WRITE_REQUEST, {
-                packetHeader: { sessionType: SessionType.Unicast },
-            } as Message);
+            await assert.rejects(
+                interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), ILLEGAL_MASS_WRITE_REQUEST, {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message),
+            );
+        });
 
-            assert.deepEqual(result, MASS_WRITE_RESPONSE);
-            assert.equal(basicInfoClusterServer.attributes.vendorName.getLocal(), "vendor");
-            assert.equal(basicInfoClusterServer.attributes.productName.getLocal(), "product");
+        it("performs mass write with wildcard endpoint", async () => {
+            withClusters();
+
+            const result = await interactionProtocol.handleWriteRequest(
+                await getDummyMessageExchange(),
+                MASS_WRITE_REQUEST,
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
+            );
+
+            expect(result).deep.equals(MASS_WRITE_RESPONSE);
             assert.equal(basicInfoClusterServer.attributes.location.getLocal(), "US");
             assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
         });
 
         it("write values and return errors on invalid values timed interaction mismatch request", async () => {
             let timedInteractionCleared = false;
-            endpoint.addClusterServer(basicInfoClusterServer);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters();
             const messageExchange = await getDummyMessageExchange(false, false, () => {
                 timedInteractionCleared = true;
             });
-            assert.throws(
-                () =>
-                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
-                        packetHeader: { sessionType: SessionType.Unicast },
-                    } as Message),
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleWriteRequest(
+                        messageExchange,
+                        { ...WRITE_REQUEST, timedRequest: true },
+                        {
+                            packetHeader: { sessionType: SessionType.Unicast },
+                        } as Message,
+                    ),
                 {
                     message:
                         "(201) timedRequest flag of write interaction (true) mismatch with expected timed interaction (false).",
@@ -1178,14 +1111,13 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values timed interaction mismatch timed expected", async () => {
             let timedInteractionCleared = false;
-            endpoint.addClusterServer(basicInfoClusterServer);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters();
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            assert.throws(
-                () =>
-                    interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, {
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, {
                         packetHeader: { sessionType: SessionType.Unicast },
                     } as Message),
                 {
@@ -1226,12 +1158,11 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            endpoint.addClusterServer(basicCluster);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters(basicCluster);
             const messageExchange = await getDummyMessageExchange(false, false, () => {
                 timedInteractionCleared = true;
             });
-            const result = interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST_TIMED_REQUIRED, {
+            const result = await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST_TIMED_REQUIRED, {
                 packetHeader: { sessionType: SessionType.Unicast },
             } as Message);
 
@@ -1268,12 +1199,11 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            endpoint.addClusterServer(basicCluster);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters(basicCluster);
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            const result = interactionProtocol.handleWriteRequest(
+            const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 { ...WRITE_REQUEST_TIMED_REQUIRED, timedRequest: true },
                 {
@@ -1288,16 +1218,19 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values timed interaction expired", async () => {
             let timedInteractionCleared = false;
-            endpoint.addClusterServer(basicInfoClusterServer);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters();
             const messageExchange = await getDummyMessageExchange(true, true, () => {
                 timedInteractionCleared = true;
             });
-            assert.throws(
-                () =>
-                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
-                        packetHeader: { sessionType: SessionType.Unicast },
-                    } as Message),
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleWriteRequest(
+                        messageExchange,
+                        { ...WRITE_REQUEST, timedRequest: true },
+                        {
+                            packetHeader: { sessionType: SessionType.Unicast },
+                        } as Message,
+                    ),
                 {
                     message: "(148) Timed request window expired. Decline write request.",
                 },
@@ -1309,16 +1242,19 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values timed interaction in group message", async () => {
             let timedInteractionCleared = false;
-            endpoint.addClusterServer(basicInfoClusterServer);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters();
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            assert.throws(
-                () =>
-                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
-                        packetHeader: { sessionType: SessionType.Group },
-                    } as Message),
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleWriteRequest(
+                        messageExchange,
+                        { ...WRITE_REQUEST, timedRequest: true },
+                        {
+                            packetHeader: { sessionType: SessionType.Group },
+                        } as Message,
+                    ),
                 {
                     message:
                         "(128) Write requests are only allowed on unicast sessions when a timed interaction is running.",
@@ -1331,12 +1267,11 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values in timed interaction", async () => {
             let timedInteractionCleared = false;
-            endpoint.addClusterServer(basicInfoClusterServer);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters();
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            const result = interactionProtocol.handleWriteRequest(
+            const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 { ...WRITE_REQUEST, timedRequest: true },
                 {
@@ -1353,10 +1288,6 @@ describe("InteractionProtocol", () => {
     describe("handleInvokeRequest", () => {
         let onOffState: boolean;
         let onOffCluster;
-        let storageManager: StorageManager;
-        let storageContext: StorageContext;
-        let endpoint: Endpoint;
-        let interactionProtocol: InteractionServer;
         let adminCommissioningCluster;
 
         beforeEach(async () => {
@@ -1391,14 +1322,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            storageManager = new StorageManager(new StorageBackendMemory());
-            await storageManager.initialize();
-            storageContext = storageManager.createContext("test");
-            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(onOffCluster);
-            endpoint.addClusterServer(adminCommissioningCluster);
-            interactionProtocol = new InteractionServer(storageContext);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters(onOffCluster, adminCommissioningCluster);
         });
 
         it("invoke command with empty args", async () => {
@@ -1434,70 +1358,6 @@ describe("InteractionProtocol", () => {
             assert.equal(onOffState, false);
         });
 
-        it("invoke command with thrown validation error", async () => {
-            const onOffCluster = ClusterServer(
-                OnOffCluster,
-                {
-                    onOff: onOffState,
-                },
-                {
-                    on: async () => {
-                        onOffState = true;
-                    },
-                    off: async () => {
-                        onOffState = false;
-                    },
-                    toggle: async () => {
-                        throw new ValidationError("test");
-                    },
-                },
-            );
-            endpoint.addClusterServer(onOffCluster);
-            interactionProtocol.setRootEndpoint(endpoint);
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(),
-                INVOKE_COMMAND_REQUEST_VALIDATION_ERROR,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
-            );
-
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_VALIDATION_ERROR);
-            assert.equal(onOffState, false);
-        });
-
-        it("invoke command with data validation error", async () => {
-            const generalCommissioningCluster = ClusterServer(
-                GeneralCommissioning.Cluster,
-                {
-                    breadcrumb: 0,
-                    basicCommissioningInfo: { failSafeExpiryLengthSeconds: 1, maxCumulativeFailsafeSeconds: 1 },
-                    regulatoryConfig: 1,
-                    locationCapability: 1,
-                    supportsConcurrentConnection: false,
-                },
-                {
-                    armFailSafe: async () => {
-                        throw new Error("should never be called");
-                    },
-                    setRegulatoryConfig: async () => {
-                        throw new Error("should never be called");
-                    },
-                    commissioningComplete: async () => {
-                        throw new Error("should never be called");
-                    },
-                },
-            );
-            endpoint.addClusterServer(generalCommissioningCluster);
-            interactionProtocol.setRootEndpoint(endpoint);
-            const result = await interactionProtocol.handleInvokeRequest(
-                await getDummyMessageExchange(),
-                INVOKE_COMMAND_REQUEST_VALIDATION_ERROR_DATA,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
-            );
-
-            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_VALIDATION_ERROR_DATA);
-            assert.equal(onOffState, false);
-        });
-
         it("multi invoke commands", async () => {
             onOffState = false;
             let triggeredOn = false;
@@ -1522,10 +1382,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(onOffCluster);
-            interactionProtocol = new InteractionServer(storageContext);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters(onOffCluster);
 
             const result = await interactionProtocol.handleInvokeRequest(
                 await getDummyMessageExchange(),
@@ -1554,10 +1411,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
-            endpoint.addClusterServer(onOffCluster);
-            interactionProtocol = new InteractionServer(storageContext);
-            interactionProtocol.setRootEndpoint(endpoint);
+            withClusters(onOffCluster);
 
             const result = await interactionProtocol.handleInvokeRequest(
                 await getDummyMessageExchange(),

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,7 +20,7 @@ import {
 import { Schema } from "./Schema.js";
 
 /** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */
-export enum CommissionningFlowType {
+export enum CommissioningFlowType {
     /** When not commissioned, the device always enters commissioning mode upon power-up. */
     Standard = 0,
 
@@ -49,7 +49,7 @@ const QrCodeDataSchema = ByteArrayBitmapSchema({
     version: BitField(0, 3),
     vendorId: BitField(3, 16),
     productId: BitField(19, 16),
-    flowType: BitFieldEnum<CommissionningFlowType>(35, 2),
+    flowType: BitFieldEnum<CommissioningFlowType>(35, 2),
     discoveryCapabilities: BitField(37, 8),
     discriminator: BitField(45, 12),
     passcode: BitField(57, 27),

@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
+import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import { NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as dgram from "dgram";
@@ -28,7 +28,7 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
             const { address: localHost, port: localPort } = socket.address();
             logger.debug(
                 "Socket created and bound ",
-                Logger.dict({
+                Diagnostic.dict({
                     remoteAddress: `${host}:${port}`,
                     localAddress: `${localHost}:${localPort}`,
                 }),
@@ -71,7 +71,7 @@ export class UdpChannelNode implements UdpChannel {
             }
             logger.debug(
                 "Initialize multicast",
-                Logger.dict({
+                Diagnostic.dict({
                     address: `${multicastInterface}:${listeningPort}`,
                     interface: netInterface,
                     type: type,
@@ -136,5 +136,9 @@ export class UdpChannelNode implements UdpChannel {
         } catch (error) {
             logger.debug("Error on closing socket", error);
         }
+    }
+
+    get port() {
+        return this.socket.address().port;
     }
 }

@@ -2,11 +2,12 @@
  * Utils for promises.
  *
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../common/MatterError.js";
+import { InternalError, MatterError } from "../common/MatterError.js";
+import { Time } from "../time/Time.js";
 
 /**
  * Obtain a promise with functions to resolve and reject.
@@ -23,8 +24,7 @@ export function createPromise<T>(): {
     });
 
     if (!resolver || !rejecter) {
-        // This doesn't happen but asserts that resolver and rejecter are
-        // defined.
+        // This doesn't happen but asserts that resolver and rejecter are defined.
         throw new InternalError("Failed to extract resolve/reject from Promise context");
     }
 
@@ -61,3 +61,208 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
         }
     });
 }
+
+/**
+ * Thrown when a timed promise times out.
+ */
+export class PromiseTimeoutError extends MatterError {
+    constructor(message = "Operation timed out") {
+        super(message);
+    }
+}
+
+/**
+ * Create a promise with a timeout.
+ *
+ * By default rejects with {@link PromiseTimeoutError} on timeout but you can override by supplying {@link cancel}.
+ *
+ * @param timeoutMs the timeout in milliseconds
+ * @param promise a promise that resolves or rejects when the timed task completes
+ * @param cancel invoked on timeout (default implementation throws {@link PromiseTimeoutError})
+ */
+export async function withTimeout<T>(timeoutMs: number, promise: Promise<T>, cancel?: () => void): Promise<T> {
+    if (!cancel) {
+        cancel = () => {
+            throw new PromiseTimeoutError();
+        };
+    }
+
+    let cancelTimer: undefined | (() => void);
+
+    // Sub-promise 1, the timer
+    const timeout = new Promise<void>((resolve, reject) => {
+        const timer = Time.getTimer("promise-timeout", timeoutMs, () => reject(cancel));
+
+        cancelTimer = () => {
+            timer.stop();
+            resolve();
+        };
+
+        timer.start();
+    });
+
+    let result: undefined | T;
+
+    // Sub-promise 2, captures result and cancels timer
+    const producer = promise.then(
+        r => {
+            cancelTimer?.();
+            result = r;
+        },
+        e => {
+            cancelTimer?.();
+            throw e;
+        },
+    );
+
+    // Output promise, resolves like input promise unless timed out
+    await Promise.all([timeout, producer]);
+
+    return result as T;
+}
+
+/**
+ * Return type for functions that are optionally asynchronous.
+ *
+ * TODO - as currently defined MaybePromise of a Promise incorrectly wraps as a Promise of a Promise
+ */
+export type MaybePromise<T = void> = T | PromiseLike<T>;
+
+/**
+ * Promise-like version of above.
+ */
+export type MaybePromiseLike<T = void> = T | PromiseLike<T>;
+
+export const MaybePromise = {
+    /**
+     * Determine whether a {@link MaybePromiseLike} is a {@link Promise}.
+     */
+    is<T>(value: MaybePromise<T>): value is PromiseLike<T> {
+        return typeof value === "object" && typeof (value as { then?: unknown }).then === "function";
+    },
+
+    /**
+     * Chained MaybePromise.  Invokes the resolve function immediately if the {@link MaybePromise} is not a
+     * {@link Promise}, otherwise the same as a normal {@link Promise.then}.
+     */
+    then<I, O1 = never, O2 = never>(
+        producer: MaybePromise<I> | (() => MaybePromise<I>),
+        resolve?: ((input: I) => MaybePromise<O1>) | null,
+        reject?: ((error: any) => MaybePromise<O2>) | null,
+    ): MaybePromise<O1 | O2> {
+        let rejected = false;
+
+        try {
+            let value;
+            if (producer instanceof Function) {
+                value = producer();
+            } else {
+                value = producer;
+            }
+            if (MaybePromise.is(value)) {
+                return value.then(
+                    resolve,
+                    reject
+                        ? error => {
+                              // If reject() is not async then we will catch rejection errors below but should not
+                              // reject again
+                              rejected = true;
+
+                              return reject?.(error);
+                          }
+                        : undefined,
+                );
+            }
+            if (resolve) {
+                return resolve(value);
+            }
+        } catch (e) {
+            if (reject && !rejected) {
+                return reject(e);
+            }
+            throw e;
+        }
+
+        // Make TypeScript happy
+        return undefined as MaybePromise<O1 | O2>;
+    },
+
+    /**
+     * Equivalent of {@link Promise.catch}.
+     */
+    catch<T, TResult = never>(
+        producer: MaybePromise<T> | (() => MaybePromise<T>),
+        onrejected?: ((reason: any) => MaybePromise<TResult>) | undefined | null,
+    ) {
+        return this.then(producer, undefined, onrejected);
+    },
+
+    /**
+     * Equivalent of {@link Promise.finally}.
+     */
+    finally<T>(
+        producer: MaybePromise<T> | (() => MaybePromise<T>),
+        onfinally?: (() => MaybePromise<void>) | undefined | null,
+    ): MaybePromise<T> {
+        let result: MaybePromise<T> | undefined;
+        try {
+            if (typeof producer === "function") {
+                result = (producer as () => MaybePromise<T>)();
+            } else {
+                result = producer;
+            }
+        } finally {
+            if (MaybePromise.is(result)) {
+                // Use native finally or fake via then
+                if (typeof (result as Promise<any>).finally === "function") {
+                    // TypeScript's types are wrong for finally, they specify the callback as () => void rather than
+                    // accepting a promise return.  TS itself somehow doesn't mind this because a function returning
+                    // something can be assigned to a promise returning void.
+                    //
+                    // The TS folks rationalize this here:
+                    //
+                    //      https://github.com/microsoft/TypeScript/issues/44980
+                    //
+                    // Eslint used to work around this sometimes (was never sure when or whether it was intentional) but
+                    // something broke when we updated typescript-eslint to 7.1.1.
+                    //
+                    // The eslint folks blow this off here.  Includes a comment referencing a TS playground that
+                    // demonstrates eslint behavior is incorrect:
+                    //
+                    //      https://github.com/typescript-eslint/typescript-eslint/issues/7276
+                    //
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    result = (result as Promise<T>).finally(onfinally);
+                } else {
+                    result = result.then(
+                        value =>
+                            MaybePromise.then(
+                                () => onfinally?.(),
+                                () => value,
+                            ),
+                        error =>
+                            MaybePromise.then(
+                                () => onfinally?.(),
+                                () => {
+                                    throw error;
+                                },
+                            ),
+                    );
+                }
+            } else {
+                // The only return value from onfinally that should affect results is a rejected promise, so if we
+                // receive a return value chain such that it either throws or we return the actual result
+                const finallyResult = onfinally?.();
+                if (MaybePromise.is(finallyResult)) {
+                    const actualResult = result as T;
+                    result = finallyResult.then(() => actualResult);
+                }
+            }
+        }
+        return result;
+    },
+
+    [Symbol.toStringTag]: "MaybePromise",
+};
+
+MaybePromise.toString = () => "MaybePromise";

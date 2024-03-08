@@ -1,25 +1,25 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Peripheral } from "@abandonware/noble";
 import { require } from "@project-chip/matter-node-ble.js/require";
 import { BLE_MATTER_SERVICE_UUID } from "@project-chip/matter.js/ble";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray } from "@project-chip/matter.js/util";
+import type { Peripheral } from "@stoprocent/noble";
 import { BleOptions } from "./BleNode.js";
 
 const logger = Logger.get("NobleBleClient");
-let noble: typeof import("@abandonware/noble");
+let noble: typeof import("@stoprocent/noble");
 
 function loadNoble(hciId?: number) {
     // load noble driver with the correct device selected
     if (hciId !== undefined) {
         process.env.NOBLE_HCI_DEVICE_ID = hciId.toString();
     }
-    noble = require("@abandonware/noble");
+    noble = require("@stoprocent/noble");
     if (typeof noble.on !== "function") {
         // The following commit broke the default exported instance of noble:
         // https://github.com/abandonware/noble/commit/b67eea246f719947fc45b1b52b856e61637a8a8e

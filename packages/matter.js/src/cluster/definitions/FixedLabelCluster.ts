@@ -1,18 +1,36 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { Label } from "../../cluster/definitions/LabelCluster.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace FixedLabel {
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
+        id: 0x40,
+        name: "FixedLabel",
+        revision: 1,
+
+        attributes: {
+            /**
+             * @see {@link MatterCoreSpecificationV1_1} § 9.8.4
+             */
+            labelList: Attribute(0x0, TlvArray(Label.TlvLabelStruct), { persistent: true, default: [] })
+        }
+    })
+
     /**
      * Fixed Label
      *
@@ -28,19 +46,13 @@ export namespace FixedLabel {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.8
      */
-    export const Cluster = ClusterFactory.Definition({
-        id: 0x40,
-        name: "FixedLabel",
-        revision: 1,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        attributes: {
-            /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.8.4
-             */
-            labelList: Attribute(0x0, TlvArray(Label.TlvLabelStruct), { persistent: true, default: [] })
-        }
-    })
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type FixedLabelCluster = typeof FixedLabel.Cluster;
+export type FixedLabelCluster = FixedLabel.Cluster;
 export const FixedLabelCluster = FixedLabel.Cluster;
+ClusterRegistry.register(FixedLabel.Complete);

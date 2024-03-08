@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -363,7 +363,7 @@ describe("BtpSessionHandler", () => {
 
             onHandleMatterMessageCallback = async (matterMessage: ByteArray) => {
                 handleMatterMessageResolver(matterMessage);
-                MockTime.getTimer(5000, () =>
+                MockTime.getTimer("Mock time", 5000, () =>
                     btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201")),
                 );
             };

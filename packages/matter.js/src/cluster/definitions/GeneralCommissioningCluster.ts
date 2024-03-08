@@ -1,19 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel, FixedAttribute, Attribute, Command } from "../../cluster/Cluster.js";
 import { TlvUInt64, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace GeneralCommissioning {
     /**
@@ -44,6 +47,13 @@ export namespace GeneralCommissioning {
          */
         maxCumulativeFailsafeSeconds: TlvField(1, TlvUInt16)
     });
+
+    /**
+     * This structure provides some constant values that may be of use to all commissioners.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.3
+     */
+    export interface BasicCommissioningInfo extends TypeFromSchema<typeof TlvBasicCommissioningInfo> {}
 
     /**
      * This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate possible radio
@@ -77,6 +87,13 @@ export namespace GeneralCommissioning {
         expiryLengthSeconds: TlvField(0, TlvUInt16),
         breadcrumb: TlvField(1, TlvUInt64)
     });
+
+    /**
+     * Input to the GeneralCommissioning armFailSafe command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.2
+     */
+    export interface ArmFailSafeRequest extends TypeFromSchema<typeof TlvArmFailSafeRequest> {}
 
     /**
      * This enumeration is used by several response commands in this cluster to indicate particular errors.
@@ -133,6 +150,11 @@ export namespace GeneralCommissioning {
     });
 
     /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.3
+     */
+    export interface ArmFailSafeResponse extends TypeFromSchema<typeof TlvArmFailSafeResponse> {}
+
+    /**
      * Input to the GeneralCommissioning setRegulatoryConfig command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.4
@@ -142,6 +164,13 @@ export namespace GeneralCommissioning {
         countryCode: TlvField(1, TlvString.bound({ length: 2 })),
         breadcrumb: TlvField(2, TlvUInt64)
     });
+
+    /**
+     * Input to the GeneralCommissioning setRegulatoryConfig command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.4
+     */
+    export interface SetRegulatoryConfigRequest extends TypeFromSchema<typeof TlvSetRegulatoryConfigRequest> {}
 
     /**
      * This field shall contain the result of the operation, based on the behavior specified in the functional
@@ -158,6 +187,16 @@ export namespace GeneralCommissioning {
 
     /**
      * This field shall contain the result of the operation, based on the behavior specified in the functional
+     * description of the SetRegulatoryConfig command.
+     *
+     * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.5
+     */
+    export interface SetRegulatoryConfigResponse extends TypeFromSchema<typeof TlvSetRegulatoryConfigResponse> {}
+
+    /**
+     * This field shall contain the result of the operation, based on the behavior specified in the functional
      * description of the CommissioningComplete command.
      *
      * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
@@ -170,18 +209,19 @@ export namespace GeneralCommissioning {
     });
 
     /**
-     * General Commissioning
+     * This field shall contain the result of the operation, based on the behavior specified in the functional
+     * description of the CommissioningComplete command.
      *
-     * This cluster is used to manage basic commissioning lifecycle.
+     * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
      *
-     * This cluster also represents responsibilities related to commissioning that don’t well fit other commissioning
-     * clusters, like Section 11.8, “Network Commissioning Cluster”. It also hosts functionalities
-     *
-     * those other clusters may depend on.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9
+     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.7
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface CommissioningCompleteResponse extends TypeFromSchema<typeof TlvCommissioningCompleteResponse> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x30,
         name: "GeneralCommissioning",
         revision: 1,
@@ -495,7 +535,25 @@ export namespace GeneralCommissioning {
             )
         }
     });
+
+    /**
+     * General Commissioning
+     *
+     * This cluster is used to manage basic commissioning lifecycle.
+     *
+     * This cluster also represents responsibilities related to commissioning that don’t well fit other commissioning
+     * clusters, like Section 11.8, “Network Commissioning Cluster”. It also hosts functionalities
+     *
+     * those other clusters may depend on.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.9
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type GeneralCommissioningCluster = typeof GeneralCommissioning.Cluster;
+export type GeneralCommissioningCluster = GeneralCommissioning.Cluster;
 export const GeneralCommissioningCluster = GeneralCommissioning.Cluster;
+ClusterRegistry.register(GeneralCommissioning.Complete);

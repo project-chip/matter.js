@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -21,7 +21,7 @@ LocalMatter.children.push({
             name: "OpenCommissioningWindow",
 
             children: [
-                { tag: "datatype", id: 1, name: "PakePasscodeVerifier", constraint: PAKE_PASSCODE_VERIFIER_LENGTH },
+                { tag: "field", id: 1, name: "PakePasscodeVerifier", constraint: PAKE_PASSCODE_VERIFIER_LENGTH },
             ],
         },
     ],

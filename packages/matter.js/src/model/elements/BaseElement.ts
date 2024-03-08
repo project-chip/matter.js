@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,7 +15,7 @@ import type { AnyElement } from "./AnyElement.js";
  * element has a corresponding "Model" that is a proper class with runtime
  * functionality related to the element.
  */
-export type BaseElement = {
+export interface BaseElement {
     /**
      * The ID of the element per Matter specification, either global or
      * context-specific.  A "machine appropriate" semantic differentiator.
@@ -59,7 +59,7 @@ export type BaseElement = {
      * and are available in-scope for every cluster.
      */
     global?: boolean;
-};
+}
 
 export function BaseElement(tag: ElementTag, definition: BaseElement) {
     const result: any = { tag: tag };

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,7 +9,8 @@ import { MatterFlowError } from "../common/MatterError.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { DiagnosticDictionary, Logger } from "../log/Logger.js";
+import { Diagnostic } from "../log/Diagnostic.js";
+import { Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
@@ -25,18 +26,18 @@ const SESSION_RESUMPTION_KEYS_INFO = ByteArray.fromString("SessionResumptionKeys
 export class NoAssociatedFabricError extends Error {}
 
 export class SecureSession<T> extends Session<T> {
-    private readonly subscriptions = new Array<SubscriptionHandler>();
-    private _closingAfterExchangeFinished = false;
-    private _sendCloseMessageWhenClosing = true;
-    private readonly context: T;
-    private readonly id: number;
-    private fabric: Fabric | undefined;
-    private readonly peerNodeId: NodeId;
-    private readonly peerSessionId: number;
-    private readonly decryptKey: ByteArray;
-    private readonly encryptKey: ByteArray;
-    private readonly attestationKey: ByteArray;
-    private readonly subscriptionChangedCallback: () => void;
+    readonly #subscriptions = new Array<SubscriptionHandler>();
+    #closingAfterExchangeFinished = false;
+    #sendCloseMessageWhenClosing = true;
+    readonly #context: T;
+    readonly #id: number;
+    #fabric: Fabric | undefined;
+    readonly #peerNodeId: NodeId;
+    readonly #peerSessionId: number;
+    readonly #decryptKey: ByteArray;
+    readonly #encryptKey: ByteArray;
+    readonly #attestationKey: ByteArray;
+    readonly #subscriptionChangedCallback: () => void;
 
     static async create<T>(args: {
         context: T;
@@ -128,22 +129,22 @@ export class SecureSession<T> extends Session<T> {
             subscriptionChangedCallback = () => {},
         } = args;
 
-        this.context = context;
-        this.id = id;
-        this.fabric = fabric;
-        this.peerNodeId = peerNodeId;
-        this.peerSessionId = peerSessionId;
-        this.decryptKey = decryptKey;
-        this.encryptKey = encryptKey;
-        this.attestationKey = attestationKey;
-        this.subscriptionChangedCallback = subscriptionChangedCallback;
+        this.#context = context;
+        this.#id = id;
+        this.#fabric = fabric;
+        this.#peerNodeId = peerNodeId;
+        this.#peerSessionId = peerSessionId;
+        this.#decryptKey = decryptKey;
+        this.#encryptKey = encryptKey;
+        this.#attestationKey = attestationKey;
+        this.#subscriptionChangedCallback = subscriptionChangedCallback;
 
         fabric?.addSession(this);
 
         logger.debug(
-            `Created secure ${this.isPase() ? "PASE" : "CASE"} session for fabric index ${fabric?.fabricIndex}`,
+            `Created secure ${this.isPase ? "PASE" : "CASE"} session for fabric index ${fabric?.fabricIndex}`,
             this.name,
-            new DiagnosticDictionary({
+            Diagnostic.dict({
                 idleIntervalMs: this.idleIntervalMs,
                 activeIntervalMs: this.activeIntervalMs,
                 activeThresholdMs: this.activeThresholdMs,
@@ -152,23 +153,23 @@ export class SecureSession<T> extends Session<T> {
     }
 
     get caseAuthenticatedTags() {
-        return this.fabric?.caseAuthenticatedTags ?? [];
+        return this.#fabric?.caseAuthenticatedTags ?? [];
     }
 
     get closingAfterExchangeFinished() {
-        return this._closingAfterExchangeFinished;
+        return this.#closingAfterExchangeFinished;
     }
 
     get sendCloseMessageWhenClosing() {
-        return this._sendCloseMessageWhenClosing;
+        return this.#sendCloseMessageWhenClosing;
     }
 
-    isSecure(): boolean {
+    get isSecure(): boolean {
         return true;
     }
 
-    isPase(): boolean {
-        return this.peerNodeId === NodeId.UNSPECIFIED_NODE_ID;
+    get isPase(): boolean {
+        return this.#peerNodeId === NodeId.UNSPECIFIED_NODE_ID;
     }
 
     async close(closeAfterExchangeFinished?: boolean) {
@@ -182,10 +183,10 @@ export class SecureSession<T> extends Session<T> {
         if (header.hasMessageExtensions) {
             logger.info(`Message extensions are not supported. Ignoring ${messageExtension?.toHex()}`);
         }
-        const nonce = this.generateNonce(header.securityFlags, header.messageId, this.peerNodeId);
+        const nonce = this.generateNonce(header.securityFlags, header.messageId, this.#peerNodeId);
         const message = MessageCodec.decodePayload({
             header,
-            applicationPayload: Crypto.decrypt(this.decryptKey, applicationPayload, nonce, aad),
+            applicationPayload: Crypto.decrypt(this.#decryptKey, applicationPayload, nonce, aad),
         });
 
         if (message.payloadHeader.hasSecuredExtension) {
@@ -196,87 +197,87 @@ export class SecureSession<T> extends Session<T> {
     }
 
     encode(message: Message): Packet {
-        message.packetHeader.sessionId = this.peerSessionId;
+        message.packetHeader.sessionId = this.#peerSessionId;
         const { header, applicationPayload } = MessageCodec.encodePayload(message);
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
         const securityFlags = headerBytes[3];
-        const sessionNodeId = this.isPase()
+        const sessionNodeId = this.isPase
             ? NodeId.UNSPECIFIED_NODE_ID
-            : this.fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
+            : this.#fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
         const nonce = this.generateNonce(securityFlags, header.messageId, sessionNodeId);
-        return { header, applicationPayload: Crypto.encrypt(this.encryptKey, applicationPayload, nonce, headerBytes) };
+        return { header, applicationPayload: Crypto.encrypt(this.#encryptKey, applicationPayload, nonce, headerBytes) };
     }
 
     getAttestationChallengeKey(): ByteArray {
-        return this.attestationKey;
+        return this.#attestationKey;
     }
 
-    getFabric() {
-        return this.fabric;
+    get fabric() {
+        return this.#fabric;
     }
 
     addAssociatedFabric(fabric: Fabric) {
-        if (this.fabric !== undefined) {
-            throw new MatterFlowError("Session already has an associated Fabric. Can not change this.");
+        if (this.#fabric !== undefined) {
+            throw new MatterFlowError("Session already has an associated Fabric. Cannot change this.");
         }
-        this.fabric = fabric;
+        this.#fabric = fabric;
     }
 
-    getAssociatedFabric(): Fabric {
-        if (this.fabric === undefined) {
-            throw new NoAssociatedFabricError("Session needs to have an associated Fabric.");
-        }
-        return this.fabric;
+    get id() {
+        return this.#id;
     }
 
     get name() {
-        return `secure/${this.id}`;
+        return `secure/${this.#id}`;
     }
 
-    getContext() {
-        return this.context;
+    get context() {
+        return this.#context;
     }
 
-    getId() {
-        return this.id;
+    get peerSessionId(): number {
+        return this.#peerSessionId;
     }
 
-    getPeerSessionId(): number {
-        return this.peerSessionId;
+    get nodeId() {
+        return this.#fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
     }
 
-    getNodeId() {
-        return this.fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
-    }
-
-    getPeerNodeId() {
-        return this.peerNodeId;
-    }
-
-    addSubscription(subscription: SubscriptionHandler) {
-        this.subscriptions.push(subscription);
-        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.id}`);
-        this.subscriptionChangedCallback();
+    get peerNodeId() {
+        return this.#peerNodeId;
     }
 
     get numberOfActiveSubscriptions() {
-        return this.subscriptions.length;
+        return this.#subscriptions.length;
+    }
+
+    get associatedFabric(): Fabric {
+        if (this.#fabric === undefined) {
+            throw new NoAssociatedFabricError("Session needs to have an associated Fabric.");
+        }
+        return this.#fabric;
+    }
+
+    addSubscription(subscription: SubscriptionHandler) {
+        this.#subscriptions.push(subscription);
+        logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.#id}`);
+        this.#subscriptionChangedCallback();
     }
 
     removeSubscription(subscriptionId: number) {
-        const index = this.subscriptions.findIndex(subscription => subscription.subscriptionId === subscriptionId);
+        const index = this.#subscriptions.findIndex(subscription => subscription.subscriptionId === subscriptionId);
         if (index !== -1) {
-            this.subscriptions.splice(index, 1);
-            logger.debug(`Removed subscription ${subscriptionId} from ${this.name}/${this.id}`);
-            this.subscriptionChangedCallback();
+            this.#subscriptions.splice(index, 1);
+            logger.debug(`Removed subscription ${subscriptionId} from ${this.name}/${this.#id}`);
+            this.#subscriptionChangedCallback();
         }
     }
 
     async clearSubscriptions(flushSubscriptions = false) {
-        for (const subscription of this.subscriptions) {
+        for (const subscription of this.#subscriptions) {
             await subscription.cancel(flushSubscriptions);
         }
-        this.subscriptions.length = 0;
+        this.#subscriptions.length = 0;
     }
 
     /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
@@ -288,14 +289,14 @@ export class SecureSession<T> extends Session<T> {
     /** Destroys a session. Outstanding subscription data will be discarded. */
     async destroy(sendClose = false, closeAfterExchangeFinished = true) {
         await this.clearSubscriptions(false);
-        this.fabric?.removeSession(this);
+        this.#fabric?.removeSession(this);
         if (!sendClose) {
-            this._sendCloseMessageWhenClosing = false;
+            this.#sendCloseMessageWhenClosing = false;
         }
 
         if (closeAfterExchangeFinished) {
             logger.info(`Register Session ${this.name} to send a close when exchange is ended.`);
-            this._closingAfterExchangeFinished = true;
+            this.#closingAfterExchangeFinished = true;
         } else {
             await this.closeCallback();
         }
@@ -311,7 +312,7 @@ export class SecureSession<T> extends Session<T> {
 }
 
 export function assertSecureSession<T>(session: Session<T>, errorText?: string): asserts session is SecureSession<T> {
-    if (!session.isSecure()) {
+    if (!session.isSecure) {
         throw new MatterFlowError(errorText ?? "Insecure session in secure context");
     }
 }

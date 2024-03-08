@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,18 +38,9 @@ import {
     eventPathToId,
 } from "./InteractionServer.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
+import { SubscriptionOptions } from "./SubscriptionOptions.js";
 
 const logger = Logger.get("SubscriptionHandler");
-
-// We use 3 minutes as global max interval because with 60 min as defined by spec the timeframe
-// until the controller establishes a new subscription after e.g a reboot can be up to 60 min
-// and the controller would assume that the value is unchanged. this is too long.
-// chip-tool is not respecting the 60 min at all and only respects the max sent by the controller
-// which can lead to spamming the network with unneeded packages. So I decided for 3 minutes for now
-// as a compromise until we have something better.
-const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_S = 3 * 60; /** 3 min */ // Officially: 1000 * 60 * 60; /** 1 hour */
-const SUBSCRIPTION_MIN_INTERVAL_S = 2; // We do not send faster than 2 seconds
-const SUBSCRIPTION_DEFAULT_RANDOMIZATION_WINDOW_S = 10; // 10 seconds
 
 interface AttributePathWithValueVersion<T> {
     path: TypeFromSchema<typeof TlvAttributePath>;
@@ -109,27 +100,25 @@ export class SubscriptionHandler {
         private readonly isFabricFiltered: boolean,
         minIntervalFloor: number,
         maxIntervalCeiling: number,
-        subscriptionMaxIntervalSeconds: number | undefined,
-        subscriptionMinIntervalSeconds: number | undefined,
-        subscriptionRandomizationWindowSeconds: number | undefined,
         private readonly cancelCallback: () => void,
+        subscriptionOptions: SubscriptionOptions.Configuration,
     ) {
-        this.server = this.session.getContext();
-        this.fabric = this.session.getAssociatedFabric();
-        this.peerNodeId = this.session.getPeerNodeId();
+        this.server = this.session.context;
+        this.fabric = this.session.associatedFabric;
+        this.peerNodeId = this.session.peerNodeId;
         this.minIntervalFloorMs = minIntervalFloor * 1000;
         this.maxIntervalCeilingMs = maxIntervalCeiling * 1000;
 
         const { maxInterval, sendInterval } = this.determineSendingIntervals(
-            (subscriptionMinIntervalSeconds ?? SUBSCRIPTION_MIN_INTERVAL_S) * 1000,
-            (subscriptionMaxIntervalSeconds ?? SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_S) * 1000,
-            (subscriptionRandomizationWindowSeconds ?? SUBSCRIPTION_DEFAULT_RANDOMIZATION_WINDOW_S) * 1000,
+            subscriptionOptions.minIntervalSeconds * 1000,
+            subscriptionOptions.maxIntervalSeconds * 1000,
+            subscriptionOptions.randomizationWindowSeconds * 1000,
         );
         this.maxInterval = maxInterval;
         this.sendInterval = sendInterval;
 
-        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()); // will be started later
-        this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
+        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () => this.prepareDataUpdate()); // will be started later
+        this.sendDelayTimer = Time.getTimer("Subscription delay", 50, () => this.sendUpdate()); // will be started later
     }
 
     private determineSendingIntervals(
@@ -144,7 +133,7 @@ export class SubscriptionHandler {
         // devices sending at the same time.
         const maxInterval =
             Math.max(
-                Math.max(subscriptionMinIntervalMs, SUBSCRIPTION_MIN_INTERVAL_S * 1000),
+                subscriptionMinIntervalMs,
                 Math.max(this.minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.maxIntervalCeilingMs)),
             ) + Math.floor(subscriptionRandomizationWindowMs * Math.random());
         let sendInterval = Math.floor(maxInterval / 2); // Ideally we send at half the max interval
@@ -159,7 +148,7 @@ export class SubscriptionHandler {
             logger.warn(
                 `Determined subscription send interval of ${sendInterval}ms is too low. Using maxInterval (${maxInterval}ms) instead.`,
             );
-            sendInterval = Math.max(subscriptionMinIntervalMs, SUBSCRIPTION_MIN_INTERVAL_S * 1000);
+            sendInterval = subscriptionMinIntervalMs;
         }
         return { maxInterval, sendInterval };
     }
@@ -359,8 +348,8 @@ export class SubscriptionHandler {
     updateSubscription() {
         const { newAttributes } = this.registerNewAttributes();
 
-        for (const attributeWitPath of newAttributes) {
-            const { path, attribute } = attributeWitPath;
+        for (const attributeWithPath of newAttributes) {
+            const { path, attribute } = attributeWithPath;
             const { version, value } = attribute.getWithVersion(this.session, true);
             this.outstandingAttributeUpdates.set(attributePathToId(path), {
                 path,
@@ -390,7 +379,9 @@ export class SubscriptionHandler {
         if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {
             void this.sendUpdate();
         }
-        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()).start();
+        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () =>
+            this.prepareDataUpdate(),
+        ).start();
     }
 
     /**
@@ -412,14 +403,18 @@ export class SubscriptionHandler {
         const timeSinceLastUpdateMs = now - this.lastUpdateTimeMs;
         if (timeSinceLastUpdateMs < this.minIntervalFloorMs) {
             // Respect minimum delay time between updates
-            this.updateTimer = Time.getTimer(this.minIntervalFloorMs - timeSinceLastUpdateMs, () =>
-                this.prepareDataUpdate(),
+            this.updateTimer = Time.getTimer(
+                "Subscription update",
+                this.minIntervalFloorMs - timeSinceLastUpdateMs,
+                () => this.prepareDataUpdate(),
             ).start();
             return;
         }
 
         this.sendDelayTimer.start();
-        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()).start();
+        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () =>
+            this.prepareDataUpdate(),
+        ).start();
     }
 
     /**
@@ -469,7 +464,10 @@ export class SubscriptionHandler {
         }
     }
 
-    async sendInitialReport(messenger: InteractionServerMessenger) {
+    async sendInitialReport(
+        messenger: InteractionServerMessenger,
+        readAttribute: (attribute: AnyAttributeServer<any>) => Promise<any>,
+    ) {
         this.updateTimer.stop();
 
         const { newAttributes, attributeErrors } = this.registerNewAttributes();
@@ -478,10 +476,16 @@ export class SubscriptionHandler {
             this.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
         );
 
-        const attributes = newAttributes.flatMap(({ path, attribute }) => {
+        const attributes = new Array<{
+            path: TypeFromSchema<typeof TlvAttributePath>;
+            value: any;
+            version: number;
+            schema: TlvSchema<any>;
+        }>();
+        for (const { path, attribute } of newAttributes) {
             // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-            const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
-            if (value === undefined) return [];
+            const { value, version } = await readAttribute(attribute);
+            if (value === undefined) continue;
 
             const { nodeId, endpointId, clusterId } = path;
 
@@ -489,10 +493,10 @@ export class SubscriptionHandler {
                 endpointId !== undefined && clusterId !== undefined
                     ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
                     : undefined;
-            if (versionFilterValue !== undefined && versionFilterValue === version) return [];
+            if (versionFilterValue !== undefined && versionFilterValue === version) continue;
 
-            return [{ path, value, version, schema: attribute.schema }];
-        });
+            attributes.push({ path, value, version, schema: attribute.schema });
+        }
         const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
             ({ path, schema, value, version }) => ({
                 attributeData: {
@@ -609,7 +613,7 @@ export class SubscriptionHandler {
         this.session.removeSubscription(this.subscriptionId);
         this.cancelCallback();
         if (cancelledByPeer) {
-            await this.session.getContext().startAnnouncement();
+            await this.session.context.startAnnouncement();
         }
     }
 

@@ -1,131 +1,133 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    DeviceTypeElement as DeviceType,
+    FieldElement as Field,
+    RequirementElement as Requirement
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "deviceType", name: "Base", classification: "base",
+Matter.children.push(DeviceType({
+    name: "Base", classification: "base",
+    xref: { document: "device", section: "1.1" },
 
     children: [
-        {
-            tag: "datatype", name: "conditions", type: "enum8",
+        Field({
+            name: "conditions", type: "enum8",
 
             children: [
-                {
-                    tag: "datatype", name: "Zha", description: "Zigbee Home Automation standard",
+                Field({
+                    name: "Zha", description: "Zigbee Home Automation standard",
                     xref: { document: "device", section: "1.1.3" }
-                },
-                {
-                    tag: "datatype", name: "Zse", description: "Zigbee Smart Energy standard",
+                }),
+                Field({
+                    name: "Zse", description: "Zigbee Smart Energy standard",
                     xref: { document: "device", section: "1.1.3" }
-                },
-                {
-                    tag: "datatype", name: "Gp", description: "Zigbee Green Power standard",
+                }),
+                Field({
+                    name: "Gp", description: "Zigbee Green Power standard",
                     xref: { document: "device", section: "1.1.3" }
-                },
-                {
-                    tag: "datatype", name: "Zigbee", description: "Zigbee standard",
+                }),
+                Field({
+                    name: "Zigbee", description: "Zigbee standard",
                     xref: { document: "device", section: "1.1.3" }
-                },
-                {
-                    tag: "datatype", name: "SuZi", description: "Zigbee PRO Sub-GHz standard",
+                }),
+                Field({
+                    name: "SuZi", description: "Zigbee PRO Sub-GHz standard",
                     xref: { document: "device", section: "1.1.3" }
-                },
-                {
-                    tag: "datatype", name: "Matter", description: "Matter standard",
+                }),
+                Field({
+                    name: "Matter", description: "Matter standard",
                     xref: { document: "device", section: "1.1.3" }
-                },
-                {
-                    tag: "datatype", name: "Sleepy",
-                    description: "The node is normally asleep and wakes to perform function",
+                }),
+                Field({
+                    name: "Sleepy", description: "The node is normally asleep and wakes to perform function",
                     xref: { document: "device", section: "1.1.4" }
-                },
-                {
-                    tag: "datatype", name: "Awake", description: "The node is always able to communicate",
+                }),
+                Field({
+                    name: "Awake", description: "The node is always able to communicate",
                     xref: { document: "device", section: "1.1.4" }
-                },
-                {
-                    tag: "datatype", name: "Simplex", description: "One way communication, client to server",
+                }),
+                Field({
+                    name: "Simplex", description: "One way communication, client to server",
                     xref: { document: "device", section: "1.1.4" }
-                },
-                {
-                    tag: "datatype", name: "Node",
+                }),
+                Field({
+                    name: "Node",
                     description: "the device type is classified as a Node device type (see Data Model specification)",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "App",
+                }),
+                Field({
+                    name: "App",
                     description: "the device type is classified as an Application device type (see Data Model specification)",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "Simple",
+                }),
+                Field({
+                    name: "Simple",
                     description: "the device type is classified as a Simple device type (see Data Model specification)",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "Dynamic",
+                }),
+                Field({
+                    name: "Dynamic",
                     description: "the device type is classified as a Dynamic device type (see Data Model specification)",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "Client",
-                    description: "there exists a client application cluster on the endpoint",
+                }),
+                Field({
+                    name: "Client", description: "there exists a client application cluster on the endpoint",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "Server",
-                    description: "there exists a server application cluster on the endpoint",
+                }),
+                Field({
+                    name: "Server", description: "there exists a server application cluster on the endpoint",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "Composed",
+                }),
+                Field({
+                    name: "Composed",
                     description: "the device type is composed of 2 or more device types (see System Model specification)",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "Multiple",
+                }),
+                Field({
+                    name: "Multiple",
                     description: "a Composed device type that is composed of 2 or more endpoints with the same device type (see System Model specification)",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "EzInitiator",
+                }),
+                Field({
+                    name: "EzInitiator",
                     description: "the endpoint is an Initiator for Zigbee EZ-Mode Finding & Binding",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "EzTarget",
-                    description: "the endpoint is a Target for Zigbee EZ-Mode Finding & Binding",
+                }),
+                Field({
+                    name: "EzTarget", description: "the endpoint is a Target for Zigbee EZ-Mode Finding & Binding",
                     xref: { document: "device", section: "1.1.5" }
-                },
-                {
-                    tag: "datatype", name: "BridgedPowerSourceInfo",
+                }),
+                Field({
+                    name: "BridgedPowerSourceInfo",
                     description: "the endpoint represents a Bridged Device, for which information about the state of its power source is available to the Bridge",
                     xref: { document: "device", section: "1.1.5" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "requirement", name: "Descriptor", element: "serverCluster",
+        Requirement({
+            name: "Descriptor", conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "1.1.7" }
-        },
-        {
-            tag: "requirement", name: "Binding", element: "serverCluster",
+        }),
+        Requirement({
+            name: "Binding", conformance: "Simple & Client", element: "serverCluster",
             xref: { document: "device", section: "1.1.7" }
-        },
-        {
-            tag: "requirement", name: "FixedLabel", element: "serverCluster",
+        }),
+        Requirement({
+            name: "FixedLabel", conformance: "[App & Server & Multiple]", element: "serverCluster",
             xref: { document: "device", section: "1.1.7" }
-        },
-        {
-            tag: "requirement", name: "UserLabel", element: "serverCluster",
+        }),
+        Requirement({
+            name: "UserLabel", conformance: "[App & Server & Multiple]", element: "serverCluster",
             xref: { document: "device", section: "1.1.7" }
-        }
+        })
     ]
-});
+}));

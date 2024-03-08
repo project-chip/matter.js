@@ -12,6 +12,50 @@ To better show how to use the library we provide some reference implementations 
 
 For BLE usage please also see the [matter-node-ble.js README.md](../matter-node-ble.js/README.md)  for prerequisites and limitations!
 
+## Examples Overview
+The examples provided by this repository show different use cases demonstrating how to build different device types and show various ways to implement and interact with the matter.js structures. This section gives an overview regarding what the different examples demonstrate.
+
+### Legacy Device Examples
+These examples use the matter.js API up to 0.7, which is considered "Legacy" now because it will be replaced by a new API starting with 0.8. The functionality is still working, but should be considered deprecated and will be removed with a later release!
+The filenames of these examples were adjusted in 0.8 and a "Legacy" was added to the end of the filename and "-legacy" to the npm run script name (exception: DeviceNode is now called DeviceNodeFullLegacy). Other than that they are fully compatible with the pre-0.7 versions also regarding storage location and structure and can be directly used as before.
+
+All examples create a MatterServer instance to add Matter nodes to be announced on a definable port number (default 5540).
+
+* **BridgedDevicesNodeLegacy**: This example shows how to build a Matter-Bridge that offers multiple OnOff lights and/or sockets as a bridge. It can be configured via command line and allows for the specification of shell commands that will be executed for on and off commands on the numbered devices. For more details, see below.
+* **ComposedDeviceNodeLegacy**: This example shows how to build a "simple" composed device where multiple OnOff lights and sockets are combined as one composed device. The devices are all added on the root level, so no bridge is used. The composed device can be configured via command line and allows for the specification of shell commands that will be executed for on and off commands, on the numbered devices. For more details, see below.
+* **DeviceNodeFullLegacy**: This example shows how to build a simple Device node with just one socket or light endpoint. The shell commands to be executed by on/off commands can be configured via CLI. Additionally, this example also shows how to enable BLE for a device node and tweaks the announcement so that only BLE is announced in the beginning. This example also includes a dummy WifiNetworkCommissioning implementation that simulates Wi-Fi logic for the commissioner. Furthermore it also shows how to handle testEventTrigger calls on the GeneralDiagnostics cluster which might be needed for official device testing cases. It also implements the callbacks where implementers can get information on commissioning changes and session/connection changes to better know the status of the node.
+* **MultiDeviceNodeLegacy**: This example shows how to start multiple Matter nodes on one MatterServer where each node is run on its own Port, but share a single MDNS broadcaster and scanner in order to optimize resources. Each node can be configured via CLI to be an onoff socket or a light. CLI. Options also allow specification of shell commands to be executed for on and off commands.
+
+## New API Device Examples
+Some command line parameters, for example those used to set the level of logging or the MDNS interface are now included in the new environment processing. These can be set by generic command line arguments or by using environment variables. These parameters are processed automatically so are no longer handled by the new example code directly. These are:
+
+* `--log-level=...` or environment variable `MATTER_LOG_LEVEL` or in code `environment.vars.set('log.level', Level.DEBUG)`. Allowed values are: Level.FATAL ("fatal"), Level.ERROR ("error"), Level.WARN ("warn"), Level.NOTICE ("notice"), Level.INFO ("info"), Level.DEBUG ("debug")
+* `--log-format=...` or environment variable `MATTER_LOG_FORMAT` or `environment.vars.set('log.format', Format.PLAIN)`. Allowed values are: Format.PLAIN ("plain"), Format.HTML ("html"), Format.ANSI ("ansi")
+* `--storage-path=...` or environment variable `MATTER_STORAGE_PATH` or `environment.vars.set('storage.path', "...")` allows to set the storage location. By default, it will be stored in the users home directory in `.matter/...`. If specified, the given path will be used relative to the current working directory.
+* `--storage-clear` or environment variable `MATTER_STORAGE_CLEAR=1` or `environment.vars.set('storage.clear', true)` allows to define if the storage is reset on startup.
+* `--mdns-networkinterface=...` or environment variable `MATTER_MDNS_NETWORKINTERFACE` or `environment.vars.set('mdns.networkInterface', "...")` allows to limit the DNS announcements and scanning to one network interface. By default, all available interfaces are used.
+Additionally, all command line parameters now require to start with two dashes!
+
+* **BridgedDevicesNode**: This example shows how to build a Matter-Bridge that offers multiple OnOff lights and sockets as a bridge. It can be configured via command line and allows for specifications of shell commands to be executed when on and off commands are received at the numbered devices. For more details see below.
+* **ComposedDeviceNode**: This example shows how to build a "simple" composed device where multiple OnOff lights and sockets are combined as a single device. The devices are all added at the root level, so no bridge is used. It can be configured via command line and allows for specifications of shell commands to be executed when on and off commands are received at the numbered devices. For more details see below.
+* **DeviceNode**: This example shows how to build a simple minimalistic DeviceNode with just one socket or light endpoint. The shell commands to be executed by on/off commands can be configured via CLI.
+* **DeviceNodeFull**: This example shows how to build a simple Device node with just one socket or light endpoint. The shell commands to be executed by on/off commands can be configured via CLI. Additionally, this example also shows the following use cases:
+  * it shows how to enable BLE for a device node and tweaks the announcement so that BLE is only announced in the beginning. 
+  * it includes a dummy WifiNetworkCommissioning and a dummy ThreadNetworkCommissioning implementation that simulates Wi-Fi/Thread logic for the commissioner and logs the Wi-Fi/Thread credentials the commissioner sends to the device. 
+  * it enhances the GeneralDiagnostics and OnOff cluster to implement some commands with its own logic.
+  * it defines the ["My Fancy Functionality" custom cluster](./src/examples/cluster/MyFancyOwnFunctionality.ts) and adds this to the OnOff endpoint as additional cluster when the chosen vendorId is set to 0xfff4 (65524) 
+  * it implements the callbacks where developers can get information on commissioning changes and session/connection changes to better know the status of the node.
+* **MultiDeviceNode**: This example shows how to start multiple Matter nodes on one MatterServer where each node is run on its own Port, but share a single MDNS broadcaster and scanner in order to optimize resources. Each node can be configured via CLI to be an onoff socket or a light. CLI. Options also allow specification of shell commands to be executed for on and off commands.
+* * **SensorDeviceNode**: This example shows how to build a simple Sensor device with a temperature (default) or humidity (`--type humidity`) sensor. The sensor values are updated by default every 60 seconds, or the number of seconds specified via the CLI parameter `--interval`. The value can be defined by the output of a CLI script provided via parameter `--value` or, if no command is specified, are randomly set in the interval -50..+50. To read the Temperature of a Raspberry Pi as example use `--value ="echo \$((\$(</sys/class/thermal/thermal_zone0/temp)/10))"` or to read temperature of your location `--value="curl -s 'wttr.in/?format=%t\&m' | sed 's/°C//'| awk '{print \$1*100}'"` (or use `?format=%h` for humidity).
+
+Additionally, these two examples are not directly configurable by CLI and mainly show how to implement different combinations of devices:
+* **IlluminatedRollerShade**: This example implements the Window Covering cluster server logic and also overrides a OnOff cluster server to build a composed devices with a window covering nd a light.
+* **LightDevice**: This example shows how to run a Light device which is not configurable via CLI and only logs changes, so it is the most minimalistic example. It shows how to enhance the OnOff cluster server with own logic.
+
+## Controller example
+* **ControllerNode**: This example shows basically how a controller could be implemented by showing pairing and connections to a paired device. When there is an OnOff Endpoint with ID 1 then this is controlled and toggled.
+
+
 ## Installation
 
 ### From NPM

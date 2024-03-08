@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,6 @@ import {
     AttributeServer,
     FabricScopedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
-import { asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
@@ -24,18 +23,23 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
-import { StorageContext } from "../../storage/StorageContext.js";
+import { Session } from "../../session/Session.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { toHexString } from "../../util/Number.js";
 import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
-import { AttributeReportPayload, DataReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
+import {
+    AttributeReportPayload,
+    DataReportPayload,
+    EventDataPayload,
+    EventReportPayload,
+} from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
     InteractionServerMessenger,
@@ -58,6 +62,7 @@ import {
 } from "./InteractionProtocol.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
+import { SubscriptionOptions } from "./SubscriptionOptions.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 export const INTERACTION_MODEL_REVISION = 11;
@@ -121,57 +126,46 @@ export function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchem
     return `${nodeId}/${endpointId}/${clusterId}`;
 }
 
-export type InteractionServerOptions = {
-    subscriptionMaxIntervalSeconds?: number;
-    subscriptionMinIntervalSeconds?: number;
-    subscriptionRandomizationWindowSeconds?: number;
-};
-
+/**
+ * Translates interactions from the Matter protocol to Matter.js APIs.
+ */
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
-    private endpointStructure = new InteractionEndpointStructure();
-    private nextSubscriptionId = Crypto.getRandomUInt32();
-    private eventHandler = new EventHandler(this.storage);
-    private readonly subscriptionMap = new Map<number, SubscriptionHandler>();
-    private isClosing = false;
+    #endpointStructure;
+    #nextSubscriptionId = Crypto.getRandomUInt32();
+    readonly #subscriptionMap = new Map<number, SubscriptionHandler>();
+    #isClosing = false;
+    #subscriptionConfig: SubscriptionOptions.Configuration;
+    #eventHandler: EventHandler;
 
-    constructor(
-        private readonly storage: StorageContext,
-        private readonly options?: InteractionServerOptions,
-    ) {}
+    constructor({ subscriptionOptions, eventHandler, endpointStructure }: InteractionServer.Configuration) {
+        this.#subscriptionConfig = SubscriptionOptions.configurationFor(subscriptionOptions);
+        this.#eventHandler = eventHandler;
+        this.#endpointStructure = endpointStructure;
+
+        this.#endpointStructure.change.on(() => {
+            for (const subscription of this.#subscriptionMap.values()) {
+                subscription.updateSubscription();
+            }
+        });
+    }
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
     }
 
-    setRootEndpoint(endpoint: Endpoint) {
-        // Reset all data
-        this.endpointStructure.initializeFromEndpoint(endpoint);
-
-        for (const endpoint of this.endpointStructure.endpoints.values()) {
-            for (const cluster of endpoint.getAllClusterServers()) {
-                const clusterServer = asClusterServerInternal(cluster);
-                clusterServer._setStorage(this.storage.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
-                clusterServer._registerEventHandler(this.eventHandler);
-            }
-        }
-
-        for (const subscription of this.subscriptionMap.values()) {
-            subscription.updateSubscription();
-        }
-    }
-
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
-        if (this.isClosing) return; // We are closing, ignore anything newly incoming
+        if (this.#isClosing) return; // We are closing, ignore anything newly incoming
         await new InteractionServerMessenger(exchange).handleRequest(
-            readRequest => this.handleReadRequest(exchange, readRequest),
+            (readRequest, message) => this.handleReadRequest(exchange, readRequest, message),
             (writeRequest, message) => this.handleWriteRequest(exchange, writeRequest, message),
-            (subscribeRequest, messenger) => this.handleSubscribeRequest(exchange, subscribeRequest, messenger),
+            (subscribeRequest, messenger, message) =>
+                this.handleSubscribeRequest(exchange, subscribeRequest, messenger, message),
             (invokeRequest, message) => this.handleInvokeRequest(exchange, invokeRequest, message),
             timedRequest => this.handleTimedRequest(exchange, timedRequest),
         );
     }
 
-    handleReadRequest(
+    async handleReadRequest(
         exchange: MessageExchange<MatterDevice>,
         {
             attributeRequests,
@@ -181,12 +175,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             isFabricFiltered,
             interactionModelRevision,
         }: ReadRequest,
-    ): DataReportPayload {
+        message: Message,
+    ): Promise<DataReportPayload> {
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
-                attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+                attributeRequests?.map(path => this.#endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
             }, events:${
-                eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+                eventRequests?.map(path => this.#endpointStructure.resolveEventName(path)).join(", ") ?? "none"
             } isFabricFiltered=${isFabricFiltered}`,
         );
 
@@ -213,101 +208,101 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
         }
 
-        const attributeReportsPayload = attributeRequests?.flatMap(
-            (path: TypeFromSchema<typeof TlvAttributePath>): AttributeReportPayload[] => {
-                const attributes = this.endpointStructure.getAttributes([path]);
-                if (attributes.length === 0) {
-                    // TODO Add checks for nodeId -> UnknownNode
-                    const { endpointId, clusterId, attributeId } = path;
-                    if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
-                        // Wildcard path: Just leave out values
-                        logger.debug(
-                            `Read attribute from ${
-                                exchange.channel.name
-                            }: ${this.endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`,
-                        );
-                    } else {
-                        // was a concrete path
-                        return tryCatch(
-                            () => {
-                                this.endpointStructure.validateConcreteAttributePath(
-                                    endpointId,
-                                    clusterId,
-                                    attributeId,
-                                );
-                                throw new InternalError(
-                                    "validateConcreteAttributePath should throw StatusResponseError but did not.",
-                                );
-                            },
-                            StatusResponseError,
-                            error => {
-                                logger.debug(
-                                    `Read attribute from ${
-                                        exchange.channel.name
-                                    }: ${this.endpointStructure.resolveAttributeName(path)}: unsupported path: Status=${
-                                        error.code
-                                    }`,
-                                );
-                                return [{ attributeStatus: { path, status: { status: error.code } } }];
-                            },
-                        );
-                    }
-                }
-
-                return attributes.flatMap(({ path, attribute }) => {
-                    const { nodeId, endpointId, clusterId } = path;
-                    const { value, version } = tryCatch(
-                        () => attribute.getWithVersion(exchange.session, isFabricFiltered),
-                        NoAssociatedFabricError,
+        const attributeReportsPayload = new Array<AttributeReportPayload>();
+        for (const path of attributeRequests ?? []) {
+            const attributes = this.#endpointStructure.getAttributes([path]);
+            if (attributes.length === 0) {
+                // TODO Add checks for nodeId -> UnknownNode
+                const { endpointId, clusterId, attributeId } = path;
+                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
+                    // Wildcard path: Just leave out values
+                    logger.debug(
+                        `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                            path,
+                        )}: ${this.#endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`,
+                    );
+                } else {
+                    // was a concrete path
+                    tryCatch(
                         () => {
-                            // This is not fully correct but should be sufficient for now
-                            // TODO: Fix with devices-gen branch!
-                            //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
-                            //  Assume for now that in this place we only need to handle fabric sensitive case
-                            if (endpointId === undefined || clusterId === undefined) {
-                                throw new MatterFlowError("Should never happen");
-                            }
-                            const cluster = this.endpointStructure.getClusterServer(endpointId, clusterId);
-                            if (cluster === undefined) {
-                                throw new MatterFlowError("Should never happen");
-                            }
-                            return {
-                                version: cluster.clusterDataVersion,
-                                value: [],
-                            };
+                            this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
+                            throw new InternalError(
+                                "validateConcreteAttributePath should throw StatusResponseError but did not.",
+                            );
+                        },
+                        StatusResponseError,
+                        error => {
+                            logger.debug(
+                                `Read attribute from ${
+                                    exchange.channel.name
+                                }: ${this.#endpointStructure.resolveAttributeName(path)}: unsupported path: Status=${
+                                    error.code
+                                }`,
+                            );
+                            attributeReportsPayload.push({ attributeStatus: { path, status: { status: error.code } } });
                         },
                     );
+                }
+                continue;
+            }
 
-                    const versionFilterValue =
-                        endpointId !== undefined && clusterId !== undefined
-                            ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
-                            : undefined;
-                    if (versionFilterValue !== undefined && versionFilterValue === version) {
-                        logger.debug(
-                            `Read attribute from ${
-                                exchange.channel.name
-                            }: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
-                                value,
-                            )} (version=${version}) ignored because of dataVersionFilter`,
-                        );
-                        return [];
-                    }
+            // TODO - bring across fixes from synchronous version of this code
+            for (const { path, attribute } of attributes) {
+                const { nodeId, endpointId, clusterId } = path;
 
+                const { value, version } = await tryCatchAsync(
+                    async () => this.readAttribute(attribute, exchange.session, isFabricFiltered, message),
+                    NoAssociatedFabricError,
+                    async () => {
+                        // TODO: Remove when we remove legacy API
+                        //  This is not fully correct but should be sufficient for now
+                        //  This is fixed in the new API already, so this error should never throw
+                        //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
+                        //  Assume for now that in this place we only need to handle fabric sensitive case
+                        if (endpointId === undefined || clusterId === undefined) {
+                            throw new MatterFlowError("Should never happen");
+                        }
+                        const cluster = this.#endpointStructure.getClusterServer(endpointId, clusterId);
+                        if (cluster === undefined || cluster.datasource == undefined) {
+                            throw new MatterFlowError("Should never happen");
+                        }
+                        return {
+                            version: cluster.datasource.version,
+                            value: [],
+                        };
+                    },
+                );
+
+                const versionFilterValue =
+                    endpointId !== undefined && clusterId !== undefined
+                        ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                        : undefined;
+                if (versionFilterValue !== undefined && versionFilterValue === version) {
                     logger.debug(
-                        `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                        `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                             path,
-                        )}=${Logger.toJSON(value)} (version=${version})`,
+                        )}=${Logger.toJSON(value)} (version=${version}) ignored because of dataVersionFilter`,
                     );
+                    continue;
+                }
 
-                    const { schema } = attribute;
-                    return [{ attributeData: { path, dataVersion: version, payload: value, schema } }];
-                });
-            },
-        );
+                logger.debug(
+                    `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                        path,
+                    )}=${Logger.toJSON(value)} (version=${version})`,
+                );
 
-        const eventReportsPayload = eventRequests?.flatMap(
-            (path: TypeFromSchema<typeof TlvEventPath>): EventReportPayload[] => {
-                const events = this.endpointStructure.getEvents([path]);
+                const { schema } = attribute;
+                attributeReportsPayload.push({ attributeData: { path, dataVersion: version, payload: value, schema } });
+            }
+        }
+
+        let eventReportsPayload: undefined | EventReportPayload[];
+        if (eventRequests) {
+            eventReportsPayload = [];
+            for (const path of eventRequests) {
+                const events = this.#endpointStructure.getEvents([path]);
+
                 // Requested event path not found in any cluster server on any endpoint
                 if (events.length === 0) {
                     // TODO Add checks for nodeId
@@ -315,14 +310,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     if (endpointId === undefined || clusterId === undefined || eventId === undefined) {
                         // Wildcard path: Just leave out values
                         logger.debug(
-                            `Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(
+                            `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
                                 path,
                             )}: ignore non-existing event`,
                         );
                     } else {
-                        return tryCatch(
+                        tryCatch(
                             () => {
-                                this.endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
+                                this.#endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
                                 throw new InternalError(
                                     "validateConcreteEventPath should throw StatusResponseError but did not.",
                                 );
@@ -332,26 +327,28 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 logger.debug(
                                     `Read event from ${
                                         exchange.channel.name
-                                    }: ${this.endpointStructure.resolveEventName(path)}: unsupported path: Status=${
+                                    }: ${this.#endpointStructure.resolveEventName(path)}: unsupported path: Status=${
                                         error.code
                                     }`,
                                 );
-                                return [{ eventStatus: { path, status: { status: error.code } } }];
+                                eventReportsPayload?.push({ eventStatus: { path, status: { status: error.code } } });
                             },
                         );
                     }
+                    continue;
                 }
 
-                return events
-                    .flatMap(({ path, event }) => {
-                        const matchingEvents = this.eventHandler.getEvents(path, eventFilters);
-                        logger.debug(
-                            `Read event from ${exchange.channel.name}:  ${this.endpointStructure.resolveEventName(
-                                path,
-                            )}=${Logger.toJSON(matchingEvents)}`,
-                        );
-                        const { schema } = event;
-                        return matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
+                const reportsForPath = new Array<{ eventData: EventDataPayload }>();
+                for (const { path, event } of events) {
+                    const matchingEvents = this.#eventHandler.getEvents(path, eventFilters);
+                    logger.debug(
+                        `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
+                            path,
+                        )}=${Logger.toJSON(matchingEvents)}`,
+                    );
+                    const { schema } = event;
+                    reportsForPath.push(
+                        ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
                             eventData: {
                                 path,
                                 eventNumber,
@@ -360,11 +357,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 payload: data,
                                 schema,
                             },
-                        }));
-                    })
-                    .sort((a, b) => a.eventData.eventNumber - b.eventData.eventNumber);
-            },
-        );
+                        })),
+                    );
+                }
+                eventReportsPayload.push(
+                    ...reportsForPath.sort((a, b) => {
+                        const eventNumberA = a.eventData?.eventNumber ?? 0;
+                        const eventNumberB = b.eventData?.eventNumber ?? 0;
+                        if (eventNumberA > eventNumberB) {
+                            return 1;
+                        } else if (eventNumberA < eventNumberB) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    }),
+                );
+            }
+        }
 
         // TODO support suppressResponse for responses
         return {
@@ -375,14 +385,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         };
     }
 
-    handleWriteRequest(
+    protected async readAttribute(
+        attribute: AnyAttributeServer<any>,
+        session: Session<MatterDevice>,
+        isFabricFiltered: boolean,
+        message: Message,
+    ) {
+        return attribute.getWithVersion(session, isFabricFiltered, message);
+    }
+
+    async handleWriteRequest(
         exchange: MessageExchange<MatterDevice>,
         { suppressResponse, timedRequest, writeRequests, interactionModelRevision }: WriteRequest,
-        { packetHeader: { sessionType } }: Message,
-    ): WriteResponse {
+        message: Message,
+    ): Promise<WriteResponse> {
+        const sessionType = message.packetHeader.sessionType;
         logger.debug(
             `Received write request from ${exchange.channel.name}: ${writeRequests
-                .map(req => this.endpointStructure.resolveAttributeName(req.path))
+                .map(req => this.#endpointStructure.resolveAttributeName(req.path))
                 .join(", ")}, suppressResponse=${suppressResponse}`,
         );
 
@@ -425,154 +445,200 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const writeData = normalizeAttributeData(writeRequests, true);
 
-        const writeResults = writeData.flatMap(
-            (
-                values,
-            ): {
-                path: TypeFromSchema<typeof TlvAttributePath>;
-                statusCode: StatusCode;
-                clusterStatusCode?: number;
-            }[] => {
-                const { path, dataVersion } = values[0];
-                const attributes = this.endpointStructure.getAttributes([path], true);
-                const { endpointId, clusterId, attributeId } = path;
+        const writeResults = new Array<{
+            path: TypeFromSchema<typeof TlvAttributePath>;
+            statusCode: StatusCode;
+            clusterStatusCode?: number;
+        }>();
 
-                if (attributes.length === 0) {
-                    // No existing attribute matches the given path and is writable
-                    // No attribute found
-                    // TODO: Also check nodeId
-                    if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
-                        // Wildcard path: Just ignore
+        for (const values of writeData) {
+            const { path, dataVersion } = values[0];
+
+            if (path.clusterId === undefined) {
+                throw new StatusResponseError(
+                    "Illegal write request with wildcard cluster ID",
+                    StatusCode.InvalidAction,
+                );
+            }
+
+            if (path.attributeId === undefined) {
+                throw new StatusResponseError(
+                    "Illegal write request with wildcard attribute ID",
+                    StatusCode.InvalidAction,
+                );
+            }
+
+            const attributes = this.#endpointStructure.getAttributes([path], true);
+            const { endpointId, clusterId, attributeId } = path;
+
+            if (attributes.length === 0) {
+                // No existing attribute matches the given path and is writable
+                // No attribute found
+                // TODO: Also check nodeId
+                if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
+                    // Wildcard path: Just ignore
+                    logger.debug(
+                        `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                            path,
+                        )}: ignore non-existing (wildcard) attribute`,
+                    );
+                    continue;
+                } else {
+                    // was a concrete path
+                    tryCatch(
+                        () => {
+                            if (
+                                this.#endpointStructure.validateConcreteAttributePath(
+                                    endpointId,
+                                    clusterId,
+                                    attributeId,
+                                )
+                            ) {
+                                throw new StatusResponseError(
+                                    `Attribute ${attributeId} is not writable.`,
+                                    StatusCode.UnsupportedWrite,
+                                );
+                            }
+                            throw new InternalError(
+                                "validateConcreteAttributePath check should throw StatusResponseError but did not.",
+                            );
+                        },
+                        StatusResponseError,
+                        error => {
+                            logger.debug(
+                                `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
+                                    path,
+                                )} not allowed: Status=${error.code}`,
+                            );
+                            writeResults.push({ path, statusCode: error.code });
+                        },
+                    );
+                    continue;
+                }
+            } else if (
+                attributes.length === 1 &&
+                endpointId !== undefined &&
+                clusterId !== undefined &&
+                attributeId !== undefined
+            ) {
+                const { attribute } = attributes[0];
+                // Concrete path
+
+                // TODO Check ACL here
+
+                if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
+                    logger.debug(`This write requires a timed interaction which is not initialized.`);
+                    writeResults.push({ path, statusCode: StatusCode.NeedsTimedInteraction });
+                    continue;
+                }
+
+                if (
+                    attribute instanceof FabricScopedAttributeServer &&
+                    (!exchange.session.isSecure || !(exchange.session as SecureSession<MatterDevice>).fabric)
+                ) {
+                    logger.debug(`This write requires a secure session with a fabric assigned which is missing.`);
+                    writeResults.push({ path, statusCode: StatusCode.UnsupportedAccess });
+                    continue;
+                }
+
+                if (dataVersion !== undefined) {
+                    const datasource = this.#endpointStructure.getClusterServer(endpointId, clusterId)?.datasource;
+
+                    if (datasource !== undefined && dataVersion !== datasource.version) {
                         logger.debug(
-                            `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
-                                path,
-                            )}: ignore non-existing (wildcard) attribute`,
+                            `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${datasource.version}).`,
                         );
-                    } else {
-                        // was a concrete path
-                        return tryCatch(
-                            () => {
-                                if (
-                                    this.endpointStructure.validateConcreteAttributePath(
-                                        endpointId,
-                                        clusterId,
-                                        attributeId,
-                                    )
-                                ) {
-                                    throw new StatusResponseError(
-                                        `Attribute ${attributeId} is not writable.`,
-                                        StatusCode.UnsupportedWrite,
-                                    );
-                                }
-                                throw new InternalError(
-                                    "validateConcreteAttributePath check should throw StatusResponseError but did not.",
-                                );
-                            },
-                            StatusResponseError,
-                            error => {
-                                logger.debug(
-                                    `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
-                                        path,
-                                    )} not allowed: Status=${error.code}`,
-                                );
-                                return [{ path, statusCode: error.code }];
-                            },
+                        writeResults.push({ path, statusCode: StatusCode.DataVersionMismatch });
+                        continue;
+                    }
+                }
+            }
+
+            for (const { path, attribute } of attributes) {
+                const { schema, defaultValue } = attribute;
+
+                try {
+                    const value = decodeAttributeValueWithSchema(schema, values, defaultValue);
+                    logger.debug(
+                        `Handle write request from ${
+                            exchange.channel.name
+                        } resolved to: ${this.#endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
+                            value,
+                        )} (Version=${dataVersion})`,
+                    );
+
+                    if (
+                        !(attribute instanceof AttributeServer) &&
+                        !(attribute instanceof FabricScopedAttributeServer)
+                    ) {
+                        throw new StatusResponseError(
+                            "Fixed attributes cannot be written",
+                            StatusCode.UnsupportedWrite,
                         );
                     }
-                } else if (
-                    attributes.length === 1 &&
-                    endpointId !== undefined &&
-                    clusterId !== undefined &&
-                    attributeId !== undefined
-                ) {
-                    const { attribute } = attributes[0];
-                    // Concrete path
 
-                    // TODO Check ACL here
+                    // TODO: ACL check here
 
                     if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
                         logger.debug(`This write requires a timed interaction which is not initialized.`);
-                        return [{ path, statusCode: StatusCode.NeedsTimedInteraction }];
+                        throw new StatusResponseError(
+                            "This write requires a timed interaction which is not initialized.",
+                            StatusCode.NeedsTimedInteraction,
+                        );
                     }
 
-                    if (
-                        attribute instanceof FabricScopedAttributeServer &&
-                        (!exchange.session.isSecure() || !(exchange.session as SecureSession<MatterDevice>).getFabric())
-                    ) {
-                        logger.debug(`This write requires a secure session with a fabric assigned which is missing.`);
-                        return [{ path, statusCode: StatusCode.UnsupportedAccess }];
-                    }
-
-                    if (dataVersion !== undefined) {
-                        const cluster = this.endpointStructure.getClusterServer(endpointId, clusterId);
-                        if (cluster !== undefined && dataVersion !== cluster.clusterDataVersion) {
-                            logger.debug(
-                                `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${cluster.clusterDataVersion}).`,
-                            );
-                            return [{ path, statusCode: StatusCode.DataVersionMismatch }];
-                        }
-                    }
-                }
-
-                return attributes.map(({ path, attribute }) => {
-                    const { schema, defaultValue } = attribute;
-
-                    try {
-                        const value = decodeAttributeValueWithSchema(schema, values, defaultValue);
-                        logger.debug(
-                            `Handle write request from ${
+                    await this.writeAttribute(
+                        attribute,
+                        value,
+                        exchange.session,
+                        message,
+                        receivedWithinTimedInteraction,
+                    );
+                } catch (error: any) {
+                    if (attributes.length === 1) {
+                        // For Multi-Attribute-Writes we ignore errors
+                        logger.error(
+                            `Error while handling write request from ${
                                 exchange.channel.name
-                            } resolved to: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
-                                value,
-                            )} (Version=${dataVersion})`,
+                            } to ${this.#endpointStructure.resolveAttributeName(path)}:`,
+                            error instanceof StatusResponseError ? error.message : error,
+                        );
+                        if (error instanceof StatusResponseError) {
+                            writeResults.push({ path, statusCode: error.code, clusterStatusCode: error.clusterCode });
+                            continue;
+                        }
+                        writeResults.push({ path, statusCode: StatusCode.ConstraintError });
+                        continue;
+                    } else {
+                        logger.debug(
+                            `While handling write request from ${
+                                exchange.channel.name
+                            } to ${this.#endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`,
                         );
 
-                        if (
-                            !(attribute instanceof AttributeServer) &&
-                            !(attribute instanceof FabricScopedAttributeServer)
-                        ) {
-                            throw new StatusResponseError(
-                                "Fixed attributes cannot be written",
-                                StatusCode.UnsupportedWrite,
-                            );
-                        }
-
-                        // TODO: ACL check here
-
-                        if (attribute.requiresTimedInteraction && !receivedWithinTimedInteraction) {
-                            logger.debug(`This write requires a timed interaction which is not initialized.`);
-                            throw new StatusResponseError(
-                                "This write requires a timed interaction which is not initialized.",
-                                StatusCode.NeedsTimedInteraction,
-                            );
-                        }
-
-                        attribute.set(value, exchange.session);
-                    } catch (error: any) {
-                        if (attributes.length === 1) {
-                            // For Multi-Attribute-Writes we ignore errors
-                            logger.error(
-                                `Error while handling write request from ${
-                                    exchange.channel.name
-                                } to ${this.endpointStructure.resolveAttributeName(path)}: ${error.message}`,
-                            );
-                            if (error instanceof StatusResponseError) {
-                                return { path, statusCode: error.code, clusterStatusCode: error.clusterCode };
-                            }
-                            return { path, statusCode: StatusCode.ConstraintError };
-                        } else {
-                            logger.debug(
-                                `While handling write request from ${
-                                    exchange.channel.name
-                                } to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`,
-                            );
-                        }
+                        // TODO - This behavior may be wrong.
+                        //
+                        // If a wildcard write fails we should either:
+                        //
+                        //   1. Ignore entirely (add nothing to write results), or
+                        //   2. Add an error response for the concrete attribute that failed.
+                        //
+                        // Spec is a little ambiguous.  After request path expansion, in core 1.2 8.7.3.2 it states:
+                        //
+                        //   "If the path indicates attribute data that is not writable, then the path SHALL be
+                        //    discarded"
+                        //
+                        // So is this "not writable" -- so it should be #1 -- or is this "writable" but with invalid
+                        // data?  The latter is error case #2 but spec doesn't make clear what the status code would
+                        // be...  We could fall back to CONSTRAINT_ERROR like we do above though
+                        //
+                        // Currently what we do is add a success response for every concrete path that fails.
                     }
-                    return { path, statusCode: StatusCode.Success };
-                });
-                //.filter(({ statusCode }) => statusCode !== StatusCode.Success); // see https://github.com/project-chip/connectedhomeip/issues/26198
-            },
-        );
+                }
+                writeResults.push({ path, statusCode: StatusCode.Success });
+            }
+            //.filter(({ statusCode }) => statusCode !== StatusCode.Success); // see https://github.com/project-chip/connectedhomeip/issues/26198
+        }
 
         const errorResults = writeResults.filter(({ statusCode }) => statusCode !== StatusCode.Success);
         logger.debug(
@@ -581,7 +647,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     ? `with following errors: ${errorResults
                           .map(
                               ({ path, statusCode }) =>
-                                  `${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`,
+                                  `${this.#endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`,
                           )
                           .join(", ")}`
                     : "without errors"
@@ -595,6 +661,16 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 status: { status: statusCode, clusterStatus: clusterStatusCode },
             })),
         };
+    }
+
+    protected async writeAttribute(
+        attribute: AttributeServer<any>,
+        value: any,
+        session: Session<MatterDevice>,
+        message: Message,
+        _receivedWithinTimedInteraction?: boolean,
+    ) {
+        attribute.set(value, session, message);
     }
 
     async handleSubscribeRequest(
@@ -611,6 +687,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             interactionModelRevision,
         }: SubscribeRequest,
         messenger: InteractionServerMessenger,
+        message: Message,
     ): Promise<void> {
         logger.debug(
             `Received subscribe request from ${exchange.channel.name} (keepSubscriptions=${keepSubscriptions}, isFabricFiltered=${isFabricFiltered})`,
@@ -626,7 +703,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         assertSecureSession(exchange.session, "Subscriptions are only implemented on secure sessions");
         const session = exchange.session;
-        const fabric = session.getFabric();
+        const fabric = session.fabric;
         if (fabric === undefined)
             throw new StatusResponseError(
                 "Subscriptions are only implemented after a fabric has been assigned",
@@ -642,9 +719,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         logger.debug(
             `Subscribe to attributes:${
-                attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+                attributeRequests?.map(path => this.#endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
             }, events:${
-                eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+                eventRequests?.map(path => this.#endpointStructure.resolveEventName(path)).join(", ") ?? "none"
             }`,
         );
 
@@ -685,32 +762,32 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // TODO: Interpret specs:
         // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
 
-        if (this.nextSubscriptionId === 0xffffffff) this.nextSubscriptionId = 0;
-        const subscriptionId = this.nextSubscriptionId++;
+        if (this.#nextSubscriptionId === 0xffffffff) this.#nextSubscriptionId = 0;
+        const subscriptionId = this.#nextSubscriptionId++;
         const subscriptionHandler = new SubscriptionHandler(
             subscriptionId,
             session,
-            this.endpointStructure,
+            this.#endpointStructure,
             attributeRequests,
             dataVersionFilters,
             eventRequests,
             eventFilters,
-            this.eventHandler,
+            this.#eventHandler,
             isFabricFiltered,
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
-            this.options?.subscriptionMaxIntervalSeconds,
-            this.options?.subscriptionMinIntervalSeconds,
-            this.options?.subscriptionRandomizationWindowSeconds,
-            () => this.subscriptionMap.delete(subscriptionId),
+            () => this.#subscriptionMap.delete(subscriptionId),
+            this.#subscriptionConfig,
         );
 
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(messenger);
+            await subscriptionHandler.sendInitialReport(messenger, attribute =>
+                this.readAttribute(attribute, session, false, message),
+            );
         } catch (error: any) {
             logger.error(
-                `Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports`,
+                `Subscription ${subscriptionId} for Session ${session.id}: Error while sending initial data reports`,
                 error,
             );
             await subscriptionHandler.cancel(); // Cleanup
@@ -729,7 +806,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         const maxInterval = subscriptionHandler.getMaxInterval();
         logger.info(
-            `Successfully created subscription ${subscriptionId} for Session ${session.getId()}. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
+            `Successfully created subscription ${subscriptionId} for Session ${
+                session.id
+            }. Updates: ${minIntervalFloorSeconds} - ${maxIntervalCeilingSeconds} => ${maxInterval} seconds (sendInterval = ${subscriptionHandler.getSendInterval()} seconds)`,
         );
         // Then send the subscription response
         await messenger.send(
@@ -741,7 +820,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }),
         );
 
-        this.subscriptionMap.set(subscriptionId, subscriptionHandler);
+        this.#subscriptionMap.set(subscriptionId, subscriptionHandler);
         session.addSubscription(subscriptionHandler);
         subscriptionHandler.activateSendingUpdates();
     }
@@ -754,7 +833,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         logger.debug(
             `Received invoke request from ${exchange.channel.name}: ${invokeRequests
                 .map(({ commandPath: { endpointId, clusterId, commandId } }) =>
-                    this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId }),
+                    this.#endpointStructure.resolveCommandName({ endpointId, clusterId, commandId }),
                 )
                 .join(", ")}, suppressResponse=${suppressResponse}`,
         );
@@ -796,7 +875,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         await Promise.all(
             invokeRequests.flatMap(async ({ commandPath, commandFields }) => {
-                const commands = this.endpointStructure.getCommands([commandPath]);
+                const commands = this.#endpointStructure.getCommands([commandPath]);
 
                 // TODO also check ACL and Timed, Fabric scoping constrains
 
@@ -806,7 +885,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     if (endpointId === undefined || clusterId === undefined || commandId === undefined) {
                         // Wildcard path: Just ignore
                         logger.debug(
-                            `Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(
+                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
                                 commandPath,
                             )} ignore non-existing attribute`,
                         );
@@ -814,7 +893,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         invokeResponses.push(
                             tryCatch(
                                 () => {
-                                    this.endpointStructure.validateConcreteCommandPath(
+                                    this.#endpointStructure.validateConcreteCommandPath(
                                         endpointId,
                                         clusterId,
                                         commandId,
@@ -828,7 +907,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                     logger.debug(
                                         `Invoke from ${
                                             exchange.channel.name
-                                        }: ${this.endpointStructure.resolveCommandName(
+                                        }: ${this.#endpointStructure.resolveCommandName(
                                             commandPath,
                                         )} unsupported path: Status=${error.code}`,
                                     );
@@ -837,7 +916,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                             ),
                         );
                     }
-                    return;
                 }
 
                 for (const { command, path } of commands) {
@@ -845,7 +923,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     if (endpointId === undefined) {
                         // Should never happen
                         logger.error(
-                            `Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(
+                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
                                 path,
                             )} invalid path because empty endpoint!`,
                         );
@@ -854,11 +932,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         });
                         continue;
                     }
-                    const endpoint = this.endpointStructure.getEndpoint(endpointId);
+                    const endpoint = this.#endpointStructure.getEndpoint(endpointId);
                     if (endpoint === undefined) {
                         // Should never happen
                         logger.error(
-                            `Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(
+                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
                                 path,
                             )} invalid path because endpoint not found!`,
                         );
@@ -875,13 +953,21 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         continue;
                     }
 
+                    // await command.invoke(
+                    //     exchange.session,
+                    //     commandFields ?? TlvNoArguments.encodeTlv(commandFields),
+                    //     message,
+                    //     endpoint,
+                    // ),
                     const result = await tryCatchAsync(
                         async () =>
-                            await command.invoke(
+                            await this.invokeCommand(
+                                command,
                                 exchange.session,
                                 commandFields ?? TlvNoArguments.encodeTlv(commandFields),
                                 message,
                                 endpoint,
+                                receivedWithinTimedInteraction,
                             ),
                         StatusResponseError,
                         async error => {
@@ -928,6 +1014,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         };
     }
 
+    protected async invokeCommand(
+        command: CommandServer<any, any>,
+        session: Session<MatterDevice>,
+        commandFields: any,
+        message: Message,
+        endpoint: EndpointInterface,
+        _receivedWithinTimedInteraction = false,
+    ) {
+        return command.invoke(session, commandFields, message, endpoint);
+    }
+
     handleTimedRequest(exchange: MessageExchange<MatterDevice>, { timeout, interactionModelRevision }: TimedRequest) {
         logger.debug(`Received timed request (${timeout}ms) from ${exchange.channel.name}`);
 
@@ -941,10 +1038,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     async close() {
-        this.isClosing = true;
-        this.endpointStructure.destroy();
-        for (const subscription of this.subscriptionMap.values()) {
+        this.#isClosing = true;
+        for (const subscription of this.#subscriptionMap.values()) {
             await subscription.cancel(true);
         }
+    }
+}
+
+export namespace InteractionServer {
+    export interface Configuration {
+        readonly subscriptionOptions?: SubscriptionOptions;
+        readonly eventHandler: EventHandler;
+        readonly endpointStructure: InteractionEndpointStructure;
     }
 }

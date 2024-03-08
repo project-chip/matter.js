@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -42,7 +42,6 @@ export interface EventStorageData<T> extends EventData<T> {
  * to handle subscriptions (TBD)
  */
 export class EventHandler {
-    private readonly eventStorage: StorageContext;
     private eventNumber = 0;
     private storedEventCount = 0;
     private readonly events = {
@@ -51,8 +50,7 @@ export class EventHandler {
         [EventPriority.Debug]: new Array<EventStorageData<any>>(),
     };
 
-    constructor(storage: StorageContext) {
-        this.eventStorage = storage.createContext("EventHandler");
+    constructor(private readonly eventStorage: StorageContext) {
         this.eventNumber = this.eventStorage.get("lastEventNumber", this.eventNumber);
         logger.debug(`Set/Restore last event number: ${this.eventNumber}`);
     }

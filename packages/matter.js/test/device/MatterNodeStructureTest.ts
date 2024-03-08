@@ -1,10 +1,11 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { CommissioningServer } from "../../src/CommissioningServer.js";
+import { DeviceCertification } from "../../src/behavior/definitions/operational-credentials/DeviceCertification.js";
 import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
 import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
@@ -36,14 +37,17 @@ import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
+import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
-import { InteractionServer, attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
+import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
+import { StorageContext } from "../../src/storage/StorageContext.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
+import { DUMMY_KEY, PRIVATE_KEY } from "../crypto/test-util.js";
 
 function addRequiredRootClusters(
-    rootEndpoint: RootEndpoint,
+    rootEndpoint: EndpointInterface,
     includeAdminCommissioningCluster = true,
     includeBasicInformationCluster = true,
 ) {
@@ -90,12 +94,14 @@ function addRequiredRootClusters(
                     trustedRootCertificates: [],
                     currentFabricIndex: FabricIndex.NO_FABRIC,
                 },
-                OperationalCredentialsClusterHandler({
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                }),
+                OperationalCredentialsClusterHandler(
+                    new DeviceCertification({
+                        privateKey: DUMMY_KEY,
+                        certificate: ByteArray.fromHex("00"),
+                        intermediateCertificate: ByteArray.fromHex("00"),
+                        declaration: ByteArray.fromHex("00"),
+                    }),
+                ),
             ),
         );
     }
@@ -210,6 +216,66 @@ function addRequiredRootClusters(
     }
 }
 
+let testStorageManager: StorageManager;
+let endpointStorage: StorageContext;
+let rootEndpoint: EndpointInterface;
+
+async function commissioningServer({ storage, values }: { storage?: boolean; values?: Record<string, any> } = {}) {
+    const testStorage = new StorageBackendMemory();
+    testStorageManager = new StorageManager(testStorage);
+    await testStorageManager.initialize();
+    const testStorageContext = testStorageManager.createContext("TestContext");
+    endpointStorage = testStorageContext.createContext("EndpointStructure");
+
+    const node = new CommissioningServer({
+        port: 5540,
+        deviceName: "Test Device",
+        deviceType: DeviceTypeId(0x16),
+        passcode: 123,
+        discriminator: 1234,
+        basicInformation: {
+            dataModelRevision: 1,
+            vendorName: "vendor",
+            vendorId: VendorId(1),
+            productName: "product",
+            productId: 2,
+            nodeLabel: "",
+            hardwareVersion: 0,
+            hardwareVersionString: "0",
+            location: "US",
+            localConfigDisabled: false,
+            softwareVersion: 1,
+            softwareVersionString: "v1",
+            capabilityMinima: {
+                caseSessionsPerFabric: 3,
+                subscriptionsPerFabric: 3,
+            },
+            serialNumber: `node-matter-0000`,
+        },
+        certificates: {
+            devicePrivateKey: PRIVATE_KEY,
+            deviceCertificate: ByteArray.fromHex("00"),
+            deviceIntermediateCertificate: ByteArray.fromHex("00"),
+            certificationDeclaration: ByteArray.fromHex("00"),
+        },
+    });
+
+    if (storage !== false) {
+        node.setStorage(testStorageContext);
+    }
+
+    if (values) {
+        for (const key in values) {
+            endpointStorage.set(key, values[key]);
+        }
+    }
+
+    rootEndpoint = node.getRootEndpoint();
+
+    addRequiredRootClusters(rootEndpoint);
+    return node;
+}
+
 describe("Endpoint Structures", () => {
     describe("Simple Endpoint structure", () => {
         it("Root Endpoint with missing required cluster throws exception", () => {
@@ -222,40 +288,8 @@ describe("Endpoint Structures", () => {
             );
         });
 
-        it("Just root Endpoint", () => {
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
-            });
-            addRequiredRootClusters(node.getRootEndpoint());
+        it("Just root Endpoint", async () => {
+            const node = await commissioningServer({ storage: false });
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
@@ -288,7 +322,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -313,47 +347,8 @@ describe("Endpoint Structures", () => {
             expect((generalCommissioningCluster?.attributes as any).acceptedCommandList.get().length).equal(3);
         });
 
-        it("One device with one OnOff endpoints - no unique id, use index", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-            const endpointStorage = testStorageContext.createContext("EndpointStructure");
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
-            });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
+        it("One device with one Light endpoints - no unique id, use index", async () => {
+            const node = await commissioningServer();
 
             const onoffDevice = new OnOffPluginUnitDevice();
 
@@ -376,7 +371,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -403,47 +398,8 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(6);
         });
 
-        it("One device with one OnOff endpoints - with uniqueid", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-            const endpointStorage = testStorageContext.createContext("EndpointStructure");
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
-            });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
+        it("One device with one Light endpoints - with uniqueid", async () => {
+            const node = await commissioningServer();
 
             const onoffDevice = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "test-unique-id" });
 
@@ -466,7 +422,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -493,48 +449,10 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(6);
         });
 
-        it("One device with one OnOff endpoints - no uniqueid, use index, from storage", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-            const endpointStorage = testStorageContext.createContext("EndpointStructure");
-            endpointStorage.set("serial_node-matter-0000-index_0", 10);
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+        it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
+            const node = await commissioningServer({
+                values: { "serial_node-matter-0000-index_0": 10 },
             });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
 
             const onoffDevice = new OnOffPluginUnitDevice();
 
@@ -557,7 +475,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -584,48 +502,10 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(6);
         });
 
-        it("One device with one OnOff endpoints - with uniqueid, from storage", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-            const endpointStorage = testStorageContext.createContext("EndpointStructure");
-            endpointStorage.set("serial_node-matter-0000-custom_test-unique-id", 10);
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+        it("One device with one Light endpoints - with uniqueid, from storage", async () => {
+            const node = await commissioningServer({
+                values: { "serial_node-matter-0000-custom_test-unique-id": 10 },
             });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
 
             const onoffDevice = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "test-unique-id" });
 
@@ -648,7 +528,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -739,7 +619,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -850,7 +730,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1006,7 +886,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1091,46 +971,8 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(10);
         });
 
-        it("Device Structure with two aggregators and two OnOff endpoints and all auto-assigned endpoint IDs", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
-            });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
+        it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", async () => {
+            const node = await commissioningServer();
 
             const aggregator1 = new Aggregator();
             aggregator1.addClusterServer(
@@ -1195,7 +1037,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1280,47 +1122,8 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(10);
         });
 
-        it("Device Structure with two aggregators and three OnOff/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-            const endpointStorage = testStorageContext.createContext("EndpointStructure");
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
-            });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
+        it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
+            const node = await commissioningServer();
 
             const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(37) });
             aggregator1.addClusterServer(
@@ -1397,7 +1200,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1524,48 +1327,10 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(11);
         });
 
-        it("Device Structure with two aggregators and three OnOff/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-            const endpointStorage = testStorageContext.createContext("EndpointStructure");
-            endpointStorage.set("serial_node-matter-0000-index_0-custom_3333", 3);
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+        it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
+            const node = await commissioningServer({
+                values: { "serial_node-matter-0000-index_0-custom_3333": 3 },
             });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
 
             const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(37) });
             aggregator1.addClusterServer(
@@ -1642,7 +1407,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1825,47 +1590,9 @@ describe("Endpoint Structures", () => {
         });
     });
 
-    describe("CLusterServer initialization and destroy", () => {
+    describe("ClusterServer initialization and destroy", () => {
         it("Init and destroy is called when cluster server are overwritten", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
-            });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
+            const node = await commissioningServer();
 
             const onoffDevice = new OnOffPluginUnitDevice();
 
@@ -1902,12 +1629,8 @@ describe("Endpoint Structures", () => {
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
-            const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
-
-            const interactionServer = new InteractionServer(testStorageManager.createContext("test"));
-            rootEndpoint.setStructureChangedCallback(() => interactionServer.setRootEndpoint(rootEndpoint)); // Make sure we get structure changes
-            interactionServer.setRootEndpoint(rootEndpoint);
+            rootEndpoint.setStructureChangedCallback(() => node.updateStructure());
+            node.updateStructure();
 
             expect(initCalled).true;
             expect(destroyCalled).false;
@@ -1939,51 +1662,13 @@ describe("Endpoint Structures", () => {
             expect(init2Called).true;
             expect(destroy2Called).false;
 
-            endpointStructure.destroy();
+            await node.close();
 
             expect(destroy2Called).true;
         });
 
         it("Destroy is called when device is removed", async () => {
-            const testStorage = new StorageBackendMemory();
-            const testStorageManager = new StorageManager(testStorage);
-            await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-
-            const node = new CommissioningServer({
-                port: 5540,
-                deviceName: "Test Device",
-                deviceType: DeviceTypeId(0x16),
-                passcode: 123,
-                discriminator: 1234,
-                basicInformation: {
-                    dataModelRevision: 1,
-                    vendorName: "vendor",
-                    vendorId: VendorId(1),
-                    productName: "product",
-                    productId: 2,
-                    nodeLabel: "",
-                    hardwareVersion: 0,
-                    hardwareVersionString: "0",
-                    location: "US",
-                    localConfigDisabled: false,
-                    softwareVersion: 1,
-                    softwareVersionString: "v1",
-                    capabilityMinima: {
-                        caseSessionsPerFabric: 3,
-                        subscriptionsPerFabric: 3,
-                    },
-                    serialNumber: `node-matter-0000`,
-                },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
-            });
-            node.setStorage(testStorageContext);
-            addRequiredRootClusters(node.getRootEndpoint());
+            const node = await commissioningServer();
 
             const aggregator = new Aggregator();
             const onoffDevice = new OnOffPluginUnitDevice();
@@ -2025,12 +1710,11 @@ describe("Endpoint Structures", () => {
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
+            rootEndpoint.setStructureChangedCallback(() => node.updateStructure());
+            node.updateStructure();
+
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
-
-            const interactionServer = new InteractionServer(testStorageManager.createContext("test"));
-            rootEndpoint.setStructureChangedCallback(() => interactionServer.setRootEndpoint(rootEndpoint)); // Make sure we get structure changes
-            interactionServer.setRootEndpoint(rootEndpoint);
 
             expect(initCalled).true;
             expect(destroyCalled).false;

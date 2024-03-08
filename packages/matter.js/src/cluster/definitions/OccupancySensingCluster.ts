@@ -1,17 +1,19 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalWritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt8, TlvBitmap, TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace OccupancySensing {
     /**
@@ -72,13 +74,9 @@ export namespace OccupancySensing {
     };
 
     /**
-     * Occupancy Sensing
-     *
-     * Attributes and commands for configuring occupancy sensing, and reporting occupancy status.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x406,
         name: "OccupancySensing",
         revision: 3,
@@ -231,7 +229,20 @@ export namespace OccupancySensing {
             )
         }
     });
+
+    /**
+     * Occupancy Sensing
+     *
+     * Attributes and commands for configuring occupancy sensing, and reporting occupancy status.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type OccupancySensingCluster = typeof OccupancySensing.Cluster;
+export type OccupancySensingCluster = OccupancySensing.Cluster;
 export const OccupancySensingCluster = OccupancySensing.Cluster;
+ClusterRegistry.register(OccupancySensing.Complete);

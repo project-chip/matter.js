@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { VendorId } from "@project-chip/matter-node.js/datatype";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
 import { CommissionableDeviceIdentifiers } from "@project-chip/matter.js/common";
+import { VendorId } from "@project-chip/matter.js/datatype";
+import { Logger } from "@project-chip/matter.js/log";
+import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 

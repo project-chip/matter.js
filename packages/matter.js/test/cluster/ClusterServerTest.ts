@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -23,7 +23,7 @@ import { VendorId } from "../../src/datatype/VendorId.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
-import { Level } from "../../src/log/Logger.js";
+import { Level } from "../../src/log/Level.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { captureLogs } from "../support/logging.js";
@@ -595,11 +595,19 @@ describe("ClusterServer structure", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-            asClusterServerInternal(server)._setStorage(testStorageContext);
+            let version = 1;
+            asClusterServerInternal(server).datasource = {
+                get version() {
+                    return version;
+                },
+                increaseVersion() {
+                    return ++version;
+                },
+                changed() {},
+            };
             expect(initCalled).true;
 
-            asClusterServerInternal(server)._destroy();
+            asClusterServerInternal(server)._close();
             expect(destroyCalled).true;
         });
 
@@ -619,7 +627,7 @@ describe("ClusterServer structure", () => {
             expect(server).ok;
 
             asClusterServerInternal(server)._assignToEndpoint({} as any);
-            asClusterServerInternal(server)._destroy();
+            asClusterServerInternal(server)._close();
         });
 
         it("GroupsCluster", () => {

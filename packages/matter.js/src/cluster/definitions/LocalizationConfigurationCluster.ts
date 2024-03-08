@@ -1,32 +1,24 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel, FixedAttribute } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace LocalizationConfiguration {
     /**
-     * Localization Configuration
-     *
-     * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have
-     * differing common languages, units of measurements, and numerical formatting standards. As such, Nodes that
-     * visually or audibly convey information need a mechanism by which they can be configured to use a user’s
-     * preferred language, units, etc.
-     *
-     * This cluster supports an interface to a Node. It provides attributes for determining and configuring
-     * localization information that a Node shall utilize when conveying values to a user.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.3
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x2b,
         name: "LocalizationConfiguration",
         revision: 1,
@@ -59,7 +51,27 @@ export namespace LocalizationConfiguration {
             supportedLocales: FixedAttribute(0x1, TlvArray(TlvString, { maxLength: 32 }), { default: [] })
         }
     })
+
+    /**
+     * Localization Configuration
+     *
+     * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have
+     * differing common languages, units of measurements, and numerical formatting standards. As such, Nodes that
+     * visually or audibly convey information need a mechanism by which they can be configured to use a user’s
+     * preferred language, units, etc.
+     *
+     * This cluster supports an interface to a Node. It provides attributes for determining and configuring
+     * localization information that a Node shall utilize when conveying values to a user.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.3
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type LocalizationConfigurationCluster = typeof LocalizationConfiguration.Cluster;
+export type LocalizationConfigurationCluster = LocalizationConfiguration.Cluster;
 export const LocalizationConfigurationCluster = LocalizationConfiguration.Cluster;
+ClusterRegistry.register(LocalizationConfiguration.Complete);

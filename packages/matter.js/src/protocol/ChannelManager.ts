@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -31,7 +31,7 @@ export class ChannelManager {
         const currentChannel = this.channels.get(channelKey);
         if (currentChannel !== undefined) {
             const { session } = currentChannel;
-            if (session.getId() !== channel.session.getId()) {
+            if (session.id !== channel.session.id) {
                 logger.debug(
                     `Existing channel for fabricIndex ${fabric.fabricIndex} and node ${nodeId} with session ${session.name} gets replaced. Consider former session already inactive and so close it.`,
                 );
@@ -49,15 +49,15 @@ export class ChannelManager {
     }
 
     getChannelForSession(session: Session<any>) {
-        if (session.isSecure() && !session.isPase()) {
+        if (session.isSecure && !session.isPase) {
             const secureSession = session as SecureSession<any>;
-            const fabric = secureSession.getFabric();
-            const nodeId = secureSession.getPeerNodeId();
+            const fabric = secureSession.fabric;
+            const nodeId = secureSession.peerNodeId;
             if (fabric === undefined) {
                 return this.paseChannels.get(session);
             }
             const channel = this.getChannel(fabric, nodeId);
-            if (channel.session.getId() !== session.getId()) {
+            if (channel.session.id !== session.id) {
                 return undefined;
             }
             return channel;
@@ -85,18 +85,18 @@ export class ChannelManager {
     }
 
     async getOrCreateChannel(byteArrayChannel: Channel<ByteArray>, session: Session<any>) {
-        if (!session.isSecure()) {
+        if (!session.isSecure) {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
         const secureSession = session as SecureSession<any>;
-        const fabric = secureSession.getFabric();
-        const nodeId = secureSession.getPeerNodeId();
+        const fabric = secureSession.fabric;
+        const nodeId = secureSession.peerNodeId;
         if (fabric === undefined) {
             return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
 
         let result = this.channels.get(this.getChannelKey(fabric, nodeId));
-        if (result === undefined || result.session.getId() !== session.getId()) {
+        if (result === undefined || result.session.id !== session.id) {
             result = new MessageChannel(
                 byteArrayChannel,
                 session,

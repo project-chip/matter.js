@@ -1,27 +1,30 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     Attribute,
+    Command,
+    TlvNoResponse,
     OptionalAttribute,
     OptionalEvent,
-    EventPriority,
-    Command,
-    TlvNoResponse
+    EventPriority
 } from "../../cluster/Cluster.js";
-import { TlvByteString } from "../../tlv/TlvString.js";
+import { TlvUInt32, TlvUInt64, TlvEnum, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TlvEnum, TlvUInt16, TlvInt8, TlvUInt64, TlvUInt32 } from "../../tlv/TlvNumber.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvByteString } from "../../tlv/TlvString.js";
+import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace WiFiNetworkDiagnostics {
     /**
@@ -110,6 +113,13 @@ export namespace WiFiNetworkDiagnostics {
     });
 
     /**
+     * Body of the WiFiNetworkDiagnostics disconnection event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.14.8.1
+     */
+    export interface DisconnectionEvent extends TypeFromSchema<typeof TlvDisconnectionEvent> {}
+
+    /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.14.5.3
      */
     export enum AssociationFailureCause {
@@ -166,6 +176,13 @@ export namespace WiFiNetworkDiagnostics {
     });
 
     /**
+     * Body of the WiFiNetworkDiagnostics associationFailure event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.14.8.2
+     */
+    export interface AssociationFailureEvent extends TypeFromSchema<typeof TlvAssociationFailureEvent> {}
+
+    /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.14.5.4
      */
     export enum ConnectionStatus {
@@ -186,6 +203,109 @@ export namespace WiFiNetworkDiagnostics {
      * @see {@link MatterCoreSpecificationV1_1} § 11.14.8.3
      */
     export const TlvConnectionStatusEvent = TlvObject({ connectionStatus: TlvField(0, TlvEnum<ConnectionStatus>()) });
+
+    /**
+     * Body of the WiFiNetworkDiagnostics connectionStatus event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.14.8.3
+     */
+    export interface ConnectionStatusEvent extends TypeFromSchema<typeof TlvConnectionStatusEvent> {}
+
+    /**
+     * A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature ErrorCounts.
+     */
+    export const ErrorCountsComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The BeaconLostCount attribute shall indicate the count of the number of missed beacons the Node has
+             * detected. If the Node does not have an ability to count beacons expected and not received, this value
+             * may remain set to zero.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.6
+             */
+            beaconLostCount: Attribute(0x5, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
+
+            /**
+             * The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, due
+             * to lack of buffer memory to retain all packets on the network interface. The OverrunCount attribute
+             * shall be reset to 0 upon a reboot of the Node.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.13
+             */
+            overrunCount: Attribute(0xc, TlvNullable(TlvUInt64), { omitChanges: true, default: 0 })
+        },
+
+        commands: {
+            /**
+             * Reception of this command shall reset the following attributes to 0:
+             *
+             *   • BeaconLostCount
+             *
+             *   • BeaconRxCount
+             *
+             *   • PacketMulticastRxCount
+             *
+             *   • PacketMulticastTxCount
+             *
+             *   • PacketUnicastRxCount
+             *
+             *   • PacketUnicastTxCount
+             *
+             * This command has no associated data.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.14.7.1
+             */
+            resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
+        }
+    });
+
+    /**
+     * A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature PacketCounts.
+     */
+    export const PacketCountsComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The BeaconRxCount attribute shall indicate the count of the number of received beacons. The total number
+             * of expected beacons that could have been received during the interval since association SHOULD match the
+             * sum of BeaconRxCount and BeaconLostCount. If the Node does not have an ability to report count of
+             * beacons received, this value may remain set to zero.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.7
+             */
+            beaconRxCount: Attribute(0x6, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
+
+            /**
+             * The PacketMulticastRxCount attribute shall indicate the number of multicast packets received by
+             *
+             * the Node.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.8
+             */
+            packetMulticastRxCount: Attribute(0x7, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
+
+            /**
+             * The PacketMulticastTxCount attribute shall indicate the number of multicast packets transmitted by the
+             * Node.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.9
+             */
+            packetMulticastTxCount: Attribute(0x8, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
+
+            /**
+             * The PacketUnicastRxCount attribute shall indicate the number of unicast packets received by the Node.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.10
+             */
+            packetUnicastRxCount: Attribute(0x9, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
+
+            /**
+             * The PacketUnicastTxCount attribute shall indicate the number of unicast packets transmitted by the Node.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.11
+             */
+            packetUnicastTxCount: Attribute(0xa, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 })
+        }
+    });
 
     /**
      * These are optional features supported by WiFiNetworkDiagnosticsCluster.
@@ -212,7 +332,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * These elements and properties are present in all WiFiNetworkDiagnostics clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x36,
         name: "WiFiNetworkDiagnostics",
         revision: 1,
@@ -312,104 +432,22 @@ export namespace WiFiNetworkDiagnostics {
              * @see {@link MatterCoreSpecificationV1_1} § 11.14.8.3
              */
             connectionStatus: OptionalEvent(0x2, EventPriority.Info, TlvConnectionStatusEvent)
-        }
-    });
-
-    /**
-     * A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature ErrorCounts.
-     */
-    export const ErrorCountsComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The BeaconLostCount attribute shall indicate the count of the number of missed beacons the Node has
-             * detected. If the Node does not have an ability to count beacons expected and not received, this value
-             * may remain set to zero.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.6
-             */
-            beaconLostCount: Attribute(0x5, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
-
-            /**
-             * The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, due
-             * to lack of buffer memory to retain all packets on the network interface. The OverrunCount attribute
-             * shall be reset to 0 upon a reboot of the Node.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.13
-             */
-            overrunCount: Attribute(0xc, TlvNullable(TlvUInt64), { omitChanges: true, default: 0 })
         },
 
-        commands: {
-            /**
-             * Reception of this command shall reset the following attributes to 0:
-             *
-             *   • BeaconLostCount
-             *
-             *   • BeaconRxCount
-             *
-             *   • PacketMulticastRxCount
-             *
-             *   • PacketMulticastTxCount
-             *
-             *   • PacketUnicastRxCount
-             *
-             *   • PacketUnicastTxCount
-             *
-             * This command has no associated data.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.14.7.1
-             */
-            resetCounts: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
-        }
+        /**
+         * This metadata controls which WiFiNetworkDiagnosticsCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { errorCounts: true }, component: ErrorCountsComponent },
+            { flags: { packetCounts: true }, component: PacketCountsComponent }
+        )
     });
 
     /**
-     * A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature PacketCounts.
+     * @see {@link Cluster}
      */
-    export const PacketCountsComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The BeaconRxCount attribute shall indicate the count of the number of received beacons. The total number
-             * of expected beacons that could have been received during the interval since association SHOULD match the
-             * sum of BeaconRxCount and BeaconLostCount. If the Node does not have an ability to report count of
-             * beacons received, this value may remain set to zero.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.7
-             */
-            beaconRxCount: Attribute(0x6, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
-
-            /**
-             * The PacketMulticastRxCount attribute shall indicate the number of multicast packets received by
-             *
-             * the Node.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.8
-             */
-            packetMulticastRxCount: Attribute(0x7, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
-
-            /**
-             * The PacketMulticastTxCount attribute shall indicate the number of multicast packets transmitted by the
-             * Node.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.9
-             */
-            packetMulticastTxCount: Attribute(0x8, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
-
-            /**
-             * The PacketUnicastRxCount attribute shall indicate the number of unicast packets received by the Node.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.10
-             */
-            packetUnicastRxCount: Attribute(0x9, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 }),
-
-            /**
-             * The PacketUnicastTxCount attribute shall indicate the number of unicast packets transmitted by the Node.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.14.6.11
-             */
-            packetUnicastTxCount: Attribute(0xa, TlvNullable(TlvUInt32), { omitChanges: true, default: 0 })
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * WiFi Network Diagnostics
@@ -423,44 +461,16 @@ export namespace WiFiNetworkDiagnostics {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.14
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a WiFiNetworkDiagnostics cluster with support for optional features.
-         * Include each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a WiFiNetworkDiagnostics cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, ErrorCountsComponent, { errorCounts: true });
-            ClusterFactory.extend(cluster, PacketCountsComponent, { packetCounts: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { errorCounts: true } ? typeof ErrorCountsComponent : {})
-        & (SF extends { packetCounts: true } ? typeof PacketCountsComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const ERRCNT = { errorCounts: true };
     const PKTCNT = { packetCounts: true };
 
     /**
-     * This cluster supports all WiFiNetworkDiagnostics features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -468,38 +478,38 @@ export namespace WiFiNetworkDiagnostics {
 
         attributes: {
             ...Cluster.attributes,
-            beaconLostCount: ClusterFactory.AsConditional(
+            beaconLostCount: MutableCluster.AsConditional(
                 ErrorCountsComponent.attributes.beaconLostCount,
                 { mandatoryIf: [ERRCNT] }
             ),
-            beaconRxCount: ClusterFactory.AsConditional(
+            beaconRxCount: MutableCluster.AsConditional(
                 PacketCountsComponent.attributes.beaconRxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            packetMulticastRxCount: ClusterFactory.AsConditional(
+            packetMulticastRxCount: MutableCluster.AsConditional(
                 PacketCountsComponent.attributes.packetMulticastRxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            packetMulticastTxCount: ClusterFactory.AsConditional(
+            packetMulticastTxCount: MutableCluster.AsConditional(
                 PacketCountsComponent.attributes.packetMulticastTxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            packetUnicastRxCount: ClusterFactory.AsConditional(
+            packetUnicastRxCount: MutableCluster.AsConditional(
                 PacketCountsComponent.attributes.packetUnicastRxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            packetUnicastTxCount: ClusterFactory.AsConditional(
+            packetUnicastTxCount: MutableCluster.AsConditional(
                 PacketCountsComponent.attributes.packetUnicastTxCount,
                 { mandatoryIf: [PKTCNT] }
             ),
-            overrunCount: ClusterFactory.AsConditional(
+            overrunCount: MutableCluster.AsConditional(
                 ErrorCountsComponent.attributes.overrunCount,
                 { mandatoryIf: [ERRCNT] }
             )
         },
 
         commands: {
-            resetCounts: ClusterFactory.AsConditional(
+            resetCounts: MutableCluster.AsConditional(
                 ErrorCountsComponent.commands.resetCounts,
                 { mandatoryIf: [ERRCNT] }
             )
@@ -507,7 +517,18 @@ export namespace WiFiNetworkDiagnostics {
 
         events: Cluster.events
     });
+
+    /**
+     * This cluster supports all WiFiNetworkDiagnostics features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type WiFiNetworkDiagnosticsCluster = typeof WiFiNetworkDiagnostics.Cluster;
+export type WiFiNetworkDiagnosticsCluster = WiFiNetworkDiagnostics.Cluster;
 export const WiFiNetworkDiagnosticsCluster = WiFiNetworkDiagnostics.Cluster;
+ClusterRegistry.register(WiFiNetworkDiagnostics.Complete);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,17 +19,25 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     static commitDelay = 1000;
     committed = Promise.resolve();
 
-    private readonly commitTimer = Time.getTimer(StorageBackendJsonFile.commitDelay, () => this.commit());
+    private readonly commitTimer = Time.getTimer("Storage commit", StorageBackendJsonFile.commitDelay, () =>
+        this.commit(),
+    );
     private closed = false;
-    private initialized = false;
     private resolveCommitted?: () => void;
 
     constructor(private readonly path: string) {
         super();
     }
 
+    static override async create(path: string) {
+        const storage = new this(path);
+        await storage.initialize();
+        return storage;
+    }
+
     override async initialize() {
         if (this.initialized) throw new StorageError("Storage already initialized!");
+        await super.initialize();
         try {
             this.store = this.fromJson(await readFile(this.path, "utf-8"));
         } catch (error: any) {
@@ -83,6 +91,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         this.commitTimer.stop();
         await this.commit();
         this.closed = true;
+        this.initialized = false;
     }
 
     private toJson(object: any): string {

@@ -1,28 +1,24 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
 import { TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace RelativeHumidityMeasurement {
     /**
-     * Relative Humidity Measurement
-     *
-     * This is a base cluster. The server cluster provides an interface to water content measurement functionality. The
-     * measurement is reportable and may be configured for reporting. Water content measurements include, but are not
-     * limited to, leaf wetness, relative humidity, and soil moisture.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.6
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x405,
         name: "RelativeHumidityMeasurement",
         revision: 3,
@@ -45,7 +41,7 @@ export namespace RelativeHumidityMeasurement {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.6.4.1
              */
-            measuredValue: Attribute(0x0, TlvNullable(TlvUInt16.bound({ max: 10000 }))),
+            measuredValue: Attribute(0x0, TlvNullable(TlvUInt16)),
 
             /**
              * The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. The
@@ -71,7 +67,23 @@ export namespace RelativeHumidityMeasurement {
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }))
         }
     })
+
+    /**
+     * Relative Humidity Measurement
+     *
+     * This is a base cluster. The server cluster provides an interface to water content measurement functionality. The
+     * measurement is reportable and may be configured for reporting. Water content measurements include, but are not
+     * limited to, leaf wetness, relative humidity, and soil moisture.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.6
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type RelativeHumidityMeasurementCluster = typeof RelativeHumidityMeasurement.Cluster;
+export type RelativeHumidityMeasurementCluster = RelativeHumidityMeasurement.Cluster;
 export const RelativeHumidityMeasurementCluster = RelativeHumidityMeasurement.Cluster;
+ClusterRegistry.register(RelativeHumidityMeasurement.Complete);

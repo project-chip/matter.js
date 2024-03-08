@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,15 +11,15 @@ import {
     DatatypeModel,
     ElementTag,
     EventModel,
+    FieldModel,
     FieldValue,
     Globals,
     Metatype,
     Model,
     ValueModel,
 } from "@project-chip/matter.js/model";
-import { Entry } from "../util/TsFile.js";
+import { Block, Entry } from "../util/TsFile.js";
 import { asObjectKey, camelize, serialize } from "../util/string.js";
-import { ClusterFile } from "./ClusterFile.js";
 import { NumericRanges, SpecializedNumbers, WrappedConstantKeys } from "./NumberConstants.js";
 
 class InternalError extends Error {}
@@ -30,17 +30,21 @@ class InternalError extends Error {}
 export class TlvGenerator {
     private definedDatatypes = new Set<Model>();
     private scopedNames = new Set<string>();
-    private cluster: ClusterModel;
 
-    constructor(public file: ClusterFile) {
-        this.cluster = file.cluster;
+    get file() {
+        return this.definitions.file;
+    }
 
+    constructor(
+        public cluster: ClusterModel,
+        public definitions: Block,
+    ) {
         // Find datatype names that conflict at top-level module scope.
         // Datatypes at cluster level get to use their own name but for nested
         // structures we prepend the parent name
         const names = new Set<string>();
         this.cluster.visit(model => {
-            if (model instanceof DatatypeModel && model.children.length) {
+            if ((model instanceof DatatypeModel || model instanceof FieldModel) && model.children.length) {
                 const metatype = model.effectiveMetatype;
                 switch (metatype) {
                     case Metatype.object:
@@ -61,11 +65,13 @@ export class TlvGenerator {
      */
     importTlv(fileOrDirectory: string, name: string) {
         if (fileOrDirectory === "datatype") {
-            fileOrDirectory = `${fileOrDirectory}/${name.replace(/^Tlv/, "")}`;
+            fileOrDirectory = `${fileOrDirectory}/${name.replace(/^Tlv/, "")}.js`;
         } else if (fileOrDirectory === "tlv") {
-            fileOrDirectory = `${fileOrDirectory}/${name}`;
+            fileOrDirectory = `${fileOrDirectory}/${name}.js`;
         } else if (fileOrDirectory === "number") {
-            fileOrDirectory = `tlv/TlvNumber`;
+            fileOrDirectory = `tlv/TlvNumber.js`;
+        } else {
+            fileOrDirectory = `${fileOrDirectory}.js`;
         }
         this.file.addImport(fileOrDirectory, name);
         return name;
@@ -200,10 +206,10 @@ export class TlvGenerator {
         }
 
         // Specialize the name based on the model type
-        if (defining instanceof CommandModel && defining.isRequest) {
+        if (defining instanceof CommandModel && defining.isRequest && !name.endsWith("Request")) {
             name += "Request";
         }
-        if (defining instanceof EventModel) {
+        if (defining instanceof EventModel && !name.endsWith("Event")) {
             name += "Event";
         }
 
@@ -215,7 +221,7 @@ export class TlvGenerator {
                 name = name.substring(0, name.length - 4);
             }
         } else if (defining.effectiveMetatype !== Metatype.bitmap) {
-            name = "Tlv" + name;
+            name = `Tlv${name}`;
         }
 
         // We reserve the name "Type".  Plus it's kind of ambiguous
@@ -234,7 +240,7 @@ export class TlvGenerator {
         if (globalMapping) {
             tlv = this.importTlv(...globalMapping);
         } else {
-            tlv = camelize(`tlv ${metabase.name}`).replace("Uint", "UInt");
+            tlv = camelize(`tlv ${metabase.name}`, true).replace("Uint", "UInt");
             this.importTlv("number", tlv);
         }
 
@@ -286,8 +292,8 @@ export class TlvGenerator {
     }
 
     private defineEnum(name: string, model: ValueModel) {
-        const enumBlock = this.file.types.expressions(`export enum ${name} {`, "}");
-        this.file.types.insertingBefore(enumBlock, () => {
+        const enumBlock = this.definitions.expressions(`export enum ${name} {`, "}");
+        this.definitions.insertingBefore(enumBlock, () => {
             model.children.forEach(child => {
                 let name = child.name;
                 if (name.match(/^\d+$/)) {
@@ -303,8 +309,8 @@ export class TlvGenerator {
     private defineStruct(name: string, model: ValueModel) {
         this.importTlv("tlv", "TlvObject");
 
-        const struct = this.file.types.expressions(`export const ${name} = TlvObject({`, "})");
-        this.file.types.insertingBefore(struct, () => {
+        const struct = this.definitions.expressions(`export const ${name} = TlvObject({`, "})");
+        this.definitions.insertingBefore(struct, () => {
             model.children.forEach(field => {
                 if (field.disallowed || field.deprecated) {
                     return;
@@ -319,7 +325,7 @@ export class TlvGenerator {
 
                 this.importTlv("tlv/TlvObject", tlv);
                 struct
-                    .atom(camelize(field.name, false), `${tlv}(${field.effectiveId}, ${this.reference(field)})`)
+                    .atom(camelize(field.name), `${tlv}(${field.effectiveId}, ${this.reference(field)})`)
                     .document(field);
             });
         });
@@ -329,11 +335,17 @@ export class TlvGenerator {
             return;
         }
 
+        this.file.addImport("tlv/TlvSchema.js", "TypeFromSchema");
+        const intf = this.definitions.atom(
+            `export interface ${name.substring(3)} extends TypeFromSchema<typeof ${name}> {}`,
+        );
+        this.documentType(model, intf);
+
         return struct;
     }
 
     private defineBitmap(name: string, model: ValueModel) {
-        const bitmap = this.file.types.expressions(`export const ${name} = {`, "}");
+        const bitmap = this.definitions.expressions(`export const ${name} = {`, "}");
 
         for (const child of model.children) {
             let type: string | undefined;
@@ -365,7 +377,7 @@ export class TlvGenerator {
                 continue;
             }
 
-            bitmap.atom(camelize(child.name, false), type).document(child);
+            bitmap.atom(camelize(child.name), type).document(child);
         }
 
         return bitmap;
@@ -411,7 +423,7 @@ export class TlvGenerator {
         // actually use the type.  Currently not an issue.
         const definingScope = defining.owner(ClusterModel);
         if (definingScope && definingScope !== this.cluster) {
-            this.file.addImport(`cluster/definitions/${definingScope.name}Cluster`, definingScope.name);
+            this.file.addImport(`cluster/definitions/${definingScope.name}Cluster.js`, definingScope.name);
             return `${definingScope.name}.${name}`;
         }
 
@@ -440,6 +452,12 @@ export class TlvGenerator {
             return;
         }
 
+        this.documentType(model, definition);
+
+        return name;
+    }
+
+    private documentType(model: ValueModel, definition: Entry) {
         // Document the type.  For standalone definitions documentation is
         // present on the model.  For other definitions the documentation is
         // associated with the defining location, so just leave a comment
@@ -447,7 +465,7 @@ export class TlvGenerator {
         switch (model.tag) {
             case ElementTag.Attribute:
                 definition.document({
-                    details: `The value of the ${this.cluster.name} ${camelize(model.name, false)} attribute`,
+                    details: `The value of the ${this.cluster.name} ${camelize(model.name)} attribute`,
                     xref: model.xref,
                 });
                 break;
@@ -458,7 +476,7 @@ export class TlvGenerator {
                     definition.document(model);
                 } else {
                     definition.document({
-                        details: `Input to the ${this.cluster.name} ${camelize(model.name, false)} command`,
+                        details: `Input to the ${this.cluster.name} ${camelize(model.name)} command`,
                         xref: model.xref,
                     });
                 }
@@ -466,7 +484,7 @@ export class TlvGenerator {
 
             case ElementTag.Event:
                 definition.document({
-                    details: `Body of the ${this.cluster.name} ${camelize(model.name, false)} event`,
+                    details: `Body of the ${this.cluster.name} ${camelize(model.name)} event`,
                     xref: model.xref,
                 });
                 break;
@@ -477,14 +495,12 @@ export class TlvGenerator {
                     definition.document(model);
                 } else {
                     definition.document({
-                        details: `The value of ${this.cluster.name}.${camelize(model.name, false)}`,
+                        details: `The value of ${this.cluster.name}.${camelize(model.name)}`,
                         xref: model.xref,
                     });
                 }
                 break;
         }
-
-        return name;
     }
 
     private createLengthBounds(model: ValueModel) {

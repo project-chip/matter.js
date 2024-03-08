@@ -1,10 +1,11 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import colors from "ansi-colors";
+import debug from "debug";
 import { glob } from "glob";
 import { relative } from "path";
 import { Package } from "../util/package.js";
@@ -28,7 +29,6 @@ export class TestRunner {
             constructor() {
                 super(progress);
             }
-
             override failRun(message: string, stack?: string) {
                 fatal(message, stack);
             }
@@ -40,6 +40,10 @@ export class TestRunner {
             this.spec = options.spec;
         } else {
             this.spec = [options.spec];
+        }
+
+        if (options.debug) {
+            debug.enable("mocha:*");
         }
     }
 

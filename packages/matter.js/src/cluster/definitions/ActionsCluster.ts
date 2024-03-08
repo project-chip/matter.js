@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     Attribute,
     OptionalAttribute,
@@ -19,9 +18,13 @@ import {
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum, TlvBitmap, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace Actions {
     /**
@@ -260,6 +263,13 @@ export namespace Actions {
     });
 
     /**
+     * This data type holds the details of a single action, and contains the data fields below.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.4.6
+     */
+    export interface ActionStruct extends TypeFromSchema<typeof TlvActionStruct> {}
+
+    /**
      * The Room and Zone values are provided for the cases where a user (or the system on behalf of the user) has
      * created logical grouping of the endpoints (e.g. bridged devices) based on location.
      *
@@ -333,6 +343,22 @@ export namespace Actions {
     });
 
     /**
+     * This data type holds the details of a single endpoint list, which relates to a set of endpoints that have some
+     * logical relation, and contains the data fields below.
+     *
+     * This field shall provide an unique identifier used to identify the endpoint list.
+     *
+     * This field shall indicate the name (as assigned by the user or automatically by the server) associated with the
+     * set of endpoints in this list. This can be used for identifying the action to the user by the client. Example:
+     * "living room".
+     *
+     * This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.4.7
+     */
+    export interface EndpointListStruct extends TypeFromSchema<typeof TlvEndpointListStruct> {}
+
+    /**
      * Input to the Actions instantAction command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.1
@@ -341,6 +367,13 @@ export namespace Actions {
         actionId: TlvField(0, TlvUInt16),
         invokeId: TlvOptionalField(1, TlvUInt32)
     });
+
+    /**
+     * Input to the Actions instantAction command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.1
+     */
+    export interface InstantActionRequest extends TypeFromSchema<typeof TlvInstantActionRequest> {}
 
     /**
      * Input to the Actions instantActionWithTransition command
@@ -360,6 +393,13 @@ export namespace Actions {
     });
 
     /**
+     * Input to the Actions instantActionWithTransition command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.2
+     */
+    export interface InstantActionWithTransitionRequest extends TypeFromSchema<typeof TlvInstantActionWithTransitionRequest> {}
+
+    /**
      * Input to the Actions startAction command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.3
@@ -368,6 +408,13 @@ export namespace Actions {
         actionId: TlvField(0, TlvUInt16),
         invokeId: TlvOptionalField(1, TlvUInt32)
     });
+
+    /**
+     * Input to the Actions startAction command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.3
+     */
+    export interface StartActionRequest extends TypeFromSchema<typeof TlvStartActionRequest> {}
 
     /**
      * Input to the Actions startActionWithDuration command
@@ -387,6 +434,13 @@ export namespace Actions {
     });
 
     /**
+     * Input to the Actions startActionWithDuration command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.4
+     */
+    export interface StartActionWithDurationRequest extends TypeFromSchema<typeof TlvStartActionWithDurationRequest> {}
+
+    /**
      * Input to the Actions stopAction command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.5
@@ -397,6 +451,13 @@ export namespace Actions {
     });
 
     /**
+     * Input to the Actions stopAction command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.5
+     */
+    export interface StopActionRequest extends TypeFromSchema<typeof TlvStopActionRequest> {}
+
+    /**
      * Input to the Actions pauseAction command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.6
@@ -405,6 +466,13 @@ export namespace Actions {
         actionId: TlvField(0, TlvUInt16),
         invokeId: TlvOptionalField(1, TlvUInt32)
     });
+
+    /**
+     * Input to the Actions pauseAction command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.6
+     */
+    export interface PauseActionRequest extends TypeFromSchema<typeof TlvPauseActionRequest> {}
 
     /**
      * Input to the Actions pauseActionWithDuration command
@@ -418,6 +486,13 @@ export namespace Actions {
     });
 
     /**
+     * Input to the Actions pauseActionWithDuration command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.7
+     */
+    export interface PauseActionWithDurationRequest extends TypeFromSchema<typeof TlvPauseActionWithDurationRequest> {}
+
+    /**
      * Input to the Actions resumeAction command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.8
@@ -428,6 +503,13 @@ export namespace Actions {
     });
 
     /**
+     * Input to the Actions resumeAction command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.8
+     */
+    export interface ResumeActionRequest extends TypeFromSchema<typeof TlvResumeActionRequest> {}
+
+    /**
      * Input to the Actions enableAction command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.9
@@ -436,6 +518,13 @@ export namespace Actions {
         actionId: TlvField(0, TlvUInt16),
         invokeId: TlvOptionalField(1, TlvUInt32)
     });
+
+    /**
+     * Input to the Actions enableAction command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.9
+     */
+    export interface EnableActionRequest extends TypeFromSchema<typeof TlvEnableActionRequest> {}
 
     /**
      * Input to the Actions enableActionWithDuration command
@@ -449,6 +538,13 @@ export namespace Actions {
     });
 
     /**
+     * Input to the Actions enableActionWithDuration command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.10
+     */
+    export interface EnableActionWithDurationRequest extends TypeFromSchema<typeof TlvEnableActionWithDurationRequest> {}
+
+    /**
      * Input to the Actions disableAction command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.11
@@ -457,6 +553,13 @@ export namespace Actions {
         actionId: TlvField(0, TlvUInt16),
         invokeId: TlvOptionalField(1, TlvUInt32)
     });
+
+    /**
+     * Input to the Actions disableAction command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.11
+     */
+    export interface DisableActionRequest extends TypeFromSchema<typeof TlvDisableActionRequest> {}
 
     /**
      * Input to the Actions disableActionWithDuration command
@@ -468,6 +571,13 @@ export namespace Actions {
         invokeId: TlvOptionalField(1, TlvUInt32),
         duration: TlvField(2, TlvUInt32)
     });
+
+    /**
+     * Input to the Actions disableActionWithDuration command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.6.12
+     */
+    export interface DisableActionWithDurationRequest extends TypeFromSchema<typeof TlvDisableActionWithDurationRequest> {}
 
     /**
      * Body of the Actions stateChanged event
@@ -492,6 +602,13 @@ export namespace Actions {
          */
         newState: TlvField(2, TlvEnum<ActionState>())
     });
+
+    /**
+     * Body of the Actions stateChanged event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.7.1
+     */
+    export interface StateChangedEvent extends TypeFromSchema<typeof TlvStateChangedEvent> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.4.4
@@ -527,43 +644,16 @@ export namespace Actions {
     });
 
     /**
-     * Actions
+     * Body of the Actions actionFailed event
      *
-     * This cluster provides a standardized way for a Node (typically a Bridge, but could be any Node) to expose
-     *
-     *   • Information about logical grouping of endpoints on the Node (example: lights in a room)
-     *
-     *   • Information about named actions that can be performed on such a group of endpoints (example: recall a scene
-     *     for a group of lights by its name)
-     *
-     *   • Commands to trigger such actions
-     *
-     *   • Events to receive feedback on the state of such actions.
-     *
-     * The information on grouping and available actions is typically provided by the user or Bridge manufacturer via
-     * some means not defined in Matter, and therefore provided as read-only to Nodes. For example: a
-     * manufacturer-provided app allows a user to set up logical grouping and create/assign scene for such groups.
-     *
-     * Using this cluster, a Node can learn about such logical grouping, provided actions, and trigger such actions.
-     *
-     * While the origin of this cluster stems from use cases with a Bridge, its server side may also be implemented on
-     * any Node which can expose certain grouping, actions or automations to other users.
-     *
-     * After defining the attributes, commands and events for this cluster, and the associated data types, several
-     * examples are provided to illustrate the capabilities of this cluster.
-     *
-     * Actions can be defined in a flexible manner to suit the needs of the various nodes implementing this cluster.
-     * For each action, the commands available for that particular action are defined.
-     *
-     * This cluster can be used to expose only the grouping of endpoints without any actions defined by populating the
-     * EndpointList attribute accordingly and providing an empty list for ActionList.
-     *
-     * The term 'action' in the description of this cluster should not be confused with the term 'action' as used in
-     * the Interaction Model.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.14
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14.7.2
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface ActionFailedEvent extends TypeFromSchema<typeof TlvActionFailedEvent> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x25,
         name: "Actions",
         revision: 1,
@@ -831,7 +921,50 @@ export namespace Actions {
             actionFailed: Event(0x1, EventPriority.Info, TlvActionFailedEvent)
         }
     });
+
+    /**
+     * Actions
+     *
+     * This cluster provides a standardized way for a Node (typically a Bridge, but could be any Node) to expose
+     *
+     *   • Information about logical grouping of endpoints on the Node (example: lights in a room)
+     *
+     *   • Information about named actions that can be performed on such a group of endpoints (example: recall a scene
+     *     for a group of lights by its name)
+     *
+     *   • Commands to trigger such actions
+     *
+     *   • Events to receive feedback on the state of such actions.
+     *
+     * The information on grouping and available actions is typically provided by the user or Bridge manufacturer via
+     * some means not defined in Matter, and therefore provided as read-only to Nodes. For example: a
+     * manufacturer-provided app allows a user to set up logical grouping and create/assign scene for such groups.
+     *
+     * Using this cluster, a Node can learn about such logical grouping, provided actions, and trigger such actions.
+     *
+     * While the origin of this cluster stems from use cases with a Bridge, its server side may also be implemented on
+     * any Node which can expose certain grouping, actions or automations to other users.
+     *
+     * After defining the attributes, commands and events for this cluster, and the associated data types, several
+     * examples are provided to illustrate the capabilities of this cluster.
+     *
+     * Actions can be defined in a flexible manner to suit the needs of the various nodes implementing this cluster.
+     * For each action, the commands available for that particular action are defined.
+     *
+     * This cluster can be used to expose only the grouping of endpoints without any actions defined by populating the
+     * EndpointList attribute accordingly and providing an empty list for ActionList.
+     *
+     * The term 'action' in the description of this cluster should not be confused with the term 'action' as used in
+     * the Interaction Model.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.14
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type ActionsCluster = typeof Actions.Cluster;
+export type ActionsCluster = Actions.Cluster;
 export const ActionsCluster = Actions.Cluster;
+ClusterRegistry.register(Actions.Complete);

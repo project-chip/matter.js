@@ -1,20 +1,17 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
-import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EventId } from "../../datatype/EventId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
-import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { StorageContext } from "../../storage/StorageContext.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { capitalize } from "../../util/String.js";
 import { Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse } from "../Cluster.js";
@@ -23,6 +20,7 @@ import { createAttributeServer } from "./AttributeServer.js";
 import {
     AttributeInitialValues,
     AttributeServers,
+    ClusterDatasource,
     ClusterServerHandlers,
     ClusterServerObj,
     CommandServers,
@@ -67,24 +65,79 @@ export function ClusterServer<
         events: eventDef,
         supportedFeatures,
     } = clusterDef;
-    let clusterStorage: StorageContext | null = null;
-    const attributeStorageListeners = new Map<AttributeId, (value: any) => void>();
+    let datasource: ClusterDatasource | undefined;
     const sceneAttributeList = new Array<string>();
     const attributes = <AttributeServers<A>>{};
     const commands = <CommandServers<C>>{};
     const events = <EventServers<E>>{};
-    let assignedEndpoint: Endpoint | undefined = undefined;
+    let assignedEndpoint: EndpointInterface | undefined = undefined;
+
+    // We pass a proxy into attribute servers so we can swap out our datasource
+    // without updating all servers
+    //
+    // There should always be a datasource when the server is online, so if
+    // there is no datasource we just report version as 0 rather than assigning
+    // a random version that will be overwritten when we receive a datasource
+    const datasourceProxy: ClusterDatasource = {
+        get version() {
+            return datasource?.version ?? 0;
+        },
+
+        get eventHandler() {
+            return datasource?.eventHandler;
+        },
+
+        increaseVersion() {
+            return datasource?.increaseVersion() ?? 0;
+        },
+
+        changed(key, value) {
+            datasource?.changed(key, value);
+        },
+    };
 
     const result: any = {
         id: clusterId,
         name,
         _type: "ClusterServer",
-        clusterDataVersion: Crypto.getRandomUInt32(),
         attributes,
         _commands: commands,
         _events: events,
 
-        _assignToEndpoint: (endpoint: Endpoint) => {
+        get datasource() {
+            return datasource;
+        },
+
+        set datasource(newDatasource: ClusterDatasource | undefined) {
+            // This is not legal but TS requires setters to accept getter type
+            if (newDatasource === undefined) {
+                throw new InternalError("Cluster datasource cannot be unset");
+            }
+
+            datasource = newDatasource;
+
+            if (assignedEndpoint === undefined) {
+                throw new InternalError(
+                    "The Endpoint always needs to be existing before storage is initialized for an Endpoint.",
+                );
+            }
+
+            if (typeof handlers.initializeClusterServer === "function") {
+                handlers.initializeClusterServer({
+                    attributes,
+                    events,
+                    endpoint: assignedEndpoint,
+                });
+            }
+
+            if (datasource.eventHandler) {
+                for (const eventName in events) {
+                    (events as any)[eventName].bindToEventHandler(datasource.eventHandler);
+                }
+            }
+        },
+
+        _assignToEndpoint: (endpoint: EndpointInterface) => {
             for (const name in attributes) {
                 (attributes as any)[name].assignToEndpoint(endpoint);
             }
@@ -94,59 +147,9 @@ export function ClusterServer<
             assignedEndpoint = endpoint;
         },
 
-        _destroy: () => {
+        _close: () => {
             if (typeof handlers.destroyClusterServer === "function") {
                 handlers.destroyClusterServer();
-            }
-        },
-
-        _setStorage: (storageContext: StorageContext) => {
-            clusterStorage = storageContext;
-
-            result.clusterDataVersion = storageContext.get<number>("_clusterDataVersion", result.clusterDataVersion);
-            logger.debug(
-                `${storageContext.has("_clusterDataVersion") ? "Restore" : "Set"} cluster data version ${
-                    result.clusterDataVersion
-                } in cluster ${name} (${clusterId})`,
-            );
-            storageContext.set("_clusterDataVersion", result.clusterDataVersion);
-
-            for (const attributeName in attributes) {
-                const attribute = (attributes as any)[attributeName];
-                if (!attributeStorageListeners.has(attribute.id)) continue;
-                if (!storageContext.has(attribute.name)) continue;
-                try {
-                    const value = storageContext.get<any>(attribute.name);
-                    logger.debug(
-                        `Restoring attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`,
-                    );
-                    attribute.init(value);
-                } catch (error) {
-                    logger.warn(
-                        `Failed to restore attribute ${attributeName} (${attribute.id}) in cluster ${name} (${clusterId})`,
-                        error,
-                    );
-                    storageContext.delete(attribute.name); // Storage broken so we should delete it
-                }
-            }
-
-            if (assignedEndpoint === undefined) {
-                throw new InternalError(
-                    "The Endpoint always needs to be existing before storage is initialized for an Endpoint.",
-                );
-            }
-            if (typeof handlers.initializeClusterServer === "function") {
-                handlers.initializeClusterServer({
-                    attributes,
-                    events,
-                    endpoint: assignedEndpoint,
-                });
-            }
-        },
-
-        _registerEventHandler: (eventHandler: EventHandler) => {
-            for (const eventName in events) {
-                (events as any)[eventName].bindToEventHandler(eventHandler);
             }
         },
 
@@ -223,12 +226,6 @@ export function ClusterServer<
         },
     };
 
-    const attributeStorageListener = (attributeName: string, value: any) => {
-        if (!clusterStorage || value === undefined) return;
-        logger.debug(`Storing attribute ${attributeName} in cluster ${name} (${clusterId})`);
-        clusterStorage.set(attributeName, value);
-    };
-
     // Create attributes
     attributesInitialValues = {
         ...attributesInitialValues,
@@ -300,29 +297,24 @@ export function ClusterServer<
                 attributeDef[attributeName],
                 attributeName,
                 (attributesInitialValues as any)[attributeName],
-                () => result.clusterDataVersion,
-                () => {
-                    if (result.clusterDataVersion === 0xffffffff) {
-                        result.clusterDataVersion = -1;
-                    }
-                    clusterStorage?.set("_clusterDataVersion", ++result.clusterDataVersion);
-                    return result.clusterDataVersion;
-                },
+                datasourceProxy,
                 getter
-                    ? (session, endpoint, isFabricFiltered) =>
+                    ? (session, endpoint, isFabricFiltered, message) =>
                           getter({
                               attributes,
                               endpoint,
                               session,
                               isFabricFiltered,
+                              message,
                           })
                     : undefined,
                 setter
-                    ? (value, session, endpoint) =>
+                    ? (value, session, endpoint, message) =>
                           setter(value, {
                               attributes,
                               endpoint,
                               session,
+                              message,
                           })
                     : undefined,
                 validator
@@ -359,8 +351,7 @@ export function ClusterServer<
             }
             if (persistent || getter || setter) {
                 const listener = (value: any) =>
-                    attributeStorageListener(attributeName, fabricScoped || getter || setter ? undefined : value);
-                attributeStorageListeners.set(id, listener);
+                    datasource?.changed(attributeName, fabricScoped || getter || setter ? undefined : value);
                 (attributes as any)[attributeName].addValueChangeListener(listener);
             }
             attributeList.push(AttributeId(id));
@@ -420,7 +411,7 @@ export function ClusterServer<
                 logger.warn(
                     `Command "${
                         clusterDef.name
-                    }/${name}" is provided but it's neither optional or mandatory for supportedFeatures: ${JSON.stringify(
+                    }/${name}" is provided but it's neither optional nor mandatory for supportedFeatures: ${JSON.stringify(
                         supportedFeatures,
                     )} but is set!`,
                 );

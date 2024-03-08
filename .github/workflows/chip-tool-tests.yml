@@ -115,8 +115,38 @@ jobs:
         with:
           rebuild-chip-tool: "false"
 
-      - name: Run Tests using the python parser sending commands to chip-tool from yaml files
-        id: test-execution
+      - name: 0.8-API - Run Tests using the python parser sending commands to chip-tool from yaml files
+        id: test-execution-08
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../bin/chip-tool \
+              --log-level info \
+              --target-glob "{Test_AddNewFabricFromExistingFabric,Test_TC_BINFO*,Test_TC_BRBINFO*,Test_TC_CADMIN*,Test_TC_CGEN*,Test_TC_CNET*,Test_TC_DESC*,Test_TC_?LABEL*,Test_TC_OO*,Test_TC_OPCREDS*,TestArmFailSafe,TestBasicInformation,TestCASERecovery,TestCommandsById,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestUserLabelCluster*,TestDiscovery}" \
+              run \
+              --iterations 1 \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+            '
+
+  chip-tests-legacy:
+    needs: [prepare-chip-build]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+
+      - name: Legacy-API - Run Tests using the python parser sending commands to chip-tool from yaml files
+        id: test-execution-legacy
         shell: bash
         run: |
           cd connectedhomeip
@@ -132,8 +162,6 @@ jobs:
               --bridge-app ../chip-testing/dist/esm/BridgeTestAppLegacy.js \
             '
 
-  # Execute the long running tests (if needed)
-  # Add Test_TC_CADMIN_1_21,Test_TC_CADMIN_1_22 later once issue is fixes
   chip-tests-long:
     needs: [prepare-chip-build]
     if: ${{ github.repository == 'project-chip/matter.js' && needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
@@ -147,8 +175,38 @@ jobs:
         with:
           rebuild-chip-tool: 'false'
 
-      - name: Long Test execution
-        id: test-execution-long
+      - name: 0.8-API - Long Test execution
+        id: test-execution-long-08
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../bin/chip-tool \
+              --log-level info \
+              --target-glob "{Test_TC_CADMIN_1_3,Test_TC_CADMIN_1_4,Test_TC_CADMIN_1_5,Test_TC_CADMIN_1_6,Test_TC_CADMIN_1_9,Test_TC_CADMIN_1_10,Test_TC_CADMIN_1_16,Test_TC_CADMIN_1_23,Test_TC_CADMIN_1_24}" \
+              --include-tags MANUAL \
+              run \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+            '
+
+  chip-tests-long-legacy:
+    needs: [prepare-chip-build]
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: 'false'
+
+      - name: Legacy-API - Long Test execution
+        id: test-execution-long-legacy
         shell: bash
         run: |
           cd connectedhomeip
@@ -163,6 +221,7 @@ jobs:
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js \
               --bridge-app ../chip-testing/dist/esm/BridgeTestAppLegacy.js \
             '
+
   python-repl-tests:
     needs: [prepare-chip-build]
 
@@ -180,7 +239,33 @@ jobs:
         with:
           rebuild-chip-tool: 'false'
 
-      - name: Run Tests
+      - name: 0.8-API - Run Tests
+        id: python-tests-08
+        shell: bash
+        run: |
+          cd connectedhomeip
+          mkdir -p out/trace_data
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_CGEN_2_4.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+
+  python-repl-tests-legacy:
+    needs: [prepare-chip-build]
+
+    env:
+      TSAN_OPTIONS: "halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: 'false'
+
+      - name: Legacy-API - Run Tests
+        id: python-tests-legacy
         shell: bash
         run: |
           cd connectedhomeip

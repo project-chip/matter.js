@@ -1,116 +1,34 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
-    OptionalAttribute,
     Attribute,
-    WritableAttribute,
-    FixedAttribute,
-    OptionalFixedAttribute,
+    Command,
+    TlvNoResponse,
+    OptionalAttribute,
     OptionalWritableAttribute,
     AccessLevel,
-    Command,
-    TlvNoResponse
+    WritableAttribute,
+    FixedAttribute,
+    OptionalFixedAttribute
 } from "../../cluster/Cluster.js";
-import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap, TlvUInt32, TlvInt16 } from "../../tlv/TlvNumber.js";
-import { TlvString } from "../../tlv/TlvString.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvUInt8, TlvEnum, TlvUInt16, TlvBitmap, TlvInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { BitFlag, BitField } from "../../schema/BitmapSchema.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvString } from "../../tlv/TlvString.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace ColorControl {
-    /**
-     * The value of the ColorControl driftCompensation attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.6
-     */
-    export enum DriftCompensation {
-        None = 0,
-        OtherUnknown = 1,
-        TemperatureMonitoring = 2,
-        OpticalLuminanceMonitoringAndFeedback = 3,
-        OpticalColorMonitoringAndFeedback = 4
-    }
-
-    /**
-     * The value of the ColorControl colorMode attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.9
-     */
-    export enum ColorMode {
-        CurrentHueAndCurrentSaturation = 0,
-        CurrentXAndCurrentY = 1,
-        ColorTemperatureMireds = 2
-    }
-
-    /**
-     * The value of the ColorControl options attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.10
-     */
-    export const Options = { executeIfOff: BitFlag(0) };
-
-    /**
-     * The value of the ColorControl enhancedColorMode attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.12
-     */
-    export enum EnhancedColorMode {
-        CurrentHueAndCurrentSaturation = 0,
-        CurrentXAndCurrentY = 1,
-        ColorTemperatureMireds = 2,
-        EnhancedCurrentHueAndCurrentSaturation = 3
-    }
-
-    /**
-     * The value of the ColorControl featureMap attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.5
-     */
-    export const FeatureMap = {
-        /**
-         * HueSaturation
-         *
-         * Supports color specification via hue/saturation.
-         */
-        hs: BitFlag(0),
-
-        /**
-         * EnhancedHue
-         *
-         * Enhanced hue is supported.
-         */
-        ehue: BitFlag(1),
-
-        /**
-         * ColorLoop
-         *
-         * Color loop is supported.
-         */
-        cl: BitFlag(2),
-
-        /**
-         * Xy
-         *
-         * Supports color specification via XY.
-         */
-        xy: BitFlag(3),
-
-        /**
-         * ColorTemperature
-         *
-         * Supports specification of color temperature.
-         */
-        ct: BitFlag(4)
-    };
-
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.4.2
      */
@@ -120,6 +38,13 @@ export namespace ColorControl {
         Up = 2,
         Down = 3
     }
+
+    /**
+     * The value of the ColorControl options attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.10
+     */
+    export const Options = { executeIfOff: BitFlag(0) };
 
     /**
      * Input to the ColorControl moveToHue command
@@ -152,6 +77,13 @@ export namespace ColorControl {
         optionsMask: TlvField(3, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(4, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl moveToHue command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.4
+     */
+    export interface MoveToHueRequest extends TypeFromSchema<typeof TlvMoveToHueRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.5.1
@@ -189,6 +121,13 @@ export namespace ColorControl {
         optionsMask: TlvField(2, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl moveHue command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.5
+     */
+    export interface MoveHueRequest extends TypeFromSchema<typeof TlvMoveHueRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.6.1
@@ -236,6 +175,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl stepHue command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.6
+     */
+    export interface StepHueRequest extends TypeFromSchema<typeof TlvStepHueRequest> {}
+
+    /**
      * Input to the ColorControl moveToSaturation command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.7
@@ -246,6 +192,13 @@ export namespace ColorControl {
         optionsMask: TlvField(2, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl moveToSaturation command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.7
+     */
+    export interface MoveToSaturationRequest extends TypeFromSchema<typeof TlvMoveToSaturationRequest> {}
 
     /**
      * Input to the ColorControl moveSaturation command
@@ -275,6 +228,13 @@ export namespace ColorControl {
         optionsMask: TlvField(2, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl moveSaturation command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.8
+     */
+    export interface MoveSaturationRequest extends TypeFromSchema<typeof TlvMoveSaturationRequest> {}
 
     /**
      * Input to the ColorControl stepSaturation command
@@ -312,6 +272,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl stepSaturation command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.9
+     */
+    export interface StepSaturationRequest extends TypeFromSchema<typeof TlvStepSaturationRequest> {}
+
+    /**
      * Input to the ColorControl moveToHueAndSaturation command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.10
@@ -325,6 +292,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl moveToHueAndSaturation command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.10
+     */
+    export interface MoveToHueAndSaturationRequest extends TypeFromSchema<typeof TlvMoveToHueAndSaturationRequest> {}
+
+    /**
      * Input to the ColorControl moveToColor command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.11
@@ -336,6 +310,13 @@ export namespace ColorControl {
         optionsMask: TlvField(3, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(4, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl moveToColor command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.11
+     */
+    export interface MoveToColorRequest extends TypeFromSchema<typeof TlvMoveToColorRequest> {}
 
     /**
      * Input to the ColorControl moveColor command
@@ -364,6 +345,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl moveColor command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.12
+     */
+    export interface MoveColorRequest extends TypeFromSchema<typeof TlvMoveColorRequest> {}
+
+    /**
      * Input to the ColorControl stepColor command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.13
@@ -385,6 +373,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl stepColor command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.13
+     */
+    export interface StepColorRequest extends TypeFromSchema<typeof TlvStepColorRequest> {}
+
+    /**
      * Input to the ColorControl moveToColorTemperature command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.14
@@ -395,6 +390,13 @@ export namespace ColorControl {
         optionsMask: TlvField(2, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl moveToColorTemperature command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.14
+     */
+    export interface MoveToColorTemperatureRequest extends TypeFromSchema<typeof TlvMoveToColorTemperatureRequest> {}
 
     /**
      * Input to the ColorControl moveColorTemperature command
@@ -455,6 +457,13 @@ export namespace ColorControl {
         optionsMask: TlvField(4, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(5, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl moveColorTemperature command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.21
+     */
+    export interface MoveColorTemperatureRequest extends TypeFromSchema<typeof TlvMoveColorTemperatureRequest> {}
 
     /**
      * Input to the ColorControl stepColorTemperature command
@@ -522,6 +531,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl stepColorTemperature command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.22
+     */
+    export interface StepColorTemperatureRequest extends TypeFromSchema<typeof TlvStepColorTemperatureRequest> {}
+
+    /**
      * Input to the ColorControl enhancedMoveToHue command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.15
@@ -555,6 +571,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl enhancedMoveToHue command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.15
+     */
+    export interface EnhancedMoveToHueRequest extends TypeFromSchema<typeof TlvEnhancedMoveToHueRequest> {}
+
+    /**
      * Input to the ColorControl enhancedMoveHue command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.16
@@ -581,6 +604,13 @@ export namespace ColorControl {
         optionsMask: TlvField(2, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl enhancedMoveHue command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.16
+     */
+    export interface EnhancedMoveHueRequest extends TypeFromSchema<typeof TlvEnhancedMoveHueRequest> {}
 
     /**
      * Input to the ColorControl enhancedStepHue command
@@ -620,6 +650,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl enhancedStepHue command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.17
+     */
+    export interface EnhancedStepHueRequest extends TypeFromSchema<typeof TlvEnhancedStepHueRequest> {}
+
+    /**
      * Input to the ColorControl enhancedMoveToHueAndSaturation command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.18
@@ -651,6 +688,13 @@ export namespace ColorControl {
         optionsMask: TlvField(3, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(4, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the ColorControl enhancedMoveToHueAndSaturation command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.18
+     */
+    export interface EnhancedMoveToHueAndSaturationRequest extends TypeFromSchema<typeof TlvEnhancedMoveToHueAndSaturationRequest> {}
 
     /**
      * The value of ColorControl.updateFlags
@@ -751,6 +795,13 @@ export namespace ColorControl {
     });
 
     /**
+     * Input to the ColorControl colorLoopSet command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.19
+     */
+    export interface ColorLoopSetRequest extends TypeFromSchema<typeof TlvColorLoopSetRequest> {}
+
+    /**
      * Input to the ColorControl stopMoveStep command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.20
@@ -758,6 +809,464 @@ export namespace ColorControl {
     export const TlvStopMoveStepRequest = TlvObject({
         optionsMask: TlvField(0, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(1, TlvBitmap(TlvUInt8, Options))
+    });
+
+    /**
+     * Input to the ColorControl stopMoveStep command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.20
+     */
+    export interface StopMoveStepRequest extends TypeFromSchema<typeof TlvStopMoveStepRequest> {}
+
+    /**
+     * The value of the ColorControl driftCompensation attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.6
+     */
+    export enum DriftCompensation {
+        None = 0,
+        OtherUnknown = 1,
+        TemperatureMonitoring = 2,
+        OpticalLuminanceMonitoringAndFeedback = 3,
+        OpticalColorMonitoringAndFeedback = 4
+    }
+
+    /**
+     * The value of the ColorControl colorMode attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.9
+     */
+    export enum ColorMode {
+        CurrentHueAndCurrentSaturation = 0,
+        CurrentXAndCurrentY = 1,
+        ColorTemperatureMireds = 2
+    }
+
+    /**
+     * The value of the ColorControl enhancedColorMode attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.12
+     */
+    export enum EnhancedColorMode {
+        CurrentHueAndCurrentSaturation = 0,
+        CurrentXAndCurrentY = 1,
+        ColorTemperatureMireds = 2,
+        EnhancedCurrentHueAndCurrentSaturation = 3
+    }
+
+    /**
+     * The value of the ColorControl featureMap attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.5
+     */
+    export const FeatureMap = {
+        /**
+         * HueSaturation
+         *
+         * Supports color specification via hue/saturation.
+         */
+        hs: BitFlag(0),
+
+        /**
+         * EnhancedHue
+         *
+         * Enhanced hue is supported.
+         */
+        ehue: BitFlag(1),
+
+        /**
+         * ColorLoop
+         *
+         * Color loop is supported.
+         */
+        cl: BitFlag(2),
+
+        /**
+         * Xy
+         *
+         * Supports color specification via XY.
+         */
+        xy: BitFlag(3),
+
+        /**
+         * ColorTemperature
+         *
+         * Supports specification of color temperature.
+         */
+        ct: BitFlag(4)
+    };
+
+    /**
+     * A ColorControlCluster supports these elements if it supports feature HueSaturation.
+     */
+    export const HueSaturationComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The CurrentHue attribute contains the current hue value of the light. It is updated as fast as practical
+             * during commands that change the hue.
+             *
+             * The hue in degrees shall be related to the CurrentHue attribute by the relationship: Hue = CurrentHue x
+             * 360 / 254 (CurrentHue in the range 0 to 254 inclusive)
+             *
+             * If this attribute is implemented then the CurrentSaturation and ColorMode attributes shall also be
+             * implemented.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.1
+             */
+            currentHue: Attribute(0x0, TlvUInt8.bound({ max: 254 }), { persistent: true, default: 0 }),
+
+            /**
+             * The CurrentSaturation attribute holds the current saturation value of the light. It is updated as fast
+             * as practical during commands that change the saturation.
+             *
+             * The saturation shall be related to the CurrentSaturation attribute by the relationship: Saturation =
+             * CurrentSaturation/254 (CurrentSaturation in the range 0 to 254 inclusive)
+             *
+             * If this attribute is implemented then the CurrentHue and ColorMode attributes shall also be implemented.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.2
+             */
+            currentSaturation: Attribute(
+                0x1,
+                TlvUInt8.bound({ max: 254 }),
+                { scene: true, persistent: true, default: 0 }
+            )
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.4
+             */
+            moveToHue: Command(0x0, TlvMoveToHueRequest, 0x0, TlvNoResponse),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.5
+             */
+            moveHue: Command(0x1, TlvMoveHueRequest, 0x1, TlvNoResponse),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.6
+             */
+            stepHue: Command(0x2, TlvStepHueRequest, 0x2, TlvNoResponse),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.7
+             */
+            moveToSaturation: Command(0x3, TlvMoveToSaturationRequest, 0x3, TlvNoResponse),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.8
+             */
+            moveSaturation: Command(0x4, TlvMoveSaturationRequest, 0x4, TlvNoResponse),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.9
+             */
+            stepSaturation: Command(0x5, TlvStepSaturationRequest, 0x5, TlvNoResponse),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.10
+             */
+            moveToHueAndSaturation: Command(0x6, TlvMoveToHueAndSaturationRequest, 0x6, TlvNoResponse)
+        }
+    });
+
+    /**
+     * A ColorControlCluster supports these elements if it supports feature Xy.
+     */
+    export const XyComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The CurrentX attribute contains the current value of the normalized chromaticity value x, as defined in
+             * the CIE xyY Color Space. It is updated as fast as practical during commands that change the color.
+             *
+             * The value of x shall be related to the CurrentX attribute by the relationship x = CurrentX / 65536
+             * (CurrentX in the range 0 to 65279 inclusive)
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.4
+             */
+            currentX: Attribute(
+                0x3,
+                TlvUInt16.bound({ max: 65279 }),
+                { scene: true, persistent: true, default: 24939 }
+            ),
+
+            /**
+             * The CurrentY attribute contains the current value of the normalized chromaticity value y, as defined in
+             * the CIE xyY Color Space. It is updated as fast as practical during commands that change the color.
+             *
+             * The value of y shall be related to the CurrentY attribute by the relationship y = CurrentY / 65536
+             * (CurrentY in the range 0 to 65279 inclusive)
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.5
+             */
+            currentY: Attribute(
+                0x4,
+                TlvUInt16.bound({ max: 65279 }),
+                { scene: true, persistent: true, default: 24701 }
+            )
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.11
+             */
+            moveToColor: Command(0x7, TlvMoveToColorRequest, 0x7, TlvNoResponse),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.12
+             */
+            moveColor: Command(0x8, TlvMoveColorRequest, 0x8, TlvNoResponse),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.13
+             */
+            stepColor: Command(0x9, TlvStepColorRequest, 0x9, TlvNoResponse)
+        }
+    });
+
+    /**
+     * A ColorControlCluster supports these elements if it supports feature ColorTemperature.
+     */
+    export const ColorTemperatureComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The ColorTemperatureMireds attribute contains a scaled inverse of the current value of the color
+             * temperature. The unit of ColorTemperatureMireds is the mired (micro reciprocal degree), AKA mirek (micro
+             * reciprocal kelvin). It is updated as fast as practical during commands that change the color.
+             *
+             * The color temperature value in kelvins shall be related to the ColorTemperatureMireds attribute in
+             * mireds by the relationship
+             *
+             * Color temperature in kelvins = 1,000,000 / ColorTemperatureMireds, where ColorTemperatureMireds is in
+             * the range 1 to 65279 mireds inclusive, giving a color temperature range from 1,000,000 kelvins to 15.32
+             * kelvins.
+             *
+             * If this attribute is implemented then the ColorMode attribute shall also be implemented.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.8
+             */
+            colorTemperatureMireds: Attribute(
+                0x7,
+                TlvUInt16.bound({ max: 65279 }),
+                { scene: true, persistent: true, default: 250 }
+            ),
+
+            /**
+             * The ColorTempPhysicalMinMireds attribute indicates the minimum mired value supported by the hardware.
+             * ColorTempPhysicalMinMireds corresponds to the maximum color temperature in kelvins supported by the
+             * hardware. ColorTempPhysicalMinMireds ≤ ColorTemperatureMireds.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.19
+             */
+            colorTempPhysicalMinMireds: Attribute(0x400b, TlvUInt16.bound({ max: 65279 }), { default: 0 }),
+
+            /**
+             * The ColorTempPhysicalMaxMireds attribute indicates the maximum mired value supported by the hardware.
+             * ColorTempPhysicalMaxMireds corresponds to the minimum color temperature in kelvins supported by the
+             * hardware. ColorTemperatureMireds ≤ ColorTempPhysicalMaxMireds.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.20
+             */
+            colorTempPhysicalMaxMireds: Attribute(0x400c, TlvUInt16.bound({ max: 65279 }), { default: 65279 }),
+
+            /**
+             * The CoupleColorTempToLevelMinMireds attribute specifies a lower bound on the value of the
+             * ColorTemperatureMireds attribute for the purposes of coupling the ColorTemperatureMireds attribute to
+             * the CurrentLevel attribute when the CoupleColorTempToLevel bit of the Options attribute of the Level
+             * Control cluster is equal to 1. When coupling the ColorTemperatureMireds attribute to the CurrentLevel
+             * attribute, this value shall correspond to a CurrentLevel value of 0xfe (100%).
+             *
+             * This attribute shall be set such that the following relationship exists: ColorTempPhysicalMinMireds ≤
+             * CoupleColorTempToLevelMinMireds ≤ ColorTemperatureMireds
+             *
+             * Note that since this attribute is stored as a micro reciprocal degree (mired) value (i.e. color
+             * temperature in kelvins = 1,000,000 / CoupleColorTempToLevelMinMireds), the
+             * CoupleColorTempToLevelMinMireds attribute corresponds to an upper bound on the value of the color
+             * temperature in kelvins supported by the device.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.21
+             */
+            coupleColorTempToLevelMinMireds: OptionalAttribute(0x400d, TlvUInt16),
+
+            /**
+             * The StartUpColorTemperatureMireds attribute shall define the desired startup color temperature value a
+             * lamp shall use when it is supplied with power and this value shall be reflected in the
+             * ColorTemperatureMireds attribute. In addition, the ColorMode and EnhancedColorMode attributes shall be
+             * set to 0x02 (color temperature). The values of the StartUpColorTemperatureMireds attribute are listed in
+             * the table below,
+             *
+             * Table 42. Values of the StartUpColorTemperatureMireds attribute
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.22
+             */
+            startUpColorTemperatureMireds: OptionalWritableAttribute(
+                0x4010,
+                TlvNullable(TlvUInt16.bound({ max: 65279 })),
+                { writeAcl: AccessLevel.Manage }
+            )
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.14
+             */
+            moveToColorTemperature: Command(0xa, TlvMoveToColorTemperatureRequest, 0xa, TlvNoResponse),
+
+            /**
+             * The MoveColorTemperature command allows the color temperature of a lamp to be moved at a specified rate.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.21
+             */
+            moveColorTemperature: Command(0x4b, TlvMoveColorTemperatureRequest, 0x4b, TlvNoResponse),
+
+            /**
+             * The StepColorTemperature command allows the color temperature of a lamp to be stepped with a specified
+             * step size.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.22
+             */
+            stepColorTemperature: Command(0x4c, TlvStepColorTemperatureRequest, 0x4c, TlvNoResponse)
+        }
+    });
+
+    /**
+     * A ColorControlCluster supports these elements if it supports feature EnhancedHue.
+     */
+    export const EnhancedHueComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The EnhancedCurrentHue attribute represents non-equidistant steps along the CIE 1931 color triangle, and
+             * it provides 16-bits precision.
+             *
+             * The upper 8 bits of this attribute shall be used as an index in the implementation specific XY lookup
+             * table to provide the non-equidistance steps. The lower 8 bits shall be used to interpolate between these
+             * steps in a linear way in order to provide color zoom for the user.
+             *
+             * To provide compatibility with standard ZCL, the CurrentHue attribute shall contain a hue value in the
+             * range 0 to 254, calculated from the EnhancedCurrentHue attribute.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.11
+             */
+            enhancedCurrentHue: Attribute(0x4000, TlvUInt16, { scene: true, persistent: true, default: 0 })
+        },
+
+        commands: {
+            /**
+             * The EnhancedMoveToHue command allows lamps to be moved in a smooth continuous transition from their
+             * current hue to a target hue.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.15
+             */
+            enhancedMoveToHue: Command(0x40, TlvEnhancedMoveToHueRequest, 0x40, TlvNoResponse),
+
+            /**
+             * The EnhancedMoveHue command allows lamps to be moved in a continuous stepped transition from their
+             * current hue to a target hue.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.16
+             */
+            enhancedMoveHue: Command(0x41, TlvEnhancedMoveHueRequest, 0x41, TlvNoResponse),
+
+            /**
+             * The EnhancedStepHue command allows lamps to be moved in a stepped transition from their current hue to a
+             * target hue, resulting in a linear transition through XY space.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.17
+             */
+            enhancedStepHue: Command(0x42, TlvEnhancedStepHueRequest, 0x42, TlvNoResponse),
+
+            /**
+             * The EnhancedMoveToHueAndSaturation command allows lamps to be moved in a smooth continuous transition
+             * from their current hue to a target hue and from their current saturation to a target saturation.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.18
+             */
+            enhancedMoveToHueAndSaturation: Command(
+                0x43,
+                TlvEnhancedMoveToHueAndSaturationRequest,
+                0x43,
+                TlvNoResponse
+            )
+        }
+    });
+
+    /**
+     * A ColorControlCluster supports these elements if it supports feature ColorLoop.
+     */
+    export const ColorLoopComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The ColorLoopActive attribute specifies the current active status of the color loop. If this attribute
+             *
+             * has the value 0, the color loop shall not be active. If this attribute has the value 1, the color loop
+             * shall be active. All other values (2 to 254) are reserved.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.13
+             */
+            colorLoopActive: Attribute(0x4002, TlvUInt8, { scene: true, persistent: true, default: 0 }),
+
+            /**
+             * The ColorLoopDirection attribute specifies the current direction of the color loop. If this attribute
+             * has the value 0, the EnhancedCurrentHue attribute shall be decremented. If this attribute has the value
+             * 1, the EnhancedCurrentHue attribute shall be incremented. All other values (2 to 254) are reserved.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.14
+             */
+            colorLoopDirection: Attribute(0x4003, TlvUInt8, { scene: true, persistent: true, default: 0 }),
+
+            /**
+             * The ColorLoopTime attribute specifies the number of seconds it shall take to perform a full color loop,
+             * i.e., to cycle all values of the EnhancedCurrentHue attribute (between 0 and 0xfffe).
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.15
+             */
+            colorLoopTime: Attribute(0x4004, TlvUInt16, { scene: true, persistent: true, default: 25 }),
+
+            /**
+             * The ColorLoopStartEnhancedHue attribute specifies the value of the EnhancedCurrentHue attribute from
+             * which the color loop shall be started.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.16
+             */
+            colorLoopStartEnhancedHue: Attribute(0x4005, TlvUInt16, { default: 8960 }),
+
+            /**
+             * The ColorLoopStoredEnhancedHue attribute specifies the value of the EnhancedCurrentHue attribute before
+             * the color loop was started. Once the color loop is complete, the EnhancedCurrentHue attribute shall be
+             * restored to this value.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.17
+             */
+            colorLoopStoredEnhancedHue: Attribute(0x4006, TlvUInt16, { default: 0 })
+        },
+
+        commands: {
+            /**
+             * The Color Loop Set command allows a color loop to be activated such that the color lamp cycles through
+             * its range of hues.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.19
+             */
+            colorLoopSet: Command(0x44, TlvColorLoopSetRequest, 0x44, TlvNoResponse)
+        }
+    });
+
+    /**
+     * A ColorControlCluster supports these elements if it supports features HueSaturation, Xy or ColorTemperature.
+     */
+    export const HueSaturationOrXyOrColorTemperatureComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * The StopMoveStep command is provided to allow MoveTo and Step commands to be stopped. (Note this
+             * automatically provides symmetry to the Level Control cluster.)
+             *
+             * Note: the StopMoveStep command has no effect on an active color loop.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.20
+             */
+            stopMoveStep: Command(0x47, TlvStopMoveStepRequest, 0x47, TlvNoResponse)
+        }
     });
 
     /**
@@ -805,7 +1314,7 @@ export namespace ColorControl {
     /**
      * These elements and properties are present in all ColorControl clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x300,
         name: "ColorControl",
         revision: 5,
@@ -1190,381 +1699,28 @@ export namespace ColorControl {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.18
              */
             colorCapabilities: FixedAttribute(0x400a, TlvBitmap(TlvUInt32, FeatureMap))
-        }
-    });
-
-    /**
-     * A ColorControlCluster supports these elements if it supports feature HueSaturation.
-     */
-    export const HueSaturationComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The CurrentHue attribute contains the current hue value of the light. It is updated as fast as practical
-             * during commands that change the hue.
-             *
-             * The hue in degrees shall be related to the CurrentHue attribute by the relationship: Hue = CurrentHue x
-             * 360 / 254 (CurrentHue in the range 0 to 254 inclusive)
-             *
-             * If this attribute is implemented then the CurrentSaturation and ColorMode attributes shall also be
-             * implemented.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.1
-             */
-            currentHue: Attribute(0x0, TlvUInt8.bound({ max: 254 }), { persistent: true, default: 0 }),
-
-            /**
-             * The CurrentSaturation attribute holds the current saturation value of the light. It is updated as fast
-             * as practical during commands that change the saturation.
-             *
-             * The saturation shall be related to the CurrentSaturation attribute by the relationship: Saturation =
-             * CurrentSaturation/254 (CurrentSaturation in the range 0 to 254 inclusive)
-             *
-             * If this attribute is implemented then the CurrentHue and ColorMode attributes shall also be implemented.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.2
-             */
-            currentSaturation: Attribute(
-                0x1,
-                TlvUInt8.bound({ max: 254 }),
-                { scene: true, persistent: true, default: 0 }
-            )
         },
 
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.4
-             */
-            moveToHue: Command(0x0, TlvMoveToHueRequest, 0x0, TlvNoResponse),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.5
-             */
-            moveHue: Command(0x1, TlvMoveHueRequest, 0x1, TlvNoResponse),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.6
-             */
-            stepHue: Command(0x2, TlvStepHueRequest, 0x2, TlvNoResponse),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.7
-             */
-            moveToSaturation: Command(0x3, TlvMoveToSaturationRequest, 0x3, TlvNoResponse),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.8
-             */
-            moveSaturation: Command(0x4, TlvMoveSaturationRequest, 0x4, TlvNoResponse),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.9
-             */
-            stepSaturation: Command(0x5, TlvStepSaturationRequest, 0x5, TlvNoResponse),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.10
-             */
-            moveToHueAndSaturation: Command(0x6, TlvMoveToHueAndSaturationRequest, 0x6, TlvNoResponse)
-        }
+        /**
+         * This metadata controls which ColorControlCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { hueSaturation: true }, component: HueSaturationComponent },
+            { flags: { xy: true }, component: XyComponent },
+            { flags: { colorTemperature: true }, component: ColorTemperatureComponent },
+            { flags: { enhancedHue: true }, component: EnhancedHueComponent },
+            { flags: { colorLoop: true }, component: ColorLoopComponent },
+            { flags: { hueSaturation: true }, component: HueSaturationOrXyOrColorTemperatureComponent },
+            { flags: { xy: true }, component: HueSaturationOrXyOrColorTemperatureComponent },
+            { flags: { colorTemperature: true }, component: HueSaturationOrXyOrColorTemperatureComponent }
+        )
     });
 
     /**
-     * A ColorControlCluster supports these elements if it supports feature Xy.
+     * @see {@link Cluster}
      */
-    export const XyComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The CurrentX attribute contains the current value of the normalized chromaticity value x, as defined in
-             * the CIE xyY Color Space. It is updated as fast as practical during commands that change the color.
-             *
-             * The value of x shall be related to the CurrentX attribute by the relationship x = CurrentX / 65536
-             * (CurrentX in the range 0 to 65279 inclusive)
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.4
-             */
-            currentX: Attribute(
-                0x3,
-                TlvUInt16.bound({ max: 65279 }),
-                { scene: true, persistent: true, default: 24939 }
-            ),
-
-            /**
-             * The CurrentY attribute contains the current value of the normalized chromaticity value y, as defined in
-             * the CIE xyY Color Space. It is updated as fast as practical during commands that change the color.
-             *
-             * The value of y shall be related to the CurrentY attribute by the relationship y = CurrentY / 65536
-             * (CurrentY in the range 0 to 65279 inclusive)
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.5
-             */
-            currentY: Attribute(
-                0x4,
-                TlvUInt16.bound({ max: 65279 }),
-                { scene: true, persistent: true, default: 24701 }
-            )
-        },
-
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.11
-             */
-            moveToColor: Command(0x7, TlvMoveToColorRequest, 0x7, TlvNoResponse),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.12
-             */
-            moveColor: Command(0x8, TlvMoveColorRequest, 0x8, TlvNoResponse),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.13
-             */
-            stepColor: Command(0x9, TlvStepColorRequest, 0x9, TlvNoResponse)
-        }
-    });
-
-    /**
-     * A ColorControlCluster supports these elements if it supports feature ColorTemperature.
-     */
-    export const ColorTemperatureComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The ColorTemperatureMireds attribute contains a scaled inverse of the current value of the color
-             * temperature. The unit of ColorTemperatureMireds is the mired (micro reciprocal degree), AKA mirek (micro
-             * reciprocal kelvin). It is updated as fast as practical during commands that change the color.
-             *
-             * The color temperature value in kelvins shall be related to the ColorTemperatureMireds attribute in
-             * mireds by the relationship
-             *
-             * Color temperature in kelvins = 1,000,000 / ColorTemperatureMireds, where ColorTemperatureMireds is in
-             * the range 1 to 65279 mireds inclusive, giving a color temperature range from 1,000,000 kelvins to 15.32
-             * kelvins.
-             *
-             * If this attribute is implemented then the ColorMode attribute shall also be implemented.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.8
-             */
-            colorTemperatureMireds: Attribute(
-                0x7,
-                TlvUInt16.bound({ max: 65279 }),
-                { scene: true, persistent: true, default: 250 }
-            ),
-
-            /**
-             * The ColorTempPhysicalMinMireds attribute indicates the minimum mired value supported by the hardware.
-             * ColorTempPhysicalMinMireds corresponds to the maximum color temperature in kelvins supported by the
-             * hardware. ColorTempPhysicalMinMireds ≤ ColorTemperatureMireds.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.19
-             */
-            colorTempPhysicalMinMireds: Attribute(0x400b, TlvUInt16.bound({ max: 65279 }), { default: 0 }),
-
-            /**
-             * The ColorTempPhysicalMaxMireds attribute indicates the maximum mired value supported by the hardware.
-             * ColorTempPhysicalMaxMireds corresponds to the minimum color temperature in kelvins supported by the
-             * hardware. ColorTemperatureMireds ≤ ColorTempPhysicalMaxMireds.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.20
-             */
-            colorTempPhysicalMaxMireds: Attribute(0x400c, TlvUInt16.bound({ max: 65279 }), { default: 65279 }),
-
-            /**
-             * The CoupleColorTempToLevelMinMireds attribute specifies a lower bound on the value of the
-             * ColorTemperatureMireds attribute for the purposes of coupling the ColorTemperatureMireds attribute to
-             * the CurrentLevel attribute when the CoupleColorTempToLevel bit of the Options attribute of the Level
-             * Control cluster is equal to 1. When coupling the ColorTemperatureMireds attribute to the CurrentLevel
-             * attribute, this value shall correspond to a CurrentLevel value of 0xfe (100%).
-             *
-             * This attribute shall be set such that the following relationship exists: ColorTempPhysicalMinMireds ≤
-             * CoupleColorTempToLevelMinMireds ≤ ColorTemperatureMireds
-             *
-             * Note that since this attribute is stored as a micro reciprocal degree (mired) value (i.e. color
-             * temperature in kelvins = 1,000,000 / CoupleColorTempToLevelMinMireds), the
-             * CoupleColorTempToLevelMinMireds attribute corresponds to an upper bound on the value of the color
-             * temperature in kelvins supported by the device.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.21
-             */
-            coupleColorTempToLevelMinMireds: OptionalAttribute(0x400d, TlvUInt16.bound({ max: 65279 })),
-
-            /**
-             * The StartUpColorTemperatureMireds attribute shall define the desired startup color temperature value a
-             * lamp shall use when it is supplied with power and this value shall be reflected in the
-             * ColorTemperatureMireds attribute. In addition, the ColorMode and EnhancedColorMode attributes shall be
-             * set to 0x02 (color temperature). The values of the StartUpColorTemperatureMireds attribute are listed in
-             * the table below,
-             *
-             * Table 42. Values of the StartUpColorTemperatureMireds attribute
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.22
-             */
-            startUpColorTemperatureMireds: OptionalWritableAttribute(
-                0x4010,
-                TlvNullable(TlvUInt16.bound({ max: 65279 })),
-                { writeAcl: AccessLevel.Manage }
-            )
-        },
-
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.14
-             */
-            moveToColorTemperature: Command(0xa, TlvMoveToColorTemperatureRequest, 0xa, TlvNoResponse),
-
-            /**
-             * The MoveColorTemperature command allows the color temperature of a lamp to be moved at a specified rate.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.21
-             */
-            moveColorTemperature: Command(0x4b, TlvMoveColorTemperatureRequest, 0x4b, TlvNoResponse),
-
-            /**
-             * The StepColorTemperature command allows the color temperature of a lamp to be stepped with a specified
-             * step size.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.22
-             */
-            stepColorTemperature: Command(0x4c, TlvStepColorTemperatureRequest, 0x4c, TlvNoResponse)
-        }
-    });
-
-    /**
-     * A ColorControlCluster supports these elements if it supports feature EnhancedHue.
-     */
-    export const EnhancedHueComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The EnhancedCurrentHue attribute represents non-equidistant steps along the CIE 1931 color triangle, and
-             * it provides 16-bits precision.
-             *
-             * The upper 8 bits of this attribute shall be used as an index in the implementation specific XY lookup
-             * table to provide the non-equidistance steps. The lower 8 bits shall be used to interpolate between these
-             * steps in a linear way in order to provide color zoom for the user.
-             *
-             * To provide compatibility with standard ZCL, the CurrentHue attribute shall contain a hue value in the
-             * range 0 to 254, calculated from the EnhancedCurrentHue attribute.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.11
-             */
-            enhancedCurrentHue: Attribute(0x4000, TlvUInt16, { scene: true, persistent: true, default: 0 })
-        },
-
-        commands: {
-            /**
-             * The EnhancedMoveToHue command allows lamps to be moved in a smooth continuous transition from their
-             * current hue to a target hue.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.15
-             */
-            enhancedMoveToHue: Command(0x40, TlvEnhancedMoveToHueRequest, 0x40, TlvNoResponse),
-
-            /**
-             * The EnhancedMoveHue command allows lamps to be moved in a continuous stepped transition from their
-             * current hue to a target hue.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.16
-             */
-            enhancedMoveHue: Command(0x41, TlvEnhancedMoveHueRequest, 0x41, TlvNoResponse),
-
-            /**
-             * The EnhancedStepHue command allows lamps to be moved in a stepped transition from their current hue to a
-             * target hue, resulting in a linear transition through XY space.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.17
-             */
-            enhancedStepHue: Command(0x42, TlvEnhancedStepHueRequest, 0x42, TlvNoResponse),
-
-            /**
-             * The EnhancedMoveToHueAndSaturation command allows lamps to be moved in a smooth continuous transition
-             * from their current hue to a target hue and from their current saturation to a target saturation.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.18
-             */
-            enhancedMoveToHueAndSaturation: Command(
-                0x43,
-                TlvEnhancedMoveToHueAndSaturationRequest,
-                0x43,
-                TlvNoResponse
-            )
-        }
-    });
-
-    /**
-     * A ColorControlCluster supports these elements if it supports feature ColorLoop.
-     */
-    export const ColorLoopComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The ColorLoopActive attribute specifies the current active status of the color loop. If this attribute
-             *
-             * has the value 0, the color loop shall not be active. If this attribute has the value 1, the color loop
-             * shall be active. All other values (2 to 254) are reserved.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.13
-             */
-            colorLoopActive: Attribute(0x4002, TlvUInt8, { scene: true, persistent: true, default: 0 }),
-
-            /**
-             * The ColorLoopDirection attribute specifies the current direction of the color loop. If this attribute
-             * has the value 0, the EnhancedCurrentHue attribute shall be decremented. If this attribute has the value
-             * 1, the EnhancedCurrentHue attribute shall be incremented. All other values (2 to 254) are reserved.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.14
-             */
-            colorLoopDirection: Attribute(0x4003, TlvUInt8, { scene: true, persistent: true, default: 0 }),
-
-            /**
-             * The ColorLoopTime attribute specifies the number of seconds it shall take to perform a full color loop,
-             * i.e., to cycle all values of the EnhancedCurrentHue attribute (between 0 and 0xfffe).
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.15
-             */
-            colorLoopTime: Attribute(0x4004, TlvUInt16, { scene: true, persistent: true, default: 25 }),
-
-            /**
-             * The ColorLoopStartEnhancedHue attribute specifies the value of the EnhancedCurrentHue attribute from
-             * which the color loop shall be started.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.16
-             */
-            colorLoopStartEnhancedHue: Attribute(0x4005, TlvUInt16, { default: 8960 }),
-
-            /**
-             * The ColorLoopStoredEnhancedHue attribute specifies the value of the EnhancedCurrentHue attribute before
-             * the color loop was started. Once the color loop is complete, the EnhancedCurrentHue attribute shall be
-             * restored to this value.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.17
-             */
-            colorLoopStoredEnhancedHue: Attribute(0x4006, TlvUInt16, { default: 0 })
-        },
-
-        commands: {
-            /**
-             * The Color Loop Set command allows a color loop to be activated such that the color lamp cycles through
-             * its range of hues.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.19
-             */
-            colorLoopSet: Command(0x44, TlvColorLoopSetRequest, 0x44, TlvNoResponse)
-        }
-    });
-
-    /**
-     * A ColorControlCluster supports these elements if it supports features HueSaturation, Xy or ColorTemperature.
-     */
-    export const HueSaturationOrXyOrColorTemperatureComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * The StopMoveStep command is provided to allow MoveTo and Step commands to be stopped. (Note this
-             * automatically provides symmetry to the Level Control cluster.)
-             *
-             * Note: the StopMoveStep command has no effect on an active color loop.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.20
-             */
-            stopMoveStep: Command(0x47, TlvStopMoveStepRequest, 0x47, TlvNoResponse)
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Color Control
@@ -1576,51 +1732,9 @@ export namespace ColorControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a ColorControl cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a ColorControl cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, HueSaturationComponent, { hueSaturation: true });
-            ClusterFactory.extend(cluster, XyComponent, { xy: true });
-            ClusterFactory.extend(cluster, ColorTemperatureComponent, { colorTemperature: true });
-            ClusterFactory.extend(cluster, EnhancedHueComponent, { enhancedHue: true });
-            ClusterFactory.extend(cluster, ColorLoopComponent, { colorLoop: true });
-
-            ClusterFactory.extend(
-                cluster,
-                HueSaturationOrXyOrColorTemperatureComponent,
-                { hueSaturation: true },
-                { xy: true },
-                { colorTemperature: true }
-            );
-
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { hueSaturation: true } ? typeof HueSaturationComponent : {})
-        & (SF extends { xy: true } ? typeof XyComponent : {})
-        & (SF extends { colorTemperature: true } ? typeof ColorTemperatureComponent : {})
-        & (SF extends { enhancedHue: true } ? typeof EnhancedHueComponent : {})
-        & (SF extends { colorLoop: true } ? typeof ColorLoopComponent : {})
-        & (SF extends { hueSaturation: true } | { xy: true } | { colorTemperature: true } ? typeof HueSaturationOrXyOrColorTemperatureComponent : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const HS = { hueSaturation: true };
     const XY = { xy: true };
     const CT = { colorTemperature: true };
@@ -1628,12 +1742,9 @@ export namespace ColorControl {
     const CL = { colorLoop: true };
 
     /**
-     * This cluster supports all ColorControl features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1641,121 +1752,132 @@ export namespace ColorControl {
 
         attributes: {
             ...Cluster.attributes,
-            currentHue: ClusterFactory.AsConditional(
+            currentHue: MutableCluster.AsConditional(
                 HueSaturationComponent.attributes.currentHue,
                 { mandatoryIf: [HS] }
             ),
-            currentSaturation: ClusterFactory.AsConditional(
+            currentSaturation: MutableCluster.AsConditional(
                 HueSaturationComponent.attributes.currentSaturation,
                 { mandatoryIf: [HS] }
             ),
-            currentX: ClusterFactory.AsConditional(XyComponent.attributes.currentX, { mandatoryIf: [XY] }),
-            currentY: ClusterFactory.AsConditional(XyComponent.attributes.currentY, { mandatoryIf: [XY] }),
-            colorTemperatureMireds: ClusterFactory.AsConditional(
+            currentX: MutableCluster.AsConditional(XyComponent.attributes.currentX, { mandatoryIf: [XY] }),
+            currentY: MutableCluster.AsConditional(XyComponent.attributes.currentY, { mandatoryIf: [XY] }),
+            colorTemperatureMireds: MutableCluster.AsConditional(
                 ColorTemperatureComponent.attributes.colorTemperatureMireds,
                 { mandatoryIf: [CT] }
             ),
-            enhancedCurrentHue: ClusterFactory.AsConditional(
+            enhancedCurrentHue: MutableCluster.AsConditional(
                 EnhancedHueComponent.attributes.enhancedCurrentHue,
                 { mandatoryIf: [EHUE] }
             ),
-            colorLoopActive: ClusterFactory.AsConditional(
+            colorLoopActive: MutableCluster.AsConditional(
                 ColorLoopComponent.attributes.colorLoopActive,
                 { mandatoryIf: [CL] }
             ),
-            colorLoopDirection: ClusterFactory.AsConditional(
+            colorLoopDirection: MutableCluster.AsConditional(
                 ColorLoopComponent.attributes.colorLoopDirection,
                 { mandatoryIf: [CL] }
             ),
-            colorLoopTime: ClusterFactory.AsConditional(
+            colorLoopTime: MutableCluster.AsConditional(
                 ColorLoopComponent.attributes.colorLoopTime,
                 { mandatoryIf: [CL] }
             ),
-            colorLoopStartEnhancedHue: ClusterFactory.AsConditional(
+            colorLoopStartEnhancedHue: MutableCluster.AsConditional(
                 ColorLoopComponent.attributes.colorLoopStartEnhancedHue,
                 { mandatoryIf: [CL] }
             ),
-            colorLoopStoredEnhancedHue: ClusterFactory.AsConditional(
+            colorLoopStoredEnhancedHue: MutableCluster.AsConditional(
                 ColorLoopComponent.attributes.colorLoopStoredEnhancedHue,
                 { mandatoryIf: [CL] }
             ),
-            colorTempPhysicalMinMireds: ClusterFactory.AsConditional(
+            colorTempPhysicalMinMireds: MutableCluster.AsConditional(
                 ColorTemperatureComponent.attributes.colorTempPhysicalMinMireds,
                 { mandatoryIf: [CT] }
             ),
-            colorTempPhysicalMaxMireds: ClusterFactory.AsConditional(
+            colorTempPhysicalMaxMireds: MutableCluster.AsConditional(
                 ColorTemperatureComponent.attributes.colorTempPhysicalMaxMireds,
                 { mandatoryIf: [CT] }
             ),
-            coupleColorTempToLevelMinMireds: ClusterFactory.AsConditional(
+            coupleColorTempToLevelMinMireds: MutableCluster.AsConditional(
                 ColorTemperatureComponent.attributes.coupleColorTempToLevelMinMireds,
                 { optionalIf: [CT] }
             ),
-            startUpColorTemperatureMireds: ClusterFactory.AsConditional(
+            startUpColorTemperatureMireds: MutableCluster.AsConditional(
                 ColorTemperatureComponent.attributes.startUpColorTemperatureMireds,
                 { optionalIf: [CT] }
             )
         },
 
         commands: {
-            moveToHue: ClusterFactory.AsConditional(HueSaturationComponent.commands.moveToHue, { mandatoryIf: [HS] }),
-            moveHue: ClusterFactory.AsConditional(HueSaturationComponent.commands.moveHue, { mandatoryIf: [HS] }),
-            stepHue: ClusterFactory.AsConditional(HueSaturationComponent.commands.stepHue, { mandatoryIf: [HS] }),
-            moveToSaturation: ClusterFactory.AsConditional(
+            moveToHue: MutableCluster.AsConditional(HueSaturationComponent.commands.moveToHue, { mandatoryIf: [HS] }),
+            moveHue: MutableCluster.AsConditional(HueSaturationComponent.commands.moveHue, { mandatoryIf: [HS] }),
+            stepHue: MutableCluster.AsConditional(HueSaturationComponent.commands.stepHue, { mandatoryIf: [HS] }),
+            moveToSaturation: MutableCluster.AsConditional(
                 HueSaturationComponent.commands.moveToSaturation,
                 { mandatoryIf: [HS] }
             ),
-            moveSaturation: ClusterFactory.AsConditional(
+            moveSaturation: MutableCluster.AsConditional(
                 HueSaturationComponent.commands.moveSaturation,
                 { mandatoryIf: [HS] }
             ),
-            stepSaturation: ClusterFactory.AsConditional(
+            stepSaturation: MutableCluster.AsConditional(
                 HueSaturationComponent.commands.stepSaturation,
                 { mandatoryIf: [HS] }
             ),
-            moveToHueAndSaturation: ClusterFactory.AsConditional(
+            moveToHueAndSaturation: MutableCluster.AsConditional(
                 HueSaturationComponent.commands.moveToHueAndSaturation,
                 { mandatoryIf: [HS] }
             ),
-            moveToColor: ClusterFactory.AsConditional(XyComponent.commands.moveToColor, { mandatoryIf: [XY] }),
-            moveColor: ClusterFactory.AsConditional(XyComponent.commands.moveColor, { mandatoryIf: [XY] }),
-            stepColor: ClusterFactory.AsConditional(XyComponent.commands.stepColor, { mandatoryIf: [XY] }),
-            moveToColorTemperature: ClusterFactory.AsConditional(
+            moveToColor: MutableCluster.AsConditional(XyComponent.commands.moveToColor, { mandatoryIf: [XY] }),
+            moveColor: MutableCluster.AsConditional(XyComponent.commands.moveColor, { mandatoryIf: [XY] }),
+            stepColor: MutableCluster.AsConditional(XyComponent.commands.stepColor, { mandatoryIf: [XY] }),
+            moveToColorTemperature: MutableCluster.AsConditional(
                 ColorTemperatureComponent.commands.moveToColorTemperature,
                 { mandatoryIf: [CT] }
             ),
-            enhancedMoveToHue: ClusterFactory.AsConditional(
+            enhancedMoveToHue: MutableCluster.AsConditional(
                 EnhancedHueComponent.commands.enhancedMoveToHue,
                 { mandatoryIf: [EHUE] }
             ),
-            enhancedMoveHue: ClusterFactory.AsConditional(
+            enhancedMoveHue: MutableCluster.AsConditional(
                 EnhancedHueComponent.commands.enhancedMoveHue,
                 { mandatoryIf: [EHUE] }
             ),
-            enhancedStepHue: ClusterFactory.AsConditional(
+            enhancedStepHue: MutableCluster.AsConditional(
                 EnhancedHueComponent.commands.enhancedStepHue,
                 { mandatoryIf: [EHUE] }
             ),
-            enhancedMoveToHueAndSaturation: ClusterFactory.AsConditional(
+            enhancedMoveToHueAndSaturation: MutableCluster.AsConditional(
                 EnhancedHueComponent.commands.enhancedMoveToHueAndSaturation,
                 { mandatoryIf: [EHUE] }
             ),
-            colorLoopSet: ClusterFactory.AsConditional(ColorLoopComponent.commands.colorLoopSet, { mandatoryIf: [CL] }),
-            stopMoveStep: ClusterFactory.AsConditional(
+            colorLoopSet: MutableCluster.AsConditional(ColorLoopComponent.commands.colorLoopSet, { mandatoryIf: [CL] }),
+            stopMoveStep: MutableCluster.AsConditional(
                 HueSaturationOrXyOrColorTemperatureComponent.commands.stopMoveStep,
                 { mandatoryIf: [HS, XY, CT] }
             ),
-            moveColorTemperature: ClusterFactory.AsConditional(
+            moveColorTemperature: MutableCluster.AsConditional(
                 ColorTemperatureComponent.commands.moveColorTemperature,
                 { mandatoryIf: [CT] }
             ),
-            stepColorTemperature: ClusterFactory.AsConditional(
+            stepColorTemperature: MutableCluster.AsConditional(
                 ColorTemperatureComponent.commands.stepColorTemperature,
                 { mandatoryIf: [CT] }
             )
         }
     });
+
+    /**
+     * This cluster supports all ColorControl features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type ColorControlCluster = typeof ColorControl.Cluster;
+export type ColorControlCluster = ColorControl.Cluster;
 export const ColorControlCluster = ColorControl.Cluster;
+ClusterRegistry.register(ColorControl.Complete);

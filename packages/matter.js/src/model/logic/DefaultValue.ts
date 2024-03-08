@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -135,7 +135,7 @@ function buildObject(model: ValueModel) {
     let result: { [key: string]: any } | undefined;
 
     for (const child of model.members) {
-        const name = camelize(child.name, false);
+        const name = camelize(child.name);
         if (result && result[name] !== undefined) {
             continue;
         }

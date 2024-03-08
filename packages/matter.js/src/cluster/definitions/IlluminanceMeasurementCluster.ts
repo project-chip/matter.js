@@ -1,26 +1,24 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace IlluminanceMeasurement {
     /**
-     * Illuminance Measurement
-     *
-     * Attributes and commands for configuring the measurement of illuminance, and reporting illuminance measurements.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x400,
         name: "IlluminanceMeasurement",
         revision: 3,
@@ -78,7 +76,21 @@ export namespace IlluminanceMeasurement {
             lightSensorType: OptionalAttribute(0x4, TlvNullable(TlvUInt8), { default: null })
         }
     })
+
+    /**
+     * Illuminance Measurement
+     *
+     * Attributes and commands for configuring the measurement of illuminance, and reporting illuminance measurements.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type IlluminanceMeasurementCluster = typeof IlluminanceMeasurement.Cluster;
+export type IlluminanceMeasurementCluster = IlluminanceMeasurement.Cluster;
 export const IlluminanceMeasurementCluster = IlluminanceMeasurement.Cluster;
+ClusterRegistry.register(IlluminanceMeasurement.Complete);

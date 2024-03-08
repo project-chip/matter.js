@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js",
-    "version": "0.7.5",
+    "version": "0.8.0-alpha.0",
     "description": "Matter protocol in pure js",
     "keywords": [
         "iot",
@@ -29,20 +29,23 @@
         "build-clean": "matter-build --clean",
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json",
         "test": "matter-test -w",
-        "coverage": "c8 matter-test esm"
+        "coverage": "c8 matter-test esm",
+        "embed-examples": "embedme **/README.md"
     },
     "dependencies": {
         "bn.js": "^5.2.1",
-        "elliptic": "^6.5.4"
+        "elliptic": "^6.5.5"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.7.5",
+        "@project-chip/matter.js-tools": "0.8.0-alpha.0",
         "@types/bn.js": "^5.1.5",
-        "@types/chai": "^4.3.11",
+        "@types/chai": "^4.3.12",
         "@types/elliptic": "^6.4.18",
         "@types/mocha": "^10.0.6",
-        "chai": "^4.3.10",
-        "mocha": "^10.2.0",
+        "@types/wtfnode": "^0.7.3",
+        "chai": "^4.4.1",
+        "embedme": "^1.22.1",
+        "mocha": "^10.3.0",
         "typescript": "^5.3.3"
     },
     "files": [
@@ -94,6 +97,36 @@
             "require": {
                 "types": "./dist/cjs/protocol/securechannel/export.d.ts",
                 "default": "./dist/cjs/protocol/securechannel/export.js"
+            }
+        },
+        "./behaviors/*": {
+            "import": {
+                "types": "./dist/esm/behavior/definitions/*/export.d.ts",
+                "default": "./dist/esm/behavior/definitions/*/export.js"
+            },
+            "require": {
+                "types": "./dist/cjs/behavior/definitions/*/export.d.ts",
+                "default": "./dist/cjs/behavior/definitions/*/export.js"
+            }
+        },
+        "./devices/*": {
+            "import": {
+                "types": "./dist/esm/endpoint/definitions/device/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/device/*.js"
+            },
+            "require": {
+                "types": "./dist/esm/endpoint/definitions/device/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/device/*.js"
+            }
+        },
+        "./endpoints/*": {
+            "import": {
+                "types": "./dist/esm/endpoint/definitions/system/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/system/*.js"
+            },
+            "require": {
+                "types": "./dist/esm/endpoint/definitions/system/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/system/*.js"
             }
         },
         "./*": {

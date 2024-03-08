@@ -1,16 +1,18 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Globals, MatterElement } from "../elements/index.js";
+import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Matter } from "../standard/index.js";
 import { AttributeModel } from "./AttributeModel.js";
 import { ClusterModel } from "./ClusterModel.js";
 import { DatatypeModel } from "./DatatypeModel.js";
 import { DeviceTypeModel } from "./DeviceTypeModel.js";
 import { FabricModel } from "./FabricModel.js";
+import { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 
 /**
@@ -39,7 +41,7 @@ export class MatterModel extends Model implements MatterElement {
      * Global datatypes.
      */
     get datatypes() {
-        return this.all(DatatypeModel);
+        return this.all(FieldModel);
     }
 
     /**
@@ -75,5 +77,7 @@ export class MatterModel extends Model implements MatterElement {
 }
 
 export namespace MatterModel {
-    export type Child = ClusterModel | DeviceTypeModel | DatatypeModel | AttributeModel | FabricModel;
+    export type Child = ClusterModel | DeviceTypeModel | FieldModel | DatatypeModel | AttributeModel | FabricModel;
 }
+
+ModelTraversal.defaultRoot = new MatterModel();

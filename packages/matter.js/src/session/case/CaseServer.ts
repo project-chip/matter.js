@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,7 +38,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
         const messenger = new CaseServerMessenger(exchange);
         try {
-            await this.handleSigma1(exchange.session.getContext(), messenger);
+            await this.handleSigma1(exchange.session.context, messenger);
         } catch (error) {
             logger.error("An error occurred during the commissioning", error);
 
@@ -96,7 +96,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             // All good! Create secure session
             const sessionId = await server.getNextAvailableSessionId();
             const secureSessionSalt = ByteArray.concat(peerRandom, peerResumptionId);
-            const secureSession = await server.createSecureSession({
+            const secureSession = await server.sessionManager.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
@@ -121,7 +121,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             }
 
             logger.info(
-                `session ${secureSession.getId()} resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
+                `session ${secureSession.id} resumed with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
                 )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
             );
@@ -205,7 +205,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
-            const secureSession = await server.createSecureSession({
+            const secureSession = await server.sessionManager.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
@@ -217,7 +217,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 sessionParameters,
             });
             logger.info(
-                `session ${secureSession.getId()} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
+                `session ${secureSession.id} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
                 )}(index ${fabric.fabricIndex}) and PeerNode ${NodeId.toHexString(peerNodeId)}`,
             );

@@ -1,20 +1,23 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { OptionalAttribute, Command, TlvNoResponse, Attribute } from "../../cluster/Cluster.js";
-import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
-import { TlvUInt16, TlvInt16, TlvEnum } from "../../tlv/TlvNumber.js";
-import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { Attribute, Command, OptionalAttribute, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvUInt16, TlvEnum, TlvInt16 } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace Channel {
     /**
@@ -68,40 +71,14 @@ export namespace Channel {
     });
 
     /**
-     * Input to the Channel changeChannelByNumber command
+     * This indicates a channel in a channel lineup.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
-     */
-    export const TlvChangeChannelByNumberRequest = TlvObject({
-        /**
-         * This shall indicate the channel major number value (ATSC format) to which the channel should change.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3.1
-         */
-        majorNumber: TlvField(0, TlvUInt16),
-
-        /**
-         * This shall indicate the channel minor number value (ATSC format) to which the channel should change.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3.2
-         */
-        minorNumber: TlvField(1, TlvUInt16)
-    });
-
-    /**
-     * Input to the Channel skipChannel command
+     * While the major and minor numbers in the ChannelInfoStruct support use of ATSC channel format, a lineup may use
+     * other formats which can map into these numeric values.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.1
      */
-    export const TlvSkipChannelRequest = TlvObject({
-        /**
-         * This shall indicate the number of steps to increase (Count is positive) or decrease (Count is negative) the
-         * current channel.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4.1
-         */
-        count: TlvField(0, TlvInt16)
-    });
+    export interface ChannelInfoStruct extends TypeFromSchema<typeof TlvChannelInfoStruct> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.3
@@ -139,6 +116,14 @@ export namespace Channel {
     });
 
     /**
+     * The Lineup Info allows references to external lineup sources like Gracenote. The combination of OperatorName,
+     * LineupName, and PostalCode MUST uniquely identify a lineup.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.2
+     */
+    export interface LineupInfoStruct extends TypeFromSchema<typeof TlvLineupInfoStruct> {}
+
+    /**
      * Input to the Channel changeChannel command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
@@ -151,6 +136,13 @@ export namespace Channel {
          */
         match: TlvField(0, TlvString)
     });
+
+    /**
+     * Input to the Channel changeChannel command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
+     */
+    export interface ChangeChannelRequest extends TypeFromSchema<typeof TlvChangeChannelRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.4
@@ -194,6 +186,112 @@ export namespace Channel {
     });
 
     /**
+     * This command shall be generated in response to a ChangeChannel command.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.2
+     */
+    export interface ChangeChannelResponse extends TypeFromSchema<typeof TlvChangeChannelResponse> {}
+
+    /**
+     * Input to the Channel changeChannelByNumber command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
+     */
+    export const TlvChangeChannelByNumberRequest = TlvObject({
+        /**
+         * This shall indicate the channel major number value (ATSC format) to which the channel should change.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3.1
+         */
+        majorNumber: TlvField(0, TlvUInt16),
+
+        /**
+         * This shall indicate the channel minor number value (ATSC format) to which the channel should change.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3.2
+         */
+        minorNumber: TlvField(1, TlvUInt16)
+    });
+
+    /**
+     * Input to the Channel changeChannelByNumber command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
+     */
+    export interface ChangeChannelByNumberRequest extends TypeFromSchema<typeof TlvChangeChannelByNumberRequest> {}
+
+    /**
+     * Input to the Channel skipChannel command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
+     */
+    export const TlvSkipChannelRequest = TlvObject({
+        /**
+         * This shall indicate the number of steps to increase (Count is positive) or decrease (Count is negative) the
+         * current channel.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4.1
+         */
+        count: TlvField(0, TlvInt16)
+    });
+
+    /**
+     * Input to the Channel skipChannel command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
+     */
+    export interface SkipChannelRequest extends TypeFromSchema<typeof TlvSkipChannelRequest> {}
+
+    /**
+     * A ChannelCluster supports these elements if it supports feature ChannelList.
+     */
+    export const ChannelListComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This optional list provides the channels supported.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.3.1
+             */
+            channelList: Attribute(0x0, TlvArray(TlvChannelInfoStruct), { default: [] })
+        }
+    });
+
+    /**
+     * A ChannelCluster supports these elements if it supports feature LineupInfo.
+     */
+    export const LineupInfoComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This optional field identifies the channel lineup using external data sources.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.3.2
+             */
+            lineup: Attribute(0x1, TlvNullable(TlvLineupInfoStruct), { default: null })
+        }
+    });
+
+    /**
+     * A ChannelCluster supports these elements if it supports features ChannelList or LineupInfo.
+     */
+    export const ChannelListOrLineupInfoComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * Change the channel to the channel case-insensitive exact matching the value passed as an argument.
+             *
+             * The match priority order shall be: AffiliateCallSign ("KCTS"), CallSign ("PBS"), Name ("Comedy
+             * Central"), Number ("13.1")
+             *
+             * Upon receipt, this shall generate a ChangeChannelResponse command.
+             *
+             * Upon success, the CurrentChannel attribute, if supported, shall be updated to reflect the change.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
+             */
+            changeChannel: Command(0x0, TlvChangeChannelRequest, 0x1, TlvChangeChannelResponse)
+        }
+    });
+
+    /**
      * These are optional features supported by ChannelCluster.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.2
@@ -217,7 +315,7 @@ export namespace Channel {
     /**
      * These elements and properties are present in all Channel clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x504,
         name: "Channel",
         revision: 1,
@@ -268,57 +366,23 @@ export namespace Channel {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
              */
             skipChannel: Command(0x3, TlvSkipChannelRequest, 0x3, TlvNoResponse)
-        }
+        },
+
+        /**
+         * This metadata controls which ChannelCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { channelList: true }, component: ChannelListComponent },
+            { flags: { lineupInfo: true }, component: LineupInfoComponent },
+            { flags: { channelList: true }, component: ChannelListOrLineupInfoComponent },
+            { flags: { lineupInfo: true }, component: ChannelListOrLineupInfoComponent }
+        )
     });
 
     /**
-     * A ChannelCluster supports these elements if it supports feature ChannelList.
+     * @see {@link Cluster}
      */
-    export const ChannelListComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This optional list provides the channels supported.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.3.1
-             */
-            channelList: Attribute(0x0, TlvArray(TlvChannelInfoStruct), { default: [] })
-        }
-    });
-
-    /**
-     * A ChannelCluster supports these elements if it supports feature LineupInfo.
-     */
-    export const LineupInfoComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This optional field identifies the channel lineup using external data sources.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.3.2
-             */
-            lineup: Attribute(0x1, TlvNullable(TlvLineupInfoStruct), { default: null })
-        }
-    });
-
-    /**
-     * A ChannelCluster supports these elements if it supports features ChannelList or LineupInfo.
-     */
-    export const ChannelListOrLineupInfoComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * Change the channel to the channel case-insensitive exact matching the value passed as an argument.
-             *
-             * The match priority order shall be: AffiliateCallSign ("KCTS"), CallSign ("PBS"), Name ("Comedy
-             * Central"), Number ("13.1")
-             *
-             * Upon receipt, this shall generate a ChangeChannelResponse command.
-             *
-             * Upon success, the CurrentChannel attribute, if supported, shall be updated to reflect the change.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
-             */
-            changeChannel: Command(0x0, TlvChangeChannelRequest, 0x1, TlvChangeChannelResponse)
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Channel
@@ -329,54 +393,16 @@ export namespace Channel {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a Channel cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a Channel cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, ChannelListComponent, { channelList: true });
-            ClusterFactory.extend(cluster, LineupInfoComponent, { lineupInfo: true });
-
-            ClusterFactory.extend(
-                cluster,
-                ChannelListOrLineupInfoComponent,
-                { channelList: true },
-                { lineupInfo: true }
-            );
-
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { channelList: true } ? typeof ChannelListComponent : {})
-        & (SF extends { lineupInfo: true } ? typeof LineupInfoComponent : {})
-        & (SF extends { channelList: true } | { lineupInfo: true } ? typeof ChannelListOrLineupInfoComponent : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const CL = { channelList: true };
     const LI = { lineupInfo: true };
 
     /**
-     * This cluster supports all Channel features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -384,22 +410,33 @@ export namespace Channel {
 
         attributes: {
             ...Cluster.attributes,
-            channelList: ClusterFactory.AsConditional(
+            channelList: MutableCluster.AsConditional(
                 ChannelListComponent.attributes.channelList,
                 { mandatoryIf: [CL] }
             ),
-            lineup: ClusterFactory.AsConditional(LineupInfoComponent.attributes.lineup, { mandatoryIf: [LI] })
+            lineup: MutableCluster.AsConditional(LineupInfoComponent.attributes.lineup, { mandatoryIf: [LI] })
         },
 
         commands: {
             ...Cluster.commands,
-            changeChannel: ClusterFactory.AsConditional(
+            changeChannel: MutableCluster.AsConditional(
                 ChannelListOrLineupInfoComponent.commands.changeChannel,
                 { mandatoryIf: [CL, LI] }
             )
         }
     });
+
+    /**
+     * This cluster supports all Channel features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type ChannelCluster = typeof Channel.Cluster;
+export type ChannelCluster = Channel.Cluster;
 export const ChannelCluster = Channel.Cluster;
+ClusterRegistry.register(Channel.Complete);

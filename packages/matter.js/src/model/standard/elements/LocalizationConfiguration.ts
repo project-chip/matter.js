@@ -1,15 +1,20 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    FieldElement as Field
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "LocalizationConfiguration", id: 0x2b, classification: "node",
+Matter.children.push(Cluster({
+    name: "LocalizationConfiguration", id: 0x2b, classification: "node",
     description: "Localization Configuration",
 
     details: "Nodes should be expected to be deployed to any and all regions of the world. These global regions " +
@@ -23,10 +28,10 @@ Matter.children.push({
     xref: { document: "core", section: "11.3" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "attribute", name: "ActiveLocale", id: 0x0, type: "string", access: "RW VM", conformance: "M",
+        Attribute({
+            name: "ActiveLocale", id: 0x0, type: "string", access: "RW VM", conformance: "M",
             constraint: "max 35", quality: "N",
 
             details: "The ActiveLocale attribute shall represent the locale that the Node is currently configured to use " +
@@ -38,16 +43,16 @@ Matter.children.push({
                 "a CONSTRAINT_ERROR error.",
 
             xref: { document: "core", section: "11.3.4.1" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "SupportedLocales", id: 0x1, type: "list", access: "R V", conformance: "M",
+        Attribute({
+            name: "SupportedLocales", id: 0x1, type: "list", access: "R V", conformance: "M",
             constraint: "max 32[max 35]", quality: "F",
             details: "The SupportedLocales attribute shall represent a list of locale strings that are valid values for " +
                 "the ActiveLocale attribute. The list shall NOT contain any duplicate entries. The ordering of items " +
                 "within the list SHOULD NOT express any meaning.",
             xref: { document: "core", section: "11.3.4.2" },
-            children: [{ tag: "datatype", name: "entry", type: "string" }]
-        }
+            children: [Field({ name: "entry", type: "string" })]
+        })
     ]
-});
+}));

@@ -1,15 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    CommandElement as Command,
+    FieldElement as Field,
+    DatatypeElement as Datatype
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "GeneralCommissioning", id: 0x30, classification: "node",
+Matter.children.push(Cluster({
+    name: "GeneralCommissioning", id: 0x30, classification: "node",
     description: "General Commissioning",
 
     details: "This cluster is used to manage basic commissioning lifecycle." +
@@ -23,11 +30,10 @@ Matter.children.push({
     xref: { document: "core", section: "11.9" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "attribute", name: "Breadcrumb", id: 0x0, type: "uint64", access: "RW VA", conformance: "M",
-            default: 0,
+        Attribute({
+            name: "Breadcrumb", id: 0x0, type: "uint64", access: "RW VA", conformance: "M", default: 0,
 
             details: "This attribute allows for the storage of a client-provided small payload which Administrators and " +
                 "Commissioners may write and then subsequently read, to keep track of their own progress. This may " +
@@ -45,29 +51,29 @@ Matter.children.push({
                 "behavior is described.",
 
             xref: { document: "core", section: "11.9.5.1" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "BasicCommissioningInfo", id: 0x1, type: "BasicCommissioningInfo",
-            access: "R V", conformance: "M", constraint: "desc", quality: "F",
+        Attribute({
+            name: "BasicCommissioningInfo", id: 0x1, type: "BasicCommissioningInfo", access: "R V",
+            conformance: "M", constraint: "desc", quality: "F",
             details: "This attribute shall describe critical parameters needed at the beginning of commissioning flow. " +
                 "See BasicCommissioningInfo for more information.",
             xref: { document: "core", section: "11.9.5.2" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "RegulatoryConfig", id: 0x2, type: "RegulatoryLocationTypeEnum",
-            access: "R V", conformance: "M", default: { type: "reference", name: "LocationCapability" },
+        Attribute({
+            name: "RegulatoryConfig", id: 0x2, type: "RegulatoryLocationTypeEnum", access: "R V",
+            conformance: "M", default: { type: "reference", name: "LocationCapability" },
             details: "This attribute shall indicate the regulatory configuration for the product." +
                 "\n" +
                 "Note that the country code is part of Basic Information Cluster and therefore NOT listed on the " +
                 "RegulatoryConfig attribute.",
             xref: { document: "core", section: "11.9.5.3" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "LocationCapability", id: 0x3, type: "RegulatoryLocationTypeEnum",
-            access: "R V", conformance: "M", default: 2, quality: "F",
+        Attribute({
+            name: "LocationCapability", id: 0x3, type: "RegulatoryLocationTypeEnum", access: "R V",
+            conformance: "M", default: 2, quality: "F",
 
             details: "LocationCapability is statically set by the manufacturer and indicates if this Node needs to be " +
                 "told an exact RegulatoryLocation. For example a Node which is \"Indoor Only\" would not be certified " +
@@ -83,19 +89,19 @@ Matter.children.push({
                 "smarter handling can.",
 
             xref: { document: "core", section: "11.9.5.4" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "SupportsConcurrentConnection", id: 0x4, type: "bool", access: "R V",
-            conformance: "M", default: true, quality: "F",
+        Attribute({
+            name: "SupportsConcurrentConnection", id: 0x4, type: "bool", access: "R V", conformance: "M",
+            default: true, quality: "F",
             details: "This attribute shall indicate whether this device supports \"concurrent connection flow\" " +
                 "commissioning mode (see Section 5.5, “Commissioning Flows”). If false, the device only supports " +
                 "\"non-concurrent connection flow\" mode.",
             xref: { document: "core", section: "11.9.5.5" }
-        },
+        }),
 
-        {
-            tag: "command", name: "ArmFailSafe", id: 0x0, access: "A", conformance: "M", direction: "request",
+        Command({
+            name: "ArmFailSafe", id: 0x0, access: "A", conformance: "M", direction: "request",
             response: "ArmFailSafeResponse",
 
             details: "Success or failure of this command shall be communicated by the ArmFailSafeResponse command, unless " +
@@ -223,41 +229,35 @@ Matter.children.push({
                 "     Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.",
 
             xref: { document: "core", section: "11.9.6.2" },
-
             children: [
-                {
-                    tag: "datatype", name: "ExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M",
-                    default: 900
-                },
-                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "M" }
+                Field({ name: "ExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M", default: 900 }),
+                Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "M" })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "ArmFailSafeResponse", id: 0x1, conformance: "M", direction: "response",
+        Command({
+            name: "ArmFailSafeResponse", id: 0x1, conformance: "M", direction: "response",
             xref: { document: "core", section: "11.9.6.3" },
 
             children: [
-                {
-                    tag: "datatype", name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M",
-                    default: 0,
+                Field({
+                    name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
                     details: "This field shall contain the result of the operation, based on the behavior specified in the " +
                         "functional description of the ArmFailSafe command.",
                     xref: { document: "core", section: "11.9.6.3.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "M",
-                    constraint: "max 128", default: "",
+                Field({
+                    name: "DebugText", id: 0x1, type: "string", conformance: "M", constraint: "max 128", default: "",
                     details: "See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.",
                     xref: { document: "core", section: "11.9.6.3.2" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "SetRegulatoryConfig", id: 0x2, access: "A", conformance: "M",
-            direction: "request", response: "SetRegulatoryConfigResponse",
+        Command({
+            name: "SetRegulatoryConfig", id: 0x2, access: "A", conformance: "M", direction: "request",
+            response: "SetRegulatoryConfigResponse",
 
             details: "This shall add or update the regulatory configuration in the RegulatoryConfig Attribute to the " +
                 "value provided in the NewRegulatoryConfig field." +
@@ -292,38 +292,29 @@ Matter.children.push({
                 "the Breadcrumb attribute shall be left unchanged.",
 
             xref: { document: "core", section: "11.9.6.4" },
-
             children: [
-                {
-                    tag: "datatype", name: "NewRegulatoryConfig", id: 0x0, type: "RegulatoryLocationTypeEnum",
-                    conformance: "M"
-                },
-                { tag: "datatype", name: "CountryCode", id: 0x1, type: "string", conformance: "M", constraint: "2" },
-                { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "M" }
+                Field({ name: "NewRegulatoryConfig", id: 0x0, type: "RegulatoryLocationTypeEnum", conformance: "M" }),
+                Field({ name: "CountryCode", id: 0x1, type: "string", conformance: "M", constraint: "2" }),
+                Field({ name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "M" })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "SetRegulatoryConfigResponse", id: 0x3, conformance: "M",
-            direction: "response",
+        Command({
+            name: "SetRegulatoryConfigResponse", id: 0x3, conformance: "M", direction: "response",
             details: "This field shall contain the result of the operation, based on the behavior specified in the " +
                 "functional description of the SetRegulatoryConfig command." +
                 "\n" +
                 "See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.",
             xref: { document: "core", section: "11.9.6.5" },
-
             children: [
-                {
-                    tag: "datatype", name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M",
-                    default: 0
-                },
-                { tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "" }
+                Field({ name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0 }),
+                Field({ name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "" })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "CommissioningComplete", id: 0x4, access: "F A", conformance: "M",
-            direction: "request", response: "CommissioningCompleteResponse",
+        Command({
+            name: "CommissioningComplete", id: 0x4, access: "F A", conformance: "M", direction: "request",
+            response: "CommissioningCompleteResponse",
 
             details: "This command has no data." +
                 "\n" +
@@ -382,83 +373,77 @@ Matter.children.push({
                 "such sessions.",
 
             xref: { document: "core", section: "11.9.6.6" }
-        },
+        }),
 
-        {
-            tag: "command", name: "CommissioningCompleteResponse", id: 0x5, conformance: "M",
-            direction: "response",
+        Command({
+            name: "CommissioningCompleteResponse", id: 0x5, conformance: "M", direction: "response",
             details: "This field shall contain the result of the operation, based on the behavior specified in the " +
                 "functional description of the CommissioningComplete command." +
                 "\n" +
                 "See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.",
             xref: { document: "core", section: "11.9.6.7" },
-
             children: [
-                {
-                    tag: "datatype", name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M",
-                    default: 0
-                },
-                { tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "" }
+                Field({ name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0 }),
+                Field({ name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "" })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "CommissioningErrorEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "CommissioningErrorEnum", type: "enum8", conformance: "M",
             details: "This enumeration is used by several response commands in this cluster to indicate particular errors.",
             xref: { document: "core", section: "11.9.4.1" },
 
             children: [
-                { tag: "datatype", name: "Ok", id: 0x0, conformance: "M", description: "No error" },
-                {
-                    tag: "datatype", name: "ValueOutsideRange", id: 0x1, conformance: "M",
+                Field({ name: "Ok", id: 0x0, conformance: "M", description: "No error" }),
+                Field({
+                    name: "ValueOutsideRange", id: 0x1, conformance: "M",
                     description: "Attempting to set regulatory configuration to a region or indoor/outdoor mode for which the server does not have proper configuration."
-                },
-                {
-                    tag: "datatype", name: "InvalidAuthentication", id: 0x2, conformance: "M",
+                }),
+                Field({
+                    name: "InvalidAuthentication", id: 0x2, conformance: "M",
                     description: "Executed CommissioningComplete outside CASE session."
-                },
-                {
-                    tag: "datatype", name: "NoFailSafe", id: 0x3, conformance: "M",
+                }),
+                Field({
+                    name: "NoFailSafe", id: 0x3, conformance: "M",
                     description: "Executed CommissioningComplete when there was no active Fail-Safe context."
-                },
-                {
-                    tag: "datatype", name: "BusyWithOtherAdmin", id: 0x4, conformance: "M",
+                }),
+                Field({
+                    name: "BusyWithOtherAdmin", id: 0x4, conformance: "M",
                     description: "Attempting to arm fail- safe or execute CommissioningComplete from a fabric different than the one associated with the current fail- safe context."
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "RegulatoryLocationTypeEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "RegulatoryLocationTypeEnum", type: "enum8", conformance: "M",
             details: "This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate " +
                 "possible radio usage.",
             xref: { document: "core", section: "11.9.4.2" },
             children: [
-                { tag: "datatype", name: "Indoor", id: 0x0, conformance: "M", description: "Indoor only" },
-                { tag: "datatype", name: "Outdoor", id: 0x1, conformance: "M", description: "Outdoor only" },
-                { tag: "datatype", name: "IndoorOutdoor", id: 0x2, conformance: "M", description: "Indoor/Outdoor" }
+                Field({ name: "Indoor", id: 0x0, conformance: "M", description: "Indoor only" }),
+                Field({ name: "Outdoor", id: 0x1, conformance: "M", description: "Outdoor only" }),
+                Field({ name: "IndoorOutdoor", id: 0x2, conformance: "M", description: "Indoor/Outdoor" })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "BasicCommissioningInfo", type: "struct", conformance: "M",
+        Datatype({
+            name: "BasicCommissioningInfo", type: "struct", conformance: "M",
             details: "This structure provides some constant values that may be of use to all commissioners.",
             xref: { document: "core", section: "11.9.4.3" },
 
             children: [
-                {
-                    tag: "datatype", name: "FailSafeExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M",
+                Field({
+                    name: "FailSafeExpiryLengthSeconds", id: 0x0, type: "uint16", conformance: "M",
                     details: "This field shall contain a conservative initial duration (in seconds) to set in the FailSafe for " +
                         "the commissioning flow to complete successfully. This may vary depending on the speed or sleepiness " +
                         "of the Commissionee. This value, if used in the ArmFailSafe command’s ExpiryLengthSeconds field " +
                         "SHOULD allow a Commissioner to proceed with a nominal commissioning without having to-rearm the " +
                         "fail-safe, with some margin.",
                     xref: { document: "core", section: "11.9.4.3.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "MaxCumulativeFailsafeSeconds", id: 0x1, type: "uint16", conformance: "M",
-                    constraint: "desc",
+                Field({
+                    name: "MaxCumulativeFailsafeSeconds", id: 0x1, type: "uint16", conformance: "M", constraint: "desc",
 
                     details: "This field shall contain a conservative value in seconds denoting the maximum total duration for " +
                         "which a fail safe timer can be re-armed. See Section 11.9.6.2.1, “Fail Safe Context”." +
@@ -468,8 +453,8 @@ Matter.children.push({
                         "5.4.2.3, “Announcement Duration” and default to 900 seconds.",
 
                     xref: { document: "core", section: "11.9.4.3.2" }
-                }
+                })
             ]
-        }
+        })
     ]
-});
+}));

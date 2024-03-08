@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,10 +11,10 @@ import { ValueElement } from "./ValueElement.js";
 /**
  * A cluster property description.
  */
-export type AttributeElement = ValueElement & {
+export interface AttributeElement extends ValueElement {
     tag: `${AttributeElement.Tag}`;
     id: Mei;
-};
+}
 
 export function AttributeElement(definition: AttributeElement.Properties) {
     return ValueElement(AttributeElement.Tag, definition) as AttributeElement;

@@ -1,12 +1,16 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { NoProviderError } from "../common/MatterError.js";
+import { Diagnostic } from "../log/Diagnostic.js";
+import { DiagnosticSource } from "../log/DiagnosticSource.js";
 
 export type TimerCallback = () => any;
+
+const registry = new Set<Timer>();
 
 export abstract class Time {
     static get: () => Time = () => DefaultTime;
@@ -18,17 +22,26 @@ export abstract class Time {
     static readonly nowMs = (): number => Time.get().nowMs();
 
     /** Returns a timer that will call callback after durationMs has passed. */
-    abstract getTimer(durationMs: number, callback: TimerCallback): Timer;
-    static readonly getTimer = (durationMs: number, callback: TimerCallback): Timer =>
-        Time.get().getTimer(durationMs, callback);
+    abstract getTimer(name: string, durationMs: number, callback: TimerCallback): Timer;
+    static readonly getTimer = (name: string, durationMs: number, callback: TimerCallback): Timer =>
+        Time.get().getTimer(name, durationMs, callback);
 
     /** Returns a timer that will periodically call callback at intervalMs intervals. */
-    abstract getPeriodicTimer(intervalMs: number, callback: TimerCallback): Timer;
-    static readonly getPeriodicTimer = (intervalMs: number, callback: TimerCallback): Timer =>
-        Time.get().getPeriodicTimer(intervalMs, callback);
+    abstract getPeriodicTimer(name: string, intervalMs: number, callback: TimerCallback): Timer;
+    static readonly getPeriodicTimer = (name: string, intervalMs: number, callback: TimerCallback): Timer =>
+        Time.get().getPeriodicTimer(name, intervalMs, callback);
 
-    static readonly sleep = async (durationMs: number): Promise<void> =>
-        new Promise(resolve => Time.get().getTimer(durationMs, resolve).start());
+    static readonly sleep = async (name: string, durationMs: number): Promise<void> =>
+        new Promise(resolve => Time.get().getTimer(name, durationMs, resolve).start());
+
+    static register(timer: Timer) {
+        timer.elapsed = Diagnostic.elapsed();
+        registry.add(timer);
+    }
+
+    static unregister(timer: Timer) {
+        registry.delete(timer);
+    }
 }
 
 const DefaultTime = new (class extends Time {
@@ -50,6 +63,24 @@ const DefaultTime = new (class extends Time {
 })();
 
 export interface Timer {
+    /** Name (diagnostics) */
+    name: string;
+
+    /** Set to true to indicate the timer should not prevent program exit */
+    utility: boolean;
+
+    /** System ID (diagnostics) */
+    systemId: unknown;
+
+    /** Interval (diagnostics) */
+    intervalMs: number;
+
+    /** Is the timer periodic? (diagnostics) */
+    isPeriodic: boolean;
+
+    /** Amount of time interval has been active (diagnostics) */
+    elapsed?: Diagnostic.Elapsed;
+
     /** Is true if this timer is running. */
     isRunning: boolean;
 
@@ -64,3 +95,23 @@ export interface Timer {
 if (typeof MatterHooks !== "undefined") {
     MatterHooks.timeSetup?.(Time);
 }
+
+DiagnosticSource.add({
+    get name() {
+        return "Timers";
+    },
+
+    get [Diagnostic.value]() {
+        return Diagnostic.list(
+            [...registry].map(timer => [
+                timer.name,
+                Diagnostic.dict({
+                    periodic: timer.isPeriodic,
+                    interval: Diagnostic.interval(timer.intervalMs),
+                    system: timer.systemId,
+                    elapsed: timer.elapsed,
+                }),
+            ]),
+        );
+    },
+});

@@ -1,16 +1,17 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
+import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import {
     AttributeElement,
     ClusterElement,
     CommandElement,
     DatatypeElement,
     EventElement,
+    FieldElement,
     Globals,
     Metatype,
 } from "@project-chip/matter.js/model";
@@ -60,7 +61,7 @@ export function* translateCluster(definition: ClusterReference) {
 
     for (const [id, name] of metadata.ids.entries()) {
         const idStr = id === undefined ? "(no ID)" : `0x${id.toString(16)}`;
-        logger.debug(`${idStr} ${name}`, Logger.dict({ rev: metadata.revision, cls: metadata.classification }));
+        logger.debug(`${idStr} ${name}`, Diagnostic.dict({ rev: metadata.revision, cls: metadata.classification }));
         const cluster = ClusterElement({
             id: id,
             name: name,
@@ -127,7 +128,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
                 // Level control table is just kind of fubar
                 uniqueIds.set(id, "LevelControl");
             } else {
-                uniqueIds.set(id, camelize(record.name || definition.name));
+                uniqueIds.set(id, camelize(record.name || definition.name, true));
             }
         }
 
@@ -159,7 +160,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
         let derivesFrom = classifications[0]?.hierarchy;
         if (derivesFrom) {
             derivesFrom = derivesFrom.replace(/^derive[sd] from /i, "");
-            derivesFrom = camelize(derivesFrom);
+            derivesFrom = camelize(derivesFrom, true);
             if (derivesFrom === "Base") {
                 derivesFrom = undefined;
             }
@@ -206,7 +207,7 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             default: Optional(Alias(NoSpace, "def")),
         });
 
-        const values = translateRecordsToMatter("feature", records, DatatypeElement);
+        const values = translateRecordsToMatter("feature", records, FieldElement);
         values &&
             children.push({
                 tag: Globals.FeatureMap.tag,
@@ -371,7 +372,7 @@ function translateValueChildren(
     tag: string,
     parent: undefined | { type?: string },
     definition: HtmlReference,
-): DatatypeElement[] | undefined {
+): FieldElement[] | undefined {
     let type = parent?.type;
     if (type === undefined) {
         switch (tag) {
@@ -413,7 +414,7 @@ function translateValueChildren(
 
             records = records.filter(r => r.name !== "Reserved");
 
-            return translateRecordsToMatter("value", records, DatatypeElement);
+            return translateRecordsToMatter("value", records, FieldElement);
         }
 
         case Metatype.bitmap: {
@@ -436,7 +437,7 @@ function translateValueChildren(
                         name = `Bits${constraint.min}To${constraint.max - 1}`;
                     }
                     if (name) {
-                        return DatatypeElement({
+                        return FieldElement({
                             name,
                             constraint,
                             description: r.description,
@@ -457,17 +458,17 @@ function translateValueChildren(
                 description: Optional(Alias(Str, "summary")),
             });
 
-            return translateRecordsToMatter("bit", records, DatatypeElement);
+            return translateRecordsToMatter("bit", records, FieldElement);
         }
 
         case Metatype.object: {
             const records = translateFields("field", definition);
-            return translateRecordsToMatter("field", records, DatatypeElement);
+            return translateRecordsToMatter("field", records, FieldElement);
         }
     }
 }
 
-// Load attributes, events and commands
+// Load attributes, events, commands and status codes
 function translateInvokable(definition: ClusterReference, children: Array<ClusterElement.Child>) {
     translateAttributes();
     translateEvents();
@@ -573,7 +574,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             name: Alias(Identifier, "value"),
             details: Alias(Str, "summary"),
         });
-        const statusCodes = translateRecordsToMatter("statusCodes", records, DatatypeElement);
+        const statusCodes = translateRecordsToMatter("statusCodes", records, FieldElement);
         statusCodes && children.push(DatatypeElement({ name: "StatusCode", type: "status", children: statusCodes }));
     }
 }
@@ -641,7 +642,7 @@ function translateDatatypes(definition: ClusterReference, children: Array<Cluste
         }
 
         const datatype = DatatypeElement({ type: type, name, description, xref: definition.xref });
-        datatype.children = translateValueChildren("datatype", datatype, definition);
+        datatype.children = translateValueChildren("field", datatype, definition);
         return datatype;
     }
 }

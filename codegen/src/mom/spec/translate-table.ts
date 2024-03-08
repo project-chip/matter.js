@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { AnyElement, DatatypeElement, Specification } from "@project-chip/matter.js/model";
+import { AnyElement, FieldElement, Specification } from "@project-chip/matter.js/model";
 import { addDocumentation } from "./add-documentation.js";
 import { Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";
@@ -32,7 +32,7 @@ type Constant<T> = { option: "constant"; value: T };
 export const Constant = <T>(value: T): Constant<T> => ({ option: "constant", value });
 
 /** Converts detail section into children */
-type ChildTranslator = (tag: string, parentRecord: any, definition: HtmlReference) => DatatypeElement[] | undefined;
+type ChildTranslator = (tag: string, parentRecord: any, definition: HtmlReference) => FieldElement[] | undefined;
 type Children = { option: "children"; translator: ChildTranslator };
 export const Children = (translator: ChildTranslator) => ({ option: "children", translator });
 
@@ -50,7 +50,7 @@ type FieldType<F> =
         : F extends Alias<infer W> | Translator<infer W> | Constant<infer W>
           ? W
           : F extends Children
-            ? DatatypeElement[]
+            ? FieldElement[]
             : never;
 
 // Create TS object type from schema definition

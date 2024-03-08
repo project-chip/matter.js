@@ -1,16 +1,19 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvEnum, TlvUInt32, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace FaultInjection {
     export enum FaultType {
@@ -33,6 +36,11 @@ export namespace FaultInjection {
     });
 
     /**
+     * Input to the FaultInjection failAtFault command
+     */
+    export interface FailAtFaultRequest extends TypeFromSchema<typeof TlvFailAtFaultRequest> {}
+
+    /**
      * Input to the FaultInjection failRandomlyAtFault command
      */
     export const TlvFailRandomlyAtFaultRequest = TlvObject({
@@ -42,12 +50,14 @@ export namespace FaultInjection {
     });
 
     /**
-     * Fault Injection
-     *
-     * The Fault Injection Cluster provide a means for a test harness to configure faults(for example triggering a
-     * fault in the system).
+     * Input to the FaultInjection failRandomlyAtFault command
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface FailRandomlyAtFaultRequest extends TypeFromSchema<typeof TlvFailRandomlyAtFaultRequest> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0xfff1fc06,
         name: "FaultInjection",
         revision: 1,
@@ -64,7 +74,19 @@ export namespace FaultInjection {
             )
         }
     });
+
+    /**
+     * Fault Injection
+     *
+     * The Fault Injection Cluster provide a means for a test harness to configure faults(for example triggering a
+     * fault in the system).
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type FaultInjectionCluster = typeof FaultInjection.Cluster;
+export type FaultInjectionCluster = FaultInjection.Cluster;
 export const FaultInjectionCluster = FaultInjection.Cluster;
+ClusterRegistry.register(FaultInjection.Complete);

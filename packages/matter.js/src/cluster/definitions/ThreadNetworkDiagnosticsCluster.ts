@@ -1,30 +1,33 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     Attribute,
-    OptionalAttribute,
-    OptionalEvent,
-    EventPriority,
     Command,
     TlvNoResponse,
-    AccessLevel
+    AccessLevel,
+    OptionalAttribute,
+    OptionalEvent,
+    EventPriority
 } from "../../cluster/Cluster.js";
-import { TlvUInt16, TlvEnum, TlvUInt64, TlvUInt32, TlvUInt8, TlvInt8 } from "../../tlv/TlvNumber.js";
+import { TlvUInt64, TlvUInt16, TlvUInt32, TlvEnum, TlvUInt8, TlvInt8 } from "../../tlv/TlvNumber.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace ThreadNetworkDiagnostics {
     /**
@@ -186,6 +189,11 @@ export namespace ThreadNetworkDiagnostics {
     });
 
     /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.4
+     */
+    export interface NeighborTableStruct extends TypeFromSchema<typeof TlvNeighborTableStruct> {}
+
+    /**
      * This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
      * corresponds.
      *
@@ -257,6 +265,16 @@ export namespace ThreadNetworkDiagnostics {
     });
 
     /**
+     * This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
+     * corresponds.
+     *
+     * This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.5
+     */
+    export interface RouteTableStruct extends TypeFromSchema<typeof TlvRouteTableStruct> {}
+
+    /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.6
      */
     export const TlvSecurityPolicy = TlvObject({
@@ -276,6 +294,11 @@ export namespace ThreadNetworkDiagnostics {
          */
         flags: TlvField(1, TlvUInt16)
     });
+
+    /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.6
+     */
+    export interface SecurityPolicy extends TypeFromSchema<typeof TlvSecurityPolicy> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.7
@@ -369,6 +392,11 @@ export namespace ThreadNetworkDiagnostics {
     });
 
     /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.7
+     */
+    export interface OperationalDatasetComponents extends TypeFromSchema<typeof TlvOperationalDatasetComponents> {}
+
+    /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.1
      */
     export enum NetworkFault {
@@ -416,6 +444,13 @@ export namespace ThreadNetworkDiagnostics {
     export const TlvConnectionStatusEvent = TlvObject({ connectionStatus: TlvField(0, TlvEnum<ConnectionStatus>()) });
 
     /**
+     * Body of the ThreadNetworkDiagnostics connectionStatus event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.13.8.2
+     */
+    export interface ConnectionStatusEvent extends TypeFromSchema<typeof TlvConnectionStatusEvent> {}
+
+    /**
      * Body of the ThreadNetworkDiagnostics networkFaultChange event
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.13.8.1
@@ -439,279 +474,16 @@ export namespace ThreadNetworkDiagnostics {
     });
 
     /**
-     * These are optional features supported by ThreadNetworkDiagnosticsCluster.
+     * Body of the ThreadNetworkDiagnostics networkFaultChange event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.13.4
+     * @see {@link MatterCoreSpecificationV1_1} § 11.13.8.1
      */
-    export enum Feature {
-        /**
-         * PacketCounts
-         *
-         * Server supports the counts for the number of received and transmitted packets on the Thread interface.
-         */
-        PacketCounts = "PacketCounts",
-
-        /**
-         * ErrorCounts
-         *
-         * Server supports the counts for the number of errors that have occurred during the reception and transmission
-         * of packets on the Thread interface.
-         */
-        ErrorCounts = "ErrorCounts",
-
-        /**
-         * MleCounts
-         *
-         * Server supports the counts for various MLE layer happenings.
-         */
-        MleCounts = "MleCounts",
-
-        /**
-         * MacCounts
-         *
-         * Server supports the counts for various MAC layer happenings.
-         */
-        MacCounts = "MacCounts"
-    }
-
-    /**
-     * These elements and properties are present in all ThreadNetworkDiagnostics clusters.
-     */
-    export const Base = ClusterFactory.Definition({
-        id: 0x35,
-        name: "ThreadNetworkDiagnostics",
-        revision: 1,
-
-        features: {
-            /**
-             * PacketCounts
-             *
-             * Server supports the counts for the number of received and transmitted packets on the Thread interface.
-             */
-            packetCounts: BitFlag(0),
-
-            /**
-             * ErrorCounts
-             *
-             * Server supports the counts for the number of errors that have occurred during the reception and
-             * transmission of packets on the Thread interface.
-             */
-            errorCounts: BitFlag(1),
-
-            /**
-             * MleCounts
-             *
-             * Server supports the counts for various MLE layer happenings.
-             */
-            mleCounts: BitFlag(2),
-
-            /**
-             * MacCounts
-             *
-             * Server supports the counts for various MAC layer happenings.
-             */
-            macCounts: BitFlag(3)
-        },
-
-        attributes: {
-            /**
-             * The Channel attribute shall indicate the 802.15.4 channel number configured on the Node’s Thread
-             * interface (that is, the Active Operational Dataset’s current Channel value). A value of null shall
-             * indicate that the Thread interface is not currently configured or operational.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.1
-             */
-            channel: Attribute(0x0, TlvNullable(TlvUInt16)),
-
-            /**
-             * The RoutingRole attribute shall indicate the role that this Node has within the routing of messages
-             * through the Thread network, as defined by RoutingRoleEnum. The potential roles are defined in the
-             * following table. A value of null shall indicate that the Thread interface is not currently configured or
-             * operational.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.2
-             */
-            routingRole: Attribute(0x1, TlvNullable(TlvEnum<RoutingRole>())),
-
-            /**
-             * The NetworkName attribute shall indicate a human-readable (displayable) name for the Thread network that
-             * the Node has been configured to join to. A value of null shall indicate that the Thread interface is not
-             * currently configured or operational.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.3
-             */
-            networkName: Attribute(0x2, TlvNullable(TlvString.bound({ maxLength: 16 })), { default: "" }),
-
-            /**
-             * The PanId attribute shall indicate the 16-bit identifier of the Node on the Thread network. A value of
-             * null shall indicate that the Thread interface is not currently configured or operational.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.4
-             */
-            panId: Attribute(0x3, TlvNullable(TlvUInt16), { default: 0 }),
-
-            /**
-             * The ExtendedPanId attribute shall indicate the unique 64-bit identifier of the Node on the Thread
-             * network. A value of null shall indicate that the Thread interface is not currently configured or
-             * operational.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.5
-             */
-            extendedPanId: Attribute(0x4, TlvNullable(TlvUInt64), { default: 0 }),
-
-            /**
-             * The MeshLocalPrefix attribute shall indicate the mesh-local IPv6 prefix for the Thread network that the
-             * Node has been configured to join to. A value of null shall indicate that the Thread interface is not
-             * currently configured or operational.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.6
-             */
-            meshLocalPrefix: Attribute(0x5, TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 17 }))),
-
-            /**
-             * The NeighborTable attribute shall indicate the current list of Nodes that comprise the neighbor table on
-             * the Node.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.8
-             */
-            neighborTable: Attribute(0x7, TlvArray(TlvNeighborTableStruct, { maxLength: 254 }), { default: [] }),
-
-            /**
-             * The RouteTable attribute shall indicate the current list of router capable Nodes for which routes have
-             * been established.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.9
-             */
-            routeTable: Attribute(0x8, TlvArray(TlvRouteTableStruct, { maxLength: 254 }), { default: [] }),
-
-            /**
-             * The PartitionId attribute shall indicate the Thread Leader Partition Id for the Thread network to which
-             * the Node is joined. This attribute shall be null if not attached to a Thread network.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.10
-             */
-            partitionId: Attribute(0x9, TlvNullable(TlvUInt32)),
-
-            /**
-             * The Weighting attribute shall indicate the Thread Leader Weight used when operating in the Leader role.
-             * This attribute shall be null if not attached to a Thread network.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.11
-             */
-            weighting: Attribute(0xa, TlvNullable(TlvUInt8)),
-
-            /**
-             * The DataVersion attribute shall indicate the full Network Data Version the Node currently uses. This
-             * attribute shall be null if not attached to a Thread network.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.12
-             */
-            dataVersion: Attribute(0xb, TlvNullable(TlvUInt8)),
-
-            /**
-             * The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of
-             *
-             * data the Node currently uses. This attribute shall be null if not attached to a Thread network.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.13
-             */
-            stableDataVersion: Attribute(0xc, TlvNullable(TlvUInt8)),
-
-            /**
-             * The LeaderRouterId attribute shall indicate the 8-bit LeaderRouterId the Node shall attempt to utilize
-             * upon becoming a router or leader on the Thread network. This attribute shall be null if not attached to
-             * a Thread network.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.14
-             */
-            leaderRouterId: Attribute(0xd, TlvNullable(TlvUInt8)),
-
-            /**
-             * This attribute shall be null when there is no dataset configured.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.57
-             */
-            activeTimestamp: OptionalAttribute(0x38, TlvNullable(TlvUInt64), { default: 0 }),
-
-            /**
-             * This attribute shall be null when there is no dataset configured.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.58
-             */
-            pendingTimestamp: OptionalAttribute(0x39, TlvNullable(TlvUInt64), { default: 0 }),
-
-            /**
-             * This attribute shall be null when there is no dataset configured.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.59
-             */
-            delay: OptionalAttribute(0x3a, TlvNullable(TlvUInt32), { default: 0 }),
-
-            /**
-             * The SecurityPolicy attribute indicates the current security policies for the Thread partition to which a
-             * Node is connected. This attribute shall be null when there is no dataset configured.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.60
-             */
-            securityPolicy: Attribute(0x3b, TlvNullable(TlvSecurityPolicy)),
-
-            /**
-             * The ChannelPage0Mask attribute indicates the channels within channel page 0, in the 2.4GHz ISM band. The
-             * channels are represented in most significant bit order, with bit value 1 meaning selected, bit value 0
-             * meaning unselected. For example, the most significant bit of the left-most byte indicates channel 0. If
-             * channel 0 and channel 10 are selected, the mask would be: 80 20 00 00. This attribute shall be null when
-             * there is no dataset configured.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.61
-             */
-            channelPage0Mask: Attribute(0x3c, TlvNullable(TlvByteString.bound({ length: 4 }))),
-
-            /**
-             * The OperationalDatasetComponents attribute is a collection of flags to indicate the presence of various
-             * operationally acquired values.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.62
-             */
-            operationalDatasetComponents: Attribute(0x3d, TlvNullable(TlvOperationalDatasetComponents)),
-
-            /**
-             * The ActiveNetworkFaults attribute shall indicate the set of faults currently detected by the Node.
-             *
-             * When the Node detects a fault has been raised, the appropriate NetworkFaultEnum value shall be added to
-             * this list. This list shall NOT contain more than one instance of a specific NetworkFaultEnum value. When
-             * the Node detects that all conditions contributing to a fault has been cleared, the corresponding
-             * NetworkFaultEnum value shall be removed from this list. An empty list shall indicate there are currently
-             * no active faults. The order of this list SHOULD have no significance. Clients interested in monitoring
-             * changes in active faults may subscribe to this attribute, or they may subscribe to NetworkFaultChange
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.63
-             */
-            activeNetworkFaults: Attribute(0x3e, TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 }), { default: [] })
-        },
-
-        events: {
-            /**
-             * The ConnectionStatus Event shall indicate that a Node’s connection status to a Thread network has
-             * changed.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.8.2
-             */
-            connectionStatus: OptionalEvent(0x0, EventPriority.Info, TlvConnectionStatusEvent),
-
-            /**
-             * The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected by
-             * the Node.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.13.8.1
-             */
-            networkFaultChange: OptionalEvent(0x1, EventPriority.Info, TlvNetworkFaultChangeEvent)
-        }
-    });
+    export interface NetworkFaultChangeEvent extends TypeFromSchema<typeof TlvNetworkFaultChangeEvent> {}
 
     /**
      * A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature ErrorCounts.
      */
-    export const ErrorCountsComponent = ClusterFactory.Component({
+    export const ErrorCountsComponent = MutableCluster.Component({
         attributes: {
             /**
              * The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, due
@@ -741,7 +513,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature MleCounts.
      */
-    export const MleCountsComponent = ClusterFactory.Component({
+    export const MleCountsComponent = MutableCluster.Component({
         attributes: {
             /**
              * The DetachedRoleCount attribute shall indicate the number of times the Node entered the
@@ -818,7 +590,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature MacCounts.
      */
-    export const MacCountsComponent = ClusterFactory.Component({
+    export const MacCountsComponent = MutableCluster.Component({
         attributes: {
             /**
              * The TxTotalCount attribute shall indicate the total number of unique MAC frame transmission requests.
@@ -1135,6 +907,291 @@ export namespace ThreadNetworkDiagnostics {
     });
 
     /**
+     * These are optional features supported by ThreadNetworkDiagnosticsCluster.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.13.4
+     */
+    export enum Feature {
+        /**
+         * PacketCounts
+         *
+         * Server supports the counts for the number of received and transmitted packets on the Thread interface.
+         */
+        PacketCounts = "PacketCounts",
+
+        /**
+         * ErrorCounts
+         *
+         * Server supports the counts for the number of errors that have occurred during the reception and transmission
+         * of packets on the Thread interface.
+         */
+        ErrorCounts = "ErrorCounts",
+
+        /**
+         * MleCounts
+         *
+         * Server supports the counts for various MLE layer happenings.
+         */
+        MleCounts = "MleCounts",
+
+        /**
+         * MacCounts
+         *
+         * Server supports the counts for various MAC layer happenings.
+         */
+        MacCounts = "MacCounts"
+    }
+
+    /**
+     * These elements and properties are present in all ThreadNetworkDiagnostics clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x35,
+        name: "ThreadNetworkDiagnostics",
+        revision: 1,
+
+        features: {
+            /**
+             * PacketCounts
+             *
+             * Server supports the counts for the number of received and transmitted packets on the Thread interface.
+             */
+            packetCounts: BitFlag(0),
+
+            /**
+             * ErrorCounts
+             *
+             * Server supports the counts for the number of errors that have occurred during the reception and
+             * transmission of packets on the Thread interface.
+             */
+            errorCounts: BitFlag(1),
+
+            /**
+             * MleCounts
+             *
+             * Server supports the counts for various MLE layer happenings.
+             */
+            mleCounts: BitFlag(2),
+
+            /**
+             * MacCounts
+             *
+             * Server supports the counts for various MAC layer happenings.
+             */
+            macCounts: BitFlag(3)
+        },
+
+        attributes: {
+            /**
+             * The Channel attribute shall indicate the 802.15.4 channel number configured on the Node’s Thread
+             * interface (that is, the Active Operational Dataset’s current Channel value). A value of null shall
+             * indicate that the Thread interface is not currently configured or operational.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.1
+             */
+            channel: Attribute(0x0, TlvNullable(TlvUInt16)),
+
+            /**
+             * The RoutingRole attribute shall indicate the role that this Node has within the routing of messages
+             * through the Thread network, as defined by RoutingRoleEnum. The potential roles are defined in the
+             * following table. A value of null shall indicate that the Thread interface is not currently configured or
+             * operational.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.2
+             */
+            routingRole: Attribute(0x1, TlvNullable(TlvEnum<RoutingRole>())),
+
+            /**
+             * The NetworkName attribute shall indicate a human-readable (displayable) name for the Thread network that
+             * the Node has been configured to join to. A value of null shall indicate that the Thread interface is not
+             * currently configured or operational.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.3
+             */
+            networkName: Attribute(0x2, TlvNullable(TlvString.bound({ maxLength: 16 })), { default: "" }),
+
+            /**
+             * The PanId attribute shall indicate the 16-bit identifier of the Node on the Thread network. A value of
+             * null shall indicate that the Thread interface is not currently configured or operational.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.4
+             */
+            panId: Attribute(0x3, TlvNullable(TlvUInt16), { default: 0 }),
+
+            /**
+             * The ExtendedPanId attribute shall indicate the unique 64-bit identifier of the Node on the Thread
+             * network. A value of null shall indicate that the Thread interface is not currently configured or
+             * operational.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.5
+             */
+            extendedPanId: Attribute(0x4, TlvNullable(TlvUInt64), { default: 0 }),
+
+            /**
+             * The MeshLocalPrefix attribute shall indicate the mesh-local IPv6 prefix for the Thread network that the
+             * Node has been configured to join to. A value of null shall indicate that the Thread interface is not
+             * currently configured or operational.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.6
+             */
+            meshLocalPrefix: Attribute(0x5, TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 17 }))),
+
+            /**
+             * The NeighborTable attribute shall indicate the current list of Nodes that comprise the neighbor table on
+             * the Node.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.8
+             */
+            neighborTable: Attribute(0x7, TlvArray(TlvNeighborTableStruct, { maxLength: 254 }), { default: [] }),
+
+            /**
+             * The RouteTable attribute shall indicate the current list of router capable Nodes for which routes have
+             * been established.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.9
+             */
+            routeTable: Attribute(0x8, TlvArray(TlvRouteTableStruct, { maxLength: 254 }), { default: [] }),
+
+            /**
+             * The PartitionId attribute shall indicate the Thread Leader Partition Id for the Thread network to which
+             * the Node is joined. This attribute shall be null if not attached to a Thread network.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.10
+             */
+            partitionId: Attribute(0x9, TlvNullable(TlvUInt32)),
+
+            /**
+             * The Weighting attribute shall indicate the Thread Leader Weight used when operating in the Leader role.
+             * This attribute shall be null if not attached to a Thread network.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.11
+             */
+            weighting: Attribute(0xa, TlvNullable(TlvUInt8)),
+
+            /**
+             * The DataVersion attribute shall indicate the full Network Data Version the Node currently uses. This
+             * attribute shall be null if not attached to a Thread network.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.12
+             */
+            dataVersion: Attribute(0xb, TlvNullable(TlvUInt8)),
+
+            /**
+             * The StableDataVersion attribute shall indicate the Network Data Version for the stable subset of
+             *
+             * data the Node currently uses. This attribute shall be null if not attached to a Thread network.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.13
+             */
+            stableDataVersion: Attribute(0xc, TlvNullable(TlvUInt8)),
+
+            /**
+             * The LeaderRouterId attribute shall indicate the 8-bit LeaderRouterId the Node shall attempt to utilize
+             * upon becoming a router or leader on the Thread network. This attribute shall be null if not attached to
+             * a Thread network.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.14
+             */
+            leaderRouterId: Attribute(0xd, TlvNullable(TlvUInt8)),
+
+            /**
+             * This attribute shall be null when there is no dataset configured.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.57
+             */
+            activeTimestamp: OptionalAttribute(0x38, TlvNullable(TlvUInt64), { default: 0 }),
+
+            /**
+             * This attribute shall be null when there is no dataset configured.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.58
+             */
+            pendingTimestamp: OptionalAttribute(0x39, TlvNullable(TlvUInt64), { default: 0 }),
+
+            /**
+             * This attribute shall be null when there is no dataset configured.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.59
+             */
+            delay: OptionalAttribute(0x3a, TlvNullable(TlvUInt32), { default: 0 }),
+
+            /**
+             * The SecurityPolicy attribute indicates the current security policies for the Thread partition to which a
+             * Node is connected. This attribute shall be null when there is no dataset configured.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.60
+             */
+            securityPolicy: Attribute(0x3b, TlvNullable(TlvSecurityPolicy)),
+
+            /**
+             * The ChannelPage0Mask attribute indicates the channels within channel page 0, in the 2.4GHz ISM band. The
+             * channels are represented in most significant bit order, with bit value 1 meaning selected, bit value 0
+             * meaning unselected. For example, the most significant bit of the left-most byte indicates channel 0. If
+             * channel 0 and channel 10 are selected, the mask would be: 80 20 00 00. This attribute shall be null when
+             * there is no dataset configured.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.61
+             */
+            channelPage0Mask: Attribute(0x3c, TlvNullable(TlvByteString.bound({ length: 4 }))),
+
+            /**
+             * The OperationalDatasetComponents attribute is a collection of flags to indicate the presence of various
+             * operationally acquired values.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.62
+             */
+            operationalDatasetComponents: Attribute(0x3d, TlvNullable(TlvOperationalDatasetComponents)),
+
+            /**
+             * The ActiveNetworkFaults attribute shall indicate the set of faults currently detected by the Node.
+             *
+             * When the Node detects a fault has been raised, the appropriate NetworkFaultEnum value shall be added to
+             * this list. This list shall NOT contain more than one instance of a specific NetworkFaultEnum value. When
+             * the Node detects that all conditions contributing to a fault has been cleared, the corresponding
+             * NetworkFaultEnum value shall be removed from this list. An empty list shall indicate there are currently
+             * no active faults. The order of this list SHOULD have no significance. Clients interested in monitoring
+             * changes in active faults may subscribe to this attribute, or they may subscribe to NetworkFaultChange
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.6.63
+             */
+            activeNetworkFaults: Attribute(0x3e, TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 }), { default: [] })
+        },
+
+        events: {
+            /**
+             * The ConnectionStatus Event shall indicate that a Node’s connection status to a Thread network has
+             * changed.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.8.2
+             */
+            connectionStatus: OptionalEvent(0x0, EventPriority.Info, TlvConnectionStatusEvent),
+
+            /**
+             * The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected by
+             * the Node.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.13.8.1
+             */
+            networkFaultChange: OptionalEvent(0x1, EventPriority.Info, TlvNetworkFaultChangeEvent)
+        },
+
+        /**
+         * This metadata controls which ThreadNetworkDiagnosticsCluster elements matter.js activates for specific
+         * feature combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { errorCounts: true }, component: ErrorCountsComponent },
+            { flags: { mleCounts: true }, component: MleCountsComponent },
+            { flags: { macCounts: true }, component: MacCountsComponent }
+        )
+    });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
+
+    /**
      * Thread Network Diagnostics
      *
      * The Thread Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be
@@ -1147,48 +1204,17 @@ export namespace ThreadNetworkDiagnostics {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.13
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a ThreadNetworkDiagnostics cluster with support for optional features.
-         * Include each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a ThreadNetworkDiagnostics cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, ErrorCountsComponent, { errorCounts: true });
-            ClusterFactory.extend(cluster, MleCountsComponent, { mleCounts: true });
-            ClusterFactory.extend(cluster, MacCountsComponent, { macCounts: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { errorCounts: true } ? typeof ErrorCountsComponent : {})
-        & (SF extends { mleCounts: true } ? typeof MleCountsComponent : {})
-        & (SF extends { macCounts: true } ? typeof MacCountsComponent : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const ERRCNT = { errorCounts: true };
     const MLECNT = { mleCounts: true };
     const MACCNT = { macCounts: true };
 
     /**
-     * This cluster supports all ThreadNetworkDiagnostics features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1196,182 +1222,182 @@ export namespace ThreadNetworkDiagnostics {
 
         attributes: {
             ...Cluster.attributes,
-            overrunCount: ClusterFactory.AsConditional(
+            overrunCount: MutableCluster.AsConditional(
                 ErrorCountsComponent.attributes.overrunCount,
                 { mandatoryIf: [ERRCNT] }
             ),
-            detachedRoleCount: ClusterFactory.AsConditional(
+            detachedRoleCount: MutableCluster.AsConditional(
                 MleCountsComponent.attributes.detachedRoleCount,
                 { optionalIf: [MLECNT] }
             ),
-            childRoleCount: ClusterFactory.AsConditional(
+            childRoleCount: MutableCluster.AsConditional(
                 MleCountsComponent.attributes.childRoleCount,
                 { optionalIf: [MLECNT] }
             ),
-            routerRoleCount: ClusterFactory.AsConditional(
+            routerRoleCount: MutableCluster.AsConditional(
                 MleCountsComponent.attributes.routerRoleCount,
                 { optionalIf: [MLECNT] }
             ),
-            leaderRoleCount: ClusterFactory.AsConditional(
+            leaderRoleCount: MutableCluster.AsConditional(
                 MleCountsComponent.attributes.leaderRoleCount,
                 { optionalIf: [MLECNT] }
             ),
-            attachAttemptCount: ClusterFactory.AsConditional(
+            attachAttemptCount: MutableCluster.AsConditional(
                 MleCountsComponent.attributes.attachAttemptCount,
                 { optionalIf: [MLECNT] }
             ),
-            partitionIdChangeCount: ClusterFactory.AsConditional(
+            partitionIdChangeCount: MutableCluster.AsConditional(
                 MleCountsComponent.attributes.partitionIdChangeCount,
                 { optionalIf: [MLECNT] }
             ),
-            betterPartitionAttachAttemptCount: ClusterFactory.AsConditional(
+            betterPartitionAttachAttemptCount: MutableCluster.AsConditional(
                 MleCountsComponent.attributes.betterPartitionAttachAttemptCount,
                 { optionalIf: [MLECNT] }
             ),
-            parentChangeCount: ClusterFactory.AsConditional(
+            parentChangeCount: MutableCluster.AsConditional(
                 MleCountsComponent.attributes.parentChangeCount,
                 { optionalIf: [MLECNT] }
             ),
-            txTotalCount: ClusterFactory.AsConditional(
+            txTotalCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txTotalCount,
                 { optionalIf: [MACCNT] }
             ),
-            txUnicastCount: ClusterFactory.AsConditional(
+            txUnicastCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txUnicastCount,
                 { optionalIf: [MACCNT] }
             ),
-            txBroadcastCount: ClusterFactory.AsConditional(
+            txBroadcastCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txBroadcastCount,
                 { optionalIf: [MACCNT] }
             ),
-            txAckRequestedCount: ClusterFactory.AsConditional(
+            txAckRequestedCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txAckRequestedCount,
                 { optionalIf: [MACCNT] }
             ),
-            txAckedCount: ClusterFactory.AsConditional(
+            txAckedCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txAckedCount,
                 { optionalIf: [MACCNT] }
             ),
-            txNoAckRequestedCount: ClusterFactory.AsConditional(
+            txNoAckRequestedCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txNoAckRequestedCount,
                 { optionalIf: [MACCNT] }
             ),
-            txDataCount: ClusterFactory.AsConditional(
+            txDataCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txDataCount,
                 { optionalIf: [MACCNT] }
             ),
-            txDataPollCount: ClusterFactory.AsConditional(
+            txDataPollCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txDataPollCount,
                 { optionalIf: [MACCNT] }
             ),
-            txBeaconCount: ClusterFactory.AsConditional(
+            txBeaconCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txBeaconCount,
                 { optionalIf: [MACCNT] }
             ),
-            txBeaconRequestCount: ClusterFactory.AsConditional(
+            txBeaconRequestCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txBeaconRequestCount,
                 { optionalIf: [MACCNT] }
             ),
-            txOtherCount: ClusterFactory.AsConditional(
+            txOtherCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txOtherCount,
                 { optionalIf: [MACCNT] }
             ),
-            txRetryCount: ClusterFactory.AsConditional(
+            txRetryCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txRetryCount,
                 { optionalIf: [MACCNT] }
             ),
-            txDirectMaxRetryExpiryCount: ClusterFactory.AsConditional(
+            txDirectMaxRetryExpiryCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txDirectMaxRetryExpiryCount,
                 { optionalIf: [MACCNT] }
             ),
-            txIndirectMaxRetryExpiryCount: ClusterFactory.AsConditional(
+            txIndirectMaxRetryExpiryCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txIndirectMaxRetryExpiryCount,
                 { optionalIf: [MACCNT] }
             ),
-            txErrCcaCount: ClusterFactory.AsConditional(
+            txErrCcaCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txErrCcaCount,
                 { optionalIf: [MACCNT] }
             ),
-            txErrAbortCount: ClusterFactory.AsConditional(
+            txErrAbortCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txErrAbortCount,
                 { optionalIf: [MACCNT] }
             ),
-            txErrBusyChannelCount: ClusterFactory.AsConditional(
+            txErrBusyChannelCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.txErrBusyChannelCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxTotalCount: ClusterFactory.AsConditional(
+            rxTotalCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxTotalCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxUnicastCount: ClusterFactory.AsConditional(
+            rxUnicastCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxUnicastCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxBroadcastCount: ClusterFactory.AsConditional(
+            rxBroadcastCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxBroadcastCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxDataCount: ClusterFactory.AsConditional(
+            rxDataCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxDataCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxDataPollCount: ClusterFactory.AsConditional(
+            rxDataPollCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxDataPollCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxBeaconCount: ClusterFactory.AsConditional(
+            rxBeaconCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxBeaconCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxBeaconRequestCount: ClusterFactory.AsConditional(
+            rxBeaconRequestCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxBeaconRequestCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxOtherCount: ClusterFactory.AsConditional(
+            rxOtherCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxOtherCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxAddressFilteredCount: ClusterFactory.AsConditional(
+            rxAddressFilteredCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxAddressFilteredCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxDestAddrFilteredCount: ClusterFactory.AsConditional(
+            rxDestAddrFilteredCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxDestAddrFilteredCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxDuplicatedCount: ClusterFactory.AsConditional(
+            rxDuplicatedCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxDuplicatedCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxErrNoFrameCount: ClusterFactory.AsConditional(
+            rxErrNoFrameCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxErrNoFrameCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxErrUnknownNeighborCount: ClusterFactory.AsConditional(
+            rxErrUnknownNeighborCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxErrUnknownNeighborCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxErrInvalidScrAddrCount: ClusterFactory.AsConditional(
+            rxErrInvalidScrAddrCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxErrInvalidScrAddrCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxErrSecCount: ClusterFactory.AsConditional(
+            rxErrSecCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxErrSecCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxErrFcsCount: ClusterFactory.AsConditional(
+            rxErrFcsCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxErrFcsCount,
                 { optionalIf: [MACCNT] }
             ),
-            rxErrOtherCount: ClusterFactory.AsConditional(
+            rxErrOtherCount: MutableCluster.AsConditional(
                 MacCountsComponent.attributes.rxErrOtherCount,
                 { optionalIf: [MACCNT] }
             )
         },
 
         commands: {
-            resetCounts: ClusterFactory.AsConditional(
+            resetCounts: MutableCluster.AsConditional(
                 ErrorCountsComponent.commands.resetCounts,
                 { mandatoryIf: [ERRCNT] }
             )
@@ -1379,7 +1405,18 @@ export namespace ThreadNetworkDiagnostics {
 
         events: Cluster.events
     });
+
+    /**
+     * This cluster supports all ThreadNetworkDiagnostics features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type ThreadNetworkDiagnosticsCluster = typeof ThreadNetworkDiagnostics.Cluster;
+export type ThreadNetworkDiagnosticsCluster = ThreadNetworkDiagnostics.Cluster;
 export const ThreadNetworkDiagnosticsCluster = ThreadNetworkDiagnostics.Cluster;
+ClusterRegistry.register(ThreadNetworkDiagnostics.Complete);

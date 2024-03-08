@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,6 +12,7 @@ import { Project } from "./project.js";
 
 enum Mode {
     BuildProject,
+    BuildProjectWithDependencies,
     BuildWorkspace,
     DisplayGraph,
 }
@@ -25,6 +26,7 @@ export async function main(argv = process.argv) {
         .option("prefix", { alias: "p", default: ".", type: "string", describe: "specify build directory" })
         .option("clean", { alias: "c", default: false, type: "boolean", describe: "clean before build" })
         .option("workspaces", { alias: "w", default: false, type: "boolean", describe: "build all workspace packages" })
+        .option("dependencies", { alias: "d", default: false, type: "boolean", describe: "build dependencies" })
         .command("*", "build types and both JS files", () => {})
         .command("clean", "remove build and dist directories", () => targets.push(Target.clean))
         .command("types", "build type definitions", () => targets.push(Target.types))
@@ -34,8 +36,12 @@ export async function main(argv = process.argv) {
         .wrap(Math.min(process.stdout.columns, 80))
         .strict().argv;
 
-    if (mode === Mode.BuildProject && args.workspaces) {
-        mode = Mode.BuildWorkspace;
+    if (mode === Mode.BuildProject) {
+        if (args.workspaces) {
+            mode = Mode.BuildWorkspace;
+        } else if (args.dependencies) {
+            mode = Mode.BuildProjectWithDependencies;
+        }
     }
 
     function builder() {
@@ -46,6 +52,10 @@ export async function main(argv = process.argv) {
         case Mode.BuildProject:
             const project = new Project(args.prefix);
             await builder().build(project);
+            break;
+
+        case Mode.BuildProjectWithDependencies:
+            await (await Graph.forProject(args.prefix)).build(builder());
             break;
 
         case Mode.BuildWorkspace:

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The matter.js Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 import { MatterController } from "./MatterController.js";
@@ -8,7 +8,7 @@ import { MatterNode } from "./MatterNode.js";
 import { GlobalAttributes } from "./cluster/Cluster.js";
 import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
 import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
-import { ImplementationError } from "./common/MatterError.js";
+import { ImplementationError, InternalError } from "./common/MatterError.js";
 import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
@@ -18,10 +18,14 @@ import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedNode.js";
+import { Environment } from "./environment/Environment.js";
+import { MdnsService } from "./environment/MdnsService.js";
 import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { Network } from "./net/Network.js";
 import { UdpInterface } from "./net/UdpInterface.js";
+import { ControllerStore } from "./node/client/storage/ControllerStore.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
 import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
@@ -79,6 +83,22 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * Maximum 3 tags are supported.
      */
     readonly caseAuthenticatedTags?: CaseAuthenticatedTag[];
+
+    /**
+     * When used with the new API Environment set the environment here and the CommissioningServer will self-register
+     * on the environment when you call start().
+     */
+    readonly environment?: {
+        /**
+         * Environment to register the node with on start()
+         */
+        readonly environment: Environment;
+
+        /**
+         * Unique id to register to node.
+         */
+        readonly id: string;
+    };
 };
 
 /** Options needed to commission a new node */
@@ -131,7 +151,9 @@ export class CommissioningController extends MatterNode {
     private readonly listeningAddressIpv4?: string;
     private readonly listeningAddressIpv6?: string;
 
+    private environment?: Environment; // Set when new API was initialized correctly
     private storage?: StorageContext;
+
     private mdnsScanner?: MdnsScanner;
 
     private controllerInstance?: MatterController;
@@ -152,13 +174,13 @@ export class CommissioningController extends MatterNode {
     }
 
     assertIsAddedToMatterServer() {
-        if (this.mdnsScanner === undefined || this.storage === undefined) {
+        if (this.mdnsScanner === undefined || (this.storage === undefined && this.environment === undefined)) {
             throw new ImplementationError("Add the node to the Matter instance before.");
         }
         if (!this.started) {
             throw new ImplementationError("The node needs to be started before interacting with the controller.");
         }
-        return { mdnsScanner: this.mdnsScanner, storage: this.storage };
+        return { mdnsScanner: this.mdnsScanner, storage: this.storage, environment: this.environment };
     }
 
     assertControllerIsStarted(errorText?: string) {
@@ -172,17 +194,39 @@ export class CommissioningController extends MatterNode {
 
     /** Internal method to initialize a MatterController instance. */
     private async initializeController() {
-        const { mdnsScanner, storage } = this.assertIsAddedToMatterServer();
+        const { mdnsScanner, storage, environment } = this.assertIsAddedToMatterServer();
         if (this.controllerInstance !== undefined) {
             return this.controllerInstance;
         }
         const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags } = this.options;
 
+        // Initialize the Storage in a compatible way for the legacy API and new style for new API
+        // TODO: clean this up when we really implement ControllerNode/ClientNode concepts in new API
+        const environmentStore = environment !== undefined ? environment.get(ControllerStore) : undefined;
+        const sessionStorage = environmentStore?.sessionStorage ?? storage?.createContext("SessionManager");
+        const rootCertificateStorage =
+            environmentStore?.credentialsStorage ?? storage?.createContext("RootCertificateManager");
+        const fabricStorage = environmentStore?.credentialsStorage ?? storage?.createContext("MatterController");
+        const nodesStorage = environmentStore?.nodesStorage ?? storage?.createContext("MatterController");
+        if (
+            sessionStorage === undefined ||
+            rootCertificateStorage === undefined ||
+            fabricStorage === undefined ||
+            nodesStorage === undefined
+        ) {
+            throw new InternalError("Storage not initialized correctly."); // Should not happen
+        }
+
         return await MatterController.create(
+            sessionStorage,
+            rootCertificateStorage,
+            fabricStorage,
+            nodesStorage,
             mdnsScanner,
-            this.ipv4Disabled ? undefined : await UdpInterface.create("udp4", localPort, this.listeningAddressIpv4),
-            await UdpInterface.create("udp6", localPort, this.listeningAddressIpv6),
-            storage,
+            this.ipv4Disabled
+                ? undefined
+                : await UdpInterface.create(Network.get(), "udp4", localPort, this.listeningAddressIpv4),
+            await UdpInterface.create(Network.get(), "udp6", localPort, this.listeningAddressIpv6),
             peerNodeId => {
                 logger.info(`Session for peer node ${peerNodeId} disconnected ...`);
                 const handler = this.sessionDisconnectedHandler.get(peerNodeId);
@@ -388,6 +432,7 @@ export class CommissioningController extends MatterNode {
      */
     setStorage(storage: StorageContext) {
         this.storage = storage;
+        this.environment = undefined;
     }
 
     /** Returns true if t least one node is commissioned/paired with this controller instance. */
@@ -455,7 +500,24 @@ export class CommissioningController extends MatterNode {
     /** Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false. */
     async start() {
         if (this.ipv4Disabled === undefined) {
-            throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
+            if (this.options.environment === undefined) {
+                throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
+            }
+
+            const { environment, id } = this.options.environment;
+            const controllerStore = await ControllerStore.create(environment, id);
+
+            environment.set(ControllerStore, controllerStore);
+
+            const mdnsService = await environment.load(MdnsService);
+            this.ipv4Disabled = !mdnsService.enableIpv4;
+            console.log("Init ipv4: ", this.ipv4Disabled);
+            this.setMdnsBroadcaster(mdnsService.broadcaster);
+            this.setMdnsScanner(mdnsService.scanner);
+
+            this.environment = environment;
+            const runtime = environment.runtime;
+            runtime.add(this);
         }
         this.started = true;
         if (this.controllerInstance === undefined) {
@@ -493,12 +555,19 @@ export class CommissioningController extends MatterNode {
         );
     }
 
-    resetStorage() {
+    async resetStorage() {
         this.assertControllerIsStarted(
             "Storage can not be reset while the controller is operating! Please close the controller first.",
         );
-        const { storage } = this.assertIsAddedToMatterServer();
-        storage.clearAll();
+        const { storage, environment } = this.assertIsAddedToMatterServer();
+        if (environment !== undefined) {
+            const controllerStore = environment.get(ControllerStore);
+            await controllerStore.erase();
+        } else if (storage !== undefined) {
+            storage.clearAll();
+        } else {
+            throw new InternalError("Storage not initialized correctly."); // Should not happen
+        }
     }
 
     /** Returns active session information for all connected nodes. */

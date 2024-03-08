@@ -1,9 +1,10 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { DefinitionError } from "../definitions/index.js";
 import { Model } from "../models/index.js";
@@ -59,7 +60,7 @@ export function ValidateModel(model: Model) {
         // Need another logging level before enabling this
         // logger.debug(
         //     `${model.valid ? "✔": "✘"} ${model.name}`,
-        //     Logger.dict({
+        //     Diagnostic.dict({
         //         tag: model.tag,
         //         children: model.children.length || undefined,
         //         id: model.id ? `0x${model.id?.toString(16)}` : undefined,
@@ -95,7 +96,10 @@ export namespace ValidateModel {
             if (this.errors.length) {
                 logger.error("*** Validation error summary ***");
                 this.errors.forEach(error =>
-                    logger.error(error.message, Logger.dict({ code: error.code, xref: error.xref, src: error.source })),
+                    logger.error(
+                        error.message,
+                        Diagnostic.dict({ code: error.code, xref: error.xref, src: error.source }),
+                    ),
                 );
 
                 logger.error("Error counts by code:");

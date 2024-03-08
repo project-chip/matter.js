@@ -1,17 +1,20 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command } from "../../cluster/Cluster.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvEnum, TlvEpochUs, TlvSysTimeUs } from "../../tlv/TlvNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace DiagnosticLogs {
     /**
@@ -77,7 +80,7 @@ export namespace DiagnosticLogs {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.10.5.1
      */
-    export const TlvRetrieveLogsRequestRequest = TlvObject({
+    export const TlvRetrieveLogsRequest = TlvObject({
         /**
          * This field shall indicate why the diagnostic logs are being retrieved from the Node. A Node may utilize this
          * field to selectively determine the logs to transfer.
@@ -134,6 +137,13 @@ export namespace DiagnosticLogs {
          */
         transferFileDesignator: TlvOptionalField(2, TlvString.bound({ maxLength: 32 }))
     });
+
+    /**
+     * Input to the DiagnosticLogs retrieveLogsRequest command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.10.5.1
+     */
+    export interface RetrieveLogsRequest extends TypeFromSchema<typeof TlvRetrieveLogsRequest> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.10.4.2
@@ -232,6 +242,32 @@ export namespace DiagnosticLogs {
     });
 
     /**
+     * This shall be generated as a response to the RetrieveLogsRequest. The data for this command is shown in the
+     * following.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.10.5.2
+     */
+    export interface RetrieveLogsResponse extends TypeFromSchema<typeof TlvRetrieveLogsResponse> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
+        id: 0x32,
+        name: "DiagnosticLogs",
+        revision: 1,
+
+        commands: {
+            /**
+             * Reception of this command starts the process of retrieving diagnostic logs from a Node.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.10.5.1
+             */
+            retrieveLogsRequest: Command(0x0, TlvRetrieveLogsRequest, 0x1, TlvRetrieveLogsResponse)
+        }
+    });
+
+    /**
      * Diagnostic Logs
      *
      * This Cluster supports an interface to a Node. It provides commands for retrieving unstructured diagnostic logs
@@ -244,21 +280,12 @@ export namespace DiagnosticLogs {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.10
      */
-    export const Cluster = ClusterFactory.Definition({
-        id: 0x32,
-        name: "DiagnosticLogs",
-        revision: 1,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        commands: {
-            /**
-             * Reception of this command starts the process of retrieving diagnostic logs from a Node.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.10.5.1
-             */
-            retrieveLogsRequest: Command(0x0, TlvRetrieveLogsRequestRequest, 0x1, TlvRetrieveLogsResponse)
-        }
-    });
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type DiagnosticLogsCluster = typeof DiagnosticLogs.Cluster;
+export type DiagnosticLogsCluster = DiagnosticLogs.Cluster;
 export const DiagnosticLogsCluster = DiagnosticLogs.Cluster;
+ClusterRegistry.register(DiagnosticLogs.Complete);

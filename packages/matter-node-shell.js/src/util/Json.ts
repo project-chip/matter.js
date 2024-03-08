@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "@project-chip/matter-node.js/common";
-import { ValueModel } from "@project-chip/matter-node.js/model";
-import { ByteArray } from "@project-chip/matter-node.js/util";
+import { ValidationError } from "@project-chip/matter.js/common";
+import { ValueModel } from "@project-chip/matter.js/model";
+import { ByteArray } from "@project-chip/matter.js/util";
 import { camelize } from "./String";
 
 export function convertJsonDataWithModel(model: ValueModel, data: any): any {

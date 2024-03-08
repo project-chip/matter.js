@@ -1,46 +1,84 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, Command, OptionalCommand } from "../../cluster/Cluster.js";
-import { TlvEnum, TlvUInt64, TlvEpochUs, TlvFloat } from "../../tlv/TlvNumber.js";
-import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
-import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
-import { TlvByteString } from "../../tlv/TlvString.js";
+import { TlvEpochUs, TlvUInt64, TlvFloat, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvByteString } from "../../tlv/TlvString.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace MediaPlayback {
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.1
+     * This structure defines a playback position within a media stream being played.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3
      */
-    export enum PlaybackState {
+    export const TlvPlaybackPositionStruct = TlvObject({
         /**
-         * Media is currently playing (includes FF and REW)
+         * This shall indicate the time when the position was last updated.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3.1
          */
-        Playing = 0,
+        updatedAt: TlvField(0, TlvEpochUs),
 
         /**
-         * Media is currently paused
+         * This shall indicate the associated discrete position within the media stream, in milliseconds from the
+         * beginning of the stream, being associated with the time indicated by the UpdatedAt field. The Position shall
+         * not be greater than the duration of the media if duration is specified. The Position shall not be greater
+         * than the time difference between current time and start time of the media when start time is specified.
+         *
+         * A value of null shall indicate that playback position is not applicable for the current state of the media
+         * playback (For example : Live media with no known duration and where seek is not supported).
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3.2
          */
-        Paused = 1,
+        position: TlvField(1, TlvNullable(TlvUInt64))
+    });
 
-        /**
-         * Media is not currently playing
-         */
-        NotPlaying = 2,
+    /**
+     * This structure defines a playback position within a media stream being played.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3
+     */
+    export interface PlaybackPositionStruct extends TypeFromSchema<typeof TlvPlaybackPositionStruct> {}
 
+    /**
+     * Input to the MediaPlayback seek command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11
+     */
+    export const TlvSeekRequest = TlvObject({
         /**
-         * Media is not currently buffering and playback will start when buffer has been filled
+         * This shall indicate the position (in milliseconds) in the media to seek to. In case the position falls in
+         * the middle of a frame, the server shall set the position to the beginning of that frame and set the
+         * SampledPosition attribute on the cluster accordingly. If the position falls before the earliest valid
+         * position or beyond the furthest valid position to which a client may seek back or forward to respectively,
+         * the status of SEEK_OUT_OF_RANGE shall be returned and no change shall be made to the position of the
+         * playback.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11.1
          */
-        Buffering = 3
-    }
+        position: TlvField(0, TlvUInt64)
+    });
+
+    /**
+     * Input to the MediaPlayback seek command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11
+     */
+    export interface SeekRequest extends TypeFromSchema<typeof TlvSeekRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.2
@@ -102,6 +140,38 @@ export namespace MediaPlayback {
     });
 
     /**
+     * This command shall be generated in response to various Playback Commands.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.12
+     */
+    export interface PlaybackResponse extends TypeFromSchema<typeof TlvPlaybackResponse> {}
+
+    /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.1
+     */
+    export enum PlaybackState {
+        /**
+         * Media is currently playing (includes FF and REW)
+         */
+        Playing = 0,
+
+        /**
+         * Media is currently paused
+         */
+        Paused = 1,
+
+        /**
+         * Media is not currently playing
+         */
+        NotPlaying = 2,
+
+        /**
+         * Media is not currently buffering and playback will start when buffer has been filled
+         */
+        Buffering = 3
+    }
+
+    /**
      * Input to the MediaPlayback skipForward command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
@@ -119,6 +189,13 @@ export namespace MediaPlayback {
          */
         deltaPositionMilliseconds: TlvField(0, TlvUInt64)
     });
+
+    /**
+     * Input to the MediaPlayback skipForward command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
+     */
+    export interface SkipForwardRequest extends TypeFromSchema<typeof TlvSkipForwardRequest> {}
 
     /**
      * Input to the MediaPlayback skipBackward command
@@ -140,176 +217,16 @@ export namespace MediaPlayback {
     });
 
     /**
-     * This structure defines a playback position within a media stream being played.
+     * Input to the MediaPlayback skipBackward command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10
      */
-    export const TlvPlaybackPositionStruct = TlvObject({
-        /**
-         * This shall indicate the time when the position was last updated.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3.1
-         */
-        updatedAt: TlvField(0, TlvEpochUs),
-
-        /**
-         * This shall indicate the associated discrete position within the media stream, in milliseconds from the
-         * beginning of the stream, being associated with the time indicated by the UpdatedAt field. The Position shall
-         * not be greater than the duration of the media if duration is specified. The Position shall not be greater
-         * than the time difference between current time and start time of the media when start time is specified.
-         *
-         * A value of null shall indicate that playback position is not applicable for the current state of the media
-         * playback (For example : Live media with no known duration and where seek is not supported).
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3.2
-         */
-        position: TlvField(1, TlvNullable(TlvUInt64))
-    });
-
-    /**
-     * Input to the MediaPlayback seek command
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11
-     */
-    export const TlvSeekRequest = TlvObject({
-        /**
-         * This shall indicate the position (in milliseconds) in the media to seek to. In case the position falls in
-         * the middle of a frame, the server shall set the position to the beginning of that frame and set the
-         * SampledPosition attribute on the cluster accordingly. If the position falls before the earliest valid
-         * position or beyond the furthest valid position to which a client may seek back or forward to respectively,
-         * the status of SEEK_OUT_OF_RANGE shall be returned and no change shall be made to the position of the
-         * playback.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11.1
-         */
-        position: TlvField(0, TlvUInt64)
-    });
-
-    /**
-     * These are optional features supported by MediaPlaybackCluster.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.2
-     */
-    export enum Feature {
-        /**
-         * AdvancedSeek
-         *
-         * Enables clients to implement more advanced media seeking behavior in their user interface, such as for
-         * example a "seek bar". Adds support for Attributes and Commands related to advanced seek support
-         */
-        AdvancedSeek = "AdvancedSeek",
-
-        /**
-         * VariableSpeed
-         *
-         * Support for commands to support variable speed playback on media that supports it.
-         */
-        VariableSpeed = "VariableSpeed"
-    }
-
-    /**
-     * These elements and properties are present in all MediaPlayback clusters.
-     */
-    export const Base = ClusterFactory.Definition({
-        id: 0x506,
-        name: "MediaPlayback",
-        revision: 1,
-
-        features: {
-            /**
-             * AdvancedSeek
-             *
-             * Enables clients to implement more advanced media seeking behavior in their user interface, such as for
-             * example a "seek bar". Adds support for Attributes and Commands related to advanced seek support
-             */
-            advancedSeek: BitFlag(0),
-
-            /**
-             * VariableSpeed
-             *
-             * Support for commands to support variable speed playback on media that supports it.
-             */
-            variableSpeed: BitFlag(1)
-        },
-
-        attributes: {
-            /**
-             * This shall indicate the current playback state of media.
-             *
-             * During fast-forward, rewind, and other seek operations; this attribute shall be set to PLAYING.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.1
-             */
-            currentState: Attribute(0x0, TlvEnum<PlaybackState>(), { default: PlaybackState.Playing })
-        },
-
-        commands: {
-            /**
-             * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play
-             * shall return media to normal playback speed.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.1
-             */
-            play: Command(0x0, TlvNoArguments, 0xa, TlvPlaybackResponse),
-
-            /**
-             * Upon receipt, this shall pause playback of the media.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.2
-             */
-            pause: Command(0x1, TlvNoArguments, 0xa, TlvPlaybackResponse),
-
-            /**
-             * Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may
-             * navigate the user back to the location from where the media was originally launched.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.3
-             */
-            stop: Command(0x2, TlvNoArguments, 0xa, TlvPlaybackResponse),
-
-            /**
-             * Upon receipt, this shall Start Over with the current media playback item.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.4
-             */
-            startOver: OptionalCommand(0x3, TlvNoArguments, 0xa, TlvPlaybackResponse),
-
-            /**
-             * Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is
-             * context-specific. This will often Go back to the previous media playback item.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.5
-             */
-            previous: OptionalCommand(0x4, TlvNoArguments, 0xa, TlvPlaybackResponse),
-
-            /**
-             * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context-
-             * specific. This will often Go forward to the next media playback item.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.6
-             */
-            next: OptionalCommand(0x5, TlvNoArguments, 0xa, TlvPlaybackResponse),
-
-            /**
-             * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
-             */
-            skipForward: OptionalCommand(0x8, TlvSkipForwardRequest, 0xa, TlvPlaybackResponse),
-
-            /**
-             * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10
-             */
-            skipBackward: OptionalCommand(0x9, TlvSkipBackwardRequest, 0xa, TlvPlaybackResponse)
-        }
-    });
+    export interface SkipBackwardRequest extends TypeFromSchema<typeof TlvSkipBackwardRequest> {}
 
     /**
      * A MediaPlaybackCluster supports these elements if it supports feature AdvancedSeek.
      */
-    export const AdvancedSeekComponent = ClusterFactory.Component({
+    export const AdvancedSeekComponent = MutableCluster.Component({
         attributes: {
             /**
              * This shall indicate the start time of the media, in case the media has a fixed start time (for example,
@@ -424,7 +341,7 @@ export namespace MediaPlayback {
     /**
      * A MediaPlaybackCluster supports these elements if it supports feature VariableSpeed.
      */
-    export const VariableSpeedComponent = ClusterFactory.Component({
+    export const VariableSpeedComponent = MutableCluster.Component({
         commands: {
             /**
              * Upon receipt, this shall start playback of the media backward in case the media is currently playing in
@@ -465,6 +382,141 @@ export namespace MediaPlayback {
     });
 
     /**
+     * These are optional features supported by MediaPlaybackCluster.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.2
+     */
+    export enum Feature {
+        /**
+         * AdvancedSeek
+         *
+         * Enables clients to implement more advanced media seeking behavior in their user interface, such as for
+         * example a "seek bar". Adds support for Attributes and Commands related to advanced seek support
+         */
+        AdvancedSeek = "AdvancedSeek",
+
+        /**
+         * VariableSpeed
+         *
+         * Support for commands to support variable speed playback on media that supports it.
+         */
+        VariableSpeed = "VariableSpeed"
+    }
+
+    /**
+     * These elements and properties are present in all MediaPlayback clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x506,
+        name: "MediaPlayback",
+        revision: 1,
+
+        features: {
+            /**
+             * AdvancedSeek
+             *
+             * Enables clients to implement more advanced media seeking behavior in their user interface, such as for
+             * example a "seek bar". Adds support for Attributes and Commands related to advanced seek support
+             */
+            advancedSeek: BitFlag(0),
+
+            /**
+             * VariableSpeed
+             *
+             * Support for commands to support variable speed playback on media that supports it.
+             */
+            variableSpeed: BitFlag(1)
+        },
+
+        attributes: {
+            /**
+             * This shall indicate the current playback state of media.
+             *
+             * During fast-forward, rewind, and other seek operations; this attribute shall be set to PLAYING.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.1
+             */
+            currentState: Attribute(0x0, TlvEnum<PlaybackState>(), { default: PlaybackState.Playing })
+        },
+
+        commands: {
+            /**
+             * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play
+             * shall return media to normal playback speed.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.1
+             */
+            play: Command(0x0, TlvNoArguments, 0xa, TlvPlaybackResponse),
+
+            /**
+             * Upon receipt, this shall pause playback of the media.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.2
+             */
+            pause: Command(0x1, TlvNoArguments, 0xa, TlvPlaybackResponse),
+
+            /**
+             * Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may
+             * navigate the user back to the location from where the media was originally launched.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.3
+             */
+            stop: Command(0x2, TlvNoArguments, 0xa, TlvPlaybackResponse),
+
+            /**
+             * Upon receipt, this shall Start Over with the current media playback item.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.4
+             */
+            startOver: OptionalCommand(0x3, TlvNoArguments, 0xa, TlvPlaybackResponse),
+
+            /**
+             * Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is
+             * context-specific. This will often Go back to the previous media playback item.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.5
+             */
+            previous: OptionalCommand(0x4, TlvNoArguments, 0xa, TlvPlaybackResponse),
+
+            /**
+             * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context-
+             * specific. This will often Go forward to the next media playback item.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.6
+             */
+            next: OptionalCommand(0x5, TlvNoArguments, 0xa, TlvPlaybackResponse),
+
+            /**
+             * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
+             */
+            skipForward: OptionalCommand(0x8, TlvSkipForwardRequest, 0xa, TlvPlaybackResponse),
+
+            /**
+             * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10
+             */
+            skipBackward: OptionalCommand(0x9, TlvSkipBackwardRequest, 0xa, TlvPlaybackResponse)
+        },
+
+        /**
+         * This metadata controls which MediaPlaybackCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { advancedSeek: true }, component: AdvancedSeekComponent },
+            { flags: { variableSpeed: true }, component: VariableSpeedComponent }
+        )
+    });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
+
+    /**
      * Media Playback
      *
      * This cluster provides an interface for controlling Media Playback (PLAY, PAUSE, etc) on a media device such as a
@@ -475,44 +527,16 @@ export namespace MediaPlayback {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a MediaPlayback cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a MediaPlayback cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, AdvancedSeekComponent, { advancedSeek: true });
-            ClusterFactory.extend(cluster, VariableSpeedComponent, { variableSpeed: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { advancedSeek: true } ? typeof AdvancedSeekComponent : {})
-        & (SF extends { variableSpeed: true } ? typeof VariableSpeedComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const AS = { advancedSeek: true };
     const VS = { variableSpeed: true };
 
     /**
-     * This cluster supports all MediaPlayback features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -520,21 +544,21 @@ export namespace MediaPlayback {
 
         attributes: {
             ...Cluster.attributes,
-            startTime: ClusterFactory.AsConditional(AdvancedSeekComponent.attributes.startTime, { mandatoryIf: [AS] }),
-            duration: ClusterFactory.AsConditional(AdvancedSeekComponent.attributes.duration, { mandatoryIf: [AS] }),
-            sampledPosition: ClusterFactory.AsConditional(
+            startTime: MutableCluster.AsConditional(AdvancedSeekComponent.attributes.startTime, { mandatoryIf: [AS] }),
+            duration: MutableCluster.AsConditional(AdvancedSeekComponent.attributes.duration, { mandatoryIf: [AS] }),
+            sampledPosition: MutableCluster.AsConditional(
                 AdvancedSeekComponent.attributes.sampledPosition,
                 { mandatoryIf: [AS] }
             ),
-            playbackSpeed: ClusterFactory.AsConditional(
+            playbackSpeed: MutableCluster.AsConditional(
                 AdvancedSeekComponent.attributes.playbackSpeed,
                 { mandatoryIf: [AS] }
             ),
-            seekRangeEnd: ClusterFactory.AsConditional(
+            seekRangeEnd: MutableCluster.AsConditional(
                 AdvancedSeekComponent.attributes.seekRangeEnd,
                 { mandatoryIf: [AS] }
             ),
-            seekRangeStart: ClusterFactory.AsConditional(
+            seekRangeStart: MutableCluster.AsConditional(
                 AdvancedSeekComponent.attributes.seekRangeStart,
                 { mandatoryIf: [AS] }
             )
@@ -542,15 +566,26 @@ export namespace MediaPlayback {
 
         commands: {
             ...Cluster.commands,
-            rewind: ClusterFactory.AsConditional(VariableSpeedComponent.commands.rewind, { mandatoryIf: [VS] }),
-            fastForward: ClusterFactory.AsConditional(
+            rewind: MutableCluster.AsConditional(VariableSpeedComponent.commands.rewind, { mandatoryIf: [VS] }),
+            fastForward: MutableCluster.AsConditional(
                 VariableSpeedComponent.commands.fastForward,
                 { mandatoryIf: [VS] }
             ),
-            seek: ClusterFactory.AsConditional(AdvancedSeekComponent.commands.seek, { mandatoryIf: [AS] })
+            seek: MutableCluster.AsConditional(AdvancedSeekComponent.commands.seek, { mandatoryIf: [AS] })
         }
     });
+
+    /**
+     * This cluster supports all MediaPlayback features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type MediaPlaybackCluster = typeof MediaPlayback.Cluster;
+export type MediaPlaybackCluster = MediaPlayback.Cluster;
 export const MediaPlaybackCluster = MediaPlayback.Cluster;
+ClusterRegistry.register(MediaPlayback.Complete);

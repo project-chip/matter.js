@@ -1,9 +1,10 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { TlvCertSigningRequest } from "../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
 import { CertificateManager } from "../certificate/CertificateManager.js";
 import { RootCertificateManager } from "../certificate/RootCertificateManager.js";
 import { ClusterClient } from "../cluster/client/ClusterClient.js";
@@ -15,7 +16,6 @@ import { GeneralCommissioning } from "../cluster/definitions/GeneralCommissionin
 import { NetworkCommissioning } from "../cluster/definitions/NetworkCommissioningCluster.js";
 import { OperationalCredentials } from "../cluster/definitions/OperationalCredentialsCluster.js";
 import { TimeSyncCluster } from "../cluster/definitions/TimeSyncCluster.js";
-import { TlvCertSigningRequest } from "../cluster/server/OperationalCredentialsServer.js";
 import { MatterError, UnexpectedDataError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { ClusterId } from "../datatype/ClusterId.js";
@@ -103,7 +103,7 @@ type CollectedCommissioningData = {
     productName?: string;
     networkFeatures?: {
         endpointId: number;
-        value: TypeFromPartialBitSchema<typeof NetworkCommissioning.Cluster.features>;
+        value: TypeFromPartialBitSchema<typeof NetworkCommissioning.Complete.features>;
     }[];
     networkStatus?: { endpointId: number; value: TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfoStruct>[] }[];
     rootPartsList?: EndpointNumber[];
@@ -404,18 +404,18 @@ export class ControllerCommissioner {
         const networkData = await this.interactionClient.getMultipleAttributes({
             attributes: [
                 {
-                    clusterId: NetworkCommissioning.Cluster.id,
-                    attributeId: NetworkCommissioning.Cluster.attributes.featureMap.id,
+                    clusterId: NetworkCommissioning.Complete.id,
+                    attributeId: NetworkCommissioning.Complete.attributes.featureMap.id,
                 },
                 {
-                    clusterId: NetworkCommissioning.Cluster.id,
-                    attributeId: NetworkCommissioning.Cluster.attributes.networks.id,
+                    clusterId: NetworkCommissioning.Complete.id,
+                    attributeId: NetworkCommissioning.Complete.attributes.networks.id,
                 },
             ],
         });
         const networkFeatures = new Array<{
             endpointId: number;
-            value: TypeFromPartialBitSchema<typeof NetworkCommissioning.Cluster.features>;
+            value: TypeFromPartialBitSchema<typeof NetworkCommissioning.Complete.features>;
         }>();
         const networkStatus = new Array<{
             endpointId: number;
@@ -425,9 +425,9 @@ export class ControllerCommissioner {
             path: { endpointId, attributeId },
             value,
         } of networkData) {
-            if (attributeId === NetworkCommissioning.Cluster.attributes.featureMap.id) {
+            if (attributeId === NetworkCommissioning.Complete.attributes.featureMap.id) {
                 networkFeatures.push({ endpointId, value });
-            } else if (attributeId === NetworkCommissioning.Cluster.attributes.networks.id) {
+            } else if (attributeId === NetworkCommissioning.Complete.attributes.networks.id) {
                 networkStatus.push({ endpointId, value });
             }
         }

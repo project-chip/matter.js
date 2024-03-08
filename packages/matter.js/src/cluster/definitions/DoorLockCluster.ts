@@ -1,521 +1,41 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitsFromPartial, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     Attribute,
     OptionalWritableAttribute,
     AccessLevel,
-    WritableAttribute,
+    Event,
+    EventPriority,
     FixedAttribute,
-    OptionalAttribute,
+    WritableAttribute,
     Command,
     TlvNoResponse,
     OptionalCommand,
-    Event,
-    EventPriority
+    OptionalAttribute
 } from "../../cluster/Cluster.js";
-import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16, TlvBitmap, TlvEpochS } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { TlvEnum, TlvUInt32, TlvUInt16, TlvUInt8, TlvBitmap, TlvEpochS } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { BitFlag, BitsFromPartial } from "../../schema/BitmapSchema.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
-import { TlvObject, TlvOptionalField, TlvField } from "../../tlv/TlvObject.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
-import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace DoorLock {
-    /**
-     * The value of the DoorLock lockState attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.1
-     */
-    export enum LockState {
-        /**
-         * Lock state is not fully locked
-         */
-        NotFullyLocked = 0,
-
-        /**
-         * Lock state is fully locked
-         */
-        Locked = 1,
-
-        /**
-         * Lock state is fully unlocked
-         */
-        Unlocked = 2
-    }
-
-    /**
-     * The value of the DoorLock lockType attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.2
-     */
-    export enum LockType {
-        /**
-         * Physical lock type is dead bolt
-         */
-        Deadbolt = 0,
-
-        /**
-         * Physical lock type is magnetic
-         */
-        Magnetic = 1,
-
-        /**
-         * Physical lock type is other
-         */
-        Other = 2,
-
-        /**
-         * Physical lock type is mortise
-         */
-        Mortise = 3,
-
-        /**
-         * Physical lock type is rim
-         */
-        Rim = 4,
-
-        /**
-         * Physical lock type is latch bolt
-         */
-        LatchBolt = 5,
-
-        /**
-         * Physical lock type is cylindrical lock
-         */
-        CylindricalLock = 6,
-
-        /**
-         * Physical lock type is tubular lock
-         */
-        TubularLock = 7,
-
-        /**
-         * Physical lock type is interconnected lock
-         */
-        InterconnectedLock = 8,
-
-        /**
-         * Physical lock type is dead latch
-         */
-        DeadLatch = 9,
-
-        /**
-         * Physical lock type is door furniture
-         */
-        DoorFurniture = 10
-    }
-
-    /**
-     * The OperatingMode enumeration shall indicate the lock operating mode.
-     *
-     * The table below shows the operating mode and which interfaces are enabled, if supported, for each mode.
-     *
-     * Note: For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, and
-     * Unlock with Timeout commands with a response status Failure and not take the action requested by those commands.
-     * The door lock shall NOT disable the radio or otherwise unbind or leave the network. It shall still respond to
-     * all other commands and requests.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12
-     */
-    export enum OperatingMode {
-        /**
-         * The lock operates normally. All interfaces are enabled.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.1
-         */
-        Normal = 0,
-
-        /**
-         * Only remote interaction is enabled. The keypad shall only be operable by the master user.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.2
-         */
-        Vacation = 1,
-
-        /**
-         * This mode is only possible if the door is locked. Manual unlocking changes the mode to Normal operating
-         * mode. All external interaction with the door lock is disabled. This mode is intended to be used so that
-         * users, presumably inside the property, will have control over the entrance.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.3
-         */
-        Privacy = 2,
-
-        /**
-         * This mode only disables remote interaction with the lock. This does not apply to any remote proprietary
-         * means of communication. It specifically applies to the Lock, Unlock, Toggle, and Unlock with Timeout
-         * Commands.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.4
-         */
-        NoRemoteLockUnlock = 3,
-
-        /**
-         * The lock is open or can be opened or closed at will without the use of a Keypad or other means of user
-         * validation (e.g. a lock for a business during work hours).
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.5
-         */
-        Passage = 4
-    }
-
-    /**
-     * The value of the DoorLock supportedOperatingModes attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.24
-     */
-    export const SupportedOperatingModes = {
-        normal: BitFlag(0),
-        vacation: BitFlag(1),
-        privacy: BitFlag(2),
-        noRemoteLockUnlock: BitFlag(3),
-        passage: BitFlag(4)
-    };
-
-    /**
-     * The value of the DoorLock defaultConfigurationRegister attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.28
-     */
-    export const DefaultConfigurationRegister = {
-        enableLocalProgrammingEnabled: BitFlag(0),
-        keypadInterfaceDefaultAccessEnabled: BitFlag(1),
-        remoteInterfaceDefaultAccessIsEnabled: BitFlag(2),
-        soundEnabled: BitFlag(5),
-        autoRelockTimeSet: BitFlag(6),
-        ledSettingsSet: BitFlag(7)
-    };
-
-    /**
-     * The value of the DoorLock localProgrammingFeatures attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.33
-     */
-    export const LocalProgrammingFeatures = {
-        addUsersCredentialsSchedulesLocally: BitFlag(0),
-        modifyUsersCredentialsSchedulesLocally: BitFlag(1),
-        clearUsersCredentialsSchedulesLocally: BitFlag(2),
-        adjustLockSettingsLocally: BitFlag(3)
-    };
-
-    /**
-     * The value of the DoorLock alarmMask attribute
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.39
-     */
-    export const AlarmMask = {
-        lockingMechanismJammed: BitFlag(0),
-        lockResetToFactoryDefaults: BitFlag(1),
-        reserved: BitFlag(2),
-        rfModulePowerCycled: BitFlag(3),
-        tamperAlarmWrongCodeEntryLimit: BitFlag(4),
-        tamperAlarmFrontEscutcheonRemovedFromMain: BitFlag(5),
-        forcedDoorOpenUnderDoorLockedCondition: BitFlag(6)
-    };
-
-    /**
-     * Input to the DoorLock lockDoor command
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-     */
-    export const TlvLockDoorRequest = TlvObject({ pinCode: TlvOptionalField(0, TlvByteString) });
-
-    /**
-     * Input to the DoorLock unlockDoor command
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-     */
-    export const TlvUnlockDoorRequest = TlvObject({ pinCode: TlvOptionalField(0, TlvByteString) });
-
-    /**
-     * Input to the DoorLock unlockWithTimeout command
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-     */
-    export const TlvUnlockWithTimeoutRequest = TlvObject({
-        timeout: TlvField(0, TlvUInt16),
-        pinCode: TlvOptionalField(1, TlvByteString)
-    });
-
-    /**
-     * The Alarm Code enum shall indicate the alarm type.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.1
-     */
-    export enum AlarmCode {
-        /**
-         * Locking Mechanism Jammed
-         */
-        LockJammed = 0,
-
-        /**
-         * Lock Reset to Factory Defaults
-         */
-        LockFactoryReset = 1,
-
-        /**
-         * Lock Radio Power Cycled
-         */
-        LockRadioPowerCycled = 3,
-
-        /**
-         * Tamper Alarm - wrong code entry limit
-         */
-        WrongCodeEntryLimit = 4,
-
-        /**
-         * Tamper Alarm - front escutcheon removed from main
-         */
-        FrontEsceutcheonRemoved = 5,
-
-        /**
-         * Forced Door Open under Door Locked Condition
-         */
-        DoorForcedOpen = 6,
-
-        /**
-         * Door ajar
-         */
-        DoorAjar = 7,
-
-        /**
-         * Force User SOS alarm
-         */
-        ForcedUser = 8
-    }
-
-    /**
-     * Body of the DoorLock doorLockAlarm event
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1
-     */
-    export const TlvDoorLockAlarmEvent = TlvObject({
-        /**
-         * The alarm code of the event that has happened.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1.1
-         */
-        alarmCode: TlvField(0, TlvEnum<AlarmCode>())
-    });
-
-    /**
-     * The LockOperationType enumeration shall indicate the type of Lock operation performed.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.10
-     */
-    export enum LockOperationType {
-        Lock = 0,
-        Unlock = 1,
-        NonAccessUserEvent = 2,
-        ForcedUserEvent = 3
-    }
-
-    /**
-     * The OperationSource enumeration shall indicate the source of the Lock/Unlock operation performed.
-     *
-     * 5.2.6.14. PIN/RFID Code Format
-     *
-     * The PIN/RFID codes defined in this specification are all octet strings.
-     *
-     * All value in the PIN/RFID code shall be ASCII encoded regardless if the PIN/RFID codes are number or characters.
-     * For example, code of “1, 2, 3, 4” shall be represented as 0x31, 0x32, 0x33, 0x34.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.13
-     */
-    export enum OperationSource {
-        Unspecified = 0,
-        Manual = 1,
-        ProprietaryRemote = 2,
-        Keypad = 3,
-        Auto = 4,
-        Button = 5,
-        Schedule = 6,
-        Remote = 7,
-        Rfid = 8,
-        Biometric = 9
-    }
-
-    /**
-     * The Credential Type enum shall indicate the credential type.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.4
-     */
-    export enum CredentialType {
-        ProgrammingPin = 0,
-        Pin = 1,
-        Rfid = 2,
-        Fingerprint = 3,
-        FingerVein = 4,
-        Face = 5
-    }
-
-    /**
-     * The CredentialStruct is used in LockOperation event and Get User Record Response command and shall indicate the
-     * credential types and their corresponding indices (if any) for the event or user record.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3
-     */
-    export const TlvCredentialStruct = TlvObject({
-        /**
-         * The credential type used to authorize the lock operation.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3.1
-         */
-        credentialType: TlvField(0, TlvEnum<CredentialType>()),
-
-        /**
-         * This is the index of the specific credential used to authorize the lock operation in the list of credentials
-         * identified by CredentialType (e.g. schedule, PIN, RFID, etc.). This shall be set to 0 if CredentialType is
-         * ProgrammingPIN or does not correspond to a list that can be indexed into.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3.2
-         */
-        credentialIndex: TlvField(1, TlvUInt16)
-    });
-
-    /**
-     * Body of the DoorLock lockOperation event
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3
-     */
-    export const TlvLockOperationEvent = TlvObject({
-        /**
-         * The type of the lock operation that was performed.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.1
-         */
-        lockOperationType: TlvField(0, TlvEnum<LockOperationType>()),
-
-        /**
-         * The source of the lock operation that was performed.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.2
-         */
-        operationSource: TlvField(1, TlvEnum<OperationSource>()),
-
-        /**
-         * The lock UserIndex who performed the lock operation. This shall be null if there is no user index that can
-         * be determined for the given operation source. This shall NOT be null if a user index can be determined. In
-         * particular, this shall NOT be null if the operation was associated with a valid credential.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.3
-         */
-        userIndex: TlvField(2, TlvNullable(TlvUInt16)),
-
-        /**
-         * The fabric index of the fabric that performed the lock operation. This shall be null if there is no fabric
-         * that can be determined for the given operation source. This shall NOT be null if the operation source is
-         * "Remote".
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.4
-         */
-        fabricIndex: TlvField(3, TlvNullable(TlvFabricIndex)),
-
-        /**
-         * The Node ID of the node that performed the lock operation. This shall be null if there is no Node associated
-         * with the given operation source. This shall NOT be null if the operation source is "Remote".
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.5
-         */
-        sourceNode: TlvField(4, TlvNullable(TlvNodeId)),
-
-        /**
-         * The list of credentials used in performing the lock operation. This shall be null if no credentials were
-         * involved.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.6
-         */
-        credentials: TlvOptionalField(5, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 1 })))
-    });
-
-    /**
-     * The OperationError enumeration shall indicate the error cause of the Lock/Unlock operation performed.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.11
-     */
-    export enum OperationError {
-        Unspecified = 0,
-        InvalidCredential = 1,
-        DisabledUserDenied = 2,
-        Restricted = 3,
-        InsufficientBattery = 4
-    }
-
-    /**
-     * Body of the DoorLock lockOperationError event
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4
-     */
-    export const TlvLockOperationErrorEvent = TlvObject({
-        /**
-         * The type of the lock operation that was performed.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.1
-         */
-        lockOperationType: TlvField(0, TlvEnum<LockOperationType>()),
-
-        /**
-         * The source of the lock operation that was performed.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.2
-         */
-        operationSource: TlvField(1, TlvEnum<OperationSource>()),
-
-        /**
-         * The lock operation error triggered when the operation was performed.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.3
-         */
-        operationError: TlvField(2, TlvEnum<OperationError>()),
-
-        /**
-         * The lock UserIndex who performed the lock operation. This shall be null if there is no user id that can be
-         * determined for the given operation source.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.4
-         */
-        userIndex: TlvField(3, TlvNullable(TlvUInt16)),
-
-        /**
-         * The fabric index of the fabric that performed the lock operation. This shall be null if there is no fabric
-         * that can be determined for the given operation source. This shall NOT be null if the operation source is
-         * "Remote".
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.5
-         */
-        fabricIndex: TlvField(4, TlvNullable(TlvFabricIndex)),
-
-        /**
-         * The Node ID of the node that performed the lock operation. This shall be null if there is no Node associated
-         * with the given operation source. This shall NOT be null if the operation source is
-         *
-         * "Remote".
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.6
-         */
-        sourceNode: TlvField(5, TlvNullable(TlvNodeId)),
-
-        /**
-         * The list of credentials used in performing the lock operation. This shall be null if no credentials were
-         * involved.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.7
-         */
-        credentials: TlvOptionalField(6, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 1 })))
-    });
-
     /**
      * The DoorState enumeration shall indicate the current door state. The data type of the DoorState
      *
@@ -568,6 +88,13 @@ export namespace DoorLock {
          */
         doorState: TlvField(0, TlvEnum<DoorState>())
     });
+
+    /**
+     * Body of the DoorLock doorStateChange event
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.2
+     */
+    export interface DoorStateChangeEvent extends TypeFromSchema<typeof TlvDoorStateChangeEvent> {}
 
     /**
      * The value of the DoorLock credentialRulesSupport attribute
@@ -726,11 +253,71 @@ export namespace DoorLock {
     });
 
     /**
+     * Input to the DoorLock setUser command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface SetUserRequest extends TypeFromSchema<typeof TlvSetUserRequest> {}
+
+    /**
      * Input to the DoorLock getUser command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
      */
     export const TlvGetUserRequest = TlvObject({ userIndex: TlvField(0, TlvUInt16) });
+
+    /**
+     * Input to the DoorLock getUser command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetUserRequest extends TypeFromSchema<typeof TlvGetUserRequest> {}
+
+    /**
+     * The Credential Type enum shall indicate the credential type.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.4
+     */
+    export enum CredentialType {
+        ProgrammingPin = 0,
+        Pin = 1,
+        Rfid = 2,
+        Fingerprint = 3,
+        FingerVein = 4,
+        Face = 5
+    }
+
+    /**
+     * The CredentialStruct is used in LockOperation event and Get User Record Response command and shall indicate the
+     * credential types and their corresponding indices (if any) for the event or user record.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3
+     */
+    export const TlvCredentialStruct = TlvObject({
+        /**
+         * The credential type used to authorize the lock operation.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3.1
+         */
+        credentialType: TlvField(0, TlvEnum<CredentialType>()),
+
+        /**
+         * This is the index of the specific credential used to authorize the lock operation in the list of credentials
+         * identified by CredentialType (e.g. schedule, PIN, RFID, etc.). This shall be set to 0 if CredentialType is
+         * ProgrammingPIN or does not correspond to a list that can be indexed into.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3.2
+         */
+        credentialIndex: TlvField(1, TlvUInt16)
+    });
+
+    /**
+     * The CredentialStruct is used in LockOperation event and Get User Record Response command and shall indicate the
+     * credential types and their corresponding indices (if any) for the event or user record.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3
+     */
+    export interface CredentialStruct extends TypeFromSchema<typeof TlvCredentialStruct> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -749,11 +336,23 @@ export namespace DoorLock {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetUserResponse extends TypeFromSchema<typeof TlvGetUserResponse> {}
+
+    /**
      * Input to the DoorLock clearUser command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
      */
     export const TlvClearUserRequest = TlvObject({ userIndex: TlvField(0, TlvUInt16) });
+
+    /**
+     * Input to the DoorLock clearUser command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface ClearUserRequest extends TypeFromSchema<typeof TlvClearUserRequest> {}
 
     /**
      * Input to the DoorLock setCredential command
@@ -768,6 +367,13 @@ export namespace DoorLock {
         userStatus: TlvField(4, TlvNullable(TlvEnum<UserStatus>())),
         userType: TlvField(5, TlvNullable(TlvEnum<UserType>()))
     });
+
+    /**
+     * Input to the DoorLock setCredential command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface SetCredentialRequest extends TypeFromSchema<typeof TlvSetCredentialRequest> {}
 
     export enum DlStatus {
         Success = 0,
@@ -789,11 +395,23 @@ export namespace DoorLock {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface SetCredentialResponse extends TypeFromSchema<typeof TlvSetCredentialResponse> {}
+
+    /**
      * Input to the DoorLock getCredentialStatus command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
      */
     export const TlvGetCredentialStatusRequest = TlvObject({ credential: TlvField(0, TlvCredentialStruct) });
+
+    /**
+     * Input to the DoorLock getCredentialStatus command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetCredentialStatusRequest extends TypeFromSchema<typeof TlvGetCredentialStatusRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -807,11 +425,23 @@ export namespace DoorLock {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetCredentialStatusResponse extends TypeFromSchema<typeof TlvGetCredentialStatusResponse> {}
+
+    /**
      * Input to the DoorLock clearCredential command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
      */
     export const TlvClearCredentialRequest = TlvObject({ credential: TlvField(0, TlvNullable(TlvCredentialStruct)) });
+
+    /**
+     * Input to the DoorLock clearCredential command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface ClearCredentialRequest extends TypeFromSchema<typeof TlvClearCredentialRequest> {}
 
     /**
      * The LockDataType enum shall indicate the data type that is being or has changed.
@@ -873,6 +503,31 @@ export namespace DoorLock {
          * Lock user face information was added, cleared, or modified.
          */
         Face = 10
+    }
+
+    /**
+     * The OperationSource enumeration shall indicate the source of the Lock/Unlock operation performed.
+     *
+     * 5.2.6.14. PIN/RFID Code Format
+     *
+     * The PIN/RFID codes defined in this specification are all octet strings.
+     *
+     * All value in the PIN/RFID code shall be ASCII encoded regardless if the PIN/RFID codes are number or characters.
+     * For example, code of “1, 2, 3, 4” shall be represented as 0x31, 0x32, 0x33, 0x34.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.13
+     */
+    export enum OperationSource {
+        Unspecified = 0,
+        Manual = 1,
+        ProprietaryRemote = 2,
+        Keypad = 3,
+        Auto = 4,
+        Button = 5,
+        Schedule = 6,
+        Remote = 7,
+        Rfid = 8,
+        Biometric = 9
     }
 
     /**
@@ -939,6 +594,13 @@ export namespace DoorLock {
     });
 
     /**
+     * Body of the DoorLock lockUserChange event
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5
+     */
+    export interface LockUserChangeEvent extends TypeFromSchema<typeof TlvLockUserChangeEvent> {}
+
+    /**
      * The DaysMask field used in various commands and shall indicate the days of the week the Week Day schedule
      * applies for.
      *
@@ -970,6 +632,13 @@ export namespace DoorLock {
     });
 
     /**
+     * Input to the DoorLock setWeekDaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface SetWeekDayScheduleRequest extends TypeFromSchema<typeof TlvSetWeekDayScheduleRequest> {}
+
+    /**
      * Input to the DoorLock getWeekDaySchedule command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -978,6 +647,13 @@ export namespace DoorLock {
         weekDayIndex: TlvField(0, TlvUInt8),
         userIndex: TlvField(1, TlvUInt16)
     });
+
+    /**
+     * Input to the DoorLock getWeekDaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetWeekDayScheduleRequest extends TypeFromSchema<typeof TlvGetWeekDayScheduleRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -994,6 +670,11 @@ export namespace DoorLock {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetWeekDayScheduleResponse extends TypeFromSchema<typeof TlvGetWeekDayScheduleResponse> {}
+
+    /**
      * Input to the DoorLock clearWeekDaySchedule command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -1002,6 +683,13 @@ export namespace DoorLock {
         weekDayIndex: TlvField(0, TlvUInt8),
         userIndex: TlvField(1, TlvUInt16)
     });
+
+    /**
+     * Input to the DoorLock clearWeekDaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface ClearWeekDayScheduleRequest extends TypeFromSchema<typeof TlvClearWeekDayScheduleRequest> {}
 
     /**
      * Input to the DoorLock setYearDaySchedule command
@@ -1016,6 +704,13 @@ export namespace DoorLock {
     });
 
     /**
+     * Input to the DoorLock setYearDaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface SetYearDayScheduleRequest extends TypeFromSchema<typeof TlvSetYearDayScheduleRequest> {}
+
+    /**
      * Input to the DoorLock getYearDaySchedule command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -1024,6 +719,13 @@ export namespace DoorLock {
         yearDayIndex: TlvField(0, TlvUInt8),
         userIndex: TlvField(1, TlvUInt16)
     });
+
+    /**
+     * Input to the DoorLock getYearDaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetYearDayScheduleRequest extends TypeFromSchema<typeof TlvGetYearDayScheduleRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -1037,6 +739,11 @@ export namespace DoorLock {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetYearDayScheduleResponse extends TypeFromSchema<typeof TlvGetYearDayScheduleResponse> {}
+
+    /**
      * Input to the DoorLock clearYearDaySchedule command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -1045,6 +752,67 @@ export namespace DoorLock {
         yearDayIndex: TlvField(0, TlvUInt8),
         userIndex: TlvField(1, TlvUInt16)
     });
+
+    /**
+     * Input to the DoorLock clearYearDaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface ClearYearDayScheduleRequest extends TypeFromSchema<typeof TlvClearYearDayScheduleRequest> {}
+
+    /**
+     * The OperatingMode enumeration shall indicate the lock operating mode.
+     *
+     * The table below shows the operating mode and which interfaces are enabled, if supported, for each mode.
+     *
+     * Note: For modes that disable the remote interface, the door lock shall respond to Lock, Unlock, Toggle, and
+     * Unlock with Timeout commands with a response status Failure and not take the action requested by those commands.
+     * The door lock shall NOT disable the radio or otherwise unbind or leave the network. It shall still respond to
+     * all other commands and requests.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12
+     */
+    export enum OperatingMode {
+        /**
+         * The lock operates normally. All interfaces are enabled.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.1
+         */
+        Normal = 0,
+
+        /**
+         * Only remote interaction is enabled. The keypad shall only be operable by the master user.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.2
+         */
+        Vacation = 1,
+
+        /**
+         * This mode is only possible if the door is locked. Manual unlocking changes the mode to Normal operating
+         * mode. All external interaction with the door lock is disabled. This mode is intended to be used so that
+         * users, presumably inside the property, will have control over the entrance.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.3
+         */
+        Privacy = 2,
+
+        /**
+         * This mode only disables remote interaction with the lock. This does not apply to any remote proprietary
+         * means of communication. It specifically applies to the Lock, Unlock, Toggle, and Unlock with Timeout
+         * Commands.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.4
+         */
+        NoRemoteLockUnlock = 3,
+
+        /**
+         * The lock is open or can be opened or closed at will without the use of a Keypad or other means of user
+         * validation (e.g. a lock for a business during work hours).
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.5
+         */
+        Passage = 4
+    }
 
     /**
      * Input to the DoorLock setHolidaySchedule command
@@ -1059,11 +827,25 @@ export namespace DoorLock {
     });
 
     /**
+     * Input to the DoorLock setHolidaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface SetHolidayScheduleRequest extends TypeFromSchema<typeof TlvSetHolidayScheduleRequest> {}
+
+    /**
      * Input to the DoorLock getHolidaySchedule command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
      */
     export const TlvGetHolidayScheduleRequest = TlvObject({ holidayIndex: TlvField(0, TlvUInt8) });
+
+    /**
+     * Input to the DoorLock getHolidaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetHolidayScheduleRequest extends TypeFromSchema<typeof TlvGetHolidayScheduleRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -1077,11 +859,23 @@ export namespace DoorLock {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface GetHolidayScheduleResponse extends TypeFromSchema<typeof TlvGetHolidayScheduleResponse> {}
+
+    /**
      * Input to the DoorLock clearHolidaySchedule command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
      */
     export const TlvClearHolidayScheduleRequest = TlvObject({ holidayIndex: TlvField(0, TlvUInt8) });
+
+    /**
+     * Input to the DoorLock clearHolidaySchedule command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface ClearHolidayScheduleRequest extends TypeFromSchema<typeof TlvClearHolidayScheduleRequest> {}
 
     /**
      * The value of the DoorLock keypadOperationEventMask attribute
@@ -1183,6 +977,1196 @@ export namespace DoorLock {
     export const RfidProgrammingEventMask = { unknown: BitFlag(0), idAdded: BitFlag(5), idCleared: BitFlag(6) };
 
     /**
+     * The value of the DoorLock lockState attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.1
+     */
+    export enum LockState {
+        /**
+         * Lock state is not fully locked
+         */
+        NotFullyLocked = 0,
+
+        /**
+         * Lock state is fully locked
+         */
+        Locked = 1,
+
+        /**
+         * Lock state is fully unlocked
+         */
+        Unlocked = 2
+    }
+
+    /**
+     * The value of the DoorLock lockType attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.2
+     */
+    export enum LockType {
+        /**
+         * Physical lock type is dead bolt
+         */
+        Deadbolt = 0,
+
+        /**
+         * Physical lock type is magnetic
+         */
+        Magnetic = 1,
+
+        /**
+         * Physical lock type is other
+         */
+        Other = 2,
+
+        /**
+         * Physical lock type is mortise
+         */
+        Mortise = 3,
+
+        /**
+         * Physical lock type is rim
+         */
+        Rim = 4,
+
+        /**
+         * Physical lock type is latch bolt
+         */
+        LatchBolt = 5,
+
+        /**
+         * Physical lock type is cylindrical lock
+         */
+        CylindricalLock = 6,
+
+        /**
+         * Physical lock type is tubular lock
+         */
+        TubularLock = 7,
+
+        /**
+         * Physical lock type is interconnected lock
+         */
+        InterconnectedLock = 8,
+
+        /**
+         * Physical lock type is dead latch
+         */
+        DeadLatch = 9,
+
+        /**
+         * Physical lock type is door furniture
+         */
+        DoorFurniture = 10
+    }
+
+    /**
+     * The value of the DoorLock supportedOperatingModes attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.24
+     */
+    export const SupportedOperatingModes = {
+        normal: BitFlag(0),
+        vacation: BitFlag(1),
+        privacy: BitFlag(2),
+        noRemoteLockUnlock: BitFlag(3),
+        passage: BitFlag(4)
+    };
+
+    /**
+     * The value of the DoorLock defaultConfigurationRegister attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.28
+     */
+    export const DefaultConfigurationRegister = {
+        enableLocalProgrammingEnabled: BitFlag(0),
+        keypadInterfaceDefaultAccessEnabled: BitFlag(1),
+        remoteInterfaceDefaultAccessIsEnabled: BitFlag(2),
+        soundEnabled: BitFlag(5),
+        autoRelockTimeSet: BitFlag(6),
+        ledSettingsSet: BitFlag(7)
+    };
+
+    /**
+     * The value of the DoorLock localProgrammingFeatures attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.33
+     */
+    export const LocalProgrammingFeatures = {
+        addUsersCredentialsSchedulesLocally: BitFlag(0),
+        modifyUsersCredentialsSchedulesLocally: BitFlag(1),
+        clearUsersCredentialsSchedulesLocally: BitFlag(2),
+        adjustLockSettingsLocally: BitFlag(3)
+    };
+
+    /**
+     * The value of the DoorLock alarmMask attribute
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.39
+     */
+    export const AlarmMask = {
+        lockingMechanismJammed: BitFlag(0),
+        lockResetToFactoryDefaults: BitFlag(1),
+        reserved: BitFlag(2),
+        rfModulePowerCycled: BitFlag(3),
+        tamperAlarmWrongCodeEntryLimit: BitFlag(4),
+        tamperAlarmFrontEscutcheonRemovedFromMain: BitFlag(5),
+        forcedDoorOpenUnderDoorLockedCondition: BitFlag(6)
+    };
+
+    /**
+     * Input to the DoorLock lockDoor command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export const TlvLockDoorRequest = TlvObject({ pinCode: TlvOptionalField(0, TlvByteString) });
+
+    /**
+     * Input to the DoorLock lockDoor command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface LockDoorRequest extends TypeFromSchema<typeof TlvLockDoorRequest> {}
+
+    /**
+     * Input to the DoorLock unlockDoor command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export const TlvUnlockDoorRequest = TlvObject({ pinCode: TlvOptionalField(0, TlvByteString) });
+
+    /**
+     * Input to the DoorLock unlockDoor command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface UnlockDoorRequest extends TypeFromSchema<typeof TlvUnlockDoorRequest> {}
+
+    /**
+     * Input to the DoorLock unlockWithTimeout command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export const TlvUnlockWithTimeoutRequest = TlvObject({
+        timeout: TlvField(0, TlvUInt16),
+        pinCode: TlvOptionalField(1, TlvByteString)
+    });
+
+    /**
+     * Input to the DoorLock unlockWithTimeout command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     */
+    export interface UnlockWithTimeoutRequest extends TypeFromSchema<typeof TlvUnlockWithTimeoutRequest> {}
+
+    /**
+     * The Alarm Code enum shall indicate the alarm type.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.1
+     */
+    export enum AlarmCode {
+        /**
+         * Locking Mechanism Jammed
+         */
+        LockJammed = 0,
+
+        /**
+         * Lock Reset to Factory Defaults
+         */
+        LockFactoryReset = 1,
+
+        /**
+         * Lock Radio Power Cycled
+         */
+        LockRadioPowerCycled = 3,
+
+        /**
+         * Tamper Alarm - wrong code entry limit
+         */
+        WrongCodeEntryLimit = 4,
+
+        /**
+         * Tamper Alarm - front escutcheon removed from main
+         */
+        FrontEsceutcheonRemoved = 5,
+
+        /**
+         * Forced Door Open under Door Locked Condition
+         */
+        DoorForcedOpen = 6,
+
+        /**
+         * Door ajar
+         */
+        DoorAjar = 7,
+
+        /**
+         * Force User SOS alarm
+         */
+        ForcedUser = 8
+    }
+
+    /**
+     * Body of the DoorLock doorLockAlarm event
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1
+     */
+    export const TlvDoorLockAlarmEvent = TlvObject({
+        /**
+         * The alarm code of the event that has happened.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1.1
+         */
+        alarmCode: TlvField(0, TlvEnum<AlarmCode>())
+    });
+
+    /**
+     * Body of the DoorLock doorLockAlarm event
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1
+     */
+    export interface DoorLockAlarmEvent extends TypeFromSchema<typeof TlvDoorLockAlarmEvent> {}
+
+    /**
+     * The LockOperationType enumeration shall indicate the type of Lock operation performed.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.10
+     */
+    export enum LockOperationType {
+        Lock = 0,
+        Unlock = 1,
+        NonAccessUserEvent = 2,
+        ForcedUserEvent = 3
+    }
+
+    /**
+     * Body of the DoorLock lockOperation event
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3
+     */
+    export const TlvLockOperationEvent = TlvObject({
+        /**
+         * The type of the lock operation that was performed.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.1
+         */
+        lockOperationType: TlvField(0, TlvEnum<LockOperationType>()),
+
+        /**
+         * The source of the lock operation that was performed.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.2
+         */
+        operationSource: TlvField(1, TlvEnum<OperationSource>()),
+
+        /**
+         * The lock UserIndex who performed the lock operation. This shall be null if there is no user index that can
+         * be determined for the given operation source. This shall NOT be null if a user index can be determined. In
+         * particular, this shall NOT be null if the operation was associated with a valid credential.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.3
+         */
+        userIndex: TlvField(2, TlvNullable(TlvUInt16)),
+
+        /**
+         * The fabric index of the fabric that performed the lock operation. This shall be null if there is no fabric
+         * that can be determined for the given operation source. This shall NOT be null if the operation source is
+         * "Remote".
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.4
+         */
+        fabricIndex: TlvField(3, TlvNullable(TlvFabricIndex)),
+
+        /**
+         * The Node ID of the node that performed the lock operation. This shall be null if there is no Node associated
+         * with the given operation source. This shall NOT be null if the operation source is "Remote".
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.5
+         */
+        sourceNode: TlvField(4, TlvNullable(TlvNodeId)),
+
+        /**
+         * The list of credentials used in performing the lock operation. This shall be null if no credentials were
+         * involved.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.6
+         */
+        credentials: TlvOptionalField(5, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 1 })))
+    });
+
+    /**
+     * Body of the DoorLock lockOperation event
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3
+     */
+    export interface LockOperationEvent extends TypeFromSchema<typeof TlvLockOperationEvent> {}
+
+    /**
+     * The OperationError enumeration shall indicate the error cause of the Lock/Unlock operation performed.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.11
+     */
+    export enum OperationError {
+        Unspecified = 0,
+        InvalidCredential = 1,
+        DisabledUserDenied = 2,
+        Restricted = 3,
+        InsufficientBattery = 4
+    }
+
+    /**
+     * Body of the DoorLock lockOperationError event
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4
+     */
+    export const TlvLockOperationErrorEvent = TlvObject({
+        /**
+         * The type of the lock operation that was performed.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.1
+         */
+        lockOperationType: TlvField(0, TlvEnum<LockOperationType>()),
+
+        /**
+         * The source of the lock operation that was performed.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.2
+         */
+        operationSource: TlvField(1, TlvEnum<OperationSource>()),
+
+        /**
+         * The lock operation error triggered when the operation was performed.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.3
+         */
+        operationError: TlvField(2, TlvEnum<OperationError>()),
+
+        /**
+         * The lock UserIndex who performed the lock operation. This shall be null if there is no user id that can be
+         * determined for the given operation source.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.4
+         */
+        userIndex: TlvField(3, TlvNullable(TlvUInt16)),
+
+        /**
+         * The fabric index of the fabric that performed the lock operation. This shall be null if there is no fabric
+         * that can be determined for the given operation source. This shall NOT be null if the operation source is
+         * "Remote".
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.5
+         */
+        fabricIndex: TlvField(4, TlvNullable(TlvFabricIndex)),
+
+        /**
+         * The Node ID of the node that performed the lock operation. This shall be null if there is no Node associated
+         * with the given operation source. This shall NOT be null if the operation source is
+         *
+         * "Remote".
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.6
+         */
+        sourceNode: TlvField(5, TlvNullable(TlvNodeId)),
+
+        /**
+         * The list of credentials used in performing the lock operation. This shall be null if no credentials were
+         * involved.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.7
+         */
+        credentials: TlvOptionalField(6, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 1 })))
+    });
+
+    /**
+     * Body of the DoorLock lockOperationError event
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4
+     */
+    export interface LockOperationErrorEvent extends TypeFromSchema<typeof TlvLockOperationErrorEvent> {}
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature DoorPositionSensor.
+     */
+    export const DoorPositionSensorComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The current door state as defined in DoorStateEnum.
+             *
+             * This attribute shall be null only if an internal error prevents the retrieval of the current door state.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.4
+             */
+            doorState: Attribute(0x3, TlvNullable(TlvEnum<DoorState>())),
+
+            /**
+             * This attribute holds the number of door open events that have occurred since it was last zeroed.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.5
+             */
+            doorOpenEvents: OptionalWritableAttribute(0x4, TlvUInt32, { writeAcl: AccessLevel.Manage }),
+
+            /**
+             * This attribute holds the number of door closed events that have occurred since it was last zeroed.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.6
+             */
+            doorClosedEvents: OptionalWritableAttribute(0x5, TlvUInt32, { writeAcl: AccessLevel.Manage }),
+
+            /**
+             * This attribute holds the number of minutes the door has been open since the last time it transitioned
+             * from closed to open.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.7
+             */
+            openPeriod: OptionalWritableAttribute(0x6, TlvUInt16, { writeAcl: AccessLevel.Manage })
+        },
+
+        events: {
+            /**
+             * The door lock server sends out a DoorStateChange event when the door lock door state changes.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.2
+             */
+            doorStateChange: Event(0x1, EventPriority.Critical, TlvDoorStateChangeEvent)
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature Logging.
+     */
+    export const LoggingComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The number of available log records.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.8
+             */
+            numberOfLogRecordsSupported: FixedAttribute(0x10, TlvUInt16, { default: 0 }),
+
+            /**
+             * Enable/disable event logging. When event logging is enabled, all event messages are stored on the lock
+             * for retrieval. Logging events can be but not limited to Tamper Alarm, Lock, Unlock, AutoRelock, User
+             * Code Added, User Code Cleared, Schedule Added, and Schedule Cleared. For a full detail of all the
+             * possible alarms and events, please refer to the full list in the Alarm and Event Masks Attribute Set.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.21
+             */
+            enableLogging: WritableAttribute(0x20, TlvBoolean, { default: true, writeAcl: AccessLevel.Administer })
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getLogRecord: Command(0x4, TlvNoArguments, 0x4, TlvNoArguments, { invokeAcl: AccessLevel.Manage })
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature User.
+     */
+    export const UserComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * Number of total users supported by the lock.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.9
+             */
+            numberOfTotalUsersSupported: FixedAttribute(0x11, TlvUInt16, { default: 0 }),
+
+            /**
+             * This bitmap contains a bit for every value of CredentialRuleEnum supported on this device.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.19
+             */
+            credentialRulesSupport: FixedAttribute(
+                0x1b,
+                TlvBitmap(TlvUInt8, CredentialRulesSupport),
+                { default: BitsFromPartial(CredentialRulesSupport, { single: true }) }
+            ),
+
+            /**
+             * The number of credentials that could be assigned for each user.
+             *
+             * Depending on the value of NumberOfRFIDUsersSupported and NumberOfPINUsersSupported it may not be
+             * possible to assign that number of credentials for a user.
+             *
+             * For example, if the device supports only PIN and RFID credential types,
+             * NumberOfCredentialsSupportedPerUser is set to 10, NumberOfPINUsersSupported is set to 5 and
+             * NumberOfRFIDUsersSupported is set to 3, it will not be possible to actually assign 10 credentials for a
+             * user because maximum number of credentials in the database is 8.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.20
+             */
+            numberOfCredentialsSupportedPerUser: FixedAttribute(0x1c, TlvUInt8, { default: 0 }),
+
+            /**
+             * Number of minutes a PIN, RFID, Fingerprint, or other credential associated with a user of type
+             * ExpiringUser shall remain valid after its first use before expiring. When the credential expires the
+             * UserStatus for the corresponding user record shall be set to OccupiedDisabled.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.38
+             */
+            expiringUserTimeout: OptionalWritableAttribute(
+                0x35,
+                TlvUInt16.bound({ min: 1, max: 2880 }),
+                { writeAcl: AccessLevel.Administer }
+            )
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setUser: Command(
+                0x1a,
+                TlvSetUserRequest,
+                0x1a,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getUser: Command(0x1b, TlvGetUserRequest, 0x1c, TlvGetUserResponse, { invokeAcl: AccessLevel.Administer }),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearUser: Command(
+                0x1d,
+                TlvClearUserRequest,
+                0x1d,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setCredential: Command(
+                0x22,
+                TlvSetCredentialRequest,
+                0x23,
+                TlvSetCredentialResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getCredentialStatus: Command(
+                0x24,
+                TlvGetCredentialStatusRequest,
+                0x25,
+                TlvGetCredentialStatusResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearCredential: Command(
+                0x26,
+                TlvClearCredentialRequest,
+                0x26,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
+        },
+
+        events: {
+            /**
+             * The door lock server sends out a LockUserChange event when a lock user, schedule, or credential change
+             * has occurred.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5
+             */
+            lockUserChange: Event(0x4, EventPriority.Info, TlvLockUserChangeEvent)
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature PinCredential.
+     */
+    export const PinCredentialComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The number of PIN users supported.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.10
+             */
+            numberOfPinUsersSupported: FixedAttribute(0x12, TlvUInt16, { default: 0 }),
+
+            /**
+             * An 8 bit value indicates the maximum length in bytes of a PIN Code on this device.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.15
+             */
+            maxPinCodeLength: FixedAttribute(0x17, TlvUInt8),
+
+            /**
+             * An 8 bit value indicates the minimum length in bytes of a PIN Code on this device.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.16
+             */
+            minPinCodeLength: FixedAttribute(0x18, TlvUInt8),
+
+            /**
+             * Boolean set to True if it is ok for the door lock server to send PINs over the air. This attribute
+             * determines the behavior of the server’s TX operation. If it is false, then it is not ok for the device
+             * to send PIN in any messages over the air.
+             *
+             * The PIN field within any door lock cluster message shall keep the first octet unchanged and masks the
+             * actual code by replacing with 0xFF. For example (PIN "1234" ): If the attribute value is True, 0x04 0x31
+             * 0x32 0x33 0x34 shall be used in the PIN field in any door lock cluster message payload. If the attribute
+             * value is False, 0x04 0xFF 0xFF 0xFF 0xFF shall be used.
+             *
+             * If the USR feature is supported by the device then this attribute shall NOT be supported.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.36
+             */
+            sendPinOverTheAir: OptionalWritableAttribute(
+                0x32,
+                TlvBoolean,
+                { default: true, writeAcl: AccessLevel.Administer }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature RfidCredential.
+     */
+    export const RfidCredentialComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The number of RFID users supported.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.11
+             */
+            numberOfRfidUsersSupported: FixedAttribute(0x13, TlvUInt16, { default: 0 }),
+
+            /**
+             * An 8 bit value indicates the maximum length in bytes of a RFID Code on this device. The value depends on
+             * the RFID code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as
+             * RFID code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.17
+             */
+            maxRfidCodeLength: FixedAttribute(0x19, TlvUInt8),
+
+            /**
+             * An 8 bit value indicates the minimum length in bytes of a RFID Code on this device. The value depends on
+             * the RFID code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as
+             * RFID code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.18
+             */
+            minRfidCodeLength: FixedAttribute(0x1a, TlvUInt8)
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature WeekDayAccessSchedules.
+     */
+    export const WeekDayAccessSchedulesComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The number of configurable week day schedule supported per user.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.12
+             */
+            numberOfWeekDaySchedulesSupportedPerUser: FixedAttribute(0x14, TlvUInt8, { default: 0 })
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setWeekDaySchedule: Command(
+                0xb,
+                TlvSetWeekDayScheduleRequest,
+                0xb,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getWeekDaySchedule: Command(
+                0xc,
+                TlvGetWeekDayScheduleRequest,
+                0xc,
+                TlvGetWeekDayScheduleResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearWeekDaySchedule: Command(
+                0xd,
+                TlvClearWeekDayScheduleRequest,
+                0xd,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature YearDayAccessSchedules.
+     */
+    export const YearDayAccessSchedulesComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The number of configurable year day schedule supported per user.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.13
+             */
+            numberOfYearDaySchedulesSupportedPerUser: FixedAttribute(0x15, TlvUInt8, { default: 0 })
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setYearDaySchedule: Command(
+                0xe,
+                TlvSetYearDayScheduleRequest,
+                0xe,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getYearDaySchedule: Command(
+                0xf,
+                TlvGetYearDayScheduleRequest,
+                0xf,
+                TlvGetYearDayScheduleResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearYearDaySchedule: Command(
+                0x10,
+                TlvClearYearDayScheduleRequest,
+                0x10,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature HolidaySchedules.
+     */
+    export const HolidaySchedulesComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The number of holiday schedules supported for the entire door lock device.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.14
+             */
+            numberOfHolidaySchedulesSupported: FixedAttribute(0x16, TlvUInt8, { default: 0 })
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setHolidaySchedule: Command(
+                0x11,
+                TlvSetHolidayScheduleRequest,
+                0x11,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getHolidaySchedule: Command(
+                0x12,
+                TlvGetHolidayScheduleRequest,
+                0x12,
+                TlvGetHolidayScheduleResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearHolidaySchedule: Command(
+                0x13,
+                TlvClearHolidayScheduleRequest,
+                0x13,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports features PinCredential or RfidCredential.
+     */
+    export const PinCredentialOrRfidCredentialComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The number of incorrect Pin codes or RFID presentment attempts a user is allowed to enter before the
+             * lock will enter a lockout state. The value of this attribute is compared to all failing forms of
+             * credential presentation, including Pin codes used in an Unlock Command when RequirePINforRemoteOperation
+             * is set to true. Valid range is 1-255 incorrect attempts. The lockout state will be for the duration of
+             * UserCodeTemporaryDisableTime. If the attribute accepts writes and an attempt to write the value 0 is
+             * made, the device shall respond with CONSTRAINT_ERROR.
+             *
+             * The lock may reset the counter used to track incorrect credential presentations as required by internal
+             * logic, environmental events, or other reasons. The lock shall reset the counter if a valid credential is
+             * presented.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.34
+             */
+            wrongCodeEntryLimit: WritableAttribute(
+                0x30,
+                TlvUInt8.bound({ min: 1 }),
+                { writeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * The number of seconds that the lock shuts down following wrong code entry. Valid range is 1-255 seconds.
+             * Device can shut down to lock user out for specified amount of time. (Makes it difficult to try and guess
+             * a PIN for the device.) If the attribute accepts writes and an attempt to write the attribute to 0 is
+             * made, the device shall respond with CONSTRAINT_ERROR.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.35
+             */
+            userCodeTemporaryDisableTime: WritableAttribute(
+                0x31,
+                TlvUInt8.bound({ min: 1 }),
+                { writeAcl: AccessLevel.Administer }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports features CredentialOverTheAirAccess and PinCredential.
+     */
+    export const CredentialOverTheAirAccessAndPinCredentialComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * Boolean set to True if the door lock server requires that an optional PINs be included in the payload of
+             * remote lock operation events like Lock, Unlock, Unlock with Timeout and Toggle in order to function.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.37
+             */
+            requirePinForRemoteOperation: WritableAttribute(
+                0x33,
+                TlvBoolean,
+                { default: true, writeAcl: AccessLevel.Administer }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports features Notification and PinCredential.
+     */
+    export const NotificationAndPinCredentialComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * Event mask used to turn on and off the transmission of keypad operation events. This mask DOES NOT apply
+             * to the storing of events in the event log. This mask only applies to the Operation Event Notification
+             * Command.
+             *
+             * This mask DOES NOT apply to the Events mechanism of this cluster.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.40
+             */
+            keypadOperationEventMask: OptionalWritableAttribute(
+                0x41,
+                TlvBitmap(TlvUInt16, KeypadOperationEventMask),
+                {
+                    default: BitsFromPartial(KeypadOperationEventMask, { unknownOrManufacturerSpecificKeypadOperationEvent: true, lockSourceKeypad: true, unlockSourceKeypad: true, lockSourceKeypadErrorInvalidPin: true, lockSourceKeypadErrorInvalidSchedule: true, unlockSourceKeypadErrorInvalidCode: true, unlockSourceKeypadErrorInvalidSchedule: true, nonAccessUserOperationEventSourceKeypad: true }),
+                    writeAcl: AccessLevel.Administer
+                }
+            ),
+
+            /**
+             * Event mask used to turn on and off keypad programming events. This mask DOES NOT apply to the storing of
+             * events in the event log. This mask only applies to the Programming Event Notification Command.
+             *
+             * This mask DOES NOT apply to the Events mechanism of this cluster.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.44
+             */
+            keypadProgrammingEventMask: OptionalWritableAttribute(
+                0x45,
+                TlvBitmap(TlvUInt16, KeypadProgrammingEventMask),
+                {
+                    default: BitsFromPartial(KeypadProgrammingEventMask, { unknown: true, pinCodeChanged: true, pinAdded: true, pinCleared: true, pinChanged: true }),
+                    writeAcl: AccessLevel.Administer
+                }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature Notification.
+     */
+    export const NotificationComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * Event mask used to turn on and off the transmission of remote operation events. This mask DOES NOT apply
+             * to the storing of events in the event log. This mask only applies to the Operation Event
+             *
+             * Notification Command.
+             *
+             * This mask DOES NOT apply to the Events mechanism of this cluster.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.41
+             */
+            remoteOperationEventMask: OptionalWritableAttribute(
+                0x42,
+                TlvBitmap(TlvUInt16, RemoteOperationEventMask),
+                {
+                    default: BitsFromPartial(RemoteOperationEventMask, { unknownOrManufacturerSpecificRemoteOperationEvent: true, lockSourceRemote: true, unlockSourceRemote: true, lockSourceRemoteErrorInvalidCode: true, lockSourceRemoteErrorInvalidSchedule: true, unlockSourceRemoteErrorInvalidCode: true, unlockSourceRemoteErrorInvalidSchedule: true }),
+                    writeAcl: AccessLevel.Administer
+                }
+            ),
+
+            /**
+             * Event mask used to turn on and off manual operation events. This mask DOES NOT apply to the storing of
+             * events in the event log. This mask only applies to the Operation Event Notification Command.
+             *
+             * This mask DOES NOT apply to the Events mechanism of this cluster.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.42
+             */
+            manualOperationEventMask: OptionalWritableAttribute(
+                0x43,
+                TlvBitmap(TlvUInt16, ManualOperationEventMask),
+                {
+                    default: BitsFromPartial(ManualOperationEventMask, { unknownOrManufacturerSpecificManualOperationEvent: true, thumbturnLock: true, thumbturnUnlock: true, oneTouchLock: true, keyLock: true, keyUnlock: true, autoLock: true, scheduleLock: true, scheduleUnlock: true, manualLock: true, manualUnlock: true }),
+                    writeAcl: AccessLevel.Administer
+                }
+            ),
+
+            /**
+             * Event mask used to turn on and off remote programming events. This mask DOES NOT apply to the storing of
+             * events in the event log. This mask only applies to the Programming Event Notification Command.
+             *
+             * This mask DOES NOT apply to the Events mechanism of this cluster.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.45
+             */
+            remoteProgrammingEventMask: OptionalWritableAttribute(
+                0x46,
+                TlvBitmap(TlvUInt16, RemoteProgrammingEventMask),
+                {
+                    default: BitsFromPartial(RemoteProgrammingEventMask, { unknown: true, pinAdded: true, pinCleared: true, pinChanged: true, rfidCodeAdded: true, rfidCodeCleared: true }),
+                    writeAcl: AccessLevel.Administer
+                }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports features Notification and RfidCredential.
+     */
+    export const NotificationAndRfidCredentialComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * Event mask used to turn on and off RFID operation events. This mask DOES NOT apply to the storing of
+             * events in the event log. This mask only applies to the Operation Event Notification Command.
+             *
+             * This mask DOES NOT apply to the Events mechanism of this cluster.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.43
+             */
+            rfidOperationEventMask: OptionalWritableAttribute(
+                0x44,
+                TlvBitmap(TlvUInt16, RfidOperationEventMask),
+                {
+                    default: BitsFromPartial(RfidOperationEventMask, { unknownOrManufacturerSpecificKeypadOperationEvent: true, lockSourceRfid: true, unlockSourceRfid: true, lockSourceRfidErrorInvalidRfidId: true, lockSourceRfidErrorInvalidSchedule: true, unlockSourceRfidErrorInvalidRfidId: true, unlockSourceRfidErrorInvalidSchedule: true }),
+                    writeAcl: AccessLevel.Administer
+                }
+            ),
+
+            /**
+             * Event mask used to turn on and off RFID programming events. This mask DOES NOT apply to the storing of
+             * events in the event log. This mask only applies to the Programming Event Notification Command.
+             *
+             * This mask DOES NOT apply to the Events mechanism of this cluster.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.46
+             */
+            rfidProgrammingEventMask: OptionalWritableAttribute(
+                0x47,
+                TlvBitmap(TlvUInt16, RfidProgrammingEventMask),
+                {
+                    default: BitsFromPartial(RfidProgrammingEventMask, { unknown: true, idAdded: true, idCleared: true }),
+                    writeAcl: AccessLevel.Administer
+                }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature PinCredential and it doesn't support feature
+     * USR.
+     */
+    export const PinCredentialNotUserComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setPinCode: Command(
+                0x5,
+                TlvNoArguments,
+                0x5,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getPinCode: Command(0x6, TlvNoArguments, 0x6, TlvNoArguments, { invokeAcl: AccessLevel.Administer }),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearPinCode: Command(
+                0x7,
+                TlvNoArguments,
+                0x7,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearAllPinCodes: Command(
+                0x8,
+                TlvNoArguments,
+                0x8,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if it supports features PinCredential, RfidCredential and
+     * FingerCredentials and it doesn't support feature USR.
+     */
+    export const PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setUserStatus: OptionalCommand(
+                0x9,
+                TlvNoArguments,
+                0x9,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getUserStatus: OptionalCommand(
+                0xa,
+                TlvNoArguments,
+                0xa,
+                TlvNoArguments,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setUserType: OptionalCommand(
+                0x14,
+                TlvNoArguments,
+                0x14,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getUserType: OptionalCommand(
+                0x15,
+                TlvNoArguments,
+                0x15,
+                TlvNoArguments,
+                { invokeAcl: AccessLevel.Administer }
+            )
+        }
+    });
+
+    /**
+     * A DoorLockCluster supports these elements if doesn't support feature USR.
+     */
+    export const NotUserComponent = MutableCluster.Component({});
+
+    /**
+     * A DoorLockCluster supports these elements if it supports feature RfidCredential and it doesn't support feature
+     * USR.
+     */
+    export const RfidCredentialNotUserComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            setRfidCode: Command(
+                0x16,
+                TlvNoArguments,
+                0x16,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            getRfidCode: Command(0x17, TlvNoArguments, 0x17, TlvNoArguments, { invokeAcl: AccessLevel.Administer }),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearRfidCode: Command(
+                0x18,
+                TlvNoArguments,
+                0x18,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            ),
+
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             */
+            clearAllRfidCodes: Command(
+                0x19,
+                TlvNoArguments,
+                0x19,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
+        }
+    });
+
+    /**
      * These are optional features supported by DoorLockCluster.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.2
@@ -1276,7 +2260,7 @@ export namespace DoorLock {
     /**
      * These elements and properties are present in all DoorLock clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x101,
         name: "DoorLock",
         revision: 6,
@@ -1623,790 +2607,55 @@ export namespace DoorLock {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4
              */
             lockOperationError: Event(0x3, EventPriority.Critical, TlvLockOperationErrorEvent)
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature DoorPositionSensor.
-     */
-    export const DoorPositionSensorComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The current door state as defined in DoorStateEnum.
-             *
-             * This attribute shall be null only if an internal error prevents the retrieval of the current door state.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.4
-             */
-            doorState: Attribute(0x3, TlvNullable(TlvEnum<DoorState>())),
-
-            /**
-             * This attribute holds the number of door open events that have occurred since it was last zeroed.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.5
-             */
-            doorOpenEvents: OptionalWritableAttribute(0x4, TlvUInt32, { writeAcl: AccessLevel.Manage }),
-
-            /**
-             * This attribute holds the number of door closed events that have occurred since it was last zeroed.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.6
-             */
-            doorClosedEvents: OptionalWritableAttribute(0x5, TlvUInt32, { writeAcl: AccessLevel.Manage }),
-
-            /**
-             * This attribute holds the number of minutes the door has been open since the last time it transitioned
-             * from closed to open.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.7
-             */
-            openPeriod: OptionalWritableAttribute(0x6, TlvUInt16, { writeAcl: AccessLevel.Manage })
         },
 
-        events: {
-            /**
-             * The door lock server sends out a DoorStateChange event when the door lock door state changes.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.2
-             */
-            doorStateChange: Event(0x1, EventPriority.Critical, TlvDoorStateChangeEvent)
-        }
+        /**
+         * This metadata controls which DoorLockCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { doorPositionSensor: true }, component: DoorPositionSensorComponent },
+            { flags: { logging: true }, component: LoggingComponent },
+            { flags: { user: true }, component: UserComponent },
+            { flags: { pinCredential: true }, component: PinCredentialComponent },
+            { flags: { rfidCredential: true }, component: RfidCredentialComponent },
+            { flags: { weekDayAccessSchedules: true }, component: WeekDayAccessSchedulesComponent },
+            { flags: { yearDayAccessSchedules: true }, component: YearDayAccessSchedulesComponent },
+            { flags: { holidaySchedules: true }, component: HolidaySchedulesComponent },
+            { flags: { pinCredential: true }, component: PinCredentialOrRfidCredentialComponent },
+            { flags: { rfidCredential: true }, component: PinCredentialOrRfidCredentialComponent },
+            {
+                flags: { credentialOverTheAirAccess: true, pinCredential: true },
+                component: CredentialOverTheAirAccessAndPinCredentialComponent
+            },
+            { flags: { notification: true, pinCredential: true }, component: NotificationAndPinCredentialComponent },
+            { flags: { notification: true }, component: NotificationComponent },
+            { flags: { notification: true, rfidCredential: true }, component: NotificationAndRfidCredentialComponent },
+            { flags: { pinCredential: true, user: false }, component: PinCredentialNotUserComponent },
+            {
+                flags: { pinCredential: true, rfidCredential: true, fingerCredentials: true, user: false },
+                component: PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent
+            },
+            { flags: { user: false }, component: NotUserComponent },
+            { flags: { rfidCredential: true, user: false }, component: RfidCredentialNotUserComponent },
+
+            {
+                flags: {
+                    user: true,
+                    pinCredential: false,
+                    rfidCredential: false,
+                    fingerCredentials: false,
+                    faceCredentials: false
+                },
+
+                component: false
+            }
+        )
     });
 
     /**
-     * A DoorLockCluster supports these elements if it supports feature Logging.
+     * @see {@link Cluster}
      */
-    export const LoggingComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The number of available log records.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.8
-             */
-            numberOfLogRecordsSupported: FixedAttribute(0x10, TlvUInt16, { default: 0 }),
-
-            /**
-             * Enable/disable event logging. When event logging is enabled, all event messages are stored on the lock
-             * for retrieval. Logging events can be but not limited to Tamper Alarm, Lock, Unlock, AutoRelock, User
-             * Code Added, User Code Cleared, Schedule Added, and Schedule Cleared. For a full detail of all the
-             * possible alarms and events, please refer to the full list in the Alarm and Event Masks Attribute Set.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.21
-             */
-            enableLogging: WritableAttribute(0x20, TlvBoolean, { default: true, writeAcl: AccessLevel.Administer })
-        },
-
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getLogRecord: Command(0x4, TlvNoArguments, 0x4, TlvNoArguments, { invokeAcl: AccessLevel.Manage })
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature User.
-     */
-    export const UserComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * Number of total users supported by the lock.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.9
-             */
-            numberOfTotalUsersSupported: FixedAttribute(0x11, TlvUInt16, { default: 0 }),
-
-            /**
-             * This bitmap contains a bit for every value of CredentialRuleEnum supported on this device.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.19
-             */
-            credentialRulesSupport: FixedAttribute(
-                0x1b,
-                TlvBitmap(TlvUInt8, CredentialRulesSupport),
-                { default: BitsFromPartial(CredentialRulesSupport, { single: true }) }
-            ),
-
-            /**
-             * The number of credentials that could be assigned for each user.
-             *
-             * Depending on the value of NumberOfRFIDUsersSupported and NumberOfPINUsersSupported it may not be
-             * possible to assign that number of credentials for a user.
-             *
-             * For example, if the device supports only PIN and RFID credential types,
-             * NumberOfCredentialsSupportedPerUser is set to 10, NumberOfPINUsersSupported is set to 5 and
-             * NumberOfRFIDUsersSupported is set to 3, it will not be possible to actually assign 10 credentials for a
-             * user because maximum number of credentials in the database is 8.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.20
-             */
-            numberOfCredentialsSupportedPerUser: FixedAttribute(0x1c, TlvUInt8, { default: 0 }),
-
-            /**
-             * Number of minutes a PIN, RFID, Fingerprint, or other credential associated with a user of type
-             * ExpiringUser shall remain valid after its first use before expiring. When the credential expires the
-             * UserStatus for the corresponding user record shall be set to OccupiedDisabled.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.38
-             */
-            expiringUserTimeout: OptionalWritableAttribute(
-                0x35,
-                TlvUInt16.bound({ min: 1, max: 2880 }),
-                { writeAcl: AccessLevel.Administer }
-            )
-        },
-
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setUser: Command(
-                0x1a,
-                TlvSetUserRequest,
-                0x1a,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getUser: Command(0x1b, TlvGetUserRequest, 0x1c, TlvGetUserResponse, { invokeAcl: AccessLevel.Administer }),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearUser: Command(
-                0x1d,
-                TlvClearUserRequest,
-                0x1d,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setCredential: Command(
-                0x22,
-                TlvSetCredentialRequest,
-                0x23,
-                TlvSetCredentialResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getCredentialStatus: Command(
-                0x24,
-                TlvGetCredentialStatusRequest,
-                0x25,
-                TlvGetCredentialStatusResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearCredential: Command(
-                0x26,
-                TlvClearCredentialRequest,
-                0x26,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            )
-        },
-
-        events: {
-            /**
-             * The door lock server sends out a LockUserChange event when a lock user, schedule, or credential change
-             * has occurred.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5
-             */
-            lockUserChange: Event(0x4, EventPriority.Info, TlvLockUserChangeEvent)
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature PinCredential.
-     */
-    export const PinCredentialComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The number of PIN users supported.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.10
-             */
-            numberOfPinUsersSupported: FixedAttribute(0x12, TlvUInt16, { default: 0 }),
-
-            /**
-             * An 8 bit value indicates the maximum length in bytes of a PIN Code on this device.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.15
-             */
-            maxPinCodeLength: FixedAttribute(0x17, TlvUInt8),
-
-            /**
-             * An 8 bit value indicates the minimum length in bytes of a PIN Code on this device.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.16
-             */
-            minPinCodeLength: FixedAttribute(0x18, TlvUInt8),
-
-            /**
-             * Boolean set to True if it is ok for the door lock server to send PINs over the air. This attribute
-             * determines the behavior of the server’s TX operation. If it is false, then it is not ok for the device
-             * to send PIN in any messages over the air.
-             *
-             * The PIN field within any door lock cluster message shall keep the first octet unchanged and masks the
-             * actual code by replacing with 0xFF. For example (PIN "1234" ): If the attribute value is True, 0x04 0x31
-             * 0x32 0x33 0x34 shall be used in the PIN field in any door lock cluster message payload. If the attribute
-             * value is False, 0x04 0xFF 0xFF 0xFF 0xFF shall be used.
-             *
-             * If the USR feature is supported by the device then this attribute shall NOT be supported.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.36
-             */
-            sendPinOverTheAir: OptionalWritableAttribute(
-                0x32,
-                TlvBoolean,
-                { default: true, writeAcl: AccessLevel.Administer }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature RfidCredential.
-     */
-    export const RfidCredentialComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The number of RFID users supported.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.11
-             */
-            numberOfRfidUsersSupported: FixedAttribute(0x13, TlvUInt16, { default: 0 }),
-
-            /**
-             * An 8 bit value indicates the maximum length in bytes of a RFID Code on this device. The value depends on
-             * the RFID code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as
-             * RFID code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.17
-             */
-            maxRfidCodeLength: FixedAttribute(0x19, TlvUInt8),
-
-            /**
-             * An 8 bit value indicates the minimum length in bytes of a RFID Code on this device. The value depends on
-             * the RFID code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as
-             * RFID code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.18
-             */
-            minRfidCodeLength: FixedAttribute(0x1a, TlvUInt8)
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature WeekDayAccessSchedules.
-     */
-    export const WeekDayAccessSchedulesComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The number of configurable week day schedule supported per user.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.12
-             */
-            numberOfWeekDaySchedulesSupportedPerUser: FixedAttribute(0x14, TlvUInt8, { default: 0 })
-        },
-
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setWeekDaySchedule: Command(
-                0xb,
-                TlvSetWeekDayScheduleRequest,
-                0xb,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getWeekDaySchedule: Command(
-                0xc,
-                TlvGetWeekDayScheduleRequest,
-                0xc,
-                TlvGetWeekDayScheduleResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearWeekDaySchedule: Command(
-                0xd,
-                TlvClearWeekDayScheduleRequest,
-                0xd,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature YearDayAccessSchedules.
-     */
-    export const YearDayAccessSchedulesComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The number of configurable year day schedule supported per user.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.13
-             */
-            numberOfYearDaySchedulesSupportedPerUser: FixedAttribute(0x15, TlvUInt8, { default: 0 })
-        },
-
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setYearDaySchedule: Command(
-                0xe,
-                TlvSetYearDayScheduleRequest,
-                0xe,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getYearDaySchedule: Command(
-                0xf,
-                TlvGetYearDayScheduleRequest,
-                0xf,
-                TlvGetYearDayScheduleResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearYearDaySchedule: Command(
-                0x10,
-                TlvClearYearDayScheduleRequest,
-                0x10,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature HolidaySchedules.
-     */
-    export const HolidaySchedulesComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The number of holiday schedules supported for the entire door lock device.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.14
-             */
-            numberOfHolidaySchedulesSupported: FixedAttribute(0x16, TlvUInt8, { default: 0 })
-        },
-
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setHolidaySchedule: Command(
-                0x11,
-                TlvSetHolidayScheduleRequest,
-                0x11,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getHolidaySchedule: Command(
-                0x12,
-                TlvGetHolidayScheduleRequest,
-                0x12,
-                TlvGetHolidayScheduleResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearHolidaySchedule: Command(
-                0x13,
-                TlvClearHolidayScheduleRequest,
-                0x13,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports features PinCredential or RfidCredential.
-     */
-    export const PinCredentialOrRfidCredentialComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The number of incorrect Pin codes or RFID presentment attempts a user is allowed to enter before the
-             * lock will enter a lockout state. The value of this attribute is compared to all failing forms of
-             * credential presentation, including Pin codes used in an Unlock Command when RequirePINforRemoteOperation
-             * is set to true. Valid range is 1-255 incorrect attempts. The lockout state will be for the duration of
-             * UserCodeTemporaryDisableTime. If the attribute accepts writes and an attempt to write the value 0 is
-             * made, the device shall respond with CONSTRAINT_ERROR.
-             *
-             * The lock may reset the counter used to track incorrect credential presentations as required by internal
-             * logic, environmental events, or other reasons. The lock shall reset the counter if a valid credential is
-             * presented.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.34
-             */
-            wrongCodeEntryLimit: WritableAttribute(
-                0x30,
-                TlvUInt8.bound({ min: 1 }),
-                { writeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * The number of seconds that the lock shuts down following wrong code entry. Valid range is 1-255 seconds.
-             * Device can shut down to lock user out for specified amount of time. (Makes it difficult to try and guess
-             * a PIN for the device.) If the attribute accepts writes and an attempt to write the attribute to 0 is
-             * made, the device shall respond with CONSTRAINT_ERROR.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.35
-             */
-            userCodeTemporaryDisableTime: WritableAttribute(
-                0x31,
-                TlvUInt8.bound({ min: 1 }),
-                { writeAcl: AccessLevel.Administer }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports features CredentialOverTheAirAccess and PinCredential.
-     */
-    export const CredentialOverTheAirAccessAndPinCredentialComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * Boolean set to True if the door lock server requires that an optional PINs be included in the payload of
-             * remote lock operation events like Lock, Unlock, Unlock with Timeout and Toggle in order to function.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.37
-             */
-            requirePinForRemoteOperation: WritableAttribute(
-                0x33,
-                TlvBoolean,
-                { default: true, writeAcl: AccessLevel.Administer }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports features Notification and PinCredential.
-     */
-    export const NotificationAndPinCredentialComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * Event mask used to turn on and off the transmission of keypad operation events. This mask DOES NOT apply
-             * to the storing of events in the event log. This mask only applies to the Operation Event Notification
-             * Command.
-             *
-             * This mask DOES NOT apply to the Events mechanism of this cluster.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.40
-             */
-            keypadOperationEventMask: OptionalWritableAttribute(
-                0x41,
-                TlvBitmap(TlvUInt16, KeypadOperationEventMask),
-                {
-                    default: BitsFromPartial(KeypadOperationEventMask, { unknownOrManufacturerSpecificKeypadOperationEvent: true, lockSourceKeypad: true, unlockSourceKeypad: true, lockSourceKeypadErrorInvalidPin: true, lockSourceKeypadErrorInvalidSchedule: true, unlockSourceKeypadErrorInvalidCode: true, unlockSourceKeypadErrorInvalidSchedule: true, nonAccessUserOperationEventSourceKeypad: true }),
-                    writeAcl: AccessLevel.Administer
-                }
-            ),
-
-            /**
-             * Event mask used to turn on and off keypad programming events. This mask DOES NOT apply to the storing of
-             * events in the event log. This mask only applies to the Programming Event Notification Command.
-             *
-             * This mask DOES NOT apply to the Events mechanism of this cluster.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.44
-             */
-            keypadProgrammingEventMask: OptionalWritableAttribute(
-                0x45,
-                TlvBitmap(TlvUInt16, KeypadProgrammingEventMask),
-                {
-                    default: BitsFromPartial(KeypadProgrammingEventMask, { unknown: true, pinCodeChanged: true, pinAdded: true, pinCleared: true, pinChanged: true }),
-                    writeAcl: AccessLevel.Administer
-                }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature Notification.
-     */
-    export const NotificationComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * Event mask used to turn on and off the transmission of remote operation events. This mask DOES NOT apply
-             * to the storing of events in the event log. This mask only applies to the Operation Event
-             *
-             * Notification Command.
-             *
-             * This mask DOES NOT apply to the Events mechanism of this cluster.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.41
-             */
-            remoteOperationEventMask: OptionalWritableAttribute(
-                0x42,
-                TlvBitmap(TlvUInt16, RemoteOperationEventMask),
-                {
-                    default: BitsFromPartial(RemoteOperationEventMask, { unknownOrManufacturerSpecificRemoteOperationEvent: true, lockSourceRemote: true, unlockSourceRemote: true, lockSourceRemoteErrorInvalidCode: true, lockSourceRemoteErrorInvalidSchedule: true, unlockSourceRemoteErrorInvalidCode: true, unlockSourceRemoteErrorInvalidSchedule: true }),
-                    writeAcl: AccessLevel.Administer
-                }
-            ),
-
-            /**
-             * Event mask used to turn on and off manual operation events. This mask DOES NOT apply to the storing of
-             * events in the event log. This mask only applies to the Operation Event Notification Command.
-             *
-             * This mask DOES NOT apply to the Events mechanism of this cluster.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.42
-             */
-            manualOperationEventMask: OptionalWritableAttribute(
-                0x43,
-                TlvBitmap(TlvUInt16, ManualOperationEventMask),
-                {
-                    default: BitsFromPartial(ManualOperationEventMask, { unknownOrManufacturerSpecificManualOperationEvent: true, thumbturnLock: true, thumbturnUnlock: true, oneTouchLock: true, keyLock: true, keyUnlock: true, autoLock: true, scheduleLock: true, scheduleUnlock: true, manualLock: true, manualUnlock: true }),
-                    writeAcl: AccessLevel.Administer
-                }
-            ),
-
-            /**
-             * Event mask used to turn on and off remote programming events. This mask DOES NOT apply to the storing of
-             * events in the event log. This mask only applies to the Programming Event Notification Command.
-             *
-             * This mask DOES NOT apply to the Events mechanism of this cluster.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.45
-             */
-            remoteProgrammingEventMask: OptionalWritableAttribute(
-                0x46,
-                TlvBitmap(TlvUInt16, RemoteProgrammingEventMask),
-                {
-                    default: BitsFromPartial(RemoteProgrammingEventMask, { unknown: true, pinAdded: true, pinCleared: true, pinChanged: true, rfidCodeAdded: true, rfidCodeCleared: true }),
-                    writeAcl: AccessLevel.Administer
-                }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports features Notification and RfidCredential.
-     */
-    export const NotificationAndRfidCredentialComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * Event mask used to turn on and off RFID operation events. This mask DOES NOT apply to the storing of
-             * events in the event log. This mask only applies to the Operation Event Notification Command.
-             *
-             * This mask DOES NOT apply to the Events mechanism of this cluster.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.43
-             */
-            rfidOperationEventMask: OptionalWritableAttribute(
-                0x44,
-                TlvBitmap(TlvUInt16, RfidOperationEventMask),
-                {
-                    default: BitsFromPartial(RfidOperationEventMask, { unknownOrManufacturerSpecificKeypadOperationEvent: true, lockSourceRfid: true, unlockSourceRfid: true, lockSourceRfidErrorInvalidRfidId: true, lockSourceRfidErrorInvalidSchedule: true, unlockSourceRfidErrorInvalidRfidId: true, unlockSourceRfidErrorInvalidSchedule: true }),
-                    writeAcl: AccessLevel.Administer
-                }
-            ),
-
-            /**
-             * Event mask used to turn on and off RFID programming events. This mask DOES NOT apply to the storing of
-             * events in the event log. This mask only applies to the Programming Event Notification Command.
-             *
-             * This mask DOES NOT apply to the Events mechanism of this cluster.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.46
-             */
-            rfidProgrammingEventMask: OptionalWritableAttribute(
-                0x47,
-                TlvBitmap(TlvUInt16, RfidProgrammingEventMask),
-                {
-                    default: BitsFromPartial(RfidProgrammingEventMask, { unknown: true, idAdded: true, idCleared: true }),
-                    writeAcl: AccessLevel.Administer
-                }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature PinCredential and it doesn't support feature
-     * USR.
-     */
-    export const PinCredentialNotUserComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setPinCode: Command(
-                0x5,
-                TlvNoArguments,
-                0x5,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getPinCode: Command(0x6, TlvNoArguments, 0x6, TlvNoArguments, { invokeAcl: AccessLevel.Administer }),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearPinCode: Command(
-                0x7,
-                TlvNoArguments,
-                0x7,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearAllPinCodes: Command(
-                0x8,
-                TlvNoArguments,
-                0x8,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if it supports features PinCredential, RfidCredential and
-     * FingerCredentials and it doesn't support feature USR.
-     */
-    export const PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setUserStatus: OptionalCommand(
-                0x9,
-                TlvNoArguments,
-                0x9,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getUserStatus: OptionalCommand(
-                0xa,
-                TlvNoArguments,
-                0xa,
-                TlvNoArguments,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setUserType: OptionalCommand(
-                0x14,
-                TlvNoArguments,
-                0x14,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getUserType: OptionalCommand(
-                0x15,
-                TlvNoArguments,
-                0x15,
-                TlvNoArguments,
-                { invokeAcl: AccessLevel.Administer }
-            )
-        }
-    });
-
-    /**
-     * A DoorLockCluster supports these elements if doesn't support feature USR.
-     */
-    export const NotUserComponent = ClusterFactory.Component({});
-
-    /**
-     * A DoorLockCluster supports these elements if it supports feature RfidCredential and it doesn't support feature
-     * USR.
-     */
-    export const RfidCredentialNotUserComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            setRfidCode: Command(
-                0x16,
-                TlvNoArguments,
-                0x16,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            getRfidCode: Command(0x17, TlvNoArguments, 0x17, TlvNoArguments, { invokeAcl: AccessLevel.Administer }),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearRfidCode: Command(
-                0x18,
-                TlvNoArguments,
-                0x18,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            ),
-
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
-             */
-            clearAllRfidCodes: Command(
-                0x19,
-                TlvNoArguments,
-                0x19,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            )
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Door Lock
@@ -2417,102 +2666,9 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a DoorLock cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a DoorLock cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, DoorPositionSensorComponent, { doorPositionSensor: true });
-            ClusterFactory.extend(cluster, LoggingComponent, { logging: true });
-            ClusterFactory.extend(cluster, UserComponent, { user: true });
-            ClusterFactory.extend(cluster, PinCredentialComponent, { pinCredential: true });
-            ClusterFactory.extend(cluster, RfidCredentialComponent, { rfidCredential: true });
-            ClusterFactory.extend(cluster, WeekDayAccessSchedulesComponent, { weekDayAccessSchedules: true });
-            ClusterFactory.extend(cluster, YearDayAccessSchedulesComponent, { yearDayAccessSchedules: true });
-            ClusterFactory.extend(cluster, HolidaySchedulesComponent, { holidaySchedules: true });
-
-            ClusterFactory.extend(
-                cluster,
-                PinCredentialOrRfidCredentialComponent,
-                { pinCredential: true },
-                { rfidCredential: true }
-            );
-
-            ClusterFactory.extend(
-                cluster,
-                CredentialOverTheAirAccessAndPinCredentialComponent,
-                { credentialOverTheAirAccess: true, pinCredential: true }
-            );
-            ClusterFactory.extend(
-                cluster,
-                NotificationAndPinCredentialComponent,
-                { notification: true, pinCredential: true }
-            );
-            ClusterFactory.extend(cluster, NotificationComponent, { notification: true });
-            ClusterFactory.extend(
-                cluster,
-                NotificationAndRfidCredentialComponent,
-                { notification: true, rfidCredential: true }
-            );
-            ClusterFactory.extend(cluster, PinCredentialNotUserComponent, { pinCredential: true, user: false });
-            ClusterFactory.extend(
-                cluster,
-                PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent,
-                { pinCredential: true, rfidCredential: true, fingerCredentials: true, user: false }
-            );
-            ClusterFactory.extend(cluster, NotUserComponent, { user: false });
-            ClusterFactory.extend(cluster, RfidCredentialNotUserComponent, { rfidCredential: true, user: false });
-
-            ClusterFactory.prevent(
-                cluster,
-
-                {
-                    user: true,
-                    pinCredential: false,
-                    rfidCredential: false,
-                    fingerCredentials: false,
-                    faceCredentials: false
-                }
-            );
-
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { doorPositionSensor: true } ? typeof DoorPositionSensorComponent : {})
-        & (SF extends { logging: true } ? typeof LoggingComponent : {})
-        & (SF extends { user: true } ? typeof UserComponent : {})
-        & (SF extends { pinCredential: true } ? typeof PinCredentialComponent : {})
-        & (SF extends { rfidCredential: true } ? typeof RfidCredentialComponent : {})
-        & (SF extends { weekDayAccessSchedules: true } ? typeof WeekDayAccessSchedulesComponent : {})
-        & (SF extends { yearDayAccessSchedules: true } ? typeof YearDayAccessSchedulesComponent : {})
-        & (SF extends { holidaySchedules: true } ? typeof HolidaySchedulesComponent : {})
-        & (SF extends { pinCredential: true } | { rfidCredential: true } ? typeof PinCredentialOrRfidCredentialComponent : {})
-        & (SF extends { credentialOverTheAirAccess: true, pinCredential: true } ? typeof CredentialOverTheAirAccessAndPinCredentialComponent : {})
-        & (SF extends { notification: true, pinCredential: true } ? typeof NotificationAndPinCredentialComponent : {})
-        & (SF extends { notification: true } ? typeof NotificationComponent : {})
-        & (SF extends { notification: true, rfidCredential: true } ? typeof NotificationAndRfidCredentialComponent : {})
-        & (SF extends { pinCredential: true, user: false } ? typeof PinCredentialNotUserComponent : {})
-        & (SF extends { pinCredential: true, rfidCredential: true, fingerCredentials: true, user: false } ? typeof PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent : {})
-        & (SF extends { user: false } ? typeof NotUserComponent : {})
-        & (SF extends { rfidCredential: true, user: false } ? typeof RfidCredentialNotUserComponent : {})
-        & (SF extends { user: true, pinCredential: false, rfidCredential: false, fingerCredentials: false, faceCredentials: false } ? never : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const DPS = { doorPositionSensor: true };
     const LOG = { logging: true };
     const USR = { user: true };
@@ -2530,12 +2686,9 @@ export namespace DoorLock {
     const RID_NOT_USR = { rfidCredential: true, user: false };
 
     /**
-     * This cluster supports all DoorLock features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -2543,123 +2696,123 @@ export namespace DoorLock {
 
         attributes: {
             ...Cluster.attributes,
-            doorState: ClusterFactory.AsConditional(
+            doorState: MutableCluster.AsConditional(
                 DoorPositionSensorComponent.attributes.doorState,
                 { mandatoryIf: [DPS] }
             ),
-            doorOpenEvents: ClusterFactory.AsConditional(
+            doorOpenEvents: MutableCluster.AsConditional(
                 DoorPositionSensorComponent.attributes.doorOpenEvents,
                 { optionalIf: [DPS] }
             ),
-            doorClosedEvents: ClusterFactory.AsConditional(
+            doorClosedEvents: MutableCluster.AsConditional(
                 DoorPositionSensorComponent.attributes.doorClosedEvents,
                 { optionalIf: [DPS] }
             ),
-            openPeriod: ClusterFactory.AsConditional(
+            openPeriod: MutableCluster.AsConditional(
                 DoorPositionSensorComponent.attributes.openPeriod,
                 { optionalIf: [DPS] }
             ),
-            numberOfLogRecordsSupported: ClusterFactory.AsConditional(
+            numberOfLogRecordsSupported: MutableCluster.AsConditional(
                 LoggingComponent.attributes.numberOfLogRecordsSupported,
                 { mandatoryIf: [LOG] }
             ),
-            numberOfTotalUsersSupported: ClusterFactory.AsConditional(
+            numberOfTotalUsersSupported: MutableCluster.AsConditional(
                 UserComponent.attributes.numberOfTotalUsersSupported,
                 { mandatoryIf: [USR] }
             ),
-            numberOfPinUsersSupported: ClusterFactory.AsConditional(
+            numberOfPinUsersSupported: MutableCluster.AsConditional(
                 PinCredentialComponent.attributes.numberOfPinUsersSupported,
                 { mandatoryIf: [PIN] }
             ),
-            numberOfRfidUsersSupported: ClusterFactory.AsConditional(
+            numberOfRfidUsersSupported: MutableCluster.AsConditional(
                 RfidCredentialComponent.attributes.numberOfRfidUsersSupported,
                 { mandatoryIf: [RID] }
             ),
-            numberOfWeekDaySchedulesSupportedPerUser: ClusterFactory.AsConditional(
+            numberOfWeekDaySchedulesSupportedPerUser: MutableCluster.AsConditional(
                 WeekDayAccessSchedulesComponent.attributes.numberOfWeekDaySchedulesSupportedPerUser,
                 { mandatoryIf: [WDSCH] }
             ),
-            numberOfYearDaySchedulesSupportedPerUser: ClusterFactory.AsConditional(
+            numberOfYearDaySchedulesSupportedPerUser: MutableCluster.AsConditional(
                 YearDayAccessSchedulesComponent.attributes.numberOfYearDaySchedulesSupportedPerUser,
                 { mandatoryIf: [YDSCH] }
             ),
-            numberOfHolidaySchedulesSupported: ClusterFactory.AsConditional(
+            numberOfHolidaySchedulesSupported: MutableCluster.AsConditional(
                 HolidaySchedulesComponent.attributes.numberOfHolidaySchedulesSupported,
                 { mandatoryIf: [HDSCH] }
             ),
-            maxPinCodeLength: ClusterFactory.AsConditional(
+            maxPinCodeLength: MutableCluster.AsConditional(
                 PinCredentialComponent.attributes.maxPinCodeLength,
                 { mandatoryIf: [PIN] }
             ),
-            minPinCodeLength: ClusterFactory.AsConditional(
+            minPinCodeLength: MutableCluster.AsConditional(
                 PinCredentialComponent.attributes.minPinCodeLength,
                 { mandatoryIf: [PIN] }
             ),
-            maxRfidCodeLength: ClusterFactory.AsConditional(
+            maxRfidCodeLength: MutableCluster.AsConditional(
                 RfidCredentialComponent.attributes.maxRfidCodeLength,
                 { mandatoryIf: [RID] }
             ),
-            minRfidCodeLength: ClusterFactory.AsConditional(
+            minRfidCodeLength: MutableCluster.AsConditional(
                 RfidCredentialComponent.attributes.minRfidCodeLength,
                 { mandatoryIf: [RID] }
             ),
-            credentialRulesSupport: ClusterFactory.AsConditional(
+            credentialRulesSupport: MutableCluster.AsConditional(
                 UserComponent.attributes.credentialRulesSupport,
                 { mandatoryIf: [USR] }
             ),
-            numberOfCredentialsSupportedPerUser: ClusterFactory.AsConditional(
+            numberOfCredentialsSupportedPerUser: MutableCluster.AsConditional(
                 UserComponent.attributes.numberOfCredentialsSupportedPerUser,
                 { mandatoryIf: [USR] }
             ),
-            enableLogging: ClusterFactory.AsConditional(
+            enableLogging: MutableCluster.AsConditional(
                 LoggingComponent.attributes.enableLogging,
                 { mandatoryIf: [LOG] }
             ),
-            wrongCodeEntryLimit: ClusterFactory.AsConditional(
+            wrongCodeEntryLimit: MutableCluster.AsConditional(
                 PinCredentialOrRfidCredentialComponent.attributes.wrongCodeEntryLimit,
                 { mandatoryIf: [PIN, RID] }
             ),
-            userCodeTemporaryDisableTime: ClusterFactory.AsConditional(
+            userCodeTemporaryDisableTime: MutableCluster.AsConditional(
                 PinCredentialOrRfidCredentialComponent.attributes.userCodeTemporaryDisableTime,
                 { mandatoryIf: [PIN, RID] }
             ),
-            sendPinOverTheAir: ClusterFactory.AsConditional(
+            sendPinOverTheAir: MutableCluster.AsConditional(
                 PinCredentialComponent.attributes.sendPinOverTheAir,
                 { optionalIf: [PIN] }
             ),
-            requirePinForRemoteOperation: ClusterFactory.AsConditional(
+            requirePinForRemoteOperation: MutableCluster.AsConditional(
                 CredentialOverTheAirAccessAndPinCredentialComponent.attributes.requirePinForRemoteOperation,
                 { mandatoryIf: [COTA_PIN] }
             ),
-            expiringUserTimeout: ClusterFactory.AsConditional(
+            expiringUserTimeout: MutableCluster.AsConditional(
                 UserComponent.attributes.expiringUserTimeout,
                 { optionalIf: [USR] }
             ),
-            keypadOperationEventMask: ClusterFactory.AsConditional(
+            keypadOperationEventMask: MutableCluster.AsConditional(
                 NotificationAndPinCredentialComponent.attributes.keypadOperationEventMask,
                 { optionalIf: [NOT_PIN] }
             ),
-            remoteOperationEventMask: ClusterFactory.AsConditional(
+            remoteOperationEventMask: MutableCluster.AsConditional(
                 NotificationComponent.attributes.remoteOperationEventMask,
                 { optionalIf: [NOT] }
             ),
-            manualOperationEventMask: ClusterFactory.AsConditional(
+            manualOperationEventMask: MutableCluster.AsConditional(
                 NotificationComponent.attributes.manualOperationEventMask,
                 { optionalIf: [NOT] }
             ),
-            rfidOperationEventMask: ClusterFactory.AsConditional(
+            rfidOperationEventMask: MutableCluster.AsConditional(
                 NotificationAndRfidCredentialComponent.attributes.rfidOperationEventMask,
                 { optionalIf: [NOT_RID] }
             ),
-            keypadProgrammingEventMask: ClusterFactory.AsConditional(
+            keypadProgrammingEventMask: MutableCluster.AsConditional(
                 NotificationAndPinCredentialComponent.attributes.keypadProgrammingEventMask,
                 { optionalIf: [NOT_PIN] }
             ),
-            remoteProgrammingEventMask: ClusterFactory.AsConditional(
+            remoteProgrammingEventMask: MutableCluster.AsConditional(
                 NotificationComponent.attributes.remoteProgrammingEventMask,
                 { optionalIf: [NOT] }
             ),
-            rfidProgrammingEventMask: ClusterFactory.AsConditional(
+            rfidProgrammingEventMask: MutableCluster.AsConditional(
                 NotificationAndRfidCredentialComponent.attributes.rfidProgrammingEventMask,
                 { optionalIf: [NOT_RID] }
             )
@@ -2667,100 +2820,100 @@ export namespace DoorLock {
 
         commands: {
             ...Cluster.commands,
-            getLogRecord: ClusterFactory.AsConditional(LoggingComponent.commands.getLogRecord, { mandatoryIf: [LOG] }),
-            setPinCode: ClusterFactory.AsConditional(
+            getLogRecord: MutableCluster.AsConditional(LoggingComponent.commands.getLogRecord, { mandatoryIf: [LOG] }),
+            setPinCode: MutableCluster.AsConditional(
                 PinCredentialNotUserComponent.commands.setPinCode,
                 { mandatoryIf: [PIN_NOT_USR] }
             ),
-            getPinCode: ClusterFactory.AsConditional(
+            getPinCode: MutableCluster.AsConditional(
                 PinCredentialNotUserComponent.commands.getPinCode,
                 { mandatoryIf: [PIN_NOT_USR] }
             ),
-            clearPinCode: ClusterFactory.AsConditional(
+            clearPinCode: MutableCluster.AsConditional(
                 PinCredentialNotUserComponent.commands.clearPinCode,
                 { mandatoryIf: [PIN_NOT_USR] }
             ),
-            clearAllPinCodes: ClusterFactory.AsConditional(
+            clearAllPinCodes: MutableCluster.AsConditional(
                 PinCredentialNotUserComponent.commands.clearAllPinCodes,
                 { mandatoryIf: [PIN_NOT_USR] }
             ),
-            setUserStatus: ClusterFactory.AsConditional(
+            setUserStatus: MutableCluster.AsConditional(
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.setUserStatus,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            getUserStatus: ClusterFactory.AsConditional(
+            getUserStatus: MutableCluster.AsConditional(
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.getUserStatus,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            setWeekDaySchedule: ClusterFactory.AsConditional(
+            setWeekDaySchedule: MutableCluster.AsConditional(
                 WeekDayAccessSchedulesComponent.commands.setWeekDaySchedule,
                 { mandatoryIf: [WDSCH] }
             ),
-            getWeekDaySchedule: ClusterFactory.AsConditional(
+            getWeekDaySchedule: MutableCluster.AsConditional(
                 WeekDayAccessSchedulesComponent.commands.getWeekDaySchedule,
                 { mandatoryIf: [WDSCH] }
             ),
-            clearWeekDaySchedule: ClusterFactory.AsConditional(
+            clearWeekDaySchedule: MutableCluster.AsConditional(
                 WeekDayAccessSchedulesComponent.commands.clearWeekDaySchedule,
                 { mandatoryIf: [WDSCH] }
             ),
-            setYearDaySchedule: ClusterFactory.AsConditional(
+            setYearDaySchedule: MutableCluster.AsConditional(
                 YearDayAccessSchedulesComponent.commands.setYearDaySchedule,
                 { mandatoryIf: [YDSCH] }
             ),
-            getYearDaySchedule: ClusterFactory.AsConditional(
+            getYearDaySchedule: MutableCluster.AsConditional(
                 YearDayAccessSchedulesComponent.commands.getYearDaySchedule,
                 { mandatoryIf: [YDSCH] }
             ),
-            clearYearDaySchedule: ClusterFactory.AsConditional(
+            clearYearDaySchedule: MutableCluster.AsConditional(
                 YearDayAccessSchedulesComponent.commands.clearYearDaySchedule,
                 { mandatoryIf: [YDSCH] }
             ),
-            setHolidaySchedule: ClusterFactory.AsConditional(
+            setHolidaySchedule: MutableCluster.AsConditional(
                 HolidaySchedulesComponent.commands.setHolidaySchedule,
                 { mandatoryIf: [HDSCH] }
             ),
-            getHolidaySchedule: ClusterFactory.AsConditional(
+            getHolidaySchedule: MutableCluster.AsConditional(
                 HolidaySchedulesComponent.commands.getHolidaySchedule,
                 { mandatoryIf: [HDSCH] }
             ),
-            clearHolidaySchedule: ClusterFactory.AsConditional(
+            clearHolidaySchedule: MutableCluster.AsConditional(
                 HolidaySchedulesComponent.commands.clearHolidaySchedule,
                 { mandatoryIf: [HDSCH] }
             ),
-            setUserType: ClusterFactory.AsConditional(
+            setUserType: MutableCluster.AsConditional(
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.setUserType,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            getUserType: ClusterFactory.AsConditional(
+            getUserType: MutableCluster.AsConditional(
                 PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent.commands.getUserType,
                 { optionalIf: [PIN_RID_FGP_NOT_USR] }
             ),
-            setRfidCode: ClusterFactory.AsConditional(
+            setRfidCode: MutableCluster.AsConditional(
                 RfidCredentialNotUserComponent.commands.setRfidCode,
                 { mandatoryIf: [RID_NOT_USR] }
             ),
-            getRfidCode: ClusterFactory.AsConditional(
+            getRfidCode: MutableCluster.AsConditional(
                 RfidCredentialNotUserComponent.commands.getRfidCode,
                 { mandatoryIf: [RID_NOT_USR] }
             ),
-            clearRfidCode: ClusterFactory.AsConditional(
+            clearRfidCode: MutableCluster.AsConditional(
                 RfidCredentialNotUserComponent.commands.clearRfidCode,
                 { mandatoryIf: [RID_NOT_USR] }
             ),
-            clearAllRfidCodes: ClusterFactory.AsConditional(
+            clearAllRfidCodes: MutableCluster.AsConditional(
                 RfidCredentialNotUserComponent.commands.clearAllRfidCodes,
                 { mandatoryIf: [RID_NOT_USR] }
             ),
-            setUser: ClusterFactory.AsConditional(UserComponent.commands.setUser, { mandatoryIf: [USR] }),
-            getUser: ClusterFactory.AsConditional(UserComponent.commands.getUser, { mandatoryIf: [USR] }),
-            clearUser: ClusterFactory.AsConditional(UserComponent.commands.clearUser, { mandatoryIf: [USR] }),
-            setCredential: ClusterFactory.AsConditional(UserComponent.commands.setCredential, { mandatoryIf: [USR] }),
-            getCredentialStatus: ClusterFactory.AsConditional(
+            setUser: MutableCluster.AsConditional(UserComponent.commands.setUser, { mandatoryIf: [USR] }),
+            getUser: MutableCluster.AsConditional(UserComponent.commands.getUser, { mandatoryIf: [USR] }),
+            clearUser: MutableCluster.AsConditional(UserComponent.commands.clearUser, { mandatoryIf: [USR] }),
+            setCredential: MutableCluster.AsConditional(UserComponent.commands.setCredential, { mandatoryIf: [USR] }),
+            getCredentialStatus: MutableCluster.AsConditional(
                 UserComponent.commands.getCredentialStatus,
                 { mandatoryIf: [USR] }
             ),
-            clearCredential: ClusterFactory.AsConditional(
+            clearCredential: MutableCluster.AsConditional(
                 UserComponent.commands.clearCredential,
                 { mandatoryIf: [USR] }
             )
@@ -2768,14 +2921,25 @@ export namespace DoorLock {
 
         events: {
             ...Cluster.events,
-            doorStateChange: ClusterFactory.AsConditional(
+            doorStateChange: MutableCluster.AsConditional(
                 DoorPositionSensorComponent.events.doorStateChange,
                 { mandatoryIf: [DPS] }
             ),
-            lockUserChange: ClusterFactory.AsConditional(UserComponent.events.lockUserChange, { mandatoryIf: [USR] })
+            lockUserChange: MutableCluster.AsConditional(UserComponent.events.lockUserChange, { mandatoryIf: [USR] })
         }
     });
+
+    /**
+     * This cluster supports all DoorLock features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type DoorLockCluster = typeof DoorLock.Cluster;
+export type DoorLockCluster = DoorLock.Cluster;
 export const DoorLockCluster = DoorLock.Cluster;
+ClusterRegistry.register(DoorLock.Complete);

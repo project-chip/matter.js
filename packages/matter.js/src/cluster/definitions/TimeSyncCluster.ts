@@ -1,35 +1,122 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
-    Attribute,
-    OptionalAttribute,
     WritableAttribute,
     AccessLevel,
-    Command,
-    TlvNoResponse,
+    Attribute,
     FixedAttribute,
     Event,
-    EventPriority
+    EventPriority,
+    OptionalAttribute,
+    Command,
+    TlvNoResponse
 } from "../../cluster/Cluster.js";
-import { TlvEpochUs, TlvEnum, TlvInt32, TlvUInt16 } from "../../tlv/TlvNumber.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TlvNodeId } from "../../datatype/NodeId.js";
-import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvInt32, TlvEpochUs, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvNodeId } from "../../datatype/NodeId.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace TimeSync {
+    /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3
+     */
+    export const TlvTimeZoneStruct = TlvObject({
+        /**
+         * The time zone offset from UTC in seconds.
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.1
+         */
+        offset: TlvField(0, TlvInt32.bound({ min: -43200, max: 50400 })),
+
+        /**
+         * The UTC time when the offset shall be applied.
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.2
+         */
+        validAt: TlvField(1, TlvEpochUs),
+
+        /**
+         * The time zone name SHOULD provide a human-readable time zone name and it SHOULD use the country/city format
+         * specified by the IANA time zone database [https://www.iana.org/time-zones].
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.3
+         */
+        name: TlvOptionalField(2, TlvString.bound({ minLength: 0, maxLength: 64 }))
+    });
+
+    /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3
+     */
+    export interface TimeZoneStruct extends TypeFromSchema<typeof TlvTimeZoneStruct> {}
+
+    /**
+     * The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
+     * accept any values in the int32 range to accommodate potential future legislation that does not fit with these
+     * assumptions.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4
+     */
+    export const TlvDSTOffsetStruct = TlvObject({
+        offset: TlvField(0, TlvInt32),
+
+        /**
+         * The UTC time when the offset shall be applied.
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4.1
+         */
+        validStarting: TlvField(1, TlvEpochUs),
+
+        /**
+         * The UTC time when the offset shall stop being applied. This value shall be larger than the ValidStarting
+         * time.
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4.2
+         */
+        validUntil: TlvField(2, TlvEpochUs)
+    });
+
+    /**
+     * The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
+     * accept any values in the int32 range to accommodate potential future legislation that does not fit with these
+     * assumptions.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4
+     */
+    export interface DSTOffsetStruct extends TypeFromSchema<typeof TlvDSTOffsetStruct> {}
+
+    /**
+     * Body of the TimeSync timeZoneStatus event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.16.10.3
+     */
+    export const TlvTimeZoneStatusEvent = TlvObject({
+        offset: TlvField(0, TlvInt32.bound({ min: -43200, max: 50400 })),
+        name: TlvOptionalField(1, TlvString.bound({ minLength: 0, maxLength: 64 }))
+    });
+
+    /**
+     * Body of the TimeSync timeZoneStatus event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.16.10.3
+     */
+    export interface TimeZoneStatusEvent extends TypeFromSchema<typeof TlvTimeZoneStatusEvent> {}
+
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.1
      */
@@ -185,6 +272,13 @@ export namespace TimeSync {
         timeSource: TlvOptionalField(2, TlvEnum<TimeSource>())
     });
 
+    /**
+     * Input to the TimeSync setUtcTime command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
+     */
+    export interface SetUtcTimeRequest extends TypeFromSchema<typeof TlvSetUtcTimeRequest> {}
+
     export enum StatusCode {
         /**
          * Server rejected the attempt to set the UTC time
@@ -195,203 +289,9 @@ export namespace TimeSync {
     }
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3
-     */
-    export const TlvTimeZoneStruct = TlvObject({
-        /**
-         * The time zone offset from UTC in seconds.
-         *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.1
-         */
-        offset: TlvField(0, TlvInt32.bound({ min: -43200, max: 50400 })),
-
-        /**
-         * The UTC time when the offset shall be applied.
-         *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.2
-         */
-        validAt: TlvField(1, TlvEpochUs),
-
-        /**
-         * The time zone name SHOULD provide a human-readable time zone name and it SHOULD use the country/city format
-         * specified by the IANA time zone database [https://www.iana.org/time-zones].
-         *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.3
-         */
-        name: TlvOptionalField(2, TlvString.bound({ minLength: 0, maxLength: 64 }))
-    });
-
-    /**
-     * The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
-     * accept any values in the int32 range to accommodate potential future legislation that does not fit with these
-     * assumptions.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4
-     */
-    export const TlvDSTOffsetStruct = TlvObject({
-        offset: TlvField(0, TlvInt32),
-
-        /**
-         * The UTC time when the offset shall be applied.
-         *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4.1
-         */
-        validStarting: TlvField(1, TlvEpochUs),
-
-        /**
-         * The UTC time when the offset shall stop being applied. This value shall be larger than the ValidStarting
-         * time.
-         *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4.2
-         */
-        validUntil: TlvField(2, TlvEpochUs)
-    });
-
-    /**
-     * Body of the TimeSync timeZoneStatus event
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.10.3
-     */
-    export const TlvTimeZoneStatusEvent = TlvObject({
-        offset: TlvField(0, TlvInt32.bound({ min: -43200, max: 50400 })),
-        name: TlvOptionalField(1, TlvString.bound({ minLength: 0, maxLength: 64 }))
-    });
-
-    /**
-     * These are optional features supported by TimeSyncCluster.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.5
-     */
-    export enum Feature {
-        /**
-         * TimeZone
-         *
-         * Server supports time zone.
-         */
-        TimeZone = "TimeZone",
-
-        /**
-         * NtpClient
-         *
-         * Server supports an NTP or SNTP client.
-         */
-        NtpClient = "NtpClient",
-
-        /**
-         * NtpServer
-         *
-         * Server supports an NTP server role.
-         */
-        NtpServer = "NtpServer"
-    }
-
-    /**
-     * These elements and properties are present in all TimeSync clusters.
-     */
-    export const Base = ClusterFactory.Definition({
-        id: 0x38,
-        name: "TimeSync",
-        revision: 1,
-
-        features: {
-            /**
-             * TimeZone
-             *
-             * Server supports time zone.
-             */
-            timeZone: BitFlag(0),
-
-            /**
-             * NtpClient
-             *
-             * Server supports an NTP or SNTP client.
-             */
-            ntpClient: BitFlag(1),
-
-            /**
-             * NtpServer
-             *
-             * Server supports an NTP server role.
-             */
-            ntpServer: BitFlag(2)
-        },
-
-        attributes: {
-            /**
-             * If the server has achieved time synchronization, this shall indicate the current time as a UTC epoch-us
-             * (Epoch Time in Microseconds).
-             *
-             * If the server has not achieved time synchronization, this shall be null. This attribute may be set when
-             * a Section 11.16.9.1, “SetUtcTime Command” is received.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.1
-             */
-            utcTime: Attribute(0x0, TlvNullable(TlvEpochUs), { omitChanges: true, default: null }),
-
-            /**
-             * The granularity of the error that the server is willing to guarantee on the time synchronization. It is
-             * of type GranularityEnum.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.2
-             */
-            granularity: Attribute(0x1, TlvEnum<Granularity>(), { default: Granularity.NoTimeGranularity }),
-
-            /**
-             * The server’s time source. This attribute indicates what method the server is using to sync, whether the
-             * source uses NTS or not and whether the source is internal or external to the Fabric. This attribute may
-             * be used by a client to determine its level of trust in the UTCTime. It is of type TimeSourceEnum.
-             *
-             * If a server is unsure if the selected NTP server is within the Fabric, it SHOULD indicate the server is
-             * NonFabric.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.3
-             */
-            timeSource: OptionalAttribute(0x2, TlvEnum<TimeSource>(), { default: TimeSource.None }),
-
-            /**
-             * The Node ID of a trusted Time Cluster. The TrustedTimeNodeId Node is used as a check on external time
-             * sync sources and may be used as the primary time source if other time sources are unavailable. See
-             * Section 11.16.13, “Time source prioritization”. This attribute is writeable only by an Administrator. It
-             * SHOULD be set by the Commissioner during commissioning. If no appropriate TrustedTimeNodeId is
-             * available, the commissioner may set this value to null.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.5
-             */
-            trustedTimeNodeId: WritableAttribute(
-                0x3,
-                TlvNullable(TlvNodeId),
-                { default: null, writeAcl: AccessLevel.Administer }
-            )
-        },
-
-        commands: {
-            /**
-             * This command may be issued by Administrator to set the time. If the Commissioner does not have a valid
-             * time source, it may send a Granularity of NoTimeGranularity.
-             *
-             * Upon receipt of this command, the server may update its UTCTime attribute to match the time specified in
-             * the command, if the stated Granularity and TimeSource are acceptable. The server shall update its
-             * UTCTime attribute if its current Granularity is NoTimeGranularity.
-             *
-             * If the time is updated, the server shall also update its Granularity attribute as appropriate
-             *
-             * server does not plan to maintain time). It shall also update its TimeSource attribute to Admin. It shall
-             * also update its last known good UTC time.
-             *
-             * If the server updates its UTCTime attribute, it shall accept the command with a status code of SUCCESS.
-             * If it opts to not update its time, it shall fail the command with a cluster specific Status Code of
-             * TimeNotAccepted.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
-             */
-            setUtcTime: Command(0x0, TlvSetUtcTimeRequest, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Administer })
-        }
-    });
-
-    /**
      * A TimeSyncCluster supports these elements if it supports feature NtpClient.
      */
-    export const NtpClientComponent = ClusterFactory.Component({
+    export const NtpClientComponent = MutableCluster.Component({
         attributes: {
             /**
              * The default NTP server the server’s Node may use if other time sources are unavailable. This attribute
@@ -413,7 +313,7 @@ export namespace TimeSync {
     /**
      * A TimeSyncCluster supports these elements if it supports feature TimeZone.
      */
-    export const TimeZoneComponent = ClusterFactory.Component({
+    export const TimeZoneComponent = MutableCluster.Component({
         attributes: {
             /**
              * A list of time zone offsets from UTC and when they shall take effect. This attribute uses a list of time
@@ -541,7 +441,7 @@ export namespace TimeSync {
     /**
      * A TimeSyncCluster supports these elements if it supports feature NtpServer.
      */
-    export const NtpServerComponent = ClusterFactory.Component({
+    export const NtpServerComponent = MutableCluster.Component({
         attributes: {
             /**
              * If the server is running an NTP server, this value shall be the port number for the service. If the
@@ -555,6 +455,151 @@ export namespace TimeSync {
             ntpServerPort: Attribute(0x9, TlvNullable(TlvUInt16), { default: null })
         }
     });
+
+    /**
+     * These are optional features supported by TimeSyncCluster.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.16.5
+     */
+    export enum Feature {
+        /**
+         * TimeZone
+         *
+         * Server supports time zone.
+         */
+        TimeZone = "TimeZone",
+
+        /**
+         * NtpClient
+         *
+         * Server supports an NTP or SNTP client.
+         */
+        NtpClient = "NtpClient",
+
+        /**
+         * NtpServer
+         *
+         * Server supports an NTP server role.
+         */
+        NtpServer = "NtpServer"
+    }
+
+    /**
+     * These elements and properties are present in all TimeSync clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x38,
+        name: "TimeSync",
+        revision: 1,
+
+        features: {
+            /**
+             * TimeZone
+             *
+             * Server supports time zone.
+             */
+            timeZone: BitFlag(0),
+
+            /**
+             * NtpClient
+             *
+             * Server supports an NTP or SNTP client.
+             */
+            ntpClient: BitFlag(1),
+
+            /**
+             * NtpServer
+             *
+             * Server supports an NTP server role.
+             */
+            ntpServer: BitFlag(2)
+        },
+
+        attributes: {
+            /**
+             * If the server has achieved time synchronization, this shall indicate the current time as a UTC epoch-us
+             * (Epoch Time in Microseconds).
+             *
+             * If the server has not achieved time synchronization, this shall be null. This attribute may be set when
+             * a Section 11.16.9.1, “SetUtcTime Command” is received.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.1
+             */
+            utcTime: Attribute(0x0, TlvNullable(TlvEpochUs), { omitChanges: true, default: null }),
+
+            /**
+             * The granularity of the error that the server is willing to guarantee on the time synchronization. It is
+             * of type GranularityEnum.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.2
+             */
+            granularity: Attribute(0x1, TlvEnum<Granularity>(), { default: Granularity.NoTimeGranularity }),
+
+            /**
+             * The server’s time source. This attribute indicates what method the server is using to sync, whether the
+             * source uses NTS or not and whether the source is internal or external to the Fabric. This attribute may
+             * be used by a client to determine its level of trust in the UTCTime. It is of type TimeSourceEnum.
+             *
+             * If a server is unsure if the selected NTP server is within the Fabric, it SHOULD indicate the server is
+             * NonFabric.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.3
+             */
+            timeSource: OptionalAttribute(0x2, TlvEnum<TimeSource>(), { default: TimeSource.None }),
+
+            /**
+             * The Node ID of a trusted Time Cluster. The TrustedTimeNodeId Node is used as a check on external time
+             * sync sources and may be used as the primary time source if other time sources are unavailable. See
+             * Section 11.16.13, “Time source prioritization”. This attribute is writeable only by an Administrator. It
+             * SHOULD be set by the Commissioner during commissioning. If no appropriate TrustedTimeNodeId is
+             * available, the commissioner may set this value to null.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.5
+             */
+            trustedTimeNodeId: WritableAttribute(
+                0x3,
+                TlvNullable(TlvNodeId),
+                { default: null, writeAcl: AccessLevel.Administer }
+            )
+        },
+
+        commands: {
+            /**
+             * This command may be issued by Administrator to set the time. If the Commissioner does not have a valid
+             * time source, it may send a Granularity of NoTimeGranularity.
+             *
+             * Upon receipt of this command, the server may update its UTCTime attribute to match the time specified in
+             * the command, if the stated Granularity and TimeSource are acceptable. The server shall update its
+             * UTCTime attribute if its current Granularity is NoTimeGranularity.
+             *
+             * If the time is updated, the server shall also update its Granularity attribute as appropriate
+             *
+             * server does not plan to maintain time). It shall also update its TimeSource attribute to Admin. It shall
+             * also update its last known good UTC time.
+             *
+             * If the server updates its UTCTime attribute, it shall accept the command with a status code of SUCCESS.
+             * If it opts to not update its time, it shall fail the command with a cluster specific Status Code of
+             * TimeNotAccepted.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
+             */
+            setUtcTime: Command(0x0, TlvSetUtcTimeRequest, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Administer })
+        },
+
+        /**
+         * This metadata controls which TimeSyncCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { ntpClient: true }, component: NtpClientComponent },
+            { flags: { timeZone: true }, component: TimeZoneComponent },
+            { flags: { ntpServer: true }, component: NtpServerComponent }
+        )
+    });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Time Synchronization
@@ -573,48 +618,17 @@ export namespace TimeSync {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.16
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a TimeSync cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a TimeSync cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, NtpClientComponent, { ntpClient: true });
-            ClusterFactory.extend(cluster, TimeZoneComponent, { timeZone: true });
-            ClusterFactory.extend(cluster, NtpServerComponent, { ntpServer: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { ntpClient: true } ? typeof NtpClientComponent : {})
-        & (SF extends { timeZone: true } ? typeof TimeZoneComponent : {})
-        & (SF extends { ntpServer: true } ? typeof NtpServerComponent : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const NTPC = { ntpClient: true };
     const TZ = { timeZone: true };
     const NTPS = { ntpServer: true };
 
     /**
-     * This cluster supports all TimeSync features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -622,15 +636,15 @@ export namespace TimeSync {
 
         attributes: {
             ...Cluster.attributes,
-            defaultNtp: ClusterFactory.AsConditional(NtpClientComponent.attributes.defaultNtp, { mandatoryIf: [NTPC] }),
-            timeZone: ClusterFactory.AsConditional(TimeZoneComponent.attributes.timeZone, { mandatoryIf: [TZ] }),
-            dstOffset: ClusterFactory.AsConditional(TimeZoneComponent.attributes.dstOffset, { mandatoryIf: [TZ] }),
-            localTime: ClusterFactory.AsConditional(TimeZoneComponent.attributes.localTime, { mandatoryIf: [TZ] }),
-            timeZoneDatabase: ClusterFactory.AsConditional(
+            defaultNtp: MutableCluster.AsConditional(NtpClientComponent.attributes.defaultNtp, { mandatoryIf: [NTPC] }),
+            timeZone: MutableCluster.AsConditional(TimeZoneComponent.attributes.timeZone, { mandatoryIf: [TZ] }),
+            dstOffset: MutableCluster.AsConditional(TimeZoneComponent.attributes.dstOffset, { mandatoryIf: [TZ] }),
+            localTime: MutableCluster.AsConditional(TimeZoneComponent.attributes.localTime, { mandatoryIf: [TZ] }),
+            timeZoneDatabase: MutableCluster.AsConditional(
                 TimeZoneComponent.attributes.timeZoneDatabase,
                 { mandatoryIf: [TZ] }
             ),
-            ntpServerPort: ClusterFactory.AsConditional(
+            ntpServerPort: MutableCluster.AsConditional(
                 NtpServerComponent.attributes.ntpServerPort,
                 { mandatoryIf: [NTPS] }
             )
@@ -639,15 +653,26 @@ export namespace TimeSync {
         commands: Cluster.commands,
 
         events: {
-            dstTableEmpty: ClusterFactory.AsConditional(TimeZoneComponent.events.dstTableEmpty, { mandatoryIf: [TZ] }),
-            dstStatus: ClusterFactory.AsConditional(TimeZoneComponent.events.dstStatus, { mandatoryIf: [TZ] }),
-            timeZoneStatus: ClusterFactory.AsConditional(
+            dstTableEmpty: MutableCluster.AsConditional(TimeZoneComponent.events.dstTableEmpty, { mandatoryIf: [TZ] }),
+            dstStatus: MutableCluster.AsConditional(TimeZoneComponent.events.dstStatus, { mandatoryIf: [TZ] }),
+            timeZoneStatus: MutableCluster.AsConditional(
                 TimeZoneComponent.events.timeZoneStatus,
                 { mandatoryIf: [TZ] }
             )
         }
     });
+
+    /**
+     * This cluster supports all TimeSync features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type TimeSyncCluster = typeof TimeSync.Cluster;
+export type TimeSyncCluster = TimeSync.Cluster;
 export const TimeSyncCluster = TimeSync.Cluster;
+ClusterRegistry.register(TimeSync.Complete);

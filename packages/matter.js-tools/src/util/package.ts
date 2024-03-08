@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,7 +13,9 @@ import { Progress } from "./progress.js";
 function findJson(filename: string, path: string = ".", title?: string) {
     path = resolve(path);
     while (true) {
-        const json = ignoreErrorSync("ENOENT", () => JSON.parse(readFileSync(resolve(path, filename)).toString()));
+        const json = ignoreErrorSync(["ENOENT", "ENOTDIR"], () =>
+            JSON.parse(readFileSync(resolve(path, filename)).toString()),
+        );
         if (json) {
             if (title === undefined || json.name === title) {
                 return { root: path, json };
@@ -124,8 +126,12 @@ export class Package {
     }
 
     static get workspace() {
+        return this.workspaceFor(workingDir);
+    }
+
+    static workspaceFor(cwd: string) {
         if (!workspace) {
-            workspace = find(workingDir, pkg => Array.isArray(pkg.json.workspaces));
+            workspace = find(cwd, pkg => Array.isArray(pkg.json.workspaces));
         }
         return workspace;
     }

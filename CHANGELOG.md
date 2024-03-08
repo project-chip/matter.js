@@ -9,6 +9,27 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Packages
+  * IMPORTANT: We switch away from re-exporting all matter.js functionality in matter-node.js, so please adjust your imports and make sure that you include matter.js together with matter-node.js in your dependencies in the exact same version!
+  * Changed BLE library (Bleno/Noble) to another fork with better support for Windows and UART devices
+* Matter-Core functionality:
+  * Fix: Added temporary fix for Network Commissioning Cluster to also accept SSIDs as empty string
+* matter.js API:
+  * IMPORTANT: Introduction of new High level API with complete Device type support for Matter 1.1 types, see [migration guide](./docs/MIGRATION_GUIDE_08.md). For now the known API that we had up top 0.7 is still included and fully working and compatible when old imports are used, but called "Legacy" for now. It will be removed in a later version not yet decided.
+  * Feature: Introduced Environment concept to centralize MDNS, storage and configuration and platform specific central functionalities (Replaces MatterServer from Legacy API).
+  * Feature: Enhanced Matter protocol and interaction abstractions and introduced transactional handling of actions which are rolled back completely in case onf errors.
+* matter-node.js
+  * Enhancement: Makes sure console.log on node.js correctly log Proxy objects with their data and not the Proxy object itself
+  * Enhancement: Allows to send SIGHUP2 signal to the node.js process to print out information on running timers and promises of the process to console
+* matter-node.js Examples
+  * IMPORTANT: All existing example scripts got renamed to *Legacy.ts when the use the "old/until now"-API and can be used directly after changing the name (exception: DeviceNode.ts became DeviceNodeFullLegacy.ts!). They are 100% compatible to the ones before.
+  * Feature: Added all examples again converted to use the new devices API and we also added some more new device types to show the new API better
+  * Feature: Enhanced DeviceNodeFull example to show several more way on how to use the new API and special cases.
+  * Feature: Enhanced DeviceNodeFull example to simulate a Thread Networking device to check BLE commissioning flows
+* matter.js Tooling 
+  * Enhanced Code generation to also generate classes for Cluster implementations and device types with full Feature configurability and TypeScript typing support for this
+
 ## 0.7.5 (2024-02-23)
 * Matter-Core functionality:
   * Feature: Allowed multiple Loggers and log targets to be registered. Logging to console is still default

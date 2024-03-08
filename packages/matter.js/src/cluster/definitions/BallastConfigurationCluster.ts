@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     Attribute,
     OptionalAttribute,
@@ -16,9 +15,12 @@ import {
     OptionalWritableAttribute
 } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvUInt24 } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace BallastConfiguration {
     /**
@@ -36,13 +38,9 @@ export namespace BallastConfiguration {
     export const LampAlarmMode = { lampBurnHours: BitFlag(0) };
 
     /**
-     * Ballast Configuration
-     *
-     * Attributes and commands for configuring a lighting ballast.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x301,
         name: "BallastConfiguration",
         revision: 4,
@@ -234,7 +232,20 @@ export namespace BallastConfiguration {
             )
         }
     });
+
+    /**
+     * Ballast Configuration
+     *
+     * Attributes and commands for configuring a lighting ballast.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type BallastConfigurationCluster = typeof BallastConfiguration.Cluster;
+export type BallastConfigurationCluster = BallastConfiguration.Cluster;
 export const BallastConfigurationCluster = BallastConfiguration.Cluster;
+ClusterRegistry.register(BallastConfiguration.Complete);

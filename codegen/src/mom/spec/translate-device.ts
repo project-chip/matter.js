@@ -1,17 +1,31 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
-import { DatatypeElement, DeviceTypeElement, RequirementElement } from "@project-chip/matter.js/model";
+import { Diagnostic, Logger } from "@project-chip/matter.js/log";
+import { DeviceTypeElement, FieldElement, RequirementElement } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
+import { addDocumentation } from "./add-documentation.js";
 import { Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
 import { DeviceReference } from "./spec-types.js";
 import { Alias, Constant, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
 
 const logger = Logger.get("translate-devices");
+
+const ActualClusterNames = {
+    Level: "LevelControl",
+    TimeSynchronization: "TimeSync",
+    NodeOperationalCredentials: "OperationalCredentials",
+};
+
+// The specification references to clusters are not entirely formal.  This
+// translator converts colloquial names to the actual cluster name
+const ClusterName = (el: HTMLElement) => {
+    const name = Identifier(el);
+    return (ActualClusterNames as any)[name] ?? name;
+};
 
 export function* translateDevice(deviceRef: DeviceReference) {
     const device = createDevice(deviceRef);
@@ -19,6 +33,7 @@ export function* translateDevice(deviceRef: DeviceReference) {
         return;
     }
 
+    addDocumentation(device, deviceRef);
     addConditions(device, deviceRef);
     addClusters(device, deviceRef);
 
@@ -30,6 +45,7 @@ function createDevice(deviceRef: DeviceReference) {
         return DeviceTypeElement({
             name: "Base",
             classification: DeviceTypeElement.Classification.Base,
+            xref: deviceRef.xref,
         });
     }
 
@@ -76,6 +92,7 @@ function createDevice(deviceRef: DeviceReference) {
         name: metadata.name,
         category: deviceRef.category,
         classification,
+        xref: deviceRef.xref,
     };
     const device = DeviceTypeElement(definition);
 
@@ -89,19 +106,16 @@ function createDevice(deviceRef: DeviceReference) {
             name: "Descriptor",
             element: RequirementElement.ElementType.ServerCluster,
             children: [
-                DatatypeElement({
-                    name: "DeviceTypeStruct",
-                    type: "struct",
-                    children: [
-                        DatatypeElement({ name: "DeviceType", type: "devtype-id", default: definition.id }),
-                        DatatypeElement({ name: "Revision", type: "uint16", default: revision }),
-                    ],
+                RequirementElement({
+                    name: "DeviceTypeList",
+                    element: RequirementElement.ElementType.Attribute,
+                    default: [{ deviceType: definition.id, revision }],
                 }),
             ],
         }),
     ];
 
-    logger.debug("metadata", Logger.dict({ ...definition, revision, type: metadata.superset }));
+    logger.debug("metadata", Diagnostic.dict({ ...definition, revision, type: metadata.superset }));
 
     return device;
 }
@@ -111,10 +125,10 @@ function addConditions(device: DeviceTypeElement, deviceRef: DeviceReference) {
         return;
     }
 
-    const conditions = Array<DatatypeElement>();
+    const conditions = Array<FieldElement>();
     deviceRef.conditionSets.forEach(conditionRef => {
         const definitions = translateTable("condition", conditionRef, {
-            tag: Constant("datatype" as const),
+            tag: Constant("field" as const),
             name: Alias(
                 Identifier,
 
@@ -136,14 +150,14 @@ function addConditions(device: DeviceTypeElement, deviceRef: DeviceReference) {
         }
     });
 
-    const translated = translateRecordsToMatter("conditions", conditions, DatatypeElement);
+    const translated = translateRecordsToMatter("conditions", conditions, FieldElement);
 
     if (translated?.length) {
         if (!device.children) {
             device.children = [];
         }
         device.children.push(
-            DatatypeElement({
+            FieldElement({
                 name: "conditions",
                 type: "enum8",
                 children: conditions,
@@ -153,9 +167,9 @@ function addConditions(device: DeviceTypeElement, deviceRef: DeviceReference) {
 }
 
 function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
-    const clusterRecords = translateTable("clusters", deviceRef.clusters, {
+    let clusterRecords = translateTable("clusters", deviceRef.clusters, {
         id: Optional(Alias(Integer, "identifier")),
-        name: Alias(Identifier, "clustername", "cluster"),
+        name: Alias(ClusterName, "clustername", "cluster"),
         element: Alias((el: HTMLElement) => {
             const cs = LowerIdentifier(el);
             switch (cs) {
@@ -174,6 +188,11 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
         conformance: Optional(Str),
     });
 
+    // CSA seems to mix in Zigbee just for old time's sake.  They reference
+    // clusters that aren't even in the Matter cluster spec.  Filter these
+    // out
+    clusterRecords = clusterRecords.filter(c => c.conformance !== "[Zigbee]");
+
     const clusters = translateRecordsToMatter("clusters", clusterRecords, RequirementElement);
     if (!clusters?.length) {
         return;
@@ -186,16 +205,17 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
 
     const clusterIndex = new Map<string, RequirementElement[]>();
     for (const cluster of clusters) {
-        if (clusterIndex.has(cluster.name)) {
-            clusterIndex.get(cluster.name)?.push(cluster);
+        const key = cluster.name.toLowerCase();
+        if (clusterIndex.has(key)) {
+            clusterIndex.get(key)?.push(cluster);
         } else {
-            clusterIndex.set(cluster.name.toLowerCase(), [cluster]);
+            clusterIndex.set(key, [cluster]);
         }
     }
 
     const elementRecords = translateTable("elements", deviceRef.elements, {
         id: Optional(Integer),
-        cluster: LowerIdentifier,
+        cluster: ClusterName,
         element: Identifier,
         name: Identifier,
         constraint: Optional(Str),
@@ -204,7 +224,7 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
     });
 
     for (const record of elementRecords) {
-        const clusters = clusterIndex.get(record.cluster);
+        const clusters = clusterIndex.get(record.cluster.toLowerCase());
         if (!clusters) {
             logger.error(`No cluster ${record.cluster} for ${record.element} requirement ${record.name}`);
             continue;
@@ -214,9 +234,13 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
             if (!cluster.children) {
                 cluster.children = [];
             }
+            const element = camelize(record.element) as RequirementElement.ElementType;
+            if (element === RequirementElement.ElementType.Feature) {
+                record.name = record.name.toUpperCase();
+            }
             cluster.children.push(
                 RequirementElement({
-                    element: camelize(record.element, false) as RequirementElement.ElementType,
+                    element: element,
                     name: record.name,
                     constraint: record.constraint,
                     access: record.access,

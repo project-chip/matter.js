@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -46,7 +46,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
     async setup() {
         try {
             await this.storageManager.initialize(); // hacky but works
-            this.matterServer = new MatterServer(this.storageManager);
+            this.matterServer = new MatterServer(this.storageManager /*, { mdnsInterface: "en0" } */);
 
             this.commissioningServer = await this.setupCommissioningServer();
             await this.matterServer.addCommissioningServer(this.commissioningServer);
@@ -61,7 +61,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
 
     /** Start the test instance MatterServer with the included device. */
     async start() {
-        if (!this.matterServer) throw new Error("matterServer not initialized on start");
+        if (!this.matterServer) throw new Error("serverNode not initialized on start");
         try {
             await this.matterServer.start();
         } catch (error) {
@@ -85,7 +85,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
 
     /** Stop the test instance MatterServer and the device. */
     async stop() {
-        if (!this.matterServer) throw new Error("matterServer not initialized on close");
+        if (!this.matterServer) throw new Error("serverNode not initialized on close");
         await this.matterServer.close();
         this.matterServer = undefined;
         console.log(`======> ${this.appName}: Instance stopped`);
@@ -99,13 +99,13 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
             passcode: this.options.passcode ?? 20202021,
             discriminator: this.options.discriminator ?? 3840,
             basicInformation: {
-                vendorName: "Vendorname",
+                vendorName: "Binford",
                 vendorId: VendorId(0xfff1),
                 nodeLabel: "",
-                productName: "Productname",
-                productLabel: "Productlabel",
+                productName: "MorePowerPro 6100",
+                productLabel: "MorePowerPro 6100",
                 productId: 0x8001,
-                serialNumber: `node-matter`,
+                serialNumber: `9999-9999-9999`,
                 manufacturingDate: "20210101",
                 partNumber: "123456",
                 productUrl: "https://test.com",

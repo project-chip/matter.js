@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,9 +10,9 @@ export function capitalize<T extends string>(text: T) {
 
 /**
  * Converts identifiers of the form "foo-bar", "foo_bar", "foo bar", "foo*bar",
- * "fooBar" or "FOOBar" into "FooBar" or "fooBar".
+ * "fooBar" or "FOOBar" into "fooBar" or "FooBar".
  */
-export function camelize(name: string, upperFirst = true) {
+export function camelize(name: string, upperFirst = false) {
     const pieces = new Array<string>();
     let pieceStart = 0,
         sawUpper = false,
@@ -77,6 +77,27 @@ export function camelize(name: string, upperFirst = true) {
 }
 
 /**
+ * Converts an identifier from CamelCase to snake_case.
+ */
+export function decamelize(name: string, separator = "-") {
+    const result = Array<string>();
+    let needSeparator = false;
+    for (const c of name) {
+        if (c >= "A" && c <= "Z") {
+            if (needSeparator) {
+                result.push(separator);
+                needSeparator = false;
+            }
+            result.push(c.toLowerCase());
+        } else {
+            result.push(c);
+            needSeparator = true;
+        }
+    }
+    return result.join("");
+}
+
+/**
  * Like JSON.stringify but targets well-formed JS and is slightly more readable.
  */
 export function serialize(value: any) {
@@ -115,7 +136,7 @@ export function serialize(value: any) {
             return value ? "true" : "false";
         }
         if (ArrayBuffer.isView(value)) {
-            const dv = new DataView(value.buffer);
+            const dv = new DataView(value.buffer, value.byteOffset, value.byteLength);
             const bytes = Array<string>();
             for (let i = 0; i < dv.byteLength; i++) {
                 bytes.push(dv.getUint8(i).toString(16).padStart(2, "0"));

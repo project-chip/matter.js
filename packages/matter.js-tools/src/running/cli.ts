@@ -1,11 +1,13 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { dirname, resolve } from "path";
 import { exit } from "process";
+import { Builder } from "../building/builder.js";
+import { Graph } from "../building/graph.js";
 import { Project } from "../building/project.js";
 import { executeNode } from "./execute.js";
 
@@ -47,7 +49,11 @@ export async function main(argv = process.argv) {
         exit(2);
     }
 
-    await project.buildSource(format);
+    // TODO - should we do a full build of dependencies unconditionally or
+    // as an option?  Currently doing the former
+    const builder = new Builder();
+    const dependencies = await Graph.forProject(dir);
+    await dependencies.build(builder, false);
 
     script = project.pkg.resolve(
         project.pkg
@@ -56,5 +62,17 @@ export async function main(argv = process.argv) {
             .replace(/^src[\\/]/, `dist/${format}/`),
     );
 
-    await executeNode(script, argv);
+    // If we run in the same process we cannot enable source maps so default mode is to fork.  However for development
+    // purposes it can be useful to avoid the intermediary process.  In this case you can set "--enable-source-maps"
+    // manually then set MATTER_DIRECT_EXEC
+    if (process.env.MATTER_DIRECT_EXEC) {
+        // This will not transpile properly to commonjs but we only use this module from ESM so that's OK
+        await import(script);
+    } else {
+        // Our behavior in response to SIGINT should mirror the child process's.  So ignore the signal locally, only
+        // quitting once the child process does
+        process.on("SIGINT", () => {});
+
+        process.exitCode = await executeNode(script, argv);
+    }
 }

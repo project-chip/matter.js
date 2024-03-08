@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,9 +14,10 @@ import { UdpChannel } from "./UdpChannel.js";
 const logger = Logger.get("UdpMulticastServer");
 
 export interface UdpMulticastServerOptions {
+    network: Network;
     listeningPort: number;
-    broadcastAddressIpv4?: string;
     broadcastAddressIpv6: string;
+    broadcastAddressIpv4?: string;
     netInterface?: string;
 }
 
@@ -26,8 +27,8 @@ export class UdpMulticastServer {
         broadcastAddressIpv4,
         broadcastAddressIpv6,
         listeningPort,
+        network,
     }: UdpMulticastServerOptions) {
-        const network = Network.get();
         return new UdpMulticastServer(
             network,
             broadcastAddressIpv4,
@@ -52,6 +53,7 @@ export class UdpMulticastServer {
     }
 
     private readonly broadcastChannels = new Cache<Promise<UdpChannel>>(
+        "UDP broadcast channel",
         (netInterface, iPv4) => this.createBroadcastChannel(netInterface, iPv4),
         5 * 60 * 1000 /* 5mn */,
         async (_netInterface, channel) => (await channel).close(),

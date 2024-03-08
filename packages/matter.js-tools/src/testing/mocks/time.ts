@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,6 +8,11 @@ type TimerCallback = () => any;
 
 // Must match matter.js Timer interface
 class MockTimer {
+    name = "Test";
+    systemId = 0;
+    intervalMs = 0;
+    isPeriodic = false;
+
     isRunning = false;
     private readonly callback: TimerCallback;
 
@@ -70,6 +75,9 @@ export class MockTime {
     reset(time = this.startTimeMs) {
         this.callbacks = [];
         this.timeMs = time;
+
+        // Some tests use "real" time implementation, ensure this can't leak across suites
+        reinstallTime?.();
     }
 
     now(): Date {
@@ -80,12 +88,73 @@ export class MockTime {
         return this.timeMs;
     }
 
-    getTimer(durationMs: number, callback: TimerCallback): MockTimer {
+    getTimer(_name: string, durationMs: number, callback: TimerCallback): MockTimer {
         return new MockTimer(this, durationMs, callback);
     }
 
-    getPeriodicTimer(intervalMs: number, callback: TimerCallback): MockTimer {
+    getPeriodicTimer(_name: string, intervalMs: number, callback: TimerCallback): MockTimer {
         return new MockInterval(this, intervalMs, callback);
+    }
+
+    /**
+     * Resolve a promise with time dependency.
+     *
+     * Moves time forward until the promise resolves.
+     */
+    async resolve<T>(promise: PromiseLike<T>) {
+        let resolved = false;
+        let result: T | undefined;
+        let error: any;
+
+        promise.then(
+            r => {
+                resolved = true;
+                result = r;
+            },
+            e => {
+                resolved = true;
+                error = e;
+            },
+        );
+
+        let timeAdvanced = 0;
+        while (!resolved) {
+            // Interestingly, a Time.yield() works in almost every case.  However, on Node SubtleCrypto.deriveBits hangs
+            // if you only yield via microtask.  It seems to require yielding via macrotask.  So we use setTimeout here.
+            // Probably related to entropy collection but I think it's safe to classify as a Node bug.  Tested on
+            // version 20.11.0
+            await new Promise<void>(resolve => setTimeout(() => resolve(), 0));
+
+            if (resolved) {
+                break;
+            }
+
+            // If we've advanced more than one hour, assume we've hung
+            if (timeAdvanced > 60 * 60 * 1000) {
+                throw new Error(
+                    "Mock timeout: Promise did not resolve within one (virtual) hour, probably not going to happen",
+                );
+            }
+
+            // Advance time exponentially, trying for granularity but also OK performance.  Note that we are not only
+            // advancing time but also yielding event loop.  So it's possible if we run out of time it's just because
+            // there were too few yields in one virtual hour.  As designed currently it's 360 macrotasks and 360
+            // microtasks (360 loops w/ 1 macro- and 1 micro-yield)
+            await this.advance(1000);
+            timeAdvanced += 1000;
+
+            if (resolved) {
+                break;
+            }
+
+            await this.yield();
+        }
+
+        if (error !== undefined) {
+            throw error;
+        }
+
+        return result as T;
     }
 
     /**
@@ -199,7 +268,10 @@ export class MockTime {
     }
 }
 
+let reinstallTime: undefined | (() => void);
+
 export const TheMockTime = new MockTime(0);
 export function timeSetup(Time: { get: () => MockTime }) {
-    Time.get = () => TheMockTime;
+    reinstallTime = () => (Time.get = () => TheMockTime);
+    reinstallTime();
 }

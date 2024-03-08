@@ -1,18 +1,21 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace ProxyConfiguration {
     /**
@@ -34,13 +37,24 @@ export namespace ProxyConfiguration {
     });
 
     /**
-     * Proxy Configuration
+     * ProxyAllNodes
      *
-     * This cluster provides a means for a proxy-capable device to be told the set of Nodes it shall proxy.
+     * This field shall be set to to 'true' to indicate to the proxy that it shall proxy all nodes. When 'true', the
+     * SourceList attribute is ignored.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.15.14
+     * SourceList
+     *
+     * When ProxyAllNodes is 'false', this list contains the set of NodeIds of sources that this proxy shall
+     * specifically proxy.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.15.14.4.1
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface ConfigurationStruct extends TypeFromSchema<typeof TlvConfigurationStruct> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x42,
         name: "ProxyConfiguration",
         revision: 1,
@@ -58,7 +72,20 @@ export namespace ProxyConfiguration {
             )
         }
     });
+
+    /**
+     * Proxy Configuration
+     *
+     * This cluster provides a means for a proxy-capable device to be told the set of Nodes it shall proxy.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.15.14
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type ProxyConfigurationCluster = typeof ProxyConfiguration.Cluster;
+export type ProxyConfigurationCluster = ProxyConfiguration.Cluster;
 export const ProxyConfigurationCluster = ProxyConfiguration.Cluster;
+ClusterRegistry.register(ProxyConfiguration.Complete);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,12 +10,10 @@ import { Aspect } from "./Aspect.js";
 /**
  * An operational view of conformance as defined by the Matter Specification.
  *
- * We extend the specification's syntax to add ">", "<", ">=" and "<=".  These
- * are required to encode some portions of the specification that are described
- * in prose.
+ * We extend the specification's syntax to add ">", "<", ">=" and "<=".  These are required to encode some portions of
+ * the specification that are described in prose.
  *
- * "Conformance" controls when a data field or cluster element is allowed or
- * required.
+ * "Conformance" controls when a data field or cluster element is allowed or required.
  */
 export class Conformance extends Aspect<Conformance.Definition> {
     ast: Conformance.Ast;
@@ -29,8 +27,7 @@ export class Conformance extends Aspect<Conformance.Definition> {
     }
 
     /**
-     * Initialize from a Conformance.Definition or the conformance DSL defined
-     * by the Matter Specification.
+     * Initialize from a Conformance.Definition or the conformance DSL defined by the Matter Specification.
      */
     constructor(definition: Conformance.Definition) {
         super(definition);
@@ -63,6 +60,45 @@ export class Conformance extends Aspect<Conformance.Definition> {
 
     validateReferences(lookup: Conformance.ReferenceResolver<boolean>) {
         return Conformance.validateReferences(this, this.ast, lookup);
+    }
+
+    /**
+     * Is the associated element mandatory?
+     *
+     * This supports a limited subset of conformance and is only appropriate for field and requirement conformance.
+     */
+    get mandatory() {
+        const conformance = this.ast;
+        if (conformance.type === Conformance.Flag.Mandatory) {
+            return true;
+        }
+        if (conformance.type === Conformance.Special.Group) {
+            for (const c of conformance.param) {
+                if (c.type === Conformance.Flag.Provisional) {
+                    continue;
+                }
+                if (c.type === Conformance.Flag.Mandatory) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Perform limited conformance evaluation to determine whether this conformance is applicable given a feature
+     * combination.
+     *
+     * Ignores subexpressions that reference field values.
+     *
+     * This is useful for filtering elements at compile time.  For complete accuracy you then need to filter at runtime
+     * once field values are known.
+     */
+    isApplicable(features: Iterable<string>, supportedFeatures: Iterable<string>) {
+        const fset = features instanceof Set ? (features as Set<string>) : new Set(features);
+        const sfset =
+            supportedFeatures instanceof Set ? (supportedFeatures as Set<string>) : new Set(supportedFeatures);
+        return computeApplicability(fset, sfset, this.ast) !== false;
     }
 
     override toString() {
@@ -543,8 +579,7 @@ namespace Tokenizer {
     }
 }
 
-// The DSL is *almost* complex enough to warrant a proper parser library.  Not
-// quite though...
+// The DSL is *almost* complex enough to warrant a proper parser library.  Not quite though...
 class Parser {
     public ast: Conformance.Ast;
 
@@ -580,9 +615,8 @@ class Parser {
         }
     }
 
-    // Note that Conformance.Definition effectively serves as our AST.  Its
-    // design is slightly suboptimal for this purpose because it also attempts
-    // to serve as a DSL for manual expression of conformance
+    // Note that Conformance.Definition effectively serves as our AST.  Its design is slightly suboptimal for this
+    // purpose because it also attempts to serve as a DSL for manual expression of conformance
     private parse(): Conformance.Ast {
         return this.parseGroup();
     }
@@ -776,4 +810,51 @@ namespace Parser {
     ];
 
     export const BinaryOperators = new Set(BinaryOperatorPrecedence.flat());
+}
+
+function computeApplicability(features: Set<string>, supportedFeatures: Set<string>, ast: Conformance.Ast) {
+    function processNode(ast: Conformance.Ast): boolean {
+        switch (ast.type) {
+            case Conformance.Special.Name:
+                if (features.has(ast.param)) {
+                    return supportedFeatures.has(ast.param);
+                }
+                break;
+
+            case Conformance.Operator.NOT:
+                const subvalue = processNode(ast.param);
+                if (typeof subvalue === "boolean") {
+                    return !subvalue;
+                }
+                break;
+
+            case Conformance.Operator.AND:
+                if (!processNode(ast.param.lhs) || !processNode(ast.param.rhs)) {
+                    return false;
+                }
+                break;
+
+            case Conformance.Operator.OR:
+                if (!processNode(ast.param.lhs) && !processNode(ast.param.rhs)) {
+                    return false;
+                }
+                break;
+
+            case Conformance.Flag.Disallowed:
+                return false;
+
+            case Conformance.Special.OptionalIf:
+                return processNode(ast.param);
+
+            case Conformance.Special.Group:
+                for (const child of ast.param) {
+                    if (processNode(child)) {
+                        return true;
+                    }
+                }
+                return false;
+        }
+        return true;
+    }
+    return processNode(ast);
 }

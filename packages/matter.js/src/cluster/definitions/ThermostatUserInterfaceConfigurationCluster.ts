@@ -1,15 +1,17 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel, OptionalWritableAttribute } from "../../cluster/Cluster.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace ThermostatUserInterfaceConfiguration {
     /**
@@ -84,14 +86,9 @@ export namespace ThermostatUserInterfaceConfiguration {
     }
 
     /**
-     * Thermostat User Interface Configuration
-     *
-     * This cluster provides an interface to allow configuration of the user interface for a thermostat, or a
-     * thermostat controller device, that supports a keypad and LCD screen.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x204,
         name: "ThermostatUserInterfaceConfiguration",
         revision: 2,
@@ -148,7 +145,21 @@ export namespace ThermostatUserInterfaceConfiguration {
             )
         }
     });
+
+    /**
+     * Thermostat User Interface Configuration
+     *
+     * This cluster provides an interface to allow configuration of the user interface for a thermostat, or a
+     * thermostat controller device, that supports a keypad and LCD screen.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type ThermostatUserInterfaceConfigurationCluster = typeof ThermostatUserInterfaceConfiguration.Cluster;
+export type ThermostatUserInterfaceConfigurationCluster = ThermostatUserInterfaceConfiguration.Cluster;
 export const ThermostatUserInterfaceConfigurationCluster = ThermostatUserInterfaceConfiguration.Cluster;
+ClusterRegistry.register(ThermostatUserInterfaceConfiguration.Complete);

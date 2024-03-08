@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -46,27 +46,29 @@ const ENCRYPTED_BYTES = ByteArray.fromHex(
 );
 
 describe("SecureSession", () => {
-    const secureSession = new SecureSession({
-        context: {} as any,
-        id: 1,
-        fabric: undefined,
-        peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
-        peerSessionId: 0x8d4b,
-        decryptKey: DECRYPT_KEY,
-        encryptKey: ENCRYPT_KEY,
-        attestationKey: Buffer.alloc(0),
-        closeCallback: async () => {
-            /* do nothing */
-        },
-        isInitiator: true,
-    });
+    function secureSession() {
+        return new SecureSession({
+            context: {} as any,
+            id: 1,
+            fabric: undefined,
+            peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
+            peerSessionId: 0x8d4b,
+            decryptKey: DECRYPT_KEY,
+            encryptKey: ENCRYPT_KEY,
+            attestationKey: Buffer.alloc(0),
+            closeCallback: async () => {
+                /* do nothing */
+            },
+            isInitiator: true,
+        });
+    }
 
     describe("decrypt", () => {
         it("decrypts a message", () => {
             const packet = MessageCodec.decodePacket(MESSAGE_ENCRYPTED);
 
             const aad = MESSAGE_ENCRYPTED.slice(0, MESSAGE_ENCRYPTED.length - packet.applicationPayload.length);
-            const result = secureSession.decode(packet, aad);
+            const result = secureSession().decode(packet, aad);
 
             assert.equal(result.payload.toHex(), DECRYPTED_BYTES.toHex());
         });
@@ -74,7 +76,7 @@ describe("SecureSession", () => {
 
     describe("encrypt", () => {
         it("encrypts a message", () => {
-            const result = secureSession.encode(MESSAGE);
+            const result = secureSession().encode(MESSAGE);
 
             assert.deepEqual(result.applicationPayload.toHex(), ENCRYPTED_BYTES.toHex());
         });

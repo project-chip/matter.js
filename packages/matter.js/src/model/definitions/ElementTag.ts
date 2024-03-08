@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,6 +19,7 @@ export enum ElementTag {
     Attribute = "attribute",
     DeviceType = "deviceType",
     Datatype = "datatype",
+    Field = "field",
 
     // Device cluster element requirement - not formally an "element" in the
     // specification

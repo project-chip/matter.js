@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FORBIDDEN_PASSCODES } from "../../CommissioningServer.js";
 import { MatterController } from "../../MatterController.js";
+import { CommissioningOptions } from "../../behavior/system/commissioning/CommissioningOptions.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
@@ -26,7 +26,7 @@ export class PaseClient {
     static generateRandomPasscode() {
         let passcode: number;
         passcode = (Crypto.getRandomUInt32() % 99999998) + 1; // prevents 00000000 and 99999999
-        if (FORBIDDEN_PASSCODES.includes(passcode)) {
+        if (CommissioningOptions.FORBIDDEN_PASSCODES.includes(passcode)) {
             passcode += 1; // With current forbidden passcode list can never collide
         }
         return passcode;
@@ -75,7 +75,7 @@ export class PaseClient {
 
         // All good! Creating the secure session
         await messenger.waitForSuccess();
-        const secureSession = await client.createSecureSession({
+        const secureSession = await client.sessionManager.createSecureSession({
             sessionId,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,

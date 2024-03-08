@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -62,7 +62,7 @@ export abstract class Aspect<D> {
         });
     }
 
-    extend(other: Exclude<D, "string">) {
+    extend<This extends Aspect<any>>(this: This, other: Exclude<D, "string">) {
         const descriptors = [
             ...Object.entries(Object.getOwnPropertyDescriptors(this)),
             ...Object.entries(Object.getOwnPropertyDescriptors(other)),
@@ -77,6 +77,6 @@ export abstract class Aspect<D> {
         }
 
         const constructor = this.constructor as new (definition: any) => Aspect<D>;
-        return new constructor(definition);
+        return new constructor(definition) as This;
     }
 }

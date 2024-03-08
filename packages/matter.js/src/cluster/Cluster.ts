@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -23,10 +23,10 @@ export class AttributeError extends MatterError {}
 export class EventError extends MatterError {}
 
 export enum AccessLevel {
-    View,
-    Operate,
-    Manage,
-    Administer,
+    View = 1,
+    Operate = 2,
+    Manage = 3,
+    Administer = 4,
 }
 
 export type ConditionalFeatureList<F extends BitSchema> = TypeFromPartialBitSchema<F>[];

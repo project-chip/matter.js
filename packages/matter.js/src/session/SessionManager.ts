@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,9 +13,11 @@ import { Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { AsyncObservable, Observable } from "../util/Observable.js";
+import { BasicSet } from "../util/Set.js";
+import { InsecureSession } from "./InsecureSession.js";
 import { SecureSession } from "./SecureSession.js";
 import { SessionParameterOptions, SessionParameters } from "./Session.js";
-import { UnsecureSession } from "./UnsecureSession.js";
 
 const logger = Logger.get("SessionManager");
 
@@ -43,18 +45,33 @@ type ResumptionStorageRecord = {
 };
 
 export class SessionManager<ContextT> {
-    private readonly unsecureSessions = new Map<NodeId, UnsecureSession<ContextT>>();
-    private readonly sessions = new Map<number, SecureSession<ContextT>>();
-    private nextSessionId = Crypto.getRandomUInt16();
-    private resumptionRecords = new Map<NodeId, ResumptionRecord>();
-    private readonly sessionStorage: StorageContext;
-    private readonly globalUnencryptedMessageCounter = new MessageCounter();
+    readonly #insecureSessions = new Map<NodeId, InsecureSession<ContextT>>();
+    readonly #sessions = new BasicSet<SecureSession<ContextT>>();
+    #nextSessionId = Crypto.getRandomUInt16();
+    #resumptionRecords = new Map<NodeId, ResumptionRecord>();
+    readonly #sessionStorage: StorageContext;
+    readonly #globalUnencryptedMessageCounter = new MessageCounter();
+    readonly #subscriptionsChanged = new Observable<[session: SecureSession<ContextT>]>();
+    readonly #sessionOpened = new Observable<[session: SecureSession<ContextT>]>();
+    readonly #sessionClosed = new AsyncObservable<[session: SecureSession<ContextT>], void>();
 
     constructor(
         private readonly context: ContextT,
-        storage: StorageContext,
+        sessionStorage: StorageContext,
     ) {
-        this.sessionStorage = storage.createContext("SessionManager");
+        this.#sessionStorage = sessionStorage;
+    }
+
+    get subscriptionsChanged() {
+        return this.#subscriptionsChanged;
+    }
+
+    get sessionOpened() {
+        return this.#sessionOpened;
+    }
+
+    get sessionClosed() {
+        return this.#sessionClosed;
     }
 
     createUnsecureSession(options: {
@@ -64,27 +81,27 @@ export class SessionManager<ContextT> {
     }) {
         const { initiatorNodeId, sessionParameters, isInitiator } = options;
         if (initiatorNodeId !== undefined) {
-            if (this.unsecureSessions.has(initiatorNodeId)) {
+            if (this.#insecureSessions.has(initiatorNodeId)) {
                 throw new MatterFlowError(`UnsecureSession with NodeId ${initiatorNodeId} already exists.`);
             }
         }
         while (true) {
-            const session = new UnsecureSession({
+            const session = new InsecureSession({
                 context: this.context,
-                messageCounter: this.globalUnencryptedMessageCounter,
+                messageCounter: this.#globalUnencryptedMessageCounter,
                 closeCallback: async () => {
-                    logger.info(`Remove Session ${session.name} from session manager.`);
-                    this.unsecureSessions.delete(session.getNodeId());
+                    logger.info(`End insecure session ${session.name}`);
+                    this.#insecureSessions.delete(session.nodeId);
                 },
                 initiatorNodeId,
                 sessionParameters,
                 isInitiator: isInitiator ?? false,
             });
 
-            const ephermalNodeId = session.getNodeId();
-            if (this.unsecureSessions.has(ephermalNodeId)) continue;
+            const ephermalNodeId = session.nodeId;
+            if (this.#insecureSessions.has(ephermalNodeId)) continue;
 
-            this.unsecureSessions.set(ephermalNodeId, session);
+            this.#insecureSessions.set(ephermalNodeId, session);
             return session;
         }
     }
@@ -99,8 +116,6 @@ export class SessionManager<ContextT> {
         isInitiator: boolean;
         isResumption: boolean;
         sessionParameters?: SessionParameterOptions;
-        closeCallback?: () => Promise<void>;
-        subscriptionChangedCallback?: () => void;
     }) {
         const {
             sessionId,
@@ -112,8 +127,6 @@ export class SessionManager<ContextT> {
             isInitiator,
             isResumption,
             sessionParameters,
-            closeCallback,
-            subscriptionChangedCallback,
         } = args;
         const session = await SecureSession.create({
             context: this.context,
@@ -126,84 +139,90 @@ export class SessionManager<ContextT> {
             isInitiator,
             isResumption,
             closeCallback: async () => {
-                logger.info(`Remove Session ${session.name} from session manager.`);
-                await closeCallback?.();
-                this.sessions.delete(sessionId);
+                logger.info(`End ${session.isPase ? "PASE" : "CASE"} session ${session.name}`);
+                this.#sessions.delete(session);
+                await this.#sessionClosed.emit(session);
             },
             sessionParameters,
-            subscriptionChangedCallback: () => subscriptionChangedCallback?.(),
+            subscriptionChangedCallback: () => {
+                this.#subscriptionsChanged.emit(session);
+            },
         });
-        this.sessions.set(sessionId, session);
+
+        this.#sessions.add(session);
+        this.#sessionOpened.emit(session);
 
         // TODO: Add a maximum of sessions and respect/close the "least recently used" session. See Core Specs 4.10.1.1
         return session;
     }
 
     removeSession(sessionId: number) {
-        this.sessions.delete(sessionId);
+        const session = this.getSession(sessionId);
+        if (session !== undefined) {
+            this.#sessions.delete(session);
+        }
     }
 
     removeResumptionRecord(peerNodeId: NodeId) {
-        this.resumptionRecords.delete(peerNodeId);
+        this.#resumptionRecords.delete(peerNodeId);
         this.storeResumptionRecords();
     }
 
     findOldestInactiveSession() {
-        let oldestSessionId: number | undefined = undefined;
-        let oldestActiveTimestamp = Number.MAX_SAFE_INTEGER;
-        for (const session of this.sessions.values()) {
-            if (session.activeTimestamp < oldestActiveTimestamp) {
-                oldestActiveTimestamp = session.timestamp;
-                oldestSessionId = session.getId();
+        let oldestSession: SecureSession<ContextT> | undefined = undefined;
+        for (const session of this.#sessions) {
+            if (!oldestSession || session.activeTimestamp < oldestSession.activeTimestamp) {
+                oldestSession = session;
             }
         }
-        if (oldestSessionId === undefined) {
+        if (oldestSession === undefined) {
             throw new MatterFlowError("No session found to close and all session ids are taken.");
         }
-        return oldestSessionId;
+        return oldestSession;
     }
 
     async getNextAvailableSessionId() {
         for (let i = 0; i < 0xffff; i++) {
-            const id = this.nextSessionId;
-            this.nextSessionId = (this.nextSessionId + 1) & 0xffff;
-            if (this.nextSessionId === 0) this.nextSessionId++;
+            const id = this.#nextSessionId;
+            this.#nextSessionId = (this.#nextSessionId + 1) & 0xffff;
+            if (this.#nextSessionId === 0) this.#nextSessionId++;
 
-            if (!this.sessions.has(id)) {
+            if (this.getSession(id) === undefined) {
                 return id;
             }
         }
-        // All session ids are taken, search for te oldest unused session id and close it and use this
-        const oldestSessionId = this.findOldestInactiveSession();
-        await this.sessions.get(oldestSessionId)?.end(true, false);
-        this.nextSessionId = oldestSessionId;
-        return this.nextSessionId++;
+
+        // All session ids are taken, search for the oldest unused session, and close it and re-use its ID
+        const oldestSession = this.findOldestInactiveSession();
+        await oldestSession.end(true, false);
+        this.#nextSessionId = oldestSession.id;
+        return this.#nextSessionId++;
     }
 
     getSession(sessionId: number) {
-        return this.sessions.get(sessionId);
+        return this.#sessions.get("id", sessionId);
     }
 
     getPaseSession() {
-        return [...this.sessions.values()].find(
-            session => session.isSecure() && session.isPase() && !session.closingAfterExchangeFinished,
+        return [...this.#sessions].find(
+            session => session.isSecure && session.isPase && !session.closingAfterExchangeFinished,
         ) as SecureSession<ContextT>;
     }
 
     getSessionForNode(fabric: Fabric, nodeId: NodeId) {
         //TODO: It can have multiple sessions for one node ...
-        return [...this.sessions.values()].find(session => {
-            if (!session.isSecure()) return false;
+        return [...this.#sessions].find(session => {
+            if (!session.isSecure) return false;
             const secureSession = session as SecureSession<any>;
-            return secureSession.getFabric()?.fabricId === fabric.fabricId && secureSession.getPeerNodeId() === nodeId;
+            return secureSession.fabric?.fabricId === fabric.fabricId && secureSession.peerNodeId === nodeId;
         });
     }
 
     async removeAllSessionsForNode(nodeId: NodeId, sendClose = false) {
-        for (const session of this.sessions.values()) {
-            if (!session.isSecure()) continue;
+        for (const session of this.#sessions) {
+            if (!session.isSecure) continue;
             const secureSession = session as SecureSession<any>;
-            if (secureSession.getPeerNodeId() === nodeId) {
+            if (secureSession.peerNodeId === nodeId) {
                 await secureSession.destroy(sendClose, false);
             }
         }
@@ -211,9 +230,9 @@ export class SessionManager<ContextT> {
 
     getUnsecureSession(sourceNodeId?: NodeId) {
         if (sourceNodeId === undefined) {
-            return this.unsecureSessions.get(NodeId.UNSPECIFIED_NODE_ID);
+            return this.#insecureSessions.get(NodeId.UNSPECIFIED_NODE_ID);
         }
-        return this.unsecureSessions.get(sourceNodeId);
+        return this.#insecureSessions.get(sourceNodeId);
     }
 
     findGroupSession(groupId: number, groupSessionId: number) {
@@ -226,31 +245,31 @@ export class SessionManager<ContextT> {
     }
 
     findResumptionRecordById(resumptionId: ByteArray) {
-        return [...this.resumptionRecords.values()].find(record => record.resumptionId.equals(resumptionId));
+        return [...this.#resumptionRecords.values()].find(record => record.resumptionId.equals(resumptionId));
     }
 
     findResumptionRecordByNodeId(nodeId: NodeId) {
-        return this.resumptionRecords.get(nodeId);
+        return this.#resumptionRecords.get(nodeId);
     }
 
     saveResumptionRecord(resumptionRecord: ResumptionRecord) {
-        this.resumptionRecords.set(resumptionRecord.peerNodeId, resumptionRecord);
+        this.#resumptionRecords.set(resumptionRecord.peerNodeId, resumptionRecord);
         this.storeResumptionRecords();
     }
 
     updateFabricForResumptionRecords(fabric: Fabric) {
-        const record = this.resumptionRecords.get(fabric.rootNodeId);
+        const record = this.#resumptionRecords.get(fabric.rootNodeId);
         if (record === undefined) {
             throw new MatterFlowError("Resumption record not found. Should never happen.");
         }
-        this.resumptionRecords.set(fabric.rootNodeId, { ...record, fabric });
+        this.#resumptionRecords.set(fabric.rootNodeId, { ...record, fabric });
         this.storeResumptionRecords();
     }
 
     storeResumptionRecords() {
-        this.sessionStorage.set<ResumptionStorageRecord[]>(
+        this.#sessionStorage.set<ResumptionStorageRecord[]>(
             "resumptionRecords",
-            [...this.resumptionRecords].map(
+            [...this.#resumptionRecords].map(
                 ([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters }]) => ({
                     nodeId,
                     sharedSecret,
@@ -264,7 +283,7 @@ export class SessionManager<ContextT> {
     }
 
     initFromStorage(fabrics: Fabric[]) {
-        const storedResumptionRecords = this.sessionStorage.get<ResumptionStorageRecord[]>("resumptionRecords", []);
+        const storedResumptionRecords = this.#sessionStorage.get<ResumptionStorageRecord[]>("resumptionRecords", []);
 
         storedResumptionRecords.forEach(
             ({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId, sessionParameters }) => {
@@ -274,7 +293,7 @@ export class SessionManager<ContextT> {
                     logger.error("fabric not found for resumption record", fabricId);
                     return;
                 }
-                this.resumptionRecords.set(nodeId, {
+                this.#resumptionRecords.set(nodeId, {
                     sharedSecret,
                     resumptionId,
                     fabric,
@@ -286,15 +305,15 @@ export class SessionManager<ContextT> {
     }
 
     getActiveSessionInformation() {
-        return [...this.sessions.values()]
-            .filter(session => session.isSecure() && !session.isPase())
+        return [...this.#sessions]
+            .filter(session => session.isSecure && !session.isPase)
             .map(session => ({
                 name: session.name,
-                nodeId: session.getNodeId(),
-                peerNodeId: session.getPeerNodeId(),
-                fabric: session instanceof SecureSession ? session.getFabric()?.getExternalInformation() : undefined,
+                nodeId: session.nodeId,
+                peerNodeId: session.peerNodeId,
+                fabric: session instanceof SecureSession ? session.fabric?.externalInformation : undefined,
                 isPeerActive: session.isPeerActive(),
-                secure: session.isSecure(),
+                secure: session.isSecure,
                 lastInteractionTimestamp: session instanceof SecureSession ? session.timestamp : undefined,
                 lastActiveTimestamp: session instanceof SecureSession ? session.activeTimestamp : undefined,
                 numberOfActiveSubscriptions: session instanceof SecureSession ? session.numberOfActiveSubscriptions : 0,
@@ -303,14 +322,13 @@ export class SessionManager<ContextT> {
 
     async close() {
         this.storeResumptionRecords();
-        for (const sessionId of this.sessions.keys()) {
-            const session = this.sessions.get(sessionId);
+        for (const session of this.#sessions) {
             await session?.end(false);
-            this.sessions.delete(sessionId);
+            this.#sessions.delete(session);
         }
-        for (const session of this.unsecureSessions.values()) {
+        for (const session of this.#insecureSessions.values()) {
             await session?.end();
-            this.unsecureSessions.delete(session.getNodeId());
+            this.#insecureSessions.delete(session.nodeId);
         }
     }
 }

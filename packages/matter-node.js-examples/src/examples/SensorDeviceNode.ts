@@ -1,0 +1,236 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * This example shows how to create a simple Sensor Matter device as temperature or humidity device.
+ * It can be used as CLI script and starting point for your own device node implementation.
+ * This example is CJS conform and do not use top level await's.
+ */
+
+/**
+ * Import needed modules from @project-chip/matter-node.js
+ */
+// Include this first to auto-register Crypto, Network and Time Node.js implementations
+import "@project-chip/matter-node.js";
+
+import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
+import { logEndpoint } from "@project-chip/matter.js/device";
+import { HumiditySensorDevice } from "@project-chip/matter.js/devices/HumiditySensorDevice";
+import { TemperatureSensorDevice } from "@project-chip/matter.js/devices/TemperatureSensorDevice";
+import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
+import { Environment, StorageService } from "@project-chip/matter.js/environment";
+import { ServerNode } from "@project-chip/matter.js/node";
+import { Time } from "@project-chip/matter.js/time";
+import { execSync } from "child_process";
+
+requireMinNodeVersion(16);
+
+async function main() {
+    /** Initialize configuration values */
+    const {
+        isTemperature,
+        interval,
+        deviceName,
+        vendorName,
+        passcode,
+        discriminator,
+        vendorId,
+        productName,
+        productId,
+        port,
+        uniqueId,
+    } = await getConfiguration();
+
+    /**
+     * Create a Matter ServerNode, which contains the Root Endpoint and all relevant data and configuration
+     */
+    const server = await ServerNode.create({
+        // Required: Give the Node a unique ID which is used to store the state of this node
+        id: uniqueId,
+
+        // Provide Network relevant configuration like the port
+        // Optional when operating only one device on a host, Default port is 5540
+        network: {
+            port,
+        },
+
+        // Provide Commissioning relevant settings
+        // Optional for development/testing purposes
+        commissioning: {
+            passcode,
+            discriminator,
+        },
+
+        // Provide Node announcement settings
+        // Optional: If Ommitted some development defaults are used
+        productDescription: {
+            name: deviceName,
+            deviceType: DeviceTypeId(
+                isTemperature ? TemperatureSensorDevice.deviceType : HumiditySensorDevice.deviceType,
+            ),
+        },
+
+        // Provide defaults for the BasicInformation cluster on the Root endpoint
+        // Optional: If Omitted some development defaults are used
+        basicInformation: {
+            vendorName,
+            vendorId: VendorId(vendorId),
+            nodeLabel: productName,
+            productName,
+            productLabel: productName,
+            productId,
+            serialNumber: `matterjs-${uniqueId}`,
+            uniqueId,
+        },
+    });
+
+    /**
+     * Matter Nodes are a composition of endpoints. Create and add a single endpoint to the node. This example uses the
+     * OnOffLightDevice or OnOffPlugInUnitDevice depending on the value of the type parameter. It also assigns this Part a
+     * unique ID to store the endpoint number for it in the storage to restore the device on restart.
+     * In this case we directly use the default command implementation from matter.js. Check out the DeviceNodeFull example
+     * to see how to customize the command handlers.
+     */
+    let endpoint: Endpoint;
+    if (isTemperature) {
+        endpoint = new Endpoint(TemperatureSensorDevice, {
+            id: "tempsensor",
+            temperatureMeasurement: { measuredValue: getIntValueFromCommandOrRandom("value") },
+        });
+    } else {
+        endpoint = new Endpoint(HumiditySensorDevice, {
+            id: "humsensor",
+            relativeHumidityMeasurement: { measuredValue: getIntValueFromCommandOrRandom("value", false) },
+        });
+    }
+
+    await server.add(endpoint);
+
+    /**
+     * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
+     */
+    logEndpoint(EndpointServer.forEndpoint(server));
+
+    const updateInterval = setInterval(() => {
+        let setter: Promise<void>;
+        if (isTemperature) {
+            setter = endpoint.set({
+                temperatureMeasurement: {
+                    measuredValue: getIntValueFromCommandOrRandom("value"),
+                },
+            });
+        } else {
+            setter = endpoint.set({
+                relativeHumidityMeasurement: {
+                    measuredValue: getIntValueFromCommandOrRandom("value", false),
+                },
+            });
+        }
+        setter.catch(error => console.error("Error updating measured value:", error));
+    }, interval * 1000);
+
+    // Cleanup our update interval when node goes offline
+    server.lifecycle.offline.on(() => clearTimeout(updateInterval));
+
+    /**
+     * In order to start the node and announce it into the network we use the run method which resolves when the node goes
+     * offline again because we do not need anything more here. See the Full example for other starting options.
+     * The QR Code is printed automatically.
+     */
+    await server.run();
+}
+
+main().catch(error => console.error(error));
+
+/*********************************************************************************************************
+ * Convenience Methods
+ *********************************************************************************************************/
+
+/** Defined a shell command from an environment variable and execute it and log the response. */
+
+function getIntValueFromCommandOrRandom(scriptParamName: string, allowNegativeValues = true) {
+    const script = Environment.default.vars.string(scriptParamName);
+    if (script === undefined) {
+        if (!allowNegativeValues) return Math.round(Math.random() * 100);
+        return (Math.round(Math.random() * 100) - 50) * 100;
+    }
+    let result = execSync(script).toString().trim();
+    if ((result.startsWith("'") && result.endsWith("'")) || (result.startsWith('"') && result.endsWith('"')))
+        result = result.slice(1, -1);
+    console.log(`Command result: ${result}`);
+    let value = Math.round(parseFloat(result));
+    if (!allowNegativeValues && value < 0) value = 0;
+    return value;
+}
+
+async function getConfiguration() {
+    /**
+     * Collect all needed data
+     *
+     * This block collects all needed data from cli, environment or storage. Replace this with where ever your data come from.
+     *
+     * Note: This example uses the matter.js process storage system to store the device parameter data for convenience
+     * and easy reuse. When you also do that be careful to not overlap with Matter-Server own storage contexts
+     * (so maybe better not do it ;-)).
+     */
+    const environment = Environment.default;
+
+    const storageService = environment.get(StorageService);
+    console.log(`Storage location: ${storageService.location} (Directory)`);
+    console.log(
+        'Use the parameter "--storage-path=NAME-OR-PATH" to specify a different storage location in this directory, use --storage-clear to start with an empty storage.',
+    );
+    const deviceStorage = (await storageService.open("device")).createContext("data");
+
+    const isTemperature = deviceStorage.get("isTemperature", environment.vars.get("type") !== "humidity");
+    if (deviceStorage.has("isTemperature")) {
+        console.log(
+            `Device type ${isTemperature ? "temperature" : "humidity"} found in storage. --type parameter is ignored.`,
+        );
+    }
+    let interval = environment.vars.number("interval") ?? deviceStorage.get("interval", 60);
+    if (interval < 1) {
+        console.log(`Invalid Interval ${interval}, set to 60s`);
+        interval = 60;
+    }
+
+    const deviceName = "Matter test device";
+    const vendorName = "matter-node.js";
+    const passcode = environment.vars.number("passcode") ?? deviceStorage.get("passcode", 20202021);
+    const discriminator = environment.vars.number("discriminator") ?? deviceStorage.get("discriminator", 3840);
+    // product name / id and vendor id should match what is in the device certificate
+    const vendorId = environment.vars.number("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
+    const productName = `node-matter OnOff ${isTemperature ? "Temperature" : "Humidity"}`;
+    const productId = environment.vars.number("productid") ?? deviceStorage.get("productid", 0x8000);
+
+    const port = environment.vars.number("port") ?? 5540;
+
+    const uniqueId = environment.vars.string("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs().toString());
+
+    // Persist basic data to keep them also on restart
+    deviceStorage.set("passcode", passcode);
+    deviceStorage.set("discriminator", discriminator);
+    deviceStorage.set("vendorid", vendorId);
+    deviceStorage.set("productid", productId);
+    deviceStorage.set("interval", interval);
+    deviceStorage.set("isTemperature", isTemperature);
+    deviceStorage.set("uniqueid", uniqueId);
+
+    return {
+        isTemperature,
+        interval,
+        deviceName,
+        vendorName,
+        passcode,
+        discriminator,
+        vendorId,
+        productName,
+        productId,
+        port,
+        uniqueId,
+    };
+}

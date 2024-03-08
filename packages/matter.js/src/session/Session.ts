@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -105,16 +105,17 @@ export abstract class Session<T> {
         };
     }
 
-    abstract isSecure(): boolean;
-    abstract isPase(): boolean;
+    abstract isSecure: boolean;
+    abstract isPase: boolean;
+    abstract context: T;
+    abstract id: number;
+    abstract peerSessionId: number;
+    abstract nodeId: NodeId | undefined;
+    abstract peerNodeId: NodeId | undefined;
+    abstract associatedFabric: Fabric;
+
     abstract decode(packet: DecodedPacket, aad?: ByteArray): DecodedMessage;
     abstract encode(message: Message): Packet;
-    abstract getContext(): T;
-    abstract getId(): number;
-    abstract getPeerSessionId(): number;
-    abstract getNodeId(): NodeId | undefined;
-    abstract getPeerNodeId(): NodeId | undefined;
     abstract end(sendClose: boolean): Promise<void>;
     abstract destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
-    abstract getAssociatedFabric(): Fabric;
 }

@@ -1,35 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel, FixedAttribute } from "../../cluster/Cluster.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace TimeFormatLocalization {
-    /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.4.5.1
-     */
-    export enum HourFormat {
-        /**
-         * Time conveyed with a 12-hour clock
-         */
-        "12Hr" = 0,
-
-        /**
-         * Time conveyed with a 24-hour clock
-         */
-        "24Hr" = 1
-    }
-
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.4.5.2
      */
@@ -96,57 +83,24 @@ export namespace TimeFormatLocalization {
     }
 
     /**
-     * These are optional features supported by TimeFormatLocalizationCluster.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.4.4
+     * @see {@link MatterCoreSpecificationV1_1} § 11.4.5.1
      */
-    export enum Feature {
+    export enum HourFormat {
         /**
-         * CalendarFormat
-         *
-         * The Node can be configured to use different calendar formats when conveying values to a user.
+         * Time conveyed with a 12-hour clock
          */
-        CalendarFormat = "CalendarFormat"
+        "12Hr" = 0,
+
+        /**
+         * Time conveyed with a 24-hour clock
+         */
+        "24Hr" = 1
     }
-
-    /**
-     * These elements and properties are present in all TimeFormatLocalization clusters.
-     */
-    export const Base = ClusterFactory.Definition({
-        id: 0x2c,
-        name: "TimeFormatLocalization",
-        revision: 1,
-
-        features: {
-            /**
-             * CalendarFormat
-             *
-             * The Node can be configured to use different calendar formats when conveying values to a user.
-             */
-            calendarFormat: BitFlag(0)
-        },
-
-        attributes: {
-            /**
-             * The HourFormat attribute shall represent the format that the Node is currently configured to use when
-             * conveying the hour unit of time. If provided, this value shall take priority over any unit
-             *
-             * implied through the ActiveLocale Attribute.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.4.6.1
-             */
-            hourFormat: WritableAttribute(
-                0x0,
-                TlvNullable(TlvEnum<HourFormat>()),
-                { persistent: true, default: null, writeAcl: AccessLevel.Manage }
-            )
-        }
-    });
 
     /**
      * A TimeFormatLocalizationCluster supports these elements if it supports feature CalendarFormat.
      */
-    export const CalendarFormatComponent = ClusterFactory.Component({
+    export const CalendarFormatComponent = MutableCluster.Component({
         attributes: {
             /**
              * The ActiveCalendarType attribute shall represent the calendar format that the Node is currently
@@ -174,6 +128,65 @@ export namespace TimeFormatLocalization {
     });
 
     /**
+     * These are optional features supported by TimeFormatLocalizationCluster.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.4.4
+     */
+    export enum Feature {
+        /**
+         * CalendarFormat
+         *
+         * The Node can be configured to use different calendar formats when conveying values to a user.
+         */
+        CalendarFormat = "CalendarFormat"
+    }
+
+    /**
+     * These elements and properties are present in all TimeFormatLocalization clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x2c,
+        name: "TimeFormatLocalization",
+        revision: 1,
+
+        features: {
+            /**
+             * CalendarFormat
+             *
+             * The Node can be configured to use different calendar formats when conveying values to a user.
+             */
+            calendarFormat: BitFlag(0)
+        },
+
+        attributes: {
+            /**
+             * The HourFormat attribute shall represent the format that the Node is currently configured to use when
+             * conveying the hour unit of time. If provided, this value shall take priority over any unit
+             *
+             * implied through the ActiveLocale Attribute.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.4.6.1
+             */
+            hourFormat: WritableAttribute(
+                0x0,
+                TlvNullable(TlvEnum<HourFormat>()),
+                { persistent: true, default: null, writeAcl: AccessLevel.Manage }
+            )
+        },
+
+        /**
+         * This metadata controls which TimeFormatLocalizationCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { calendarFormat: true }, component: CalendarFormatComponent })
+    });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
+
+    /**
      * Time Format Localization
      *
      * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have
@@ -188,41 +201,15 @@ export namespace TimeFormatLocalization {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.4
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a TimeFormatLocalization cluster with support for optional features.
-         * Include each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a TimeFormatLocalization cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, CalendarFormatComponent, { calendarFormat: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { calendarFormat: true } ? typeof CalendarFormatComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const CALFMT = { calendarFormat: true };
 
     /**
-     * This cluster supports all TimeFormatLocalization features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -230,17 +217,28 @@ export namespace TimeFormatLocalization {
 
         attributes: {
             ...Cluster.attributes,
-            activeCalendarType: ClusterFactory.AsConditional(
+            activeCalendarType: MutableCluster.AsConditional(
                 CalendarFormatComponent.attributes.activeCalendarType,
                 { mandatoryIf: [CALFMT] }
             ),
-            supportedCalendarTypes: ClusterFactory.AsConditional(
+            supportedCalendarTypes: MutableCluster.AsConditional(
                 CalendarFormatComponent.attributes.supportedCalendarTypes,
                 { mandatoryIf: [CALFMT] }
             )
         }
     });
+
+    /**
+     * This cluster supports all TimeFormatLocalization features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type TimeFormatLocalizationCluster = typeof TimeFormatLocalization.Cluster;
+export type TimeFormatLocalizationCluster = TimeFormatLocalization.Cluster;
 export const TimeFormatLocalizationCluster = TimeFormatLocalization.Cluster;
+ClusterRegistry.register(TimeFormatLocalization.Complete);

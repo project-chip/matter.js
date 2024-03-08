@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -31,7 +31,6 @@ export function loggerSetup(Logger: LoggerLike) {
 
     let messageBuffer: [number, string][] | undefined;
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     const defaultLog = Logger.log;
 
     function passMessage(args: [number, string]) {

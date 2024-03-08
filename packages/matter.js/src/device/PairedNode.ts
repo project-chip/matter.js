@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The matter.js Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 import { CommissioningController } from "../CommissioningController.js";
@@ -38,10 +38,11 @@ import { PairedDevice, RootEndpoint } from "./Device.js";
 import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
 import { AdministratorCommissioning } from "../cluster/definitions/index.js";
 import { Crypto } from "../crypto/Crypto.js";
+import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import {
-    CommissionningFlowType,
+    CommissioningFlowType,
     DiscoveryCapabilitiesSchema,
     ManualPairingCodeCodec,
     QrPairingCodeCodec,
@@ -133,10 +134,12 @@ export class PairedNode {
     private readonly endpoints = new Map<EndpointNumber, Endpoint>();
     private interactionClient?: InteractionClient;
     private readonly reconnectDelayTimer = Time.getTimer(
+        "Reconnect delay",
         STRUCTURE_UPDATE_TIMEOUT_MS,
         async () => await this.reconnect(),
     );
     private readonly updateEndpointStructureTimer = Time.getTimer(
+        "Endpoint structure update",
         5_000,
         async () => await this.updateEndpointStructure(),
     );
@@ -201,24 +204,25 @@ export class PairedNode {
      * was closed or the device wen offline and was detected as being online again.
      */
     async reconnect() {
-        if (this.interactionClient !== undefined) {
-            this.interactionClient.close();
-            this.interactionClient = undefined;
-        }
-        this.setConnectionState(NodeStateInformation.Reconnecting);
-        try {
-            await this.initialize();
-        } catch (error) {
-            if (error instanceof MatterError) {
-                // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
-                if (this.connectionState === NodeStateInformation.Disconnected) {
-                    return;
+        while (true) {
+            if (this.interactionClient !== undefined) {
+                this.interactionClient.close();
+                this.interactionClient = undefined;
+            }
+            this.setConnectionState(NodeStateInformation.Reconnecting);
+            try {
+                await this.initialize();
+            } catch (error) {
+                if (error instanceof MatterError) {
+                    // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
+                    if (this.connectionState === NodeStateInformation.Disconnected) {
+                        return;
+                    }
+                    logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
+                    this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+                } else {
+                    throw error;
                 }
-                logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
-                this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
-                await this.reconnect();
-            } else {
-                throw error;
             }
         }
     }
@@ -482,7 +486,7 @@ export class PairedNode {
 
                 if (parentEndpoint.getChildEndpoint(childEndpointId) === undefined) {
                     logger.debug(
-                        `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpointId} -> Parent: ${parentEndpoint.id}`,
+                        `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpointId} -> Parent: ${parentEndpoint.number}`,
                     );
 
                     parentEndpoint.addChildEndpoint(childEndpoint);
@@ -613,7 +617,7 @@ export class PairedNode {
     }
 
     /** Returns the functional devices/endpoints (those below the Root Endpoint) known for this node. */
-    getDevices(): Endpoint[] {
+    getDevices(): EndpointInterface[] {
         return this.endpoints.get(EndpointNumber(0))?.getChildEndpoints() ?? [];
     }
 
@@ -729,7 +733,7 @@ export class PairedNode {
             version: 0,
             vendorId,
             productId,
-            flowType: CommissionningFlowType.Standard,
+            flowType: CommissioningFlowType.Standard,
             discriminator: discriminator,
             passcode: passcode,
             discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({

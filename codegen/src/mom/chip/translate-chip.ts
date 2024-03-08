@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,6 +17,7 @@ import {
     DatatypeElement,
     ElementTag,
     EventElement,
+    FieldElement,
     Globals,
     ValueElement,
 } from "@project-chip/matter.js/model";
@@ -188,7 +189,7 @@ function mapType(chipType: string | undefined) {
     if (mapped) {
         return mapped;
     }
-    return camelize(chipType);
+    return camelize(chipType, true);
 }
 
 function setBounds(source: Element, element: ValueElement) {
@@ -281,7 +282,7 @@ function createValueElement<T extends AnyValueElement>({
     const attr = (name: string) => source.getAttribute(name);
     const id = int(attr("code") || attr("value") || attr("fieldId") || attr("id"));
 
-    if (factory.Tag !== DatatypeElement.Tag) {
+    if (factory.Tag !== DatatypeElement.Tag && factory.Tag !== FieldElement.Tag) {
         need(`${factory.Tag} id`, id);
     }
 
@@ -308,8 +309,8 @@ function createValueElement<T extends AnyValueElement>({
 
             const childType = str(propertyEl.getAttribute("type"));
 
-            const child = createValueElement<DatatypeElement>({
-                factory: DatatypeElement,
+            const child = createValueElement<FieldElement>({
+                factory: FieldElement,
                 source: propertyEl,
                 isClass: propertyIsClass,
                 type: childType,
@@ -317,7 +318,7 @@ function createValueElement<T extends AnyValueElement>({
 
             const isArray = propertyEl.getAttribute("array") === "true";
             if (isArray) {
-                const entry = DatatypeElement({ name: "entry", type: child.type });
+                const entry = FieldElement({ name: "entry", type: child.type });
                 entry.children = child.children;
                 child.children = [entry];
                 child.type = "list";
@@ -335,7 +336,7 @@ function createValueElement<T extends AnyValueElement>({
     if (!element.children?.length) {
         const entryType = source.getAttribute("entryType");
         if (entryType) {
-            element.children = [DatatypeElement({ name: "entry", type: mapType(entryType) })];
+            element.children = [FieldElement({ name: "entry", type: mapType(entryType) })];
         }
     }
 
@@ -373,7 +374,7 @@ const translators: { [name: string]: Translator } = {
         });
 
         const response = str(source.getAttribute("response"));
-        if (response) command.response = camelize(response);
+        if (response) command.response = camelize(response, true);
 
         const src = str(source.getAttribute("source"));
         if (src === "client") {
@@ -447,7 +448,7 @@ const translators: { [name: string]: Translator } = {
             const constraint = msb === lsb ? { value: msb } : { min: lsb, max: msb + 1 };
 
             bitmap.children.push(
-                DatatypeElement({
+                FieldElement({
                     name: need("bitmap field name", str(f.getAttribute("name"))),
                     constraint: constraint,
                 }),
@@ -462,7 +463,7 @@ const translators: { [name: string]: Translator } = {
         const name = need("cluster name", str(child(source, "name"))).replace(/Cluster$/, "");
         const cluster = ClusterElement({
             id: need("cluster id", id),
-            name: camelize(name),
+            name: camelize(name, true),
             description: name,
             details: str(child(source, "description")),
         });
@@ -482,7 +483,7 @@ const translators: { [name: string]: Translator } = {
                     if (!cluster.children) {
                         cluster.children = [];
                     }
-                    cluster.children.push(element);
+                    cluster.children.push(element as ClusterElement.Child);
                 }
             }
         }

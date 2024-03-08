@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,7 +19,7 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
 
     const getTimedOnTimer = (onTime: AttributeServer<number | null>, onOff: AttributeServer<boolean>) => {
         if (timedOnTimer === undefined) {
-            timedOnTimer = Time.getPeriodicTimer(100, () => {
+            timedOnTimer = Time.getPeriodicTimer("Delayed on", 100, () => {
                 let time = onTime.getLocal() ?? 0 - 0.1;
                 if (time <= 0) {
                     time = 0;
@@ -34,7 +34,7 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
 
     const getDelayedOffTimer = (offWaitTime: AttributeServer<number | null>) => {
         if (delayedOffTimer === undefined) {
-            delayedOffTimer = Time.getTimer(100, () => {
+            delayedOffTimer = Time.getTimer("Delayed off", 100, () => {
                 let time = offWaitTime.getLocal() ?? 0 - 0.1;
                 if (time <= 0) {
                     time = 0;
@@ -59,6 +59,10 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
                     onOff.setLocal(targetOnOffValue);
                 }
             }
+        },
+        destroyClusterServer: () => {
+            timedOnTimer?.stop();
+            delayedOffTimer?.stop();
         },
         on: async ({ attributes: { onOff } }) => {
             onOff.setLocal(true);

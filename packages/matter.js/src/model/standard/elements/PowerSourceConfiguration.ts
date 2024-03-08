@@ -1,15 +1,20 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    FieldElement as Field
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "PowerSourceConfiguration", id: 0x2e, classification: "endpoint",
+Matter.children.push(Cluster({
+    name: "PowerSourceConfiguration", id: 0x2e, classification: "endpoint",
     description: "Power Source Configuration",
     details: "This cluster is used to describe the configuration and capabilities of a Device’s power system. It " +
         "provides an ordering overview as well as linking to the one or more endpoints each supporting a " +
@@ -17,11 +22,11 @@ Matter.children.push({
     xref: { document: "core", section: "11.6" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "attribute", name: "Sources", id: 0x0, type: "list", access: "R V", conformance: "M",
-            constraint: "max 6", quality: "N",
+        Attribute({
+            name: "Sources", id: 0x0, type: "list", access: "R V", conformance: "M", constraint: "max 6",
+            quality: "N",
 
             details: "This list shall contain the set of all power sources capable of participating in the power system " +
                 "of this Node. Each entry in the list shall be the endpoint number of an endpoint having a Power " +
@@ -34,7 +39,7 @@ Matter.children.push({
                 "entries may have the same order, there are no restrictions on their relative sorting.",
 
             xref: { document: "core", section: "11.6.4.1" },
-            children: [{ tag: "datatype", name: "entry", type: "endpoint-no" }]
-        }
+            children: [Field({ name: "entry", type: "endpoint-no" })]
+        })
     ]
-});
+}));

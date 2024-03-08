@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,7 +9,7 @@ import { ClusterModel } from "../../models/index.js";
 import { InferredComponent, InferredComponents } from "./InferredComponents.js";
 
 /**
- * An inferred with generated name and documentation.
+ * An inferred component with generated name and documentation.
  */
 export type NamedComponent = InferredComponent & {
     name: string;

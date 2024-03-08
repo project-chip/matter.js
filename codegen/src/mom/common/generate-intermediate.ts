@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -23,15 +23,14 @@ const logger = Logger.get("generate-model");
 export function generateIntermediateModel(source: string, elements: MatterElement.Child[]) {
     logger.info(`validate ${source}`);
     const matter = new MatterModel({
-        name: `${camelize(source)}Matter`,
+        name: `${camelize(source, true)}Matter`,
         children: elements,
     });
 
     const validationResult = finalizeModel(matter);
 
     const file = new TsFile(`#intermediate/${source}`);
-    file.addImport("@project-chip/matter.js/model", "MatterElement");
-    generateElement(file, matter, `export const ${camelize(source)}Matter: MatterElement = `);
+    generateElement(file, "@project-chip/matter.js/model", matter, `export const ${camelize(source, true)}Matter = `);
     file.save();
 
     validationResult.report();

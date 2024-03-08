@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,6 +9,7 @@ import { Metatype, StatusCode } from "../definitions/index.js";
 import { AttributeElement } from "./AttributeElement.js";
 import { DatatypeElement } from "./DatatypeElement.js";
 import { EventElement } from "./EventElement.js";
+import { FieldElement } from "./FieldElement.js";
 import { ValueElement } from "./ValueElement.js";
 
 // Constants for all type names used more than once
@@ -43,21 +44,21 @@ const extOctet = (name: string, description: string, constraint?: Constraint.Def
     DatatypeElement({ name, description, type: OCTSTR, constraint });
 const extEnum = (name: string, description: string, values: DatatypeElement.ValueMap) =>
     DatatypeElement({ name, description, type: ENUM8, children: DatatypeElement.ListValues(values) });
-const extStruct = (name: string, description: string, children: DatatypeElement[]) =>
+const extStruct = (name: string, description: string, children: FieldElement[]) =>
     DatatypeElement({ name, description, type: STRUCT, children });
 
 const TodFields = [
-    DatatypeElement({ type: "uint8", name: "hours" }),
-    DatatypeElement({ type: "uint8", name: "minutes" }),
-    DatatypeElement({ type: "uint8", name: "seconds" }),
-    DatatypeElement({ type: "uint8", name: "hundredths" }),
+    FieldElement({ type: "uint8", name: "hours" }),
+    FieldElement({ type: "uint8", name: "minutes" }),
+    FieldElement({ type: "uint8", name: "seconds" }),
+    FieldElement({ type: "uint8", name: "hundredths" }),
 ];
 
 const DateFields = [
-    DatatypeElement({ type: "uint8", name: "year" }),
-    DatatypeElement({ type: "uint8", name: "month" }),
-    DatatypeElement({ type: "uint8", name: "day" }),
-    DatatypeElement({ type: "uint8", name: "dow" }),
+    FieldElement({ type: "uint8", name: "year" }),
+    FieldElement({ type: "uint8", name: "month" }),
+    FieldElement({ type: "uint8", name: "day" }),
+    FieldElement({ type: "uint8", name: "dow" }),
 ];
 
 /**
@@ -197,7 +198,7 @@ export const Globals = {
         access: "R V",
         conformance: "P, M",
     }),
-    AcceptedCommandListList: AttributeElement({
+    AcceptedCommandList: AttributeElement({
         id: 0xfff9,
         name: "AcceptedCommandList",
         type: "list[command-id]",
@@ -213,7 +214,7 @@ export const Globals = {
         access: "R V",
         conformance: "M",
     }),
-    FabricIndex: DatatypeElement({
+    FabricIndex: FieldElement({
         id: 0xfe,
         name: "FabricIndex",
         type: "fabric-idx",

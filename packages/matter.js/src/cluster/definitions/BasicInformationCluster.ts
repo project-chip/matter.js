@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     FixedAttribute,
     WritableAttribute,
@@ -20,13 +19,17 @@ import {
     OptionalEvent
 } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace BasicInformation {
     /**
@@ -57,6 +60,14 @@ export namespace BasicInformation {
          */
         subscriptionsPerFabric: TlvField(1, TlvUInt16.bound({ min: 3 }))
     });
+
+    /**
+     * This structure provides constant values related to overall global capabilities of this Node, that are not
+     * cluster-specific.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.1.4.1
+     */
+    export interface CapabilityMinimaStruct extends TypeFromSchema<typeof TlvCapabilityMinimaStruct> {}
 
     export enum ProductFinish {
         Other = 0,
@@ -95,6 +106,7 @@ export namespace BasicInformation {
         finish: TlvField(0, TlvEnum<ProductFinish>()),
         primaryColor: TlvField(1, TlvNullable(TlvEnum<Color>()))
     });
+    export interface ProductAppearanceStruct extends TypeFromSchema<typeof TlvProductAppearanceStruct> {}
 
     /**
      * Body of the BasicInformation startUp event
@@ -112,6 +124,13 @@ export namespace BasicInformation {
     });
 
     /**
+     * Body of the BasicInformation startUp event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.1
+     */
+    export interface StartUpEvent extends TypeFromSchema<typeof TlvStartUpEvent> {}
+
+    /**
      * Body of the BasicInformation leave event
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.3
@@ -124,6 +143,13 @@ export namespace BasicInformation {
          */
         fabricIndex: TlvField(0, TlvFabricIndex)
     });
+
+    /**
+     * Body of the BasicInformation leave event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.3
+     */
+    export interface LeaveEvent extends TypeFromSchema<typeof TlvLeaveEvent> {}
 
     /**
      * Body of the BasicInformation reachableChanged event
@@ -140,15 +166,16 @@ export namespace BasicInformation {
     });
 
     /**
-     * Basic Information
+     * Body of the BasicInformation reachableChanged event
      *
-     * This cluster provides attributes and events for determining basic information about Nodes, which supports both
-     * Commissioning and operational determination of Node characteristics, such as Vendor ID, Product ID and serial
-     * number, which apply to the whole Node.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1
+     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.4
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface ReachableChangedEvent extends TypeFromSchema<typeof TlvReachableChangedEvent> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x28,
         name: "BasicInformation",
         revision: 2,
@@ -430,7 +457,22 @@ export namespace BasicInformation {
             reachableChanged: OptionalEvent(0x3, EventPriority.Info, TlvReachableChangedEvent)
         }
     });
+
+    /**
+     * Basic Information
+     *
+     * This cluster provides attributes and events for determining basic information about Nodes, which supports both
+     * Commissioning and operational determination of Node characteristics, such as Vendor ID, Product ID and serial
+     * number, which apply to the whole Node.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.1
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type BasicInformationCluster = typeof BasicInformation.Cluster;
+export type BasicInformationCluster = BasicInformation.Cluster;
 export const BasicInformationCluster = BasicInformation.Cluster;
+ClusterRegistry.register(BasicInformation.Complete);

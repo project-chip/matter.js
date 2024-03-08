@@ -1,28 +1,45 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     Attribute,
-    OptionalAttribute,
     WritableAttribute,
-    OptionalWritableAttribute,
+    AccessLevel,
     Command,
     TlvNoResponse,
-    AccessLevel
+    OptionalAttribute,
+    OptionalWritableAttribute
 } from "../../cluster/Cluster.js";
-import { TlvUInt8, TlvBitmap, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
+import { TlvUInt16, TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace LevelControl {
+    /**
+     * Input to the LevelControl moveToClosestFrequency command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+     */
+    export const TlvMoveToClosestFrequencyRequest = TlvObject({ frequency: TlvField(0, TlvUInt16) });
+
+    /**
+     * Input to the LevelControl moveToClosestFrequency command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+     */
+    export interface MoveToClosestFrequencyRequest extends TypeFromSchema<typeof TlvMoveToClosestFrequencyRequest> {}
+
     /**
      * The value of the LevelControl options attribute
      *
@@ -41,6 +58,13 @@ export namespace LevelControl {
         optionsMask: TlvField(2, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the LevelControl moveToLevel command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.1
+     */
+    export interface MoveToLevelRequest extends TypeFromSchema<typeof TlvMoveToLevelRequest> {}
 
     export enum MoveMode {
         Up = 0,
@@ -76,6 +100,13 @@ export namespace LevelControl {
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
 
+    /**
+     * Input to the LevelControl move command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2
+     */
+    export interface MoveRequest extends TypeFromSchema<typeof TlvMoveRequest> {}
+
     export enum StepMode {
         Up = 0,
         Down = 1
@@ -95,6 +126,13 @@ export namespace LevelControl {
     });
 
     /**
+     * Input to the LevelControl step command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.3
+     */
+    export interface StepRequest extends TypeFromSchema<typeof TlvStepRequest> {}
+
+    /**
      * Input to the LevelControl stop command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.4
@@ -103,6 +141,13 @@ export namespace LevelControl {
         optionsMask: TlvField(0, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(1, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the LevelControl stop command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.4
+     */
+    export interface StopRequest extends TypeFromSchema<typeof TlvStopRequest> {}
 
     /**
      * Input to the LevelControl moveToLevelWithOnOff command
@@ -117,6 +162,13 @@ export namespace LevelControl {
     });
 
     /**
+     * Input to the LevelControl moveToLevelWithOnOff command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     */
+    export interface MoveToLevelWithOnOffRequest extends TypeFromSchema<typeof TlvMoveToLevelWithOnOffRequest> {}
+
+    /**
      * Input to the LevelControl moveWithOnOff command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
@@ -127,6 +179,13 @@ export namespace LevelControl {
         optionsMask: TlvField(2, TlvBitmap(TlvUInt8, Options)),
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
+
+    /**
+     * Input to the LevelControl moveWithOnOff command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     */
+    export interface MoveWithOnOffRequest extends TypeFromSchema<typeof TlvMoveWithOnOffRequest> {}
 
     /**
      * Input to the LevelControl stepWithOnOff command
@@ -142,6 +201,13 @@ export namespace LevelControl {
     });
 
     /**
+     * Input to the LevelControl stepWithOnOff command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     */
+    export interface StepWithOnOffRequest extends TypeFromSchema<typeof TlvStepWithOnOffRequest> {}
+
+    /**
      * Input to the LevelControl stopWithOnOff command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
@@ -152,11 +218,82 @@ export namespace LevelControl {
     });
 
     /**
-     * Input to the LevelControl moveToClosestFrequency command
+     * Input to the LevelControl stopWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
      */
-    export const TlvMoveToClosestFrequencyRequest = TlvObject({ frequency: TlvField(0, TlvUInt16) });
+    export interface StopWithOnOffRequest extends TypeFromSchema<typeof TlvStopWithOnOffRequest> {}
+
+    /**
+     * A LevelControlCluster supports these elements if it supports feature Lighting.
+     */
+    export const LightingComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The RemainingTime attribute represents the time remaining until the current command is complete - it is
+             * specified in 1/10ths of a second.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.2
+             */
+            remainingTime: Attribute(0x1, TlvUInt16, { default: 0 }),
+
+            /**
+             * The StartUpCurrentLevel attribute shall define the desired startup level for a device when it is
+             * supplied with power and this level shall be reflected in the CurrentLevel attribute. The values of the
+             * StartUpCurrentLevel attribute are listed below:
+             *
+             * Table 20. Values of the StartUpCurrentLevel attribute
+             *
+             * This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel
+             * attribute shall return to its value prior to the restart.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.14
+             */
+            startUpCurrentLevel: WritableAttribute(
+                0x4000,
+                TlvNullable(TlvUInt8),
+                { persistent: true, writeAcl: AccessLevel.Manage }
+            )
+        }
+    });
+
+    /**
+     * A LevelControlCluster supports these elements if it supports feature Frequency.
+     */
+    export const FrequencyComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The CurrentFrequency attribute represents the frequency at which the device is at CurrentLevel. A
+             * CurrentFrequency of 0 is unknown.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.5
+             */
+            currentFrequency: Attribute(0x4, TlvUInt16, { scene: true, default: 0 }),
+
+            /**
+             * The MinFrequency attribute indicates the minimum value of CurrentFrequency that is capable of being
+             * assigned. MinFrequency shall be less than or equal to MaxFrequency. A value of 0 indicates undefined.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.6
+             */
+            minFrequency: Attribute(0x5, TlvUInt16, { default: 0 }),
+
+            /**
+             * The MaxFrequency attribute indicates the maximum value of CurrentFrequency that is capable of being
+             * assigned. MaxFrequency shall be greater than or equal to MinFrequency. A value of 0 indicates undefined.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.7
+             */
+            maxFrequency: Attribute(0x6, TlvUInt16, { default: 0 })
+        },
+
+        commands: {
+            /**
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+             */
+            moveToClosestFrequency: Command(0x8, TlvMoveToClosestFrequencyRequest, 0x8, TlvNoResponse)
+        }
+    });
 
     /**
      * These are optional features supported by LevelControlCluster.
@@ -190,7 +327,7 @@ export namespace LevelControl {
     /**
      * These elements and properties are present in all LevelControl clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x8,
         name: "LevelControl",
         revision: 5,
@@ -226,11 +363,7 @@ export namespace LevelControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.1
              */
-            currentLevel: Attribute(
-                0x0,
-                TlvNullable(TlvUInt8.bound({ max: 254 })),
-                { scene: true, persistent: true, default: null }
-            ),
+            currentLevel: Attribute(0x0, TlvNullable(TlvUInt8), { scene: true, persistent: true, default: null }),
 
             /**
              * The MinLevel attribute indicates the minimum value of CurrentLevel that is capable of being assigned.
@@ -283,7 +416,7 @@ export namespace LevelControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.10
              */
-            onLevel: WritableAttribute(0x11, TlvNullable(TlvUInt8.bound({ max: 254 })), { default: null }),
+            onLevel: WritableAttribute(0x11, TlvNullable(TlvUInt8), { default: null }),
 
             /**
              * The OnTransitionTime attribute represents the time taken to move the current level from the minimum
@@ -363,79 +496,22 @@ export namespace LevelControl {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
              */
             stopWithOnOff: Command(0x7, TlvStopWithOnOffRequest, 0x7, TlvNoResponse)
-        }
-    });
-
-    /**
-     * A LevelControlCluster supports these elements if it supports feature Lighting.
-     */
-    export const LightingComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The RemainingTime attribute represents the time remaining until the current command is complete - it is
-             * specified in 1/10ths of a second.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.2
-             */
-            remainingTime: Attribute(0x1, TlvUInt16, { default: 0 }),
-
-            /**
-             * The StartUpCurrentLevel attribute shall define the desired startup level for a device when it is
-             * supplied with power and this level shall be reflected in the CurrentLevel attribute. The values of the
-             * StartUpCurrentLevel attribute are listed below:
-             *
-             * Table 20. Values of the StartUpCurrentLevel attribute
-             *
-             * This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel
-             * attribute shall return to its value prior to the restart.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.14
-             */
-            startUpCurrentLevel: WritableAttribute(
-                0x4000,
-                TlvNullable(TlvUInt8),
-                { persistent: true, writeAcl: AccessLevel.Manage }
-            )
-        }
-    });
-
-    /**
-     * A LevelControlCluster supports these elements if it supports feature Frequency.
-     */
-    export const FrequencyComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The CurrentFrequency attribute represents the frequency at which the device is at CurrentLevel. A
-             * CurrentFrequency of 0 is unknown.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.5
-             */
-            currentFrequency: Attribute(0x4, TlvUInt16, { scene: true, default: 0 }),
-
-            /**
-             * The MinFrequency attribute indicates the minimum value of CurrentFrequency that is capable of being
-             * assigned. MinFrequency shall be less than or equal to MaxFrequency. A value of 0 indicates undefined.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.6
-             */
-            minFrequency: Attribute(0x5, TlvUInt16, { default: 0 }),
-
-            /**
-             * The MaxFrequency attribute indicates the maximum value of CurrentFrequency that is capable of being
-             * assigned. MaxFrequency shall be greater than or equal to MinFrequency. A value of 0 indicates undefined.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.7
-             */
-            maxFrequency: Attribute(0x6, TlvUInt16, { default: 0 })
         },
 
-        commands: {
-            /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
-             */
-            moveToClosestFrequency: Command(0x8, TlvMoveToClosestFrequencyRequest, 0x8, TlvNoResponse)
-        }
+        /**
+         * This metadata controls which LevelControlCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { lighting: true }, component: LightingComponent },
+            { flags: { frequency: true }, component: FrequencyComponent }
+        )
     });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base, supportedFeatures: { onOff: true } });
 
     /**
      * Level Control
@@ -448,44 +524,16 @@ export namespace LevelControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6
      */
-    export const Cluster = ClusterFactory.Extensible(
-        { ...Base, supportedFeatures: { onOff: true } },
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a LevelControl cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a LevelControl cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, LightingComponent, { lighting: true });
-            ClusterFactory.extend(cluster, FrequencyComponent, { frequency: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { lighting: true } ? typeof LightingComponent : {})
-        & (SF extends { frequency: true } ? typeof FrequencyComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const LT = { lighting: true };
     const FQ = { frequency: true };
 
     /**
-     * This cluster supports all LevelControl features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -493,23 +541,23 @@ export namespace LevelControl {
 
         attributes: {
             ...Cluster.attributes,
-            remainingTime: ClusterFactory.AsConditional(
+            remainingTime: MutableCluster.AsConditional(
                 LightingComponent.attributes.remainingTime,
                 { mandatoryIf: [LT] }
             ),
-            currentFrequency: ClusterFactory.AsConditional(
+            currentFrequency: MutableCluster.AsConditional(
                 FrequencyComponent.attributes.currentFrequency,
                 { mandatoryIf: [FQ] }
             ),
-            minFrequency: ClusterFactory.AsConditional(
+            minFrequency: MutableCluster.AsConditional(
                 FrequencyComponent.attributes.minFrequency,
                 { mandatoryIf: [FQ] }
             ),
-            maxFrequency: ClusterFactory.AsConditional(
+            maxFrequency: MutableCluster.AsConditional(
                 FrequencyComponent.attributes.maxFrequency,
                 { mandatoryIf: [FQ] }
             ),
-            startUpCurrentLevel: ClusterFactory.AsConditional(
+            startUpCurrentLevel: MutableCluster.AsConditional(
                 LightingComponent.attributes.startUpCurrentLevel,
                 { mandatoryIf: [LT] }
             )
@@ -517,13 +565,24 @@ export namespace LevelControl {
 
         commands: {
             ...Cluster.commands,
-            moveToClosestFrequency: ClusterFactory.AsConditional(
+            moveToClosestFrequency: MutableCluster.AsConditional(
                 FrequencyComponent.commands.moveToClosestFrequency,
                 { mandatoryIf: [FQ] }
             )
         }
     });
+
+    /**
+     * This cluster supports all LevelControl features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type LevelControlCluster = typeof LevelControl.Cluster;
+export type LevelControlCluster = LevelControl.Cluster;
 export const LevelControlCluster = LevelControl.Cluster;
+ClusterRegistry.register(LevelControl.Complete);

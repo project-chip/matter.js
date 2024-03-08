@@ -1,80 +1,63 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "deviceType", name: "DoorLock", id: 0xa, classification: "simple",
+Matter.children.push(DeviceType({
+    name: "DoorLock", id: 0xa, classification: "simple",
+    details: "A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by " +
+        "means of a manual or a remote method.",
+    xref: { document: "device", section: "8.1" },
 
     children: [
-        {
-            tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+        Requirement({
+            name: "Descriptor", id: 0x1d, element: "serverCluster",
+            children: [
+                Requirement({ name: "DeviceTypeList", default: [ { deviceType: 10, revision: 2 } ], element: "attribute" })
+            ]
+        }),
 
-            children: [{
-                tag: "datatype", name: "DeviceTypeStruct", type: "struct",
-                children: [
-                    { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 10 },
-                    { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
-                ]
-            }]
-        },
-
-        {
-            tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+        Requirement({
+            name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "8.1.4" },
-            children: [{ tag: "requirement", name: "Qry", element: "feature" }]
-        },
-        {
-            tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
-            xref: { document: "device", section: "8.1.4" }
-        },
-        {
-            tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
-            xref: { document: "device", section: "8.1.4" }
-        },
+            children: [Requirement({ name: "QRY", conformance: "Zigbee", element: "feature" })]
+        }),
 
-        {
-            tag: "requirement", name: "DoorLock", id: 0x101, element: "serverCluster",
+        Requirement({
+            name: "DoorLock", id: 0x101, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "8.1.4" },
 
             children: [
-                { tag: "requirement", name: "Rid", element: "feature" },
-                { tag: "requirement", name: "Log", element: "feature" },
-                { tag: "requirement", name: "Usr", element: "feature" },
-                { tag: "requirement", name: "Not", element: "feature" },
-                { tag: "requirement", name: "AlarmMask", element: "attribute" },
-                { tag: "requirement", name: "KeypadOperationEventMask", element: "attribute" },
-                { tag: "requirement", name: "RemoteOperationEventMask", element: "attribute" },
-                { tag: "requirement", name: "ManualOperationEventMask", element: "attribute" },
-                { tag: "requirement", name: "RfidOperationEventMask", element: "attribute" },
-                { tag: "requirement", name: "KeypadProgrammingEventMask", element: "attribute" },
-                { tag: "requirement", name: "RemoteProgrammingEventMask", element: "attribute" },
-                { tag: "requirement", name: "RfidProgrammingEventMask", element: "attribute" },
-                { tag: "requirement", name: "OperatingEventNotification", element: "command" },
-                { tag: "requirement", name: "ProgrammingEventNotification", element: "command" }
+                Requirement({ name: "RID", conformance: "[Zigbee], P, O", element: "feature" }),
+                Requirement({ name: "LOG", conformance: "[Zigbee]", element: "feature" }),
+                Requirement({ name: "USR", conformance: "Matter & (PIN | RID | FPG | FACE)", element: "feature" }),
+                Requirement({ name: "NOT", conformance: "[Zigbee]", element: "feature" }),
+                Requirement({ name: "AlarmMask", conformance: "[Alarms]", element: "attribute" }),
+                Requirement({ name: "KeypadOperationEventMask", conformance: "[Zigbee]", element: "attribute" }),
+                Requirement({ name: "RemoteOperationEventMask", conformance: "[Zigbee]", element: "attribute" }),
+                Requirement({ name: "ManualOperationEventMask", conformance: "[Zigbee]", element: "attribute" }),
+                Requirement({ name: "RfidOperationEventMask", conformance: "[Zigbee]", element: "attribute" }),
+                Requirement({ name: "KeypadProgrammingEventMask", conformance: "[Zigbee]", element: "attribute" }),
+                Requirement({ name: "RemoteProgrammingEventMask", conformance: "[Zigbee]", element: "attribute" }),
+                Requirement({ name: "RfidProgrammingEventMask", conformance: "[Zigbee]", element: "attribute" }),
+                Requirement({ name: "OperatingEventNotification", conformance: "[Zigbee]", element: "command" }),
+                Requirement({ name: "ProgrammingEventNotification", conformance: "[Zigbee]", element: "command" })
             ]
-        },
+        }),
 
-        {
-            tag: "requirement", name: "Alarms", id: 0x9, element: "serverCluster",
+        Requirement({
+            name: "PollControl", id: 0x20, conformance: "O", element: "serverCluster",
             xref: { document: "device", section: "8.1.4" }
-        },
-        {
-            tag: "requirement", name: "PollControl", id: 0x20, element: "serverCluster",
+        }),
+        Requirement({
+            name: "TimeSync", id: 0x38, conformance: "P, O", element: "clientCluster",
             xref: { document: "device", section: "8.1.4" }
-        },
-        {
-            tag: "requirement", name: "Time", id: 0xa, element: "clientCluster",
-            xref: { document: "device", section: "8.1.4" }
-        },
-        {
-            tag: "requirement", name: "TimeSync", id: 0x38, element: "clientCluster",
-            xref: { document: "device", section: "8.1.4" }
-        }
+        })
     ]
-});
+}));

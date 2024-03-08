@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -21,6 +21,7 @@ import "./GroupKeyManagementOverrides.js";
 import "./GroupsOverrides.js";
 import "./IlluminanceMeasurementOverrides.js";
 import "./ModeSelectOverrides.js";
+import "./NetworkCommissioningOverrides.js";
 import "./OperationalCredentialsOverrides.js";
 import "./PumpConfigurationAndControlOverrides.js";
 import "./ScenesOverrides.js";

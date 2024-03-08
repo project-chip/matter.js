@@ -1,14 +1,13 @@
-#!/usr/bin/env node
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * This example shows how to create a new device node that is composed of multiple devices.
- * It creates multiple endpoints on the server. When you want to add a composed devices to a Aggregator you need to
- * add all endpoints of the composed device to an "ComposedDevice" instance! (not shown in this example).
+ * It creates multiple endpoints on the server. For information on how to add a composed device to a bridge please
+ * refer to the bridge example!
  * It can be used as CLI script and starting point for your own device node implementation.
  */
 
@@ -16,247 +15,196 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
+import "@project-chip/matter-node.js";
 
-import { DeviceTypes, OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
-import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
-import { QrCode } from "@project-chip/matter-node.js/schema";
-import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
-import { Time } from "@project-chip/matter-node.js/time";
-import {
-    commandExecutor,
-    getIntParameter,
-    getParameter,
-    hasParameter,
-    requireMinNodeVersion,
-} from "@project-chip/matter-node.js/util";
-import { VendorId } from "@project-chip/matter.js/datatype";
-
-const logger = Logger.get("MultiDevice");
+import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
+import { logEndpoint } from "@project-chip/matter.js/device";
+import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
+import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
+import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
+import { Environment, StorageService } from "@project-chip/matter.js/environment";
+import { ServerNode } from "@project-chip/matter.js/node";
+import { Time } from "@project-chip/matter.js/time";
+import { execSync } from "child_process";
 
 requireMinNodeVersion(16);
 
-/** Configure logging */
-switch (getParameter("loglevel")) {
-    case "fatal":
-        Logger.defaultLogLevel = Level.FATAL;
-        break;
-    case "error":
-        Logger.defaultLogLevel = Level.ERROR;
-        break;
-    case "warn":
-        Logger.defaultLogLevel = Level.WARN;
-        break;
-    case "info":
-        Logger.defaultLogLevel = Level.INFO;
-        break;
-}
+const devices = await getConfiguration();
+for (let idx = 1; idx < devices.length; idx++) {
+    const {
+        isSocket,
+        deviceName,
+        vendorName,
+        passcode,
+        discriminator,
+        vendorId,
+        productName,
+        productId,
+        port,
+        uniqueId,
+    } = devices[idx];
+    const i = idx + 1;
 
-switch (getParameter("logformat")) {
-    case "plain":
-        Logger.format = Format.PLAIN;
-        break;
-    case "html":
-        Logger.format = Format.HTML;
-        break;
-    default:
-        if (process.stdin?.isTTY) Logger.format = Format.ANSI;
-}
+    /**
+     * Create a Matter ServerNode, which contains the Root Endpoint and all relevant data and configuration
+     */
+    const server = await ServerNode.create({
+        // Required: Give the Node a unique ID which is used to store the state of this node
+        id: uniqueId,
 
-const storageLocation = getParameter("store") ?? ".device-node";
-const storage = new StorageBackendDisk(storageLocation, hasParameter("clearstorage"));
-logger.info(`Storage location: ${storageLocation} (Directory)`);
-logger.info(
-    'Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.',
-);
+        // Provide Network relevant configuration like the port
+        // Optional when operating only one device on a host, Default port is 5540
+        network: {
+            port,
+        },
 
-class Device {
-    private matterServer: MatterServer | undefined;
+        // Provide Commissioning relevant settings
+        // Optional for development/testing purposes
+        commissioning: {
+            passcode,
+            discriminator,
+        },
 
-    async start() {
-        logger.info(`node-matter`);
+        // Provide Node announcement settings
+        // Optional: If Ommitted some development defaults are used
+        productDescription: {
+            name: deviceName,
+            deviceType: DeviceTypeId(isSocket ? OnOffPlugInUnitDevice.deviceType : OnOffLightDevice.deviceType),
+        },
 
-        /**
-         * Initialize the storage system.
-         *
-         * The storage manager is then also used by the Matter server, so this code block in general is required,
-         * but you can choose a different storage backend as long as it implements the required API.
-         */
+        // Provide defaults for the BasicInformation cluster on the Root endpoint
+        // Optional: If Omitted some development defaults are used
+        basicInformation: {
+            vendorName,
+            vendorId: VendorId(vendorId),
+            nodeLabel: productName,
+            productName,
+            productLabel: productName,
+            productId,
+            serialNumber: `matterjs-${uniqueId}`,
+            uniqueId,
+        },
+    });
 
-        const storageManager = new StorageManager(storage);
-        await storageManager.initialize();
+    console.log(
+        `Added device ${i} on port ${port} and unique id ${uniqueId}: Passcode: ${passcode}, Discriminator: ${discriminator}`,
+    );
 
-        /**
-         * Collect all needed data
-         *
-         * This block makes sure to collect all needed data from cli or storage. Replace this with where ever your data
-         * come from.
-         *
-         * Note: This example also uses the initialized storage system to store the device parameter data for convenience
-         * and easy reuse. When you also do that be careful to not overlap with Matter-Server own contexts
-         * (so maybe better not ;-)).
-         */
-        const netInterface = getParameter("netinterface");
+    const endpoint = new Endpoint(isSocket ? OnOffPlugInUnitDevice : OnOffLightDevice, { id: "onoff" });
+    await server.add(endpoint);
 
-        const deviceStorage = storageManager.createContext("Device");
-
-        /**
-         * Create Matter Server and CommissioningServer Node
-         *
-         * To allow the device to be announced, found, paired and operated we need a MatterServer instance and add a
-         * commissioningServer to it and add the just created device instance to it.
-         * The CommissioningServer node defines the port where the server listens for the UDP packages of the Matter protocol
-         * and initializes deice specific certificates and such.
-         *
-         * The below logic also adds command handlers for commands of clusters that normally are handled internally
-         * like testEventTrigger (General Diagnostic Cluster) that can be implemented with the logic when these commands
-         * are called.
-         */
-
-        this.matterServer = new MatterServer(storageManager, { mdnsInterface: netInterface });
-
-        /**
-         * Create Device instance and add needed Listener
-         *
-         * Create an instance of the matter device class you want to use.
-         * This example uses the OnOffLightDevice or OnOffPluginUnitDevice depending on the value of the type  parameter.
-         * To execute the on/off scripts defined as parameters a listener for the onOff attribute is registered via the
-         * device specific API.
-         *
-         * The below logic also adds command handlers for commands of clusters that normally are handled device internally
-         * like identify that can be implemented with the logic when these commands are called.
-         */
-
-        const commissioningServers = new Array<CommissioningServer>();
-
-        let defaultPasscode = 20202021;
-        let defaultDiscriminator = 3840;
-        let defaultPort = 5550;
-
-        const numDevices = getIntParameter("num") || 2;
-        for (let i = 1; i <= numDevices; i++) {
-            if (deviceStorage.has(`isSocket${i}`)) {
-                logger.info("Device type found in storage. -type parameter is ignored.");
-            }
-            const isSocket = deviceStorage.get(`isSocket${i}`, getParameter(`type${i}`) === "socket");
-            const deviceName = `Matter ${getParameter(`type${i}`) ?? "light"} device ${i}`;
-            const deviceType =
-                getParameter(`type${i}`) === "socket"
-                    ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code
-                    : DeviceTypes.ON_OFF_LIGHT.code;
-            const vendorName = "matter-node.js";
-            const passcode = getIntParameter(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
-            const discriminator =
-                getIntParameter(`discriminator${i}`) ?? deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
-            // product name / id and vendor id should match what is in the device certificate
-            const vendorId = getIntParameter(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xfff1);
-            const productName = `node-matter OnOff-Device ${i}`;
-            const productId = getIntParameter(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
-
-            const port = getIntParameter(`port${i}`) ?? defaultPort++;
-
-            const uniqueId =
-                getIntParameter(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
-
-            deviceStorage.set(`passcode${i}`, passcode);
-            deviceStorage.set(`discriminator${i}`, discriminator);
-            deviceStorage.set(`vendorid${i}`, vendorId);
-            deviceStorage.set(`productid${i}`, productId);
-            deviceStorage.set(`isSocket${i}`, isSocket);
-            deviceStorage.set(`uniqueid${i}`, uniqueId);
-
-            const commissioningServer = new CommissioningServer({
-                port,
-                deviceName,
-                deviceType,
-                passcode,
-                discriminator,
-                basicInformation: {
-                    vendorName,
-                    vendorId: VendorId(vendorId),
-                    nodeLabel: productName,
-                    productName,
-                    productLabel: productName,
-                    productId,
-                    serialNumber: `node-matter-${uniqueId}`,
-                },
-            });
-
-            console.log(
-                `Added device ${i} on port ${port} and unique id ${uniqueId}: Passcode: ${passcode}, Discriminator: ${discriminator}`,
-            );
-
-            const onOffDevice =
-                getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
-            onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
-            onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
-            commissioningServer.addDevice(onOffDevice);
-
-            await this.matterServer.addCommissioningServer(commissioningServer);
-
-            commissioningServers.push(commissioningServer);
+    /**
+     * Register state change handlers of the node for identify and onoff states to react to the commands.
+     * If the code in these change handlers fail then the change is also rolled back and not executed and an error is
+     * reported back to the controller.
+     */
+    let isIdentifying = false;
+    endpoint.events.identify.identifyTime$Change.on(value => {
+        // identifyTime is set when an identify commandf is called and then decreased every second while indenitfy logic runs.
+        if (value > 0 && !isIdentifying) {
+            isIdentifying = true;
+            console.log(`Run identify logic, ideally blink a light every 0.5s ...`);
+        } else if (value === 0) {
+            isIdentifying = false;
+            console.log(`Stop identify logic ...`);
         }
+    });
 
-        /**
-         * Start the Matter Server
-         *
-         * After everything was plugged together we can start the server. When not delayed announcement is set for the
-         * CommissioningServer node then this command also starts the announcement of the device into the network.
-         */
+    endpoint.events.onOff.onOff$Change.on(value => {
+        executeCommand(value ? `on${i}` : `off${i}`);
+        console.log(`OnOff ${i} is now ${value ? "ON" : "OFF"}`);
+    });
 
-        await this.matterServer.start();
+    /**
+     * Log the endpoint structure for debugging reasons and to allow to verify anything is correct
+     */
+    logEndpoint(EndpointServer.forEndpoint(server));
 
-        /**
-         * Print Pairing Information
-         *
-         * If the device is not already commissioned (this info is stored in the storage system) then get and print the
-         * pairing details. This includes the QR code that can be scanned by the Matter app to pair the device.
-         */
+    console.log("----------------------------");
+    console.log(`QR Code for Device ${i} on port ${port}:`);
+    console.log("----------------------------");
 
-        logger.info("Listening");
-        console.log();
-        commissioningServers.forEach((commissioningServer, index) => {
-            console.log("----------------------------");
-            console.log(`Device ${index + 1}:`);
-            if (!commissioningServer.isCommissioned()) {
-                const pairingData = commissioningServer.getPairingCode();
-                const { qrPairingCode, manualPairingCode } = pairingData;
+    /**
+     * In order to start the node and announce it into the network we use the run method which resolves when the node goes
+     * offline again because we do not need anything more here. See the Full example for other starting options.
+     * The QR Code is printed automatically.
+     */
+    await server.bringOnline();
+}
 
-                console.log(QrCode.get(qrPairingCode));
-                console.log(
-                    `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
-                );
-                console.log(`Manual pairing code: ${manualPairingCode}`);
-            } else {
-                console.log("Device is already commissioned. Waiting for controllers to connect ...");
-            }
-            console.log();
+/*********************************************************************************************************
+ * Convenience Methods
+ *********************************************************************************************************/
+
+/**
+ * Defines a shell command from an environment variable and execute it and log the response
+ */
+function executeCommand(scriptParamName: string) {
+    const script = Environment.default.vars.string(scriptParamName);
+    if (script === undefined) return undefined;
+    console.log(`${scriptParamName}: ${execSync(script).toString().slice(0, -1)}`);
+}
+
+async function getConfiguration() {
+    const environment = Environment.default;
+
+    const storageService = environment.get(StorageService);
+    console.log(`Storage location: ${storageService.location} (Directory)`);
+    console.log(
+        'Use the parameter "--storage-path=NAME-OR-PATH" to specify a different storage location in this directory, use --storage-clear to start with an empty storage.',
+    );
+    const deviceStorage = (await storageService.open("device")).createContext("data");
+
+    let defaultPasscode = 20202021;
+    let defaultDiscriminator = 3840;
+    let defaultPort = 5550;
+
+    const devices = [];
+    const numDevices = environment.vars.number("num") ?? 2;
+    for (let i = 1; i <= numDevices; i++) {
+        const isSocket = deviceStorage.get(`isSocket${i}`, environment.vars.string(`type${i}`) === "socket");
+        if (deviceStorage.has(`isSocket${i}`)) {
+            console.log(`Device type ${isSocket ? "socket" : "light"} found in storage. --type parameter is ignored.`);
+        }
+        const deviceName = `Matter ${environment.vars.string(`type${i}`) ?? "light"} device ${i}`;
+        const vendorName = "matter-node.js";
+        const passcode =
+            environment.vars.number(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
+        const discriminator =
+            environment.vars.number(`discriminator${i}`) ??
+            deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
+        // product name / id and vendor id should match what is in the device certificate
+        const vendorId = environment.vars.number(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xfff1);
+        const productName = `node-matter OnOff-Device ${i}`;
+        const productId = environment.vars.number(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
+
+        const port = environment.vars.number(`port${i}`) ?? defaultPort++;
+
+        const uniqueId =
+            environment.vars.string(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
+
+        // Persist basic data to keep them also on restart
+        deviceStorage.set(`passcode${i}`, passcode);
+        deviceStorage.set(`discriminator${i}`, discriminator);
+        deviceStorage.set(`vendorid${i}`, vendorId);
+        deviceStorage.set(`productid${i}`, productId);
+        deviceStorage.set(`isSocket${i}`, isSocket);
+        deviceStorage.set(`uniqueid${i}`, uniqueId);
+
+        devices.push({
+            isSocket,
+            deviceName,
+            vendorName,
+            passcode,
+            discriminator,
+            vendorId,
+            productName,
+            productId,
+            port,
+            uniqueId,
         });
     }
 
-    async stop() {
-        await this.matterServer?.close();
-    }
+    return devices;
 }
-
-const device = new Device();
-device
-    .start()
-    .then(() => {
-        /* done */
-    })
-    .catch(err => console.error(err));
-
-process.on("SIGINT", () => {
-    // Clean up on CTRL-C
-    device
-        .stop()
-        .then(() => {
-            // Pragmatic way to make sure the storage is correctly closed before the process ends.
-            storage
-                .close()
-                .then(() => process.exit(0))
-                .catch(err => console.error(err));
-        })
-        .catch(err => console.error(err));
-});

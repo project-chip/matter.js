@@ -1,28 +1,31 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
-    OptionalAttribute,
-    OptionalEvent,
-    EventPriority,
     Attribute,
     Command,
     TlvNoResponse,
-    AccessLevel
+    AccessLevel,
+    OptionalAttribute,
+    OptionalEvent,
+    EventPriority
 } from "../../cluster/Cluster.js";
+import { TlvUInt64, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
-import { TlvUInt64, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
-import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace SoftwareDiagnostics {
     /**
@@ -74,6 +77,11 @@ export namespace SoftwareDiagnostics {
     });
 
     /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.12.5.1
+     */
+    export interface ThreadMetricsStruct extends TypeFromSchema<typeof TlvThreadMetricsStruct> {}
+
+    /**
      * Body of the SoftwareDiagnostics softwareFault event
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.12.8.1
@@ -93,6 +101,52 @@ export namespace SoftwareDiagnostics {
     });
 
     /**
+     * Body of the SoftwareDiagnostics softwareFault event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.12.8.1
+     */
+    export interface SoftwareFaultEvent extends TypeFromSchema<typeof TlvSoftwareFaultEvent> {}
+
+    /**
+     * A SoftwareDiagnosticsCluster supports these elements if it supports feature Watermarks.
+     */
+    export const WatermarksComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * The CurrentHeapHighWatermark attribute shall indicate the maximum amount of heap memory, in bytes, that
+             * has been used by the Node. This value shall only be reset upon a Node reboot or upon receiving of the
+             * ResetWatermarks command.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.12.6.4
+             */
+            currentHeapHighWatermark: Attribute(0x3, TlvUInt64, { default: 0 })
+        },
+
+        commands: {
+            /**
+             * Receipt of this command shall reset the following values which track high and lower watermarks:
+             *
+             *   • The StackFreeMinimum field of the ThreadMetrics attribute
+             *
+             *   • The CurrentHeapHighWatermark attribute This command has no payload.
+             *
+             * Effect on Receipt
+             *
+             * On receipt of this command, the Node shall make the following modifications to attributes it supports:
+             *
+             * If implemented, the server shall set the value of the CurrentHeapHighWatermark attribute to the value of
+             * the CurrentHeapUsed attribute.
+             *
+             * If implemented, the server shall set the value of the StackFreeMinimum field for every thread to the
+             * value of the corresponding thread’s StackFreeCurrent field.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.12.7.1
+             */
+            resetWatermarks: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
+        }
+    });
+
+    /**
      * These are optional features supported by SoftwareDiagnosticsCluster.
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.12.4
@@ -109,7 +163,7 @@ export namespace SoftwareDiagnostics {
     /**
      * These elements and properties are present in all SoftwareDiagnostics clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x34,
         name: "SoftwareDiagnostics",
         revision: 1,
@@ -161,47 +215,19 @@ export namespace SoftwareDiagnostics {
              * @see {@link MatterCoreSpecificationV1_1} § 11.12.8.1
              */
             softwareFault: OptionalEvent(0x0, EventPriority.Info, TlvSoftwareFaultEvent)
-        }
+        },
+
+        /**
+         * This metadata controls which SoftwareDiagnosticsCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { watermarks: true }, component: WatermarksComponent })
     });
 
     /**
-     * A SoftwareDiagnosticsCluster supports these elements if it supports feature Watermarks.
+     * @see {@link Cluster}
      */
-    export const WatermarksComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * The CurrentHeapHighWatermark attribute shall indicate the maximum amount of heap memory, in bytes, that
-             * has been used by the Node. This value shall only be reset upon a Node reboot or upon receiving of the
-             * ResetWatermarks command.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.12.6.4
-             */
-            currentHeapHighWatermark: Attribute(0x3, TlvUInt64, { default: 0 })
-        },
-
-        commands: {
-            /**
-             * Receipt of this command shall reset the following values which track high and lower watermarks:
-             *
-             *   • The StackFreeMinimum field of the ThreadMetrics attribute
-             *
-             *   • The CurrentHeapHighWatermark attribute This command has no payload.
-             *
-             * Effect on Receipt
-             *
-             * On receipt of this command, the Node shall make the following modifications to attributes it supports:
-             *
-             * If implemented, the server shall set the value of the CurrentHeapHighWatermark attribute to the value of
-             * the CurrentHeapUsed attribute.
-             *
-             * If implemented, the server shall set the value of the StackFreeMinimum field for every thread to the
-             * value of the corresponding thread’s StackFreeCurrent field.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.12.7.1
-             */
-            resetWatermarks: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Software Diagnostics
@@ -215,41 +241,15 @@ export namespace SoftwareDiagnostics {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.12
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a SoftwareDiagnostics cluster with support for optional features. Include
-         * each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a SoftwareDiagnostics cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, WatermarksComponent, { watermarks: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { watermarks: true } ? typeof WatermarksComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const WTRMRK = { watermarks: true };
 
     /**
-     * This cluster supports all SoftwareDiagnostics features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -257,14 +257,14 @@ export namespace SoftwareDiagnostics {
 
         attributes: {
             ...Cluster.attributes,
-            currentHeapHighWatermark: ClusterFactory.AsConditional(
+            currentHeapHighWatermark: MutableCluster.AsConditional(
                 WatermarksComponent.attributes.currentHeapHighWatermark,
                 { mandatoryIf: [WTRMRK] }
             )
         },
 
         commands: {
-            resetWatermarks: ClusterFactory.AsConditional(
+            resetWatermarks: MutableCluster.AsConditional(
                 WatermarksComponent.commands.resetWatermarks,
                 { mandatoryIf: [WTRMRK] }
             )
@@ -272,7 +272,18 @@ export namespace SoftwareDiagnostics {
 
         events: Cluster.events
     });
+
+    /**
+     * This cluster supports all SoftwareDiagnostics features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type SoftwareDiagnosticsCluster = typeof SoftwareDiagnostics.Cluster;
+export type SoftwareDiagnosticsCluster = SoftwareDiagnostics.Cluster;
 export const SoftwareDiagnosticsCluster = SoftwareDiagnostics.Cluster;
+ClusterRegistry.register(SoftwareDiagnostics.Complete);

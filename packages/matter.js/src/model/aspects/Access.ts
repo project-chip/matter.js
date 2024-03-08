@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -31,6 +31,19 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
     override get empty() {
         return (
             (!this.rw || this.rw === Access.Rw.Read) && !this.fabric && !this.readPriv && !this.writePriv && !this.timed
+        );
+    }
+
+    /**
+     * Determine whether this access is fully specified.  This means we know
+     * whether reads and/or writes are allowed and if so the required access
+     * levels.
+     */
+    get complete() {
+        return (
+            this.rw !== undefined &&
+            (!this.readable || this.rw !== undefined) &&
+            (!this.writable || this.rw !== undefined)
         );
     }
 
@@ -212,10 +225,10 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
                 case Access.Privilege.Operate:
                 case Access.Privilege.Manage:
                 case Access.Privilege.Administer:
-                    if (!this.readPriv || Access.PrivilegePriority[f] < Access.PrivilegePriority[this.readPriv]) {
+                    if (!this.readPriv || Access.PrivilegeLevel[f] < Access.PrivilegeLevel[this.readPriv]) {
                         this.readPriv = f;
                     }
-                    if (!this.writePriv || Access.PrivilegePriority[f] > Access.PrivilegePriority[this.writePriv]) {
+                    if (!this.writePriv || Access.PrivilegeLevel[f] > Access.PrivilegeLevel[this.writePriv]) {
                         this.writePriv = f;
                     }
                     break;
@@ -320,7 +333,7 @@ export namespace Access {
     /**
      * Relative ordering of privilege.
      */
-    export const PrivilegePriority = {
+    export const PrivilegeLevel = {
         V: 1,
         O: 2,
         M: 3,
@@ -396,4 +409,12 @@ export namespace Access {
      * like `[ RW, VA ]` or `[ Access.Rw.W, Access.Privilege.Operate ]`.
      */
     export type Definition = Ast | (Flag | Authorization)[] | string | undefined;
+}
+
+export namespace Access {
+    export const Default = new Access({
+        rw: Access.RW,
+        readPriv: Access.Privilege.View,
+        writePriv: Access.Privilege.Operate,
+    });
 }

@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { ElementTag } from "../definitions/index.js";
-import { Access, Conformance, Constraint, DatatypeElement, Quality } from "../index.js";
+import { Access, Conformance, Constraint, FieldElement, Quality } from "../index.js";
 import { BaseElement } from "./BaseElement.js";
 
 /**
@@ -23,8 +23,9 @@ export type RequirementElement = BaseElement & {
     access?: Access.Definition;
     quality?: Quality.Definition;
     conformance?: Conformance.Definition;
+    default?: any;
 
-    children?: (RequirementElement | DatatypeElement)[];
+    children?: (RequirementElement | FieldElement)[];
 };
 
 export function RequirementElement(definition: RequirementElement.Properties) {

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,6 +11,8 @@ export type TestOptions = {
     fgrep?: string;
     invert?: boolean;
     allLogs?: boolean;
+    wtf?: boolean;
+    debug?: boolean;
 };
 
 function option<T extends keyof TestOptions>(options: TestOptions, name: T) {

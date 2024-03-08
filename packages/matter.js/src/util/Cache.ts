@@ -2,7 +2,7 @@
  * Cache computed values or resources for a specified duration to improve performances.
  *
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,11 +15,15 @@ export class Cache<T> {
     private readonly periodicTimer: Timer;
 
     constructor(
+        name: string,
         private readonly generator: (...params: any[]) => T,
         private readonly expirationMs: number,
         private readonly expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
-        this.periodicTimer = Time.getPeriodicTimer(expirationMs, () => this.expire()).start();
+        this.periodicTimer = Time.getPeriodicTimer(`${name} cache expiration`, expirationMs, () =>
+            this.expire(),
+        ).start();
+        this.periodicTimer.utility = true;
     }
 
     get(...params: any[]) {

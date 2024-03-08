@@ -1,14 +1,14 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { BitFlag, BitField } from "../../schema/BitmapSchema.js";
 import {
     Attribute,
     OptionalAttribute,
@@ -28,7 +28,10 @@ import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvAttributeId } from "../../datatype/AttributeId.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace Scenes {
     /**
@@ -69,6 +72,13 @@ export namespace Scenes {
     });
 
     /**
+     * This data type indicates a combination of an identifier and the value of an attribute.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.6.1
+     */
+    export interface AttributeValuePair extends TypeFromSchema<typeof TlvAttributeValuePair> {}
+
+    /**
      * This data type indicates for a given cluster a set of attributes and their values. Only attributes which have
      * the "S" designation in the Quality column of the cluster specification shall be used in the AttributeValueList
      * field.
@@ -79,6 +89,15 @@ export namespace Scenes {
         clusterId: TlvField(0, TlvClusterId),
         attributeValueList: TlvField(1, TlvArray(TlvAttributeValuePair))
     });
+
+    /**
+     * This data type indicates for a given cluster a set of attributes and their values. Only attributes which have
+     * the "S" designation in the Quality column of the cluster specification shall be used in the AttributeValueList
+     * field.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.6.2
+     */
+    export interface ExtensionFieldSet extends TypeFromSchema<typeof TlvExtensionFieldSet> {}
 
     /**
      * Input to the Scenes addScene command
@@ -94,6 +113,13 @@ export namespace Scenes {
     });
 
     /**
+     * Input to the Scenes addScene command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.2
+     */
+    export interface AddSceneRequest extends TypeFromSchema<typeof TlvAddSceneRequest> {}
+
+    /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.12
      */
     export const TlvAddSceneResponse = TlvObject({
@@ -103,11 +129,23 @@ export namespace Scenes {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.12
+     */
+    export interface AddSceneResponse extends TypeFromSchema<typeof TlvAddSceneResponse> {}
+
+    /**
      * Input to the Scenes viewScene command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.3
      */
     export const TlvViewSceneRequest = TlvObject({ groupId: TlvField(0, TlvGroupId), sceneId: TlvField(1, TlvUInt8) });
+
+    /**
+     * Input to the Scenes viewScene command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.3
+     */
+    export interface ViewSceneRequest extends TypeFromSchema<typeof TlvViewSceneRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.13
@@ -122,6 +160,11 @@ export namespace Scenes {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.13
+     */
+    export interface ViewSceneResponse extends TypeFromSchema<typeof TlvViewSceneResponse> {}
+
+    /**
      * Input to the Scenes removeScene command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.4
@@ -130,6 +173,13 @@ export namespace Scenes {
         groupId: TlvField(0, TlvGroupId),
         sceneId: TlvField(1, TlvUInt8)
     });
+
+    /**
+     * Input to the Scenes removeScene command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.4
+     */
+    export interface RemoveSceneRequest extends TypeFromSchema<typeof TlvRemoveSceneRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.14
@@ -141,11 +191,23 @@ export namespace Scenes {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.14
+     */
+    export interface RemoveSceneResponse extends TypeFromSchema<typeof TlvRemoveSceneResponse> {}
+
+    /**
      * Input to the Scenes removeAllScenes command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.5
      */
     export const TlvRemoveAllScenesRequest = TlvObject({ groupId: TlvField(0, TlvGroupId) });
+
+    /**
+     * Input to the Scenes removeAllScenes command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.5
+     */
+    export interface RemoveAllScenesRequest extends TypeFromSchema<typeof TlvRemoveAllScenesRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.15
@@ -156,11 +218,23 @@ export namespace Scenes {
     });
 
     /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.15
+     */
+    export interface RemoveAllScenesResponse extends TypeFromSchema<typeof TlvRemoveAllScenesResponse> {}
+
+    /**
      * Input to the Scenes storeScene command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.6
      */
     export const TlvStoreSceneRequest = TlvObject({ groupId: TlvField(0, TlvGroupId), sceneId: TlvField(1, TlvUInt8) });
+
+    /**
+     * Input to the Scenes storeScene command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.6
+     */
+    export interface StoreSceneRequest extends TypeFromSchema<typeof TlvStoreSceneRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.16
@@ -170,6 +244,11 @@ export namespace Scenes {
         groupId: TlvField(1, TlvGroupId),
         sceneId: TlvField(2, TlvUInt8)
     });
+
+    /**
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.16
+     */
+    export interface StoreSceneResponse extends TypeFromSchema<typeof TlvStoreSceneResponse> {}
 
     /**
      * Input to the Scenes recallScene command
@@ -183,11 +262,25 @@ export namespace Scenes {
     });
 
     /**
+     * Input to the Scenes recallScene command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.7
+     */
+    export interface RecallSceneRequest extends TypeFromSchema<typeof TlvRecallSceneRequest> {}
+
+    /**
      * Input to the Scenes getSceneMembership command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.8
      */
     export const TlvGetSceneMembershipRequest = TlvObject({ groupId: TlvField(0, TlvGroupId) });
+
+    /**
+     * Input to the Scenes getSceneMembership command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.8
+     */
+    export interface GetSceneMembershipRequest extends TypeFromSchema<typeof TlvGetSceneMembershipRequest> {}
 
     /**
      * The fields of the get scene membership response command have the following semantics:
@@ -222,6 +315,35 @@ export namespace Scenes {
         groupId: TlvField(2, TlvGroupId),
         sceneList: TlvOptionalField(3, TlvArray(TlvUInt8))
     });
+
+    /**
+     * The fields of the get scene membership response command have the following semantics:
+     *
+     * The Capacity field shall contain the remaining capacity of the Scene Table of the server (for all groups). The
+     * following values apply:
+     *
+     *   • 0 - No further scenes may be added.
+     *
+     *   • 0 < Capacity < 0xfe - Capacity holds the number of scenes that may be added.
+     *
+     *   • 0xfe - At least 1 further scene may be added (exact number is unknown).
+     *
+     *   • null - It is unknown if any further scenes may be added.
+     *
+     * The Status field shall contain SUCCESS or ILLEGAL_COMMAND (the endpoint is not a member of the group) as
+     * appropriate.
+     *
+     * The GroupID field shall be set to the corresponding field of the received GetSceneMembership command.
+     *
+     * If the status is not SUCCESS then the SceneList field shall be omitted, else the SceneList field shall contain
+     * the identifiers of all the scenes in the Scene Table with the corresponding Group ID.
+     *
+     * Zigbee: If the total number of scenes associated with this Group ID will cause the maximum payload length of a
+     * frame to be exceeded, then the SceneList field shall contain only as many scenes as will fit.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.17
+     */
+    export interface GetSceneMembershipResponse extends TypeFromSchema<typeof TlvGetSceneMembershipResponse> {}
 
     /**
      * The value of Scenes.mode
@@ -286,6 +408,13 @@ export namespace Scenes {
     });
 
     /**
+     * Input to the Scenes copyScene command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.11
+     */
+    export interface CopySceneRequest extends TypeFromSchema<typeof TlvCopySceneRequest> {}
+
+    /**
      * The CopySceneResponse command allows a server to respond to a CopyScene command.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.20
@@ -319,6 +448,13 @@ export namespace Scenes {
     });
 
     /**
+     * The CopySceneResponse command allows a server to respond to a CopyScene command.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.20
+     */
+    export interface CopySceneResponse extends TypeFromSchema<typeof TlvCopySceneResponse> {}
+
+    /**
      * These are optional features supported by ScenesCluster.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.4
@@ -335,7 +471,7 @@ export namespace Scenes {
     /**
      * These elements and properties are present in all Scenes clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x5,
         name: "Scenes",
         revision: 4,
@@ -509,8 +645,18 @@ export namespace Scenes {
                 TlvCopySceneResponse,
                 { invokeAcl: AccessLevel.Manage }
             )
-        }
+        },
+
+        /**
+         * This metadata controls which ScenesCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions()
     });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base, supportedFeatures: { sceneNames: true } });
 
     /**
      * Scenes
@@ -533,31 +679,12 @@ export namespace Scenes {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4
      */
-    export const Cluster = ClusterFactory.Extensible(
-        { ...Base, supportedFeatures: { sceneNames: true } },
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a Scenes cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a Scenes cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF };
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type ScenesCluster = typeof Scenes.Cluster;
+export type ScenesCluster = Scenes.Cluster;
 export const ScenesCluster = Scenes.Cluster;
+ClusterRegistry.register(Scenes.Complete);

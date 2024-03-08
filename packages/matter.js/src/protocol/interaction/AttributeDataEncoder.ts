@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 import { MatterFlowError } from "../../common/MatterError.js";
@@ -45,7 +45,7 @@ export type EventReportPayload = Omit<TypeFromSchema<typeof TlvEventReport>, "ev
 };
 
 /** Type for TlvEventData where the real data are represented with the schema and the JS value. */
-type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data"> & {
+export type EventDataPayload = Omit<TypeFromSchema<typeof TlvEventData>, "data"> & {
     schema: TlvSchema<any>;
     payload: any;
 };

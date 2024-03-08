@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -84,7 +84,7 @@ export class AttributeClient<T> {
             );
             value = tryCatch(
                 () => {
-                    const sessionFabric = this.interactionClient.session.getAssociatedFabric();
+                    const sessionFabric = this.interactionClient.session.associatedFabric;
                     // also remove fabric index if it is the same as the session fabric
                     return this.schema.removeField(
                         value,

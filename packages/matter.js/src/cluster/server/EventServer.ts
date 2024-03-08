@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -46,13 +46,13 @@ export class EventServer<T> {
     }
 
     triggerEvent(data: T) {
-        if (this.endpoint === undefined || this.endpoint.id === undefined) {
+        if (this.endpoint === undefined || this.endpoint.number === undefined) {
             throw new InternalError("Endpoint not assigned");
         }
         const event: EventData<T> = {
             eventId: this.id,
             clusterId: this.clusterId,
-            endpointId: this.endpoint.id,
+            endpointId: this.endpoint.number,
             epochTimestamp: Time.nowMs(),
             priority: this.priority,
             data,

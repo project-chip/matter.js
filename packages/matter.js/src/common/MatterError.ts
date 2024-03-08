@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -33,3 +33,12 @@ export class UnexpectedDataError extends MatterError {}
  * provided data. if you are sure your code is correct please report the issue.
  */
 export class ImplementationError extends MatterError {}
+
+/**
+ * Thrown for write attempts against immutable data.
+ */
+export class ReadOnlyError extends ImplementationError {
+    constructor(message = "This view is read-only") {
+        super(message);
+    }
+}

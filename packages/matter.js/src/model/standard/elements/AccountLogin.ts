@@ -1,16 +1,21 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    CommandElement as Command,
+    FieldElement as Field
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "AccountLogin", id: 0x50e, classification: "application",
-    description: "Account Login",
+Matter.children.push(Cluster({
+    name: "AccountLogin", id: 0x50e, classification: "application", description: "Account Login",
     details: "This cluster provides commands that facilitate user account login on a Content App or a node. For " +
         "example, a Content App running on a Video Player device, which is represented as an endpoint (see " +
         "Device Type Library document), can use this cluster to help make the user account on the Content " +
@@ -18,10 +23,10 @@ Matter.children.push({
     xref: { document: "cluster", section: "6.2" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "command", name: "GetSetupPin", id: 0x0, access: "A T", conformance: "M", direction: "request",
+        Command({
+            name: "GetSetupPin", id: 0x0, access: "A T", conformance: "M", direction: "request",
             response: "GetSetupPinResponse",
 
             details: "The purpose of this command is to determine if the active user account of the given Content App " +
@@ -72,34 +77,31 @@ Matter.children.push({
 
             xref: { document: "cluster", section: "6.2.4.1" },
 
-            children: [{
-                tag: "datatype", name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M",
-                constraint: "max 100",
+            children: [Field({
+                name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "max 100",
                 details: "This attribute shall specify the client’s Temporary Account Identifier. The length of this field " +
                     "shall be at least 16 characters to protect the account holder against password guessing attacks.",
                 xref: { document: "cluster", section: "6.2.4.1.1" }
-            }]
-        },
+            })]
+        }),
 
-        {
-            tag: "command", name: "GetSetupPinResponse", id: 0x1, conformance: "M", direction: "response",
+        Command({
+            name: "GetSetupPinResponse", id: 0x1, conformance: "M", direction: "response",
             details: "This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or " +
                 "null when the account identified in the request does not match the active account of the running " +
                 "Content App.",
             xref: { document: "cluster", section: "6.2.4.2" },
 
-            children: [{
-                tag: "datatype", name: "SetupPin", id: 0x0, type: "string", conformance: "M", constraint: "min 11",
-                quality: "X",
+            children: [Field({
+                name: "SetupPin", id: 0x0, type: "string", conformance: "M", constraint: "min 11", quality: "X",
                 details: "This field shall provide the setup PIN code as a text string at least 11 characters in length or " +
                     "null to indicate that the accounts do not match.",
                 xref: { document: "cluster", section: "6.2.4.2.1" }
-            }]
-        },
+            })]
+        }),
 
-        {
-            tag: "command", name: "Login", id: 0x2, access: "A T", conformance: "M", direction: "request",
-            response: "status",
+        Command({
+            name: "Login", id: 0x2, access: "A T", conformance: "M", direction: "request", response: "status",
 
             details: "The purpose of this command is to allow the Content App to assume the user account of a given " +
                 "Commissionee by leveraging the Setup PIN code input by the user during the commissioning process." +
@@ -143,27 +145,24 @@ Matter.children.push({
             xref: { document: "cluster", section: "6.2.4.3" },
 
             children: [
-                {
-                    tag: "datatype", name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M",
-                    constraint: "max 100",
+                Field({
+                    name: "TempAccountIdentifier", id: 0x0, type: "string", conformance: "M", constraint: "max 100",
                     details: "This field shall specify the client’s temporary account identifier.",
                     xref: { document: "cluster", section: "6.2.4.3.1" }
-                },
-
-                {
-                    tag: "datatype", name: "SetupPin", id: 0x1, type: "string", conformance: "M", constraint: "min 11",
+                }),
+                Field({
+                    name: "SetupPin", id: 0x1, type: "string", conformance: "M", constraint: "min 11",
                     details: "This field shall provide the setup PIN code as a text string at least 11 characters in length.",
                     xref: { document: "cluster", section: "6.2.4.3.2" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "Logout", id: 0x3, access: "O T", conformance: "M", direction: "request",
-            response: "status",
+        Command({
+            name: "Logout", id: 0x3, access: "O T", conformance: "M", direction: "request", response: "status",
             details: "The purpose of this command is to instruct the Content App to clear the current user account. This " +
                 "command SHOULD be used by clients of a Content App to indicate the end of a user session.",
             xref: { document: "cluster", section: "6.2.4.4" }
-        }
+        })
     ]
-});
+}));

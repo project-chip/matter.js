@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -25,8 +25,6 @@ import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "../../../src/tlv/TlvObject.js";
 import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
 import { ByteArray } from "../../../src/util/ByteArray.js";
-
-//import { AllClustersMap } from "../../../src/cluster/ClusterHelper.js";
 
 const TlvAclTestSchema = TlvObject({
     privilege: TlvField(1, TlvUInt8),

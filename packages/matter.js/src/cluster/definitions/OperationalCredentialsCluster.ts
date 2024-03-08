@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     FabricScopedAttribute,
     AccessLevel,
@@ -19,14 +18,18 @@ import {
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvFabricIndex, FabricIndex } from "../../datatype/FabricIndex.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvFabricId } from "../../datatype/FabricId.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvSubjectId } from "../../datatype/SubjectId.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace OperationalCredentials {
     /**
@@ -56,6 +59,16 @@ export namespace OperationalCredentials {
 
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
+
+    /**
+     * This encodes a fabric sensitive NOC chain, underpinning a commissioned Operational Identity for a given Node.
+     *
+     * Note that the Trusted Root CA Certificate is not included in this structure. The roots are available in the
+     * TrustedRootCertificates attribute of the Node Operational Credentials cluster.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.4.4
+     */
+    export interface NOCStruct extends TypeFromSchema<typeof TlvNOCStruct> {}
 
     /**
      * This structure encodes a Fabric Reference for a fabric within which a given Node is currently commissioned.
@@ -115,13 +128,25 @@ export namespace OperationalCredentials {
     });
 
     /**
+     * This structure encodes a Fabric Reference for a fabric within which a given Node is currently commissioned.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.4.5
+     */
+    export interface FabricDescriptorStruct extends TypeFromSchema<typeof TlvFabricDescriptorStruct> {}
+
+    /**
      * Input to the OperationalCredentials attestationRequest command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.1
      */
-    export const TlvAttestationRequestRequest = TlvObject({
-        attestationNonce: TlvField(0, TlvByteString.bound({ length: 32 }))
-    });
+    export const TlvAttestationRequest = TlvObject({ attestationNonce: TlvField(0, TlvByteString.bound({ length: 32 })) });
+
+    /**
+     * Input to the OperationalCredentials attestationRequest command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.1
+     */
+    export interface AttestationRequest extends TypeFromSchema<typeof TlvAttestationRequest> {}
 
     /**
      * This command shall be generated in response to an Attestation Request command.
@@ -151,6 +176,18 @@ export namespace OperationalCredentials {
     });
 
     /**
+     * This command shall be generated in response to an Attestation Request command.
+     *
+     * See Section 11.17.4.7, “Attestation Information” for details about the generation of the fields within this
+     * response command.
+     *
+     * See Section F.2, “Device Attestation Response test vector” for an example computation of an AttestationResponse.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.2
+     */
+    export interface AttestationResponse extends TypeFromSchema<typeof TlvAttestationResponse> {}
+
+    /**
      * This enumeration is used by the CertificateChainRequest command to convey which certificate from the device
      * attestation certificate chain to transmit back to the client.
      *
@@ -173,9 +210,14 @@ export namespace OperationalCredentials {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.3
      */
-    export const TlvCertificateChainRequestRequest = TlvObject({
-        certificateType: TlvField(0, TlvEnum<CertificateChainType>())
-    });
+    export const TlvCertificateChainRequest = TlvObject({ certificateType: TlvField(0, TlvEnum<CertificateChainType>()) });
+
+    /**
+     * Input to the OperationalCredentials certificateChainRequest command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.3
+     */
+    export interface CertificateChainRequest extends TypeFromSchema<typeof TlvCertificateChainRequest> {}
 
     /**
      * This command shall be generated in response to a CertificateChainRequest command.
@@ -193,14 +235,28 @@ export namespace OperationalCredentials {
     });
 
     /**
+     * This command shall be generated in response to a CertificateChainRequest command.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.4
+     */
+    export interface CertificateChainResponse extends TypeFromSchema<typeof TlvCertificateChainResponse> {}
+
+    /**
      * Input to the OperationalCredentials csrRequest command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.5
      */
-    export const TlvCsrRequestRequest = TlvObject({
+    export const TlvCsrRequest = TlvObject({
         csrNonce: TlvField(0, TlvByteString.bound({ length: 32 })),
         isForUpdateNoc: TlvOptionalField(1, TlvBoolean)
     });
+
+    /**
+     * Input to the OperationalCredentials csrRequest command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.5
+     */
+    export interface CsrRequest extends TypeFromSchema<typeof TlvCsrRequest> {}
 
     /**
      * This command shall be generated in response to a CSRRequest Command.
@@ -225,6 +281,18 @@ export namespace OperationalCredentials {
 
         attestationSignature: TlvField(1, TlvByteString.bound({ length: 64 }))
     });
+
+    /**
+     * This command shall be generated in response to a CSRRequest Command.
+     *
+     * See Section 11.17.4.9, “NOCSR Information” for details about the generation of the fields within this response
+     * command.
+     *
+     * See Section F.3, “Node Operational CSR Response test vector” for an example computation of a CSRResponse.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.6
+     */
+    export interface CsrResponse extends TypeFromSchema<typeof TlvCsrResponse> {}
 
     /**
      * Input to the OperationalCredentials addNoc command
@@ -368,6 +436,13 @@ export namespace OperationalCredentials {
     });
 
     /**
+     * Input to the OperationalCredentials addNoc command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.8
+     */
+    export interface AddNocRequest extends TypeFromSchema<typeof TlvAddNocRequest> {}
+
+    /**
      * This enumeration is used by the NOCResponse common response command to convey detailed out
      *
      * come of several of this cluster’s operations.
@@ -468,6 +543,23 @@ export namespace OperationalCredentials {
     });
 
     /**
+     * This command shall be generated in response to the following commands:
+     *
+     *   • AddNOC
+     *
+     *   • UpdateNOC
+     *
+     *   • UpdateFabricLabel
+     *
+     *   • RemoveFabric
+     *
+     * It provides status information about the success or failure of those commands.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.10
+     */
+    export interface NocResponse extends TypeFromSchema<typeof TlvNocResponse> {}
+
+    /**
      * Input to the OperationalCredentials updateNoc command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.9
@@ -477,6 +569,13 @@ export namespace OperationalCredentials {
         icacValue: TlvOptionalField(1, TlvByteString.bound({ maxLength: 400 })),
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
+
+    /**
+     * Input to the OperationalCredentials updateNoc command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.9
+     */
+    export interface UpdateNocRequest extends TypeFromSchema<typeof TlvUpdateNocRequest> {}
 
     /**
      * Input to the OperationalCredentials updateFabricLabel command
@@ -489,11 +588,25 @@ export namespace OperationalCredentials {
     });
 
     /**
+     * Input to the OperationalCredentials updateFabricLabel command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.11
+     */
+    export interface UpdateFabricLabelRequest extends TypeFromSchema<typeof TlvUpdateFabricLabelRequest> {}
+
+    /**
      * Input to the OperationalCredentials removeFabric command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.12
      */
     export const TlvRemoveFabricRequest = TlvObject({ fabricIndex: TlvField(0, TlvFabricIndex) });
+
+    /**
+     * Input to the OperationalCredentials removeFabric command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.12
+     */
+    export interface RemoveFabricRequest extends TypeFromSchema<typeof TlvRemoveFabricRequest> {}
 
     /**
      * Input to the OperationalCredentials addTrustedRootCertificate command
@@ -505,14 +618,16 @@ export namespace OperationalCredentials {
     });
 
     /**
-     * Operational Credentials
+     * Input to the OperationalCredentials addTrustedRootCertificate command
      *
-     * This cluster is used to add or remove Node Operational credentials on a Commissionee or Node, as well as manage
-     * the associated Fabrics.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.17
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.13
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface AddTrustedRootCertificateRequest extends TypeFromSchema<typeof TlvAddTrustedRootCertificateRequest> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x3e,
         name: "OperationalCredentials",
         revision: 1,
@@ -532,7 +647,7 @@ export namespace OperationalCredentials {
              */
             nocs: FabricScopedAttribute(
                 0x0,
-                TlvArray(TlvNOCStruct, { maxLength: 254 }),
+                TlvArray(TlvNOCStruct),
 
                 {
                     persistent: true,
@@ -553,11 +668,7 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.5.2
              */
-            fabrics: FabricScopedAttribute(
-                0x1,
-                TlvArray(TlvFabricDescriptorStruct, { maxLength: 254 }),
-                { persistent: true, default: [] }
-            ),
+            fabrics: FabricScopedAttribute(0x1, TlvArray(TlvFabricDescriptorStruct), { persistent: true, default: [] }),
 
             /**
              * This attribute contains the number of Fabrics that are supported by the device. This value is fixed for
@@ -579,7 +690,7 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.5.4
              */
-            commissionedFabrics: Attribute(0x3, TlvUInt8.bound({ max: 254 }), { persistent: true }),
+            commissionedFabrics: Attribute(0x3, TlvUInt8, { persistent: true }),
 
             /**
              * This attribute shall contain a read-only list of Trusted Root CA Certificates installed on the Node, as
@@ -601,7 +712,7 @@ export namespace OperationalCredentials {
              */
             trustedRootCertificates: Attribute(
                 0x4,
-                TlvArray(TlvByteString, { maxLength: 254 }),
+                TlvArray(TlvByteString),
                 { persistent: true, omitChanges: true, default: [] }
             ),
 
@@ -629,7 +740,7 @@ export namespace OperationalCredentials {
              */
             attestationRequest: Command(
                 0x0,
-                TlvAttestationRequestRequest,
+                TlvAttestationRequest,
                 0x1,
                 TlvAttestationResponse,
                 { invokeAcl: AccessLevel.Administer }
@@ -643,7 +754,7 @@ export namespace OperationalCredentials {
              */
             certificateChainRequest: Command(
                 0x2,
-                TlvCertificateChainRequestRequest,
+                TlvCertificateChainRequest,
                 0x3,
                 TlvCertificateChainResponse,
                 { invokeAcl: AccessLevel.Administer }
@@ -678,7 +789,7 @@ export namespace OperationalCredentials {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.5
              */
-            csrRequest: Command(0x4, TlvCsrRequestRequest, 0x5, TlvCsrResponse, { invokeAcl: AccessLevel.Administer }),
+            csrRequest: Command(0x4, TlvCsrRequest, 0x5, TlvCsrResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
              * This command shall add a new NOC chain to the device and commission a new Fabric association upon
@@ -890,7 +1001,21 @@ export namespace OperationalCredentials {
             )
         }
     });
+
+    /**
+     * Operational Credentials
+     *
+     * This cluster is used to add or remove Node Operational credentials on a Commissionee or Node, as well as manage
+     * the associated Fabrics.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.17
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type OperationalCredentialsCluster = typeof OperationalCredentials.Cluster;
+export type OperationalCredentialsCluster = OperationalCredentials.Cluster;
 export const OperationalCredentialsCluster = OperationalCredentials.Cluster;
+ClusterRegistry.register(OperationalCredentials.Complete);

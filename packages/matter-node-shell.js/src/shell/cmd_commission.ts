@@ -1,14 +1,14 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeCommissioningOptions } from "@project-chip/matter-node.js";
-import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter-node.js/cluster";
-import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter-node.js/schema";
+import { NodeCommissioningOptions } from "@project-chip/matter.js";
+import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter.js/cluster";
+import { NodeId } from "@project-chip/matter.js/datatype";
+import { Logger } from "@project-chip/matter.js/log";
+import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { createDiagnosticCallbacks } from "./cmd_nodes";

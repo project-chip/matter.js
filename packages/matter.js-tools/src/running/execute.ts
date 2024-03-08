@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,8 +9,8 @@ import { platform } from "os";
 
 import colors from "ansi-colors";
 
-export async function execute(bin: string, argv: string[]) {
-    return new Promise<void>((resolve, reject) => {
+export async function execute(bin: string, argv: string[], env?: typeof process.env) {
+    return new Promise<number>((resolve, reject) => {
         let finished = false;
 
         const options: SpawnOptions = {
@@ -18,6 +18,9 @@ export async function execute(bin: string, argv: string[]) {
         };
         if (platform() === "win32") {
             options.shell = true;
+        }
+        if (env !== undefined) {
+            options.env = { ...process.env, ...env };
         }
 
         const proc = spawn(bin, argv, options);
@@ -33,11 +36,7 @@ export async function execute(bin: string, argv: string[]) {
             }
             finished = true;
 
-            if (code === 0) {
-                resolve();
-            } else {
-                reject(`Process ${bin} exited with code ${code}`);
-            }
+            resolve(code ?? 1);
         });
     });
 }
@@ -48,5 +47,12 @@ export async function executeNode(script: string, argv: string[]) {
         const command = colors.whiteBright(`node ${argv.join(" ")}`);
         process.stdout.write(`${colors.greenBright("Matter execute:")} ${command}\n`);
     }
-    return execute("node", argv);
+    const env = {} as NodeJS.ProcessEnv;
+
+    // Hmm this is a little much as a default
+    // if (process.env.MATTER_LOG_STACK_LIMIT === undefined) {
+    //     env.MATTER_LOG_STACK_LIMIT = "100";
+    // }
+
+    return execute("node", argv, env);
 }

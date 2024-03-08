@@ -1,28 +1,30 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     FixedAttribute,
+    OptionalFixedAttribute,
     OptionalAttribute,
     Attribute,
     OptionalWritableAttribute,
     AccessLevel,
     WritableAttribute,
     OptionalEvent,
-    EventPriority,
-    OptionalFixedAttribute
+    EventPriority
 } from "../../cluster/Cluster.js";
 import { TlvInt16, TlvUInt16, TlvBitmap, TlvEnum, TlvUInt24, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace PumpConfigurationAndControl {
     /**
@@ -210,6 +212,270 @@ export namespace PumpConfigurationAndControl {
     }
 
     /**
+     * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantPressure.
+     */
+    export const ConstantPressureComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This attribute specifies the minimum pressure the pump can achieve when it is working with the
+             * ControlMode attribute set to ConstantPressure.
+             *
+             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
+             * is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.4
+             */
+            minConstPressure: FixedAttribute(0x3, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum pressure the pump can achieve when it is working with the
+             * ControlMode attribute set to ConstantPressure.
+             *
+             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
+             * is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.5
+             */
+            maxConstPressure: FixedAttribute(0x4, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null })
+        }
+    });
+
+    /**
+     * A PumpConfigurationAndControlCluster supports these elements if it supports feature Automatic.
+     */
+    export const AutomaticComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This attribute specifies the minimum pressure the pump can achieve when it is working with the
+             * ControlMode attribute set to ConstantPressure.
+             *
+             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
+             * is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.4
+             */
+            minConstPressure: OptionalFixedAttribute(0x3, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum pressure the pump can achieve when it is working with the
+             * ControlMode attribute set to ConstantPressure.
+             *
+             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
+             * is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.5
+             */
+            maxConstPressure: OptionalFixedAttribute(0x4, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
+
+            /**
+             * This attribute specifies the minimum compensated pressure the pump can achieve when it is working with
+             * the ControlMode attribute set to ProportionalPressure.
+             *
+             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
+             * is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.6
+             */
+            minCompPressure: OptionalFixedAttribute(0x5, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum compensated pressure the pump can achieve when it is working with
+             * the ControlMode attribute set to ProportionalPressure.
+             *
+             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
+             * is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.7
+             */
+            maxCompPressure: OptionalFixedAttribute(0x6, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
+
+            /**
+             * This attribute specifies the minimum speed the pump can achieve when it is working with the ControlMode
+             * attribute set to ConstantSpeed.
+             *
+             * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.8
+             */
+            minConstSpeed: OptionalFixedAttribute(0x7, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum speed the pump can achieve when it is working with the ControlMode
+             * attribute set to ConstantSpeed.
+             *
+             * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.9
+             */
+            maxConstSpeed: OptionalFixedAttribute(0x8, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
+
+            /**
+             * This attribute specifies the minimum flow the pump can achieve when it is working with the Con
+             *
+             * trolMode attribute set to ConstantFlow.
+             *
+             * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
+             * invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.10
+             */
+            minConstFlow: OptionalFixedAttribute(0x9, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum flow the pump can achieve when it is working with the ControlMode
+             * attribute set to ConstantFlow.
+             *
+             * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
+             * invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.11
+             */
+            maxConstFlow: OptionalFixedAttribute(0xa, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
+
+            /**
+             * This attribute specifies the minimum temperature the pump can maintain in the system when it is working
+             * with the ControlMode attribute set to ConstantTemperature.
+             *
+             * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
+             * invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.12
+             */
+            minConstTemp: OptionalFixedAttribute(0xb, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum temperature the pump can maintain in the system when it is working
+             * with the ControlMode attribute set to ConstantTemperature.
+             *
+             * MaxConstTemp shall be greater than or equal to MinConstTemp
+             *
+             * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
+             * invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.13
+             */
+            maxConstTemp: OptionalFixedAttribute(0xc, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null })
+        }
+    });
+
+    /**
+     * A PumpConfigurationAndControlCluster supports these elements if it supports feature CompensatedPressure.
+     */
+    export const CompensatedPressureComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This attribute specifies the minimum compensated pressure the pump can achieve when it is working with
+             * the ControlMode attribute set to ProportionalPressure.
+             *
+             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
+             * is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.6
+             */
+            minCompPressure: FixedAttribute(0x5, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum compensated pressure the pump can achieve when it is working with
+             * the ControlMode attribute set to ProportionalPressure.
+             *
+             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
+             * is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.7
+             */
+            maxCompPressure: FixedAttribute(0x6, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null })
+        }
+    });
+
+    /**
+     * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantSpeed.
+     */
+    export const ConstantSpeedComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This attribute specifies the minimum speed the pump can achieve when it is working with the ControlMode
+             * attribute set to ConstantSpeed.
+             *
+             * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.8
+             */
+            minConstSpeed: FixedAttribute(0x7, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum speed the pump can achieve when it is working with the ControlMode
+             * attribute set to ConstantSpeed.
+             *
+             * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.9
+             */
+            maxConstSpeed: FixedAttribute(0x8, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null })
+        }
+    });
+
+    /**
+     * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantFlow.
+     */
+    export const ConstantFlowComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This attribute specifies the minimum flow the pump can achieve when it is working with the Con
+             *
+             * trolMode attribute set to ConstantFlow.
+             *
+             * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
+             * invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.10
+             */
+            minConstFlow: FixedAttribute(0x9, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum flow the pump can achieve when it is working with the ControlMode
+             * attribute set to ConstantFlow.
+             *
+             * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
+             * invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.11
+             */
+            maxConstFlow: FixedAttribute(0xa, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null })
+        }
+    });
+
+    /**
+     * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantTemperature.
+     */
+    export const ConstantTemperatureComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This attribute specifies the minimum temperature the pump can maintain in the system when it is working
+             * with the ControlMode attribute set to ConstantTemperature.
+             *
+             * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
+             * invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.12
+             */
+            minConstTemp: FixedAttribute(0xb, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null }),
+
+            /**
+             * This attribute specifies the maximum temperature the pump can maintain in the system when it is working
+             * with the ControlMode attribute set to ConstantTemperature.
+             *
+             * MaxConstTemp shall be greater than or equal to MinConstTemp
+             *
+             * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
+             * invalid.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.13
+             */
+            maxConstTemp: FixedAttribute(0xc, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null })
+        }
+    });
+
+    /**
      * These are optional features supported by PumpConfigurationAndControlCluster.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.4
@@ -268,7 +534,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * These elements and properties are present in all PumpConfigurationAndControl clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x200,
         name: "PumpConfigurationAndControl",
         revision: 4,
@@ -334,7 +600,7 @@ export namespace PumpConfigurationAndControl {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.1
              */
-            maxPressure: FixedAttribute(0x0, TlvNullable(TlvInt16), { default: null }),
+            maxPressure: FixedAttribute(0x0, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
             /**
              * This attribute specifies the maximum speed the pump can achieve. It is a physical limit, and does not
@@ -628,272 +894,38 @@ export namespace PumpConfigurationAndControl {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
              */
             turbineOperation: OptionalEvent(0x10, EventPriority.Info, TlvNoArguments)
-        }
+        },
+
+        /**
+         * This metadata controls which PumpConfigurationAndControlCluster elements matter.js activates for specific
+         * feature combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { constantPressure: true }, component: ConstantPressureComponent },
+            { flags: { automatic: true }, component: AutomaticComponent },
+            { flags: { compensatedPressure: true }, component: CompensatedPressureComponent },
+            { flags: { constantSpeed: true }, component: ConstantSpeedComponent },
+            { flags: { constantFlow: true }, component: ConstantFlowComponent },
+            { flags: { constantTemperature: true }, component: ConstantTemperatureComponent },
+
+            {
+                flags: {
+                    constantPressure: false,
+                    compensatedPressure: false,
+                    constantFlow: false,
+                    constantSpeed: false,
+                    constantTemperature: false
+                },
+
+                component: false
+            }
+        )
     });
 
     /**
-     * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantPressure.
+     * @see {@link Cluster}
      */
-    export const ConstantPressureComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This attribute specifies the minimum pressure the pump can achieve when it is working with the
-             * ControlMode attribute set to ConstantPressure.
-             *
-             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
-             * is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.4
-             */
-            minConstPressure: FixedAttribute(0x3, TlvNullable(TlvInt16), { default: null }),
-
-            /**
-             * This attribute specifies the maximum pressure the pump can achieve when it is working with the
-             * ControlMode attribute set to ConstantPressure.
-             *
-             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
-             * is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.5
-             */
-            maxConstPressure: FixedAttribute(0x4, TlvNullable(TlvInt16), { default: null })
-        }
-    });
-
-    /**
-     * A PumpConfigurationAndControlCluster supports these elements if it supports feature Automatic.
-     */
-    export const AutomaticComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This attribute specifies the minimum pressure the pump can achieve when it is working with the
-             * ControlMode attribute set to ConstantPressure.
-             *
-             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
-             * is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.4
-             */
-            minConstPressure: OptionalFixedAttribute(0x3, TlvNullable(TlvInt16), { default: null }),
-
-            /**
-             * This attribute specifies the maximum pressure the pump can achieve when it is working with the
-             * ControlMode attribute set to ConstantPressure.
-             *
-             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
-             * is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.5
-             */
-            maxConstPressure: OptionalFixedAttribute(0x4, TlvNullable(TlvInt16), { default: null }),
-
-            /**
-             * This attribute specifies the minimum compensated pressure the pump can achieve when it is working with
-             * the ControlMode attribute set to ProportionalPressure.
-             *
-             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
-             * is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.6
-             */
-            minCompPressure: OptionalFixedAttribute(0x5, TlvNullable(TlvInt16), { default: null }),
-
-            /**
-             * This attribute specifies the maximum compensated pressure the pump can achieve when it is working with
-             * the ControlMode attribute set to ProportionalPressure.
-             *
-             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
-             * is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.7
-             */
-            maxCompPressure: OptionalFixedAttribute(0x6, TlvNullable(TlvInt16), { default: null }),
-
-            /**
-             * This attribute specifies the minimum speed the pump can achieve when it is working with the ControlMode
-             * attribute set to ConstantSpeed.
-             *
-             * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.8
-             */
-            minConstSpeed: OptionalFixedAttribute(0x7, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
-
-            /**
-             * This attribute specifies the maximum speed the pump can achieve when it is working with the ControlMode
-             * attribute set to ConstantSpeed.
-             *
-             * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.9
-             */
-            maxConstSpeed: OptionalFixedAttribute(0x8, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
-
-            /**
-             * This attribute specifies the minimum flow the pump can achieve when it is working with the Con
-             *
-             * trolMode attribute set to ConstantFlow.
-             *
-             * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
-             * invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.10
-             */
-            minConstFlow: OptionalFixedAttribute(0x9, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
-
-            /**
-             * This attribute specifies the maximum flow the pump can achieve when it is working with the ControlMode
-             * attribute set to ConstantFlow.
-             *
-             * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
-             * invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.11
-             */
-            maxConstFlow: OptionalFixedAttribute(0xa, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
-
-            /**
-             * This attribute specifies the minimum temperature the pump can maintain in the system when it is working
-             * with the ControlMode attribute set to ConstantTemperature.
-             *
-             * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
-             * invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.12
-             */
-            minConstTemp: OptionalFixedAttribute(0xb, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null }),
-
-            /**
-             * This attribute specifies the maximum temperature the pump can maintain in the system when it is working
-             * with the ControlMode attribute set to ConstantTemperature.
-             *
-             * MaxConstTemp shall be greater than or equal to MinConstTemp
-             *
-             * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
-             * invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.13
-             */
-            maxConstTemp: OptionalFixedAttribute(0xc, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null })
-        }
-    });
-
-    /**
-     * A PumpConfigurationAndControlCluster supports these elements if it supports feature CompensatedPressure.
-     */
-    export const CompensatedPressureComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This attribute specifies the minimum compensated pressure the pump can achieve when it is working with
-             * the ControlMode attribute set to ProportionalPressure.
-             *
-             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
-             * is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.6
-             */
-            minCompPressure: FixedAttribute(0x5, TlvNullable(TlvInt16), { default: null }),
-
-            /**
-             * This attribute specifies the maximum compensated pressure the pump can achieve when it is working with
-             * the ControlMode attribute set to ProportionalPressure.
-             *
-             * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
-             * is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.7
-             */
-            maxCompPressure: FixedAttribute(0x6, TlvNullable(TlvInt16), { default: null })
-        }
-    });
-
-    /**
-     * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantSpeed.
-     */
-    export const ConstantSpeedComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This attribute specifies the minimum speed the pump can achieve when it is working with the ControlMode
-             * attribute set to ConstantSpeed.
-             *
-             * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.8
-             */
-            minConstSpeed: FixedAttribute(0x7, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
-
-            /**
-             * This attribute specifies the maximum speed the pump can achieve when it is working with the ControlMode
-             * attribute set to ConstantSpeed.
-             *
-             * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.9
-             */
-            maxConstSpeed: FixedAttribute(0x8, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null })
-        }
-    });
-
-    /**
-     * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantFlow.
-     */
-    export const ConstantFlowComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This attribute specifies the minimum flow the pump can achieve when it is working with the Con
-             *
-             * trolMode attribute set to ConstantFlow.
-             *
-             * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
-             * invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.10
-             */
-            minConstFlow: FixedAttribute(0x9, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
-
-            /**
-             * This attribute specifies the maximum flow the pump can achieve when it is working with the ControlMode
-             * attribute set to ConstantFlow.
-             *
-             * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
-             * invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.11
-             */
-            maxConstFlow: FixedAttribute(0xa, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null })
-        }
-    });
-
-    /**
-     * A PumpConfigurationAndControlCluster supports these elements if it supports feature ConstantTemperature.
-     */
-    export const ConstantTemperatureComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This attribute specifies the minimum temperature the pump can maintain in the system when it is working
-             * with the ControlMode attribute set to ConstantTemperature.
-             *
-             * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
-             * invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.12
-             */
-            minConstTemp: FixedAttribute(0xb, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null }),
-
-            /**
-             * This attribute specifies the maximum temperature the pump can maintain in the system when it is working
-             * with the ControlMode attribute set to ConstantTemperature.
-             *
-             * MaxConstTemp shall be greater than or equal to MinConstTemp
-             *
-             * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
-             * invalid.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.13
-             */
-            maxConstTemp: FixedAttribute(0xc, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null })
-        }
-    });
+    export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
 
     /**
      * Pump Configuration and Control
@@ -902,62 +934,15 @@ export namespace PumpConfigurationAndControl {
      * the automatic reporting of pump status information. Note that control of pump speed is not included – speed is
      * controlled by the On/Off and Level Control clusters.
      *
-     * PumpConfigurationAndControlCluster supports optional features that you can enable with the
-     * PumpConfigurationAndControlCluster.with() factory method.
+     * Per the Matter specification you cannot use {@link PumpConfigurationAndControlCluster} without enabling certain
+     * feature combinations. You must use the PumpConfigurationAndControlCluster.with() factory method to obtain a
+     * working cluster.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a PumpConfigurationAndControl cluster with support for optional features.
-         * Include each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a PumpConfigurationAndControl cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, ConstantPressureComponent, { constantPressure: true });
-            ClusterFactory.extend(cluster, AutomaticComponent, { automatic: true });
-            ClusterFactory.extend(cluster, CompensatedPressureComponent, { compensatedPressure: true });
-            ClusterFactory.extend(cluster, ConstantSpeedComponent, { constantSpeed: true });
-            ClusterFactory.extend(cluster, ConstantFlowComponent, { constantFlow: true });
-            ClusterFactory.extend(cluster, ConstantTemperatureComponent, { constantTemperature: true });
-
-            ClusterFactory.prevent(
-                cluster,
-
-                {
-                    constantPressure: false,
-                    compensatedPressure: false,
-                    constantFlow: false,
-                    constantSpeed: false,
-                    constantTemperature: false
-                }
-            );
-
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { constantPressure: true } ? typeof ConstantPressureComponent : {})
-        & (SF extends { automatic: true } ? typeof AutomaticComponent : {})
-        & (SF extends { compensatedPressure: true } ? typeof CompensatedPressureComponent : {})
-        & (SF extends { constantSpeed: true } ? typeof ConstantSpeedComponent : {})
-        & (SF extends { constantFlow: true } ? typeof ConstantFlowComponent : {})
-        & (SF extends { constantTemperature: true } ? typeof ConstantTemperatureComponent : {})
-        & (SF extends { constantPressure: false, compensatedPressure: false, constantFlow: false, constantSpeed: false, constantTemperature: false } ? never : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const PRSCONST = { constantPressure: true };
     const AUTO = { automatic: true };
     const PRSCOMP = { compensatedPressure: true };
@@ -966,64 +951,72 @@ export namespace PumpConfigurationAndControl {
     const TEMP = { constantTemperature: true };
 
     /**
-     * This cluster supports all PumpConfigurationAndControl features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
+    export const CompleteInstance = MutableCluster({
+        id: Base.id,
+        name: Base.name,
+        revision: Base.revision,
+        features: Base.features,
 
         attributes: {
-            ...Cluster.attributes,
-            minConstPressure: ClusterFactory.AsConditional(
+            ...Base.attributes,
+            minConstPressure: MutableCluster.AsConditional(
                 ConstantPressureComponent.attributes.minConstPressure,
                 { mandatoryIf: [PRSCONST], optionalIf: [AUTO] }
             ),
-            maxConstPressure: ClusterFactory.AsConditional(
+            maxConstPressure: MutableCluster.AsConditional(
                 ConstantPressureComponent.attributes.maxConstPressure,
                 { mandatoryIf: [PRSCONST], optionalIf: [AUTO] }
             ),
-            minCompPressure: ClusterFactory.AsConditional(
+            minCompPressure: MutableCluster.AsConditional(
                 AutomaticComponent.attributes.minCompPressure,
                 { optionalIf: [AUTO], mandatoryIf: [PRSCOMP] }
             ),
-            maxCompPressure: ClusterFactory.AsConditional(
+            maxCompPressure: MutableCluster.AsConditional(
                 AutomaticComponent.attributes.maxCompPressure,
                 { optionalIf: [AUTO], mandatoryIf: [PRSCOMP] }
             ),
-            minConstSpeed: ClusterFactory.AsConditional(
+            minConstSpeed: MutableCluster.AsConditional(
                 AutomaticComponent.attributes.minConstSpeed,
                 { optionalIf: [AUTO], mandatoryIf: [SPD] }
             ),
-            maxConstSpeed: ClusterFactory.AsConditional(
+            maxConstSpeed: MutableCluster.AsConditional(
                 AutomaticComponent.attributes.maxConstSpeed,
                 { optionalIf: [AUTO], mandatoryIf: [SPD] }
             ),
-            minConstFlow: ClusterFactory.AsConditional(
+            minConstFlow: MutableCluster.AsConditional(
                 AutomaticComponent.attributes.minConstFlow,
                 { optionalIf: [AUTO], mandatoryIf: [FLW] }
             ),
-            maxConstFlow: ClusterFactory.AsConditional(
+            maxConstFlow: MutableCluster.AsConditional(
                 AutomaticComponent.attributes.maxConstFlow,
                 { optionalIf: [AUTO], mandatoryIf: [FLW] }
             ),
-            minConstTemp: ClusterFactory.AsConditional(
+            minConstTemp: MutableCluster.AsConditional(
                 AutomaticComponent.attributes.minConstTemp,
                 { optionalIf: [AUTO], mandatoryIf: [TEMP] }
             ),
-            maxConstTemp: ClusterFactory.AsConditional(
+            maxConstTemp: MutableCluster.AsConditional(
                 AutomaticComponent.attributes.maxConstTemp,
                 { optionalIf: [AUTO], mandatoryIf: [TEMP] }
             )
         },
 
-        events: Cluster.events
+        events: Base.events
     });
+
+    /**
+     * This cluster supports all PumpConfigurationAndControl features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type PumpConfigurationAndControlCluster = typeof PumpConfigurationAndControl.Cluster;
+export type PumpConfigurationAndControlCluster = PumpConfigurationAndControl.Cluster;
 export const PumpConfigurationAndControlCluster = PumpConfigurationAndControl.Cluster;
+ClusterRegistry.register(PumpConfigurationAndControl.Complete);

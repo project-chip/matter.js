@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,10 +11,10 @@
 // Actually not necessary because we decided to stick generated files under
 // src/ ... leaving this for future reference though
 
-import { register, createEsmHooks } from "ts-node";
-import { URL } from "url";
 import { promises as fs } from "fs";
-import { relative } from "path"
+import { relative } from "path";
+import { createEsmHooks, register } from "ts-node";
+import { URL } from "url";
 
 const tsNode = register();
 const tsnHooks = createEsmHooks(tsNode);
@@ -45,7 +45,7 @@ export async function resolve(specifier, context, nextResolve) {
     if (context.parentURL && context.parentURL.indexOf(FLAGGED_PATH_SEGMENT) !== -1) {
         const parentURL = new URL(context.parentURL);
         const url = new URL(specifier, parentURL);
-        if (!await exists(url)) {
+        if (!(await exists(url))) {
             let mapped;
             mapped = await map(url, SRC, GEN);
             if (!mapped) {

@@ -2,7 +2,7 @@
  * Promise-based blocking queue.
  *
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -27,7 +27,9 @@ export class Queue<T> implements Stream<T> {
         this.pendingRead = {
             resolver,
             rejecter,
-            timeoutTimer: Time.getTimer(timeoutMs, () => rejecter(new NoResponseTimeoutError())).start(),
+            timeoutTimer: Time.getTimer("Queue timeout", timeoutMs, () =>
+                rejecter(new NoResponseTimeoutError()),
+            ).start(),
         };
         return promise;
     }

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022 The node-matter Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,9 +26,7 @@ export class RootCertificateManager {
     private rootCertBytes = this.generateRootCert();
     private nextCertificateId = 1;
 
-    constructor(storageContext: StorageContext) {
-        const storage = storageContext.createContext("RootCertificateManager");
-
+    constructor(storage: StorageContext) {
         // Read from storage if we have them stored, else store the just generated data
         if (storage.has("rootCertId")) {
             try {

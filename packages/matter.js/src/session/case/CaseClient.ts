@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -88,7 +88,7 @@ export class CaseClient {
             Crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
 
             const secureSessionSalt = ByteArray.concat(random, resumptionRecord.resumptionId);
-            secureSession = await client.createSecureSession({
+            secureSession = await client.sessionManager.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
@@ -184,7 +184,7 @@ export class CaseClient {
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
-            secureSession = await client.createSecureSession({
+            secureSession = await client.sessionManager.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,

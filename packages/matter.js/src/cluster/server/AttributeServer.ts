@@ -1,16 +1,18 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
+import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError, MatterError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { Endpoint as EndpointInterface } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
+import { Logger } from "../../log/Logger.js";
 import { Globals } from "../../model/index.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
@@ -19,6 +21,9 @@ import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
+import { ClusterDatasource } from "./ClusterServerTypes.js";
+
+const logger = Logger.get("AttributeServer");
 
 /**
  * Thrown when an operation cannot complete because fabric information is
@@ -42,14 +47,18 @@ export function createAttributeServer<
     clusterDef: Cluster<F, SF, A, C, E>,
     attributeDef: Attribute<T, F>,
     attributeName: string,
-    defaultValue: T,
-    getClusterDataVersion: () => number,
-    increaseClusterDataVersion: () => number,
-    getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
-    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
-    validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
+    initValue: T,
+    datasource: ClusterDatasource,
+    getter?: (
+        session?: Session<MatterDevice>,
+        endpoint?: EndpointInterface,
+        isFabricFiltered?: boolean,
+        message?: Message,
+    ) => T,
+    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => boolean,
+    validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
 ) {
-    const { id, schema, writable, fabricScoped, fixed, omitChanges, timed } = attributeDef;
+    const { id, schema, writable, fabricScoped, fixed, omitChanges, timed, default: defaultValue } = attributeDef;
 
     if (fixed) {
         return new FixedAttributeServer(
@@ -59,8 +68,9 @@ export function createAttributeServer<
             writable,
             false,
             timed,
+            initValue,
             defaultValue,
-            getClusterDataVersion,
+            datasource,
             getter,
         );
     }
@@ -73,10 +83,10 @@ export function createAttributeServer<
             writable,
             !omitChanges,
             timed,
+            initValue,
             defaultValue,
             clusterDef,
-            getClusterDataVersion,
-            increaseClusterDataVersion,
+            datasource,
             getter,
             setter,
             validator,
@@ -90,9 +100,9 @@ export function createAttributeServer<
         writable,
         !omitChanges,
         timed,
+        initValue,
         defaultValue,
-        getClusterDataVersion,
-        increaseClusterDataVersion,
+        datasource,
         getter,
         setter,
         validator,
@@ -107,7 +117,8 @@ export abstract class BaseAttributeServer<T> {
      * The value is undefined when getter/setter are used. But we still handle the version number here.
      */
     protected value: T | undefined = undefined;
-    protected endpoint?: Endpoint;
+    protected endpoint?: EndpointInterface;
+    readonly defaultValue: T;
 
     constructor(
         readonly id: AttributeId,
@@ -116,10 +127,25 @@ export abstract class BaseAttributeServer<T> {
         readonly isWritable: boolean,
         readonly isSubscribable: boolean,
         readonly requiresTimedInteraction: boolean,
-        readonly defaultValue: T,
+        initValue: T,
+        defaultValue: T | undefined,
     ) {
-        this.validateWithSchema(defaultValue);
-        this.value = defaultValue;
+        try {
+            this.validateWithSchema(initValue);
+            this.value = initValue;
+        } catch (error) {
+            logger.warn(
+                `Attribute value to initialize for ${name} has an invalid value ${Logger.toJSON(
+                    initValue,
+                )}. Restore to default ${Logger.toJSON(defaultValue)}`,
+            );
+            if (defaultValue === undefined) {
+                throw new ImplementationError(`Attribute value to initialize for ${name} can not be undefined.`);
+            }
+            this.validateWithSchema(defaultValue);
+            this.value = defaultValue;
+        }
+        this.defaultValue = this.value;
     }
 
     validateWithSchema(value: T) {
@@ -133,7 +159,7 @@ export abstract class BaseAttributeServer<T> {
         }
     }
 
-    assignToEndpoint(endpoint: Endpoint) {
+    assignToEndpoint(endpoint: EndpointInterface) {
         this.endpoint = endpoint;
     }
 
@@ -150,7 +176,12 @@ export abstract class BaseAttributeServer<T> {
  */
 export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     readonly isFixed: boolean = true;
-    protected readonly getter: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T;
+    protected readonly getter: (
+        session?: Session<MatterDevice>,
+        endpoint?: EndpointInterface,
+        isFabricFiltered?: boolean,
+        message?: Message,
+    ) => T;
 
     constructor(
         id: AttributeId,
@@ -159,19 +190,26 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         isWritable: boolean,
         isSubscribable: boolean,
         requiresTimedInteraction: boolean,
-        defaultValue: T,
-        protected readonly getClusterDataVersion: () => number,
+        initValue: T,
+        defaultValue: T | undefined,
+        protected readonly datasource: ClusterDatasource,
 
         /**
          * Optional getter function to handle special requirements or the data are stored in different places.
          *
-         * @param session the session that is requesting the value (if any).
-         * @param endpoint the endpoint the cluster server of this attribute is assigned to.
+         * @param session the session that is requesting the value (if any)
+         * @param endpoint the endpoint the cluster server of this attribute is assigned to
          * @param isFabricFiltered whether the read request is fabric scoped or not
+         * @param message the wire message that initiated the request (if any)
          */
-        getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
+        getter?: (
+            session?: Session<MatterDevice>,
+            endpoint?: EndpointInterface,
+            isFabricFiltered?: boolean,
+            message?: Message,
+        ) => T,
     ) {
-        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, defaultValue); // Fixed attributes do not change, so are not subscribable
+        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, initValue, defaultValue); // Fixed attributes do not change, so are not subscribable
 
         if (getter === undefined) {
             this.getter = () => {
@@ -189,22 +227,24 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     /**
      * Get the value of the attribute. This method is used by the Interaction model to read the value of the attribute
      * and includes the ACL check. It should not be used locally in the code!
+     *
      * If a getter is defined the value is determined by that getter method.
      */
-    get(session: Session<MatterDevice>, isFabricFiltered: boolean): T {
+    get(session: Session<MatterDevice>, isFabricFiltered: boolean, message?: Message): T {
         // TODO: check ACL
 
-        return this.getter(session, this.endpoint, isFabricFiltered);
+        return this.getter(session, this.endpoint, isFabricFiltered, message);
     }
 
     /**
      * Get the value of the attribute including the version number. This method is used by the Interaction model to read
      * the value of the attribute and includes the ACL check. It should not be used locally in the code!
+     *
      * If a getter is defined the value is determined by that getter method. The version number is always 0 for fixed
      * attributes.
      */
-    getWithVersion(session: Session<MatterDevice>, isFabricFiltered: boolean) {
-        return { version: this.getClusterDataVersion(), value: this.get(session, isFabricFiltered) };
+    getWithVersion(session: Session<MatterDevice>, isFabricFiltered: boolean, message?: Message) {
+        return { version: this.datasource.version, value: this.get(session, isFabricFiltered, message) };
     }
 
     /**
@@ -275,8 +315,13 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     override readonly isFixed = false;
     protected readonly valueChangeListeners = new Array<(value: T, version: number) => void>();
     protected readonly valueSetListeners = new Array<(newValue: T, oldValue: T) => void>();
-    protected readonly setter: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean;
-    protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void;
+    protected readonly setter: (
+        value: T,
+        session?: Session<MatterDevice>,
+        endpoint?: EndpointInterface,
+        message?: Message,
+    ) => boolean;
+    protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
 
     constructor(
         id: AttributeId,
@@ -285,34 +330,45 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         isWritable: boolean,
         isSubscribable: boolean,
         requiresTimedInteraction: boolean,
-        defaultValue: T,
-        getClusterDataVersion: () => number,
-        protected readonly increaseClusterDataVersion: () => number,
-        getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
+        initValue: T,
+        defaultValue: T | undefined,
+        datasource: ClusterDatasource,
+        getter?: (
+            session?: Session<MatterDevice>,
+            endpoint?: EndpointInterface,
+            isFabricFiltered?: boolean,
+            message?: Message,
+        ) => T,
 
         /**
-         * Optional setter function to handle special requirements or the data are stored in different places.
-         * If a setter method is used for a writable attribute, the getter method must be implemented as well.
-         * The method needs to return if the stored value has changed or not.
+         * Optional setter function to handle special requirements or the data are stored in different places. If a
+         * setter method is used for a writable attribute, the getter method must be implemented as well. The method
+         * needs to return if the stored value has changed or not.
          *
          * @param value the value to be set.
          * @param session the session that is requesting the value (if any).
          * @param endpoint the endpoint the cluster server of this attribute is assigned to.
          * @returns true if the value has changed, false otherwise.
          */
-        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
+        setter?: (
+            value: T,
+            session?: Session<MatterDevice>,
+            endpoint?: EndpointInterface,
+            message?: Message,
+        ) => boolean,
 
         /**
-         * Optional Validator function to handle special requirements for verification of stored data.
-         * The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is
-         * also returned to the client.
+         * Optional Validator function to handle special requirements for verification of stored data. The method should
+         * throw an error if the value is not valid. If a StatusResponseError is thrown this one is also returned to the
+         * client.
+         *
          * If a setter is used then no validator should be used as the setter should handle the validation itself!
          *
          * @param value the value to be set.
          * @param session the session that is requesting the value (if any).
          * @param endpoint the endpoint the cluster server of this attribute is assigned to.
          */
-        validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
+        validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
     ) {
         if (
             isWritable &&
@@ -331,8 +387,9 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             isWritable,
             isSubscribable,
             requiresTimedInteraction,
+            initValue,
             defaultValue,
-            getClusterDataVersion,
+            datasource,
             getter,
         );
 
@@ -372,31 +429,36 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     /**
      * Set the value of the attribute. This method is used by the Interaction model to write the value of the attribute
      * and includes the ACL check. It should not be used locally in the code!
+     *
      * If a setter is defined this setter method is called to store the value.
+     *
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
-    set(value: T, session: Session<MatterDevice>) {
+    set(value: T, session: Session<MatterDevice>, message?: Message) {
         if (!this.isWritable) {
             throw new StatusResponseError(`Attribute "${this.name}" is not writable.`, StatusCode.UnsupportedWrite);
         }
         // TODO: check ACL
 
-        this.setRemote(value, session);
+        this.setRemote(value, session, message);
     }
 
     /**
      * Method that contains the logic to set a value "from remote" (e.g. from a client).
      */
-    protected setRemote(value: T, session: Session<MatterDevice>) {
-        this.processSet(value, session);
+    protected setRemote(value: T, session: Session<MatterDevice>, message?: Message) {
+        this.processSet(value, session, message);
         this.value = value;
     }
 
     /**
      * Set the value of the attribute locally. This method should be used locally in the code and does not include the
      * ACL check.
+     *
      * If a setter is defined this setter method is called to validate and store the value.
+     *
      * Else if a validator is defined the value is validated before it is stored.
+     *
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
     setLocal(value: T) {
@@ -407,10 +469,10 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     /**
      * Helper Method to process the set of a value in a generic way. This method is used internally.
      */
-    protected processSet(value: T, session?: Session<MatterDevice>) {
+    protected processSet(value: T, session?: Session<MatterDevice>, message?: Message) {
         this.validator(value, session, this.endpoint);
-        const oldValue = this.getter(session, this.endpoint);
-        const valueChanged = this.setter(value, session, this.endpoint);
+        const oldValue = this.getter(session, this.endpoint, undefined, message);
+        const valueChanged = this.setter(value, session, this.endpoint, message);
         this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
     }
 
@@ -420,7 +482,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      */
     protected handleVersionAndTriggerListeners(value: T, oldValue: T | undefined, considerVersionChanged: boolean) {
         if (considerVersionChanged) {
-            const version = this.increaseClusterDataVersion();
+            const version = this.datasource.increaseVersion();
             this.valueChangeListeners.forEach(listener => listener(value, version));
         }
         if (oldValue !== undefined) {
@@ -432,6 +494,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * When the value is handled by getter or setter methods and is changed by other processes this method can be used
      * to notify the attribute server that the value has changed. This will increase the version number and trigger the
      * listeners.
+     *
      * ACL checks needs to be performed before calling this method.
      */
     updated(session: SecureSession<MatterDevice>) {
@@ -448,6 +511,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * When the value is handled by getter or setter methods and is changed by other processes and no session from the
      * originating process is known this method can be used to notify the attribute server that the value has changed.
      * This will increase the version number and trigger the listeners.
+     *
      * ACL checks needs to be performed before calling this method.
      */
     updatedLocal() {
@@ -516,13 +580,18 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         isWritable: boolean,
         isSubscribable: boolean,
         requiresTimedInteraction: boolean,
-        defaultValue: T,
+        initValue: T,
+        defaultValue: T | undefined,
         readonly cluster: Cluster<any, any, any, any, any>,
-        getClusterDataVersion: () => number,
-        increaseClusterDataVersion: () => number,
-        getter?: (session?: Session<MatterDevice>, endpoint?: Endpoint, isFabricFiltered?: boolean) => T,
-        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => boolean,
-        validator?: (value: T, session?: Session<MatterDevice>, endpoint?: Endpoint) => void,
+        datasource: ClusterDatasource,
+        getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
+        setter?: (
+            value: T,
+            session?: Session<MatterDevice>,
+            endpoint?: EndpointInterface,
+            message?: Message,
+        ) => boolean,
+        validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
     ) {
         if (
             isWritable &&
@@ -530,7 +599,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             !(getter === undefined && setter === undefined)
         ) {
             throw new ImplementationError(
-                `Getter and setter must be implemented together writeable fabric scoped attribute "${name}".`,
+                `Getter and setter must be implemented together for writeable fabric scoped attribute "${name}".`,
             );
         }
 
@@ -542,9 +611,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
 
                 if (isFabricFiltered === true) {
                     assertSecureSession(session);
-                    return this.getLocalForFabric(session.getAssociatedFabric());
+                    return this.getLocalForFabric(session.associatedFabric);
                 } else {
-                    const fabrics = session.getContext().getFabrics();
+                    const fabrics = session.context.getFabrics();
                     const values = new Array<any>();
                     for (const fabric of fabrics) {
                         const value = this.getLocalForFabric(fabric);
@@ -569,7 +638,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                     throw new FabricScopeError(`Session is required for fabric scoped attribute "${name}".`);
 
                 assertSecureSession(session);
-                const fabric = session.getAssociatedFabric();
+                const fabric = session.associatedFabric;
 
                 const oldData = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
                 const oldValue = oldData?.value ?? this.defaultValue;
@@ -590,9 +659,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             isWritable,
             isSubscribable,
             requiresTimedInteraction,
+            initValue,
             defaultValue,
-            getClusterDataVersion,
-            increaseClusterDataVersion,
+            datasource,
             getter,
             setter,
             validator,
@@ -615,16 +684,16 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
      * we need to inject the fabric index into the value.
      */
-    protected override setRemote(value: T, session: Session<MatterDevice>) {
+    protected override setRemote(value: T, session: Session<MatterDevice>, message: Message) {
         // Inject fabric index into structures in general if undefined, if set it will be used
         value = this.schema.injectField(
             value,
             <number>Globals.FabricIndex.id,
-            session.getAssociatedFabric().fabricIndex,
+            session.associatedFabric.fabricIndex,
             existingFieldIndex => existingFieldIndex === undefined,
         );
 
-        super.setRemote(value, session);
+        super.setRemote(value, session, message);
     }
 
     /**

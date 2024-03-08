@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 import { GroupId } from "../datatype/GroupId.js";
 import { NodeId } from "../datatype/NodeId.js";
-import { DiagnosticDictionary } from "../log/Logger.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
@@ -50,7 +50,6 @@ export interface Packet {
 export interface DecodedPacket extends Packet {
     header: DecodedPacketHeader;
 }
-
 export interface Message {
     packetHeader: PacketHeader;
     payloadHeader: PayloadHeader;
@@ -249,7 +248,7 @@ export class MessageCodec {
         }: Message,
         isDuplicate = false,
     ) {
-        return new DiagnosticDictionary({
+        return Diagnostic.dict({
             id: `${sessionId}/${exchangeId}/${messageId}`,
             type: `${protocolId}/${messageType}`,
             acked: ackedMessageId,

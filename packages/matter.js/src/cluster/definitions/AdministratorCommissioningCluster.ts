@@ -1,24 +1,41 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { Command, TlvNoResponse, AccessLevel, Attribute } from "../../cluster/Cluster.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
-import { TlvEnum, TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvUInt16, TlvEnum, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace AdministratorCommissioning {
+    /**
+     * Input to the AdministratorCommissioning openBasicCommissioningWindow command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
+     */
+    export const TlvOpenBasicCommissioningWindowRequest = TlvObject({ commissioningTimeout: TlvField(0, TlvUInt16) });
+
+    /**
+     * Input to the AdministratorCommissioning openBasicCommissioningWindow command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
+     */
+    export interface OpenBasicCommissioningWindowRequest extends TypeFromSchema<typeof TlvOpenBasicCommissioningWindowRequest> {}
+
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.18.5.1
      */
@@ -107,6 +124,13 @@ export namespace AdministratorCommissioning {
         salt: TlvField(4, TlvByteString.bound({ minLength: 16, maxLength: 32 }))
     });
 
+    /**
+     * Input to the AdministratorCommissioning openCommissioningWindow command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.1
+     */
+    export interface OpenCommissioningWindowRequest extends TypeFromSchema<typeof TlvOpenCommissioningWindowRequest> {}
+
     export enum StatusCode {
         /**
          * Could not be completed because another commissioning is in progress
@@ -131,11 +155,51 @@ export namespace AdministratorCommissioning {
     }
 
     /**
-     * Input to the AdministratorCommissioning openBasicCommissioningWindow command
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
+     * A AdministratorCommissioningCluster supports these elements if it supports feature Basic.
      */
-    export const TlvOpenBasicCommissioningWindowRequest = TlvObject({ commissioningTimeout: TlvField(0, TlvUInt16) });
+    export const BasicComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * This command may be used by a current Administrator to instruct a Node to go into commissioning mode, if
+             * the node supports the Basic Commissioning Method. The Basic Commissioning Method specifies a window of
+             * time during which an already commissioned Node accepts PASE sessions. The current Administrator shall
+             * specify a timeout value for the duration of OBCW.
+             *
+             * If a commissioning window is already currently open, this command shall fail with a cluster specific
+             * status code of Busy.
+             *
+             * If the fail-safe timer is currently armed, this command shall fail with a cluster specific status code
+             * of Busy, since it is likely that concurrent commissioning operations from multiple separate
+             * Commissioners are about to take place.
+             *
+             * In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID.
+             *
+             * The commissioning into a new Fabric completes when the Node successfully receives a
+             * CommissioningComplete command, see Section 5.5, “Commissioning Flows”. The new Administrator shall
+             * discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for commissioning.
+             *
+             * This field shall specify the time in seconds during which commissioning session establishment is allowed
+             * by the Node. This is known as Open Basic Commissioning Window (OBCW). This timeout shall follow guidance
+             * as specified in Announcement Duration.
+             *
+             * When a Node receives the Open Basic Commissioning Window command, it shall begin advertising on DNS-SD
+             * as described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in
+             * Section 11.18.8.2.1, “CommissioningTimeout Field”. When the command is received by a SED, it shall enter
+             * into active mode and set its fast-polling interval to SLEEPY_AC
+             *
+             * TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
+             */
+            openBasicCommissioningWindow: Command(
+                0x1,
+                TlvOpenBasicCommissioningWindowRequest,
+                0x1,
+                TlvNoResponse,
+                { invokeAcl: AccessLevel.Administer, timed: true }
+            )
+        }
+    });
 
     /**
      * These are optional features supported by AdministratorCommissioningCluster.
@@ -154,7 +218,7 @@ export namespace AdministratorCommissioning {
     /**
      * These elements and properties are present in all AdministratorCommissioning clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x3c,
         name: "AdministratorCommissioning",
         revision: 1,
@@ -270,55 +334,19 @@ export namespace AdministratorCommissioning {
                 TlvNoResponse,
                 { invokeAcl: AccessLevel.Administer, timed: true }
             )
-        }
+        },
+
+        /**
+         * This metadata controls which AdministratorCommissioningCluster elements matter.js activates for specific
+         * feature combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { basic: true }, component: BasicComponent })
     });
 
     /**
-     * A AdministratorCommissioningCluster supports these elements if it supports feature Basic.
+     * @see {@link Cluster}
      */
-    export const BasicComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * This command may be used by a current Administrator to instruct a Node to go into commissioning mode, if
-             * the node supports the Basic Commissioning Method. The Basic Commissioning Method specifies a window of
-             * time during which an already commissioned Node accepts PASE sessions. The current Administrator shall
-             * specify a timeout value for the duration of OBCW.
-             *
-             * If a commissioning window is already currently open, this command shall fail with a cluster specific
-             * status code of Busy.
-             *
-             * If the fail-safe timer is currently armed, this command shall fail with a cluster specific status code
-             * of Busy, since it is likely that concurrent commissioning operations from multiple separate
-             * Commissioners are about to take place.
-             *
-             * In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID.
-             *
-             * The commissioning into a new Fabric completes when the Node successfully receives a
-             * CommissioningComplete command, see Section 5.5, “Commissioning Flows”. The new Administrator shall
-             * discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for commissioning.
-             *
-             * This field shall specify the time in seconds during which commissioning session establishment is allowed
-             * by the Node. This is known as Open Basic Commissioning Window (OBCW). This timeout shall follow guidance
-             * as specified in Announcement Duration.
-             *
-             * When a Node receives the Open Basic Commissioning Window command, it shall begin advertising on DNS-SD
-             * as described in Section 4.3.1, “Commissionable Node Discovery” and for a time period as described in
-             * Section 11.18.8.2.1, “CommissioningTimeout Field”. When the command is received by a SED, it shall enter
-             * into active mode and set its fast-polling interval to SLEEPY_AC
-             *
-             * TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
-             */
-            openBasicCommissioningWindow: Command(
-                0x1,
-                TlvOpenBasicCommissioningWindowRequest,
-                0x1,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Administer, timed: true }
-            )
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Administrator Commissioning
@@ -334,41 +362,15 @@ export namespace AdministratorCommissioning {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.18
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create an AdministratorCommissioning cluster with support for optional features.
-         * Include each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns an AdministratorCommissioning cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, BasicComponent, { basic: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { basic: true } ? typeof BasicComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const BC = { basic: true };
 
     /**
-     * This cluster supports all AdministratorCommissioning features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -377,13 +379,24 @@ export namespace AdministratorCommissioning {
 
         commands: {
             ...Cluster.commands,
-            openBasicCommissioningWindow: ClusterFactory.AsConditional(
+            openBasicCommissioningWindow: MutableCluster.AsConditional(
                 BasicComponent.commands.openBasicCommissioningWindow,
                 { mandatoryIf: [BC] }
             )
         }
     });
+
+    /**
+     * This cluster supports all AdministratorCommissioning features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type AdministratorCommissioningCluster = typeof AdministratorCommissioning.Cluster;
+export type AdministratorCommissioningCluster = AdministratorCommissioning.Cluster;
 export const AdministratorCommissioningCluster = AdministratorCommissioning.Cluster;
+ClusterRegistry.register(AdministratorCommissioning.Complete);

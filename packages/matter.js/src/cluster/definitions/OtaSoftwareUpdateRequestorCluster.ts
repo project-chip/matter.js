@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     WritableFabricScopedAttribute,
     AccessLevel,
@@ -22,11 +21,15 @@ import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16, TlvUInt64, TlvInt64 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace OtaSoftwareUpdateRequestor {
     /**
@@ -39,6 +42,13 @@ export namespace OtaSoftwareUpdateRequestor {
         endpoint: TlvField(2, TlvEndpointNumber),
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
+
+    /**
+     * This structure encodes a fabric-scoped location of an OTA provider on a given fabric.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.20
+     */
+    export interface ProviderLocationStruct extends TypeFromSchema<typeof TlvProviderLocationStruct> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.5
@@ -127,6 +137,13 @@ export namespace OtaSoftwareUpdateRequestor {
     });
 
     /**
+     * Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.6.1
+     */
+    export interface AnnounceOtaProviderRequest extends TypeFromSchema<typeof TlvAnnounceOtaProviderRequest> {}
+
+    /**
      * This value shall indicate that the reason for a state change is unknown.
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.15
@@ -171,6 +188,13 @@ export namespace OtaSoftwareUpdateRequestor {
     });
 
     /**
+     * Body of the OtaSoftwareUpdateRequestor stateTransition event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.1
+     */
+    export interface StateTransitionEvent extends TypeFromSchema<typeof TlvStateTransitionEvent> {}
+
+    /**
      * Body of the OtaSoftwareUpdateRequestor versionApplied event
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.6
@@ -179,6 +203,13 @@ export namespace OtaSoftwareUpdateRequestor {
         softwareVersion: TlvField(0, TlvUInt32),
         productId: TlvField(1, TlvUInt16)
     });
+
+    /**
+     * Body of the OtaSoftwareUpdateRequestor versionApplied event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.6
+     */
+    export interface VersionAppliedEvent extends TypeFromSchema<typeof TlvVersionAppliedEvent> {}
 
     /**
      * Body of the OtaSoftwareUpdateRequestor downloadError event
@@ -193,13 +224,16 @@ export namespace OtaSoftwareUpdateRequestor {
     });
 
     /**
-     * OTA Software Update Requestor
+     * Body of the OtaSoftwareUpdateRequestor downloadError event
      *
-     * Provides an interface for downloading and applying OTA software updates
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.9
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface DownloadErrorEvent extends TypeFromSchema<typeof TlvDownloadErrorEvent> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x2a,
         name: "OtaSoftwareUpdateRequestor",
         revision: 1,
@@ -311,7 +345,20 @@ export namespace OtaSoftwareUpdateRequestor {
             downloadError: Event(0x2, EventPriority.Info, TlvDownloadErrorEvent)
         }
     });
+
+    /**
+     * OTA Software Update Requestor
+     *
+     * Provides an interface for downloading and applying OTA software updates
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type OtaSoftwareUpdateRequestorCluster = typeof OtaSoftwareUpdateRequestor.Cluster;
+export type OtaSoftwareUpdateRequestorCluster = OtaSoftwareUpdateRequestor.Cluster;
 export const OtaSoftwareUpdateRequestorCluster = OtaSoftwareUpdateRequestor.Cluster;
+ClusterRegistry.register(OtaSoftwareUpdateRequestor.Complete);

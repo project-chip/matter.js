@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -74,11 +74,11 @@ export class BitmapSchemaInternal<T extends BitSchema> extends Schema<TypeFromBi
      * Allow to use a fully defined Bitmap schema as input, but also allow one where only the entries of bits set are
      * provided, rest is unset.
      */
-    override encode(value: TypeFromBitSchema<T> | TypeFromPartialBitSchema<T>) {
+    override encode(value: TypeFromPartialBitSchema<T>) {
         return super.encode(value as TypeFromBitSchema<T>);
     }
 
-    override encodeInternal(value: TypeFromBitSchema<T>) {
+    override encodeInternal(value: TypeFromPartialBitSchema<T>) {
         let result = 0;
         for (const name in this.bitSchemas) {
             const { type, offset } = this.bitSchemas[name];

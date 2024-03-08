@@ -1,27 +1,54 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
+    Command,
+    AccessLevel,
     WritableAttribute,
     Attribute,
-    Command,
     TlvNoResponse,
-    AccessLevel,
     OptionalCommand
 } from "../../cluster/Cluster.js";
-import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace Identify {
+    /**
+     * This command is generated in response to receiving an IdentifyQuery command, see IdentifyQuery Command, in the
+     * case that the device is currently identifying itself.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4
+     */
+    export const TlvIdentifyQueryResponse = TlvObject({
+        /**
+         * This field contains the current value of the IdentifyTime attribute, and specifies the length of time, in
+         * seconds, that the device will continue to identify itself.
+         *
+         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4.1
+         */
+        timeout: TlvField(0, TlvUInt16)
+    });
+
+    /**
+     * This command is generated in response to receiving an IdentifyQuery command, see IdentifyQuery Command, in the
+     * case that the device is currently identifying itself.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4
+     */
+    export interface IdentifyQueryResponse extends TypeFromSchema<typeof TlvIdentifyQueryResponse> {}
+
     /**
      * The value of the Identify identifyType attribute
      *
@@ -63,6 +90,13 @@ export namespace Identify {
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
      */
     export const TlvIdentifyRequest = TlvObject({ identifyTime: TlvField(0, TlvUInt16) });
+
+    /**
+     * Input to the Identify identify command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
+     */
+    export interface IdentifyRequest extends TypeFromSchema<typeof TlvIdentifyRequest> {}
 
     /**
      * The value of Identify.effectIdentifier
@@ -144,19 +178,33 @@ export namespace Identify {
     });
 
     /**
-     * This command is generated in response to receiving an IdentifyQuery command, see IdentifyQuery Command, in the
-     * case that the device is currently identifying itself.
+     * Input to the Identify triggerEffect command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3
      */
-    export const TlvIdentifyQueryResponse = TlvObject({
-        /**
-         * This field contains the current value of the IdentifyTime attribute, and specifies the length of time, in
-         * seconds, that the device will continue to identify itself.
-         *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4.1
-         */
-        timeout: TlvField(0, TlvUInt16)
+    export interface TriggerEffectRequest extends TypeFromSchema<typeof TlvTriggerEffectRequest> {}
+
+    /**
+     * A IdentifyCluster supports these elements if it supports feature Query.
+     */
+    export const QueryComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * This command allows the sending device to request the target or targets to respond if they are currently
+             * identifying themselves.
+             *
+             * This command has no data fields.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.2
+             */
+            identifyQuery: Command(
+                0x1,
+                TlvNoArguments,
+                0x0,
+                TlvIdentifyQueryResponse,
+                { invokeAcl: AccessLevel.Manage }
+            )
+        }
     });
 
     /**
@@ -176,7 +224,7 @@ export namespace Identify {
     /**
      * These elements and properties are present in all Identify clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x3,
         name: "Identify",
         revision: 4,
@@ -242,31 +290,18 @@ export namespace Identify {
                 TlvNoResponse,
                 { invokeAcl: AccessLevel.Manage }
             )
-        }
+        },
+
+        /**
+         * This metadata controls which IdentifyCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { query: true }, component: QueryComponent })
     });
 
     /**
-     * A IdentifyCluster supports these elements if it supports feature Query.
+     * @see {@link Cluster}
      */
-    export const QueryComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * This command allows the sending device to request the target or targets to respond if they are currently
-             * identifying themselves.
-             *
-             * This command has no data fields.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.2
-             */
-            identifyQuery: Command(
-                0x1,
-                TlvNoArguments,
-                0x0,
-                TlvIdentifyQueryResponse,
-                { invokeAcl: AccessLevel.Manage }
-            )
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Identify
@@ -287,41 +322,15 @@ export namespace Identify {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create an Identify cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns an Identify cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, QueryComponent, { query: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { query: true } ? typeof QueryComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const QRY = { query: true };
 
     /**
-     * This cluster supports all Identify features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -329,10 +338,21 @@ export namespace Identify {
         attributes: Cluster.attributes,
         commands: {
             ...Cluster.commands,
-            identifyQuery: ClusterFactory.AsConditional(QueryComponent.commands.identifyQuery, { mandatoryIf: [QRY] })
+            identifyQuery: MutableCluster.AsConditional(QueryComponent.commands.identifyQuery, { mandatoryIf: [QRY] })
         }
     });
+
+    /**
+     * This cluster supports all Identify features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type IdentifyCluster = typeof Identify.Cluster;
+export type IdentifyCluster = Identify.Cluster;
 export const IdentifyCluster = Identify.Cluster;
+ClusterRegistry.register(Identify.Complete);

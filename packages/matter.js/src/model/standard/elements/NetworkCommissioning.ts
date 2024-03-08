@@ -1,15 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    FieldElement as Field,
+    CommandElement as Command,
+    DatatypeElement as Datatype
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "NetworkCommissioning", id: 0x31, classification: "node",
+Matter.children.push(Cluster({
+    name: "NetworkCommissioning", id: 0x31, classification: "node",
     description: "Network Commissioning",
 
     details: "Network commissioning is part of the overall Node commissioning. The main goal of Network " +
@@ -29,43 +36,40 @@ Matter.children.push({
     xref: { document: "core", section: "11.8" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "attribute", name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
+        Attribute({
+            name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
             xref: { document: "core", section: "11.8.4" },
 
             children: [
-                {
-                    tag: "datatype", name: "WI", conformance: "O.a", constraint: "0",
-                    description: "WiFiNetworkInterface",
+                Field({
+                    name: "WI", conformance: "O.a", constraint: "0", description: "WiFiNetworkInterface",
                     details: "Wi-Fi related features"
-                },
-                {
-                    tag: "datatype", name: "TH", conformance: "O.a", constraint: "1",
-                    description: "ThreadNetworkInterface",
+                }),
+                Field({
+                    name: "TH", conformance: "O.a", constraint: "1", description: "ThreadNetworkInterface",
                     details: "Thread related features"
-                },
-                {
-                    tag: "datatype", name: "ET", conformance: "O.a", constraint: "2",
-                    description: "EthernetNetworkInterface",
+                }),
+                Field({
+                    name: "ET", conformance: "O.a", constraint: "2", description: "EthernetNetworkInterface",
                     details: "Ethernet related features"
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "attribute", name: "MaxNetworks", id: 0x0, type: "uint8", access: "R A", conformance: "M",
-            constraint: "min 1", quality: "F",
+        Attribute({
+            name: "MaxNetworks", id: 0x0, type: "uint8", access: "R A", conformance: "M", constraint: "min 1",
+            quality: "F",
             details: "This shall indicate the maximum number of network configuration entries that can be added, based on " +
                 "available device resources. The length of the Networks attribute list shall be less than or equal " +
                 "to this value.",
             xref: { document: "core", section: "11.8.6.1" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "Networks", id: 0x1, type: "list", access: "R A", conformance: "M",
-            constraint: "max MaxNetworks", default: [],
+        Attribute({
+            name: "Networks", id: 0x1, type: "list", access: "R A", conformance: "M",
+            constraint: "max maxNetworks", default: [],
 
             details: "This attribute shall indicate the network configurations that are usable on the network interface " +
                 "represented by this cluster server instance." +
@@ -85,33 +89,33 @@ Matter.children.push({
                 "network configurations to those Cluster instances.",
 
             xref: { document: "core", section: "11.8.6.2" },
-            children: [{ tag: "datatype", name: "entry", type: "NetworkInfoStruct" }]
-        },
+            children: [Field({ name: "entry", type: "NetworkInfoStruct" })]
+        }),
 
-        {
-            tag: "attribute", name: "ScanMaxTimeSeconds", id: 0x2, type: "uint8", access: "R V",
-            conformance: "WI | TH", constraint: "desc", quality: "F",
+        Attribute({
+            name: "ScanMaxTimeSeconds", id: 0x2, type: "uint8", access: "R V", conformance: "WI | TH",
+            constraint: "desc", quality: "F",
             details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
                 "this cluster server instance to provide scan results." +
                 "\n" +
                 "See Section 11.8.7.1, “ScanNetworks Command” for usage.",
             xref: { document: "core", section: "11.8.6.3" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "ConnectMaxTimeSeconds", id: 0x3, type: "uint8", access: "R V",
-            conformance: "WI | TH", constraint: "desc", quality: "F",
+        Attribute({
+            name: "ConnectMaxTimeSeconds", id: 0x3, type: "uint8", access: "R V", conformance: "WI | TH",
+            constraint: "desc", quality: "F",
             details: "This attribute shall indicate the maximum duration taken, in seconds, by the network interface on " +
                 "this cluster server instance to report a successful or failed network connection indication. This " +
                 "maximum time shall account for all operations needed until a successful network connection is " +
                 "deemed to have occurred, including, for example, obtaining IP addresses, or the execution of " +
                 "necessary internal retries.",
             xref: { document: "core", section: "11.8.6.4" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "InterfaceEnabled", id: 0x4, type: "bool", access: "RW VA",
-            conformance: "M", default: true, quality: "N",
+        Attribute({
+            name: "InterfaceEnabled", id: 0x4, type: "bool", access: "RW VA", conformance: "M", default: true,
+            quality: "N",
 
             details: "This attribute shall indicate whether the associated network interface is enabled or not. By " +
                 "default all network interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set " +
@@ -132,11 +136,11 @@ Matter.children.push({
                 "cluster instances with InterfaceEnabled set to true.",
 
             xref: { document: "core", section: "11.8.6.5" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "LastNetworkingStatus", id: 0x5, type: "NetworkCommissioningStatusEnum",
-            access: "R A", conformance: "M", default: null, quality: "X",
+        Attribute({
+            name: "LastNetworkingStatus", id: 0x5, type: "NetworkCommissioningStatusEnum", access: "R A",
+            conformance: "M", default: null, quality: "X",
 
             details: "This attribute shall indicate the status of the last attempt either scan or connect to an " +
                 "operational network, using this interface, whether by invocation of the ConnectNetwork command or " +
@@ -148,10 +152,10 @@ Matter.children.push({
                 "in non-concurrent networking commissioning flows.",
 
             xref: { document: "core", section: "11.8.6.6" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "LastNetworkId", id: 0x6, type: "octstr", access: "R A", conformance: "M",
+        Attribute({
+            name: "LastNetworkId", id: 0x6, type: "octstr", access: "R A", conformance: "M",
             constraint: "1 to 32", default: null, quality: "X",
 
             details: "This attribute shall indicate the NetworkID used in the last attempt to connect to an operational " +
@@ -168,11 +172,11 @@ Matter.children.push({
                 "in non-concurrent networking commissioning flows.",
 
             xref: { document: "core", section: "11.8.6.7" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "LastConnectErrorValue", id: 0x7, type: "int32", access: "R A",
-            conformance: "M", default: null, quality: "X",
+        Attribute({
+            name: "LastConnectErrorValue", id: 0x7, type: "int32", access: "R A", conformance: "M",
+            default: null, quality: "X",
 
             details: "This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an " +
                 "operational network, using this interface, whether by invocation of the ConnectNetwork command or " +
@@ -187,11 +191,11 @@ Matter.children.push({
                 "in non-concurrent networking commissioning flows.",
 
             xref: { document: "core", section: "11.8.6.8" }
-        },
+        }),
 
-        {
-            tag: "command", name: "ScanNetworks", id: 0x0, access: "A", conformance: "WI | TH",
-            direction: "request", response: "ScanNetworksResponse",
+        Command({
+            name: "ScanNetworks", id: 0x0, access: "A", conformance: "WI | TH", direction: "request",
+            response: "ScanNetworksResponse",
 
             details: "This command shall scan on the Cluster instance’s associated network interface for either of:" +
                 "\n" +
@@ -224,28 +228,27 @@ Matter.children.push({
             xref: { document: "core", section: "11.8.7.1" },
 
             children: [
-                {
-                    tag: "datatype", name: "Ssid", id: 0x0, type: "octstr", conformance: "[WI]", constraint: "1 to 32",
-                    default: null, quality: "X",
+                Field({
+                    name: "Ssid", id: 0x0, type: "octstr", conformance: "[WI]", constraint: "0 to 32", default: null,
+                    quality: "X",
                     details: "This field, if present, shall contain the SSID for a directed scan of that particular Wi-Fi SSID. " +
                         "Otherwise, if the field is absent, or it is null, this shall indicate scanning of all BSSID in " +
                         "range. This field shall be ignored for ScanNetworks invocations on non-Wi-Fi server instances.",
                     xref: { document: "core", section: "11.8.7.1.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
+                Field({
+                    name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
                     details: "The Breadcrumb field, if present, shall be used to atomically set the Breadcrumb attribute in the " +
                         "General Commissioning cluster on success of the associated command. If the command fails, the " +
                         "Breadcrumb attribute in the General Commissioning cluster shall be left unchanged.",
                     xref: { document: "core", section: "11.8.7.1.2" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "ScanNetworksResponse", id: 0x1, conformance: "WI | TH",
-            direction: "response",
+        Command({
+            name: "ScanNetworksResponse", id: 0x1, conformance: "WI | TH", direction: "response",
 
             details: "This command shall contain the status of the last ScanNetworks command, and the associated scan " +
                 "results if the operation was successful." +
@@ -258,9 +261,9 @@ Matter.children.push({
             xref: { document: "core", section: "11.8.7.2" },
 
             children: [
-                {
-                    tag: "datatype", name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum",
-                    conformance: "M", constraint: "desc",
+                Field({
+                    name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum", conformance: "M",
+                    constraint: "desc",
 
                     details: "The NetworkingStatus field shall indicate the status of the last scan operation, taking one of " +
                         "these values:" +
@@ -278,20 +281,18 @@ Matter.children.push({
                         "  • UnknownError: An internal error occurred during scanning.",
 
                     xref: { document: "core", section: "11.8.7.2.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "O",
-                    constraint: "max 512",
+                Field({
+                    name: "DebugText", id: 0x1, type: "string", conformance: "O", constraint: "max 512",
                     details: "This field, if present and non-empty, may contain error information which may be communicated to " +
                         "the user in case the NetworkingStatus was not Success. Its purpose is to help developers in " +
                         "troubleshooting errors and may go into logs or crash reports.",
                     xref: { document: "core", section: "11.8.7.2.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "WiFiScanResults", id: 0x2, type: "list", conformance: "WI",
-                    constraint: "desc",
+                Field({
+                    name: "WiFiScanResults", id: 0x2, type: "list", conformance: "WI", constraint: "desc",
 
                     details: "If NetworkingStatus was Success, this field shall contain the Wi-Fi network scan results. The list " +
                         "may be empty if none were found in range on the bands supported by the interface, or if directed " +
@@ -307,12 +308,11 @@ Matter.children.push({
                         "that most likely to be reachable elements are included within the size limits of the response.",
 
                     xref: { document: "core", section: "11.8.7.2.3" },
-                    children: [{ tag: "datatype", name: "entry", type: "WiFiInterfaceScanResultStruct" }]
-                },
+                    children: [Field({ name: "entry", type: "WiFiInterfaceScanResultStruct" })]
+                }),
 
-                {
-                    tag: "datatype", name: "ThreadScanResults", id: 0x3, type: "list", conformance: "TH",
-                    constraint: "desc",
+                Field({
+                    name: "ThreadScanResults", id: 0x3, type: "list", conformance: "TH", constraint: "desc",
 
                     details: "If NetworkingStatus was Success, this field shall contain the Thread network scan results. The list " +
                         "may be empty if none were found in range on the bands supported by the interface." +
@@ -327,14 +327,14 @@ Matter.children.push({
                         "included within the size limits of the response.",
 
                     xref: { document: "core", section: "11.8.7.2.4" },
-                    children: [{ tag: "datatype", name: "entry", type: "ThreadInterfaceScanResultStruct" }]
-                }
+                    children: [Field({ name: "entry", type: "ThreadInterfaceScanResultStruct" })]
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "AddOrUpdateWiFiNetwork", id: 0x2, access: "A", conformance: "WI",
-            direction: "request", response: "NetworkConfigResponse",
+        Command({
+            name: "AddOrUpdateWiFiNetwork", id: 0x2, access: "A", conformance: "WI", direction: "request",
+            response: "NetworkConfigResponse",
 
             details: "This command shall be used to add or modify Wi-Fi network configurations." +
                 "\n" +
@@ -354,11 +354,10 @@ Matter.children.push({
             xref: { document: "core", section: "11.8.7.3" },
 
             children: [
-                { tag: "datatype", name: "Ssid", id: 0x0, type: "octstr", conformance: "M", constraint: "max 32" },
+                Field({ name: "Ssid", id: 0x0, type: "octstr", conformance: "M", constraint: "max 32" }),
 
-                {
-                    tag: "datatype", name: "Credentials", id: 0x1, type: "octstr", conformance: "M",
-                    constraint: "max 64",
+                Field({
+                    name: "Credentials", id: 0x1, type: "octstr", conformance: "M", constraint: "max 64",
 
                     details: "Credentials is the passphrase or PSK for the network (if any is needed)." +
                         "\n" +
@@ -399,15 +398,15 @@ Matter.children.push({
                         "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
 
                     xref: { document: "core", section: "11.8.7.3.1" }
-                },
+                }),
 
-                { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" }
+                Field({ name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "AddOrUpdateThreadNetwork", id: 0x3, access: "A", conformance: "TH",
-            direction: "request", response: "NetworkConfigResponse",
+        Command({
+            name: "AddOrUpdateThreadNetwork", id: 0x3, access: "A", conformance: "TH", direction: "request",
+            response: "NetworkConfigResponse",
 
             details: "This command shall be used to add or modify Thread network configurations." +
                 "\n" +
@@ -428,9 +427,8 @@ Matter.children.push({
             xref: { document: "core", section: "11.8.7.4" },
 
             children: [
-                {
-                    tag: "datatype", name: "OperationalDataset", id: 0x0, type: "octstr", conformance: "M",
-                    constraint: "max 254",
+                Field({
+                    name: "OperationalDataset", id: 0x0, type: "octstr", conformance: "M", constraint: "max 254",
 
                     details: "The OperationalDataset field shall contain the Thread Network Parameters, including channel, PAN " +
                         "ID, and Extended PAN ID." +
@@ -441,15 +439,15 @@ Matter.children.push({
                         "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
 
                     xref: { document: "core", section: "11.8.7.4.1" }
-                },
+                }),
 
-                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" }
+                Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "RemoveNetwork", id: 0x4, access: "A", conformance: "WI | TH",
-            direction: "request", response: "NetworkConfigResponse",
+        Command({
+            name: "RemoveNetwork", id: 0x4, access: "A", conformance: "WI | TH", direction: "request",
+            response: "NetworkConfigResponse",
 
             details: "This command shall remove the network configuration from the Cluster if there was already a network " +
                 "configuration with the same NetworkID. The relative order of the entries in the Networks attribute " +
@@ -473,19 +471,14 @@ Matter.children.push({
                 "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
 
             xref: { document: "core", section: "11.8.7.7" },
-
             children: [
-                {
-                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
-                    constraint: "1 to 32"
-                },
-                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" }
+                Field({ name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" }),
+                Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "NetworkConfigResponse", id: 0x5, conformance: "WI | TH",
-            direction: "response",
+        Command({
+            name: "NetworkConfigResponse", id: 0x5, conformance: "WI | TH", direction: "response",
 
             details: "This response command relates status information for some commands which require it as their " +
                 "response command. See each individual cluster server command for the situations that may cause a " +
@@ -518,28 +511,25 @@ Matter.children.push({
             xref: { document: "core", section: "11.8.7.8" },
 
             children: [
-                {
-                    tag: "datatype", name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum",
-                    conformance: "M", constraint: "desc"
-                },
-                {
-                    tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "O",
-                    constraint: "max 512"
-                },
+                Field({
+                    name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum", conformance: "M",
+                    constraint: "desc"
+                }),
+                Field({ name: "DebugText", id: 0x1, type: "string", conformance: "O", constraint: "max 512" }),
 
-                {
-                    tag: "datatype", name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O",
+                Field({
+                    name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O",
                     details: "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
                         "index of the entry in the Networks attribute that was last added, updated or removed successfully " +
                         "by the associated request command.",
                     xref: { document: "core", section: "11.8.7.8.1" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "ConnectNetwork", id: 0x6, access: "A", conformance: "WI | TH",
-            direction: "request", response: "ConnectNetworkResponse",
+        Command({
+            name: "ConnectNetwork", id: 0x6, access: "A", conformance: "WI | TH", direction: "request",
+            response: "ConnectNetworkResponse",
 
             details: "This command shall attempt to connect to a network whose configuration was previously added by " +
                 "either the AddOrUpdateWiFiNetwork or AddOrUpdateThreadNetwork commands. Network is identified by " +
@@ -613,19 +603,14 @@ Matter.children.push({
                 "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
 
             xref: { document: "core", section: "11.8.7.9" },
-
             children: [
-                {
-                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
-                    constraint: "1 to 32"
-                },
-                { tag: "datatype", name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" }
+                Field({ name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" }),
+                Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "ConnectNetworkResponse", id: 0x7, conformance: "WI | TH",
-            direction: "response",
+        Command({
+            name: "ConnectNetworkResponse", id: 0x7, conformance: "WI | TH", direction: "response",
 
             details: "Before generating a ConnectNetworkResponse, the server shall:" +
                 "\n" +
@@ -663,14 +648,11 @@ Matter.children.push({
             xref: { document: "core", section: "11.8.7.10" },
 
             children: [
-                {
-                    tag: "datatype", name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum",
-                    conformance: "M"
-                },
-                { tag: "datatype", name: "DebugText", id: 0x1, type: "string", conformance: "O" },
+                Field({ name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum", conformance: "M" }),
+                Field({ name: "DebugText", id: 0x1, type: "string", conformance: "O" }),
 
-                {
-                    tag: "datatype", name: "ErrorValue", id: 0x2, type: "int32", conformance: "M", quality: "X",
+                Field({
+                    name: "ErrorValue", id: 0x2, type: "int32", conformance: "M", quality: "X",
 
                     details: "  • ErrorValue interpretation for Wi-Fi association errors:" +
                         "\n" +
@@ -693,13 +675,13 @@ Matter.children.push({
                         "    used by a reader of the structure to record, report or diagnose the failure.",
 
                     xref: { document: "core", section: "11.8.7.10.1" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "ReorderNetwork", id: 0x8, access: "A", conformance: "WI | TH",
-            direction: "request", response: "NetworkConfigResponse",
+        Command({
+            name: "ReorderNetwork", id: 0x8, access: "A", conformance: "WI | TH", direction: "request",
+            response: "NetworkConfigResponse",
 
             details: "This command shall set the specific order of the network configuration selected by its NetworkID in " +
                 "the Networks attribute list to match the position given by NetworkIndex." +
@@ -761,132 +743,117 @@ Matter.children.push({
                 "lowest priority network in the list.",
 
             xref: { document: "core", section: "11.8.7.11" },
-
             children: [
-                {
-                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
-                    constraint: "1 to 32"
-                },
-                { tag: "datatype", name: "NetworkIndex", id: 0x1, type: "uint8", conformance: "M", constraint: "desc" },
-                { tag: "datatype", name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" }
+                Field({ name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" }),
+                Field({ name: "NetworkIndex", id: 0x1, type: "uint8", conformance: "M", constraint: "desc" }),
+                Field({ name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "WiFiSecurityBitmap", type: "map8", conformance: "M",
+        Datatype({
+            name: "WiFiSecurityBitmap", type: "map8", conformance: "M",
             details: "WiFiSecurityBitmap encodes the supported Wi-Fi security types present in the Security field of the " +
                 "WiFiInterfaceScanResultStruct.",
             xref: { document: "core", section: "11.8.5.1" },
 
             children: [
-                { tag: "datatype", name: "Unencrypted", constraint: "0", description: "Supports unencrypted Wi-Fi" },
-                { tag: "datatype", name: "Wep", constraint: "1", description: "Supports Wi-Fi using WEP security" },
-                {
-                    tag: "datatype", name: "WpaPersonal", constraint: "2",
-                    description: "Supports Wi-Fi using WPA-Personal security"
-                },
-                {
-                    tag: "datatype", name: "Wpa2Personal", constraint: "3",
-                    description: "Supports Wi-Fi using WPA2-Personal security"
-                },
-                {
-                    tag: "datatype", name: "Wpa3Personal", constraint: "4",
-                    description: "Supports Wi-Fi using WPA3-Personal security"
-                }
+                Field({ name: "Unencrypted", constraint: "0", description: "Supports unencrypted Wi-Fi" }),
+                Field({ name: "Wep", constraint: "1", description: "Supports Wi-Fi using WEP security" }),
+                Field({ name: "WpaPersonal", constraint: "2", description: "Supports Wi-Fi using WPA-Personal security" }),
+                Field({
+                    name: "Wpa2Personal", constraint: "3", description: "Supports Wi-Fi using WPA2-Personal security"
+                }),
+                Field({
+                    name: "Wpa3Personal", constraint: "4", description: "Supports Wi-Fi using WPA3-Personal security"
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "WiFiBandEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "WiFiBandEnum", type: "enum8", conformance: "M",
             details: "WiFiBandEnum encodes a supported Wi-Fi frequency band present in the WiFiBand field of the " +
                 "WiFiInterfaceScanResultStruct.",
             xref: { document: "core", section: "11.8.5.2" },
 
             children: [
-                {
-                    tag: "datatype", name: "2G4", id: 0x0, conformance: "O.a+",
+                Field({
+                    name: "2G4", id: 0x0, conformance: "O.a+",
                     description: "2.4GHz - 2.401GHz to2.495GHz(802.11b/g/n/ax)"
-                },
-                {
-                    tag: "datatype", name: "3G65", id: 0x1, conformance: "O.a+",
-                    description: "3.65GHz - 3.655GHz to3.695GHz (802.11y)"
-                },
-                {
-                    tag: "datatype", name: "5G", id: 0x2, conformance: "O.a+",
+                }),
+                Field({
+                    name: "3G65", id: 0x1, conformance: "O.a+", description: "3.65GHz - 3.655GHz to3.695GHz (802.11y)"
+                }),
+                Field({
+                    name: "5G", id: 0x2, conformance: "O.a+",
                     description: "5GHz - 5.150GHz to5.895GHz(802.11a/n/ac/ax)"
-                },
-                {
-                    tag: "datatype", name: "6G", id: 0x3, conformance: "O.a+",
+                }),
+                Field({
+                    name: "6G", id: 0x3, conformance: "O.a+",
                     description: "6GHz - 5.925GHz to7.125GHz (802.11ax / WiFi 6E)"
-                },
-                {
-                    tag: "datatype", name: "60G", id: 0x4, conformance: "O.a+",
-                    description: "60GHz - 57.24GHz to70.20GHz (802.11ad/ay)"
-                }
+                }),
+                Field({
+                    name: "60G", id: 0x4, conformance: "O.a+", description: "60GHz - 57.24GHz to70.20GHz (802.11ad/ay)"
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "NetworkCommissioningStatusEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "NetworkCommissioningStatusEnum", type: "enum8", conformance: "M",
             xref: { document: "core", section: "11.8.5.3" },
 
             children: [
-                { tag: "datatype", name: "Success", id: 0x0, conformance: "M", description: "OK, no error" },
-                { tag: "datatype", name: "OutOfRange", id: 0x1, conformance: "M", description: "Value Outside Range" },
-                {
-                    tag: "datatype", name: "BoundsExceeded", id: 0x2, conformance: "M",
+                Field({ name: "Success", id: 0x0, conformance: "M", description: "OK, no error" }),
+                Field({ name: "OutOfRange", id: 0x1, conformance: "M", description: "Value Outside Range" }),
+                Field({
+                    name: "BoundsExceeded", id: 0x2, conformance: "M",
                     description: "A collection would exceed its size limit"
-                },
-                {
-                    tag: "datatype", name: "NetworkIdNotFound", id: 0x3, conformance: "M",
+                }),
+                Field({
+                    name: "NetworkIdNotFound", id: 0x3, conformance: "M",
                     description: "The NetworkID is not among the collection of added networks"
-                },
-                {
-                    tag: "datatype", name: "DuplicateNetworkId", id: 0x4, conformance: "M",
+                }),
+                Field({
+                    name: "DuplicateNetworkId", id: 0x4, conformance: "M",
                     description: "The NetworkID is already among the collection of added networks"
-                },
-                {
-                    tag: "datatype", name: "NetworkNotFound", id: 0x5, conformance: "M",
-                    description: "Cannot find AP: SSID Not found"
-                },
-                {
-                    tag: "datatype", name: "RegulatoryError", id: 0x6, conformance: "M",
+                }),
+                Field({
+                    name: "NetworkNotFound", id: 0x5, conformance: "M", description: "Cannot find AP: SSID Not found"
+                }),
+                Field({
+                    name: "RegulatoryError", id: 0x6, conformance: "M",
                     description: "Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz"
-                },
-                {
-                    tag: "datatype", name: "AuthFailure", id: 0x7, conformance: "M",
+                }),
+                Field({
+                    name: "AuthFailure", id: 0x7, conformance: "M",
                     description: "Cannot associate due to authentication failure"
-                },
-                {
-                    tag: "datatype", name: "UnsupportedSecurity", id: 0x8, conformance: "M",
+                }),
+                Field({
+                    name: "UnsupportedSecurity", id: 0x8, conformance: "M",
                     description: "Cannot associate due to unsupported security mode"
-                },
-                {
-                    tag: "datatype", name: "OtherConnectionFailure", id: 0x9, conformance: "M",
-                    description: "Other association failure"
-                },
-                {
-                    tag: "datatype", name: "Ipv6Failed", id: 0xa, conformance: "M",
-                    description: "Failure to generate an IPv6 address"
-                },
-                {
-                    tag: "datatype", name: "IpBindFailed", id: 0xb, conformance: "M",
+                }),
+                Field({
+                    name: "OtherConnectionFailure", id: 0x9, conformance: "M", description: "Other association failure"
+                }),
+                Field({
+                    name: "Ipv6Failed", id: 0xa, conformance: "M", description: "Failure to generate an IPv6 address"
+                }),
+                Field({
+                    name: "IpBindFailed", id: 0xb, conformance: "M",
                     description: "Failure to bind Wi-Fi <-> IP interfaces"
-                },
-                { tag: "datatype", name: "UnknownError", id: 0xc, conformance: "M", description: "Unknown error" }
+                }),
+                Field({ name: "UnknownError", id: 0xc, conformance: "M", description: "Unknown error" })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "NetworkInfoStruct", type: "struct", conformance: "M",
+        Datatype({
+            name: "NetworkInfoStruct", type: "struct", conformance: "M",
             details: "NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks " +
                 "attribute.",
             xref: { document: "core", section: "11.8.5.4" },
 
             children: [
-                {
-                    tag: "datatype", name: "NetworkId", id: 0x0, type: "octstr", conformance: "M",
-                    constraint: "1 to 32",
+                Field({
+                    name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32",
 
                     details: "Every network is uniquely identified (for purposes of commissioning) by a NetworkID mapping to the " +
                         "following technology-specific properties:" +
@@ -914,69 +881,63 @@ Matter.children.push({
                         "string.",
 
                     xref: { document: "core", section: "11.8.5.4.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Connected", id: 0x1, type: "bool", conformance: "M",
+                Field({
+                    name: "Connected", id: 0x1, type: "bool", conformance: "M",
                     details: "This field shall indicate the connected status of the associated network, where \"connected\" means " +
                         "currently linked to the network technology (e.g. Associated for a Wi-Fi network, media connected " +
                         "for an Ethernet network).",
                     xref: { document: "core", section: "11.8.5.4.2" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "WiFiInterfaceScanResultStruct", type: "struct", conformance: "M",
+        Datatype({
+            name: "WiFiInterfaceScanResultStruct", type: "struct", conformance: "M",
             details: "WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.",
             xref: { document: "core", section: "11.8.5.5" },
 
             children: [
-                { tag: "datatype", name: "Security", id: 0x0, type: "WiFiSecurityBitmap", conformance: "WI" },
-                { tag: "datatype", name: "Ssid", id: 0x1, type: "octstr", conformance: "WI", constraint: "max 32" },
-                { tag: "datatype", name: "Bssid", id: 0x2, type: "octstr", conformance: "WI", constraint: "6" },
-                { tag: "datatype", name: "Channel", id: 0x3, type: "uint16", conformance: "WI" },
+                Field({ name: "Security", id: 0x0, type: "WiFiSecurityBitmap", conformance: "WI" }),
+                Field({ name: "Ssid", id: 0x1, type: "octstr", conformance: "WI", constraint: "max 32" }),
+                Field({ name: "Bssid", id: 0x2, type: "octstr", conformance: "WI", constraint: "6" }),
+                Field({ name: "Channel", id: 0x3, type: "uint16", conformance: "WI" }),
 
-                {
-                    tag: "datatype", name: "WiFiBand", id: 0x4, type: "WiFiBandEnum", conformance: "[WI]",
+                Field({
+                    name: "WiFiBand", id: 0x4, type: "WiFiBandEnum", conformance: "[WI]",
                     details: "This field, if present, may be used to differentiate overlapping channel number values across " +
                         "different Wi-Fi frequency bands.",
                     xref: { document: "core", section: "11.8.5.5.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Rssi", id: 0x5, type: "int8", conformance: "[WI]",
+                Field({
+                    name: "Rssi", id: 0x5, type: "int8", conformance: "[WI]",
                     details: "This field, if present, shall denote the signal strength in dBm of the associated scan result.",
                     xref: { document: "core", section: "11.8.5.5.2" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "ThreadInterfaceScanResultStruct", type: "struct", conformance: "M",
+        Datatype({
+            name: "ThreadInterfaceScanResultStruct", type: "struct", conformance: "M",
             details: "ThreadInterfaceScanResultStruct represents a single Thread network scan result.",
             xref: { document: "core", section: "11.8.5.6" },
 
             children: [
-                {
-                    tag: "datatype", name: "PanId", id: 0x0, type: "uint16", conformance: "TH",
-                    constraint: "0 to 65534"
-                },
-                { tag: "datatype", name: "ExtendedPanId", id: 0x1, type: "uint64", conformance: "TH" },
-                {
-                    tag: "datatype", name: "NetworkName", id: 0x2, type: "string", conformance: "TH",
-                    constraint: "1 to 16"
-                },
-                { tag: "datatype", name: "Channel", id: 0x3, type: "uint16", conformance: "TH" },
-                { tag: "datatype", name: "Version", id: 0x4, type: "uint8", conformance: "TH" },
-                {
-                    tag: "datatype", name: "ExtendedAddress", id: 0x5, type: "hwadr", conformance: "TH",
+                Field({ name: "PanId", id: 0x0, type: "uint16", conformance: "TH", constraint: "0 to 65534" }),
+                Field({ name: "ExtendedPanId", id: 0x1, type: "uint64", conformance: "TH" }),
+                Field({ name: "NetworkName", id: 0x2, type: "string", conformance: "TH", constraint: "1 to 16" }),
+                Field({ name: "Channel", id: 0x3, type: "uint16", conformance: "TH" }),
+                Field({ name: "Version", id: 0x4, type: "uint8", conformance: "TH" }),
+                Field({
+                    name: "ExtendedAddress", id: 0x5, type: "hwadr", conformance: "TH",
                     details: "ExtendedAddress stands for an IEEE 802.15.4 Extended Address.",
                     xref: { document: "core", section: "11.8.5.6.1" }
-                },
-                { tag: "datatype", name: "Rssi", id: 0x6, type: "int8", conformance: "TH" },
-                { tag: "datatype", name: "Lqi", id: 0x7, type: "uint8", conformance: "TH" }
+                }),
+                Field({ name: "Rssi", id: 0x6, type: "int8", conformance: "TH" }),
+                Field({ name: "Lqi", id: 0x7, type: "uint8", conformance: "TH" })
             ]
-        }
+        })
     ]
-});
+}));

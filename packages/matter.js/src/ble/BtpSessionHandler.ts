@@ -1,11 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { BtpCodec } from "../codec/BtpCodec.js";
 import { MatterError } from "../common/MatterError.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { Time } from "../time/Time.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
@@ -32,13 +33,17 @@ export class BtpSessionHandler {
     private currentIncomingSegmentedPayload: ByteArray | undefined;
     private prevIncomingSequenceNumber = 255; // Incoming Sequence Number received. Set to 255 to start at 0
     private prevIncomingAckNumber = -1; // Previous ackNumber received
-    private readonly ackReceiveTimer = Time.getTimer(BTP_ACK_TIMEOUT_MS, () => this.btpAckTimeoutTriggered());
+    private readonly ackReceiveTimer = Time.getTimer("BTP ack timeout", BTP_ACK_TIMEOUT_MS, () =>
+        this.btpAckTimeoutTriggered(),
+    );
 
     private sequenceNumber = 0; // Sequence number is set to 0 already for the handshake, next sequence number is 1
     private prevAckedSequenceNumber = -1; // Previous (outgoing) Acked Sequence Number
     private readonly queuedOutgoingMatterMessages = new Array<DataReader<Endian.Little>>();
     private sendInProgress = false;
-    private readonly sendAckTimer = Time.getTimer(BTP_SEND_ACK_TIMEOUT_MS, () => this.btpSendAckTimeoutTriggered());
+    private readonly sendAckTimer = Time.getTimer("BTP send timeout", BTP_SEND_ACK_TIMEOUT_MS, () =>
+        this.btpSendAckTimeoutTriggered(),
+    );
     private isActive = true;
 
     /** Factory method to create a new BTPSessionHandler from a received handshake request */
@@ -85,7 +90,7 @@ export class BtpSessionHandler {
 
         logger.debug(`Sending BTP handshake response: ${handshakeResponse.toHex()}`);
         logger.debug(
-            `Sending BTP packet: ${Logger.dict({
+            `Sending BTP packet: ${Diagnostic.dict({
                 version,
                 attMtu,
                 windowSize,
@@ -324,10 +329,11 @@ export class BtpSessionHandler {
             const remainingMessageLength = currentProcessedMessage.getRemainingBytesCount();
 
             logger.debug(
-                `Sending BTP fragment: ${Logger.dict({
+                "Sending BTP fragment: ",
+                Diagnostic.dict({
                     fullMessageLength: currentProcessedMessage.getLength(),
                     remainingLengthInBytes: remainingMessageLength,
-                })}`,
+                }),
             );
 
             //checks if last ack number sent < ack number to be sent

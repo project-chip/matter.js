@@ -1,12 +1,15 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { Builder } from "../building/builder.js";
+import { Graph } from "../building/graph.js";
 import { Project } from "../building/project.js";
+import "../util/node-shims.js";
 import { TestRunner } from "./runner.js";
 
 enum TestType {
@@ -14,6 +17,8 @@ enum TestType {
     cjs = "cjs",
     web = "web",
 }
+
+Error.stackTraceLimit = 50;
 
 export async function main(argv = process.argv) {
     const testTypes = new Set<TestType>();
@@ -38,7 +43,7 @@ export async function main(argv = process.argv) {
             type: "array",
             string: true,
             describe: "One or more paths of tests to run",
-            default: "test/**/*Test.ts",
+            default: "./test/**/*Test.ts",
         })
         .option("fgrep", { alias: "f", type: "string", describe: "Only run tests matching this string" })
         .option("grep", { alias: "g", type: "string", describe: "Only run tests matching this regexp" })
@@ -46,6 +51,8 @@ export async function main(argv = process.argv) {
         .option("profile", { type: "boolean", describe: "Write profiling data to build/profiles (node only)" })
         .option("all-logs", { type: "boolean", describe: "Emit log messages in real time" })
         .option("force-exit", { type: "boolean", describe: "Force Node to exit after tests complete" })
+        .option("wtf", { type: "boolean", describe: "Enlist wtfnode to detect test leaks" })
+        .option("debug", { type: "boolean", describe: "Enable Mocha debugging" })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))
@@ -56,7 +63,16 @@ export async function main(argv = process.argv) {
         })
         .strict().argv;
 
-    const project = new Project(args.prefix);
+    // If spec specified and prefix is default, use the spec file to locate the package
+    let packageLocation = args.prefix;
+    if (packageLocation === "." && args.spec) {
+        const firstSpec = Array.isArray(args.spec) ? args.spec[0] : args.spec;
+        packageLocation = firstSpec;
+    }
+
+    const project = new Project(packageLocation);
+
+    process.chdir(project.pkg.path);
 
     // If no test types are specified explicitly, run all enabled types
     if (!testTypes.size) {
@@ -71,34 +87,22 @@ export async function main(argv = process.argv) {
         }
     }
 
-    let esmBuilt = false;
-    async function buildEsm() {
-        if (esmBuilt) {
-            return;
-        }
-
-        await project.buildSource("esm");
-        await project.buildTests("esm");
-
-        esmBuilt = true;
-    }
+    const builder = new Builder();
+    const dependencies = await Graph.forProject(packageLocation);
+    await dependencies.build(builder, false);
 
     const progress = project.pkg.start("Testing");
     const runner = new TestRunner(project.pkg, progress, args);
 
     if (testTypes.has(TestType.esm)) {
-        await buildEsm();
         await runner.runNode("esm");
     }
 
     if (testTypes.has(TestType.cjs)) {
-        await project.buildSource("cjs");
-        await project.buildTests("cjs");
         await runner.runNode("cjs");
     }
 
     if (testTypes.has(TestType.web)) {
-        await buildEsm();
         await runner.runWeb(manual);
     }
 

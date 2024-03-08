@@ -1,19 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { OptionalFixedAttribute, FixedAttribute, Attribute, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvVendorId, VendorId } from "../../datatype/VendorId.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace ApplicationBasic {
     /**
@@ -46,6 +49,13 @@ export namespace ApplicationBasic {
     });
 
     /**
+     * This indicates a global identifier for an Application given a catalog.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.3.4.1
+     */
+    export interface ApplicationStruct extends TypeFromSchema<typeof TlvApplicationStruct> {}
+
+    /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.3.4.2
      */
     export enum ApplicationStatus {
@@ -71,14 +81,9 @@ export namespace ApplicationBasic {
     }
 
     /**
-     * Application Basic
-     *
-     * This cluster provides information about a Content App running on a Video Player device which is represented as
-     * an endpoint (see Device Type Library document).
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.3
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x50d,
         name: "ApplicationBasic",
         revision: 1,
@@ -151,7 +156,21 @@ export namespace ApplicationBasic {
             )
         }
     });
+
+    /**
+     * Application Basic
+     *
+     * This cluster provides information about a Content App running on a Video Player device which is represented as
+     * an endpoint (see Device Type Library document).
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.3
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type ApplicationBasicCluster = typeof ApplicationBasic.Cluster;
+export type ApplicationBasicCluster = ApplicationBasic.Cluster;
 export const ApplicationBasicCluster = ApplicationBasic.Cluster;
+ClusterRegistry.register(ApplicationBasic.Complete);

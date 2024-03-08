@@ -1,85 +1,84 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import { DeviceTypeElement as DeviceType, RequirementElement as Requirement } from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "deviceType", name: "ExtendedColorLight", id: 0x10d, type: "ColorTemperatureLight",
-    classification: "simple",
+Matter.children.push(DeviceType({
+    name: "ExtendedColorLight", id: 0x10d, type: "ColorTemperatureLight", classification: "simple",
+    details: "An Extended Color Light is a lighting device that is capable of being switched on or off, the " +
+        "intensity of its light adjusted, and its color adjusted by means of a bound controller device such " +
+        "as a Color Dimmer Switch or Control Bridge. The device supports adjustment of color by means of " +
+        "hue/saturation, enhanced hue, color looping, XY coordinates, and color temperature. In addition, " +
+        "the extended color light is also capable of being switched by means of a bound occupancy sensor.",
+    xref: { document: "device", section: "4.4" },
 
     children: [
-        {
-            tag: "requirement", name: "Descriptor", id: 0x1d, element: "serverCluster",
+        Requirement({
+            name: "Descriptor", id: 0x1d, element: "serverCluster",
+            children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 269, revision: 2 } ], element: "attribute" })]
+        }),
 
-            children: [{
-                tag: "datatype", name: "DeviceTypeStruct", type: "struct",
-                children: [
-                    { tag: "datatype", name: "DeviceType", type: "devtype-id", default: 269 },
-                    { tag: "datatype", name: "Revision", type: "uint16", default: 2 }
-                ]
-            }]
-        },
-
-        {
-            tag: "requirement", name: "Identify", id: 0x3, element: "serverCluster",
+        Requirement({
+            name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "4.4.4" },
             children: [
-                { tag: "requirement", name: "Query", element: "feature" },
-                { tag: "requirement", name: "TriggerEffect", element: "command" }
+                Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" }),
+                Requirement({ name: "TriggerEffect", conformance: "M", element: "command" })
             ]
-        },
+        }),
 
-        {
-            tag: "requirement", name: "Groups", id: 0x4, element: "serverCluster",
+        Requirement({
+            name: "Groups", id: 0x4, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "4.4.4" }
-        },
+        }),
 
-        {
-            tag: "requirement", name: "Scenes", id: 0x5, element: "serverCluster",
+        Requirement({
+            name: "Scenes", id: 0x5, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "4.4.4" },
             children: [
-                { tag: "requirement", name: "EnhancedAddScene", element: "command" },
-                { tag: "requirement", name: "EnhancedViewScene", element: "command" },
-                { tag: "requirement", name: "CopyScene", element: "command" }
+                Requirement({ name: "EnhancedAddScene", conformance: "M", element: "command" }),
+                Requirement({ name: "EnhancedViewScene", conformance: "M", element: "command" }),
+                Requirement({ name: "CopyScene", conformance: "M", element: "command" })
             ]
-        },
+        }),
 
-        {
-            tag: "requirement", name: "OnOff", id: 0x6, element: "serverCluster",
+        Requirement({
+            name: "OnOff", id: 0x6, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "4.4.4" },
-            children: [{ tag: "requirement", name: "Lt", element: "feature" }]
-        },
+            children: [Requirement({ name: "LT", conformance: "M", element: "feature" })]
+        }),
 
-        {
-            tag: "requirement", name: "LevelControl", id: 0x8, element: "serverCluster",
-            xref: { document: "device", section: "4.4.4" },
-
-            children: [
-                { tag: "requirement", name: "Oo", element: "feature" },
-                { tag: "requirement", name: "Lt", element: "feature" },
-                { tag: "requirement", name: "CurrentLevel", element: "attribute" },
-                { tag: "requirement", name: "MinLevel", element: "attribute" },
-                { tag: "requirement", name: "MaxLevel", element: "attribute" }
-            ]
-        },
-
-        {
-            tag: "requirement", name: "ColorControl", id: 0x300, element: "serverCluster",
+        Requirement({
+            name: "LevelControl", id: 0x8, conformance: "M", element: "serverCluster",
             xref: { document: "device", section: "4.4.4" },
 
             children: [
-                { tag: "requirement", name: "Hs", element: "feature" },
-                { tag: "requirement", name: "Ehue", element: "feature" },
-                { tag: "requirement", name: "Cl", element: "feature" },
-                { tag: "requirement", name: "Xy", element: "feature" },
-                { tag: "requirement", name: "Ct", element: "feature" },
-                { tag: "requirement", name: "RemainingTime", element: "attribute" }
+                Requirement({ name: "OO", conformance: "M", element: "feature" }),
+                Requirement({ name: "LT", conformance: "M", element: "feature" }),
+                Requirement({ name: "CurrentLevel", constraint: "1 to 254", element: "attribute" }),
+                Requirement({ name: "MinLevel", constraint: "1", element: "attribute" }),
+                Requirement({ name: "MaxLevel", constraint: "254", element: "attribute" })
             ]
-        }
+        }),
+
+        Requirement({
+            name: "ColorControl", id: 0x300, conformance: "M", element: "serverCluster",
+            xref: { document: "device", section: "4.4.4" },
+
+            children: [
+                Requirement({ name: "HS", conformance: "O", element: "feature" }),
+                Requirement({ name: "EHUE", conformance: "O", element: "feature" }),
+                Requirement({ name: "CL", conformance: "O", element: "feature" }),
+                Requirement({ name: "XY", conformance: "M", element: "feature" }),
+                Requirement({ name: "CT", conformance: "M", element: "feature" }),
+                Requirement({ name: "RemainingTime", conformance: "M", element: "attribute" })
+            ]
+        })
     ]
-});
+}));

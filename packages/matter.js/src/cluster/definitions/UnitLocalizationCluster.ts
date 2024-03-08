@@ -1,17 +1,19 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace UnitLocalization {
     /**
@@ -35,41 +37,9 @@ export namespace UnitLocalization {
     }
 
     /**
-     * These are optional features supported by UnitLocalizationCluster.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.5.4
-     */
-    export enum Feature {
-        /**
-         * TemperatureUnit
-         *
-         * The Node can be configured to use different units of temperature when conveying values to a user.
-         */
-        TemperatureUnit = "TemperatureUnit"
-    }
-
-    /**
-     * These elements and properties are present in all UnitLocalization clusters.
-     */
-    export const Base = ClusterFactory.Definition({
-        id: 0x2d,
-        name: "UnitLocalization",
-        revision: 1,
-
-        features: {
-            /**
-             * TemperatureUnit
-             *
-             * The Node can be configured to use different units of temperature when conveying values to a user.
-             */
-            temperatureUnit: BitFlag(0)
-        }
-    });
-
-    /**
      * A UnitLocalizationCluster supports these elements if it supports feature TemperatureUnit.
      */
-    export const TemperatureUnitComponent = ClusterFactory.Component({
+    export const TemperatureUnitComponent = MutableCluster.Component({
         attributes: {
             /**
              * The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying
@@ -87,6 +57,49 @@ export namespace UnitLocalization {
     });
 
     /**
+     * These are optional features supported by UnitLocalizationCluster.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.5.4
+     */
+    export enum Feature {
+        /**
+         * TemperatureUnit
+         *
+         * The Node can be configured to use different units of temperature when conveying values to a user.
+         */
+        TemperatureUnit = "TemperatureUnit"
+    }
+
+    /**
+     * These elements and properties are present in all UnitLocalization clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x2d,
+        name: "UnitLocalization",
+        revision: 1,
+
+        features: {
+            /**
+             * TemperatureUnit
+             *
+             * The Node can be configured to use different units of temperature when conveying values to a user.
+             */
+            temperatureUnit: BitFlag(0)
+        },
+
+        /**
+         * This metadata controls which UnitLocalizationCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { temperatureUnit: true }, component: TemperatureUnitComponent })
+    });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
+
+    /**
      * Unit Localization
      *
      * Nodes should be expected to be deployed to any and all regions of the world. These global regions may have
@@ -102,33 +115,27 @@ export namespace UnitLocalization {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.5
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create an UnitLocalization cluster with support for optional features. Include
-         * each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns an UnitLocalization cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, TemperatureUnitComponent, { temperatureUnit: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { temperatureUnit: true } ? typeof TemperatureUnitComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const TEMP = { temperatureUnit: true };
+
+    /**
+     * @see {@link Complete}
+     */
+    export const CompleteInstance = MutableCluster({
+        id: Cluster.id,
+        name: Cluster.name,
+        revision: Cluster.revision,
+        features: Cluster.features,
+
+        attributes: {
+            temperatureUnit: MutableCluster.AsConditional(
+                TemperatureUnitComponent.attributes.temperatureUnit,
+                { mandatoryIf: [TEMP] }
+            )
+        }
+    });
 
     /**
      * This cluster supports all UnitLocalization features. It may support illegal feature combinations.
@@ -136,20 +143,11 @@ export namespace UnitLocalization {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = ClusterFactory.Definition({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
+    export interface Complete extends Identity<typeof CompleteInstance> {}
 
-        attributes: {
-            temperatureUnit: ClusterFactory.AsConditional(
-                TemperatureUnitComponent.attributes.temperatureUnit,
-                { mandatoryIf: [TEMP] }
-            )
-        }
-    });
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type UnitLocalizationCluster = typeof UnitLocalization.Cluster;
+export type UnitLocalizationCluster = UnitLocalization.Cluster;
 export const UnitLocalizationCluster = UnitLocalization.Cluster;
+ClusterRegistry.register(UnitLocalization.Complete);

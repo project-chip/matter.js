@@ -1,19 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DiagnosticDictionary, Format, Level, Logger, consoleLogger } from "../../src/log/Logger.js";
+import { Diagnostic } from "../../src/log/Diagnostic.js";
+import { Format } from "../../src/log/Format.js";
+import { Level } from "../../src/log/Level.js";
+import { Logger, consoleLogger } from "../../src/log/Logger.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { captureLog } from "../support/logging.js";
 
 const LOGGER_NAME = "UnitTest";
 
 type LogOptions = {
-    format?: Format;
+    format?: Format.Type;
     levels?: typeof Logger.logLevels;
-    method?: "info" | "debug" | "warn" | "error" | "fatal";
+    method?: "notice" | "info" | "debug" | "warn" | "error" | "fatal";
     fromLogger?: string;
 };
 
@@ -39,7 +42,7 @@ describe("Logger", () => {
             () =>
                 logger[options.method ?? "debug"](
                     "dict test",
-                    Logger.dict({
+                    Diagnostic.dict({
                         foo: "bar",
                         biz: 1,
                     }),
@@ -228,7 +231,10 @@ describe("Logger", () => {
 
         it("accepts custom formatters", () => {
             const result = captureLog(() => {
-                Logger.logFormatter = (_now, _level, _logger, values) => values[0].toString();
+                Logger.setLogFormatterForLogger(
+                    "default",
+                    (_now, _level, _facility, _nestingPrefix, values) => `${values[0]}`,
+                );
                 logger.debug("test");
             });
 
@@ -252,7 +258,14 @@ describe("Logger", () => {
                 logger.error("Uh", error);
             });
 
-            expect(result?.message).equal("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest Uh (details unavailable)");
+            expect(result?.message).equal("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest Uh oh");
+        });
+
+        it("emphasizes", () => {
+            const result = captureLog(() => {
+                logger.error("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
+            });
+            expect(result?.message).equals("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest THIS IS *VERY* IMPORTANT");
         });
     });
 
@@ -261,15 +274,15 @@ describe("Logger", () => {
             const result = logTestLine({ format: Format.ANSI });
 
             expect(result?.message).equal(
-                "\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[90m\u001b[1mUnitTest            \u001b[0m \u001b[90mtest\u001b[0m",
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG  \u001b[0;1;90mUnitTest             \u001b[0;90mtest\u001b[0m",
             );
         });
 
         it("formats keys correctly", () => {
-            const result = logTestDict({ format: Format.ANSI });
+            const result = logTestDict({ method: "notice", format: Format.ANSI });
 
             expect(result?.message).equal(
-                "\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[90m\u001b[1mUnitTest            \u001b[0m \u001b[90mdict test \u001b[34mfoo:\u001b[90m bar \u001b[34mbiz:\u001b[90m 1\u001b[0m",
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mdict test \u001b[34mfoo: \u001b[2;39mbar \u001b[0;34mbiz: \u001b[2;39m1\u001b[0m",
             );
         });
 
@@ -279,8 +292,42 @@ describe("Logger", () => {
                 const logger = Logger.get("ThisIsAFacilityWithAReallyLongName");
                 logger.debug("test");
             });
+
             expect(result?.message).equal(
-                "\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[90m\u001b[1mThisIsAFac~yLongName\u001b[0m \u001b[90mtest\u001b[0m",
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG  \u001b[0;1;90mThisIsAFac~yLongName \u001b[0;90mtest\u001b[0m",
+            );
+        });
+
+        it("emphasizes", () => {
+            const result = captureLog(() => {
+                Logger.format = Format.ANSI;
+                logger.notice("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
+            });
+
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mTHIS IS \u001b[1mVERY \u001b[0;32mIMPORTANT\u001b[0m",
+            );
+        });
+
+        it("indents properly", () => {
+            const result = captureLog(() => {
+                Logger.format = Format.ANSI;
+                logger.info(
+                    "start",
+                    "same line\nnext line\nand more",
+                    "and more",
+                    Diagnostic.list([
+                        "indented\nnext line",
+                        Diagnostic.list(["indented deeper\nand more"]),
+                        "up again",
+                        Diagnostic.list(["and down"]),
+                    ]),
+                    "and all the way up",
+                );
+            });
+
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx INFO   \u001b[0;1;90mUnitTest             \u001b[0mstart same line\nnext line\nand more \nand more\n    indented\n    next line\n        indented deeper\n        and more\n    up again\n        and down\nand all the way up\u001b[0m",
             );
         });
     });
@@ -290,7 +337,7 @@ describe("Logger", () => {
             const result = logTestLine({ format: Format.HTML });
 
             expect(result?.message).equal(
-                '<span class="matter-log-matter-log-line"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">DEBUG</span> <span class="matter-log-facility">UnitTest</span> <span class="matter-log-value">test</span></span>',
+                '<span class="matter-log-line debug"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">DEBUG</span> <span class="matter-log-facility">UnitTest</span> test</span>',
             );
         });
 
@@ -298,7 +345,17 @@ describe("Logger", () => {
             const result = logTestDict({ format: Format.HTML });
 
             expect(result?.message).equal(
-                '<span class="matter-log-matter-log-line"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">DEBUG</span> <span class="matter-log-facility">UnitTest</span> <span class="matter-log-value">dict test</span> <span class="matter-log-key">foo:</span> <span class="matter-log-value">bar</span> <span class="matter-log-key">biz:</span> <span class="matter-log-value">1</span></span>',
+                '<span class="matter-log-line debug"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">DEBUG</span> <span class="matter-log-facility">UnitTest</span> dict test <span class="matter-log-key">foo:</span> <span class="matter-log-value">bar</span> <span class="matter-log-key">biz:</span> <span class="matter-log-value">1</span></span>',
+            );
+        });
+
+        it("emphasizes", () => {
+            const result = captureLog(() => {
+                Logger.format = Format.HTML;
+                logger.fatal("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
+            });
+            expect(result?.message).equals(
+                '<span class="matter-log-line fatal"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">FATAL</span> <span class="matter-log-facility">UnitTest</span> THIS IS <em>VERY</em> IMPORTANT</span>',
             );
         });
     });
@@ -308,7 +365,7 @@ describe("Logger", () => {
             let message;
             try {
                 captureLog(() => {
-                    Logger.format = <Format>"foo";
+                    Logger.format = "foo";
                 });
             } catch (e: unknown) {
                 message = (<any>e).message;
@@ -324,22 +381,6 @@ describe("Logger", () => {
 
         it("handles BigInt", () => {
             expect(Logger.toJSON(BigInt(4))).equal('"4"');
-        });
-    });
-
-    describe("DiagnosticDictionary", () => {
-        it("converts to plain string", () => {
-            expect(Logger.dict({ foo: "bar", biz: true }).toString()).equal("foo: bar biz: true");
-        });
-
-        it("constructs empty", () => {
-            expect(new DiagnosticDictionary().toString()).equal("");
-        });
-
-        it("formats byte array in value", () => {
-            expect(new DiagnosticDictionary({ bytes: new ByteArray([0x12, 0x3a, 0xbc]) }).toString()).equal(
-                "bytes: 123abc",
-            );
         });
     });
 

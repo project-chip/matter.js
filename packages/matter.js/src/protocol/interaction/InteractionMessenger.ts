@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -130,11 +130,15 @@ class InteractionMessenger<ContextT> {
 
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
     async handleRequest(
-        handleReadRequest: (request: ReadRequest) => DataReport,
-        handleWriteRequest: (request: WriteRequest, message: Message) => WriteResponse,
-        handleSubscribeRequest: (request: SubscribeRequest, messenger: InteractionServerMessenger) => Promise<void>,
+        handleReadRequest: (request: ReadRequest, message: Message) => Promise<DataReport>,
+        handleWriteRequest: (request: WriteRequest, message: Message) => Promise<WriteResponse>,
+        handleSubscribeRequest: (
+            request: SubscribeRequest,
+            messenger: InteractionServerMessenger,
+            message: Message,
+        ) => Promise<void>,
         handleInvokeRequest: (request: InvokeRequest, message: Message) => Promise<InvokeResponse>,
-        handleTimedRequest: (request: TimedRequest) => void,
+        handleTimedRequest: (request: TimedRequest, message: Message) => void,
     ) {
         let continueExchange = true; // are more messages expected in this "transaction"?
         try {
@@ -145,13 +149,13 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 switch (message.payloadHeader.messageType) {
                     case MessageType.ReadRequest: {
                         const readRequest = TlvReadRequest.decode(message.payload);
-                        await this.sendDataReport(handleReadRequest(readRequest));
+                        await this.sendDataReport(await handleReadRequest(readRequest, message));
                         break;
                     }
                     case MessageType.WriteRequest: {
                         const writeRequest = TlvWriteRequest.decode(message.payload);
                         const { suppressResponse } = writeRequest;
-                        const writeResponse = handleWriteRequest(writeRequest, message);
+                        const writeResponse = await handleWriteRequest(writeRequest, message);
                         if (!suppressResponse && !isGroupSession) {
                             await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
                         }
@@ -159,7 +163,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.SubscribeRequest: {
                         const subscribeRequest = TlvSubscribeRequest.decode(message.payload);
-                        await handleSubscribeRequest(subscribeRequest, this);
+                        await handleSubscribeRequest(subscribeRequest, this, message);
                         // response is sent by handler
                         break;
                     }
@@ -178,7 +182,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
-                        handleTimedRequest(timedRequest);
+                        handleTimedRequest(timedRequest, message);
                         await this.sendStatus(StatusCode.Success);
                         continueExchange = true;
                         break;

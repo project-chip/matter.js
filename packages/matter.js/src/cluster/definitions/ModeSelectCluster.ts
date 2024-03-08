@@ -1,28 +1,31 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
+    WritableAttribute,
     FixedAttribute,
     Attribute,
     OptionalWritableAttribute,
     Command,
-    TlvNoResponse,
-    WritableAttribute
+    TlvNoResponse
 } from "../../cluster/Cluster.js";
-import { TlvString } from "../../tlv/TlvString.js";
-import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvUInt8, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvString } from "../../tlv/TlvString.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace ModeSelect {
     /**
@@ -51,6 +54,13 @@ export namespace ModeSelect {
          */
         value: TlvField(1, TlvUInt16)
     });
+
+    /**
+     * A Semantic Tag is meant to be interpreted by the client for the purpose the cluster serves.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.8.2
+     */
+    export interface SemanticTagStruct extends TypeFromSchema<typeof TlvSemanticTagStruct> {}
 
     /**
      * This is a struct representing a possible mode of the server.
@@ -94,11 +104,43 @@ export namespace ModeSelect {
     });
 
     /**
+     * This is a struct representing a possible mode of the server.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.8.1
+     */
+    export interface ModeOptionStruct extends TypeFromSchema<typeof TlvModeOptionStruct> {}
+
+    /**
      * Input to the ModeSelect changeToMode command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.6.1
      */
     export const TlvChangeToModeRequest = TlvObject({ newMode: TlvField(0, TlvUInt8) });
+
+    /**
+     * Input to the ModeSelect changeToMode command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.6.1
+     */
+    export interface ChangeToModeRequest extends TypeFromSchema<typeof TlvChangeToModeRequest> {}
+
+    /**
+     * A ModeSelectCluster supports these elements if it supports feature OnOff.
+     */
+    export const OnOffComponent = MutableCluster.Component({
+        attributes: {
+            /**
+             * This attribute shall indicate the value of CurrentMode that depends on the state of the On/Off cluster
+             * on the same endpoint. If this attribute is not present or is set to null, it shall NOT have an effect,
+             * otherwise the CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster
+             *
+             * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.5.6
+             */
+            onMode: WritableAttribute(0x5, TlvNullable(TlvUInt8), { persistent: true, default: null })
+        }
+    });
 
     /**
      * These are optional features supported by ModeSelectCluster.
@@ -117,7 +159,7 @@ export namespace ModeSelect {
     /**
      * These elements and properties are present in all ModeSelect clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x50,
         name: "ModeSelect",
         revision: 1,
@@ -206,26 +248,19 @@ export namespace ModeSelect {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.6.1
              */
             changeToMode: Command(0x0, TlvChangeToModeRequest, 0x0, TlvNoResponse)
-        }
+        },
+
+        /**
+         * This metadata controls which ModeSelectCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { onOff: true }, component: OnOffComponent })
     });
 
     /**
-     * A ModeSelectCluster supports these elements if it supports feature OnOff.
+     * @see {@link Cluster}
      */
-    export const OnOffComponent = ClusterFactory.Component({
-        attributes: {
-            /**
-             * This attribute shall indicate the value of CurrentMode that depends on the state of the On/Off cluster
-             * on the same endpoint. If this attribute is not present or is set to null, it shall NOT have an effect,
-             * otherwise the CurrentMode attribute shall depend on the OnOff attribute of the On/Off cluster
-             *
-             * The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.5.6
-             */
-            onMode: WritableAttribute(0x5, TlvNullable(TlvUInt8), { persistent: true, default: null })
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Mode Select
@@ -253,33 +288,25 @@ export namespace ModeSelect {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a ModeSelect cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a ModeSelect cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, OnOffComponent, { onOff: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { onOff: true } ? typeof OnOffComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const DEPONOFF = { onOff: true };
+
+    /**
+     * @see {@link Complete}
+     */
+    export const CompleteInstance = MutableCluster({
+        id: Cluster.id,
+        name: Cluster.name,
+        revision: Cluster.revision,
+        features: Cluster.features,
+        attributes: {
+            ...Cluster.attributes,
+            onMode: MutableCluster.AsConditional(OnOffComponent.attributes.onMode, { mandatoryIf: [DEPONOFF] })
+        },
+        commands: Cluster.commands
+    });
 
     /**
      * This cluster supports all ModeSelect features. It may support illegal feature combinations.
@@ -287,18 +314,11 @@ export namespace ModeSelect {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = ClusterFactory.Definition({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
-        attributes: {
-            ...Cluster.attributes,
-            onMode: ClusterFactory.AsConditional(OnOffComponent.attributes.onMode, { mandatoryIf: [DEPONOFF] })
-        },
-        commands: Cluster.commands
-    });
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type ModeSelectCluster = typeof ModeSelect.Cluster;
+export type ModeSelectCluster = ModeSelect.Cluster;
 export const ModeSelectCluster = ModeSelect.Cluster;
+ClusterRegistry.register(ModeSelect.Complete);

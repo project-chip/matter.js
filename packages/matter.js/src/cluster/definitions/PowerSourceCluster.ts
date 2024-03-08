@@ -1,55 +1,33 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
-    Attribute,
-    FixedAttribute,
     OptionalAttribute,
+    FixedAttribute,
     OptionalFixedAttribute,
     OptionalEvent,
-    EventPriority
+    EventPriority,
+    Attribute
 } from "../../cluster/Cluster.js";
-import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16 } from "../../tlv/TlvNumber.js";
-import { TlvString } from "../../tlv/TlvString.js";
+import { TlvUInt32, TlvUInt16, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvString } from "../../tlv/TlvString.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace PowerSource {
-    /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.4
-     */
-    export enum PowerSourceStatus {
-        /**
-         * Indicate the source status is not specified
-         */
-        Unspecified = 0,
-
-        /**
-         * Indicate the source is available and currently supplying power
-         */
-        Active = 1,
-
-        /**
-         * Indicate the source is available, but is not currently supplying power
-         */
-        Standby = 2,
-
-        /**
-         * Indicate the source is not currently available to supply power
-         */
-        Unavailable = 3
-    }
-
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.5
      */
@@ -107,6 +85,13 @@ export namespace PowerSource {
          */
         previous: TlvField(1, TlvArray(TlvEnum<WiredFault>(), { maxLength: 8 }))
     });
+
+    /**
+     * Body of the PowerSource wiredFaultChange event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.7.7.1
+     */
+    export interface WiredFaultChangeEvent extends TypeFromSchema<typeof TlvWiredFaultChangeEvent> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.6
@@ -182,6 +167,13 @@ export namespace PowerSource {
         current: TlvField(0, TlvArray(TlvEnum<BatFault>(), { maxLength: 8 })),
         previous: TlvField(1, TlvArray(TlvEnum<BatFault>(), { maxLength: 8 }))
     });
+
+    /**
+     * Body of the PowerSource batFaultChange event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.7.7.2
+     */
+    export interface BatFaultChangeEvent extends TypeFromSchema<typeof TlvBatFaultChangeEvent> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.8
@@ -859,113 +851,41 @@ export namespace PowerSource {
     });
 
     /**
-     * These are optional features supported by PowerSourceCluster.
+     * Body of the PowerSource batChargeFaultChange event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.7.4
+     * @see {@link MatterCoreSpecificationV1_1} § 11.7.7.3
      */
-    export enum Feature {
-        /**
-         * Wired
-         *
-         * A wired power source
-         */
-        Wired = "Wired",
-
-        /**
-         * Battery
-         *
-         * A battery power source
-         */
-        Battery = "Battery",
-
-        /**
-         * Rechargeable
-         *
-         * A rechargeable battery power source (requires Battery feature)
-         */
-        Rechargeable = "Rechargeable",
-
-        /**
-         * Replaceable
-         *
-         * A replaceable battery power source (requires Battery feature)
-         */
-        Replaceable = "Replaceable"
-    }
+    export interface BatChargeFaultChangeEvent extends TypeFromSchema<typeof TlvBatChargeFaultChangeEvent> {}
 
     /**
-     * These elements and properties are present in all PowerSource clusters.
+     * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.4
      */
-    export const Base = ClusterFactory.Definition({
-        id: 0x2f,
-        name: "PowerSource",
-        revision: 1,
+    export enum PowerSourceStatus {
+        /**
+         * Indicate the source status is not specified
+         */
+        Unspecified = 0,
 
-        features: {
-            /**
-             * Wired
-             *
-             * A wired power source
-             */
-            wired: BitFlag(0),
+        /**
+         * Indicate the source is available and currently supplying power
+         */
+        Active = 1,
 
-            /**
-             * Battery
-             *
-             * A battery power source
-             */
-            battery: BitFlag(1),
+        /**
+         * Indicate the source is available, but is not currently supplying power
+         */
+        Standby = 2,
 
-            /**
-             * Rechargeable
-             *
-             * A rechargeable battery power source (requires Battery feature)
-             */
-            rechargeable: BitFlag(2),
-
-            /**
-             * Replaceable
-             *
-             * A replaceable battery power source (requires Battery feature)
-             */
-            replaceable: BitFlag(3)
-        },
-
-        attributes: {
-            /**
-             * This attribute shall indicate the participation of this power source in providing power to the Node as
-             * specified in PowerSourceStatusEnum.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.7.6.1
-             */
-            status: Attribute(0x0, TlvEnum<PowerSourceStatus>()),
-
-            /**
-             * This attribute shall indicate the relative preference with which the Node will select this source to
-             * provide power. A source with a lower order shall be selected by the Node to provide power before any
-             * other source with a higher order, if the lower order source is available (see Status).
-             *
-             * Note, Order is read-only and therefore NOT intended to allow clients control over power source selection.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2
-             */
-            order: Attribute(0x1, TlvUInt8, { persistent: true }),
-
-            /**
-             * This attribute shall provide a user-facing description of this source, used to distinguish it from other
-             * power sources, e.g. "DC Power", "Primary Battery" or "Battery back-up". This attribute shall NOT be used
-             * to convey information such as battery form factor, or chemistry.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.7.6.3
-             */
-            description: FixedAttribute(0x2, TlvString.bound({ maxLength: 60 }))
-        }
-    });
+        /**
+         * Indicate the source is not currently available to supply power
+         */
+        Unavailable = 3
+    }
 
     /**
      * A PowerSourceCluster supports these elements if it supports feature Wired.
      */
-    export const WiredComponent = ClusterFactory.Component({
+    export const WiredComponent = MutableCluster.Component({
         attributes: {
             /**
              * This attribute shall indicate the assessed RMS or DC voltage currently provided by the hard-wired
@@ -1058,7 +978,7 @@ export namespace PowerSource {
     /**
      * A PowerSourceCluster supports these elements if it supports feature Battery.
      */
-    export const BatteryComponent = ClusterFactory.Component({
+    export const BatteryComponent = MutableCluster.Component({
         attributes: {
             /**
              * This attribute shall indicate the currently measured output voltage of the battery in mV (millivolts). A
@@ -1159,7 +1079,7 @@ export namespace PowerSource {
     /**
      * A PowerSourceCluster supports these elements if it supports feature Replaceable.
      */
-    export const ReplaceableComponent = ClusterFactory.Component({
+    export const ReplaceableComponent = MutableCluster.Component({
         attributes: {
             /**
              * This attribute shall provide a user-facing description of this battery, which SHOULD contain information
@@ -1222,7 +1142,7 @@ export namespace PowerSource {
     /**
      * A PowerSourceCluster supports these elements if it supports feature Rechargeable.
      */
-    export const RechargeableComponent = ClusterFactory.Component({
+    export const RechargeableComponent = MutableCluster.Component({
         attributes: {
             /**
              * This attribute shall indicate the current state of the battery source with respect to charging as
@@ -1292,6 +1212,126 @@ export namespace PowerSource {
     });
 
     /**
+     * These are optional features supported by PowerSourceCluster.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.7.4
+     */
+    export enum Feature {
+        /**
+         * Wired
+         *
+         * A wired power source
+         */
+        Wired = "Wired",
+
+        /**
+         * Battery
+         *
+         * A battery power source
+         */
+        Battery = "Battery",
+
+        /**
+         * Rechargeable
+         *
+         * A rechargeable battery power source (requires Battery feature)
+         */
+        Rechargeable = "Rechargeable",
+
+        /**
+         * Replaceable
+         *
+         * A replaceable battery power source (requires Battery feature)
+         */
+        Replaceable = "Replaceable"
+    }
+
+    /**
+     * These elements and properties are present in all PowerSource clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x2f,
+        name: "PowerSource",
+        revision: 1,
+
+        features: {
+            /**
+             * Wired
+             *
+             * A wired power source
+             */
+            wired: BitFlag(0),
+
+            /**
+             * Battery
+             *
+             * A battery power source
+             */
+            battery: BitFlag(1),
+
+            /**
+             * Rechargeable
+             *
+             * A rechargeable battery power source (requires Battery feature)
+             */
+            rechargeable: BitFlag(2),
+
+            /**
+             * Replaceable
+             *
+             * A replaceable battery power source (requires Battery feature)
+             */
+            replaceable: BitFlag(3)
+        },
+
+        attributes: {
+            /**
+             * This attribute shall indicate the participation of this power source in providing power to the Node as
+             * specified in PowerSourceStatusEnum.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.7.6.1
+             */
+            status: Attribute(0x0, TlvEnum<PowerSourceStatus>()),
+
+            /**
+             * This attribute shall indicate the relative preference with which the Node will select this source to
+             * provide power. A source with a lower order shall be selected by the Node to provide power before any
+             * other source with a higher order, if the lower order source is available (see Status).
+             *
+             * Note, Order is read-only and therefore NOT intended to allow clients control over power source selection.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.7.6.2
+             */
+            order: Attribute(0x1, TlvUInt8, { persistent: true }),
+
+            /**
+             * This attribute shall provide a user-facing description of this source, used to distinguish it from other
+             * power sources, e.g. "DC Power", "Primary Battery" or "Battery back-up". This attribute shall NOT be used
+             * to convey information such as battery form factor, or chemistry.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.7.6.3
+             */
+            description: FixedAttribute(0x2, TlvString.bound({ maxLength: 60 }))
+        },
+
+        /**
+         * This metadata controls which PowerSourceCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { wired: true }, component: WiredComponent },
+            { flags: { battery: true }, component: BatteryComponent },
+            { flags: { replaceable: true }, component: ReplaceableComponent },
+            { flags: { rechargeable: true }, component: RechargeableComponent }
+        )
+    });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
+
+    /**
      * Power Source
      *
      * This cluster is used to describe the configuration and capabilities of a physical power source that provides
@@ -1304,51 +1344,18 @@ export namespace PowerSource {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.7
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a PowerSource cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a PowerSource cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, WiredComponent, { wired: true });
-            ClusterFactory.extend(cluster, BatteryComponent, { battery: true });
-            ClusterFactory.extend(cluster, ReplaceableComponent, { replaceable: true });
-            ClusterFactory.extend(cluster, RechargeableComponent, { rechargeable: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { wired: true } ? typeof WiredComponent : {})
-        & (SF extends { battery: true } ? typeof BatteryComponent : {})
-        & (SF extends { replaceable: true } ? typeof ReplaceableComponent : {})
-        & (SF extends { rechargeable: true } ? typeof RechargeableComponent : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const WIRED = { wired: true };
     const BAT = { battery: true };
     const REPLC = { replaceable: true };
     const RECHG = { rechargeable: true };
 
     /**
-     * This cluster supports all PowerSource features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -1356,124 +1363,135 @@ export namespace PowerSource {
 
         attributes: {
             ...Cluster.attributes,
-            wiredAssessedInputVoltage: ClusterFactory.AsConditional(
+            wiredAssessedInputVoltage: MutableCluster.AsConditional(
                 WiredComponent.attributes.wiredAssessedInputVoltage,
                 { optionalIf: [WIRED] }
             ),
-            wiredAssessedInputFrequency: ClusterFactory.AsConditional(
+            wiredAssessedInputFrequency: MutableCluster.AsConditional(
                 WiredComponent.attributes.wiredAssessedInputFrequency,
                 { optionalIf: [WIRED] }
             ),
-            wiredCurrentType: ClusterFactory.AsConditional(
+            wiredCurrentType: MutableCluster.AsConditional(
                 WiredComponent.attributes.wiredCurrentType,
                 { mandatoryIf: [WIRED] }
             ),
-            wiredAssessedCurrent: ClusterFactory.AsConditional(
+            wiredAssessedCurrent: MutableCluster.AsConditional(
                 WiredComponent.attributes.wiredAssessedCurrent,
                 { optionalIf: [WIRED] }
             ),
-            wiredNominalVoltage: ClusterFactory.AsConditional(
+            wiredNominalVoltage: MutableCluster.AsConditional(
                 WiredComponent.attributes.wiredNominalVoltage,
                 { optionalIf: [WIRED] }
             ),
-            wiredMaximumCurrent: ClusterFactory.AsConditional(
+            wiredMaximumCurrent: MutableCluster.AsConditional(
                 WiredComponent.attributes.wiredMaximumCurrent,
                 { optionalIf: [WIRED] }
             ),
-            wiredPresent: ClusterFactory.AsConditional(WiredComponent.attributes.wiredPresent, { optionalIf: [WIRED] }),
-            activeWiredFaults: ClusterFactory.AsConditional(
+            wiredPresent: MutableCluster.AsConditional(WiredComponent.attributes.wiredPresent, { optionalIf: [WIRED] }),
+            activeWiredFaults: MutableCluster.AsConditional(
                 WiredComponent.attributes.activeWiredFaults,
                 { optionalIf: [WIRED] }
             ),
-            batVoltage: ClusterFactory.AsConditional(BatteryComponent.attributes.batVoltage, { optionalIf: [BAT] }),
-            batPercentRemaining: ClusterFactory.AsConditional(
+            batVoltage: MutableCluster.AsConditional(BatteryComponent.attributes.batVoltage, { optionalIf: [BAT] }),
+            batPercentRemaining: MutableCluster.AsConditional(
                 BatteryComponent.attributes.batPercentRemaining,
                 { optionalIf: [BAT] }
             ),
-            batTimeRemaining: ClusterFactory.AsConditional(
+            batTimeRemaining: MutableCluster.AsConditional(
                 BatteryComponent.attributes.batTimeRemaining,
                 { optionalIf: [BAT] }
             ),
-            batChargeLevel: ClusterFactory.AsConditional(
+            batChargeLevel: MutableCluster.AsConditional(
                 BatteryComponent.attributes.batChargeLevel,
                 { mandatoryIf: [BAT] }
             ),
-            batReplacementNeeded: ClusterFactory.AsConditional(
+            batReplacementNeeded: MutableCluster.AsConditional(
                 BatteryComponent.attributes.batReplacementNeeded,
                 { mandatoryIf: [BAT] }
             ),
-            batReplaceability: ClusterFactory.AsConditional(
+            batReplaceability: MutableCluster.AsConditional(
                 BatteryComponent.attributes.batReplaceability,
                 { mandatoryIf: [BAT] }
             ),
-            batPresent: ClusterFactory.AsConditional(BatteryComponent.attributes.batPresent, { optionalIf: [BAT] }),
-            activeBatFaults: ClusterFactory.AsConditional(
+            batPresent: MutableCluster.AsConditional(BatteryComponent.attributes.batPresent, { optionalIf: [BAT] }),
+            activeBatFaults: MutableCluster.AsConditional(
                 BatteryComponent.attributes.activeBatFaults,
                 { optionalIf: [BAT] }
             ),
-            batReplacementDescription: ClusterFactory.AsConditional(
+            batReplacementDescription: MutableCluster.AsConditional(
                 ReplaceableComponent.attributes.batReplacementDescription,
                 { mandatoryIf: [REPLC] }
             ),
-            batCommonDesignation: ClusterFactory.AsConditional(
+            batCommonDesignation: MutableCluster.AsConditional(
                 ReplaceableComponent.attributes.batCommonDesignation,
                 { optionalIf: [REPLC] }
             ),
-            batAnsiDesignation: ClusterFactory.AsConditional(
+            batAnsiDesignation: MutableCluster.AsConditional(
                 ReplaceableComponent.attributes.batAnsiDesignation,
                 { optionalIf: [REPLC] }
             ),
-            batIecDesignation: ClusterFactory.AsConditional(
+            batIecDesignation: MutableCluster.AsConditional(
                 ReplaceableComponent.attributes.batIecDesignation,
                 { optionalIf: [REPLC] }
             ),
-            batApprovedChemistry: ClusterFactory.AsConditional(
+            batApprovedChemistry: MutableCluster.AsConditional(
                 ReplaceableComponent.attributes.batApprovedChemistry,
                 { optionalIf: [REPLC] }
             ),
-            batCapacity: ClusterFactory.AsConditional(
+            batCapacity: MutableCluster.AsConditional(
                 ReplaceableComponent.attributes.batCapacity,
                 { optionalIf: [REPLC] }
             ),
-            batQuantity: ClusterFactory.AsConditional(
+            batQuantity: MutableCluster.AsConditional(
                 ReplaceableComponent.attributes.batQuantity,
                 { mandatoryIf: [REPLC] }
             ),
-            batChargeState: ClusterFactory.AsConditional(
+            batChargeState: MutableCluster.AsConditional(
                 RechargeableComponent.attributes.batChargeState,
                 { mandatoryIf: [RECHG] }
             ),
-            batTimeToFullCharge: ClusterFactory.AsConditional(
+            batTimeToFullCharge: MutableCluster.AsConditional(
                 RechargeableComponent.attributes.batTimeToFullCharge,
                 { optionalIf: [RECHG] }
             ),
-            batFunctionalWhileCharging: ClusterFactory.AsConditional(
+            batFunctionalWhileCharging: MutableCluster.AsConditional(
                 RechargeableComponent.attributes.batFunctionalWhileCharging,
                 { mandatoryIf: [RECHG] }
             ),
-            batChargingCurrent: ClusterFactory.AsConditional(
+            batChargingCurrent: MutableCluster.AsConditional(
                 RechargeableComponent.attributes.batChargingCurrent,
                 { optionalIf: [RECHG] }
             ),
-            activeBatChargeFaults: ClusterFactory.AsConditional(
+            activeBatChargeFaults: MutableCluster.AsConditional(
                 RechargeableComponent.attributes.activeBatChargeFaults,
                 { optionalIf: [RECHG] }
             )
         },
 
         events: {
-            wiredFaultChange: ClusterFactory.AsConditional(
+            wiredFaultChange: MutableCluster.AsConditional(
                 WiredComponent.events.wiredFaultChange,
                 { optionalIf: [WIRED] }
             ),
-            batFaultChange: ClusterFactory.AsConditional(BatteryComponent.events.batFaultChange, { optionalIf: [BAT] }),
-            batChargeFaultChange: ClusterFactory.AsConditional(
+            batFaultChange: MutableCluster.AsConditional(BatteryComponent.events.batFaultChange, { optionalIf: [BAT] }),
+            batChargeFaultChange: MutableCluster.AsConditional(
                 RechargeableComponent.events.batChargeFaultChange,
                 { optionalIf: [RECHG] }
             )
         }
     });
+
+    /**
+     * This cluster supports all PowerSource features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type PowerSourceCluster = typeof PowerSource.Cluster;
+export type PowerSourceCluster = PowerSource.Cluster;
 export const PowerSourceCluster = PowerSource.Cluster;
+ClusterRegistry.register(PowerSource.Complete);

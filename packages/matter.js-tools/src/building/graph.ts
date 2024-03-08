@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,49 +15,89 @@ import { Project } from "./project.js";
 /**
  * Graph of dependencies for workspace packages.
  *
- * We use this information to determine which packages are "dirty" and need
- * rebuild.  In the future we can also use for parallel build, only tricky
- * part there is showing status.
+ * We use this information to determine which packages are "dirty" and need rebuild.  In the future we can also use for
+ * parallel build, only tricky part there is showing status.
  */
 export class Graph {
     protected constructor(readonly nodes: Graph.Node[]) {}
 
-    static async load(pkg = Package.workspace) {
-        const workspaces = await mapWorkspaces({ pkg: pkg.json, cwd: pkg.path });
+    static async load(workspace = Package.workspace) {
+        const nodeMap = await this.#loadNodes(workspace);
+        return await this.#createGraph(Object.values(nodeMap));
+    }
 
-        const nodeMap = {} as Record<string, Graph.Node>;
-        const allDeps = {} as Record<string, string[]>;
-        for (const path of workspaces.values()) {
-            const pkg = new Package({ path: path });
-            allDeps[pkg.json.name] = pkg.dependencies;
-            nodeMap[pkg.json.name] = {
-                pkg,
-                dependencies: [],
-                buildTime: 0,
-                modifyTime: 0,
+    static async forProject(path: string) {
+        const workspace = Package.workspaceFor(path);
+        const nodeMap = await this.#loadNodes(workspace);
 
-                get dirty() {
-                    return (
-                        this.modifyTime > this.buildTime ||
-                        !!this.dependencies.find(d => d.dirty || d.buildTime > this.buildTime)
-                    );
-                },
-            };
+        const rootPkg = new Package({ path: path });
+        const rootNode = nodeMap[rootPkg.json.name];
+        if (!rootNode) {
+            throw new InternalBuildError(`Package ${rootPkg.json.name} is not in workspace`);
         }
 
-        for (const name in allDeps) {
-            for (const dep of allDeps[name]) {
-                const depNode = nodeMap[dep];
-
-                // Note -- allow nodes to reference themselves, seems to be
-                // necessary on tools for use of tsc
-                if (depNode && depNode !== nodeMap[name]) {
-                    nodeMap[name].dependencies.push(depNode);
-                }
+        const nodes = new Set<Graph.Node>();
+        function addNode(node: Graph.Node) {
+            if (nodes.has(node)) {
+                return;
+            }
+            nodes.add(node);
+            for (const dependency of node.dependencies) {
+                addNode(dependency);
             }
         }
 
-        const graph = new Graph(Object.values(nodeMap));
+        addNode(rootNode);
+
+        return await this.#createGraph([...nodes]);
+    }
+
+    // TODO - parallelization will be trivial except need to update Progress
+    // to support display of multiple simultaneous tasks
+    async build(builder: Builder, showSkipped = true) {
+        const toBuild = new Set(this.nodes);
+
+        while (toBuild.size) {
+            let node;
+
+            nodes: for (node of toBuild) {
+                for (const dep of node.dependencies) {
+                    if (dep.dirty) {
+                        continue nodes;
+                    }
+                }
+                break;
+            }
+
+            if (!node) {
+                throw new Error("Internal logic error: No unbuilt project has fully built dependencies");
+            }
+
+            if (node.dirty || builder.unconditional) {
+                await builder.build(new Project(node.pkg));
+                node.buildTime = Date.now();
+            } else if (showSkipped) {
+                new Progress().skip("Up to date", node.pkg);
+            }
+
+            toBuild.delete(node);
+        }
+    }
+
+    display() {
+        for (const node of this.nodes) {
+            const progress = node.pkg.start("Node");
+            progress.info("path", node.pkg.path);
+            progress.info("modified", formatTime(node.modifyTime));
+            progress.info("built", formatTime(node.buildTime));
+            progress.info("dirty", node.dirty ? colors.dim.red("yes") : colors.dim.green("no"));
+            progress.info("dependencies", node.dependencies.map(formatDep).join(", "));
+            progress.shutdown();
+        }
+    }
+
+    static async #createGraph(nodes: Graph.Node[]) {
+        const graph = new Graph(nodes);
 
         await Promise.all(
             graph.nodes.map(async node => {
@@ -88,48 +128,41 @@ export class Graph {
         return graph;
     }
 
-    // TODO - parallelization will be trivial except need to update Progress
-    // to support display of multiple simultaneous tasks
-    async build(builder: Builder) {
-        const toBuild = new Set(this.nodes);
+    static async #loadNodes(workspace: Package) {
+        const workspaces = await mapWorkspaces({ pkg: workspace.json, cwd: workspace.path });
 
-        while (toBuild.size) {
-            let node;
+        const nodeMap = {} as Record<string, Graph.Node>;
+        const allDeps = {} as Record<string, string[]>;
+        for (const path of workspaces.values()) {
+            const pkg = new Package({ path: path });
+            allDeps[pkg.json.name] = pkg.dependencies;
+            nodeMap[pkg.json.name] = {
+                pkg,
+                dependencies: [],
+                buildTime: 0,
+                modifyTime: 0,
 
-            nodes: for (node of toBuild) {
-                for (const dep of node.dependencies) {
-                    if (dep.dirty) {
-                        continue nodes;
-                    }
+                get dirty() {
+                    return (
+                        this.modifyTime > this.buildTime ||
+                        !!this.dependencies.find(d => d.dirty || d.buildTime > this.buildTime)
+                    );
+                },
+            };
+        }
+
+        for (const name in allDeps) {
+            for (const dep of allDeps[name]) {
+                const depNode = nodeMap[dep];
+                // Note -- allow nodes to reference themselves, seems to be
+                // necessary on tools for use of tsc
+                if (depNode && depNode !== nodeMap[name]) {
+                    nodeMap[name].dependencies.push(depNode);
                 }
-                break;
             }
-
-            if (!node) {
-                throw new Error("Internal logic error: No unbuilt project has fully built dependencies");
-            }
-
-            if (node.dirty || builder.unconditional) {
-                await builder.build(new Project(node.pkg));
-                node.buildTime = Date.now();
-            } else {
-                new Progress().skip("Up to date", node.pkg);
-            }
-
-            toBuild.delete(node);
         }
-    }
 
-    display() {
-        for (const node of this.nodes) {
-            const progress = node.pkg.start("Node");
-            progress.info("path", node.pkg.path);
-            progress.info("modified", formatTime(node.modifyTime));
-            progress.info("built", formatTime(node.buildTime));
-            progress.info("dirty", node.dirty ? colors.dim.red("yes") : colors.dim.green("no"));
-            progress.info("dependencies", node.dependencies.map(formatDep).join(", "));
-            progress.shutdown();
-        }
+        return nodeMap;
     }
 }
 

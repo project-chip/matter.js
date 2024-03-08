@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -79,7 +79,10 @@ const NODE_ID = NodeId(BigInt(1));
 
         beforeEach(async () => {
             Network.get = () => clientNetwork;
-            scanner = await MdnsScanner.create({ enableIpv4: testIpv4Enabled, netInterface: FAKE_INTERFACE_NAME });
+            scanner = await MdnsScanner.create(Network.get(), {
+                enableIpv4: testIpv4Enabled,
+                netInterface: FAKE_INTERFACE_NAME,
+            });
             scannerChannel = await UdpChannelFake.create(serverNetwork, {
                 listeningPort: 5353,
                 listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",
@@ -87,7 +90,7 @@ const NODE_ID = NodeId(BigInt(1));
             });
 
             Network.get = () => serverNetwork;
-            broadcaster = await MdnsBroadcaster.create({
+            broadcaster = await MdnsBroadcaster.create(Network.get(), {
                 enableIpv4: testIpv4Enabled,
                 multicastInterface: FAKE_INTERFACE_NAME,
             });
@@ -278,7 +281,7 @@ const NODE_ID = NodeId(BigInt(1));
                 );
 
                 await broadcaster.setCommissionMode(PORT, 1, {
-                    deviceName: "Test Device",
+                    name: "Test Device",
                     deviceType: 1,
                     vendorId: VendorId(1),
                     productId: 0x8000,
@@ -540,7 +543,7 @@ const NODE_ID = NodeId(BigInt(1));
 
                 await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
                 await broadcaster.setCommissionMode(PORT2, 1, {
-                    deviceName: "Test Device",
+                    name: "Test Device",
                     deviceType: 1,
                     vendorId: VendorId(1),
                     productId: 0x8000,
@@ -943,7 +946,7 @@ const NODE_ID = NodeId(BigInt(1));
                 });
 
                 await broadcaster.setCommissionMode(PORT, 1, {
-                    deviceName: "Test Device",
+                    name: "Test Device",
                     deviceType: 1,
                     vendorId: VendorId(1),
                     productId: 0x8000,
@@ -1041,7 +1044,7 @@ const NODE_ID = NodeId(BigInt(1));
                 });
 
                 await broadcaster.setCommissionMode(PORT, 1, {
-                    deviceName: "Test Device",
+                    name: "Test Device",
                     deviceType: 1,
                     vendorId: VendorId(1),
                     productId: 0x8000,

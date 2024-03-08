@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -55,8 +55,7 @@ describe("Storage in JSON File", () => {
     });
 
     it("write and delete success", async () => {
-        const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-        await storage.initialize();
+        const storage = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
 
         storage.set(["context"], "key", "value");
 
@@ -70,8 +69,7 @@ describe("Storage in JSON File", () => {
 
         await storage.committed;
 
-        const storageRead = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-        await storageRead.initialize();
+        const storageRead = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
 
         const valueRead = storage.get(["context"], "key");
         assert.equal(valueRead, undefined);
@@ -88,10 +86,10 @@ describe("Storage in JSON File", () => {
         await storage.close();
     });
 
-    it("Throws error when context is empty on set", () => {
+    it("Throws error when context is empty on set", async () => {
+        const storage = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
         assert.throws(
             () => {
-                const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
                 storage.set([""], "key", "value");
             },
             {
@@ -100,10 +98,10 @@ describe("Storage in JSON File", () => {
         );
     });
 
-    it("Throws error when key is empty on set", () => {
+    it("Throws error when key is empty on set", async () => {
+        const storage = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
         assert.throws(
             () => {
-                const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
                 storage.set(["context"], "", "value");
             },
             {
@@ -112,10 +110,10 @@ describe("Storage in JSON File", () => {
         );
     });
 
-    it("Throws error when context is empty on get", () => {
+    it("Throws error when context is empty on get", async () => {
+        const storage = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
         assert.throws(
             () => {
-                const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
                 storage.get([""], "key");
             },
             {
@@ -124,10 +122,10 @@ describe("Storage in JSON File", () => {
         );
     });
 
-    it("Throws error when key is empty on get", () => {
+    it("Throws error when key is empty on get", async () => {
+        const storage = await StorageBackendJsonFile.create(TEST_STORAGE_LOCATION);
         assert.throws(
             () => {
-                const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
                 storage.get(["context"], "");
             },
             {

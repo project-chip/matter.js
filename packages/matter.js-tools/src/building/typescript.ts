@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -98,13 +98,11 @@ export class Typescript {
         if (!this.options.noEmit) {
             diagnostics.push(...program.emit().diagnostics);
         }
-
         this.passTscErrors(diagnostics);
     }
 
     private getCompilerOptions(filename: string) {
         filename = this.pkg.resolve(filename);
-        // eslint-disable-next-line @typescript-eslint/unbound-method
         const file = ts.readConfigFile(filename, ts.sys.readFile);
         this.passTscError(file.error);
         const config = ts.parseJsonConfigFileContent(file.config, ts.sys, dirname(filename));

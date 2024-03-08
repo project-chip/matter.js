@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -1011,7 +1011,7 @@ export class InteractionClient {
             );
         }
         maxInterval += 5; // Add 5 seconds to the maxInterval to allow at least one full resubmission cycle before assuming the subscription is lost
-        const timer = Time.getTimer(maxInterval * 1000, () => {
+        const timer = Time.getTimer("Subscription retry", maxInterval * 1000, () => {
             logger.info(`Subscription ${subscriptionId} timed out ...`);
             this.removeSubscription(subscriptionId);
             // We remove all data because we don't know which data is still valid, so we better read from remote if needed

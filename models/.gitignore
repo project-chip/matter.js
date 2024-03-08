@@ -1,2 +1,3 @@
-dist
-build
+/dist
+/build
+/node_modules

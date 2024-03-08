@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,6 +16,12 @@ import { MatterDeviceLibrarySpecificationV1_0 } from "../spec/Specifications.js"
 export enum DeviceClasses {
     /** Node device type. */
     Node = "Node",
+
+    /**
+     * Utility device type.
+     * A Utility device type supports configuration and settings.
+     */
+    Utility = "Utility",
 
     /**
      * Application device type.

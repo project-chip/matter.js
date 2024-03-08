@@ -1,15 +1,15 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SupportedAttributeClient } from "@project-chip/matter-node.js/cluster";
-import { ValidationError } from "@project-chip/matter-node.js/common";
-import { AttributeId, ClusterId, EndpointNumber } from "@project-chip/matter-node.js/datatype";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { AttributeModel, ClusterModel, MatterModel } from "@project-chip/matter-node.js/model";
-import { toHexString } from "@project-chip/matter-node.js/util";
+import { SupportedAttributeClient } from "@project-chip/matter.js/cluster";
+import { ValidationError } from "@project-chip/matter.js/common";
+import { AttributeId, ClusterId, EndpointNumber } from "@project-chip/matter.js/datatype";
+import { Logger } from "@project-chip/matter.js/log";
+import { AttributeModel, ClusterModel, MatterModel } from "@project-chip/matter.js/model";
+import { toHexString } from "@project-chip/matter.js/util";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { convertJsonDataWithModel } from "../util/Json";

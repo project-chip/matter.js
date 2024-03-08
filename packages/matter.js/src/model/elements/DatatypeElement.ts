@@ -1,24 +1,19 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ElementTag, Mei, Metatype } from "../definitions/index.js";
+import { ElementTag, Metatype } from "../definitions/index.js";
 import { BaseElement } from "./BaseElement.js";
+import { FieldElement } from "./FieldElement.js";
 import { ValueElement } from "./ValueElement.js";
 
 /**
- * A datatype element defines a standalone datatype.
+ * A datatype represents a named, standalone type definition.
  */
-export type DatatypeElement = ValueElement & {
+export interface DatatypeElement extends ValueElement {
     tag: `${DatatypeElement.Tag}`;
-
-    /**
-     * A datatype defined locally within a cluster is referenced by name and
-     * does not have an ID.  So we leave ID is optional for this type.
-     */
-    id?: Mei;
 
     /**
      * A "metatype" provides enough semantics for us to translate a value into
@@ -28,16 +23,21 @@ export type DatatypeElement = ValueElement & {
      */
     metatype?: `${Metatype}`;
 
-    children?: DatatypeElement[];
-};
+    /**
+     * You can only reference a datatype by name.  It does not have an ID.
+     */
+    id?: undefined;
+
+    children?: FieldElement[];
+}
 
 export function DatatypeElement(definition: DatatypeElement.Properties) {
     return ValueElement(DatatypeElement.Tag, definition) as DatatypeElement;
 }
 
 export namespace DatatypeElement {
-    export type Tag = ElementTag.Datatype;
     export const Tag = ElementTag.Datatype;
+    export type Tag = typeof ElementTag.Datatype;
     export type Properties = BaseElement.Properties<DatatypeElement>;
 
     /**
@@ -48,12 +48,12 @@ export namespace DatatypeElement {
      * we can't use a TypeScript enum directly.
      */
     export function ListValues(values: ValueMap): ListValues {
-        const result = Array<DatatypeElement>();
+        const result = Array<FieldElement>();
 
         for (const [k, v] of Object.entries(values)) {
             if (typeof v === "number") {
                 result.push(
-                    DatatypeElement({
+                    FieldElement({
                         id: v,
                         name: k,
                         type: "uint8",
@@ -70,7 +70,7 @@ export namespace DatatypeElement {
      * We express enum values as IntElements as this gives us conformance
      * and other metadata.
      */
-    export type ListValues = DatatypeElement[];
+    export type ListValues = FieldElement[];
 
     /**
      * Per the Matter specification, enums are named integers.  The following

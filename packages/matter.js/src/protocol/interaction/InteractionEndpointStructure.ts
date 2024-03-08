@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,8 +15,9 @@ import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Observable } from "../../util/Observable.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
 import {
     AttributePath,
@@ -33,13 +34,14 @@ import {
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 export class InteractionEndpointStructure {
-    endpoints = new Map<EndpointNumber, Endpoint>();
+    endpoints = new Map<EndpointNumber, EndpointInterface>();
     attributes = new Map<string, AnyAttributeServer<any>>();
     attributePaths = new Array<AttributePath>();
     events = new Map<string, EventServer<any>>();
     eventPaths = new Array<EventPath>();
     commands = new Map<string, CommandServer<any, any>>();
     commandPaths = new Array<CommandPath>();
+    change = new Observable();
 
     public clear() {
         this.endpoints.clear();
@@ -51,20 +53,22 @@ export class InteractionEndpointStructure {
         this.commandPaths.length = 0;
     }
 
-    public destroy() {
+    public close() {
         for (const endpoint of this.endpoints.values()) {
-            endpoint.destroy();
+            endpoint.close();
         }
     }
 
-    public initializeFromEndpoint(endpoint: Endpoint) {
+    public initializeFromEndpoint(endpoint: EndpointInterface) {
         this.clear();
 
         this.verifyAndInitializeStructureElementsFromEndpoint(endpoint); // Initialize Data from Root Endpoint
         this.initializeStructureFromEndpoints(endpoint); // Initialize Data from Child Endpoints
+
+        this.change.emit();
     }
 
-    private initializeStructureFromEndpoints(endpoint: Endpoint) {
+    private initializeStructureFromEndpoints(endpoint: EndpointInterface) {
         const endpoints = endpoint.getChildEndpoints();
         for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
             this.verifyAndInitializeStructureElementsFromEndpoint(endpoints[endpointIndex]);
@@ -72,8 +76,8 @@ export class InteractionEndpointStructure {
         }
     }
 
-    private verifyAndInitializeStructureElementsFromEndpoint(endpoint: Endpoint) {
-        if (endpoint.id === undefined) {
+    private verifyAndInitializeStructureElementsFromEndpoint(endpoint: EndpointInterface) {
+        if (endpoint.number === undefined) {
             throw new InternalError(`Endpoint ID is undefined. It needs to be initialized first!`);
         }
 
@@ -86,10 +90,11 @@ export class InteractionEndpointStructure {
                 _events: clusterEvents,
                 _commands: clusterCommands,
             } = asClusterServerInternal(cluster);
+
             // Add attributes
             for (const name in clusterAttributes) {
                 const attribute = clusterAttributes[name];
-                const path = { endpointId: endpoint.id, clusterId, attributeId: attribute.id };
+                const path = { endpointId: endpoint.number, clusterId, attributeId: attribute.id };
                 this.attributes.set(attributePathToId(path), attribute);
                 this.attributePaths.push(path);
             }
@@ -97,7 +102,7 @@ export class InteractionEndpointStructure {
             // Add events
             for (const name in clusterEvents) {
                 const event = clusterEvents[name];
-                const path = { endpointId: endpoint.id, clusterId, eventId: event.id };
+                const path = { endpointId: endpoint.number, clusterId, eventId: event.id };
                 this.events.set(eventPathToId(path), event);
                 this.eventPaths.push(path);
             }
@@ -105,15 +110,16 @@ export class InteractionEndpointStructure {
             // Add commands
             for (const name in clusterCommands) {
                 const command = clusterCommands[name];
-                const path = { endpointId: endpoint.id, clusterId, commandId: command.invokeId };
+                const path = { endpointId: endpoint.number, clusterId, commandId: command.invokeId };
                 this.commands.set(commandPathToId(path), command);
                 this.commandPaths.push(path);
             }
         }
 
-        if (this.endpoints.has(endpoint.id)) throw new ImplementationError(`Endpoint ID ${endpoint.id} exists twice`);
+        if (this.endpoints.has(endpoint.number))
+            throw new ImplementationError(`Endpoint ID ${endpoint.number} exists twice`);
 
-        this.endpoints.set(endpoint.id, endpoint);
+        this.endpoints.set(endpoint.number, endpoint);
     }
 
     toHex(value: number | bigint | undefined) {
@@ -174,7 +180,7 @@ export class InteractionEndpointStructure {
         return this.resolveGenericElementName(undefined, endpointId, clusterId, commandId, this.commands);
     }
 
-    getEndpoint(endpointId: EndpointNumber): Endpoint | undefined {
+    getEndpoint(endpointId: EndpointNumber): EndpointInterface | undefined {
         return this.endpoints.get(endpointId);
     }
 

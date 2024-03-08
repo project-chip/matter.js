@@ -1,21 +1,38 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { Command, TlvNoResponse, AccessLevel, Attribute } from "../../cluster/Cluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
-import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace AudioOutput {
+    /**
+     * Input to the AudioOutput renameOutput command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4.2
+     */
+    export const TlvRenameOutputRequest = TlvObject({ index: TlvField(0, TlvUInt8), name: TlvField(1, TlvString) });
+
+    /**
+     * Input to the AudioOutput renameOutput command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4.2
+     */
+    export interface RenameOutputRequest extends TypeFromSchema<typeof TlvRenameOutputRequest> {}
+
     /**
      * The type of output, expressed as an enum, with the following values:
      *
@@ -64,6 +81,13 @@ export namespace AudioOutput {
     });
 
     /**
+     * This contains information about an output.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.5.1
+     */
+    export interface OutputInfoStruct extends TypeFromSchema<typeof TlvOutputInfoStruct> {}
+
+    /**
      * Input to the AudioOutput selectOutput command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4
@@ -71,11 +95,28 @@ export namespace AudioOutput {
     export const TlvSelectOutputRequest = TlvObject({ index: TlvField(0, TlvUInt8) });
 
     /**
-     * Input to the AudioOutput renameOutput command
+     * Input to the AudioOutput selectOutput command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4.2
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4
      */
-    export const TlvRenameOutputRequest = TlvObject({ index: TlvField(0, TlvUInt8), name: TlvField(1, TlvString) });
+    export interface SelectOutputRequest extends TypeFromSchema<typeof TlvSelectOutputRequest> {}
+
+    /**
+     * A AudioOutputCluster supports these elements if it supports feature NameUpdates.
+     */
+    export const NameUpdatesComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * Upon receipt, this shall rename the output at a specific index in the Output List.
+             *
+             * Updates to the output name shall appear in the device’s settings menus. Name updates may automatically
+             * be sent to the actual device to which the output connects.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4.2
+             */
+            renameOutput: Command(0x1, TlvRenameOutputRequest, 0x1, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
+        }
+    });
 
     /**
      * These are optional features supported by AudioOutputCluster.
@@ -94,7 +135,7 @@ export namespace AudioOutput {
     /**
      * These elements and properties are present in all AudioOutput clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x50b,
         name: "AudioOutput",
         revision: 1,
@@ -129,25 +170,19 @@ export namespace AudioOutput {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4
              */
             selectOutput: Command(0x0, TlvSelectOutputRequest, 0x0, TlvNoResponse)
-        }
+        },
+
+        /**
+         * This metadata controls which AudioOutputCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { nameUpdates: true }, component: NameUpdatesComponent })
     });
 
     /**
-     * A AudioOutputCluster supports these elements if it supports feature NameUpdates.
+     * @see {@link Cluster}
      */
-    export const NameUpdatesComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * Upon receipt, this shall rename the output at a specific index in the Output List.
-             *
-             * Updates to the output name shall appear in the device’s settings menus. Name updates may automatically
-             * be sent to the actual device to which the output connects.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4.2
-             */
-            renameOutput: Command(0x1, TlvRenameOutputRequest, 0x1, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Audio Output
@@ -159,41 +194,15 @@ export namespace AudioOutput {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create an AudioOutput cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns an AudioOutput cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, NameUpdatesComponent, { nameUpdates: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { nameUpdates: true } ? typeof NameUpdatesComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const NU = { nameUpdates: true };
 
     /**
-     * This cluster supports all AudioOutput features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -202,13 +211,24 @@ export namespace AudioOutput {
 
         commands: {
             ...Cluster.commands,
-            renameOutput: ClusterFactory.AsConditional(
+            renameOutput: MutableCluster.AsConditional(
                 NameUpdatesComponent.commands.renameOutput,
                 { mandatoryIf: [NU] }
             )
         }
     });
+
+    /**
+     * This cluster supports all AudioOutput features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type AudioOutputCluster = typeof AudioOutput.Cluster;
+export type AudioOutputCluster = AudioOutput.Cluster;
 export const AudioOutputCluster = AudioOutput.Cluster;
+ClusterRegistry.register(AudioOutput.Complete);

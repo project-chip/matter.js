@@ -1,20 +1,23 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command, TlvNoResponse } from "../../cluster/Cluster.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace OtaSoftwareUpdateProvider {
     /**
@@ -63,6 +66,13 @@ export namespace OtaSoftwareUpdateProvider {
     });
 
     /**
+     * Input to the OtaSoftwareUpdateProvider queryImage command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.1
+     */
+    export interface QueryImageRequest extends TypeFromSchema<typeof TlvQueryImageRequest> {}
+
+    /**
      * See Section 11.19.3.2, “Querying the OTA Provider” for the semantics of these values.
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.4.1
@@ -104,14 +114,26 @@ export namespace OtaSoftwareUpdateProvider {
     });
 
     /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.10
+     */
+    export interface QueryImageResponse extends TypeFromSchema<typeof TlvQueryImageResponse> {}
+
+    /**
      * Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.18
      */
-    export const TlvApplyUpdateRequestRequest = TlvObject({
+    export const TlvApplyUpdateRequest = TlvObject({
         updateToken: TlvField(0, TlvByteString.bound({ minLength: 8, maxLength: 32 })),
         newVersion: TlvField(1, TlvUInt32)
     });
+
+    /**
+     * Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.18
+     */
+    export interface ApplyUpdateRequest extends TypeFromSchema<typeof TlvApplyUpdateRequest> {}
 
     /**
      * See Section 11.19.3.6, “Applying a software update” for the semantics of the values. This enumeration is used in
@@ -145,6 +167,11 @@ export namespace OtaSoftwareUpdateProvider {
     });
 
     /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.20
+     */
+    export interface ApplyUpdateResponse extends TypeFromSchema<typeof TlvApplyUpdateResponse> {}
+
+    /**
      * Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.22
@@ -155,13 +182,16 @@ export namespace OtaSoftwareUpdateProvider {
     });
 
     /**
-     * OTA Software Update Provider
+     * Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
      *
-     * Provides an interface for providing OTA software updates
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.6
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.22
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface NotifyUpdateAppliedRequest extends TypeFromSchema<typeof TlvNotifyUpdateAppliedRequest> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x29,
         name: "OtaSoftwareUpdateProvider",
         revision: 1,
@@ -182,7 +212,7 @@ export namespace OtaSoftwareUpdateProvider {
              *
              * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.18
              */
-            applyUpdateRequest: Command(0x2, TlvApplyUpdateRequestRequest, 0x3, TlvApplyUpdateResponse),
+            applyUpdateRequest: Command(0x2, TlvApplyUpdateRequest, 0x3, TlvApplyUpdateResponse),
 
             /**
              * This field shall contain the UpdateToken as specified in Section 11.19.3.6.1, “UpdateToken usage”.
@@ -222,7 +252,20 @@ export namespace OtaSoftwareUpdateProvider {
             notifyUpdateApplied: Command(0x4, TlvNotifyUpdateAppliedRequest, 0x4, TlvNoResponse)
         }
     });
+
+    /**
+     * OTA Software Update Provider
+     *
+     * Provides an interface for providing OTA software updates
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.19.6
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type OtaSoftwareUpdateProviderCluster = typeof OtaSoftwareUpdateProvider.Cluster;
+export type OtaSoftwareUpdateProviderCluster = OtaSoftwareUpdateProvider.Cluster;
 export const OtaSoftwareUpdateProviderCluster = OtaSoftwareUpdateProvider.Cluster;
+ClusterRegistry.register(OtaSoftwareUpdateProvider.Complete);

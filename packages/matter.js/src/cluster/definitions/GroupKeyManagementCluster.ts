@@ -1,14 +1,14 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import {
     WritableFabricScopedAttribute,
     AccessLevel,
@@ -22,10 +22,13 @@ import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
 import { TlvUInt16, TlvEnum, TlvEpochUs } from "../../tlv/TlvNumber.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace GroupKeyManagement {
     /**
@@ -54,6 +57,11 @@ export namespace GroupKeyManagement {
     });
 
     /**
+     * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.3
+     */
+    export interface GroupKeyMapStruct extends TypeFromSchema<typeof TlvGroupKeyMapStruct> {}
+
+    /**
      * This field uniquely identifies the group within the scope of the given Fabric.
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.5
@@ -78,6 +86,13 @@ export namespace GroupKeyManagement {
 
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
+
+    /**
+     * This field uniquely identifies the group within the scope of the given Fabric.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.5
+     */
+    export interface GroupInfoMapStruct extends TypeFromSchema<typeof TlvGroupInfoMapStruct> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.1
@@ -202,6 +217,14 @@ export namespace GroupKeyManagement {
     });
 
     /**
+     * This field shall provide the fabric-unique index for the associated group key set, as specified in Section
+     * 4.15.3.5.1, “Group Key Set ID”.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.4
+     */
+    export interface GroupKeySetStruct extends TypeFromSchema<typeof TlvGroupKeySetStruct> {}
+
+    /**
      * Input to the GroupKeyManagement keySetWrite command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.1
@@ -209,11 +232,25 @@ export namespace GroupKeyManagement {
     export const TlvKeySetWriteRequest = TlvObject({ groupKeySet: TlvField(0, TlvGroupKeySetStruct) });
 
     /**
+     * Input to the GroupKeyManagement keySetWrite command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.1
+     */
+    export interface KeySetWriteRequest extends TypeFromSchema<typeof TlvKeySetWriteRequest> {}
+
+    /**
      * Input to the GroupKeyManagement keySetRead command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.2
      */
     export const TlvKeySetReadRequest = TlvObject({ groupKeySetId: TlvField(0, TlvUInt16) });
+
+    /**
+     * Input to the GroupKeyManagement keySetRead command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.2
+     */
+    export interface KeySetReadRequest extends TypeFromSchema<typeof TlvKeySetReadRequest> {}
 
     /**
      * This command shall be generated in response to the KeySetRead command, if a valid Group Key Set was found. It
@@ -225,11 +262,27 @@ export namespace GroupKeyManagement {
     export const TlvKeySetReadResponse = TlvObject({ groupKeySet: TlvField(0, TlvGroupKeySetStruct) });
 
     /**
+     * This command shall be generated in response to the KeySetRead command, if a valid Group Key Set was found. It
+     * shall contain the configuration of the requested Group Key Set, with the EpochKey0, EpochKey1 and EpochKey2 key
+     * contents replaced by null.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.3
+     */
+    export interface KeySetReadResponse extends TypeFromSchema<typeof TlvKeySetReadResponse> {}
+
+    /**
      * Input to the GroupKeyManagement keySetRemove command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.4
      */
     export const TlvKeySetRemoveRequest = TlvObject({ groupKeySetId: TlvField(0, TlvUInt16) });
+
+    /**
+     * Input to the GroupKeyManagement keySetRemove command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.4
+     */
+    export interface KeySetRemoveRequest extends TypeFromSchema<typeof TlvKeySetRemoveRequest> {}
 
     /**
      * This command shall be generated in response to KeySetReadAllIndices and it shall contain the list of
@@ -245,6 +298,21 @@ export namespace GroupKeyManagement {
      * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.6
      */
     export const TlvKeySetReadAllIndicesResponse = TlvObject({ groupKeySetIDs: TlvField(0, TlvArray(TlvUInt16)) });
+
+    /**
+     * This command shall be generated in response to KeySetReadAllIndices and it shall contain the list of
+     * GroupKeySetID for all Group Key Sets associated with the scoped Fabric.
+     *
+     * GroupKeySetIDs
+     *
+     * This field references the set of group keys that generate operational group keys for use with the accessing
+     * fabric.
+     *
+     * Each entry in GroupKeySetIDs is a GroupKeySetID field.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.6
+     */
+    export interface KeySetReadAllIndicesResponse extends TypeFromSchema<typeof TlvKeySetReadAllIndicesResponse> {}
 
     /**
      * These are optional features supported by GroupKeyManagementCluster.
@@ -263,7 +331,7 @@ export namespace GroupKeyManagement {
     /**
      * These elements and properties are present in all GroupKeyManagement clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x3f,
         name: "GroupKeyManagement",
         revision: 1,
@@ -442,8 +510,19 @@ export namespace GroupKeyManagement {
                 TlvKeySetReadAllIndicesResponse,
                 { invokeAcl: AccessLevel.Administer }
             )
-        }
+        },
+
+        /**
+         * This metadata controls which GroupKeyManagementCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions()
     });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Group Key Management
@@ -455,31 +534,12 @@ export namespace GroupKeyManagement {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.2
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a GroupKeyManagement cluster with support for optional features. Include
-         * each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a GroupKeyManagement cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF };
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type GroupKeyManagementCluster = typeof GroupKeyManagement.Cluster;
+export type GroupKeyManagementCluster = GroupKeyManagement.Cluster;
 export const GroupKeyManagementCluster = GroupKeyManagement.Cluster;
+ClusterRegistry.register(GroupKeyManagement.Complete);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -54,7 +54,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
         const messenger = new PaseServerMessenger(exchange);
         try {
-            await this.handlePairingRequest(exchange.session.getContext(), messenger);
+            await this.handlePairingRequest(exchange.session.context, messenger);
         } catch (error) {
             this.pairingErrors++;
             logger.error("An error occurred during the PASE commissioning.", error);
@@ -93,7 +93,9 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         logger.info(`Received pairing request from ${messenger.getChannelName()}.`);
 
-        this.pairingTimer = Time.getTimer(PASE_PAIRING_TIMEOUT_MS, () => this.cancelPairing(messenger)).start();
+        this.pairingTimer = Time.getTimer("PASE pairing timeout", PASE_PAIRING_TIMEOUT_MS, () =>
+            this.cancelPairing(messenger),
+        ).start();
 
         // Read pbkdfRequest and send pbkdfResponse
         const {
@@ -129,7 +131,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         }
 
         // All good! Creating the secure PASE session
-        await server.createSecureSession({
+        await server.sessionManager.createSecureSession({
             sessionId,
             fabric: undefined,
             peerNodeId: NodeId.UNSPECIFIED_NODE_ID,

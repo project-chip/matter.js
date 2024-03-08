@@ -1,19 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalAttribute, Command } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace TargetNavigator {
     /**
@@ -38,6 +41,13 @@ export namespace TargetNavigator {
     });
 
     /**
+     * This indicates an object describing the navigable target.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.11.5.1
+     */
+    export interface TargetInfoStruct extends TypeFromSchema<typeof TlvTargetInfoStruct> {}
+
+    /**
      * Input to the TargetNavigator navigateTarget command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.11.4.1
@@ -58,6 +68,13 @@ export namespace TargetNavigator {
          */
         data: TlvOptionalField(1, TlvString)
     });
+
+    /**
+     * Input to the TargetNavigator navigateTarget command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.11.4.1
+     */
+    export interface NavigateTargetRequest extends TypeFromSchema<typeof TlvNavigateTargetRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.11.5.2
@@ -101,13 +118,16 @@ export namespace TargetNavigator {
     });
 
     /**
-     * Target Navigator
+     * This command shall be generated in response to NavigateTarget command.
      *
-     * This cluster provides an interface for UX navigation within a set of targets on a device or endpoint.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.11
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.11.4.2
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface NavigateTargetResponse extends TypeFromSchema<typeof TlvNavigateTargetResponse> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x505,
         name: "TargetNavigator",
         revision: 1,
@@ -144,7 +164,20 @@ export namespace TargetNavigator {
             navigateTarget: Command(0x0, TlvNavigateTargetRequest, 0x1, TlvNavigateTargetResponse)
         }
     });
+
+    /**
+     * Target Navigator
+     *
+     * This cluster provides an interface for UX navigation within a set of targets on a device or endpoint.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.11
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type TargetNavigatorCluster = typeof TargetNavigator.Cluster;
+export type TargetNavigatorCluster = TargetNavigator.Cluster;
 export const TargetNavigatorCluster = TargetNavigator.Cluster;
+ClusterRegistry.register(TargetNavigator.Complete);

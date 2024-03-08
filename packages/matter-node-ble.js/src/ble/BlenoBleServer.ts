@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,19 +17,20 @@ import {
 } from "@project-chip/matter.js/ble";
 import { Channel, InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
+import { ChannelNotConnectedError } from "@project-chip/matter.js/protocol";
 import { Time } from "@project-chip/matter.js/time";
 import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import { BleOptions } from "./BleNode.js";
 
 const logger = Logger.get("BlenoBleServer");
-let Bleno: typeof import("@abandonware/bleno");
+let Bleno: typeof import("@stoprocent/bleno");
 
 function initializeBleno(server: BlenoBleServer, hciId?: number) {
     // load Bleno driver with the correct device selected
     if (hciId !== undefined) {
         process.env.BLENO_HCI_DEVICE_ID = hciId.toString();
     }
-    Bleno = require("@abandonware/bleno");
+    Bleno = require("@stoprocent/bleno");
 
     class BtpWriteCharacteristicC1 extends Bleno.Characteristic {
         constructor() {
@@ -137,7 +138,9 @@ export class BlenoBleServer implements Channel<ByteArray> {
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     private clientAddress: string | undefined;
-    private btpHandshakeTimeout = Time.getTimer(BTP_CONN_RSP_TIMEOUT_MS, () => this.btpHandshakeTimeoutTriggered());
+    private btpHandshakeTimeout = Time.getTimer("BTP handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, () =>
+        this.btpHandshakeTimeoutTriggered(),
+    );
 
     private readonly matterBleService;
 
@@ -366,13 +369,19 @@ export class BlenoBleServer implements Channel<ByteArray> {
             await this.btpSession.close();
             this.btpSession = undefined;
         }
+        this.onMatterMessageListener = undefined;
     }
 
     async disconnect() {
+        Bleno.disconnect();
+        /*
+        TODO: This is not working as expected, the disconnect event is not triggered, seems issue in Bleno
         return new Promise<void>(resolve => {
-            Bleno.once("disconnect", () => resolve());
-            Bleno.disconnect();
-        });
+            Bleno.once("disconnect", () => {
+                console.log("DISCONNECTED");
+                resolve();
+            });
+        });*/
     }
 
     // Channel<ByteArray>
@@ -383,7 +392,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
      */
     async send(data: ByteArray) {
         if (this.btpSession === undefined) {
-            throw new BtpFlowError(`Can not send data, no BTP session initialized`);
+            throw new ChannelNotConnectedError(`Can not send data, no BTP session initialized`);
         }
         await this.btpSession.sendMatterMessage(data);
     }

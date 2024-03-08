@@ -1,0 +1,17 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
+
+import { WindowCoveringBehavior } from "./WindowCoveringBehavior.js";
+
+/**
+ * This is the default server implementation of {@link WindowCoveringBehavior}.
+ *
+ * The Matter specification requires the WindowCovering cluster to support features we do not enable by default. You
+ * should use {@link WindowCoveringServer.with} to specialize the class for the features your implementation supports.
+ */
+export class WindowCoveringServer extends WindowCoveringBehavior {}

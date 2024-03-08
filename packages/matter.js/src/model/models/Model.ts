@@ -1,10 +1,11 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { InternalError } from "../../common/MatterError.js";
+import { camelize } from "../../util/String.js";
 import { DefinitionError, ElementTag, Specification } from "../definitions/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
@@ -13,12 +14,10 @@ const CHILDREN = Symbol("children");
 const PARENT = Symbol("parent");
 
 /**
- * A "model" is a class that implements runtime functionality associated with
- * the corresponding element type.
+ * A "model" is a class that implements runtime functionality associated with the corresponding element type.
  */
 export abstract class Model {
-    // These fields are defined in BaseElement.  This base class does not
-    // implement an element but subclasses do
+    // These fields are defined in BaseElement.  This base class does not implement an element but subclasses do
     abstract readonly tag: ElementTag;
     id?: number;
     name!: string;
@@ -54,10 +53,29 @@ export abstract class Model {
     }
 
     /**
-     * The full path ("." delimited) in the Matter tree.
+     * The path ("." delimited) in the Matter tree.
+     *
+     * This is informational and generally tries to adhere to JS API conventions.
      */
     get path(): string {
         if (this.parent && this.parent.tag !== ElementTag.Matter) {
+            if (this.parent.tag === ElementTag.Field) {
+                return `${this.parent.path}.${camelize(this.name)}`;
+            }
+
+            if (this.parent.tag === ElementTag.Cluster) {
+                switch (this.tag) {
+                    case ElementTag.Attribute:
+                        return `${this.parent.path}.state.${camelize(this.name)}`;
+
+                    case ElementTag.Command:
+                        return `${this.parent.path}.${camelize(this.name)}`;
+
+                    case ElementTag.Event:
+                        return `${this.parent.path}.events.${camelize(this.name)}`;
+                }
+            }
+
             return `${this.parent.path}.${this.name}`;
         } else {
             return this.name;
@@ -65,8 +83,7 @@ export abstract class Model {
     }
 
     /**
-     * The structural parent.  This is the model for the element that contains
-     * this element's definition.
+     * The structural parent.  This is the model for the element that contains this element's definition.
      */
     get parent(): Model | undefined {
         return this[PARENT];
@@ -96,8 +113,8 @@ export abstract class Model {
     }
 
     /**
-     * Element view of children.  For TypeScript this allows children to be
-     * added as elements.  For JavaScript this is identical to children().
+     * Element view of children.  For TypeScript this allows children to be added as elements.  For JavaScript this is
+     * identical to children().
      */
     get elements(): AnyElement[] {
         if (!this[CHILDREN]) {
@@ -114,8 +131,8 @@ export abstract class Model {
     }
 
     /**
-     * Get a string that uniquely identifies this model.  This is normally
-     * the effective ID but some models require a generated identifier.
+     * Get a string that uniquely identifies this model.  This is normally the effective ID but some models require a
+     * generated identifier.
      */
     get key() {
         return this.effectiveId?.toString();
@@ -192,8 +209,7 @@ export abstract class Model {
     static constructors = {} as { [type: string]: new (definition: any) => Model };
 
     /**
-     * In some circumstances the base type can be inferred.  This inference
-     * happens here.
+     * In some circumstances the base type can be inferred.  This inference happens here.
      *
      * Does not recurse so only returns the direct base type.
      */
@@ -209,16 +225,14 @@ export abstract class Model {
     }
 
     /**
-     * Get shadow model, if any.  A "shadow" is an element in my parent's
-     * inheritance hierarchy that I override.
+     * Get shadow model, if any.  A "shadow" is an element in my parent's inheritance hierarchy that I override.
      */
     get shadow() {
         return new ModelTraversal().findShadow(this);
     }
 
     /**
-     * Get the first global base type.  This may have semantic meaning more
-     * specific than the base primitive type.
+     * Get the first global base type.  This may have semantic meaning more specific than the base primitive type.
      */
     get globalBase() {
         return new ModelTraversal().findGlobalBase(this);
@@ -275,14 +289,14 @@ export abstract class Model {
     get<T extends Model>(constructor: Model.Constructor<T>, key: number | string) {
         return this.children.find(c =>
             c instanceof constructor && typeof key === "number" ? c.effectiveId === key : c.name === key,
-        ) as T;
+        ) as T | undefined;
     }
 
     /**
      * Retrieve a model of a specific type from the ownership hierarchy.
      */
     owner<T extends Model>(constructor: Model.Constructor<T>) {
-        return new ModelTraversal().findOwner(constructor, this.parent);
+        return new ModelTraversal().findOwner(constructor, this);
     }
 
     /**
@@ -362,7 +376,7 @@ export abstract class Model {
      */
     member(
         key: ModelTraversal.ElementSelector,
-        allowedTags = [ElementTag.Datatype, ElementTag.Attribute],
+        allowedTags = [ElementTag.Field, ElementTag.Attribute],
     ): Model | undefined {
         return new ModelTraversal().findMember(this, key, allowedTags);
     }
@@ -374,11 +388,29 @@ export abstract class Model {
         return new ModelTraversal().instanceOf(this, other);
     }
 
+    /**
+     * Clone the model.  This deep copies all descendant child models but not other properties.
+     */
+    clone<This extends Model>(this: This): This {
+        const clone = Object.create(Object.getPrototypeOf(this));
+
+        const descriptors = Object.getOwnPropertyDescriptors(this);
+        if (this.children) {
+            delete (descriptors as any)[CHILDREN];
+        }
+
+        Object.defineProperties(clone, Object.getOwnPropertyDescriptors(this));
+
+        if (this[CHILDREN]) {
+            clone.children = this[CHILDREN].map(child => child.clone());
+        }
+
+        return clone;
+    }
+
     constructor(definition: BaseElement) {
-        // Copy all definition properties.  Types will be wrong for some of
-        // them but constructors correct this.  Properties for which type is
-        // correct are suffixed with "!" to indicate no further initialization
-        // is necessary
+        // Copy all definition properties.  Types will be wrong for some of them but constructors correct this.
+        // Properties for which type is correct are suffixed with "!" to indicate no further initialization is necessary
         for (const [k, v] of Object.entries(definition)) {
             if (v !== undefined) {
                 (this as any)[k] = v;
@@ -392,6 +424,7 @@ export abstract class Model {
 
 export namespace Model {
     export type Constructor<T extends Model> = abstract new (...args: any) => T;
+    export type Type = abstract new (...args: any) => Model;
 
     export type LookupPredicate<T extends Model> =
         | Constructor<T>

@@ -1,17 +1,17 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DatatypeElement } from "../../elements/index.js";
-import { DatatypeModel } from "../../models/index.js";
+import { DatatypeElement } from "../../elements/DatatypeElement.js";
+import { FieldModel } from "../../models/index.js";
 import { ModelValidator } from "./ModelValidator.js";
 import { ValueValidator } from "./ValueValidator.js";
 
-ModelValidator.validators[DatatypeElement.Tag] = class AttributeValidator extends ValueValidator<DatatypeModel> {
+ModelValidator.validators[DatatypeElement.Tag] = class AttributeValidator extends ValueValidator<FieldModel> {
     override validate() {
-        this.validateStructure(false, DatatypeModel);
+        this.validateStructure(false, FieldModel);
         super.validate();
     }
 };

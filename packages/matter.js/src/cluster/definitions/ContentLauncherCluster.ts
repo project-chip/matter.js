@@ -1,20 +1,23 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, Command } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvUInt32, TlvBitmap, TlvDouble, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace ContentLauncher {
     /**
@@ -89,6 +92,16 @@ export namespace ContentLauncher {
     });
 
     /**
+     * This object defines dimension which can be used for defining Size of background images.
+     *
+     * TODO : Evaluate if Dimension should be part of common data types. As of Apr 2021 adding it in ContentLauncher
+     * because we don’t have any other usecases which require this datatype.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.8
+     */
+    export interface DimensionStruct extends TypeFromSchema<typeof TlvDimensionStruct> {}
+
+    /**
      * This object defines style information which can be used by content providers to change the Media Player’s style
      * related properties.
      *
@@ -124,6 +137,14 @@ export namespace ContentLauncher {
          */
         size: TlvOptionalField(2, TlvDimensionStruct)
     });
+
+    /**
+     * This object defines style information which can be used by content providers to change the Media Player’s style
+     * related properties.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.7
+     */
+    export interface StyleInformationStruct extends TypeFromSchema<typeof TlvStyleInformationStruct> {}
 
     /**
      * This object defines Branding Information which can be provided by the client in order to customize the skin of
@@ -179,6 +200,14 @@ export namespace ContentLauncher {
     });
 
     /**
+     * This object defines Branding Information which can be provided by the client in order to customize the skin of
+     * the Video Player during playback.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.6
+     */
+    export interface BrandingInformationStruct extends TypeFromSchema<typeof TlvBrandingInformationStruct> {}
+
+    /**
      * Input to the ContentLauncher launchUrl command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.2
@@ -207,6 +236,13 @@ export namespace ContentLauncher {
          */
         brandingInformation: TlvOptionalField(2, TlvBrandingInformationStruct)
     });
+
+    /**
+     * Input to the ContentLauncher launchUrl command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.2
+     */
+    export interface LaunchUrlRequest extends TypeFromSchema<typeof TlvLaunchUrlRequest> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.1
@@ -250,6 +286,15 @@ export namespace ContentLauncher {
          */
         data: TlvOptionalField(1, TlvByteString)
     });
+
+    /**
+     * This command shall be generated in response to LaunchContent and LaunchURL commands.
+     *
+     * WARNING TODO: Data in table above needs a max size
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.3
+     */
+    export interface LauncherResponse extends TypeFromSchema<typeof TlvLauncherResponse> {}
 
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.4
@@ -357,6 +402,13 @@ export namespace ContentLauncher {
     });
 
     /**
+     * This object defines additional name=value pairs that can be used for identifying content.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.5
+     */
+    export interface AdditionalInfoStruct extends TypeFromSchema<typeof TlvAdditionalInfoStruct> {}
+
+    /**
      * This object defines inputs to a search for content for display or playback.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.3
@@ -387,6 +439,13 @@ export namespace ContentLauncher {
     /**
      * This object defines inputs to a search for content for display or playback.
      *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.3
+     */
+    export interface ParameterStruct extends TypeFromSchema<typeof TlvParameterStruct> {}
+
+    /**
+     * This object defines inputs to a search for content for display or playback.
+     *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.2
      */
     export const TlvContentSearchStruct = TlvObject({
@@ -399,6 +458,13 @@ export namespace ContentLauncher {
          */
         parameterList: TlvField(0, TlvArray(TlvParameterStruct))
     });
+
+    /**
+     * This object defines inputs to a search for content for display or playback.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.2
+     */
+    export interface ContentSearchStruct extends TypeFromSchema<typeof TlvContentSearchStruct> {}
 
     /**
      * Input to the ContentLauncher launchContent command
@@ -430,55 +496,16 @@ export namespace ContentLauncher {
     });
 
     /**
-     * These are optional features supported by ContentLauncherCluster.
+     * Input to the ContentLauncher launchContent command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.2
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.1
      */
-    export enum Feature {
-        /**
-         * ContentSearch
-         *
-         * Device supports content search (non-app specific)
-         */
-        ContentSearch = "ContentSearch",
-
-        /**
-         * UrlPlayback
-         *
-         * Device supports basic URL-based file playback
-         */
-        UrlPlayback = "UrlPlayback"
-    }
-
-    /**
-     * These elements and properties are present in all ContentLauncher clusters.
-     */
-    export const Base = ClusterFactory.Definition({
-        id: 0x50a,
-        name: "ContentLauncher",
-        revision: 1,
-
-        features: {
-            /**
-             * ContentSearch
-             *
-             * Device supports content search (non-app specific)
-             */
-            contentSearch: BitFlag(0),
-
-            /**
-             * UrlPlayback
-             *
-             * Device supports basic URL-based file playback
-             */
-            urlPlayback: BitFlag(1)
-        }
-    });
+    export interface LaunchContentRequest extends TypeFromSchema<typeof TlvLaunchContentRequest> {}
 
     /**
      * A ContentLauncherCluster supports these elements if it supports feature UrlPlayback.
      */
-    export const UrlPlaybackComponent = ClusterFactory.Component({
+    export const UrlPlaybackComponent = MutableCluster.Component({
         attributes: {
             /**
              * This list provides list of content types supported by the Video Player or Content App in the form of
@@ -516,7 +543,7 @@ export namespace ContentLauncher {
     /**
      * A ContentLauncherCluster supports these elements if it supports feature ContentSearch.
      */
-    export const ContentSearchComponent = ClusterFactory.Component({
+    export const ContentSearchComponent = MutableCluster.Component({
         commands: {
             /**
              * Upon receipt, this shall launch the specified content with optional search criteria. This command
@@ -531,7 +558,69 @@ export namespace ContentLauncher {
     /**
      * A ContentLauncherCluster supports these elements if it supports features ContentSearch or UrlPlayback.
      */
-    export const ContentSearchOrUrlPlaybackComponent = ClusterFactory.Component({});
+    export const ContentSearchOrUrlPlaybackComponent = MutableCluster.Component({});
+
+    /**
+     * These are optional features supported by ContentLauncherCluster.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.2
+     */
+    export enum Feature {
+        /**
+         * ContentSearch
+         *
+         * Device supports content search (non-app specific)
+         */
+        ContentSearch = "ContentSearch",
+
+        /**
+         * UrlPlayback
+         *
+         * Device supports basic URL-based file playback
+         */
+        UrlPlayback = "UrlPlayback"
+    }
+
+    /**
+     * These elements and properties are present in all ContentLauncher clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x50a,
+        name: "ContentLauncher",
+        revision: 1,
+
+        features: {
+            /**
+             * ContentSearch
+             *
+             * Device supports content search (non-app specific)
+             */
+            contentSearch: BitFlag(0),
+
+            /**
+             * UrlPlayback
+             *
+             * Device supports basic URL-based file playback
+             */
+            urlPlayback: BitFlag(1)
+        },
+
+        /**
+         * This metadata controls which ContentLauncherCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { urlPlayback: true }, component: UrlPlaybackComponent },
+            { flags: { contentSearch: true }, component: ContentSearchComponent },
+            { flags: { contentSearch: true }, component: ContentSearchOrUrlPlaybackComponent },
+            { flags: { urlPlayback: true }, component: ContentSearchOrUrlPlaybackComponent }
+        )
+    });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Content Launcher
@@ -544,46 +633,40 @@ export namespace ContentLauncher {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a ContentLauncher cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a ContentLauncher cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, UrlPlaybackComponent, { urlPlayback: true });
-            ClusterFactory.extend(cluster, ContentSearchComponent, { contentSearch: true });
-
-            ClusterFactory.extend(
-                cluster,
-                ContentSearchOrUrlPlaybackComponent,
-                { contentSearch: true },
-                { urlPlayback: true }
-            );
-
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { urlPlayback: true } ? typeof UrlPlaybackComponent : {})
-        & (SF extends { contentSearch: true } ? typeof ContentSearchComponent : {})
-        & (SF extends { contentSearch: true } | { urlPlayback: true } ? typeof ContentSearchOrUrlPlaybackComponent : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const UP = { urlPlayback: true };
     const CS = { contentSearch: true };
+
+    /**
+     * @see {@link Complete}
+     */
+    export const CompleteInstance = MutableCluster({
+        id: Cluster.id,
+        name: Cluster.name,
+        revision: Cluster.revision,
+        features: Cluster.features,
+
+        attributes: {
+            acceptHeader: MutableCluster.AsConditional(
+                UrlPlaybackComponent.attributes.acceptHeader,
+                { mandatoryIf: [UP] }
+            ),
+            supportedStreamingProtocols: MutableCluster.AsConditional(
+                UrlPlaybackComponent.attributes.supportedStreamingProtocols,
+                { mandatoryIf: [UP] }
+            )
+        },
+
+        commands: {
+            launchContent: MutableCluster.AsConditional(
+                ContentSearchComponent.commands.launchContent,
+                { mandatoryIf: [CS] }
+            ),
+            launchUrl: MutableCluster.AsConditional(UrlPlaybackComponent.commands.launchUrl, { mandatoryIf: [UP] })
+        }
+    });
 
     /**
      * This cluster supports all ContentLauncher features. It may support illegal feature combinations.
@@ -591,32 +674,11 @@ export namespace ContentLauncher {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = ClusterFactory.Definition({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
+    export interface Complete extends Identity<typeof CompleteInstance> {}
 
-        attributes: {
-            acceptHeader: ClusterFactory.AsConditional(
-                UrlPlaybackComponent.attributes.acceptHeader,
-                { mandatoryIf: [UP] }
-            ),
-            supportedStreamingProtocols: ClusterFactory.AsConditional(
-                UrlPlaybackComponent.attributes.supportedStreamingProtocols,
-                { mandatoryIf: [UP] }
-            )
-        },
-
-        commands: {
-            launchContent: ClusterFactory.AsConditional(
-                ContentSearchComponent.commands.launchContent,
-                { mandatoryIf: [CS] }
-            ),
-            launchUrl: ClusterFactory.AsConditional(UrlPlaybackComponent.commands.launchUrl, { mandatoryIf: [UP] })
-        }
-    });
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type ContentLauncherCluster = typeof ContentLauncher.Cluster;
+export type ContentLauncherCluster = ContentLauncher.Cluster;
 export const ContentLauncherCluster = ContentLauncher.Cluster;
+ClusterRegistry.register(ContentLauncher.Complete);

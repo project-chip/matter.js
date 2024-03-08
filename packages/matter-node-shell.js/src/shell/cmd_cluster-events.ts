@@ -1,16 +1,15 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SupportedEventClient } from "@project-chip/matter-node.js/cluster";
-import { ClusterId } from "@project-chip/matter-node.js/datatype";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { ClusterModel, EventModel, MatterModel } from "@project-chip/matter-node.js/model";
+import { SupportedEventClient } from "@project-chip/matter.js/cluster";
+import { ClusterId } from "@project-chip/matter.js/datatype";
+import { Logger } from "@project-chip/matter.js/log";
+import { ClusterModel, EventModel, MatterModel } from "@project-chip/matter.js/model";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
-
 import { camelize } from "../util/String";
 
 function generateAllEventHandlersForCluster(yargs: Argv, theNode: MatterNode) {

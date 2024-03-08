@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,28 +18,28 @@ export enum Target {
 
 export interface Options {
     targets?: Target[];
-    prefix?: string;
     clean?: boolean;
 }
 
 /**
  * High-level build coordination.
  *
- * Warning: This class is intended for command line use and process.exit if
- * things go wrong.
+ * Warning: This class is intended for command line use and will process.exit
+ * if things go wrong.
  */
 export class Builder {
     unconditional: boolean;
 
-    constructor(private options: Options) {
-        this.unconditional = options.clean || options.targets?.indexOf(Target.clean) !== -1;
+    constructor(private options: Options = {}) {
+        this.unconditional =
+            options.clean || (options.targets !== undefined && options.targets?.indexOf(Target.clean) !== -1);
     }
 
     public async build(project: Project) {
         const progress = project.pkg.start("Building");
 
         try {
-            await this.doBuild(project, progress);
+            await this.#doBuild(project, progress);
         } catch (e: any) {
             progress.failure(`Unexpected build error`);
             progress.shutdown();
@@ -50,8 +50,8 @@ export class Builder {
         progress.shutdown();
     }
 
-    private async doBuild(project: Project, progress: Progress) {
-        const targets = this.selectTargets(project);
+    async #doBuild(project: Project, progress: Progress) {
+        const targets = this.#selectTargets(project);
 
         if (targets.has(Target.clean) || this.options.clean) {
             await progress.run("Clean", () => project.clean());
@@ -80,11 +80,11 @@ export class Builder {
         }
 
         if (targets.has(Target.esm)) {
-            await this.transpile(project, progress, Target.esm);
+            await this.#transpile(project, progress, Target.esm);
         }
 
         if (targets.has(Target.cjs)) {
-            await this.transpile(project, progress, Target.cjs);
+            await this.#transpile(project, progress, Target.cjs);
         }
 
         // Only update timestamp when there are no explicit targets so we know
@@ -94,7 +94,7 @@ export class Builder {
         }
     }
 
-    private async transpile(project: Project, progress: Progress, format: "esm" | "cjs") {
+    async #transpile(project: Project, progress: Progress, format: "esm" | "cjs") {
         const fmt = format.toUpperCase();
         await progress.run(`Transpile ${colors.bold("library")} to ${colors.bold(fmt)}`, () =>
             project.buildSource(format),
@@ -106,7 +106,7 @@ export class Builder {
         }
     }
 
-    private selectTargets(project: Project) {
+    #selectTargets(project: Project) {
         const targets = new Set<string>(this.options.targets);
 
         if (!targets.size) {

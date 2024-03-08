@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,6 +16,10 @@ const DIR_MAPPING = {
     "#intermediate": Package.workspace.resolve("models/src"),
     "#elements": Package.workspace.resolve("packages/matter.js/src/model/standard/elements"),
     "#clusters": Package.workspace.resolve("packages/matter.js/src/cluster/definitions"),
+    "#endpoints": Package.workspace.resolve("packages/matter.js/src/endpoint/definitions"),
+    "#behaviors": Package.workspace.resolve("packages/matter.js/src/behavior/definitions"),
+    "#behavior-servers": Package.workspace.resolve("packages/matter.js/src/behavior/server/definitions"),
+    "#interfaces": Package.workspace.resolve("packages/matter.js/src/behavior/cluster/definitions"),
 } as { [dirname: string]: string | undefined };
 
 function resolveFromPackage(path: string) {

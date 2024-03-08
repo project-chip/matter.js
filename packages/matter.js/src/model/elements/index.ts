@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -15,6 +15,7 @@ export * from "./DeviceTypeElement.js";
 export * from "./EndpointElement.js";
 export * from "./EventElement.js";
 export * from "./FabricElement.js";
+export * from "./FieldElement.js";
 export * from "./Globals.js";
 export * from "./MatterElement.js";
 export * from "./NodeElement.js";

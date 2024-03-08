@@ -1,26 +1,24 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { Label } from "../../cluster/definitions/LabelCluster.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace UserLabel {
     /**
-     * User Label
-     *
-     * This cluster provides a feature to tag an endpoint with zero or more labels.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.9
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x41,
         name: "UserLabel",
         revision: 1,
@@ -39,7 +37,21 @@ export namespace UserLabel {
             )
         }
     })
+
+    /**
+     * User Label
+     *
+     * This cluster provides a feature to tag an endpoint with zero or more labels.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.9
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type UserLabelCluster = typeof UserLabel.Cluster;
+export type UserLabelCluster = UserLabel.Cluster;
 export const UserLabelCluster = UserLabel.Cluster;
+ClusterRegistry.register(UserLabel.Complete);

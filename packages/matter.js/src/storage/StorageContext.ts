@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,7 +10,7 @@ import { SupportedStorageTypes } from "./StringifyTools.js";
 export class StorageContext {
     constructor(
         private readonly storage: Storage,
-        private readonly contexts: string[],
+        readonly contexts: string[],
     ) {}
 
     get<T extends SupportedStorageTypes>(key: string, defaultValue?: T): T {

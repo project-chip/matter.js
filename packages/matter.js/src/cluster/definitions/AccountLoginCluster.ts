@@ -1,18 +1,21 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command, AccessLevel, TlvNoResponse } from "../../cluster/Cluster.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace AccountLogin {
     /**
@@ -31,6 +34,13 @@ export namespace AccountLogin {
     });
 
     /**
+     * Input to the AccountLogin getSetupPin command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.1
+     */
+    export interface GetSetupPinRequest extends TypeFromSchema<typeof TlvGetSetupPinRequest> {}
+
+    /**
      * This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
      * account identified in the request does not match the active account of the running Content App.
      *
@@ -45,6 +55,14 @@ export namespace AccountLogin {
          */
         setupPin: TlvField(0, TlvNullable(TlvString.bound({ minLength: 11 })))
     });
+
+    /**
+     * This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
+     * account identified in the request does not match the active account of the running Content App.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.2
+     */
+    export interface GetSetupPinResponse extends TypeFromSchema<typeof TlvGetSetupPinResponse> {}
 
     /**
      * Input to the AccountLogin login command
@@ -68,16 +86,16 @@ export namespace AccountLogin {
     });
 
     /**
-     * Account Login
+     * Input to the AccountLogin login command
      *
-     * This cluster provides commands that facilitate user account login on a Content App or a node. For example, a
-     * Content App running on a Video Player device, which is represented as an endpoint (see Device Type Library
-     * document), can use this cluster to help make the user account on the Content App match the user account on the
-     * Client.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface LoginRequest extends TypeFromSchema<typeof TlvLoginRequest> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x50e,
         name: "AccountLogin",
         revision: 1,
@@ -195,7 +213,23 @@ export namespace AccountLogin {
             logout: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse, { timed: true })
         }
     });
+
+    /**
+     * Account Login
+     *
+     * This cluster provides commands that facilitate user account login on a Content App or a node. For example, a
+     * Content App running on a Video Player device, which is represented as an endpoint (see Device Type Library
+     * document), can use this cluster to help make the user account on the Content App match the user account on the
+     * Client.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type AccountLoginCluster = typeof AccountLogin.Cluster;
+export type AccountLoginCluster = AccountLogin.Cluster;
 export const AccountLoginCluster = AccountLogin.Cluster;
+ClusterRegistry.register(AccountLogin.Complete);

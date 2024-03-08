@@ -1,20 +1,23 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { FixedAttribute, Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvDeviceTypeId } from "../../datatype/DeviceTypeId.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt16 } from "../../tlv/TlvNumber.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace Descriptor {
     /**
@@ -42,23 +45,17 @@ export namespace Descriptor {
     });
 
     /**
-     * Descriptor
+     * The device type and revision define endpoint conformance to a release of a device type definition. See the Data
+     * Model specification for more information.
      *
-     * NOTE The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for describing a
-     * node, its endpoints and clusters.
-     *
-     * This cluster describes an endpoint instance on the node, independently from other endpoints, but also allows
-     * composition of endpoints to conform to complex device type patterns.
-     *
-     * This cluster supports a list of one or more device type identifiers that represent conformance to device type
-     * specifications.
-     *
-     * The cluster supports a PartsList attribute that is a list of zero or more endpoints to support a composed device
-     * type.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.5
+     * @see {@link MatterCoreSpecificationV1_1} § 9.5.4.1
      */
-    export const Cluster = ClusterFactory.Definition({
+    export interface DeviceTypeStruct extends TypeFromSchema<typeof TlvDeviceTypeStruct> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
         id: 0x1d,
         name: "Descriptor",
         revision: 1,
@@ -100,7 +97,30 @@ export namespace Descriptor {
             partsList: Attribute(0x3, TlvArray(TlvEndpointNumber), { default: [] })
         }
     });
+
+    /**
+     * Descriptor
+     *
+     * NOTE The Descriptor cluster is meant to replace the support from the Zigbee Device Object (ZDO) for describing a
+     * node, its endpoints and clusters.
+     *
+     * This cluster describes an endpoint instance on the node, independently from other endpoints, but also allows
+     * composition of endpoints to conform to complex device type patterns.
+     *
+     * This cluster supports a list of one or more device type identifiers that represent conformance to device type
+     * specifications.
+     *
+     * The cluster supports a PartsList attribute that is a list of zero or more endpoints to support a composed device
+     * type.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 9.5
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type DescriptorCluster = typeof Descriptor.Cluster;
+export type DescriptorCluster = Descriptor.Cluster;
 export const DescriptorCluster = Descriptor.Cluster;
+ClusterRegistry.register(Descriptor.Complete);

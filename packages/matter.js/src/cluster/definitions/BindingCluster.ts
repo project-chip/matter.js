@@ -1,21 +1,24 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableFabricScopedAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvOptionalField, TlvField } from "../../tlv/TlvObject.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace Binding {
     /**
@@ -58,6 +61,33 @@ export namespace Binding {
     });
 
     /**
+     * @see {@link MatterCoreSpecificationV1_1} § 9.6.5.1
+     */
+    export interface TargetStruct extends TypeFromSchema<typeof TlvTargetStruct> {}
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({
+        id: 0x1e,
+        name: "Binding",
+        revision: 1,
+
+        attributes: {
+            /**
+             * Each entry shall represent a binding.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 9.6.6.1
+             */
+            binding: WritableFabricScopedAttribute(
+                0x0,
+                TlvArray(TlvTargetStruct),
+                { persistent: true, default: [], writeAcl: AccessLevel.Manage }
+            )
+        }
+    });
+
+    /**
      * Binding
      *
      * NOTE
@@ -91,25 +121,12 @@ export namespace Binding {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.6
      */
-    export const Cluster = ClusterFactory.Definition({
-        id: 0x1e,
-        name: "Binding",
-        revision: 1,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        attributes: {
-            /**
-             * Each entry shall represent a binding.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.6.6.1
-             */
-            binding: WritableFabricScopedAttribute(
-                0x0,
-                TlvArray(TlvTargetStruct),
-                { persistent: true, default: [], writeAcl: AccessLevel.Manage }
-            )
-        }
-    });
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type BindingCluster = typeof Binding.Cluster;
+export type BindingCluster = Binding.Cluster;
 export const BindingCluster = Binding.Cluster;
+ClusterRegistry.register(Binding.Complete);

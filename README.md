@@ -185,9 +185,9 @@ The following reference implementation and code references are available as basi
 
 - For Network, Crypto, Storage and Time functionality you can use the Node.js implementations provided by [matter-node.js](packages/matter-node.js/README.md) as reference. 
 - For BLE functionality you can use the Node.js implementations provided by [matter-node-ble.js](packages/matter-node-ble.js/README.md) as reference. 
-- For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/matter-node.js-examples/src/examples/cluster/DummyWifiNetworkCommissioningClusterServer.ts) which contains a static "testing only" (but API complete for Wifi) reference.
+- For Wi-Fi/Thread Commissioning functionality you can use the [Node.js DeviceNode example script](packages/matter-node.js-examples/src/examples/cluster/DummyWifiNetworkCommissioningServerLegacy.ts) which contains a static "testing only" (but API complete for Wifi) reference.
 
-If you implement a specific platform we would be happy about aa PR with the code, so that also other community members can benefit from it.
+If you implement a specific platform we would be happy about a PR with the code, so that also other community members can benefit from it.
 
 ## matter.js based projects
 
@@ -294,9 +294,9 @@ Minimum Version Required for the "Google Home" app：2.62.1.15 or later.
 
 Also for Google you need to have a Hub device (Android or Google Nest smart speakers/display) out of the [list of supported devices](https://support.google.com/googlenest/answer/12391458?hl=en) to control your Matter devices.
 
-Before you can pair matter.js to Google Home you need to allow uncertified devices for your Google Account. For this open the [Google
+When pairing with matter.js the operating system will ask you to allow to pair an "uncertified device" which you need to allow. If you want to avoid this message you optionally can register the relevant details for your uncertified devices in your Google Account. For this open the [Google
 Developer Console to add an Integration](https://console.home.google.com/projects/) and [setup](https://developers.home.google.com/matter/get-started?hl=en&%3Bauthuser=0&authuser=0) the device there. Please use 0xFFF1 as Vendor ID
-because matter.js uses this by the current scripts.
+because matter.js uses this by the current scripts by default..
 
 If you have issues with pairing please refer to the [Troubleshootling pages](https://developers.home.google.com/matter/build/troubleshooting?hl=en#verify_your_google_play_services_gps_matter_modules) from Google.
 

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -157,7 +157,7 @@ describe("Fabric", () => {
                 removeCallbackCalled = true;
             });
 
-            await fabric.remove(secureSession2.getId());
+            await fabric.remove(secureSession2.id);
 
             assert.equal(session1Destroyed, true);
             assert.equal(secureSession1.closingAfterExchangeFinished, false);

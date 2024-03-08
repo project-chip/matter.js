@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/index.js";
 import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
-import { AnyElement, DatatypeElement, Globals, ValueElement } from "../elements/index.js";
+import { AnyElement, FieldElement, Globals, ValueElement } from "../elements/index.js";
 import { Model } from "./Model.js";
 
 // These are circular dependencies so just to be safe we only import the
@@ -15,7 +15,7 @@ import { Model } from "./Model.js";
 import { DefaultValue } from "../logic/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Aspects } from "./Aspects.js";
-import { type DatatypeModel } from "./DatatypeModel.js";
+import { type FieldModel } from "./FieldModel.js";
 
 const CONSTRAINT: unique symbol = Symbol("constraint");
 const CONFORMANCE: unique symbol = Symbol("conformance");
@@ -32,11 +32,11 @@ export abstract class ValueModel extends Model implements ValueElement {
     metatype?: Metatype;
     override isType? = true;
 
-    override get children(): DatatypeModel[] {
+    override get children(): FieldModel[] {
         return super.children as any;
     }
 
-    override set children(children: (DatatypeModel | DatatypeElement)[]) {
+    override set children(children: (FieldModel | FieldElement)[]) {
         super.children = children;
     }
 
@@ -67,7 +67,7 @@ export abstract class ValueModel extends Model implements ValueElement {
         Aspects.setAspect(this, ACCESS, Access, definition);
     }
     get effectiveAccess(): Access {
-        return Aspects.getEffectiveAspect(this, ACCESS, Access);
+        return new ModelTraversal().findAccess(this, ACCESS, ValueModel);
     }
 
     get quality(): Quality {
@@ -163,7 +163,7 @@ export abstract class ValueModel extends Model implements ValueElement {
      * Get the entry type for lists, if any.
      */
     get listEntry() {
-        return this.member("entry", [ElementTag.Datatype]) as DatatypeModel | undefined;
+        return this.member("entry", [ElementTag.Field]) as FieldModel | undefined;
     }
 
     /**
@@ -178,8 +178,10 @@ export abstract class ValueModel extends Model implements ValueElement {
      * Datatype models.
      */
     override get allowedBaseTags() {
-        if (this.tag === ElementTag.Datatype) {
-            return [ElementTag.Datatype, ElementTag.Attribute];
+        if (this.tag === ElementTag.Field) {
+            // Allow fields to derive from attributes.  We use this for
+            // referencing options in masks and bitmaps
+            return [ElementTag.Field, ElementTag.Datatype, ElementTag.Attribute];
         }
         return [this.tag, ElementTag.Datatype];
     }
@@ -187,8 +189,8 @@ export abstract class ValueModel extends Model implements ValueElement {
     /**
      * Retrieve all datatype members.
      */
-    get members(): DatatypeModel[] {
-        return new ModelTraversal().findMembers(this, [ElementTag.Datatype]) as DatatypeModel[];
+    get members(): FieldModel[] {
+        return new ModelTraversal().findMembers(this, [ElementTag.Field]) as FieldModel[];
     }
 
     /**
@@ -236,25 +238,10 @@ export abstract class ValueModel extends Model implements ValueElement {
     }
 
     /**
-     * Is this model mandatory?  This supports a limited subset of conformance
-     * and is only appropriate for field conformance.
+     * Is the model mandatory?
      */
     get mandatory() {
-        const conformance = this.effectiveConformance.ast;
-        if (conformance.type === Conformance.Flag.Mandatory) {
-            return true;
-        }
-        if (conformance.type === Conformance.Special.Group) {
-            for (const c of conformance.param) {
-                if (c.type === Conformance.Flag.Provisional) {
-                    continue;
-                }
-                if (c.type === Conformance.Flag.Mandatory) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return this.effectiveConformance.mandatory;
     }
 
     /**
@@ -310,7 +297,7 @@ export abstract class ValueModel extends Model implements ValueElement {
         const match = this.type?.match(/^list\[(.*)\]$/);
         if (match) {
             this.type = "list";
-            this.children.push(new Model.constructors.datatype({ name: "entry", type: match[1] }) as DatatypeModel);
+            this.children.push(new Model.constructors.field({ name: "entry", type: match[1] }) as FieldModel);
         }
     }
 }

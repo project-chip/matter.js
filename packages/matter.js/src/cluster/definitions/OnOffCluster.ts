@@ -1,20 +1,23 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, WritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { Attribute, WritableAttribute, AccessLevel, Command, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { BitFlag, BitField } from "../../schema/BitmapSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace OnOff {
     /**
@@ -70,6 +73,13 @@ export namespace OnOff {
     });
 
     /**
+     * Input to the OnOff offWithEffect command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4
+     */
+    export interface OffWithEffectRequest extends TypeFromSchema<typeof TlvOffWithEffectRequest> {}
+
+    /**
      * The value of OnOff.onOffControl
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6.1
@@ -111,74 +121,16 @@ export namespace OnOff {
     });
 
     /**
-     * These are optional features supported by OnOffCluster.
+     * Input to the OnOff onWithTimedOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.4
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6
      */
-    export enum Feature {
-        /**
-         * LevelControlForLighting
-         *
-         * Behavior that supports lighting applications.
-         */
-        LevelControlForLighting = "LevelControlForLighting"
-    }
-
-    /**
-     * These elements and properties are present in all OnOff clusters.
-     */
-    export const Base = ClusterFactory.Definition({
-        id: 0x6,
-        name: "OnOff",
-        revision: 4,
-
-        features: {
-            /**
-             * LevelControlForLighting
-             *
-             * Behavior that supports lighting applications.
-             */
-            levelControlForLighting: BitFlag(0)
-        },
-
-        attributes: {
-            /**
-             * The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or
-             * turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.6.1
-             */
-            onOff: Attribute(0x0, TlvBoolean, { scene: true, persistent: true, default: true })
-        },
-
-        commands: {
-            /**
-             * This command does not have any data fields.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.1
-             */
-            off: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse),
-
-            /**
-             * This command does not have any data fields.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.2
-             */
-            on: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse),
-
-            /**
-             * This command does not have any data fields.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.3
-             */
-            toggle: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
-        }
-    });
+    export interface OnWithTimedOffRequest extends TypeFromSchema<typeof TlvOnWithTimedOffRequest> {}
 
     /**
      * A OnOffCluster supports these elements if it supports feature LevelControlForLighting.
      */
-    export const LevelControlForLightingComponent = ClusterFactory.Component({
+    export const LevelControlForLightingComponent = MutableCluster.Component({
         attributes: {
             /**
              * In order to support the use case where the user gets back the last setting of a set of devices (e.g.
@@ -272,6 +224,83 @@ export namespace OnOff {
     });
 
     /**
+     * These are optional features supported by OnOffCluster.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.4
+     */
+    export enum Feature {
+        /**
+         * LevelControlForLighting
+         *
+         * Behavior that supports lighting applications.
+         */
+        LevelControlForLighting = "LevelControlForLighting"
+    }
+
+    /**
+     * These elements and properties are present in all OnOff clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x6,
+        name: "OnOff",
+        revision: 4,
+
+        features: {
+            /**
+             * LevelControlForLighting
+             *
+             * Behavior that supports lighting applications.
+             */
+            levelControlForLighting: BitFlag(0)
+        },
+
+        attributes: {
+            /**
+             * The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or
+             * turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.6.1
+             */
+            onOff: Attribute(0x0, TlvBoolean, { scene: true, persistent: true, default: true })
+        },
+
+        commands: {
+            /**
+             * This command does not have any data fields.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.1
+             */
+            off: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse),
+
+            /**
+             * This command does not have any data fields.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.2
+             */
+            on: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse),
+
+            /**
+             * This command does not have any data fields.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.3
+             */
+            toggle: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
+        },
+
+        /**
+         * This metadata controls which OnOffCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { levelControlForLighting: true }, component: LevelControlForLightingComponent }
+        )
+    });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
+
+    /**
      * On/Off
      *
      * Attributes and commands for turning devices on and off.
@@ -280,41 +309,15 @@ export namespace OnOff {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create an OnOff cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns an OnOff cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, LevelControlForLightingComponent, { levelControlForLighting: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { levelControlForLighting: true } ? typeof LevelControlForLightingComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const LT = { levelControlForLighting: true };
 
     /**
-     * This cluster supports all OnOff features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -322,19 +325,19 @@ export namespace OnOff {
 
         attributes: {
             ...Cluster.attributes,
-            globalSceneControl: ClusterFactory.AsConditional(
+            globalSceneControl: MutableCluster.AsConditional(
                 LevelControlForLightingComponent.attributes.globalSceneControl,
                 { mandatoryIf: [LT] }
             ),
-            onTime: ClusterFactory.AsConditional(
+            onTime: MutableCluster.AsConditional(
                 LevelControlForLightingComponent.attributes.onTime,
                 { mandatoryIf: [LT] }
             ),
-            offWaitTime: ClusterFactory.AsConditional(
+            offWaitTime: MutableCluster.AsConditional(
                 LevelControlForLightingComponent.attributes.offWaitTime,
                 { mandatoryIf: [LT] }
             ),
-            startUpOnOff: ClusterFactory.AsConditional(
+            startUpOnOff: MutableCluster.AsConditional(
                 LevelControlForLightingComponent.attributes.startUpOnOff,
                 { mandatoryIf: [LT] }
             )
@@ -342,21 +345,32 @@ export namespace OnOff {
 
         commands: {
             ...Cluster.commands,
-            offWithEffect: ClusterFactory.AsConditional(
+            offWithEffect: MutableCluster.AsConditional(
                 LevelControlForLightingComponent.commands.offWithEffect,
                 { mandatoryIf: [LT] }
             ),
-            onWithRecallGlobalScene: ClusterFactory.AsConditional(
+            onWithRecallGlobalScene: MutableCluster.AsConditional(
                 LevelControlForLightingComponent.commands.onWithRecallGlobalScene,
                 { mandatoryIf: [LT] }
             ),
-            onWithTimedOff: ClusterFactory.AsConditional(
+            onWithTimedOff: MutableCluster.AsConditional(
                 LevelControlForLightingComponent.commands.onWithTimedOff,
                 { mandatoryIf: [LT] }
             )
         }
     });
+
+    /**
+     * This cluster supports all OnOff features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type OnOffCluster = typeof OnOff.Cluster;
+export type OnOffCluster = OnOff.Cluster;
 export const OnOffCluster = OnOff.Cluster;
+ClusterRegistry.register(OnOff.Complete);

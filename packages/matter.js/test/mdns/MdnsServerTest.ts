@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,6 @@ import {
     TxtRecord,
 } from "../../src/codec/DnsCodec.js";
 import { AnnouncementType, MdnsServer } from "../../src/mdns/MdnsServer.js";
-import { Network } from "../../src/net/Network.js";
 import { NetworkFake } from "../../src/net/fake/NetworkFake.js";
 import { FAKE_INTERFACE_NAME } from "../../src/net/fake/SimulatedNetwork.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -46,8 +45,7 @@ describe("MdnsServer", () => {
 
     beforeEach(async () => {
         await MockTime.advance(130_000); // More then 2 minutes in the future for the difference calculation vs 120s ttl
-        Network.get = () => clientNetwork;
-        mdnsServer = new MdnsServer(udpServerSimulator, "fakeInterface");
+        mdnsServer = new MdnsServer(clientNetwork, udpServerSimulator, "fakeInterface");
 
         await mdnsServer.setRecordsGenerator(PORT, AnnouncementType.Commissionable, () => [
             PtrRecord(DUMMY_QNAME, "abcd"),

@@ -1,43 +1,49 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    FieldElement as Field,
+    CommandElement as Command,
+    DatatypeElement as Datatype
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "GroupKeyManagement", id: 0x3f, classification: "node",
-    description: "Group Key Management",
+Matter.children.push(Cluster({
+    name: "GroupKeyManagement", id: 0x3f, classification: "node", description: "Group Key Management",
     details: "The Group Key Management Cluster is the mechanism by which group keys are managed.",
     xref: { document: "core", section: "11.2" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "attribute", name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
+        Attribute({
+            name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
             xref: { document: "core", section: "11.2.5" },
-            children: [{
-                tag: "datatype", name: "CS", constraint: "0", description: "CacheAndSync",
+            children: [Field({
+                name: "CS", constraint: "0", description: "CacheAndSync",
                 details: "The ability to support CacheAndSync security policy and MCSP."
-            }]
-        },
+            })]
+        }),
 
-        {
-            tag: "attribute", name: "GroupKeyMap", id: 0x0, type: "list", access: "RW F VM", conformance: "M",
+        Attribute({
+            name: "GroupKeyMap", id: 0x0, type: "list", access: "RW F VM", conformance: "M",
             constraint: "max 254", default: [], quality: "N",
             details: "This attribute is a list of GroupKeyMapStruct entries. Each entry associates a logical Group Id " +
                 "with a particular group key set.",
             xref: { document: "core", section: "11.2.7.1" },
-            children: [{ tag: "datatype", name: "entry", type: "GroupKeyMapStruct" }]
-        },
+            children: [Field({ name: "entry", type: "GroupKeyMapStruct" })]
+        }),
 
-        {
-            tag: "attribute", name: "GroupTable", id: 0x1, type: "list", access: "R F", conformance: "M",
-            constraint: "max 254", default: [],
+        Attribute({
+            name: "GroupTable", id: 0x1, type: "list", access: "R F", conformance: "M", constraint: "max 254",
+            default: [],
 
             details: "This attribute is a list of GroupInfoMapStruct entries. Each entry provides read-only information " +
                 "about how a given logical Group ID maps to a particular set of endpoints, and a name for the group. " +
@@ -49,30 +55,29 @@ Matter.children.push({
                 "endpoint, the entire GroupTable entry for that given GroupId shall be removed.",
 
             xref: { document: "core", section: "11.2.7.2" },
-            children: [{ tag: "datatype", name: "entry", type: "GroupInfoMapStruct" }]
-        },
+            children: [Field({ name: "entry", type: "GroupInfoMapStruct" })]
+        }),
 
-        {
-            tag: "attribute", name: "MaxGroupsPerFabric", id: 0x2, type: "uint16", conformance: "M", default: 0,
-            quality: "F",
+        Attribute({
+            name: "MaxGroupsPerFabric", id: 0x2, type: "uint16", conformance: "M", default: 0, quality: "F",
             details: "This attribute shall indicate the maximum number of groups that this node supports per fabric. The " +
                 "value of this attribute shall be set to be no less than the required minimum supported groups as " +
                 "specified in Group Limits. The length of the GroupKeyMap and GroupTable list attributes shall NOT " +
                 "exceed the value of the MaxGroupsPerFabric attribute multiplied by the number of supported fabrics.",
             xref: { document: "core", section: "11.2.7.3" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "MaxGroupKeysPerFabric", id: 0x3, type: "uint16", conformance: "M",
-            constraint: "1 to 65535", default: 1, quality: "F",
+        Attribute({
+            name: "MaxGroupKeysPerFabric", id: 0x3, type: "uint16", conformance: "M", constraint: "1 to 65535",
+            default: 1, quality: "F",
             details: "This attribute shall indicate the maximum number of group key sets this node supports per fabric. " +
                 "The value of this attribute shall be set according to the minimum number of group key sets to " +
                 "support as specified in Group Limits.",
             xref: { document: "core", section: "11.2.7.4" }
-        },
+        }),
 
-        {
-            tag: "command", name: "KeySetWrite", id: 0x0, access: "F A", conformance: "M", direction: "request",
+        Command({
+            name: "KeySetWrite", id: 0x0, access: "F A", conformance: "M", direction: "request",
             response: "status",
 
             details: "This command is used by Administrators to set the state of a given Group Key Set, including " +
@@ -113,11 +118,11 @@ Matter.children.push({
                 "  • Otherwise, this status code shall be set to FAILURE.",
 
             xref: { document: "core", section: "11.2.8.1" },
-            children: [{ tag: "datatype", name: "GroupKeySet", id: 0x0, type: "GroupKeySetStruct", conformance: "M" }]
-        },
+            children: [Field({ name: "GroupKeySet", id: 0x0, type: "GroupKeySetStruct", conformance: "M" })]
+        }),
 
-        {
-            tag: "command", name: "KeySetRead", id: 0x1, access: "F A", conformance: "M", direction: "request",
+        Command({
+            name: "KeySetRead", id: 0x1, access: "F A", conformance: "M", direction: "request",
             response: "KeySetReadResponse",
 
             details: "This command is used by Administrators to read the state of a given Group Key Set." +
@@ -133,21 +138,21 @@ Matter.children.push({
                 "fabric, then this command shall fail with a NOT_FOUND status code.",
 
             xref: { document: "core", section: "11.2.8.2" },
-            children: [{ tag: "datatype", name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M" }]
-        },
+            children: [Field({ name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M" })]
+        }),
 
-        {
-            tag: "command", name: "KeySetReadResponse", id: 0x2, conformance: "M", direction: "response",
+        Command({
+            name: "KeySetReadResponse", id: 0x2, conformance: "M", direction: "response",
             details: "This command shall be generated in response to the KeySetRead command, if a valid Group Key Set was " +
                 "found. It shall contain the configuration of the requested Group Key Set, with the EpochKey0, " +
                 "EpochKey1 and EpochKey2 key contents replaced by null.",
             xref: { document: "core", section: "11.2.8.3" },
-            children: [{ tag: "datatype", name: "GroupKeySet", id: 0x0, type: "GroupKeySetStruct", conformance: "M" }]
-        },
+            children: [Field({ name: "GroupKeySet", id: 0x0, type: "GroupKeySetStruct", conformance: "M" })]
+        }),
 
-        {
-            tag: "command", name: "KeySetRemove", id: 0x3, access: "F A", conformance: "M",
-            direction: "request", response: "status",
+        Command({
+            name: "KeySetRemove", id: 0x3, access: "F A", conformance: "M", direction: "request",
+            response: "status",
 
             details: "This command is used by Administrators to remove all state of a given Group Key Set." +
                 "\n" +
@@ -169,12 +174,12 @@ Matter.children.push({
                 "GroupKeySetID requested did not exist.",
 
             xref: { document: "core", section: "11.2.8.4" },
-            children: [{ tag: "datatype", name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M" }]
-        },
+            children: [Field({ name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M" })]
+        }),
 
-        {
-            tag: "command", name: "KeySetReadAllIndices", id: 0x4, access: "F A", conformance: "M",
-            direction: "request", response: "KeySetReadAllIndicesResponse",
+        Command({
+            name: "KeySetReadAllIndices", id: 0x4, access: "F A", conformance: "M", direction: "request",
+            response: "KeySetReadAllIndicesResponse",
 
             details: "This command is used by Administrators to query a list of all Group Key Sets associated with the " +
                 "accessing fabric." +
@@ -186,15 +191,14 @@ Matter.children.push({
                 "values from those structs.",
 
             xref: { document: "core", section: "11.2.8.5" },
-            children: [{
-                tag: "datatype", name: "GroupKeySetIDs", id: 0x1, type: "list", conformance: "X",
-                children: [{ tag: "datatype", name: "entry", type: "uint16" }]
-            }]
-        },
+            children: [Field({
+                name: "GroupKeySetIDs", id: 0x1, type: "list", conformance: "X",
+                children: [Field({ name: "entry", type: "uint16" })]
+            })]
+        }),
 
-        {
-            tag: "command", name: "KeySetReadAllIndicesResponse", id: 0x5, conformance: "M",
-            direction: "response",
+        Command({
+            name: "KeySetReadAllIndicesResponse", id: 0x5, conformance: "M", direction: "response",
 
             details: "This command shall be generated in response to KeySetReadAllIndices and it shall contain the list " +
                 "of GroupKeySetID for all Group Key Sets associated with the scoped Fabric." +
@@ -207,62 +211,62 @@ Matter.children.push({
                 "Each entry in GroupKeySetIDs is a GroupKeySetID field.",
 
             xref: { document: "core", section: "11.2.8.6" },
-            children: [{
-                tag: "datatype", name: "GroupKeySetIDs", id: 0x0, type: "list", conformance: "M",
-                children: [{ tag: "datatype", name: "entry", type: "uint16" }]
-            }]
-        },
+            children: [Field({
+                name: "GroupKeySetIDs", id: 0x0, type: "list", conformance: "M",
+                children: [Field({ name: "entry", type: "uint16" })]
+            })]
+        }),
 
-        {
-            tag: "datatype", name: "GroupKeySecurityPolicyEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "GroupKeySecurityPolicyEnum", type: "enum8", conformance: "M",
             xref: { document: "core", section: "11.2.6.1" },
 
             children: [
-                {
-                    tag: "datatype", name: "TrustFirst", id: 0x0, conformance: "M",
+                Field({
+                    name: "TrustFirst", id: 0x0, conformance: "M",
                     description: "Message counter synchronization using trust-first"
-                },
-                {
-                    tag: "datatype", name: "CacheAndSync", id: 0x1, conformance: "CS",
+                }),
+                Field({
+                    name: "CacheAndSync", id: 0x1, conformance: "CS",
                     description: "Message counter synchronization using cache-and-sync"
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "GroupKeyMulticastPolicyEnum", type: "enum8",
+        Datatype({
+            name: "GroupKeyMulticastPolicyEnum", type: "enum8",
             xref: { document: "core", section: "11.2.6.2" },
 
             children: [
-                {
-                    tag: "datatype", name: "PerGroupId", id: 0x0, conformance: "M",
+                Field({
+                    name: "PerGroupId", id: 0x0, conformance: "M",
                     description: "Indicates filtering of multicast messages for a specific Group ID",
                     details: "The 16-bit Group Identifier of the Multicast Address shall be the Group ID of the group.",
                     xref: { document: "core", section: "11.2.6.2.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "AllNodes", id: 0x1, conformance: "M",
+                Field({
+                    name: "AllNodes", id: 0x1, conformance: "M",
                     description: "Indicates not filtering of multicast messages",
                     details: "The 16-bit Group Identifier of the Multicast Address shall be 0xFFFF.",
                     xref: { document: "core", section: "11.2.6.2.2" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "GroupKeyMapStruct", type: "struct", access: "R F", conformance: "M",
+        Datatype({
+            name: "GroupKeyMapStruct", type: "struct", access: "R F", conformance: "M",
             xref: { document: "core", section: "11.2.6.3" },
 
             children: [
-                {
-                    tag: "datatype", name: "GroupId", id: 0x1, type: "group-id", access: "F", conformance: "M",
+                Field({
+                    name: "GroupId", id: 0x1, type: "group-id", access: "F", conformance: "M",
                     details: "This field uniquely identifies the group within the scope of the given Fabric.",
                     xref: { document: "core", section: "11.2.6.3.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "GroupKeySetId", id: 0x2, type: "uint16", access: "F", conformance: "M",
+                Field({
+                    name: "GroupKeySetId", id: 0x2, type: "uint16", access: "F", conformance: "M",
                     constraint: "1 to 65535",
                     details: "This field references the set of group keys that generate operational group keys for use with this" +
                         "\n" +
@@ -270,88 +274,85 @@ Matter.children.push({
                         "\n" +
                         "A GroupKeyMapStruct shall NOT accept GroupKeySetID of 0, which is reserved for the IPK.",
                     xref: { document: "core", section: "11.2.6.3.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
-                    conformance: "M", constraint: "1 to 254"
-                }
+                Field({
+                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
+                    constraint: "1 to 254"
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "GroupKeySetStruct", type: "struct", conformance: "M",
+        Datatype({
+            name: "GroupKeySetStruct", type: "struct", conformance: "M",
             details: "This field shall provide the fabric-unique index for the associated group key set, as specified in " +
                 "Section 4.15.3.5.1, “Group Key Set ID”.",
             xref: { document: "core", section: "11.2.6.4" },
 
             children: [
-                { tag: "datatype", name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M" },
+                Field({ name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M" }),
 
-                {
-                    tag: "datatype", name: "GroupKeySecurityPolicy", id: 0x1, type: "GroupKeySecurityPolicyEnum",
-                    access: "S", conformance: "M",
+                Field({
+                    name: "GroupKeySecurityPolicy", id: 0x1, type: "GroupKeySecurityPolicyEnum", access: "S",
+                    conformance: "M",
                     details: "This field shall provide the security policy for an operational group key set." +
                         "\n" +
                         "When CacheAndSync is not supported in the FeatureMap of this cluster, any action attempting to set " +
                         "CacheAndSync in the GroupKeySecurityPolicy field shall fail with an INVALID_COMMAND error.",
                     xref: { document: "core", section: "11.2.6.4.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "EpochKey0", id: 0x2, type: "octstr", access: "S", conformance: "M",
-                    constraint: "16", quality: "X",
+                Field({
+                    name: "EpochKey0", id: 0x2, type: "octstr", access: "S", conformance: "M", constraint: "16",
+                    quality: "X",
                     details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
                         "group key for epoch slot 0 of the given group key set. If EpochKey0 is not null, EpochStartTime0 " +
                         "shall NOT be null.",
                     xref: { document: "core", section: "11.2.6.4.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "EpochStartTime0", id: 0x3, type: "epoch-us", access: "S", conformance: "M",
-                    quality: "X",
+                Field({
+                    name: "EpochStartTime0", id: 0x3, type: "epoch-us", access: "S", conformance: "M", quality: "X",
                     details: "This field, if not null, shall define when EpochKey0 becomes valid as specified by Section 4.15.3, " +
                         "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
                     xref: { document: "core", section: "11.2.6.4.3" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "EpochKey1", id: 0x4, type: "octstr", access: "S", conformance: "M",
-                    constraint: "16", quality: "X",
+                Field({
+                    name: "EpochKey1", id: 0x4, type: "octstr", access: "S", conformance: "M", constraint: "16",
+                    quality: "X",
                     details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
                         "group key for epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 " +
                         "shall NOT be null.",
                     xref: { document: "core", section: "11.2.6.4.4" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "EpochStartTime1", id: 0x5, type: "epoch-us", access: "S", conformance: "M",
-                    quality: "X",
+                Field({
+                    name: "EpochStartTime1", id: 0x5, type: "epoch-us", access: "S", conformance: "M", quality: "X",
                     details: "This field, if not null, shall define when EpochKey1 becomes valid as specified by Section 4.15.3, " +
                         "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
                     xref: { document: "core", section: "11.2.6.4.5" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "EpochKey2", id: 0x6, type: "octstr", access: "S", conformance: "M",
-                    constraint: "16", quality: "X",
+                Field({
+                    name: "EpochKey2", id: 0x6, type: "octstr", access: "S", conformance: "M", constraint: "16",
+                    quality: "X",
                     details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
                         "group key for epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTime2 " +
                         "shall NOT be null.",
                     xref: { document: "core", section: "11.2.6.4.6" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "EpochStartTime2", id: 0x7, type: "epoch-us", access: "S", conformance: "M",
-                    quality: "X",
+                Field({
+                    name: "EpochStartTime2", id: 0x7, type: "epoch-us", access: "S", conformance: "M", quality: "X",
                     details: "This field, if not null, shall define when EpochKey2 becomes valid as specified by Section 4.15.3, " +
                         "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
                     xref: { document: "core", section: "11.2.6.4.7" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "GroupKeyMulticastPolicy", id: 0x8, type: "GroupKeyMulticastPolicyEnum",
-                    access: "S", conformance: "P, M",
+                Field({
+                    name: "GroupKeyMulticastPolicy", id: 0x8, type: "GroupKeyMulticastPolicyEnum", access: "S",
+                    conformance: "P, M",
 
                     details: "This field specifies how the IPv6 Multicast Address shall be formed for groups using this " +
                         "operational group key set." +
@@ -366,40 +367,38 @@ Matter.children.push({
                         "by value PerGroupID.",
 
                     xref: { document: "core", section: "11.2.6.4.8" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "GroupInfoMapStruct", type: "struct", access: "R F", conformance: "M",
+        Datatype({
+            name: "GroupInfoMapStruct", type: "struct", access: "R F", conformance: "M",
             details: "This field uniquely identifies the group within the scope of the given Fabric.",
             xref: { document: "core", section: "11.2.6.5" },
 
             children: [
-                { tag: "datatype", name: "GroupId", id: 0x1, type: "group-id", access: "R F", conformance: "M" },
+                Field({ name: "GroupId", id: 0x1, type: "group-id", access: "R F", conformance: "M" }),
 
-                {
-                    tag: "datatype", name: "Endpoints", id: 0x2, type: "list", access: "R F", conformance: "M",
-                    constraint: "min 1",
+                Field({
+                    name: "Endpoints", id: 0x2, type: "list", access: "R F", conformance: "M", constraint: "min 1",
                     details: "This field provides the list of Endpoint IDs on the Node to which messages to this group shall be " +
                         "forwarded.",
                     xref: { document: "core", section: "11.2.6.5.1" },
-                    children: [{ tag: "datatype", name: "entry", type: "endpoint-no" }]
-                },
+                    children: [Field({ name: "entry", type: "endpoint-no" })]
+                }),
 
-                {
-                    tag: "datatype", name: "GroupName", id: 0x3, type: "string", access: "R F", conformance: "O",
-                    constraint: "max 16",
+                Field({
+                    name: "GroupName", id: 0x3, type: "string", access: "R F", conformance: "O", constraint: "max 16",
                     details: "This field provides a name for the group. This field shall contain the last GroupName written for a " +
                         "given GroupId on any Endpoint via the Groups cluster.",
                     xref: { document: "core", section: "11.2.6.5.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V",
-                    conformance: "M", constraint: "1 to 254"
-                }
+                Field({
+                    name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
+                    constraint: "1 to 254"
+                })
             ]
-        }
+        })
     ]
-});
+}));

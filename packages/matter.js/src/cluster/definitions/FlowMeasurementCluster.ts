@@ -1,27 +1,24 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
 import { TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace FlowMeasurement {
     /**
-     * Flow Measurement
-     *
-     * This cluster provides an interface to flow measurement functionality, including configuration and provision of
-     * notifications of flow measurements.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.5
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x404,
         name: "FlowMeasurement",
         revision: 3,
@@ -35,7 +32,7 @@ export namespace FlowMeasurement {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.5.4.1
              */
-            measuredValue: Attribute(0x0, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
+            measuredValue: Attribute(0x0, TlvNullable(TlvUInt16), { default: null }),
 
             /**
              * The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. See
@@ -65,7 +62,22 @@ export namespace FlowMeasurement {
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }), { default: 0 })
         }
     })
+
+    /**
+     * Flow Measurement
+     *
+     * This cluster provides an interface to flow measurement functionality, including configuration and provision of
+     * notifications of flow measurements.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.5
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type FlowMeasurementCluster = typeof FlowMeasurement.Cluster;
+export type FlowMeasurementCluster = FlowMeasurement.Cluster;
 export const FlowMeasurementCluster = FlowMeasurement.Cluster;
+ClusterRegistry.register(FlowMeasurement.Complete);

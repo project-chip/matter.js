@@ -1,17 +1,20 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Command } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace KeypadInput {
     export enum CecKeyCode {
@@ -118,6 +121,13 @@ export namespace KeypadInput {
     });
 
     /**
+     * Input to the KeypadInput sendKey command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.1
+     */
+    export interface SendKeyRequest extends TypeFromSchema<typeof TlvSendKeyRequest> {}
+
+    /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.4.1
      */
     export enum Status {
@@ -152,6 +162,13 @@ export namespace KeypadInput {
     });
 
     /**
+     * This command shall be generated in response to a SendKey command.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.2
+     */
+    export interface SendKeyResponse extends TypeFromSchema<typeof TlvSendKeyResponse> {}
+
+    /**
      * These are optional features supported by KeypadInputCluster.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.2
@@ -182,7 +199,7 @@ export namespace KeypadInput {
     /**
      * These elements and properties are present in all KeypadInput clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x509,
         name: "KeypadInput",
         revision: 1,
@@ -221,8 +238,19 @@ export namespace KeypadInput {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.1
              */
             sendKey: Command(0x0, TlvSendKeyRequest, 0x1, TlvSendKeyResponse)
-        }
+        },
+
+        /**
+         * This metadata controls which KeypadInputCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions()
     });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Keypad Input
@@ -235,31 +263,12 @@ export namespace KeypadInput {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a KeypadInput cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a KeypadInput cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF };
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type KeypadInputCluster = typeof KeypadInput.Cluster;
+export type KeypadInputCluster = KeypadInput.Cluster;
 export const KeypadInputCluster = KeypadInput.Cluster;
+ClusterRegistry.register(KeypadInput.Complete);

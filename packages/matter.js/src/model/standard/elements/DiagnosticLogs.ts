@@ -1,16 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    CommandElement as Command,
+    FieldElement as Field,
+    DatatypeElement as Datatype
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "DiagnosticLogs", id: 0x32, classification: "node",
-    description: "Diagnostic Logs",
+Matter.children.push(Cluster({
+    name: "DiagnosticLogs", id: 0x32, classification: "node", description: "Diagnostic Logs",
 
     details: "This Cluster supports an interface to a Node. It provides commands for retrieving unstructured " +
         "diagnostic logs from a Node that may be used to aid in diagnostics. It will often be the case that " +
@@ -23,24 +29,24 @@ Matter.children.push({
     xref: { document: "core", section: "11.10" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "command", name: "RetrieveLogsRequest", id: 0x0, access: "O", conformance: "M",
-            direction: "request", response: "RetrieveLogsResponse",
+        Command({
+            name: "RetrieveLogsRequest", id: 0x0, access: "O", conformance: "M", direction: "request",
+            response: "RetrieveLogsResponse",
             details: "Reception of this command starts the process of retrieving diagnostic logs from a Node.",
             xref: { document: "core", section: "11.10.5.1" },
 
             children: [
-                {
-                    tag: "datatype", name: "Intent", id: 0x0, type: "IntentEnum", conformance: "M",
+                Field({
+                    name: "Intent", id: 0x0, type: "IntentEnum", conformance: "M",
                     details: "This field shall indicate why the diagnostic logs are being retrieved from the Node. A Node may " +
                         "utilize this field to selectively determine the logs to transfer.",
                     xref: { document: "core", section: "11.10.5.1.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "RequestedProtocol", id: 0x1, type: "TransferProtocolEnum", conformance: "M",
+                Field({
+                    name: "RequestedProtocol", id: 0x1, type: "TransferProtocolEnum", conformance: "M",
 
                     details: "This field shall be used to indicate how the log transfer is to be realized. If the field is set to " +
                         "BDX, then if the receiving Node supports BDX it shall attempt to use BDX to transfer any potential " +
@@ -50,11 +56,10 @@ Matter.children.push({
                         "RetreiveLogsResponse command to transfer diagnostic log information.",
 
                     xref: { document: "core", section: "11.10.5.1.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "TransferFileDesignator", id: 0x2, type: "string", conformance: "O",
-                    constraint: "max 32",
+                Field({
+                    name: "TransferFileDesignator", id: 0x2, type: "string", conformance: "O", constraint: "max 32",
 
                     details: "This field shall be present if the RequestedProtocol is BDX. The TransferFileDesignator shall be " +
                         "set as the File Designator of the BDX transfer if initiated." +
@@ -90,147 +95,141 @@ Matter.children.push({
                         "command shall fail with a Status Code of INVALID_COMMAND.",
 
                     xref: { document: "core", section: "11.10.5.1.3" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "RetrieveLogsResponse", id: 0x1, conformance: "M", direction: "response",
+        Command({
+            name: "RetrieveLogsResponse", id: 0x1, conformance: "M", direction: "response",
             details: "This shall be generated as a response to the RetrieveLogsRequest. The data for this command is " +
                 "shown in the following.",
             xref: { document: "core", section: "11.10.5.2" },
 
             children: [
-                {
-                    tag: "datatype", name: "Status", id: 0x0, type: "StatusEnum", conformance: "M",
+                Field({
+                    name: "Status", id: 0x0, type: "StatusEnum", conformance: "M",
                     details: "This field shall indicate the result of an attempt to retrieve diagnostic logs.",
                     xref: { document: "core", section: "11.10.5.2.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "LogContent", id: 0x1, type: "octstr", conformance: "M", constraint: "1024",
+                Field({
+                    name: "LogContent", id: 0x1, type: "octstr", conformance: "M", constraint: "1024",
                     details: "This field shall be included in the command if the Status field has a value of Success or " +
                         "Exhausted. A Node SHOULD utilize this field to transfer the newest diagnostic log entries. This " +
                         "field shall be empty if BDX is requested and the Status field has a value of Success.",
                     xref: { document: "core", section: "11.10.5.2.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "UtcTimeStamp", id: 0x2, type: "epoch-us", conformance: "O",
+                Field({
+                    name: "UtcTimeStamp", id: 0x2, type: "epoch-us", conformance: "O",
                     details: "This field SHOULD be included in the command if the Status field has a value of Success and the " +
                         "Node maintains a wall clock. When included, the UTCTimeStamp field shall contain the value of the " +
                         "oldest log entry in the diagnostic logs that are being transferred.",
                     xref: { document: "core", section: "11.10.5.2.3" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "TimeSinceBoot", id: 0x3, type: "systime-us", conformance: "O",
+                Field({
+                    name: "TimeSinceBoot", id: 0x3, type: "systime-us", conformance: "O",
                     details: "This field SHOULD be included in the command if the Status field has a value of Success. When " +
                         "included, the TimeSinceBoot field shall contain the time of the oldest log entry in the diagnostic " +
                         "logs that are being transferred represented by the number of microseconds since the last time the " +
                         "Node went through a reboot.",
                     xref: { document: "core", section: "11.10.5.2.4" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "IntentEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "IntentEnum", type: "enum8", conformance: "M",
             xref: { document: "core", section: "11.10.4.1" },
 
             children: [
-                {
-                    tag: "datatype", name: "EndUserSupport", id: 0x0, conformance: "M",
+                Field({
+                    name: "EndUserSupport", id: 0x0, conformance: "M",
                     description: "Logs to be used for end- user support",
                     details: "shall indicate that the purpose of the log request is to retrieve logs for the intention of " +
                         "providing support to an end-user.",
                     xref: { document: "core", section: "11.10.4.1.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "NetworkDiag", id: 0x1, conformance: "M",
+                Field({
+                    name: "NetworkDiag", id: 0x1, conformance: "M",
                     description: "Logs to be used for network diagnostics",
                     details: "shall indicate that the purpose of the log request is to diagnose the network(s) for which the Node " +
                         "is currently commissioned (and/or connected) or has previously been commissioned (and/or connected).",
                     xref: { document: "core", section: "11.10.4.1.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "CrashLogs", id: 0x2, conformance: "M",
-                    description: "Obtain crash logs from the Node",
+                Field({
+                    name: "CrashLogs", id: 0x2, conformance: "M", description: "Obtain crash logs from the Node",
                     details: "shall indicate that the purpose of the log request is to retrieve any crash logs that may be " +
                         "present on a Node.",
                     xref: { document: "core", section: "11.10.4.1.3" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "StatusEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "StatusEnum", type: "enum8", conformance: "M",
             xref: { document: "core", section: "11.10.4.2" },
 
             children: [
-                {
-                    tag: "datatype", name: "Success", id: 0x0, conformance: "M",
-                    description: "Successful transfer of logs",
+                Field({
+                    name: "Success", id: 0x0, conformance: "M", description: "Successful transfer of logs",
                     details: "shall be used if diagnostic logs will be or are being transferred.",
                     xref: { document: "core", section: "11.10.4.2.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Exhausted", id: 0x1, conformance: "M",
-                    description: "All logs has been transferred",
+                Field({
+                    name: "Exhausted", id: 0x1, conformance: "M", description: "All logs has been transferred",
                     details: "shall be used when a BDX session is requested, however, all available logs were provided in a" +
                         "\n" +
                         "LogContent field.",
                     xref: { document: "core", section: "11.10.4.2.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "NoLogs", id: 0x2, conformance: "M",
-                    description: "No logs of the requested type available",
+                Field({
+                    name: "NoLogs", id: 0x2, conformance: "M", description: "No logs of the requested type available",
                     details: "shall be used if the Node does not currently have any diagnostic logs of the requested type " +
                         "(Intent) to transfer.",
                     xref: { document: "core", section: "11.10.4.2.3" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Busy", id: 0x3, conformance: "M",
-                    description: "Unable to handle request, retry later",
+                Field({
+                    name: "Busy", id: 0x3, conformance: "M", description: "Unable to handle request, retry later",
                     details: "shall be used if the Node is unable to handle the request (e.g. in the process of another transfer) " +
                         "and the Client SHOULD re-attempt the request later.",
                     xref: { document: "core", section: "11.10.4.2.4" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Denied", id: 0x4, conformance: "M",
+                Field({
+                    name: "Denied", id: 0x4, conformance: "M",
                     description: "The request is denied, no logs being transferred",
                     details: "shall be used if the Node is denying the current transfer of diagnostic logs for any reason.",
                     xref: { document: "core", section: "11.10.4.2.5" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "TransferProtocolEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "TransferProtocolEnum", type: "enum8", conformance: "M",
             xref: { document: "core", section: "11.10.4.3" },
 
             children: [
-                {
-                    tag: "datatype", name: "ResponsePayload", id: 0x0, conformance: "M",
+                Field({
+                    name: "ResponsePayload", id: 0x0, conformance: "M",
                     description: "Logs to be returned as a response",
                     details: "shall be used by a Client to request that logs are transferred using the LogContent attribute of " +
                         "the response",
                     xref: { document: "core", section: "11.10.4.3.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Bdx", id: 0x1, conformance: "M",
-                    description: "Logs to be returned using BDX",
+                Field({
+                    name: "Bdx", id: 0x1, conformance: "M", description: "Logs to be returned using BDX",
                     details: "shall be used by a Client to request that logs are transferred using BDX as defined in BDX Protocol",
                     xref: { document: "core", section: "11.10.4.3.2" }
-                }
+                })
             ]
-        }
+        })
     ]
-});
+}));

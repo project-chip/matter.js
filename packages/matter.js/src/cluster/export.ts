@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,8 +11,12 @@ export * from "./client/ClusterClientTypes.js";
 export * from "./client/EventClient.js";
 // Export all Client classes
 export * from "./Cluster.js";
-export * from "./ClusterFactory.js";
 export * from "./ClusterHelper.js";
+export * from "./ClusterRegistry.js";
+export * from "./ClusterType.js";
+export * from "./mutation/ClusterComposer.js";
+export * from "./mutation/ElementModifier.js";
+export * from "./mutation/MutableCluster.js";
 // Export all Cluster definitions
 export * from "./definitions/index.js";
 // Export all Server handler
@@ -22,6 +26,7 @@ export * from "./server/ClusterServer.js";
 // Export all Server classes
 export * from "./server/ClusterServerTypes.js";
 export * from "./server/CommandServer.js";
+export * from "./server/CommissioningServerFailsafeContext.js";
 export * from "./server/EventServer.js";
 export * from "./server/GeneralCommissioningServer.js";
 export * from "./server/GroupKeyManagementServer.js";

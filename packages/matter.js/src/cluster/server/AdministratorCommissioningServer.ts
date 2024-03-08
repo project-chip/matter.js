@@ -1,12 +1,16 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
+import {
+    MAXIMUM_COMMISSIONING_TIMEOUT_S,
+    MINIMUM_COMMISSIONING_TIMEOUT_S,
+    PAKE_PASSCODE_VERIFIER_LENGTH,
+} from "../../behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
 import { InternalError } from "../../common/MatterError.js";
-import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../../crypto/CryptoConstants.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { VendorId } from "../../datatype/VendorId.js";
 import { Logger } from "../../log/Logger.js";
@@ -25,17 +29,12 @@ import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AdministratorCommissioningServer");
 
-export const MAXIMUM_COMMISSIONING_TIMEOUT_S = 15 * 60; // 900 seconds/15 minutes
-export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
-
-const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
-
 /**
  * Monkey patching Tlv Structure of openCommissioningWindow command to prevent data validation of the fields to be
  * handled as ConstraintError because we need to return a special error.
  * We do this to leave the model in fact for other validations and only apply the change for our Schema-aware Tlv parsing.
  */
-AdministratorCommissioning.Base.commands = {
+AdministratorCommissioning.Cluster.commands = {
     ...AdministratorCommissioning.Cluster.commands,
     openCommissioningWindow: Command(
         0x0,
@@ -83,13 +82,14 @@ class AdministratorCommissioningManager {
         }
         logger.debug(`Commissioning window timer started for ${commissioningTimeout} seconds for ${session.name}.`);
         this.commissioningWindowTimeout = Time.getTimer(
+            "Commissioning timeout",
             commissioningTimeout * 1000,
             async () => await this.closeCommissioningWindow(session),
         ).start();
 
-        this.adminFabricIndexAttribute.setLocal(session.getAssociatedFabric().fabricIndex);
-        this.adminVendorIdAttribute.setLocal(session.getAssociatedFabric().rootVendorId);
-        session.getAssociatedFabric().addRemoveCallback(this.fabricRemoveHandler);
+        this.adminFabricIndexAttribute.setLocal(session.associatedFabric.fabricIndex);
+        this.adminVendorIdAttribute.setLocal(session.associatedFabric.rootVendorId);
+        session.associatedFabric.addRemoveCallback(this.fabricRemoveHandler);
     }
 
     /**
@@ -160,7 +160,7 @@ class AdministratorCommissioningManager {
             );
         }
 
-        const device = session.getContext();
+        const device = session.context;
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
@@ -171,7 +171,7 @@ class AdministratorCommissioningManager {
             discriminator,
             PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }),
             () => {
-                session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
+                session.associatedFabric.deleteRemoveCallback(this.fabricRemoveHandler);
                 this.endCommissioning();
             },
         );
@@ -179,7 +179,7 @@ class AdministratorCommissioningManager {
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
     async openBasicCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
-        const device = session.getContext();
+        const device = session.context;
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
@@ -187,7 +187,7 @@ class AdministratorCommissioningManager {
         this.initializeCommissioningWindow(commissioningTimeout, session);
 
         await device.allowBasicCommissioning(() => {
-            session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
+            session.associatedFabric.deleteRemoveCallback(this.fabricRemoveHandler);
             this.endCommissioning();
         });
     }
@@ -196,11 +196,13 @@ class AdministratorCommissioningManager {
      * This method is used internally when the commissioning window timer expires or the commissioning was completed.
      */
     private endCommissioning() {
-        logger.debug("End commissioning window.");
-        if (this.commissioningWindowTimeout !== undefined) {
-            this.commissioningWindowTimeout.stop();
-            this.commissioningWindowTimeout = undefined;
+        if (this.commissioningWindowTimeout === undefined) {
+            return;
         }
+        this.commissioningWindowTimeout.stop();
+        this.commissioningWindowTimeout = undefined;
+
+        logger.debug("End commissioning window.");
         this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen);
         this.adminFabricIndexAttribute.setLocal(null);
         this.adminVendorIdAttribute.setLocal(null);
@@ -209,7 +211,7 @@ class AdministratorCommissioningManager {
     /** This method is used to close a commissioning window. */
     async closeCommissioningWindow(session: Session<MatterDevice>) {
         this.endCommissioning();
-        await session.getContext().endCommissioning();
+        await session.context.endCommissioning();
     }
 
     /** This method is used to revoke a commissioning window. */
@@ -224,14 +226,14 @@ class AdministratorCommissioningManager {
         logger.debug("Revoking commissioning window.");
         await this.closeCommissioningWindow(session);
 
-        const device = session.getContext();
+        const device = session.context;
         if (device.isFailsafeArmed()) {
-            await device.getFailSafeContext().expire();
+            await device.failsafeContext.close();
         }
     }
 
     /** Cleanup resources and stop the timer when the ClusterServer is destroyed. */
-    destroy() {
+    close() {
         if (this.commissioningWindowTimeout !== undefined) {
             this.commissioningWindowTimeout.stop();
             this.commissioningWindowTimeout = undefined;
@@ -264,11 +266,12 @@ export const AdministratorCommissioningHandler: () => ClusterServerHandlers<
 
         revokeCommissioning: async ({ session }) => await manager.revokeCommissioning(session),
 
-        destroyClusterServer: () => manager?.destroy(),
+        destroyClusterServer: () => manager?.close(),
     };
 };
 
 const AdministratorCommissioningBasicCluster = AdministratorCommissioning.Cluster.with("Basic");
+
 export const BasicAdminCommissioningHandler: () => ClusterServerHandlers<
     typeof AdministratorCommissioningBasicCluster
 > = () => {
@@ -297,6 +300,6 @@ export const BasicAdminCommissioningHandler: () => ClusterServerHandlers<
 
         revokeCommissioning: async ({ session }) => await manager.revokeCommissioning(session),
 
-        destroyClusterServer: () => manager?.destroy(),
+        destroyClusterServer: () => manager?.close(),
     };
 };

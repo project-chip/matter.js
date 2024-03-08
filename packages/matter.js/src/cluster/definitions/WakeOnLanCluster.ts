@@ -1,26 +1,23 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { OptionalFixedAttribute } from "../../cluster/Cluster.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace WakeOnLan {
     /**
-     * Wake on LAN
-     *
-     * This cluster provides an interface for managing low power mode on a device that supports the Wake On LAN or Wake
-     * On Wireless LAN (WLAN) protocol (see [Wake On LAN]).
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.10
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x503,
         name: "WakeOnLan",
         revision: 1,
@@ -49,7 +46,22 @@ export namespace WakeOnLan {
             linkLocalAddress: OptionalFixedAttribute(0x1, TlvByteString.bound({ length: 16 }))
         }
     })
+
+    /**
+     * Wake on LAN
+     *
+     * This cluster provides an interface for managing low power mode on a device that supports the Wake On LAN or Wake
+     * On Wireless LAN (WLAN) protocol (see [Wake On LAN]).
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.10
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type WakeOnLanCluster = typeof WakeOnLan.Cluster;
+export type WakeOnLanCluster = WakeOnLan.Cluster;
 export const WakeOnLanCluster = WakeOnLan.Cluster;
+ClusterRegistry.register(WakeOnLan.Complete);

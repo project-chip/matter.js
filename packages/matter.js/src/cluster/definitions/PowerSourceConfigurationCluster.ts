@@ -1,27 +1,24 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace PowerSourceConfiguration {
     /**
-     * Power Source Configuration
-     *
-     * This cluster is used to describe the configuration and capabilities of a Device’s power system. It provides an
-     * ordering overview as well as linking to the one or more endpoints each supporting a Power Source cluster.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.6
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x2e,
         name: "PowerSourceConfiguration",
         revision: 1,
@@ -43,7 +40,22 @@ export namespace PowerSourceConfiguration {
             sources: Attribute(0x0, TlvArray(TlvEndpointNumber, { maxLength: 6 }), { persistent: true, default: [] })
         }
     })
+
+    /**
+     * Power Source Configuration
+     *
+     * This cluster is used to describe the configuration and capabilities of a Device’s power system. It provides an
+     * ordering overview as well as linking to the one or more endpoints each supporting a Power Source cluster.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.6
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type PowerSourceConfigurationCluster = typeof PowerSourceConfiguration.Cluster;
+export type PowerSourceConfigurationCluster = PowerSourceConfiguration.Cluster;
 export const PowerSourceConfigurationCluster = PowerSourceConfiguration.Cluster;
+ClusterRegistry.register(PowerSourceConfiguration.Complete);

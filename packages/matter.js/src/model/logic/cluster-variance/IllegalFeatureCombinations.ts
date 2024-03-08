@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { InternalError } from "../../../common/MatterError.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Conformance } from "../../aspects/index.js";
-import { ClusterModel, DatatypeModel } from "../../models/index.js";
+import { ClusterModel, FieldModel } from "../../models/index.js";
 import { FeatureBitmap } from "./FeatureBitmap.js";
 
 export type IllegalFeatureCombinations = FeatureBitmap[];
@@ -20,15 +20,13 @@ type Choices = {
 };
 
 /**
- * Analyzes feature conformance to ascertain feature combinations that are
- * unsupported.  Uses rules to match the conformance AST.
+ * Analyzes feature conformance to ascertain feature combinations that are unsupported.  Uses rules to match the
+ * conformance AST.
  *
- * Rule matching is not exhaustive but supports a significant subset of the
- * conformance dialect that is inclusive of all feature conformances used by
- * the 1.1 specifications.
+ * Rule matching is not exhaustive but supports a significant subset of the conformance dialect that is inclusive of all
+ * feature conformances used by the 1.1 specifications.
  *
- * Throws an error if conformance does not adhere to supported rules.  This
- * indicates the ruleset needs augmentation.
+ * Throws an error if conformance does not adhere to supported rules.  This indicates the ruleset needs augmentation.
  */
 export function IllegalFeatureCombinations(cluster: ClusterModel) {
     const illegal = [] as IllegalFeatureCombinations;
@@ -44,9 +42,10 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
         }
     }
 
+    let requiresFeatures = false;
+
     for (const choice of Object.values(choices)) {
-        // If choices are mutually exclusive, reject any two flags in
-        // combination
+        // If choices are mutually exclusive, reject any two flags in combination
         if (choice.exclusive) {
             for (const f1 of choice.features) {
                 for (const f2 of choice.features) {
@@ -62,15 +61,15 @@ export function IllegalFeatureCombinations(cluster: ClusterModel) {
         for (const f of choice.features) {
             flags[f] = false;
         }
-
         add(flags);
+        requiresFeatures = true;
     }
 
-    return { illegal, requiresFeatures: !!choices.length };
+    return { illegal, requiresFeatures };
 }
 
 function addFeatureNode(
-    feature: DatatypeModel,
+    feature: FieldModel,
     node: Conformance.Ast,
     illegal: IllegalFeatureCombinations,
     choices: Choices,

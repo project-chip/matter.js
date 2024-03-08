@@ -2,7 +2,7 @@
 
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,29 +16,29 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningController, MatterServer, NodeCommissioningOptions } from "@project-chip/matter-node.js";
+// Include this first to auto-register Crypto, Network and Time Node.js implementations
+import "@project-chip/matter-node.js";
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import { Ble } from "@project-chip/matter-node.js/ble";
+import { StorageBackendDisk } from "@project-chip/matter-node.js/storage";
+import { getIntParameter, getParameter, hasParameter, requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { CommissioningController, NodeCommissioningOptions } from "@project-chip/matter.js";
+import { Ble } from "@project-chip/matter.js/ble";
 import {
     BasicInformationCluster,
     DescriptorCluster,
     GeneralCommissioning,
     OnOffCluster,
-} from "@project-chip/matter-node.js/cluster";
-import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { NodeStateInformation } from "@project-chip/matter-node.js/device";
-import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
-import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
-import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
-import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
-import {
-    getIntParameter,
-    getParameter,
-    hasParameter,
-    requireMinNodeVersion,
-    singleton,
-} from "@project-chip/matter-node.js/util";
+} from "@project-chip/matter.js/cluster";
+import { NodeId } from "@project-chip/matter.js/datatype";
+import { NodeStateInformation } from "@project-chip/matter.js/device";
+import { Environment } from "@project-chip/matter.js/environment";
+import { Format, Level, Logger } from "@project-chip/matter.js/log";
+import { CommissioningOptions } from "@project-chip/matter.js/protocol";
+import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
+import { StorageManager } from "@project-chip/matter.js/storage";
+import { Time } from "@project-chip/matter.js/time";
+import { singleton } from "@project-chip/matter.js/util";
 
 const logger = Logger.get("Controller");
 
@@ -116,6 +116,10 @@ class ControllerNode {
         const controllerStorage = storageManager.createContext("Controller");
         const ip = controllerStorage.has("ip") ? controllerStorage.get<string>("ip") : getParameter("ip");
         const port = controllerStorage.has("port") ? controllerStorage.get<number>("port") : getIntParameter("port");
+        const uniqueId = controllerStorage.has("uniqueid")
+            ? controllerStorage.get<string>("uniqueid")
+            : getParameter("uniqueid") ?? Time.nowMs().toString();
+        controllerStorage.set("uniqueid", uniqueId);
 
         const pairingCode = getParameter("pairingcode");
         let longDiscriminator, setupPin, shortDiscriminator;
@@ -179,11 +183,14 @@ class ControllerNode {
          * are called.
          */
 
-        const matterServer = new MatterServer(storageManager);
+        const environment = Environment.default;
         const commissioningController = new CommissioningController({
+            environment: {
+                environment,
+                id: uniqueId,
+            },
             autoConnect: false,
         });
-        await matterServer.addCommissioningController(commissioningController);
 
         /**
          * Start the Matter Server
@@ -191,8 +198,7 @@ class ControllerNode {
          * After everything was plugged together we can start the server. When not delayed announcement is set for the
          * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
-
-        await matterServer.start();
+        await commissioningController.start();
 
         if (!commissioningController.isCommissioned()) {
             const options = {
@@ -308,7 +314,7 @@ class ControllerNode {
             //console.log("Attributes-BasicInformation:", JSON.stringify(attributesBasicInformation, null, 2));
 
             const devices = node.getDevices();
-            if (devices[0] && devices[0].id === 1) {
+            if (devices[0] && devices[0].number === 1) {
                 // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
                 //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
                 //    console.log("Subscribe-All Data:", Logger.toJSON(data));

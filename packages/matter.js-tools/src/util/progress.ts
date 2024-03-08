@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,7 +8,6 @@ import colors from "ansi-colors";
 import { stdout } from "process";
 import { Package } from "./package.js";
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const actualWrite = process.stdout.write;
 
 const FRONT = "\x1b[G";

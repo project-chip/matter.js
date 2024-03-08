@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,6 +13,7 @@ import {
     DnsRecordType,
     MAX_MDNS_MESSAGE_SIZE,
 } from "../codec/DnsCodec.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { Network } from "../net/Network.js";
 import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
@@ -33,11 +34,13 @@ export enum AnnouncementType {
 }
 
 export class MdnsServer {
-    static async create(options?: { enableIpv4?: boolean; netInterface?: string }) {
+    static async create(network: Network, options?: { enableIpv4?: boolean; netInterface?: string }) {
         const { enableIpv4 = true, netInterface } = options ?? {};
         return new MdnsServer(
+            network,
             await UdpMulticastServer.create({
-                netInterface: netInterface,
+                network,
+                netInterface,
                 broadcastAddressIpv4: enableIpv4 ? MDNS_BROADCAST_IPV4 : undefined,
                 broadcastAddressIpv6: MDNS_BROADCAST_IPV6,
                 listeningPort: MDNS_BROADCAST_PORT,
@@ -46,9 +49,9 @@ export class MdnsServer {
         );
     }
 
-    private readonly network = Network.get();
     private recordsGenerator = new Map<string, (netInterface: string) => DnsRecord<any>[]>();
     private readonly records = new Cache<Map<string, DnsRecord<any>[]>>(
+        "MDNS discovery",
         (multicastInterface: string) => {
             const portTypeMap = new Map<string, DnsRecord<any>[]>();
             for (const [announceTypePort, generator] of this.recordsGenerator) {
@@ -61,6 +64,7 @@ export class MdnsServer {
     private readonly recordLastSentAsMulticastAnswer = new Map<string, number>();
 
     constructor(
+        private readonly network: Network,
         private readonly multicastServer: UdpMulticastServer,
         private readonly netInterface: string | undefined,
     ) {
@@ -159,7 +163,7 @@ export class MdnsServer {
             ).catch(error => {
                 logger.warn(`Failed to send mDNS response to ${remoteIp}`, error);
             });
-            await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+            await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
         }
     }
 
@@ -236,7 +240,7 @@ export class MdnsServer {
 
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
                     await this.announceRecordsForInterface(netInterface, portTypeRecords);
-                    await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+                    await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
         );
@@ -263,7 +267,7 @@ export class MdnsServer {
                     });
                     logger.debug(
                         `Expiring records`,
-                        Logger.dict({
+                        Diagnostic.dict({
                             instanceName,
                             port: announcedNetPort,
                             netInterface,
@@ -273,7 +277,7 @@ export class MdnsServer {
                     // TODO: try to combine the messages to avoid sending multiple messages but keep under 1500 bytes per message
                     await this.announceRecordsForInterface(netInterface, portTypeRecords);
                     this.recordsGenerator.delete(portType);
-                    await Time.sleep(20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
+                    await Time.sleep("MDNS delay", 20 + Math.floor(Math.random() * 100)); // as per DNS-SD spec wait 20-120ms before sending more packets
                 }
             }),
         );

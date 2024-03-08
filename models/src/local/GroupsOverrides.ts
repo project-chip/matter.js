@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,7 @@ LocalMatter.children.push({
             tag: "attribute",
             id: Globals.FeatureMap.id,
             name: Globals.FeatureMap.name,
-            children: [{ tag: "datatype", name: "GN", default: true }],
+            children: [{ tag: "field", name: "GN", default: true }],
         },
 
         // Set NameSupport default to match feature default per the specification
@@ -25,7 +25,7 @@ LocalMatter.children.push({
             tag: "attribute",
             id: 0,
             name: "NameSupport",
-            children: [{ tag: "datatype", name: "NameSupport", default: true, constraint: "7" }],
+            children: [{ tag: "field", name: "NameSupport", default: true, constraint: "7" }],
         },
     ],
 });

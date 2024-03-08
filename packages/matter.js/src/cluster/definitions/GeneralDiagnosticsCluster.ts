@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import {
     Attribute,
     OptionalAttribute,
@@ -21,9 +20,13 @@ import {
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
+import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvEnum, TlvUInt16, TlvUInt64, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace GeneralDiagnostics {
     /**
@@ -129,6 +132,14 @@ export namespace GeneralDiagnostics {
          */
         type: TlvField(7, TlvEnum<InterfaceType>())
     });
+
+    /**
+     * This structure describes a network interface supported by the Node, as provided in the NetworkInterfaces
+     * attribute.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.11.4.6
+     */
+    export interface NetworkInterface extends TypeFromSchema<typeof TlvNetworkInterface> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.4.5
@@ -349,6 +360,13 @@ export namespace GeneralDiagnostics {
     });
 
     /**
+     * Input to the GeneralDiagnostics testEventTrigger command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.11.7.1
+     */
+    export interface TestEventTriggerRequest extends TypeFromSchema<typeof TlvTestEventTriggerRequest> {}
+
+    /**
      * Body of the GeneralDiagnostics hardwareFaultChange event
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.8.1
@@ -373,6 +391,13 @@ export namespace GeneralDiagnostics {
     });
 
     /**
+     * Body of the GeneralDiagnostics hardwareFaultChange event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.11.8.1
+     */
+    export interface HardwareFaultChangeEvent extends TypeFromSchema<typeof TlvHardwareFaultChangeEvent> {}
+
+    /**
      * Body of the GeneralDiagnostics radioFaultChange event
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.8.2
@@ -383,6 +408,13 @@ export namespace GeneralDiagnostics {
     });
 
     /**
+     * Body of the GeneralDiagnostics radioFaultChange event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.11.8.2
+     */
+    export interface RadioFaultChangeEvent extends TypeFromSchema<typeof TlvRadioFaultChangeEvent> {}
+
+    /**
      * Body of the GeneralDiagnostics networkFaultChange event
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.8.3
@@ -391,6 +423,13 @@ export namespace GeneralDiagnostics {
         current: TlvField(0, TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 })),
         previous: TlvField(1, TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 }))
     });
+
+    /**
+     * Body of the GeneralDiagnostics networkFaultChange event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.11.8.3
+     */
+    export interface NetworkFaultChangeEvent extends TypeFromSchema<typeof TlvNetworkFaultChangeEvent> {}
 
     /**
      * Body of the GeneralDiagnostics bootReason event
@@ -406,6 +445,13 @@ export namespace GeneralDiagnostics {
         bootReason: TlvField(0, TlvEnum<BootReason>())
     });
 
+    /**
+     * Body of the GeneralDiagnostics bootReason event
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.11.8.4
+     */
+    export interface BootReasonEvent extends TypeFromSchema<typeof TlvBootReasonEvent> {}
+
     export enum StatusCode {
         /**
          * Provided EnableKey does not match the previously configured value.
@@ -416,16 +462,9 @@ export namespace GeneralDiagnostics {
     }
 
     /**
-     * General Diagnostics
-     *
-     * The General Diagnostics Cluster, along with other diagnostics clusters, provide a means to acquire standardized
-     * diagnostics metrics that may be used by a Node to assist a user or Administrator in diagnosing potential
-     * problems. The General Diagnostics Cluster attempts to centralize all metrics that are broadly relevant to the
-     * majority of Nodes.
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.11
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x33,
         name: "GeneralDiagnostics",
         revision: 1,
@@ -611,7 +650,23 @@ export namespace GeneralDiagnostics {
             bootReason: Event(0x3, EventPriority.Critical, TlvBootReasonEvent)
         }
     });
+
+    /**
+     * General Diagnostics
+     *
+     * The General Diagnostics Cluster, along with other diagnostics clusters, provide a means to acquire standardized
+     * diagnostics metrics that may be used by a Node to assist a user or Administrator in diagnosing potential
+     * problems. The General Diagnostics Cluster attempts to centralize all metrics that are broadly relevant to the
+     * majority of Nodes.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.11
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type GeneralDiagnosticsCluster = typeof GeneralDiagnostics.Cluster;
+export type GeneralDiagnosticsCluster = GeneralDiagnostics.Cluster;
 export const GeneralDiagnosticsCluster = GeneralDiagnostics.Cluster;
+ClusterRegistry.register(GeneralDiagnostics.Complete);

@@ -1,10 +1,9 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Peripheral } from "@abandonware/noble";
 import { BleError } from "@project-chip/matter.js/ble";
 import { BtpCodec } from "@project-chip/matter.js/codec";
 import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@project-chip/matter.js/common";
@@ -12,6 +11,7 @@ import { VendorId } from "@project-chip/matter.js/datatype";
 import { Logger } from "@project-chip/matter.js/log";
 import { Time, Timer } from "@project-chip/matter.js/time";
 import { ByteArray, createPromise } from "@project-chip/matter.js/util";
+import type { Peripheral } from "@stoprocent/noble";
 import { NobleBleClient } from "./NobleBleClient.js";
 
 const logger = Logger.get("BleScanner");
@@ -57,7 +57,9 @@ export class BleScanner implements Scanner {
      */
     private async registerWaiterPromise(queryId: string, timeoutSeconds: number, resolveOnUpdatedRecords = true) {
         const { promise, resolver } = createPromise<void>();
-        const timer = Time.getTimer(timeoutSeconds * 1000, () => this.finishWaiter(queryId, true)).start();
+        const timer = Time.getTimer("BLE query timeout", timeoutSeconds * 1000, () =>
+            this.finishWaiter(queryId, true),
+        ).start();
         this.recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
         logger.debug(
             `Registered waiter for query ${queryId} with timeout ${timeoutSeconds} seconds${

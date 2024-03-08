@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,6 +10,7 @@ import {
     ClusterModel,
     CommandModel,
     DatatypeModel,
+    FieldModel,
     Globals,
     MatterModel,
     Metatype,
@@ -136,11 +137,11 @@ function patchOptionsTypes(cluster: ClusterModel) {
             return;
         }
 
-        const mask = element.get(DatatypeModel, "OptionsMask");
+        const mask = element.get(FieldModel, "OptionsMask");
         if (mask) {
             mask.type = "Options";
         }
-        const overrides = element.get(DatatypeModel, "OptionsOverride");
+        const overrides = element.get(FieldModel, "OptionsOverride");
         if (overrides) {
             overrides.type = "Options";
         }
@@ -156,7 +157,7 @@ function patchStatusTypes(cluster: ClusterModel) {
             continue;
         }
 
-        const status = element.get(DatatypeModel, "Status");
+        const status = element.get(FieldModel, "Status");
         if (!status || status.type !== "enum8") {
             continue;
         }

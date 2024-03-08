@@ -1,17 +1,20 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
+import "@project-chip/matter-node.js";
 
-import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { CommissioningControllerNodeOptions, Endpoint, PairedNode } from "@project-chip/matter-node.js/device";
-import { Logger } from "@project-chip/matter-node.js/log";
-import { StorageBackendDisk, StorageContext, StorageManager } from "@project-chip/matter-node.js/storage";
+import { StorageBackendDisk } from "@project-chip/matter-node.js/storage";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { CommissioningController, MatterServer } from "@project-chip/matter.js";
+import { NodeId } from "@project-chip/matter.js/datatype";
+import { CommissioningControllerNodeOptions, PairedNode } from "@project-chip/matter.js/device";
+import { EndpointInterface } from "@project-chip/matter.js/endpoint";
+import { Logger } from "@project-chip/matter.js/log";
+import { StorageContext, StorageManager } from "@project-chip/matter.js/storage";
 
 requireMinNodeVersion(16);
 
@@ -125,13 +128,13 @@ export class MatterNode {
 
     async iterateNodeDevices(
         nodes: PairedNode[],
-        callback: (device: Endpoint, node: PairedNode) => Promise<void>,
+        callback: (device: EndpointInterface, node: PairedNode) => Promise<void>,
         endpointId?: number,
     ) {
         for (const node of nodes) {
             let devices = node.getDevices();
             if (endpointId !== undefined) {
-                devices = devices.filter(device => device.id === endpointId);
+                devices = devices.filter(device => device.number === endpointId);
             }
 
             for (const device of devices) {

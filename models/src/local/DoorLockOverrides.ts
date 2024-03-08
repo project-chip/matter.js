@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -20,11 +20,11 @@ LocalMatter.children.push({
             id: 0x45,
             name: "KeypadProgrammingEventMask",
             children: [
-                { tag: "datatype", constraint: "0", name: "Unknown" },
-                { tag: "datatype", constraint: "1", name: "PinCodeChanged" },
-                { tag: "datatype", constraint: "2", name: "PinAdded" },
-                { tag: "datatype", constraint: "3", name: "PinCleared" },
-                { tag: "datatype", constraint: "4", name: "PinChanged" },
+                { tag: "field", constraint: "0", name: "Unknown" },
+                { tag: "field", constraint: "1", name: "PinCodeChanged" },
+                { tag: "field", constraint: "2", name: "PinAdded" },
+                { tag: "field", constraint: "3", name: "PinCleared" },
+                { tag: "field", constraint: "4", name: "PinChanged" },
             ],
         },
         {
@@ -32,12 +32,12 @@ LocalMatter.children.push({
             id: 0x46,
             name: "RemoteProgrammingEventMask",
             children: [
-                { tag: "datatype", constraint: "0", name: "Unknown" },
-                { tag: "datatype", constraint: "2", name: "PinAdded" },
-                { tag: "datatype", constraint: "3", name: "PinCleared" },
-                { tag: "datatype", constraint: "4", name: "PinChanged" },
-                { tag: "datatype", constraint: "5", name: "RfidCodeAdded" },
-                { tag: "datatype", constraint: "6", name: "RfidCodeCleared" },
+                { tag: "field", constraint: "0", name: "Unknown" },
+                { tag: "field", constraint: "2", name: "PinAdded" },
+                { tag: "field", constraint: "3", name: "PinCleared" },
+                { tag: "field", constraint: "4", name: "PinChanged" },
+                { tag: "field", constraint: "5", name: "RfidCodeAdded" },
+                { tag: "field", constraint: "6", name: "RfidCodeCleared" },
             ],
         },
         {
@@ -45,9 +45,9 @@ LocalMatter.children.push({
             id: 0x47,
             name: "RfidProgrammingEventMask",
             children: [
-                { tag: "datatype", constraint: "0", name: "Unknown" },
-                { tag: "datatype", constraint: "5", name: "IdAdded" },
-                { tag: "datatype", constraint: "6", name: "IdCleared" },
+                { tag: "field", constraint: "0", name: "Unknown" },
+                { tag: "field", constraint: "5", name: "IdAdded" },
+                { tag: "field", constraint: "6", name: "IdCleared" },
             ],
         },
 

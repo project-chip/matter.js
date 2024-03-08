@@ -1,13 +1,14 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
-import { Ble } from "@project-chip/matter-node.js/ble";
-import { Format, Level, Logger, createFileLogger } from "@project-chip/matter-node.js/log";
-import { singleton } from "@project-chip/matter-node.js/util";
+import { createFileLogger } from "@project-chip/matter-node.js/log";
+import { Ble } from "@project-chip/matter.js/ble";
+import { Format, Level, Logger } from "@project-chip/matter.js/log";
+import { singleton } from "@project-chip/matter.js/util";
 import yargs from "yargs/yargs";
 import { MatterNode } from "./MatterNode.js";
 import { Shell } from "./shell/Shell";

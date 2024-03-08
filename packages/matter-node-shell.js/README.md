@@ -14,7 +14,7 @@ npm install @project-chip/matter-node-shell.js
 
 ## Run
 
-There are three ways to start matter-node-shell. The `nodenum` parameter provides a unique identifier for the matter-node-shell process mainly to allocate a unique port number. If `nodenum` is not passed, it will default to `0`. 
+There are three ways to start matter-node-shell. The `nodenum` parameter provides a unique identifier for the matter-node-shell process mainly to allocate a unique port number. If `nodenum` is not passed, it will default to `0`.
 The shell currently just supports Controller side and so the port is not used and the node is always by default a "controller".
 
 ```
@@ -66,11 +66,13 @@ Done
 ```
 
 ### Logging
+
 By default the Shell logs messages to the console. The log level can be changed using the `config loglevel` command. The log level can be set to `error`, `warn`, `info`, `debug` or `trace`. The console default is "info".
 
 Additionally the Shell can log to a file. The log file path can be set using the `config logfile` command or as commandline parameter (which will then be persisted in the configuration). The log file always contain the logs in "debug" level.
 
 ### Commission a device
+
 The shell supports discovery and also commissioning of devices. The commissioning process is based on the Matter SDK and uses the same commissioning process as the chip-tool. The commissioning process is started by the `commission pair` command.
 
 In order to pair a device you need to specify the pairing-code which is printed on the device QR-Code as parameter pairing-code: `commission pair --pairing-code 123456789`. This is the easiest way for all production devices.
@@ -120,16 +122,16 @@ When sending complex JSON content ideally use single quotes around the json beca
 
 Some examples:
 
-* `attributes basicinformation read all 5000 0` reads all attributes from the Basic Information cluster from node 5000 endpoint 0
-* `attributes basicinformation read nodelabel 5000 0` reads the attribute "nodelabel" from the Basic Information cluster from node 5000 endpoint 0
-* `attributes basicinformation read 0x5 5000 0` reads the attribute "nodelabel" (aliased with it's hex attribute id) from the Basic Information cluster from node 5000 endpoint 0
-* `attributes by-id 0x28 read 0x5 5000 0` also reads the attribute "nodelabel" from the Basic Information cluster from node 5000 endpoint 0, but as generic read from the cluster with id 0x28 (also the decimal value 40 can be used)
-* `attributes basicinformation write nodelabel "My Node" 5000 0` writes the value "My Node" to the attribute "nodelabel" from the Basic Information cluster from node 5000 endpoint 0. Instead of nodelabel also 0x5 as alias can be used.
-* `attributes binding write binding '[{"node": "4568118954124746267" , "cluster": 6 , "endpoint": 1 }]' 5000 1` writes the binding array to the Binding cluster from node 5000 endpoint 1 to create a binding for node 4568118954124746267 to cluster 6 on endpoint 1. Note that the 64bit Node-id (4568118954124746267) needs to be provided as string because it is too big for a number.
-* `attributes binding write binding '[{"node": "4568118954124746267" , "cluster": "0x6" , "endpoint": 1 }]' 5000 1` writes the same binding array as abobe but uses a hex string for the cluster id in the json data
-* `events basicinformation startup 5000 0` reads the  details from the startup event from the Basic Information cluster from node 5000 endpoint 0
-* `commands onoff toggle 5000 1` executes the "toggle" command on the OnOff cluster from node 5000 endpoint 1
-* `commands onoff offwitheffect '{"effectIdentifier":0,"effectVariant":0}' 5000 1` executes the "offwitheffect" command on the OnOff cluster from node 5000 endpoint 1 with the given JSON data
+-   `attributes basicinformation read all 5000 0` reads all attributes from the Basic Information cluster from node 5000 endpoint 0
+-   `attributes basicinformation read nodelabel 5000 0` reads the attribute "nodelabel" from the Basic Information cluster from node 5000 endpoint 0
+-   `attributes basicinformation read 0x5 5000 0` reads the attribute "nodelabel" (aliased with it's hex attribute id) from the Basic Information cluster from node 5000 endpoint 0
+-   `attributes by-id 0x28 read 0x5 5000 0` also reads the attribute "nodelabel" from the Basic Information cluster from node 5000 endpoint 0, but as generic read from the cluster with id 0x28 (also the decimal value 40 can be used)
+-   `attributes basicinformation write nodelabel "My Node" 5000 0` writes the value "My Node" to the attribute "nodelabel" from the Basic Information cluster from node 5000 endpoint 0. Instead of nodelabel also 0x5 as alias can be used.
+-   `attributes binding write binding '[{"node": "4568118954124746267" , "cluster": 6 , "endpoint": 1 }]' 5000 1` writes the binding array to the Binding cluster from node 5000 endpoint 1 to create a binding for node 4568118954124746267 to cluster 6 on endpoint 1. Note that the 64bit Node-id (4568118954124746267) needs to be provided as string because it is too big for a number.
+-   `attributes binding write binding '[{"node": "4568118954124746267" , "cluster": "0x6" , "endpoint": 1 }]' 5000 1` writes the same binding array as abobe but uses a hex string for the cluster id in the json data
+-   `events basicinformation startup 5000 0` reads the details from the startup event from the Basic Information cluster from node 5000 endpoint 0
+-   `commands onoff toggle 5000 1` executes the "toggle" command on the OnOff cluster from node 5000 endpoint 1
+-   `commands onoff offwitheffect '{"effectIdentifier":0,"effectVariant":0}' 5000 1` executes the "offwitheffect" command on the OnOff cluster from node 5000 endpoint 1 with the given JSON data
 
 ### exit
 
@@ -139,7 +141,6 @@ Exit the shell terminal.
 > exit
 Goodbye
 ```
-
 
 # Running multiple instances
 
@@ -172,7 +173,7 @@ $ ls .matter-shell-1
 0.RootCertificateManager.rootKeyIdentifier	Node.shortDiscriminator
 0.RootCertificateManager.rootKeyPair
 
-$ more .matter-shell-1/Node.ip 
+$ more .matter-shell-1/Node.ip
 "fe80::148d:9bd8:5006:243%en0"
 ```
 

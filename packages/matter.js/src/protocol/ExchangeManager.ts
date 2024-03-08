@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { MatterController } from "../MatterController.js";
 import { MAX_MESSAGE_SIZE, Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Channel } from "../common/Channel.js";
-import { ImplementationError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
+import { ImplementationError, MatterError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { Crypto } from "../crypto/Crypto.js";
@@ -28,6 +28,8 @@ import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureC
 import { SecureChannelMessenger } from "./securechannel/SecureChannelMessenger.js";
 
 const logger = Logger.get("ExchangeManager");
+
+export class ChannelNotConnectedError extends MatterError {}
 
 export class MessageChannel<ContextT> implements Channel<Message> {
     public closed = false;
@@ -192,8 +194,7 @@ export class ExchangeManager<ContextT> {
 
         if (
             exchange !== undefined &&
-            (exchange.session.getId() !== session.getId() ||
-                exchange.isInitiator === message.payloadHeader.isInitiatorMessage) // Should always be ok, but just in case
+            (exchange.session.id !== session.id || exchange.isInitiator === message.payloadHeader.isInitiatorMessage) // Should always be ok, but just in case
         ) {
             exchange = undefined;
         }
@@ -262,7 +263,7 @@ export class ExchangeManager<ContextT> {
             return;
         }
         const { session } = exchange;
-        if (session.isSecure() && session.closingAfterExchangeFinished) {
+        if (session.isSecure && session.closingAfterExchangeFinished) {
             logger.debug(
                 `Exchange index ${exchangeIndex} Session ${session.name} is already marked for closure. Close session now.`,
             );
@@ -276,7 +277,7 @@ export class ExchangeManager<ContextT> {
     }
 
     async closeSession(session: SecureSession<any>) {
-        const sessionId = session.getId();
+        const sessionId = session.id;
         const sessionName = session.name;
         if (this.sessionManager.getSession(sessionId) === undefined) {
             // Session already removed, so we do not need to close again
@@ -287,7 +288,7 @@ export class ExchangeManager<ContextT> {
         }
         this.closingSessions.add(sessionId);
         for (const [_exchangeIndex, exchange] of this.exchanges.entries()) {
-            if (exchange.session.getId() === sessionId) {
+            if (exchange.session.id === sessionId) {
                 await exchange.destroy();
             }
         }
@@ -303,7 +304,11 @@ export class ExchangeManager<ContextT> {
                         await messenger.sendCloseSession();
                         await messenger.close();
                     } catch (error) {
-                        logger.error("Error closing session", error);
+                        if (error instanceof ChannelNotConnectedError) {
+                            logger.debug("Session already closed because channel is disconnected.");
+                        } else {
+                            logger.error("Error closing session", error);
+                        }
                     }
                 }
                 await exchange.destroy();

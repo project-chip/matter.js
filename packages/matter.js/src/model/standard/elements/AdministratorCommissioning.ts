@@ -1,15 +1,22 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    FieldElement as Field,
+    CommandElement as Command,
+    DatatypeElement as Datatype
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "AdministratorCommissioning", id: 0x3c, classification: "node",
+Matter.children.push(Cluster({
+    name: "AdministratorCommissioning", id: 0x3c, classification: "node",
     description: "Administrator Commissioning",
     details: "This cluster is used to trigger a Node to allow a new Administrator to commission it. It defines " +
         "Attributes, Commands and Responses needed for this purpose." +
@@ -19,20 +26,20 @@ Matter.children.push({
     xref: { document: "core", section: "11.18" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "attribute", name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
+        Attribute({
+            name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
             xref: { document: "core", section: "11.18.4" },
-            children: [{
-                tag: "datatype", name: "BC", constraint: "0", description: "Basic",
+            children: [Field({
+                name: "BC", constraint: "0", description: "Basic",
                 details: "Node supports Basic Commissioning Method."
-            }]
-        },
+            })]
+        }),
 
-        {
-            tag: "attribute", name: "WindowStatus", id: 0x0, type: "CommissioningWindowStatusEnum",
-            access: "R V", conformance: "M",
+        Attribute({
+            name: "WindowStatus", id: 0x0, type: "CommissioningWindowStatusEnum", access: "R V",
+            conformance: "M",
 
             details: "This attribute shall indicate whether a new Commissioning window has been opened by an " +
                 "Administrator, using either the OCW command or the OBCW command." +
@@ -43,11 +50,11 @@ Matter.children.push({
                 "command, and therefore this attribute shall be set to WindowNotOpen on initial commissioning.",
 
             xref: { document: "core", section: "11.18.7.1" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "AdminFabricIndex", id: 0x1, type: "fabric-idx", access: "R V",
-            conformance: "M", quality: "X",
+        Attribute({
+            name: "AdminFabricIndex", id: 0x1, type: "fabric-idx", access: "R V", conformance: "M",
+            quality: "X",
 
             details: "When the WindowStatus attribute is not set to WindowNotOpen, this attribute shall indicate the " +
                 "FabricIndex associated with the Fabric scoping of the Administrator that opened the window. This " +
@@ -59,11 +66,10 @@ Matter.children.push({
                 "When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null.",
 
             xref: { document: "core", section: "11.18.7.2" }
-        },
+        }),
 
-        {
-            tag: "attribute", name: "AdminVendorId", id: 0x2, type: "vendor-id", access: "R V",
-            conformance: "M", quality: "X",
+        Attribute({
+            name: "AdminVendorId", id: 0x2, type: "vendor-id", access: "R V", conformance: "M", quality: "X",
 
             details: "When the WindowStatus attribute is not set to WindowNotOpen, this attribute shall indicate the " +
                 "Vendor ID associated with the Fabric scoping of the Administrator that opened the window. This " +
@@ -75,11 +81,11 @@ Matter.children.push({
                 "When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null.",
 
             xref: { document: "core", section: "11.18.7.3" }
-        },
+        }),
 
-        {
-            tag: "command", name: "OpenCommissioningWindow", id: 0x0, access: "A T", conformance: "M",
-            direction: "request", response: "status",
+        Command({
+            name: "OpenCommissioningWindow", id: 0x0, access: "A T", conformance: "M", direction: "request",
+            response: "status",
 
             details: "This command is used by a current Administrator to instruct a Node to go into commissioning mode. " +
                 "The Enhanced Commissioning Method specifies a window of time during which an already commissioned " +
@@ -115,9 +121,8 @@ Matter.children.push({
             xref: { document: "core", section: "11.18.8.1" },
 
             children: [
-                {
-                    tag: "datatype", name: "CommissioningTimeout", id: 0x0, type: "uint16", conformance: "M",
-                    constraint: "desc",
+                Field({
+                    name: "CommissioningTimeout", id: 0x0, type: "uint16", conformance: "M", constraint: "desc",
 
                     details: "This field shall specify the time in seconds during which commissioning session establishment is " +
                         "allowed by the Node. This is known as Open Commissioning Window (OCW). This timeout value shall " +
@@ -127,11 +132,10 @@ Matter.children.push({
                         "of this timeout.",
 
                     xref: { document: "core", section: "11.18.8.1.1" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "PakePasscodeVerifier", id: 0x1, type: "octstr", conformance: "M",
-                    constraint: "97",
+                Field({
+                    name: "PakePasscodeVerifier", id: 0x1, type: "octstr", conformance: "M", constraint: "97",
 
                     details: "This field shall specify an ephemeral PAKE passcode verifier (see Section 3.10, " +
                         "“Password-Authenticated Key Exchange (PAKE)”) computed by the existing Administrator to be used for " +
@@ -142,31 +146,29 @@ Matter.children.push({
                         "existing Administrator after sending it to the Node(s).",
 
                     xref: { document: "core", section: "11.18.8.1.2" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Discriminator", id: 0x2, type: "uint16", conformance: "M",
-                    constraint: "0 to 4095",
+                Field({
+                    name: "Discriminator", id: 0x2, type: "uint16", conformance: "M", constraint: "0 to 4095",
                     details: "This field shall be used by the Node as the long discriminator for DNS-SD advertisement (see " +
                         "Commissioning Discriminator) for discovery by the new Administrator. The new Administrator can find " +
                         "and filter DNS-SD records by long discriminator to locate and initiate commissioning with the " +
                         "appropriate Node.",
                     xref: { document: "core", section: "11.18.8.1.3" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Iterations", id: 0x3, type: "uint32", conformance: "M",
-                    constraint: "1000 to 100000",
+                Field({
+                    name: "Iterations", id: 0x3, type: "uint32", conformance: "M", constraint: "1000 to 100000",
                     details: "This field shall be used by the Node as the PAKE iteration count associated with the ephemeral PAKE " +
                         "passcode verifier to be used for this commissioning, which shall be sent by the Node to the new " +
                         "Administrator’s software as response to the PBKDFParamRequest during PASE negotiation. The " +
                         "permitted range of values shall match the range specified in Section 3.9, “Password-Based Key " +
                         "Derivation Function (PBKDF)”, within the definition of the Crypto_PBKDFParameterSet.",
                     xref: { document: "core", section: "11.18.8.1.4" }
-                },
+                }),
 
-                {
-                    tag: "datatype", name: "Salt", id: 0x4, type: "octstr", conformance: "M", constraint: "16 to 32",
+                Field({
+                    name: "Salt", id: 0x4, type: "octstr", conformance: "M", constraint: "16 to 32",
 
                     details: "This field shall be used by the Node as the PAKE Salt associated with the ephemeral PAKE passcode " +
                         "verifier to be used for this commissioning, which shall be sent by the Node to the new" +
@@ -182,12 +184,12 @@ Matter.children.push({
                         "entire duration of the CommissioningTimeout.",
 
                     xref: { document: "core", section: "11.18.8.1.5" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "command", name: "OpenBasicCommissioningWindow", id: 0x1, access: "A T", conformance: "BC",
+        Command({
+            name: "OpenBasicCommissioningWindow", id: 0x1, access: "A T", conformance: "BC",
             direction: "request", response: "status",
 
             details: "This command may be used by a current Administrator to instruct a Node to go into commissioning " +
@@ -220,15 +222,14 @@ Matter.children.push({
                 "TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.",
 
             xref: { document: "core", section: "11.18.8.2" },
-            children: [{
-                tag: "datatype", name: "CommissioningTimeout", id: 0x0, type: "uint16", conformance: "M",
-                constraint: "desc"
-            }]
-        },
+            children: [
+                Field({ name: "CommissioningTimeout", id: 0x0, type: "uint16", conformance: "M", constraint: "desc" })
+            ]
+        }),
 
-        {
-            tag: "command", name: "RevokeCommissioning", id: 0x2, access: "A T", conformance: "M",
-            direction: "request", response: "status",
+        Command({
+            name: "RevokeCommissioning", id: 0x2, access: "A T", conformance: "M", direction: "request",
+            response: "status",
 
             details: "This command is used by a current Administrator to instruct a Node to revoke any active Open " +
                 "Commissioning Window or Open Basic Commissioning Window command. This is an idempotent command and " +
@@ -240,48 +241,45 @@ Matter.children.push({
                 "specific status code of WindowNotOpen.",
 
             xref: { document: "core", section: "11.18.8.3" }
-        },
+        }),
 
-        {
-            tag: "datatype", name: "StatusCode", type: "status",
+        Datatype({
+            name: "StatusCode", type: "status",
 
             children: [
-                {
-                    tag: "datatype", name: "Busy", id: 0x2,
+                Field({
+                    name: "Busy", id: 0x2,
                     details: "Could not be completed because another commissioning is in progress",
                     xref: { document: "core", section: "11.18.6" }
-                },
-                {
-                    tag: "datatype", name: "PakeParameterError", id: 0x3,
+                }),
+                Field({
+                    name: "PakeParameterError", id: 0x3,
                     details: "Provided PAKE parameters were incorrectly formatted or otherwise invalid",
                     xref: { document: "core", section: "11.18.6" }
-                },
-                {
-                    tag: "datatype", name: "WindowNotOpen", id: 0x4,
+                }),
+                Field({
+                    name: "WindowNotOpen", id: 0x4,
                     details: "No commissioning window was currently open",
                     xref: { document: "core", section: "11.18.6" }
-                }
+                })
             ]
-        },
+        }),
 
-        {
-            tag: "datatype", name: "CommissioningWindowStatusEnum", type: "enum8", conformance: "M",
+        Datatype({
+            name: "CommissioningWindowStatusEnum", type: "enum8", conformance: "M",
             xref: { document: "core", section: "11.18.5.1" },
 
             children: [
-                {
-                    tag: "datatype", name: "WindowNotOpen", id: 0x0, conformance: "M",
-                    description: "Commissioning window not open"
-                },
-                {
-                    tag: "datatype", name: "EnhancedWindowOpen", id: 0x1, conformance: "M",
+                Field({ name: "WindowNotOpen", id: 0x0, conformance: "M", description: "Commissioning window not open" }),
+                Field({
+                    name: "EnhancedWindowOpen", id: 0x1, conformance: "M",
                     description: "An Enhanced Commissioning Method window is open"
-                },
-                {
-                    tag: "datatype", name: "BasicWindowOpen", id: 0x2, conformance: "BC",
+                }),
+                Field({
+                    name: "BasicWindowOpen", id: 0x2, conformance: "BC",
                     description: "A Basic Commissioning Method window is open"
-                }
+                })
             ]
-        }
+        })
     ]
-});
+}));

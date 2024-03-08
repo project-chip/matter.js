@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,20 +8,26 @@
 // running tests in IDE with Mocha support.  Utilize by importing into
 // .mocharc.cjs as a sibling of package.json in the package to test
 
+// Required for Node < 19 (see node-shims.ts)
+const webcrypto = require("node:crypto").webcrypto;
+if (globalThis.crypto === undefined) {
+    Object.assign(globalThis, { crypto: webcrypto });
+}
+
 function mocharc(format = "cjs") {
     const { resolve } = require("path");
     const cli = require("mocha/lib/cli/cli");
     const listSupportFiles = require("./files.js").listSupportFiles;
 
     const TOOLS = resolve(__dirname, "../../..");
-    
+
     const testJs = `build/${format}/test`;
     const defaultSpec = `${testJs}/**/*Test.js`;
 
     // Build.  Ideally we'd import build code but it's asynchronous so instead
     // build in a separate process
     const spawnSync = require("child_process").spawnSync;
-    const result = spawnSync(`${TOOLS}/bin/build.js`, [ format ], { stdio: "inherit" });
+    const result = spawnSync(`${TOOLS}/bin/build.js`, [format], { stdio: "inherit" });
     if (result.error) {
         console.error(result.error);
         process.exit(-1);
@@ -29,7 +35,7 @@ function mocharc(format = "cjs") {
 
     // Hook Mocha so we can futz with args
     const main = cli.main;
-    cli.main = function(argv, args) {
+    cli.main = function (argv, args) {
         const spec = args._;
 
         // Remove wildcard test selection if there's an input file
@@ -51,13 +57,13 @@ function mocharc(format = "cjs") {
         }
 
         main.call(this, argv, args);
-    }
+    };
 
     return {
         inlineDiffs: true,
         file: listSupportFiles(format),
-        spec: [ defaultSpec ]
-    }
+        spec: [defaultSpec],
+    };
 }
 
 module.exports.mocharc = mocharc;

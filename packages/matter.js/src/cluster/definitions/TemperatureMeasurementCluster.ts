@@ -1,27 +1,24 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
 import { TlvInt16, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace TemperatureMeasurement {
     /**
-     * Temperature Measurement
-     *
-     * This cluster provides an interface to temperature measurement functionality, including configuration and
-     * provision of notifications of temperature measurements.
-     *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.3
+     * @see {@link Cluster}
      */
-    export const Cluster = ClusterFactory.Definition({
+    export const ClusterInstance = MutableCluster({
         id: 0x402,
         name: "TemperatureMeasurement",
         revision: 4,
@@ -37,7 +34,7 @@ export namespace TemperatureMeasurement {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.3.4.1
              */
-            measuredValue: Attribute(0x0, TlvNullable(TlvInt16.bound({ min: -27315 }))),
+            measuredValue: Attribute(0x0, TlvNullable(TlvInt16)),
 
             /**
              * The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that is capable of being
@@ -67,7 +64,22 @@ export namespace TemperatureMeasurement {
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 }), { default: 0 })
         }
     })
+
+    /**
+     * Temperature Measurement
+     *
+     * This cluster provides an interface to temperature measurement functionality, including configuration and
+     * provision of notifications of temperature measurements.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.3
+     */
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
+
+    export const Cluster: Cluster = ClusterInstance;
+
+    export const Complete = Cluster;
 }
 
-export type TemperatureMeasurementCluster = typeof TemperatureMeasurement.Cluster;
+export type TemperatureMeasurementCluster = TemperatureMeasurement.Cluster;
 export const TemperatureMeasurementCluster = TemperatureMeasurement.Cluster;
+ClusterRegistry.register(TemperatureMeasurement.Complete);

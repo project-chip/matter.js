@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,10 +14,10 @@ import { Branded } from "../util/Type.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 7.15
  */
-export type DeviceTypeId = Branded<number, "DeviceTypeId">;
+export type DeviceTypeId<ID extends number = number> = Branded<ID, "DeviceTypeId">;
 
-export function DeviceTypeId(v: number): DeviceTypeId {
-    return v as DeviceTypeId;
+export function DeviceTypeId<ID extends number>(v: ID) {
+    return v as DeviceTypeId<ID>;
 }
 
 /** Tlv schema for a Device type ID. */

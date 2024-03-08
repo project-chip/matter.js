@@ -1,22 +1,39 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { Command, TlvNoResponse, AccessLevel, Attribute } from "../../cluster/Cluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Attribute, Command, TlvNoResponse, AccessLevel } from "../../cluster/Cluster.js";
-import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace MediaInput {
+    /**
+     * Input to the MediaInput renameInput command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
+     */
+    export const TlvRenameInputRequest = TlvObject({ index: TlvField(0, TlvUInt8), name: TlvField(1, TlvString) });
+
+    /**
+     * Input to the MediaInput renameInput command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
+     */
+    export interface RenameInputRequest extends TypeFromSchema<typeof TlvRenameInputRequest> {}
+
     /**
      * The type of input, expressed as an enum, with the following values:
      *
@@ -79,6 +96,13 @@ export namespace MediaInput {
     });
 
     /**
+     * This contains information about an input.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.1
+     */
+    export interface InputInfoStruct extends TypeFromSchema<typeof TlvInputInfoStruct> {}
+
+    /**
      * Input to the MediaInput selectInput command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.1
@@ -94,11 +118,26 @@ export namespace MediaInput {
     });
 
     /**
-     * Input to the MediaInput renameInput command
+     * Input to the MediaInput selectInput command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.1
      */
-    export const TlvRenameInputRequest = TlvObject({ index: TlvField(0, TlvUInt8), name: TlvField(1, TlvString) });
+    export interface SelectInputRequest extends TypeFromSchema<typeof TlvSelectInputRequest> {}
+
+    /**
+     * A MediaInputCluster supports these elements if it supports feature NameUpdates.
+     */
+    export const NameUpdatesComponent = MutableCluster.Component({
+        commands: {
+            /**
+             * Upon receipt, this shall rename the input at a specific index in the Input List. Updates to the input
+             * name shall appear in the device’s settings menus.
+             *
+             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
+             */
+            renameInput: Command(0x3, TlvRenameInputRequest, 0x3, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
+        }
+    });
 
     /**
      * These are optional features supported by MediaInputCluster.
@@ -117,7 +156,7 @@ export namespace MediaInput {
     /**
      * These elements and properties are present in all MediaInput clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x507,
         name: "MediaInput",
         revision: 1,
@@ -169,23 +208,19 @@ export namespace MediaInput {
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.3
              */
             hideInputStatus: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
-        }
+        },
+
+        /**
+         * This metadata controls which MediaInputCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions({ flags: { nameUpdates: true }, component: NameUpdatesComponent })
     });
 
     /**
-     * A MediaInputCluster supports these elements if it supports feature NameUpdates.
+     * @see {@link Cluster}
      */
-    export const NameUpdatesComponent = ClusterFactory.Component({
-        commands: {
-            /**
-             * Upon receipt, this shall rename the input at a specific index in the Input List. Updates to the input
-             * name shall appear in the device’s settings menus.
-             *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
-             */
-            renameInput: Command(0x3, TlvRenameInputRequest, 0x3, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
-        }
-    });
+    export const ClusterInstance = MutableCluster({ ...Base });
 
     /**
      * Media Input
@@ -197,41 +232,15 @@ export namespace MediaInput {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a MediaInput cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a MediaInput cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            ClusterFactory.extend(cluster, NameUpdatesComponent, { nameUpdates: true });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { nameUpdates: true } ? typeof NameUpdatesComponent : {});
+    export const Cluster: Cluster = ClusterInstance;
     const NU = { nameUpdates: true };
 
     /**
-     * This cluster supports all MediaInput features. It may support illegal feature combinations.
-     *
-     * If you use this cluster you must manually specify which features are active and ensure the set of active
-     * features is legal per the Matter specification.
+     * @see {@link Complete}
      */
-    export const Complete = ClusterFactory.Definition({
+    export const CompleteInstance = MutableCluster({
         id: Cluster.id,
         name: Cluster.name,
         revision: Cluster.revision,
@@ -239,10 +248,21 @@ export namespace MediaInput {
         attributes: Cluster.attributes,
         commands: {
             ...Cluster.commands,
-            renameInput: ClusterFactory.AsConditional(NameUpdatesComponent.commands.renameInput, { mandatoryIf: [NU] })
+            renameInput: MutableCluster.AsConditional(NameUpdatesComponent.commands.renameInput, { mandatoryIf: [NU] })
         }
     });
+
+    /**
+     * This cluster supports all MediaInput features. It may support illegal feature combinations.
+     *
+     * If you use this cluster you must manually specify which features are active and ensure the set of active
+     * features is legal per the Matter specification.
+     */
+    export interface Complete extends Identity<typeof CompleteInstance> {}
+
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type MediaInputCluster = typeof MediaInput.Cluster;
+export type MediaInputCluster = MediaInput.Cluster;
 export const MediaInputCluster = MediaInput.Cluster;
+ClusterRegistry.register(MediaInput.Complete);

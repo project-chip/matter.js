@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -62,6 +62,7 @@ export class NetworkNode extends Network {
     }
 
     private static readonly netInterfaces = new Cache<string | undefined>(
+        "Network interface",
         (ip: string) => this.getNetInterfaceForRemoveAddress(ip),
         5 * 60 * 1000 /* 5mn */,
     );

@@ -1,23 +1,26 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
 import { FixedAttribute, Command, AccessLevel, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
 import { TlvString } from "../../tlv/TlvString.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace Groups {
     /**
@@ -43,6 +46,13 @@ export namespace Groups {
     });
 
     /**
+     * Input to the Groups addGroup command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.1
+     */
+    export interface AddGroupRequest extends TypeFromSchema<typeof TlvAddGroupRequest> {}
+
+    /**
      * The AddGroupResponse is sent by the Groups cluster server in response to an AddGroup command.
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.7
@@ -53,11 +63,25 @@ export namespace Groups {
     });
 
     /**
+     * The AddGroupResponse is sent by the Groups cluster server in response to an AddGroup command.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.7
+     */
+    export interface AddGroupResponse extends TypeFromSchema<typeof TlvAddGroupResponse> {}
+
+    /**
      * Input to the Groups viewGroup command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.2
      */
     export const TlvViewGroupRequest = TlvObject({ groupId: TlvField(0, TlvGroupId) });
+
+    /**
+     * Input to the Groups viewGroup command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.2
+     */
+    export interface ViewGroupRequest extends TypeFromSchema<typeof TlvViewGroupRequest> {}
 
     /**
      * The ViewGroupResponse command is sent by the Groups cluster server in response to a ViewGroup command.
@@ -71,11 +95,25 @@ export namespace Groups {
     });
 
     /**
+     * The ViewGroupResponse command is sent by the Groups cluster server in response to a ViewGroup command.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.8
+     */
+    export interface ViewGroupResponse extends TypeFromSchema<typeof TlvViewGroupResponse> {}
+
+    /**
      * Input to the Groups getGroupMembership command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.3
      */
     export const TlvGetGroupMembershipRequest = TlvObject({ groupList: TlvField(0, TlvArray(TlvGroupId)) });
+
+    /**
+     * Input to the Groups getGroupMembership command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.3
+     */
+    export interface GetGroupMembershipRequest extends TypeFromSchema<typeof TlvGetGroupMembershipRequest> {}
 
     /**
      * The GetGroupMembershipResponse command is sent by the Groups cluster server in response to a GetGroupMembership
@@ -112,11 +150,49 @@ export namespace Groups {
     });
 
     /**
+     * The GetGroupMembershipResponse command is sent by the Groups cluster server in response to a GetGroupMembership
+     * command.
+     *
+     * The fields of the GetGroupMembershipResponse command have the following semantics:
+     *
+     * The Capacity field shall contain the remaining capacity of the Group Table of the node. The following values
+     * apply:
+     *
+     *   • 0 - No further groups may be added.
+     *
+     *   • 0 < Capacity < 0xfe - Capacity holds the number of groups that may be added.
+     *
+     *   • 0xfe - At least 1 further group may be added (exact number is unknown).
+     *
+     *   • null - It is unknown if any further groups may be added.
+     *
+     * The GroupList field shall contain either the group IDs of all the groups in the Group Table for which the server
+     * endpoint is a member of the group (in the case where the GroupList field of the received GetGroupMembership
+     * command was empty), or the group IDs of all the groups in the Group Table for which the server endpoint is a
+     * member of the group and for which the group ID was included in the the GroupList field of the received
+     * GetGroupMembership command (in the case where the GroupList field of the received GetGroupMembership command was
+     * not empty).
+     *
+     * Zigbee: If the total number of groups will cause the maximum payload length of a frame to be exceeded, then the
+     * GroupList field shall contain only as many groups as will fit.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.9
+     */
+    export interface GetGroupMembershipResponse extends TypeFromSchema<typeof TlvGetGroupMembershipResponse> {}
+
+    /**
      * Input to the Groups removeGroup command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.4
      */
     export const TlvRemoveGroupRequest = TlvObject({ groupId: TlvField(0, TlvGroupId) });
+
+    /**
+     * Input to the Groups removeGroup command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.4
+     */
+    export interface RemoveGroupRequest extends TypeFromSchema<typeof TlvRemoveGroupRequest> {}
 
     /**
      * The RemoveGroupResponse command is generated by the server in response to the receipt of a RemoveGroup command.
@@ -129,6 +205,13 @@ export namespace Groups {
     });
 
     /**
+     * The RemoveGroupResponse command is generated by the server in response to the receipt of a RemoveGroup command.
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.10
+     */
+    export interface RemoveGroupResponse extends TypeFromSchema<typeof TlvRemoveGroupResponse> {}
+
+    /**
      * Input to the Groups addGroupIfIdentifying command
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.6
@@ -137,6 +220,13 @@ export namespace Groups {
         groupId: TlvField(0, TlvGroupId),
         groupName: TlvField(1, TlvString.bound({ maxLength: 16 }))
     });
+
+    /**
+     * Input to the Groups addGroupIfIdentifying command
+     *
+     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.6
+     */
+    export interface AddGroupIfIdentifyingRequest extends TypeFromSchema<typeof TlvAddGroupIfIdentifyingRequest> {}
 
     /**
      * These are optional features supported by GroupsCluster.
@@ -155,7 +245,7 @@ export namespace Groups {
     /**
      * These elements and properties are present in all Groups clusters.
      */
-    export const Base = ClusterFactory.Definition({
+    export const Base = MutableCluster.Component({
         id: 0x4,
         name: "Groups",
         revision: 4,
@@ -245,8 +335,18 @@ export namespace Groups {
                 TlvNoResponse,
                 { invokeAcl: AccessLevel.Manage }
             )
-        }
+        },
+
+        /**
+         * This metadata controls which GroupsCluster elements matter.js activates for specific feature combinations.
+         */
+        extensions: MutableCluster.Extensions()
     });
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster({ ...Base, supportedFeatures: { groupNames: true } });
 
     /**
      * Groups
@@ -272,31 +372,12 @@ export namespace Groups {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3
      */
-    export const Cluster = ClusterFactory.Extensible(
-        { ...Base, supportedFeatures: { groupNames: true } },
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a Groups cluster with support for optional features. Include each
-         * {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a Groups cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF };
+    export const Cluster: Cluster = ClusterInstance;
+    export const Complete = Cluster;
 }
 
-export type GroupsCluster = typeof Groups.Cluster;
+export type GroupsCluster = Groups.Cluster;
 export const GroupsCluster = Groups.Cluster;
+ClusterRegistry.register(Groups.Complete);

@@ -1,15 +1,17 @@
 /**
  * @license
- * Copyright 2022-2023 Project CHIP Authors
+ * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { AnyElement } from "@project-chip/matter.js/model";
 import { Block } from "../../util/TsFile.js";
-import { serialize, wordWrap } from "../../util/string.js";
+import { camelize, serialize, wordWrap } from "../../util/string.js";
 
-export function generateElement(target: Block, element: AnyElement, prefix = "", suffix = "") {
-    const block = target.expressions(`${prefix}{`, `}${suffix}`);
+export function generateElement(target: Block, importFrom: string, element: AnyElement, prefix = "", suffix = "") {
+    const factory = camelize(element.tag, true);
+    target.file.addImport(importFrom, `${factory}Element as ${factory}`);
+    const block = target.expressions(`${prefix}${factory}({`, `})${suffix}`);
 
     const fields = element.valueOf() as { [name: string]: any };
 
@@ -19,7 +21,7 @@ export function generateElement(target: Block, element: AnyElement, prefix = "",
     delete fields.details;
 
     // First, tag/ID/name/type
-    const properties = Array<string>(`tag: ${serialize(element.tag)}`, `name: ${serialize(element.name)}`);
+    const properties = Array<string>(`name: ${serialize(element.name)}`);
     if (element.id !== undefined) {
         const idStr = element.id < 0 ? `${element.id}` : `0x${element.id.toString(16)}`;
         properties.push(`id: ${idStr}`);
@@ -79,7 +81,7 @@ export function generateElement(target: Block, element: AnyElement, prefix = "",
     if (children?.length) {
         const childBlock = block.expressions(`children: [`, "]");
         for (const child of children) {
-            generateElement(childBlock, child);
+            generateElement(childBlock, importFrom, child);
         }
     }
 }
