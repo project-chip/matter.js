@@ -50,6 +50,23 @@ Both exports and the typings are exported as CommonJS and ES6 modules.
 
 For more details please refer to the [API Documentation](../../docs/matter.js).
 
+### Included Cluster default implementations
+Each cluster that has commands also needs to have them implemented based on the chosen feature set.
+
+Matter.js wants to provide meaningful but general and basic default implementations for all clusters, so that it is very simply to build a certain device and already have basic functionality available. The developer can then decide if own functionality needs to be developed and can overwrite and extend these implementations or just use them.
+
+This section contains the list of currently included clusters with default implementations.
+
+| Cluster name                 | Features                        | Matter-Version | Additional Information                                                            |
+|------------------------------|---------------------------------|----------------|-----------------------------------------------------------------------------------|
+| Administrator Commissioning  | None, Basic                     | 1.1            |                                                                                   |
+| General Commissioning        | None                            | 1.1            |                                                                                   |
+| Identify                     | None, IdentifyQuery             | 1.1            |                                                                                   |
+| Node Operational Credentials | None                            | 1.1            |                                                                                   |
+| OnOff                        | None, LevelControl-For-Lighting | 1.1            | LevelControl-For-Lighting feature is exposed automatically when added to a device |
+
+More will come over time and can also be contributed by the community!
+
 ### Typescript note
 To have Typescript and your IDE know all the relevant exported functionality you need to use the following in your tsconfig.json:
 
