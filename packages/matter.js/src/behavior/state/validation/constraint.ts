@@ -42,8 +42,15 @@ export function createConstraintValidator(
 
         case Metatype.string:
         case Metatype.bytes:
+            const strIsNullable = schema.nullable;
             return (value: Val, _session, location) => {
                 assertSequence(value, location);
+
+                // Empty strings are functionally equivalent to nulls per Matter standard
+                if (strIsNullable && !value.length) {
+                    return;
+                }
+
                 if (!constraint.test(value.length)) {
                     throw new ConstraintError(
                         schema,
@@ -74,8 +81,15 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
         }
     }
 
+    const isNullable = schema.nullable;
+
     return (value, session, location) => {
         assertArray(value, location);
+
+        // Empty arrays are functionally equivalent to null per Matter standard
+        if (isNullable && value.length === 0) {
+            return;
+        }
 
         if (!constraint.test(value.length, location.siblings)) {
             throw new ConstraintError(

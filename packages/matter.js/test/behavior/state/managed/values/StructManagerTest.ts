@@ -6,6 +6,7 @@
 
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { NodeActivity } from "../../../../../src/behavior/context/server/NodeActivity.js";
+import { ValidateError } from "../../../../../src/behavior/errors.js";
 import { Val } from "../../../../../src/behavior/state/Val.js";
 import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
@@ -148,6 +149,34 @@ describe("StructManager", () => {
 
             array = ref.array as { num: number; str: string }[];
             expect(array).deep.equals([...input, { num: 3, str: "baz" }]);
+        });
+    });
+
+    it("rejects strings that are too short", async () => {
+        const struct = TestStruct({ str: { name: "str", type: "string", constraint: "min 4" } });
+
+        await struct.online(TestContext, ref => {
+            ref.str = "foofers";
+            expect(() => (ref.str = "foo")).throws(ValidateError);
+            expect(ref.str).equals("foofers");
+        });
+    });
+
+    it("rejects strings that are too long", async () => {
+        const struct = TestStruct({ str: { name: "str", type: "string", constraint: "max 4" } });
+
+        await struct.online(TestContext, ref => {
+            ref.str = "foo";
+            expect(() => (ref.str = "foofers")).throws(ValidateError);
+            expect(ref.str).equals("foo");
+        });
+    });
+
+    it("accepts empty strings for nullable fields with minimum length", async () => {
+        const struct = TestStruct({ str: { name: "str", type: "string", constraint: "min 4", quality: "X" } });
+        await struct.online(TestContext, ref => {
+            ref.str = "";
+            expect(ref.str).equals("");
         });
     });
 });
