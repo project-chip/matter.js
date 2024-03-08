@@ -32,9 +32,9 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     #interactionServer?: TransactionalInteractionServer;
     #matterDevice?: MatterDevice;
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
-    #primaryNetInterface?: UdpInterface;
+    #transports?: Set<TransportInterface>;
+    #bleTransports?: Set<TransportInterface>;
     #bleBroadcaster?: InstanceBroadcaster;
-    #bleTransport?: TransportInterface;
     #commissionedListener?: () => void;
 
     override get owner() {
@@ -81,22 +81,56 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     /**
-     * The IPv6 {@link UdpInterface}.  We create this interface independently of the server so the OS can select a port
-     * before we are fully online.
+     * The {@link UdpInterface} instances we listen on.  We create these independently of the server so the OS can
+     * select a port before we are fully online.
      */
-    protected async getPrimaryNetInterface() {
-        if (this.#primaryNetInterface === undefined) {
-            const port = this.owner.state.network.port;
-            this.#primaryNetInterface = await UdpInterface.create(
-                this.owner.env.get(Network),
-                "udp6",
-                port ? port : undefined,
-                this.owner.state.network.listeningAddressIpv6,
-            );
-
-            await this.owner.set({ network: { operationalPort: this.#primaryNetInterface.port } });
+    protected async getTransports() {
+        if (this.#transports !== undefined) {
+            return this.#transports;
         }
-        return this.#primaryNetInterface;
+
+        const transports = new Set<TransportInterface>();
+        const bleTransports = new Set<TransportInterface>();
+
+        for (const address of this.owner.state.network.listen) {
+            switch (address.protocol) {
+                case "udp":
+                case "udp4":
+                case "udp6":
+                    const udp = await UdpInterface.create(
+                        this.owner.env.get(Network),
+                        address.protocol,
+                        address.port,
+                        address.address,
+                    );
+
+                    transports.add(udp);
+
+                    // We advertise the first (most likely only) UDP port we open as our official address
+                    await this.owner.act(agent => {
+                        const state = agent.network.state;
+                        if (state.operationalPort === -1) {
+                            state.operationalPort = udp.port;
+                        }
+                    });
+
+                    break;
+
+                case "ble":
+                    // TODO - HCI ID and/or multiple BLE transports?  (Former seems valuable, latter not really but
+                    // would include for completeness)
+                    const ble = Ble.get().getBlePeripheralInterface();
+                    transports.add(ble);
+                    bleTransports.add(ble);
+                    break;
+            }
+        }
+
+        // AFAICT no way to query transport interface for protocol type so just store BLE transports separately so we
+        // can identify them for removal after commissioning completes
+        this.#bleTransports = bleTransports;
+
+        return (this.#transports = transports);
     }
 
     /**
@@ -108,40 +142,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             this.#bleBroadcaster = Ble.get().getBleBroadcaster(bleData);
         }
         return this.#bleBroadcaster;
-    }
-
-    /**
-     * A BLE transport.
-     */
-    protected get bleTransport() {
-        if (this.#bleTransport === undefined) {
-            this.#bleTransport = Ble.get().getBlePeripheralInterface();
-        }
-        return this.#bleTransport;
-    }
-
-    /**
-     * Add transports to the {@link MatterDevice}.
-     */
-    protected async addTransports(device: MatterDevice) {
-        device.addTransportInterface(await this.getPrimaryNetInterface());
-
-        const netconf = this.owner.state.network;
-
-        if (netconf.ipv4) {
-            device.addTransportInterface(
-                await UdpInterface.create(
-                    this.owner.env.get(Network),
-                    "udp4",
-                    netconf.port,
-                    netconf.listeningAddressIpv4,
-                ),
-            );
-        }
-
-        if (netconf.ble) {
-            device.addTransportInterface(this.bleTransport);
-        }
     }
 
     /**
@@ -187,20 +187,23 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             this.#bleBroadcaster = undefined;
         }
 
-        if (this.#bleTransport) {
-            this.owner.env.runtime.add(this.#removeBleTransport(this.#bleTransport));
-            this.#bleTransport = undefined;
+        if (this.#bleTransports) {
+            for (const ble of this.#bleTransports) {
+                this.owner.env.runtime.add(this.#removeBleTransport(ble));
+            }
         }
     }
 
-    async #removeBleBroadcaster(bleBroadcaster: InstanceBroadcaster) {
-        await this.#matterDevice?.deleteBroadcaster(bleBroadcaster);
-        await bleBroadcaster.close();
+    async #removeBleBroadcaster(broadcaster: InstanceBroadcaster) {
+        await this.#matterDevice?.deleteBroadcaster(broadcaster);
+        await broadcaster.close();
     }
 
-    async #removeBleTransport(bleTransport: TransportInterface) {
-        await this.#matterDevice?.deleteTransportInterface(bleTransport);
-        await bleTransport.close();
+    async #removeBleTransport(transport: TransportInterface) {
+        this.#transports?.delete(transport);
+        this.#bleTransports?.delete(transport);
+        await this.#matterDevice?.deleteTransportInterface(transport);
+        await transport.close();
     }
 
     /**
@@ -215,10 +218,6 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
     get #commissionedFabrics() {
         return this.owner.state.operationalCredentials.commissionedFabrics;
-    }
-
-    override get operationalPort() {
-        return this.#primaryNetInterface?.port ?? 0;
     }
 
     async endCommissioning() {
@@ -266,10 +265,11 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         await this.owner.act(agent => agent.load(SessionsBehavior));
         this.owner.eventsOf(CommissioningBehavior).commissioned.on(() => this.endUncommissionedMode());
 
-        await this.addTransports(this.#matterDevice);
-        await this.addBroadcasters(this.#matterDevice);
+        for (const transport of await this.getTransports()) {
+            this.#matterDevice.addTransportInterface(transport);
+        }
 
-        await this.owner.set({ network: { operationalPort: this.operationalPort } });
+        await this.addBroadcasters(this.#matterDevice);
 
         await this.openAdvertisementWindow();
     }
@@ -282,13 +282,13 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             await this.#matterDevice.close();
 
             this.#matterDevice = undefined;
-            this.#primaryNetInterface = undefined;
-        }
-
-        if (this.#primaryNetInterface) {
-            // If we created the net interface but not the device we need to dispose ourselves
-            await this.#primaryNetInterface.close();
-            this.#primaryNetInterface = undefined;
+            this.#transports = undefined;
+        } else if (this.#transports) {
+            // We created the transports but not the device; so we need to dispose ourselves
+            for (const transport of this.#transports) {
+                await transport.close();
+            }
+            this.#transports = undefined;
         }
 
         await this.#interactionServer?.[Symbol.asyncDispose]();

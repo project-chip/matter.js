@@ -5,7 +5,7 @@
  */
 
 import { Ble } from "../../../ble/Ble.js";
-import { ImplementationError } from "../../../common/MatterError.js";
+import { ImplementationError, NotImplementedError } from "../../../common/MatterError.js";
 import { Logger } from "../../../log/Logger.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
@@ -27,13 +27,11 @@ export class NetworkServer extends NetworkBehavior {
     declare internal: NetworkServer.Internal;
 
     override initialize() {
-        if (this.state.ble === undefined) {
-            // TODO make working again when State init gets fixed!
-            this.state.ble = Ble.enabled;
-        } else if (this.state.ble && !Ble.enabled) {
-            logger.warn("Disabling Bluetooth commissioning because BLE support is not installed");
-            this.state.ble = false;
-        }
+        const vars = this.endpoint.env.vars;
+
+        this.state.port = vars.number("network.port", this.state.port);
+
+        this.state.listen = this.#configureListeners(vars.list("network.listen", this.state.listen));
 
         const discoveryCaps = this.state.discoveryCapabilities;
         switch (discoveryCaps.ble) {
@@ -101,21 +99,156 @@ export class NetworkServer extends NetworkBehavior {
             this.internal.runtime.endUncommissionedMode();
         }
     }
+
+    #configureListeners(config: unknown[]) {
+        const listen = Array<NetworkServer.Address>();
+        let hasUdp = false;
+        let hasBle = false;
+        let disabledBle = false;
+        for (const addr of config) {
+            if (typeof addr !== "object") {
+                throw new ImplementationError("Listen address is not an object");
+            }
+
+            let { protocol, port } = addr as Record<string, any>;
+            const { address } = addr as Record<string, any>;
+
+            if (protocol === undefined) {
+                protocol = "udp";
+            }
+
+            switch (protocol) {
+                case "ble":
+                    if (Ble.enabled) {
+                        if (hasBle) {
+                            throw new NotImplementedError("Currently only a single BLE transport is allowed");
+                        } else {
+                            hasBle = true;
+                        }
+                        if (address !== undefined) {
+                            throw new NotImplementedError("Currently you may not specify HCI ID for BLE transport");
+                        }
+                        listen.push({ protocol, address });
+                        this.state.ble = true;
+                    } else {
+                        disabledBle = true;
+                    }
+                    break;
+
+                case "udp":
+                case "udp4":
+                case "udp6":
+                    hasUdp = true;
+                    if (port === undefined) {
+                        port = this.state.port;
+                    }
+                    listen.push({ protocol, address, port });
+                    break;
+
+                default:
+                    throw new ImplementationError(`Unknown listen protocol "${protocol}"`);
+            }
+        }
+
+        if (disabledBle) {
+            logger.warn("Disabling Bluetooth commissioning because BLE support is not installed");
+            this.state.ble = false;
+        } else if (this.state.ble !== false && Ble.enabled) {
+            if (!hasBle) {
+                listen.push({ protocol: "ble" });
+            }
+            this.state.ble = true;
+        }
+
+        if (!hasUdp) {
+            listen.push({ protocol: "udp", port: this.state.port });
+        }
+
+        return listen;
+    }
 }
 
 export namespace NetworkServer {
+    /**
+     * A UDP listening address.
+     */
+    export interface UdpAddress {
+        protocol: "udp" | "udp4" | "udp6";
+
+        /**
+         * The hostname or IP address.  Leave undefined for all addresses, "0.0.0.0" for all IPv4 addresses, and "::"
+         * for all IPv6 addresses.
+         */
+        address?: string;
+
+        /**
+         * The port to listen on.  Defaults to {@link State.port}.
+         */
+        port?: number;
+    }
+
+    /**
+     * A Bluetooth LE listening address,
+     *
+     * TODO - currently only a single BLE transport is supported
+     */
+    export interface BleAddress {
+        protocol: "ble";
+
+        /**
+         * The HCI ID of the bluetooth adapter.
+         *
+         * By default selects the first adapter on the system.
+         *
+         * TODO - currently you cannot specify HCI ID here
+         */
+        address?: string;
+    }
+
+    export type Address = BleAddress | UdpAddress;
+
     export class Internal extends NetworkBehavior.Internal {
         declare runtime: ServerNetworkRuntime;
     }
 
     export class State extends NetworkBehavior.State {
-        listeningAddressIpv4?: string = undefined;
-        listeningAddressIpv6?: string = undefined;
-        ipv4 = true;
+        /**
+         * An array of {@link Address} objects configuring the interfaces the server listens on.
+         *
+         * Configurable also with variable "network.listen".  You may configure a single listener using:
+         *
+         *   * `network.listen.protocol` either "ble", "udp4", "udp6" or "udp" (default is "udp" for dual IPv4/6)
+         *   * `network.listen.address` the hostname, IP address (default all) or HCI ID (default first) to listen on
+         *   * `network.listen.port` the port for UDP listeners (default is 5540)
+         *
+         * You may configure multiple listeners using `network.listen.0`, `network.listen.1`, etc. with the same subkeys
+         * as above.
+         *
+         * At least one UDP listener is required.  The server will add one if none are present.
+         *
+         * If {@link ble} is true, the server will add a BLE listener as well if none are present and Matter.js supports
+         * BLE on the current platform.
+         */
+        listen = Array<Address>();
+
+        /**
+         * Controls whether BLE is added to the default configuration.  If undefined, BLE is enabled if present on the
+         * system.
+         *
+         * Once the server starts this value reflects the current state of BLE for the node.
+         */
         ble?: boolean = undefined;
+
+        /**
+         * The Matter capabilities the server broadcasts.
+         */
         discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = {
             onIpNetwork: true,
         };
+
+        /**
+         * Time intervales for subscription configuration.
+         */
         subscriptionOptions?: SubscriptionOptions = undefined;
     }
 }

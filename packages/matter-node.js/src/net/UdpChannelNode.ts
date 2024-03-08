@@ -47,10 +47,14 @@ export class UdpChannelNode implements UdpChannel {
         listeningAddress,
         netInterface,
         membershipAddresses,
+        reuseAddress,
     }: UdpChannelOptions) {
-        const socketOptions: dgram.SocketOptions = { type, reuseAddr: true };
+        const socketOptions: dgram.SocketOptions = { type: type === "udp" ? "udp6" : type };
         if (type === "udp6") {
             socketOptions.ipv6Only = true;
+        }
+        if (reuseAddress) {
+            socketOptions.reuseAddr = true;
         }
         const socket = await createDgramSocket(listeningAddress, listeningPort, socketOptions);
         socket.setBroadcast(true);

@@ -38,13 +38,13 @@ export class VariableService {
     get(name: string, fallback?: VariableService.Value) {
         switch (typeof fallback) {
             case "string":
-                return this.string(name) ?? fallback;
+                return this.string(name, fallback);
 
             case "number":
-                return this.number(name) ?? fallback;
+                return this.number(name, fallback);
 
             case "boolean":
-                return this.boolean(name) ?? fallback;
+                return this.boolean(name, fallback);
         }
 
         let value: VariableService.Value = this.#vars;
@@ -77,10 +77,14 @@ export class VariableService {
         parent[key] = value;
     }
 
-    string(name: string) {
+    string(name: string): string | undefined;
+
+    string(name: string, fallback: string): string;
+
+    string(name: string, fallback?: string) {
         const value = this.get(name);
         if (value === undefined) {
-            return value;
+            return fallback;
         }
         if (typeof value === "string") {
             return value;
@@ -91,11 +95,15 @@ export class VariableService {
         return value.toString();
     }
 
-    boolean(name: string) {
+    boolean(name: string): boolean | undefined;
+
+    boolean(name: string, fallback: boolean): boolean;
+
+    boolean(name: string, fallback?: boolean) {
         const value = this.get(name);
         switch (value) {
             case undefined:
-                return value;
+                return fallback;
 
             case null:
             case 0:
@@ -109,7 +117,11 @@ export class VariableService {
         }
     }
 
-    number(name: string) {
+    number(name: string): number | undefined;
+
+    number(name: string, fallback: number): number;
+
+    number(name: string, fallback?: number) {
         let value = this.get(name);
         if (typeof value === "number") {
             return value;
@@ -117,17 +129,74 @@ export class VariableService {
         if (typeof value === "string") {
             value = Number.parseFloat(value);
             if (Number.isNaN(value)) {
-                return;
+                return fallback;
             }
             return value;
         }
+        return fallback;
     }
+
+    bigint(name: string): bigint | undefined;
+
+    bigint(name: string, fallback: bigint): bigint;
+
+    bigint(name: string, fallback?: bigint) {
+        const value = this.get(name);
+
+        if (typeof value === "bigint") {
+            return value;
+        }
+
+        if (typeof value === "number" || typeof value === "string") {
+            return BigInt(value);
+        }
+
+        return fallback;
+    }
+
+    integer(name: string): number | undefined;
+
+    integer(name: string, fallback: number): number;
 
     integer(name: string, fallback?: number) {
         const number = this.number(name) ?? fallback;
         if (typeof number === "number") {
             return Math.floor(number);
         }
+    }
+
+    list(name: string): unknown[] | undefined;
+
+    list(name: string, fallback: unknown[]): unknown[];
+
+    list(name: string, fallback?: unknown[]): unknown[] | undefined {
+        const value = this.get(name);
+        if (value === undefined || value === null) {
+            return fallback;
+        }
+
+        if (Array.isArray(value)) {
+            return value;
+        }
+
+        if (typeof value === "object") {
+            const keys = Object.keys(value);
+            if (!keys.length) {
+                return fallback;
+            }
+
+            let isArrayLike = true;
+            for (const key of keys) {
+                if (!key.match(/^[0-9]+$/)) {
+                    isArrayLike = false;
+                }
+            }
+            if (isArrayLike) {
+                return Object.values(value);
+            }
+        }
+
+        return [value];
     }
 
     increment(name: string) {

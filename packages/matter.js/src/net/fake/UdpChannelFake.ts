@@ -35,7 +35,7 @@ export class UdpChannelFake implements UdpChannel {
         private readonly listeningAddress: string | undefined,
         listeningPort?: number,
     ) {
-        this.listeningPort = listeningPort ?? 1024 + Math.floor(Math.random() * 64511); // Random port 1024-65535
+        this.listeningPort = listeningPort ? listeningPort : 1024 + Math.floor(Math.random() * 64511); // Random port 1024-65535
     }
 
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
