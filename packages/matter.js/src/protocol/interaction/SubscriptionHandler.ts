@@ -12,6 +12,7 @@ import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
+import { NetworkError } from "../../net/Network.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Time, Timer } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -447,7 +448,7 @@ export class SubscriptionHandler {
                     `Sending update failed 3 times in a row, canceling subscription ${this.subscriptionId} and let controller subscribe again.`,
                 );
                 this.sendNextUpdateImmediately = false;
-                if (error instanceof RetransmissionLimitReachedError) {
+                if (error instanceof RetransmissionLimitReachedError || error instanceof NetworkError) {
                     // We could not send at all, consider session as dead
                     await this.session.destroy(false);
                 } else {
