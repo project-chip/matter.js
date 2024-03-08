@@ -38,6 +38,7 @@ jobs:
           config: |
             paths-ignore:
               - packages/matter.js/src/node/ServerNode.ts
+              - **/test/**/*Test.ts
 
       # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
       # If this step fails, then you should remove it and run the build manually (see below)
