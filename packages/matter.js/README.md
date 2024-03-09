@@ -50,6 +50,58 @@ Both exports and the typings are exported as CommonJS and ES6 modules.
 
 For more details please refer to the [API Documentation](../../docs/matter.js).
 
+### Included Cluster default implementations
+Each cluster that has commands also needs to have them implemented based on the chosen feature set.
+
+Matter.js provides a specification-compliant implementation of all Matter 1.1 clusters. For many clusters our implementations perform high-level business logic. For other clusters you provide the needed business logic by extending the Matter.js implementation. In all cases Matter.js takes care of details like the Matter protocol, input and output validation and persistence. The developer can then decide if own functionality needs to be developed and can overwrite and extend these implementations or just use them.
+
+Matter.js allows the following clusters to be used directly with a default implementation for all relevant commands - or the clusters do not need any commands and so the standard feature set of Matter.js for attributes is sufficient.  
+
+| Cluster name                     | Features                        | Matter-Version | Additional Information                                                                                                            |
+|----------------------------------|---------------------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Access Control                   | None                            | 1.1            | No command implementations needed, but ACL checks still pending in matter.js                                                      |
+| Administrator Commissioning      | None, Basic                     | 1.1            | Internal Root cluster implemented, no need to customize                                                                           |
+| Application Basic                | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Ballast Configuration            | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Basic Information                | None                            | 1.1            | Internal Root cluster implemented, no need to customize, events are automatically emitted by matter.js                            |
+| Binary Input Basic               | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Binding                          | None                            | 1.1            | No command implementations needed, support of defined bindings pending in matter.js                                               |
+| Boolean State                    | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Bridged Device Basic Information | None                            | 1.1            | Internal Root cluster implemented, no need to customize, events automatically emitted by matter.js                                |
+| Descriptor                       | None                            | 1.1            | Internal Root cluster implemented, no need to customize, data are automatically manabed by matter.js                              |
+| Ethernet Network Diagnostics     | None                            | 1.1            | No command implementations needed when used without any features                                                                  |
+| Fan Control                      | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Fixed Label                      | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Flow Measurement                 | None                            | 1.1            | No command implementations needed                                                                                                 |
+| General Commissioning            | None                            | 1.1            | Internal Root cluster implemented, no need to customize                                                                           |
+| General Diagnostics              | None                            | 1.1            | No command implementations needed when used without test event triggers, else implement as needed                                 |
+| Identify                         | None, IdentifyQuery             | 1.1            |                                                                                                                                   |
+| Illuminance Measurement          | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Leaf Wetness Measurement         | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Localization Configuration       | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Network Commissioning            | None                            | 1.1            | No command implementations needed when using with Ethernet network, needs custom implementation for Wi-Fi or Thread, see examples |
+| Occupancy Sensing                | None                            | 1.1            | No command implementations needed                                                                                                 |
+| OnOff                            | None, LevelControl-For-Lighting | 1.1            | LevelControl-For-Lighting feature is exposed automatically when added to a device                                                 |
+| OnOff Switch Configuration       | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Operational Credentials          | None                            | 1.1            | Internal Root cluster implemented, no need to customize                                                                           |
+| Power Source                     | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Power Source Configuration       | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Pressure Measurement             | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Proxy Configuration              | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Pump Configuration and Control   | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Relative Humidity Measurement    | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Software Diagnostics             | None                            | 1.1            | No command implementations needed when used without Watermark feature                                                             |
+| Soil Moisture Measurement        | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Switch                           | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Temperature Measurement          | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Thermostat User Interface        | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Time Format Localization         | None                            | 1.1            | No command implementations needed                                                                                                 |
+| Unit Localization                | None                            | 1.1            | No command implementations needed                                                                                                 |
+| User Label                       | None                            | 1.1            | No command implementations needed                                                                                                 |
+| WakeOnLan                        | None                            | 1.1            | No command implementations needed                                                                                                 |
+
+More will come over time and can also be contributed by the community!
+
 ### Typescript note
 To have Typescript and your IDE know all the relevant exported functionality you need to use the following in your tsconfig.json:
 
