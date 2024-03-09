@@ -80,12 +80,6 @@ export namespace ValueSupervisor {
         trace?: ActionTracer.Action;
 
         /**
-         * If this is true, only changes to non-volatile values trigger version updates.  This is used for setup and
-         * teardown where there is no visibility to peers.
-         */
-        unversionedVolatiles?: boolean;
-
-        /**
          * If this is true, data validation is disabled.  This should only be used in contexts where data validation is
          * deferred.
          */

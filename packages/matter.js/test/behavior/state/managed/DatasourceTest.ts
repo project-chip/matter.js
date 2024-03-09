@@ -37,7 +37,6 @@ const persistentSupervisor = BehaviorSupervisor({
 function createStore(initialValues: Val.Struct = {}): Datasource.Store & { sets: Val.Struct[] } {
     return {
         initialValues: {
-            __version__: 1,
             ...initialValues,
         },
 
@@ -160,39 +159,11 @@ describe("Datasource", () => {
         });
     });
 
-    it("commits version after initial load and not subsequently", async () => {
-        const store = createStore({ __version__: undefined });
-
-        await withDatasourceAndReference({ store, versioning: true }, async ({ ds, context }) => {
-            await context.transaction.commit();
-
-            expect(store.sets.length).equals(1);
-            expect(Object.keys(store.sets[0]).length).equals(1);
-            expect(typeof store.sets[0].__version__).equals("number");
-
-            await withReference(ds, async ({ context }) => await context.transaction.commit());
-        });
-
-        expect(store.sets.length).equals(1);
-    });
-
-    it("does not commit version if already persisted", async () => {
-        const store = createStore({ __version__: 1234 });
-
-        await withDatasourceAndReference({ store, versioning: true }, async ({ ds, context }) => {
-            await context.transaction.commit();
-
-            expect(store.sets.length).equals(0);
-            expect(ds.version).equals(1234);
-        });
-    });
-
     it("auto-commits changes after initial load", async () => {
         const store = createStore();
         await withDatasourceAndReference(
             {
                 store,
-                versioning: true,
                 supervisor: persistentSupervisor,
             },
 
@@ -202,7 +173,6 @@ describe("Datasource", () => {
 
         expect(store.sets).deep.equals([
             {
-                __version__: 2,
                 foo: "rab",
             },
         ]);
@@ -212,7 +182,6 @@ describe("Datasource", () => {
         const store = createStore();
         const ds = createDatasource({
             store: store,
-            versioning: true,
             supervisor: persistentSupervisor,
         });
 
@@ -224,7 +193,7 @@ describe("Datasource", () => {
             await context.transaction.commit();
 
             expect(store.sets.length).equals(1);
-            expect(store.sets[0]).deep.equals({ __version__: 2, foo: "rab" });
+            expect(store.sets[0]).deep.equals({ foo: "rab" });
         });
 
         await withReference(ds, async ({ state }) => {
@@ -234,7 +203,7 @@ describe("Datasource", () => {
         });
 
         expect(store.sets.length).equals(2);
-        expect(store.sets[1]).deep.equals({ __version__: 3, foo: "woof" });
+        expect(store.sets[1]).deep.equals({ foo: "woof" });
     });
 
     it("triggers events after transaction commit", async () => {
