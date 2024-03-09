@@ -88,7 +88,6 @@ export namespace OfflineContext {
      * {@link OfflineContext} configuration options.
      */
     export interface Options {
-        unversionedVolatiles?: boolean;
         trace?: ActionTracer.Action;
     }
 }
