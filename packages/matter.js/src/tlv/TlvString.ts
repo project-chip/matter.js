@@ -26,8 +26,8 @@ type LengthConstraints = {
 export class StringSchema<T extends TlvType.ByteString | TlvType.Utf8String> extends TlvSchema<TlvToPrimitive[T]> {
     constructor(
         private type: T,
-        private readonly minLength: number = 0,
-        private readonly maxLength: number = 1024,
+        readonly minLength: number = 0,
+        readonly maxLength: number = 1024,
     ) {
         super();
 

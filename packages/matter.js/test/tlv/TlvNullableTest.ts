@@ -5,6 +5,7 @@
  */
 
 import { TlvAny } from "../../src/tlv/TlvAny.js";
+import { TlvArray } from "../../src/tlv/TlvArray.js";
 import { TlvNullable } from "../../src/tlv/TlvNullable.js";
 import { TlvString } from "../../src/tlv/TlvString.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -45,5 +46,43 @@ describe("TlvNullable", () => {
                 expect(schema.decode(ByteArray.fromHex(encoded))).equal(decoded);
             });
         }
+    });
+
+    describe("decode nullable types with constraints but zero length as null", () => {
+        it("decodes null correctly without constraint", () => {
+            const encoded = schema.encode(null);
+            const schemaWithConstraint = TlvNullable(TlvString.bound({ minLength: 0 }));
+            expect(schemaWithConstraint.decode(encoded)).equal(null);
+        });
+
+        it("decodes null correctly with constraint", () => {
+            const encoded = schema.encode(null);
+            const schemaWithConstraint = TlvNullable(TlvString.bound({ minLength: 1 }));
+            expect(schemaWithConstraint.decode(encoded)).equal(null);
+        });
+
+        it("decodes zero length string with minlength 0 as empty string", () => {
+            const encoded = schema.encode("");
+            const schemaWithConstraint = TlvNullable(TlvString.bound({ minLength: 0 }));
+            expect(schemaWithConstraint.decode(encoded)).equal("");
+        });
+
+        it("decodes zero length string with constraint as null", () => {
+            const encoded = schema.encode("");
+            const schemaWithConstraint = TlvNullable(TlvString.bound({ minLength: 1 }));
+            expect(schemaWithConstraint.decode(encoded)).equal(null);
+        });
+
+        it("decodes zero length array with minlength 0 as empty array", () => {
+            const encoded = TlvNullable(TlvArray(TlvString)).encode([]);
+            const schemaWithConstraint = TlvNullable(TlvArray(TlvString, { minLength: 0 }));
+            expect(schemaWithConstraint.decode(encoded)).deep.equal([]);
+        });
+
+        it("decodes zero length string with constraint as null", () => {
+            const encoded = TlvNullable(TlvArray(TlvString)).encode([]);
+            const schemaWithConstraint = TlvNullable(TlvArray(TlvString, { minLength: 1 }));
+            expect(schemaWithConstraint.decode(encoded)).equal(null);
+        });
     });
 });
