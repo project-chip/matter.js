@@ -93,13 +93,13 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         const bleTransports = new Set<TransportInterface>();
 
         for (const address of this.owner.state.network.listen) {
-            switch (address.protocol) {
+            switch (address.transport) {
                 case "udp":
                 case "udp4":
                 case "udp6":
                     const udp = await UdpInterface.create(
                         this.owner.env.get(Network),
-                        address.protocol,
+                        address.transport,
                         address.port,
                         address.address,
                     );

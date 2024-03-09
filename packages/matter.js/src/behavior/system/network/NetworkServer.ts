@@ -110,14 +110,14 @@ export class NetworkServer extends NetworkBehavior {
                 throw new ImplementationError("Listen address is not an object");
             }
 
-            let { protocol, port } = addr as Record<string, any>;
+            let { transport, port } = addr as Record<string, any>;
             const { address } = addr as Record<string, any>;
 
-            if (protocol === undefined) {
-                protocol = "udp";
+            if (transport === undefined) {
+                transport = "udp";
             }
 
-            switch (protocol) {
+            switch (transport) {
                 case "ble":
                     if (Ble.enabled) {
                         if (hasBle) {
@@ -126,9 +126,9 @@ export class NetworkServer extends NetworkBehavior {
                             hasBle = true;
                         }
                         if (address !== undefined) {
-                            throw new NotImplementedError("Currently you may not specify HCI ID for BLE transport");
+                            throw new NotImplementedError("Currently you may not specify the BLE transport address");
                         }
-                        listen.push({ protocol, address });
+                        listen.push({ transport: transport, address });
                         this.state.ble = true;
                     } else {
                         disabledBle = true;
@@ -142,11 +142,11 @@ export class NetworkServer extends NetworkBehavior {
                     if (port === undefined) {
                         port = this.state.port;
                     }
-                    listen.push({ protocol, address, port });
+                    listen.push({ transport: transport, address, port });
                     break;
 
                 default:
-                    throw new ImplementationError(`Unknown listen protocol "${protocol}"`);
+                    throw new ImplementationError(`Unknown listen protocol "${transport}"`);
             }
         }
 
@@ -155,13 +155,13 @@ export class NetworkServer extends NetworkBehavior {
             this.state.ble = false;
         } else if (this.state.ble !== false && Ble.enabled) {
             if (!hasBle) {
-                listen.push({ protocol: "ble" });
+                listen.push({ transport: "ble" });
             }
             this.state.ble = true;
         }
 
         if (!hasUdp) {
-            listen.push({ protocol: "udp", port: this.state.port });
+            listen.push({ transport: "udp", port: this.state.port });
         }
 
         return listen;
@@ -173,7 +173,7 @@ export namespace NetworkServer {
      * A UDP listening address.
      */
     export interface UdpAddress {
-        protocol: "udp" | "udp4" | "udp6";
+        transport: "udp" | "udp4" | "udp6";
 
         /**
          * The hostname or IP address.  Leave undefined for all addresses, "0.0.0.0" for all IPv4 addresses, and "::"
@@ -193,7 +193,7 @@ export namespace NetworkServer {
      * TODO - currently only a single BLE transport is supported
      */
     export interface BleAddress {
-        protocol: "ble";
+        transport: "ble";
 
         /**
          * The HCI ID of the bluetooth adapter.
@@ -217,7 +217,7 @@ export namespace NetworkServer {
          *
          * Configurable also with variable "network.listen".  You may configure a single listener using:
          *
-         *   * `network.listen.protocol` either "ble", "udp4", "udp6" or "udp" (default is "udp" for dual IPv4/6)
+         *   * `network.listen.transport` either "ble", "udp4", "udp6" or "udp" (default is "udp" for dual IPv4/6)
          *   * `network.listen.address` the hostname, IP address (default all) or HCI ID (default first) to listen on
          *   * `network.listen.port` the port for UDP listeners (default is 5540)
          *
