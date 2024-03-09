@@ -15,7 +15,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Changed BLE library (Bleno/Noble) to another fork with better support for Windows and UART devices
 * Matter-Core functionality:
   * Adjustment: Cluster versions do not need to be persisted, so remove in legacy and new API
-  * Fix: Added temporary fix for Network Commissioning Cluster to also accept SSIDs as empty string
+  * Fix: Decode Empty nullable data types as null when they have constrains that would require a minimum length
   * Fix: Convert Error type of Network errors and handle in case of subscription failures
 * matter.js API:
   * IMPORTANT: Introduction of new High level API with complete Device type support for Matter 1.1 types, see [migration guide](./docs/MIGRATION_GUIDE_08.md). For now the known API that we had up top 0.7 is still included and fully working and compatible when old imports are used, but called "Legacy" for now. It will be removed in a later version not yet decided.

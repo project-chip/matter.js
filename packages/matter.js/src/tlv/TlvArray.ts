@@ -31,8 +31,8 @@ export type ArrayAsChunked = ArrayChunkData[];
 export class ArraySchema<T> extends TlvSchema<T[]> {
     constructor(
         readonly elementSchema: TlvSchema<T>,
-        private readonly minLength: number = 0,
-        private readonly maxLength: number = 65535,
+        readonly minLength: number = 0,
+        readonly maxLength: number = 65535,
     ) {
         super();
     }
