@@ -122,7 +122,9 @@ export class UdpChannelNode implements UdpChannel {
         return new Promise<void>((resolve, reject) => {
             this.socket.send(data, port, host, error => {
                 if (error !== null) {
-                    reject(error);
+                    const netError = new NetworkError(error.message);
+                    netError.stack = error.stack;
+                    reject(netError);
                     return;
                 }
                 resolve();
