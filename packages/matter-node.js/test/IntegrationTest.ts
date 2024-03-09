@@ -130,15 +130,6 @@ describe("Integration Test", () => {
         const serverStorageManager = new StorageManager(fakeServerStorage);
         await serverStorageManager.initialize();
 
-        // make cluster data version deterministic
-        const nodeContext = serverStorageManager.createContext("0");
-        const cluster16Context = nodeContext.createContext("Cluster-1-6");
-        cluster16Context.set("_clusterDataVersion", 0); // Make sure the onoff attribute has deterministic start version for tests
-        const cluster029Context = nodeContext.createContext("Cluster-0-29");
-        cluster029Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
-        const cluster040Context = nodeContext.createContext("Cluster-0-40");
-        cluster040Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
-
         matterServer = new MatterServer(serverStorageManager, { disableIpv4: true });
 
         commissioningServer = new CommissioningServer({
@@ -551,28 +542,24 @@ describe("Integration Test", () => {
                     clusterId === Descriptor.Cluster.id &&
                     attributeId === Descriptor.Cluster.attributes.serverList.id,
             );
-            assert.deepEqual(descriptorServerListData, {
-                path: {
-                    nodeId: undefined,
-                    endpointId: 0,
-                    clusterId: Descriptor.Cluster.id,
-                    attributeId: Descriptor.Cluster.attributes.serverList.id,
-                    attributeName: "serverList",
-                },
-                value: [
-                    ClusterId(29),
-                    ClusterId(31),
-                    ClusterId(40),
-                    ClusterId(48),
-                    ClusterId(49),
-                    ClusterId(51),
-                    ClusterId(60),
-                    ClusterId(62),
-                    ClusterId(63),
-                ],
-                version: 0,
+            assert.deepEqual(descriptorServerListData?.path, {
+                nodeId: undefined,
+                endpointId: 0,
+                clusterId: Descriptor.Cluster.id,
+                attributeId: Descriptor.Cluster.attributes.serverList.id,
+                attributeName: "serverList",
             });
-
+            assert.deepEqual(descriptorServerListData?.value, [
+                ClusterId(29),
+                ClusterId(31),
+                ClusterId(40),
+                ClusterId(48),
+                ClusterId(49),
+                ClusterId(51),
+                ClusterId(60),
+                ClusterId(62),
+                ClusterId(63),
+            ]);
             assert.equal(
                 response.filter(
                     ({ path: { endpointId, clusterId } }) =>
@@ -586,34 +573,28 @@ describe("Integration Test", () => {
                     clusterId === BasicInformation.Cluster.id &&
                     attributeId === BasicInformation.Cluster.attributes.softwareVersionString.id,
             );
-            assert.deepEqual(softwareVersionStringData, {
-                path: {
-                    nodeId: undefined,
-                    endpointId: 0,
-                    clusterId: BasicInformation.Cluster.id,
-                    attributeId: BasicInformation.Cluster.attributes.softwareVersionString.id,
-                    attributeName: "softwareVersionString",
-                },
-                value: "v1",
-                version: 3,
+            assert.deepEqual(softwareVersionStringData?.path, {
+                nodeId: undefined,
+                endpointId: 0,
+                clusterId: BasicInformation.Cluster.id,
+                attributeId: BasicInformation.Cluster.attributes.softwareVersionString.id,
+                attributeName: "softwareVersionString",
             });
+            assert.deepEqual(softwareVersionStringData?.value, "v1");
             const nodeLabelData = response.find(
                 ({ path: { endpointId, clusterId, attributeId } }) =>
                     endpointId === 0 &&
                     clusterId === BasicInformation.Cluster.id &&
                     attributeId === BasicInformation.Cluster.attributes.nodeLabel.id,
             );
-            assert.deepEqual(nodeLabelData, {
-                path: {
-                    nodeId: undefined,
-                    endpointId: 0,
-                    clusterId: BasicInformation.Cluster.id,
-                    attributeId: BasicInformation.Cluster.attributes.nodeLabel.id,
-                    attributeName: "nodeLabel",
-                },
-                value: "345678",
-                version: 3,
+            assert.deepEqual(nodeLabelData?.path, {
+                nodeId: undefined,
+                endpointId: 0,
+                clusterId: BasicInformation.Cluster.id,
+                attributeId: BasicInformation.Cluster.attributes.nodeLabel.id,
+                attributeName: "nodeLabel",
             });
+            assert.deepEqual(nodeLabelData?.value, "345678");
 
             const onOffData = response.find(
                 ({ path: { endpointId, clusterId, attributeId } }) =>
@@ -621,17 +602,14 @@ describe("Integration Test", () => {
                     clusterId === OnOffCluster.id &&
                     attributeId === OnOffCluster.attributes.onOff.id,
             );
-            assert.deepEqual(onOffData, {
-                path: {
-                    nodeId: undefined,
-                    endpointId: 1,
-                    clusterId: OnOffCluster.id,
-                    attributeId: OnOffCluster.attributes.onOff.id,
-                    attributeName: "onOff",
-                },
-                value: false,
-                version: 0,
+            assert.deepEqual(onOffData?.path, {
+                nodeId: undefined,
+                endpointId: 1,
+                clusterId: OnOffCluster.id,
+                attributeId: OnOffCluster.attributes.onOff.id,
+                attributeName: "onOff",
             });
+            assert.deepEqual(onOffData?.value, false);
         });
 
         it("read events", async () => {
@@ -937,6 +915,21 @@ describe("Integration Test", () => {
             const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onOffClient);
 
+            // gather the current data version
+            const response = await (
+                await node.getInteractionClient()
+            ).getMultipleAttributes({
+                attributes: [
+                    {
+                        endpointId: EndpointNumber(1),
+                        clusterId: OnOffCluster.id,
+                        attributeId: OnOffCluster.attributes.onOff.id,
+                    }, // 1/OnOffCluster/onOff
+                ],
+            });
+            expect(response.length).to.equal(1);
+            const dataVersion = response[0].version;
+
             assert.ok(onOffLightDeviceServer);
             const startTime = Time.nowMs();
 
@@ -954,7 +947,7 @@ describe("Integration Test", () => {
                 },
                 0,
                 5,
-                2,
+                dataVersion,
             );
 
             assert.deepEqual(pushedUpdates, []);
@@ -1200,9 +1193,6 @@ describe("Integration Test", () => {
 
             const onOffValue = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "onOff");
             assert.equal(onOffValue, true);
-
-            const onOffClusterDataVerison = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "_clusterDataVersion");
-            assert.equal(onOffClusterDataVerison, 3);
 
             const storedServerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
             assert.ok(Array.isArray(storedServerResumptionRecords));

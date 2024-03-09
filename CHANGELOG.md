@@ -14,6 +14,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * IMPORTANT: We switch away from re-exporting all matter.js functionality in matter-node.js, so please adjust your imports and make sure that you include matter.js together with matter-node.js in your dependencies in the exact same version!
   * Changed BLE library (Bleno/Noble) to another fork with better support for Windows and UART devices
 * Matter-Core functionality:
+  * Adjustment: Cluster versions do not need to be persisted, so remove in legacy and new API
   * Fix: Added temporary fix for Network Commissioning Cluster to also accept SSIDs as empty string
   * Fix: Convert Error type of Network errors and handle in case of subscription failures
 * matter.js API:
