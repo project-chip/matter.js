@@ -17,6 +17,6 @@ export class DatatypeModel extends ValueModel implements DatatypeElement {
     }
 
     static {
-        Model.constructors[DatatypeElement.Tag] = this;
+        Model.types[DatatypeElement.Tag] = this;
     }
 }

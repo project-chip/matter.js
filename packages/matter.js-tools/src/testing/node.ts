@@ -87,7 +87,7 @@ class Profiler {
     #profiler?: Profilerish;
 
     async start() {
-        this.#profiler = (await import("" + "v8-profiler-next")) as Profilerish;
+        this.#profiler = (await import("" + "v8-profiler-next")).default as Profilerish;
         this.#profiler.setGenerateType(1);
         this.#profiler.startProfiling();
     }

@@ -120,7 +120,6 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
                 // If the name didn't match, try case-insensitive search
                 if (!member) {
-                    // Cast of def to string should be unnecessary here, TS bug?
                     member = this.model.member(
                         model => model.name.toLowerCase() === (defaultValue as string).toLowerCase(),
                     );

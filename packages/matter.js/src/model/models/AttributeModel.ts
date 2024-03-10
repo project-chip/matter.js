@@ -47,7 +47,7 @@ export class AttributeModel extends PropertyModel implements AttributeElement {
     }
 
     static {
-        Model.constructors[AttributeElement.Tag] = this;
+        Model.types[AttributeElement.Tag] = this;
     }
 
     static Tag = AttributeElement.Tag;

@@ -8,6 +8,7 @@ import { Access } from "../aspects/Access.js";
 import { FeatureSet, Mei, Metatype } from "../definitions/index.js";
 import { ClusterElement, Globals } from "../elements/index.js";
 import { AttributeModel } from "./AttributeModel.js";
+import { Children } from "./Children.js";
 import { CommandModel } from "./CommandModel.js";
 import { DatatypeModel } from "./DatatypeModel.js";
 import { EventModel } from "./EventModel.js";
@@ -60,7 +61,7 @@ export class ClusterModel extends Model {
         return this.get(AttributeModel, Globals.FeatureMap.id) ?? new AttributeModel(Globals.FeatureMap);
     }
 
-    override get children(): ClusterModel.Child[] {
+    override get children(): Children<ClusterModel.Child, ClusterElement.Child> {
         return super.children as any;
     }
 
@@ -80,8 +81,10 @@ export class ClusterModel extends Model {
         super(definition);
     }
 
+    static Tag = ClusterElement.Tag;
+
     static {
-        Model.constructors[ClusterElement.Tag] = this;
+        Model.types[this.Tag] = this;
     }
 }
 

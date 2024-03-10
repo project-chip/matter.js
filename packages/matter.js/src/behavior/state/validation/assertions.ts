@@ -33,7 +33,7 @@ export function assertNumeric(value: Val, path: SchemaErrorPath): asserts value 
     if (typeof value === "number" || typeof value === "bigint") {
         return;
     }
-    throw new DatatypeError(path, "number a number or bigint", value);
+    throw new DatatypeError(path, "a number or bigint", value);
 }
 
 export function assertString(value: Val, path: SchemaErrorPath): asserts value is string {

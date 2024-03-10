@@ -5,6 +5,7 @@
  */
 
 import { FabricElement, NodeElement } from "../elements/index.js";
+import { Children } from "./Children.js";
 import { Model } from "./Model.js";
 import { NodeModel } from "./NodeModel.js";
 
@@ -16,7 +17,7 @@ export class FabricModel extends Model implements FabricElement {
         return this.children;
     }
 
-    override get children(): NodeModel[] {
+    override get children(): Children<NodeModel, NodeElement> {
         return super.children as any;
     }
 
@@ -29,6 +30,6 @@ export class FabricModel extends Model implements FabricElement {
     }
 
     static {
-        Model.constructors[FabricElement.Tag] = this;
+        Model.types[FabricElement.Tag] = this;
     }
 }

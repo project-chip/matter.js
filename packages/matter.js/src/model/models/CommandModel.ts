@@ -41,7 +41,7 @@ export class CommandModel extends ValueModel implements CommandElement {
     }
 
     static {
-        Model.constructors[CommandElement.Tag] = this;
+        Model.types[CommandElement.Tag] = this;
     }
 
     static Tag = CommandElement.Tag;
