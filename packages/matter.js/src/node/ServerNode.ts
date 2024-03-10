@@ -189,8 +189,8 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         await this.#mutex;
     }
 
-    advertiseNow() {
-        this.act(agent => agent.get(NetworkServer).advertiseNow());
+    async advertiseNow() {
+        await this.act(agent => agent.get(NetworkServer).advertiseNow());
     }
 
     protected override async initialize(agent: Agent.Instance<T>) {
