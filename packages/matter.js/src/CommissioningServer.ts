@@ -1039,19 +1039,7 @@ class CommissioningServerClusterDatasource implements ClusterDatasource {
         this.#clusterDescription = `cluster ${cluster.name} (${cluster.id})`;
         this.#storage = storage = storage.createContext(`Cluster-${endpoint.number}-${cluster.id}`);
 
-        const version = storage.get<number>("_clusterDataVersion", cluster.datasource?.version ?? -1);
-        if (version === -1) {
-            this.#version = Crypto.getRandomUInt32();
-        } else {
-            this.#version = version;
-        }
-
-        logger.debug(
-            `${storage.has("_clusterDataVersion") ? "Restore" : "Set"} cluster data version ${this.#version} in ${
-                this.#clusterDescription
-            }`,
-        );
-        storage.set("_clusterDataVersion", this.#version);
+        this.#version = cluster.datasource?.version ?? Crypto.getRandomUInt32();
 
         for (const attributeName in cluster.attributes) {
             const attribute = cluster.attributes[attributeName];
@@ -1088,8 +1076,7 @@ class CommissioningServerClusterDatasource implements ClusterDatasource {
         if (this.#version === 0xffffffff) {
             this.#version = -1;
         }
-        this.#storage?.set("_clusterDataVersion", ++this.#version);
-        return this.#version;
+        return ++this.#version;
     }
 
     changed(attributeName: string, value: SupportedStorageTypes) {
