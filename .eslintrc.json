@@ -118,7 +118,11 @@
         "@typescript-eslint/unbound-method": "off",
 
         // Umm, this mattered for IE <= 8??
-        "no-ex-assign": "off"
+        "no-ex-assign": "off",
+
+        // Always of dubious value, this rule is buggy as of typescript-eslint 7.2.0 and TS 5.4.2 (works w/ TS 5.3.3
+        // though)
+        "@typescript-eslint/no-redundant-type-constituents": "off"
     },
     "settings": {
         "import/extensions": [".ts"],

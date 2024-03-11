@@ -14,11 +14,11 @@ import type { ClusterOf } from "./ClusterBehaviorUtil.js";
 /**
  * Event instance type for ClusterBehaviors.
  */
-export type ClusterEvents<C extends ClusterType, B extends Behavior.Type> =
+export type ClusterEvents<ClusterT extends ClusterType, BaseT extends Behavior.Type> =
     // Keep observables *not* supplied by the old cluster
-    Omit<InstanceType<B["Events"]>, keyof ClusterEvents.Properties<ClusterOf<B>>> &
+    Omit<InstanceType<BaseT["Events"]>, keyof ClusterEvents.Properties<ClusterOf<BaseT>>> &
         // Add observables supplied by the old cluster
-        ClusterEvents.Properties<C>;
+        ClusterEvents.Properties<ClusterT>;
 
 export namespace ClusterEvents {
     export type Type<C extends ClusterType, B extends Behavior.Type> = {

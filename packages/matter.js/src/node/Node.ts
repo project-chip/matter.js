@@ -117,7 +117,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
 }
 
 export namespace Node {
-    export interface NodeOptions extends Endpoint.PartOptions {
+    export interface NodeOptions extends Endpoint.EndpointOptions {
         environment?: Environment;
     }
 

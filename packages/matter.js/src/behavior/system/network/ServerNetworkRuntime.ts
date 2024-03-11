@@ -16,7 +16,7 @@ import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
 import { Network } from "../../../net/Network.js";
 import { UdpInterface } from "../../../net/UdpInterface.js";
-import type { ServerNode } from "../../../node/ServerNode.js";
+import { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
 import { ServerStore } from "../../../node/server/storage/ServerStore.js";
 import { SessionManager } from "../../../session/SessionManager.js";
