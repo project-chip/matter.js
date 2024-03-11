@@ -100,11 +100,11 @@ export class CommissioningBehavior extends Behavior {
         const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
         const commissioned = !!fabrics.length;
         if (fabricAction === FabricAction.Removed) {
-            delete this.state.commissionedFabrics[fabricIndex];
+            delete this.state.fabrics[fabricIndex];
         } else {
             const fabric = fabrics.find(fabric => fabric.fabricIndex === fabricIndex);
             if (fabric !== undefined) {
-                this.state.commissionedFabrics[fabricIndex] = {
+                this.state.fabrics[fabricIndex] = {
                     fabricIndex: fabric.fabricIndex,
                     fabricId: fabric.fabricId,
                     nodeId: fabric.nodeId,
@@ -130,7 +130,7 @@ export class CommissioningBehavior extends Behavior {
             }
         }
 
-        this.events.commissionedFabricsChanged.emit(fabricIndex, fabricAction);
+        this.events.fabricsChanged.emit(fabricIndex, fabricAction);
     }
 
     #monitorFailsafe(failsafe: FailsafeContext) {
@@ -231,14 +231,12 @@ export class CommissioningBehavior extends Behavior {
         if (!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics) {
             this.initiateCommissioning();
         } else {
-            const commissionedFabrics: Record<FabricIndex, ExposedFabricInformation> = {};
+            const fabrics: Record<FabricIndex, ExposedFabricInformation> = {};
             this.endpoint.env
                 .get(FabricManager)
                 .getFabrics()
-                .forEach(
-                    ({ fabricIndex, externalInformation }) => (commissionedFabrics[fabricIndex] = externalInformation),
-                );
-            this.state.commissionedFabrics = commissionedFabrics;
+                .forEach(({ fabricIndex, externalInformation }) => (fabrics[fabricIndex] = externalInformation));
+            this.state.fabrics = fabrics;
         }
     }
 
@@ -260,7 +258,7 @@ export namespace CommissioningBehavior {
 
     export class State implements CommissioningOptions {
         commissioned = false;
-        commissionedFabrics: Record<FabricIndex, ExposedFabricInformation> = {};
+        fabrics: Record<FabricIndex, ExposedFabricInformation> = {};
         passcode = -1;
         discriminator = -1;
         flowType = CommissioningFlowType.Standard;
@@ -279,6 +277,6 @@ export namespace CommissioningBehavior {
     export class Events extends EventEmitter {
         commissioned = Observable<[session: ActionContext]>();
         decommissioned = Observable<[session: ActionContext]>();
-        commissionedFabricsChanged = Observable<[fabricIndex: FabricIndex, action: FabricAction]>();
+        fabricsChanged = Observable<[fabricIndex: FabricIndex, action: FabricAction]>();
     }
 }
