@@ -10,7 +10,8 @@ import { ImplementationError, MatterFlowError } from "../../../common/MatterErro
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import type { EndpointServer } from "../../../endpoint/EndpointServer.js";
-import { FabricAction } from "../../../fabric/FabricManager.js";
+import { ExposedFabricInformation } from "../../../fabric/Fabric.js";
+import { FabricAction, FabricManager } from "../../../fabric/FabricManager.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { DatatypeModel, FieldElement } from "../../../model/index.js";
@@ -96,8 +97,23 @@ export class CommissioningBehavior extends Behavior {
             }
         }
 
-        // We get the real state of Fabrics from FabricManager directly - the mirrored Fabrics state could be not yet uptodate
-        const commissioned = !!this.agent.get(OperationalCredentialsBehavior).state.fabrics.length; //!!this.endpoint.env.get(FabricManager).getFabrics().length;
+        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        const commissioned = !!fabrics.length;
+        if (fabricAction === FabricAction.Removed) {
+            delete this.state.fabrics[fabricIndex];
+        } else {
+            const fabric = fabrics.find(fabric => fabric.fabricIndex === fabricIndex);
+            if (fabric !== undefined) {
+                this.state.fabrics[fabricIndex] = {
+                    fabricIndex: fabric.fabricIndex,
+                    fabricId: fabric.fabricId,
+                    nodeId: fabric.nodeId,
+                    rootNodeId: fabric.rootNodeId,
+                    rootVendorId: fabric.rootVendorId,
+                    label: fabric.label,
+                };
+            }
+        }
 
         if (commissioned !== this.state.commissioned) {
             this.state.commissioned = commissioned;
@@ -114,7 +130,7 @@ export class CommissioningBehavior extends Behavior {
             }
         }
 
-        this.events.commissionedFabricsChanged.emit(fabricIndex, fabricAction);
+        this.events.fabricsChanged.emit(fabricIndex, fabricAction);
     }
 
     #monitorFailsafe(failsafe: FailsafeContext) {
@@ -214,6 +230,13 @@ export class CommissioningBehavior extends Behavior {
     #nodeOnline() {
         if (!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics) {
             this.initiateCommissioning();
+        } else {
+            const fabrics: Record<FabricIndex, ExposedFabricInformation> = {};
+            this.endpoint.env
+                .get(FabricManager)
+                .getFabrics()
+                .forEach(({ fabricIndex, externalInformation }) => (fabrics[fabricIndex] = externalInformation));
+            this.state.fabrics = fabrics;
         }
     }
 
@@ -235,6 +258,7 @@ export namespace CommissioningBehavior {
 
     export class State implements CommissioningOptions {
         commissioned = false;
+        fabrics: Record<FabricIndex, ExposedFabricInformation> = {};
         passcode = -1;
         discriminator = -1;
         flowType = CommissioningFlowType.Standard;
@@ -253,6 +277,6 @@ export namespace CommissioningBehavior {
     export class Events extends EventEmitter {
         commissioned = Observable<[session: ActionContext]>();
         decommissioned = Observable<[session: ActionContext]>();
-        commissionedFabricsChanged = Observable<[fabricIndex: FabricIndex, action: FabricAction]>();
+        fabricsChanged = Observable<[fabricIndex: FabricIndex, action: FabricAction]>();
     }
 }
