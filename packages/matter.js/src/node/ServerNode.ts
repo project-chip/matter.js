@@ -189,6 +189,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         await this.#mutex;
     }
 
+    async advertiseNow() {
+        await this.act(agent => agent.get(NetworkServer).advertiseNow());
+    }
+
     protected override async initialize(agent: Agent.Instance<T>) {
         // Load the environment with node-specific services
         const serverStore = await ServerStore.create(this.env, this.id);

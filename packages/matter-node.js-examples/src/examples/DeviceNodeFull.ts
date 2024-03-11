@@ -323,7 +323,7 @@ server.lifecycle.offline.on(() => console.log("Server is offline"));
  * This event is triggered when a fabric is added, removed or updated on the device. Use this if more granular
  * information is needed.
  */
-server.events.commissioning.commissionedFabricsChanged.on((fabricIndex, fabricAction) => {
+server.events.commissioning.fabricsChanged.on((fabricIndex, fabricAction) => {
     let action = "";
     switch (fabricAction) {
         case FabricAction.Added:
@@ -337,7 +337,7 @@ server.events.commissioning.commissionedFabricsChanged.on((fabricIndex, fabricAc
             break;
     }
     console.log(`Commissioned Fabrics changed event (${action}) for ${fabricIndex} triggered`);
-    console.log(server.state.operationalCredentials.fabrics);
+    console.log(server.state.commissioning.fabrics[fabricIndex]);
 });
 
 /**
