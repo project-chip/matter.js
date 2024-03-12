@@ -8,6 +8,7 @@ import { Globals, MatterElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
 import { Matter } from "../standard/index.js";
 import { AttributeModel } from "./AttributeModel.js";
+import { Children } from "./Children.js";
 import { ClusterModel } from "./ClusterModel.js";
 import { DatatypeModel } from "./DatatypeModel.js";
 import { DeviceTypeModel } from "./DeviceTypeModel.js";
@@ -58,7 +59,7 @@ export class MatterModel extends Model implements MatterElement {
         return this.all(FabricModel);
     }
 
-    override get children(): MatterModel.Child[] {
+    override get children(): Children<MatterModel.Child, MatterElement.Child> {
         return super.children as any;
     }
 
@@ -72,7 +73,7 @@ export class MatterModel extends Model implements MatterElement {
     }
 
     static {
-        Model.constructors[MatterElement.Tag] = this;
+        Model.types[MatterElement.Tag] = this;
     }
 }
 

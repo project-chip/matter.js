@@ -12,9 +12,10 @@ import { Model } from "./Model.js";
 // These are circular dependencies so just to be safe we only import the
 // types.  We also need the class, though, at runtime.  So we use the
 // references in the Model.constructors factory pool.
-import { DefaultValue } from "../logic/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
+import { DefaultValue } from "../logic/index.js";
 import { Aspects } from "./Aspects.js";
+import { Children } from "./Children.js";
 import { type FieldModel } from "./FieldModel.js";
 
 const CONSTRAINT: unique symbol = Symbol("constraint");
@@ -32,7 +33,7 @@ export abstract class ValueModel extends Model implements ValueElement {
     metatype?: Metatype;
     override isType? = true;
 
-    override get children(): FieldModel[] {
+    override get children(): Children<FieldModel, FieldElement> {
         return super.children as any;
     }
 
@@ -297,7 +298,11 @@ export abstract class ValueModel extends Model implements ValueElement {
         const match = this.type?.match(/^list\[(.*)\]$/);
         if (match) {
             this.type = "list";
-            this.children.push(new Model.constructors.field({ name: "entry", type: match[1] }) as FieldModel);
+            this.children.push(new Model.types.field({ name: "entry", type: match[1] }) as FieldModel);
+        }
+
+        if (definition instanceof Model) {
+            Aspects.cloneAspects(definition, this, [CONSTRAINT, CONFORMANCE, ACCESS, QUALITY]);
         }
     }
 }

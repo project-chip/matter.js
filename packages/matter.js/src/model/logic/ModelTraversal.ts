@@ -8,6 +8,7 @@ import { InternalError } from "../../common/MatterError.js";
 import { Access, Aspect, Constraint } from "../aspects/index.js";
 import { ElementTag, FieldValue, Metatype } from "../definitions/index.js";
 import { AnyElement, Globals } from "../elements/index.js";
+import { Children } from "../models/Children.js";
 import { type CommandModel, type Model, type ValueModel } from "../models/index.js";
 
 const OPERATION_DEPTH_LIMIT = 20;
@@ -102,7 +103,7 @@ export class ModelTraversal {
                 }
 
                 // If I override a field my type is the same as the overridden field
-                const overridden = this.findLocal(ancestor, name, [model.tag]);
+                const overridden = ancestor.children.select(name, [model.tag], this.dismissed);
                 if (overridden?.type) {
                     result = overridden.type;
                     return false;
@@ -233,12 +234,12 @@ export class ModelTraversal {
         this.operationWithDismissal(model, () => {
             this.visitInheritance(this.findBase(parentOf(model)), parent => {
                 if (model.id !== undefined) {
-                    shadow = this.findLocal(parent, model.id, [model.tag]);
+                    shadow = parent.children.select(model.id, [model.tag], this.dismissed);
                     if (shadow) {
                         return false;
                     }
                 }
-                shadow = this.findLocal(parent, model.name, [model.tag]);
+                shadow = parent.children.select(model.name, [model.tag], this.dismissed);
                 if (shadow) {
                     return false;
                 }
@@ -371,14 +372,10 @@ export class ModelTraversal {
     /**
      * Search inherited scope for a named member.
      */
-    findMember(
-        scope: Model | undefined,
-        key: ModelTraversal.ElementSelector,
-        allowedTags: ElementTag[],
-    ): Model | undefined {
+    findMember(scope: Model | undefined, key: Children.Selector, allowedTags: ElementTag[]): Model | undefined {
         return this.operation(() => {
             while (scope) {
-                const result = this.findLocal(scope, key, allowedTags);
+                const result = scope.children.select(key, allowedTags, this.dismissed);
                 if (result) {
                     return result;
                 }
@@ -441,7 +438,7 @@ export class ModelTraversal {
             const queue = Array<Model>(scope);
             for (scope = queue.shift(); scope; scope = queue.shift()) {
                 if (scope.isTypeScope) {
-                    const result = this.findLocal(scope, name, [tag]);
+                    const result = scope.children.select(name, [tag], this.dismissed);
                     if (result) {
                         return result;
                     }
@@ -511,7 +508,7 @@ export class ModelTraversal {
     /**
      * Find an owning model of a specific type.
      */
-    findOwner<T extends Model>(constructor: Model.Constructor<T>, model: Model | undefined): T | undefined {
+    findOwner<T extends Model>(constructor: Model.Type<T>, model: Model | undefined): T | undefined {
         const parent = parentOf(model);
 
         if (!parent || parent instanceof constructor) {
@@ -575,17 +572,6 @@ export class ModelTraversal {
     }
 
     /**
-     * Search for a direct child by name.
-     */
-    private findLocal(scope: Model, key: ModelTraversal.ElementSelector, allowedTags: ElementTag[]) {
-        for (const c of scope.children) {
-            if (c.is(key) && allowedTags.indexOf(c.tag) !== -1 && !this.dismissed?.has(c)) {
-                return c;
-            }
-        }
-    }
-
-    /**
      * If a model is not owned by a MatterModel, global resolution won't work.
      * This model acts as a fallback to work around this.
      */
@@ -597,8 +583,4 @@ function parentOf(model?: Model) {
         return ModelTraversal.defaultRoot;
     }
     return model?.parent;
-}
-
-export namespace ModelTraversal {
-    export type ElementSelector = string | number | ((model: Model) => boolean);
 }

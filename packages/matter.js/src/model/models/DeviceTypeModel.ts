@@ -6,6 +6,7 @@
 
 import { Mei } from "../definitions/index.js";
 import { DeviceTypeElement, FieldElement, RequirementElement } from "../elements/index.js";
+import { Children } from "./Children.js";
 import { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 import { RequirementModel } from "./RequirementModel.js";
@@ -25,7 +26,7 @@ export class DeviceTypeModel extends Model implements DeviceTypeElement {
         );
     }
 
-    override get children(): (RequirementModel | FieldModel)[] {
+    override get children(): Children<RequirementModel | FieldModel, RequirementElement | FieldElement> {
         return super.children as any;
     }
 
@@ -38,6 +39,6 @@ export class DeviceTypeModel extends Model implements DeviceTypeElement {
     }
 
     static {
-        Model.constructors[DeviceTypeElement.Tag] = this;
+        Model.types[DeviceTypeElement.Tag] = this;
     }
 }

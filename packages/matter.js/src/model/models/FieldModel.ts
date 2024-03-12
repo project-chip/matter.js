@@ -46,6 +46,6 @@ export class FieldModel extends PropertyModel implements FieldElement {
     }
 
     static {
-        Model.constructors[FieldElement.Tag] = this;
+        Model.types[FieldElement.Tag] = this;
     }
 }

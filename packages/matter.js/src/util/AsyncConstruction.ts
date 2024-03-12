@@ -253,12 +253,12 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                     throw crashedError();
                 };
 
-                initialization = initialization.then(initSuccess, initFailure);
+                initialization = Promise.resolve(initialization.then(initSuccess, initFailure));
 
                 if (promise) {
                     void initialization.then(placeholderResolve, placeholderReject);
                 } else {
-                    promise = Promise.resolve(initialization);
+                    promise = initialization;
                 }
             } else {
                 ready = true;
@@ -357,9 +357,17 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 }
             };
 
-            // Do not catch this "promise" because we catch hook errors and other errors are handled elsewhere or are
-            // uncuaght
-            void this.then(onSuccess);
+            this.then(onSuccess).catch(e => {
+                // Failure should result in a CrashedDependencyError which simply means initialization failed.  The
+                // actual error is logged so we can safely ignore
+                if (e instanceof CrashedDependencyError) {
+                    return;
+                }
+
+                // If the error was not a CrashedDependencyError then it is unexpected.  We rethrow which will result in
+                // the process exiting with an unexpected error
+                throw e;
+            });
         },
 
         onError(actor: (error: Error) => MaybePromise<void>) {

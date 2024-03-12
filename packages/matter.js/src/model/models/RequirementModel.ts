@@ -7,6 +7,7 @@
 import { Access, Aspect, Conformance, Constraint, Quality } from "../aspects/index.js";
 import { FieldElement, RequirementElement } from "../elements/index.js";
 import { Aspects } from "./Aspects.js";
+import { Children } from "./Children.js";
 import { FieldModel } from "./FieldModel.js";
 import { Model } from "./Model.js";
 
@@ -24,7 +25,7 @@ export class RequirementModel extends Model implements RequirementElement {
         return `${this.id ?? this.name}:${this.element}`;
     }
 
-    override get children(): (RequirementModel | FieldModel)[] {
+    override get children(): Children<RequirementModel | FieldModel, RequirementElement | FieldElement> {
         return super.children as any;
     }
 
@@ -61,7 +62,7 @@ export class RequirementModel extends Model implements RequirementElement {
     }
 
     static {
-        Model.constructors[RequirementElement.Tag] = this;
+        Model.types[RequirementElement.Tag] = this;
     }
 
     get requirements() {

@@ -20,6 +20,15 @@ export namespace Aspects {
         }
     }
 
+    export function cloneAspects(source: Model, dest: Model, symbols: symbol[]) {
+        for (const symbol of symbols) {
+            const aspect = (source as any)[symbol];
+            if (aspect !== undefined) {
+                (dest as any)[symbol] = aspect;
+            }
+        }
+    }
+
     export function getEffectiveAspect<T>(model: Model, symbol: symbol, constructor: new (definition: any) => T) {
         const aspect = new ModelTraversal().findAspect(model, symbol) as T | undefined;
         if (aspect) {
