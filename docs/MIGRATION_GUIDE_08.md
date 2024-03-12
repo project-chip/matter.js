@@ -41,6 +41,7 @@ In fact this is all what they have in common, so the differences are:
 -   Basic configuration can be provided via a config file, CLI parameters or also environment variables. Some defined configuration keys are used by the base environment or the Node.js environment (e.g. MDNS network interface and such), but also custom configuration can be added and access from within every place in the code by accessing the environment. So this also acts as central place to share configuration for the device implementation. Some variables and their usage is documented in the [Examples Readme](../packages/matter-node.js-examples/README.md). Else check the [Environment.ts](../packages/matter.js/src/environment/Environment.ts) and [NodeJsEnvironment.ts](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts).
 -   The "ProcessManager" of the environment will, in case of the Node.js environment, also register Process signal handlers to handle Shutdown (SIGINT, SIGTERM, exit) or to trigger logging diagnostic data (SIGUSR2). For other environments this needs to be implemented accordingly.
 -   The environment adds the concept of Workers that can execute tasks/jobs/logic and these workers are used to run Nodes and finish when they are ended. With this Matter Servers (old name CommissioningServer)/Server Nodes (new) are registered on the Environment as workers. The ServerNode (see below) has convenient methods to do that registration, so these Workers are ideally encapsulated and are not needed be used directly the developer, but could for own workloads. The Workers are all disposed/ended when the Environment is disposed.
+-    Port numbers that were optionally managed by the MatterServer are no longer managed and so the application needs to take care itself!
 
 This Environment component even more simplifies to build devices by making sure base components are handled centrally for all things needed.
 
@@ -302,7 +303,7 @@ These events will not trigger if the node gets added to another controller. If y
  * This event is triggered when a fabric is added, removed or updated on the device. Use this if more granular
  * information is needed.
  */
-server.events.commissioning.commissionedFabricsChanged.on((fabricIndex, fabricAction) => {
+server.events.commissioning.fabricsChanged.on((fabricIndex, fabricAction) => {
     let action = "";
     switch (fabricAction) {
         case FabricAction.Added:
@@ -316,7 +317,7 @@ server.events.commissioning.commissionedFabricsChanged.on((fabricIndex, fabricAc
             break;
     }
     console.log(`Commissioned Fabrics changed event (${action}) for ${fabricIndex} triggered`);
-    console.log(server.state.operationalCredentials.fabrics);
+    console.log(server.state.commissioning.fabrics[fabricIndex]);
 });
 ```
 

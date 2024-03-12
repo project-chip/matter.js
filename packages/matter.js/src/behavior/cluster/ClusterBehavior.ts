@@ -71,11 +71,6 @@ export class ClusterBehavior extends Behavior {
     static override readonly early = true;
 
     /**
-     * Cluster data must be versioned.
-     */
-    static override readonly versioning = true;
-
-    /**
      * Keep networking alive until I'm destroyed.
      */
     static override readonly dependencies = [NetworkBehavior];
@@ -204,7 +199,6 @@ export namespace ClusterBehavior {
 
         readonly schema?: Schema;
         readonly early: boolean;
-        readonly versioning: boolean;
         readonly defaults: ClusterState.Type<C, B>;
         readonly supervisor: RootSupervisor;
         readonly dependencies?: Iterable<Behavior.Type>;

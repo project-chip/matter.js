@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js",
-    "version": "0.8.0-alpha.1-20240308-033110a3",
+    "version": "0.8.0-alpha.0-20240311-6a811d05",
     "description": "Matter protocol in pure js",
     "keywords": [
         "iot",
@@ -37,7 +37,7 @@
         "elliptic": "^6.5.5"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.8.0-alpha.1-20240308-033110a3",
+        "@project-chip/matter.js-tools": "0.8.0-alpha.0-20240311-6a811d05",
         "@types/bn.js": "^5.1.5",
         "@types/chai": "^4.3.12",
         "@types/elliptic": "^6.4.18",
@@ -69,6 +69,36 @@
             }
         },
         "./package.json": "./package.json",
+        "./behaviors/*": {
+            "import": {
+                "types": "./dist/esm/behavior/definitions/*/export.d.ts",
+                "default": "./dist/esm/behavior/definitions/*/export.js"
+            },
+            "require": {
+                "types": "./dist/cjs/behavior/definitions/*/export.d.ts",
+                "default": "./dist/cjs/behavior/definitions/*/export.js"
+            }
+        },
+        "./devices/*": {
+            "import": {
+                "types": "./dist/esm/endpoint/definitions/device/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/device/*.js"
+            },
+            "require": {
+                "types": "./dist/cjs/endpoint/definitions/device/*.d.ts",
+                "default": "./dist/cjs/endpoint/definitions/device/*.js"
+            }
+        },
+        "./endpoints/*": {
+            "import": {
+                "types": "./dist/esm/endpoint/definitions/system/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/system/*.js"
+            },
+            "require": {
+                "types": "./dist/cjs/endpoint/definitions/system/*.d.ts",
+                "default": "./dist/cjs/endpoint/definitions/system/*.js"
+            }
+        },
         "./interaction": {
             "import": {
                 "types": "./dist/esm/protocol/interaction/export.d.ts",
@@ -99,36 +129,6 @@
                 "default": "./dist/cjs/protocol/securechannel/export.js"
             }
         },
-        "./behaviors/*": {
-            "import": {
-                "types": "./dist/esm/behavior/definitions/*/export.d.ts",
-                "default": "./dist/esm/behavior/definitions/*/export.js"
-            },
-            "require": {
-                "types": "./dist/cjs/behavior/definitions/*/export.d.ts",
-                "default": "./dist/cjs/behavior/definitions/*/export.js"
-            }
-        },
-        "./devices/*": {
-            "import": {
-                "types": "./dist/esm/endpoint/definitions/device/*.d.ts",
-                "default": "./dist/esm/endpoint/definitions/device/*.js"
-            },
-            "require": {
-                "types": "./dist/esm/endpoint/definitions/device/*.d.ts",
-                "default": "./dist/esm/endpoint/definitions/device/*.js"
-            }
-        },
-        "./endpoints/*": {
-            "import": {
-                "types": "./dist/esm/endpoint/definitions/system/*.d.ts",
-                "default": "./dist/esm/endpoint/definitions/system/*.js"
-            },
-            "require": {
-                "types": "./dist/esm/endpoint/definitions/system/*.d.ts",
-                "default": "./dist/esm/endpoint/definitions/system/*.js"
-            }
-        },
         "./*": {
             "import": {
                 "types": "./dist/esm/*/export.d.ts",
@@ -151,6 +151,15 @@
             ],
             "securechannel": [
                 "/dist/cjs/protocol/securechannel/export.d.ts"
+            ],
+            "behaviors/*": [
+                "/dist/cjs/behavior/definitions/*/export.d.ts"
+            ],
+            "devices/*": [
+                "/dist/cjs/endpoint/definitions/device/*.d.ts"
+            ],
+            "endpoints/*": [
+                "/dist/cjs/endpoint/definitions/system/*.d.ts"
             ],
             ".": [
                 "/dist/cjs/export.d.ts"

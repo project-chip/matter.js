@@ -74,11 +74,6 @@ export abstract class Behavior {
     static readonly early: boolean = false;
 
     /**
-     * This flag enables persistent versioning of state data.
-     */
-    static readonly versioning: boolean = false;
-
-    /**
      * The agent that owns the behavior.
      */
     get agent() {
@@ -332,7 +327,6 @@ export namespace Behavior {
 
         readonly schema?: Schema;
         readonly early: boolean;
-        readonly versioning: boolean;
         readonly supervisor: RootSupervisor;
         readonly dependencies?: Iterable<Behavior.Type>;
         readonly State: new () => {};

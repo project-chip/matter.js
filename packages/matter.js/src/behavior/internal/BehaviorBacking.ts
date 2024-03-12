@@ -160,7 +160,6 @@ export abstract class BehaviorBacking {
             events: this.events as unknown as Datasource.Events,
             defaults: this.#endpoint.behaviors.defaultsFor(this.type),
             store: this.store,
-            versioning: this.type.versioning,
             owner: this.#endpoint,
         };
     }

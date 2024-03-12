@@ -107,7 +107,10 @@ describe("DescriptorServer", () => {
 
         await child.close();
 
-        await parent.events.descriptor.partsList$Change;
+        if (parent.state.descriptor.partsList.length) {
+            await parent.events.descriptor.partsList$Change;
+        }
+        expect(parent.state.descriptor.partsList.length).equals(0);
 
         expect(partsState.partsList).deep.equals([]);
     });
