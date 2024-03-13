@@ -383,10 +383,3 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 The devices itself and functionality are at least equal - if not better with the new API because we also did some fixes that were not in the 7.7.x versions.
 But most important is that the storage structure has changed between legacy and New API - this means that data are stored in a different way and so a device commissioned with the Legacy API will not work with the new API. You need to delete and recommission the device when migrating!
 
-## TOPICS/DISCUSSIONS/TODOs:
--   (A) Make matter.js peerDep? - Ingo
--   (B) Missing: multiple nodes duplicate port check missing
--   (B) Have BLE package register itself when included - Greg
--   Discussion: async store?
--   Later: Generator options for custom clusters into own projects
--   Later: Collect and Expose Code coverage, ideally including chip tests
