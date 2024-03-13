@@ -46,7 +46,7 @@ import { ProcessManager } from "./ProcessManager.js";
  * * `trace.enable` - Enable writing a trace file
  * * `storage.path` - Where to store storage files, Default: "path.root"
  * * `storage.clear` - Clear storage on start? Default: false
- * * `runtime.signals` - By default register SIGINT and SUGUSR2 (diag) handlers, set to false if not wanted
+ * * `runtime.signals` - By default register SIGINT and SIGUSR2 (diag) handlers, set to false if not wanted
  * * `runtime.exitcode` - by default we set the process.exitcode to 0 (ok) or 1 (crash), set to false if not wanted
  */
 export function NodeJsEnvironment() {

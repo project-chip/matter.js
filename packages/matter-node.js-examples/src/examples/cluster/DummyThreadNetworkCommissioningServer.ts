@@ -21,7 +21,7 @@ import { ByteArray } from "@project-chip/matter.js/util";
 const firstNetworkId = new ByteArray(32);
 
 /**
- * This represents a Dummy version of a Wifi Network Commissioning Cluster Server without real Wifi related logic, beside
+ * This represents a Dummy version of a Thread Network Commissioning Cluster Server without real thread related logic, beside
  * returning some values provided as CLI parameters. This dummy implementation is only there for tests/as showcase for BLE
  * commissioning of a device.
  */
@@ -64,7 +64,7 @@ export class DummyThreadNetworkCommissioningServer extends NetworkCommissioningB
 
     override addOrUpdateThreadNetwork({ operationalDataset, breadcrumb }: AddOrUpdateThreadNetworkRequest) {
         console.log(
-            `---> addOrUpdateWiFiNetwork called on NetworkCommissioning cluster: ${operationalDataset.toHex()} ${breadcrumb}`,
+            `---> addOrUpdateThreadNetwork called on NetworkCommissioning cluster: ${operationalDataset.toHex()} ${breadcrumb}`,
         );
 
         this.session.context.assertFailSafeArmed("Failsafe timer needs to be armed to add or update networks.");

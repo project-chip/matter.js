@@ -21,6 +21,9 @@ Matter.js contains several examples to show how devices are built that also can 
 These examples were also adjusted and exist for the legacy API (\*Legacy.ts) as well as the new API. This can be used
 too to see the differences between the APIs.
 
+## TypeScript relevant settings
+Beside the TS module resolution settings already mentioned in the [matter.js README.md](../packages/matter.js/README.md), the new API also requires to use at least `"strictNullChecks": true` or better for code quality `"strict": true` to make sure that all types are correctly determined.
+
 ## Components
 
 The following sections shows the legacy and matching new components and tries to show the differences and what they
@@ -352,6 +355,22 @@ server.events.sessions.subscriptionsChanged.on(session => console.log(`Session s
 ```
 
 With `server.state.sessions.sessions` you can get a list of all currently active sessions including the relevant information.
+
+### Can I add Clusters dynamically to an endpoint also after creation?
+Yes also this is possible. You can add clusters to an endpoint also after creation. This is done by the `behaviors.require` method of the endpoint.
+
+This example dynamically adds a BridgedDeviceBasicInformation cluster to an endpoint, to dynamically allow the endpoint to be added to a bridge. The second parameter contains the default values for the cluster state of the added cluster.
+This do not
+
+```javascript
+endpoint.behaviors.require(BridgedDeviceBasicInformationServer, {
+    nodeLabel: name,
+    productName: name,
+    productLabel: name,
+    uniqueId: this.devicesOptions[i].uuid[i].replace(/-/g, ''),
+    reachable: true,
+});
+```
 
 ### More options?
 
