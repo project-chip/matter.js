@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js",
-    "version": "0.8.0-alpha.0-20240313-a06243dc",
+    "version": "0.8.0-alpha.0-20240314-ed7b831b",
     "description": "Matter protocol in pure js",
     "keywords": [
         "iot",
@@ -37,7 +37,7 @@
         "elliptic": "^6.5.5"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.8.0-alpha.0-20240313-a06243dc",
+        "@project-chip/matter.js-tools": "0.8.0-alpha.0-20240314-ed7b831b",
         "@types/bn.js": "^5.1.5",
         "@types/chai": "^4.3.12",
         "@types/elliptic": "^6.4.18",
