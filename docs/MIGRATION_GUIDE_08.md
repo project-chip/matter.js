@@ -21,6 +21,9 @@ Matter.js contains several examples to show how devices are built that also can 
 These examples were also adjusted and exist for the legacy API (\*Legacy.ts) as well as the new API. This can be used
 too to see the differences between the APIs.
 
+## TypeScript relevant settings
+Beside the TS module resolution settings already mentioned in the [matter.js README.md](../packages/matter.js/README.md), the new API also requires to use at least `"strictNullChecks": true` or better for code quality `"strict": true` to make sure that all types are correctly determined.
+
 ## Components
 
 The following sections shows the legacy and matching new components and tries to show the differences and what they
@@ -353,6 +356,24 @@ server.events.sessions.subscriptionsChanged.on(session => console.log(`Session s
 
 With `server.state.sessions.sessions` you can get a list of all currently active sessions including the relevant information.
 
+### Can I add Clusters dynamically to an endpoint also after creation?
+Yes also this is possible. You can add clusters to an endpoint also after creation. This is done by the `behaviors.require` method of the endpoint.
+
+This example dynamically adds a BridgedDeviceBasicInformation cluster to an endpoint, to dynamically allow the endpoint to be added to a bridge. The second parameter contains the default values for the cluster state of the added cluster.
+This do not have any effects on the typings of the relevant endpoint, so especially when using attributes of this added cluster you ned to use special methods to do so:
+-   `endpoint.stateOf(BridgedDeviceBasicInformationServer)` to get and
+-   `endpoint.setStateOf(BridgedDeviceBasicInformationServer, { ... })` to set the states of this cluster.
+
+```javascript
+endpoint.behaviors.require(BridgedDeviceBasicInformationServer, {
+    nodeLabel: name,
+    productName: name,
+    productLabel: name,
+    uniqueId: this.devicesOptions[i].uuid[i].replace(/-/g, ''),
+    reachable: true,
+});
+```
+
 ### More options?
 
 Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/examples/DeviceNodeFull.ts) example for more interaction points.
@@ -364,10 +385,3 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 The devices itself and functionality are at least equal - if not better with the new API because we also did some fixes that were not in the 7.7.x versions.
 But most important is that the storage structure has changed between legacy and New API - this means that data are stored in a different way and so a device commissioned with the Legacy API will not work with the new API. You need to delete and recommission the device when migrating!
 
-## TOPICS/DISCUSSIONS/TODOs:
--   (A) Make matter.js peerDep? - Ingo
--   (B) Missing: multiple nodes duplicate port check missing
--   (B) Have BLE package register itself when included - Greg
--   Discussion: async store?
--   Later: Generator options for custom clusters into own projects
--   Later: Collect and Expose Code coverage, ideally including chip tests
