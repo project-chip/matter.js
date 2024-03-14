@@ -114,7 +114,7 @@ To have Typescript and your IDE know all the relevant exported functionality you
 }
 ```
 
-Additionally, you need to use at least `"strictNullChecks": true` or better for code quality `"strict": true` to make sure that all types are correctly determined.
+Additionally, we recommend using `"strictNullChecks": true` or better for code quality `"strict": true` to make sure that all types are correctly determined.
 
 ## matter.js usage
 
