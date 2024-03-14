@@ -19,6 +19,7 @@ import { UdpInterface } from "../../../net/UdpInterface.js";
 import { ServerNode } from "../../../node/ServerNode.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
 import { ServerStore } from "../../../node/server/storage/ServerStore.js";
+import { ExchangeManager } from "../../../protocol/ExchangeManager.js";
 import { SessionManager } from "../../../session/SessionManager.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
@@ -259,9 +260,10 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             }
         });
 
-        // MatterDevice is the interface to a broad array of functionality that other modules require access to
+        // Expose internal managers for other components in the environment
         this.owner.env.set(SessionManager, this.#matterDevice.sessionManager);
         this.owner.env.set(FabricManager, this.#matterDevice.fabricManager);
+        this.owner.env.set(ExchangeManager, this.#matterDevice.exchangeManager);
 
         await this.owner.act(agent => agent.load(SessionsBehavior));
         this.owner.eventsOf(CommissioningBehavior).commissioned.on(() => this.endUncommissionedMode());
@@ -278,6 +280,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         if (this.#matterDevice) {
             this.owner.env.delete(SessionManager, this.#matterDevice.sessionManager);
             this.owner.env.delete(FabricManager, this.#matterDevice.fabricManager);
+            this.owner.env.delete(ExchangeManager, this.#matterDevice.exchangeManager);
 
             await this.#matterDevice.close();
 

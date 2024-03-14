@@ -6,6 +6,8 @@
 
 import { MATTER_DATAMODEL_VERSION } from "../../../CommissioningServer.js";
 import { VendorId } from "../../../datatype/VendorId.js";
+import { Fabric } from "../../../fabric/Fabric.js";
+import { FabricManager } from "../../../fabric/FabricManager.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
@@ -64,6 +66,13 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
 
     #online() {
         this.events.startUp.emit({ softwareVersion: this.state.softwareVersion }, this.context);
+
+        const fabricManager = this.endpoint.env.get(FabricManager);
+        this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric);
+    }
+
+    #handleRemovedFabric({ fabricIndex }: Fabric) {
+        this.events.leave.emit({ fabricIndex }, this.context);
     }
 }
 
