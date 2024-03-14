@@ -360,7 +360,9 @@ With `server.state.sessions.sessions` you can get a list of all currently active
 Yes also this is possible. You can add clusters to an endpoint also after creation. This is done by the `behaviors.require` method of the endpoint.
 
 This example dynamically adds a BridgedDeviceBasicInformation cluster to an endpoint, to dynamically allow the endpoint to be added to a bridge. The second parameter contains the default values for the cluster state of the added cluster.
-This do not have any effects on the typings of the relevant endpoint, so especially when using attributes of this added cluster in get/set it might be needed to ignore the typing errors.
+This do not have any effects on the typings of the relevant endpoint, so especially when using attributes of this added cluster you ned to use special methods to do so:
+-   `endpoint.stateOf(BridgedDeviceBasicInformationServer)` to get and
+-   `endpoint.setStateOf(BridgedDeviceBasicInformationServer, { ... })` to set the states of this cluster.
 
 ```javascript
 endpoint.behaviors.require(BridgedDeviceBasicInformationServer, {
