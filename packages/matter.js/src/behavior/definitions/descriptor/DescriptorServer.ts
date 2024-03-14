@@ -19,6 +19,8 @@ import { DescriptorBehavior } from "./DescriptorBehavior.js";
  * This is the default server implementation of DescriptorBehavior.
  */
 export class DescriptorServer extends DescriptorBehavior {
+    static override dependencies = [IndexBehavior];
+
     override async initialize() {
         // We update PartsList differently if there's an index
         if (this.endpoint.behaviors.has(IndexBehavior)) {

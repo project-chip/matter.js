@@ -7,13 +7,14 @@
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
+import { BasicInformationBehavior } from "../../../src/behavior/definitions/basic-information/BasicInformationBehavior.js";
 import { LevelControlServer } from "../../../src/behavior/definitions/level-control/LevelControlServer.js";
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
 import { OnOffServer } from "../../../src/behavior/definitions/on-off/OnOffServer.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
 import { ClusterModel } from "../../../src/model/index.js";
-import { Observable } from "../../../src/util/Observable.js";
+import { EventEmitter, Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
@@ -63,7 +64,7 @@ describe("ClusterBehavior", () => {
             expect((MyBehavior.prototype as any).becomeAwesome).equals(undefined);
 
             ({}) as MyBehavior satisfies {
-                events: {
+                events: EventEmitter & {
                     reqAttr$Change: Observable<[value: string, oldValue: string, context?: ActionContext]>;
                 };
             };
@@ -152,6 +153,15 @@ describe("ClusterBehavior", () => {
     });
 
     describe("with", () => {
+        it("is satisfactory", () => {
+            const AwesomeBehavior = MyBehavior.with("Awesome");
+
+            ({}) as InstanceType<typeof AwesomeBehavior.Events> satisfies EventEmitter;
+            (({}) as InstanceType<typeof AwesomeBehavior>).events satisfies EventEmitter;
+
+            AwesomeBehavior satisfies ClusterBehavior.Type;
+        });
+
         it("recreates ID", () => {
             const AwesomeBehavior = MyBehavior.with("Awesome");
             AwesomeBehavior.id satisfies "myCluster";
@@ -168,7 +178,7 @@ describe("ClusterBehavior", () => {
 
                 becomeAwesome(value: number): void;
 
-                events: {
+                events: EventEmitter & {
                     becameAwesome: Observable<[number, ActionContext]>;
                 };
             };
@@ -199,6 +209,15 @@ describe("ClusterBehavior", () => {
     });
 
     describe("enable", () => {
+        it("enables events", () => {
+            const MyBi = BasicInformationBehavior.enable({ events: { startUp: true } });
+            ({}) as InstanceType<typeof MyBi> satisfies ClusterBehavior;
+            (({}) as InstanceType<typeof MyBi>).events satisfies EventEmitter;
+
+            const Events2 = MyBi.Events;
+            ({}) as InstanceType<typeof Events2> satisfies EventEmitter;
+        });
+
         it("sets defaults for newly-enabled properties", () => {
             const MyOnOffServer = OnOffServer.with("LevelControlForLighting").enable({ attributes: { onTime: true } });
             expect(new MyOnOffServer.State().onTime).equals(0);

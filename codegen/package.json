@@ -38,7 +38,7 @@
         "@project-chip/matter.js-tools": "0.8.0-alpha.0-20240313-a06243dc",
         "@types/jsdom": "^21.1.6",
         "jsdom": "^24.0.0",
-        "typescript": "^5.3.3",
+        "typescript": "^5.4.2",
         "word-list": "^3.1.0"
     }
 }

@@ -181,6 +181,15 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
                 const patch = (behavior.constructor as Behavior.Type).supervisor.patch;
 
+                if (typeof vals !== "object") {
+                    throw new ImplementationError(
+                        `State values for ${behaviorId} must be an object, not ${typeof vals}`,
+                    );
+                }
+                if (Array.isArray(vals)) {
+                    throw new ImplementationError(`StateValue for ${behaviorId} must be an object, not an array`);
+                }
+
                 patch(vals, behavior.state, this.path);
             }
         });
@@ -203,6 +212,13 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
             await tx.addResources(behavior);
 
             const patch = (behavior.constructor as Behavior.Type).supervisor.patch;
+
+            if (typeof values !== "object") {
+                throw new ImplementationError(`State values for ${type.id} must be an object, not ${typeof values}`);
+            }
+            if (Array.isArray(values)) {
+                throw new ImplementationError(`StateValue for ${type.id} must be an object, not an array`);
+            }
 
             patch(values, behavior.state, this.path);
         });
@@ -671,11 +687,14 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 }
 
 export namespace Endpoint {
-    export type BehaviorOptions<T extends EndpointType = EndpointType.Empty, O extends PartOptions = PartOptions> = {
-        [K in keyof T["behaviors"] as K extends keyof O ? never : K]?: Behavior.Options<T["behaviors"][K]>;
+    export type BehaviorOptions<
+        T extends EndpointType = EndpointType.Empty,
+        O extends EndpointOptions = EndpointOptions,
+    > = {
+        -readonly [K in keyof T["behaviors"] as K extends keyof O ? never : K]?: Behavior.Options<T["behaviors"][K]>;
     };
 
-    export interface PartOptions {
+    export interface EndpointOptions {
         owner?: Endpoint | Agent;
         id?: string;
         number?: number;
@@ -684,12 +703,12 @@ export namespace Endpoint {
 
     export type Options<
         T extends EndpointType = EndpointType.Empty,
-        O extends PartOptions = PartOptions,
+        O extends EndpointOptions = EndpointOptions,
     > = BehaviorOptions<T, O> & O;
 
     export type Configuration<
         T extends EndpointType = EndpointType.Empty,
-        O extends PartOptions = PartOptions,
+        O extends EndpointOptions = EndpointOptions,
     > = Options<T, O & { type: T }> & { type: T };
 
     /**
