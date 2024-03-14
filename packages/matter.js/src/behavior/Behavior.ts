@@ -365,9 +365,8 @@ export namespace Behavior {
     /**
      * Initialization options.
      */
-    export type InitializationOptionsOf<B extends Type> = Parameters<InstanceType<B>["initialize"]>[0] extends object
-        ? Parameters<InstanceType<B>["initialize"]>[0]
-        : {};
+    export type InitializationOptionsOf<B extends Type> =
+        Parameters<InstanceType<B>["initialize"]> extends [infer P extends object] ? P : {};
 
     /**
      * Configuration options you may set when adding a {@link Behavior} to an endpoint.

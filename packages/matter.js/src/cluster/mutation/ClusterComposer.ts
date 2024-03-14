@@ -227,8 +227,8 @@ export namespace ClusterComposer {
     > = FlagsT extends SelectorT["flags"]
         ? SelectorT["component"] extends false
             ? never
-            : SelectorT["component"]
-        : {};
+            : SelectorT["component"] & { attributes: {}; commands: {}; events: {} }
+        : { attributes: {}; commands: {}; events: {} };
 
     /**
      * Merge elements from the base, selected features and an original cluster
