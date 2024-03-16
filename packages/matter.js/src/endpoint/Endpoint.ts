@@ -19,6 +19,7 @@ import type { Node } from "../node/Node.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
+import { Immutable } from "../util/Type.js";
 import { Agent } from "./Agent.js";
 import { DataModelPath } from "./DataModelPath.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
@@ -50,7 +51,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #lifecycle: EndpointLifecycle;
     #parts?: Parts;
     #construction: AsyncConstruction<Endpoint<T>>;
-    #stateView = {} as SupportedBehaviors.StateOf<T["behaviors"]>;
+    #stateView = {} as Immutable<SupportedBehaviors.StateOf<T["behaviors"]>>;
     #eventsView = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
     #activity?: NodeActivity;
 
@@ -144,7 +145,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         if (!this.behaviors.has(type)) {
             throw new ImplementationError(`Behavior ${type.id} is not supported by this endpoint`);
         }
-        return this.#stateView[type.id] as Behavior.StateOf<T>;
+        return (this.#stateView as Record<string, unknown>)[type.id] as Immutable<Behavior.StateOf<T>>;
     }
 
     /**

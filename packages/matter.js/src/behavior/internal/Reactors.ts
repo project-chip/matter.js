@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { Endpoint } from "../../endpoint/Endpoint.js";
 import { Logger } from "../../log/Logger.js";
 import type { Observable, Observer } from "../../util/Observable.js";
@@ -256,9 +256,17 @@ class ReactorBacking<T extends any[], R> {
         // If the emitter's context is available, execute in that
         //
         // TODO - if emitter doesn't await promise, things will probably go wrong so async reactors need to use the
-        // offline option.  Can probably enforce that with types
+        // offline option.  Can probably enforce that with types but right now we just throw an error at runtime
         if (context) {
-            return this.#reactWithContext(context, this.#owner.backing, args);
+            const result = this.#reactWithContext(context, this.#owner.backing, args);
+
+            if (MaybePromise.is(result) && !this.#observable.isAsync) {
+                throw new ImplementationError(
+                    `${this} returned a Promise but the observable is synchronous; you must set the "offline" option so this reactor runs with a dedicated transaction`,
+                );
+            }
+
+            return result;
         }
 
         // Otherwise run in independent context and errors do not interfere with emitter
