@@ -248,59 +248,84 @@ describe("Reactors", () => {
         const endpoint = new MockEndpoint();
         const context = MockContext(false);
 
-        let reacted = false;
+        let reacted = 0;
+
+        let reactionText: string | undefined;
+        let offline: boolean | undefined;
+        let reactionContext: ActionContext | undefined;
+        let reactionThis: Behavior | undefined;
 
         endpoint.reactTo(endpoint.event, function (this: Behavior, text: string) {
-            reacted = true;
+            reacted++;
 
-            expect(text).equals("foo");
-            expect(this.context.offline).false;
-            expect(this.context).equals(context);
-            expect(this).equals(context.agentFor({} as any).get({} as Behavior.Type));
+            reactionText = text;
+            offline = this.context.offline;
+            reactionContext = this.context;
+            reactionThis = this;
         });
 
         void endpoint.emit("foo", context);
 
-        expect(reacted).true;
+        expect(reactionText).equals("foo");
+        expect(offline).false;
+        expect(reactionContext).equals(context);
+        expect(reactionThis).equals(context.agentFor({} as any).get({} as Behavior.Type));
+
+        expect(reacted).equals(1);
     });
 
     it("reacts with offline agent when agent is unavailable", async () => {
         const endpoint = new MockEndpoint();
 
-        let reacted = false;
+        let reacted = 0;
+
+        let reactionText: string | undefined;
+        let offline: boolean | undefined;
 
         endpoint.reactTo(endpoint.event, function (this: Behavior, text: string) {
-            reacted = true;
+            reacted++;
 
-            expect(text).equals("foo");
-            expect(this.context.offline).true;
+            reactionText = text;
+            offline = this.context.offline;
         });
 
         void endpoint.emit("foo");
 
-        expect(reacted).true;
+        expect(reactionText).equals("foo");
+        expect(offline).equals(true);
+
+        expect(reacted).equals(1);
     });
 
     it("reacts with offline agent in offline mode", async () => {
         const endpoint = new MockEndpoint();
         const context = MockContext(false);
 
-        let reacted = false;
+        let reacted = 0;
+
+        let reactionText: string | undefined;
+        let offline: boolean | undefined;
+        let reactionContext: ActionContext | undefined;
 
         endpoint.reactTo(
             endpoint.event,
             function (this: Behavior, text: string) {
-                reacted = true;
+                reacted++;
 
-                expect(text).equals("foo");
-                expect(this.context.offline).true;
-                expect(this.context).not.equals(context);
+                reactionText = text;
+                offline = this.context.offline;
+                reactionContext = this.context;
             },
             { offline: true },
         );
 
         void endpoint.emit("foo", context);
 
-        expect(reacted).true;
+        expect(reactionText).equals("foo");
+        expect(offline).equals(true);
+        expect(reactionContext).not.undefined;
+        expect(reactionContext).not.equals(context);
+
+        expect(reacted).equals(1);
     });
 });
