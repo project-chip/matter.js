@@ -4,23 +4,38 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../../src/MatterDevice.js";
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
 import { NetworkServer } from "../../../src/behavior/system/network/NetworkServer.js";
 import { AccessControl } from "../../../src/cluster/definitions/AccessControlCluster.js";
+import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
 import { NetworkCommissioning } from "../../../src/cluster/definitions/NetworkCommissioningCluster.js";
+import { OperationalCredentials } from "../../../src/cluster/definitions/OperationalCredentialsCluster.js";
 import { Message, SessionType } from "../../../src/codec/MessageCodec.js";
 import { AttributeId } from "../../../src/datatype/AttributeId.js";
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
 import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
+import { FabricId } from "../../../src/datatype/FabricId.js";
 import { FabricIndex } from "../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../src/datatype/NodeId.js";
 import { TlvSubjectId } from "../../../src/datatype/SubjectId.js";
 import { VendorId } from "../../../src/datatype/VendorId.js";
 import { OnOffLightDevice } from "../../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { Fabric, FabricBuilder } from "../../../src/fabric/Fabric.js";
+import { FabricManager } from "../../../src/fabric/FabricManager.js";
 import { Globals } from "../../../src/model/index.js";
-import { TlvReadRequest, TlvWriteRequest } from "../../../src/protocol/interaction/InteractionProtocol.js";
+import { ExchangeManager } from "../../../src/protocol/ExchangeManager.js";
+import { MessageExchange } from "../../../src/protocol/MessageExchange.js";
+import { InteractionServerMessenger, MessageType } from "../../../src/protocol/interaction/InteractionMessenger.js";
+import {
+    TlvDataReport,
+    TlvReadRequest,
+    TlvStatusResponse,
+    TlvSubscribeRequest,
+    TlvWriteRequest,
+} from "../../../src/protocol/interaction/InteractionProtocol.js";
 import { INTERACTION_MODEL_REVISION } from "../../../src/protocol/interaction/InteractionServer.js";
+import { StatusCode } from "../../../src/protocol/interaction/StatusCode.js";
 import { TlvArray } from "../../../src/tlv/TlvArray.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
 import { TlvEnum } from "../../../src/tlv/TlvNumber.js";
@@ -37,16 +52,36 @@ const NEW_OP_CERT = ByteArray.fromHex(
     "153001010124020137032414001826048012542826058015203b370624150124110918240701240801300941049ac1dc9995e6897f2bf1420a6efdba30781ac3dcdb7bb15e993050ff0ce92c52727b029c30f11f163b177d3bfa37f015db156994801f0e0f9b64c72bf8a15153370a35012801182402013603040204011830041402cce0d7bfa29e98e454be38e27bfe6c0f162302300514e766069362d7e35b79687161644d222bdde93a6818300b4050e8183c290f438a57516faea006282d6d2b5178d5d15dfcc3ec8a9232db942894ff2d2ce941d3b42dd8a2cd51eea4f3f50b66757959368868c3a0a1b5fe665f18",
 );
 
+const FABRICS_PATH = {
+    endpointId: EndpointNumber(0),
+    clusterId: OperationalCredentials.Cluster.id,
+    attributeId: OperationalCredentials.Cluster.attributes.fabrics.id,
+};
+
+const COMMISSIONED_FABRICS_PATH = {
+    endpointId: EndpointNumber(0),
+    clusterId: OperationalCredentials.Cluster.id,
+    attributeId: OperationalCredentials.Cluster.attributes.commissionedFabrics.id,
+};
+
+const LEAVE_PATH = {
+    endpointId: EndpointNumber(0),
+    clusterId: BasicInformation.Cluster.id,
+    eventId: BasicInformation.Cluster.events.leave.id,
+};
+
 const IPK_KEY = ByteArray.fromHex("74656d706f726172792069706b203031");
 
-function createFabric(index = 1) {
+async function createFabric(node: MockServerNode, index = 1) {
     const builder = new FabricBuilder();
     builder.setRootVendorId(VendorId(0));
     builder.setRootNodeId(NodeId(1));
     builder.setRootCert(ROOT_CERT);
     builder.setOperationalCert(NEW_OP_CERT);
     builder.setIdentityProtectionKey(IPK_KEY);
-    return builder.build(FabricIndex(index));
+    const fabric = await builder.build(FabricIndex(index));
+    node.env.get(FabricManager).addFabric(fabric);
+    return fabric;
 }
 
 class WifiCommissioningServer extends NetworkCommissioningServer.with("WiFiNetworkInterface") {
@@ -57,14 +92,20 @@ class WifiCommissioningServer extends NetworkCommissioningServer.with("WiFiNetwo
     }
 }
 
+async function connect(node: MockServerNode, fabric: Fabric) {
+    const exchange = await node.createExchange({ fabric });
+
+    const interactionServer = node.behaviors.internalsOf(NetworkServer).runtime.interactionServer;
+
+    return { exchange, interactionServer };
+}
+
 async function performWrite(
     node: MockServerNode,
     fabric: Fabric,
     request: TypeFromSchema<typeof TlvWriteRequest>["writeRequests"][number],
 ) {
-    const exchange = await node.createExchange({ fabric });
-
-    const interactionServer = node.behaviors.internalsOf(NetworkServer).runtime.interactionServer;
+    const { exchange, interactionServer } = await connect(node, fabric);
 
     await interactionServer.handleWriteRequest(
         exchange,
@@ -86,9 +127,7 @@ async function performRead(
     isFabricFiltered: boolean,
     request: Exclude<TypeFromSchema<typeof TlvReadRequest>["attributeRequests"], undefined>[number],
 ) {
-    const exchange = await node.createExchange({ fabric });
-
-    const interactionServer = node.behaviors.internalsOf(NetworkServer).runtime.interactionServer;
+    const { exchange, interactionServer } = await connect(node, fabric);
 
     const result = await interactionServer.handleReadRequest(
         exchange,
@@ -103,6 +142,28 @@ async function performRead(
     );
 
     return result.attributeReportsPayload?.[0]?.attributeData?.payload;
+}
+
+async function performSubscribe(
+    node: MockServerNode,
+    fabric: Fabric,
+    request: TypeFromSchema<typeof TlvSubscribeRequest>,
+) {
+    const { exchange, interactionServer } = await connect(node, fabric);
+
+    await interactionServer.handleSubscribeRequest(
+        exchange,
+        request,
+        {
+            sendStatus: _code => {},
+            sendDataReport: async _report => {},
+            send: async (_type, _message) => {},
+            close: async () => {},
+        } as InteractionServerMessenger,
+        {
+            packetHeader: { sessionType: SessionType.Unicast },
+        } as Message,
+    );
 }
 
 // This is AccessControl.AccessControlEntryStruct but not sure how to remove fabric index from payload so just
@@ -134,7 +195,7 @@ async function readAcls(node: MockServerNode, fabric: Fabric, isFabricFiltered: 
 }
 
 async function readCommandList(node: MockServerNode, cluster: number, endpoint = 1) {
-    return await performRead(node, await createFabric(1), false, {
+    return await performRead(node, await createFabric(node, 1), false, {
         endpointId: EndpointNumber(endpoint),
         clusterId: ClusterId(cluster),
         attributeId: AttributeId(Globals.AcceptedCommandList.id),
@@ -145,8 +206,8 @@ describe("ClusterServerBacking", () => {
     it("properly filters reads and writes", async () => {
         const node = await MockServerNode.createOnline();
 
-        const fabric1 = await createFabric(1);
-        const fabric2 = await createFabric(2);
+        const fabric1 = await createFabric(node, 1);
+        const fabric2 = await createFabric(node, 2);
 
         await writeAcl(node, fabric1, {
             privilege: AccessControl.AccessControlEntryPrivilege.Administer,
@@ -180,6 +241,104 @@ describe("ClusterServerBacking", () => {
             { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 1 },
             { privilege: 5, authMode: 1, subjects: null, targets: null, fabricIndex: 2 },
         ]);
+
+        await node.close();
+    });
+
+    it("properly handles subscribe and notify of attributes and events", async () => {
+        const node = await MockServerNode.createOnline();
+
+        const fabric1 = await createFabric(node, 1);
+
+        // Create a subscription to a couple of attributes and an event
+        await performSubscribe(node, fabric1, {
+            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            isFabricFiltered: false,
+            attributeRequests: [FABRICS_PATH, COMMISSIONED_FABRICS_PATH],
+            eventRequests: [LEAVE_PATH],
+            keepSubscriptions: true,
+            minIntervalFloorSeconds: 1,
+            maxIntervalCeilingSeconds: 2,
+        });
+
+        // State for the mock method we create below -- the last data report and a promise to notify us of its arrival
+        let promise: Promise<void>;
+        let resolve: () => void;
+        let report: TypeFromSchema<typeof TlvDataReport> | undefined;
+
+        // Mock ExchangeManager's "initiateExchange" method
+        node.env.get(ExchangeManager).initiateExchange = (fabric, nodeId) => {
+            expect(fabric.fabricId).equals(FabricId(1));
+            expect(nodeId).equals(NodeId(0));
+
+            return {
+                async nextMessage() {
+                    return {
+                        payloadHeader: {
+                            messageType: MessageType.StatusResponse,
+                        },
+                        payload: TlvStatusResponse.encode({
+                            status: StatusCode.Success,
+                            interactionModelRevision: INTERACTION_MODEL_REVISION,
+                        }),
+                    } as Message;
+                },
+                async send(messageType, payload, _options) {
+                    expect(messageType).equals(MessageType.ReportData);
+                    report = TlvDataReport.decode(payload, false);
+                    if (!report.attributeReports && !report.eventReports) {
+                        return;
+                    }
+                    resolve();
+                },
+                async close() {},
+            } as MessageExchange<MatterDevice>;
+        };
+
+        // Create another fabric so we can capture subscription messages
+        promise = new Promise(r => (resolve = r));
+        const fabric2 = await createFabric(node, 2);
+        await MockTime.resolve(promise);
+
+        expect(report?.attributeReports?.length).equals(2);
+        expect(report?.eventReports).equals(undefined);
+
+        // Confirm the first report is for Fabrics
+        const fabricsReport = report?.attributeReports?.[0]?.attributeData;
+        expect(fabricsReport?.path).deep.equals(FABRICS_PATH);
+        expect(
+            (
+                fabricsReport?.data &&
+                OperationalCredentials.Cluster.attributes.fabrics.schema.decodeTlv(fabricsReport?.data)
+            )?.map(({ fabricIndex }) => fabricIndex),
+        ).deep.equals([1, 2]);
+
+        // Confirm the second report is for CommissionedFabrics
+        const commissionedFabricsReport = report?.attributeReports?.[1]?.attributeData;
+        expect(commissionedFabricsReport?.path).deep.equals(COMMISSIONED_FABRICS_PATH);
+        expect(
+            commissionedFabricsReport?.data &&
+                OperationalCredentials.Cluster.attributes.commissionedFabrics.schema.decodeTlv(
+                    commissionedFabricsReport.data,
+                ),
+        ).deep.equals(2);
+
+        // Remove the second fabric so we can capture the leave event notification
+        promise = new Promise(r => (resolve = r));
+        await fabric2.remove();
+        await MockTime.resolve(promise);
+
+        expect(report?.attributeReports?.length).equals(2);
+        expect(report?.eventReports?.length).equals(1);
+
+        // Confirm we received leave event for second fabric
+        const leaveReport = report?.eventReports?.[0]?.eventData;
+        expect(leaveReport?.path).deep.equals(LEAVE_PATH);
+        expect(
+            leaveReport?.data && BasicInformation.Cluster.events.leave.schema.decodeTlv(leaveReport?.data),
+        ).deep.equals({
+            fabricIndex: 2,
+        });
 
         await node.close();
     });

@@ -53,13 +53,13 @@ export class MatterDevice {
     private readonly broadcasters = new Array<InstanceBroadcaster>();
     private readonly transportInterfaces = new Array<TransportInterface | NetInterface>();
     private readonly channelManager = new ChannelManager();
-    private readonly exchangeManager;
     private readonly secureChannelProtocol = new SecureChannelProtocol(() => this.endCommissioning());
     private activeCommissioningMode = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
     private activeCommissioningEndCallback?: () => void;
     private announceInterval: Timer;
     private announcementStartedTime: number | null = null;
     private isClosing = false;
+    readonly #exchangeManager;
     readonly #fabricManager;
     readonly #sessionManager;
     #failsafeContext?: FailsafeContext;
@@ -93,7 +93,7 @@ export class MatterDevice {
         this.#sessionManager = new SessionManager(this, sessionStorage);
         this.#sessionManager.initFromStorage(this.#fabricManager.getFabrics());
 
-        this.exchangeManager = new ExchangeManager<MatterDevice>(this.#sessionManager, this.channelManager);
+        this.#exchangeManager = new ExchangeManager<MatterDevice>(this.#sessionManager, this.channelManager);
 
         this.addProtocolHandler(this.secureChannelProtocol);
 
@@ -138,6 +138,10 @@ export class MatterDevice {
 
     get sessionManager() {
         return this.#sessionManager;
+    }
+
+    get exchangeManager() {
+        return this.#exchangeManager;
     }
 
     get failsafeContext() {

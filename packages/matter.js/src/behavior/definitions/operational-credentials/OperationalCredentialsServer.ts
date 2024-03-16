@@ -18,7 +18,6 @@ import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { CommissioningBehavior } from "../../system/commissioning/CommissioningBehavior.js";
 import { ProductDescriptionServer } from "../../system/product-description/ProductDescriptionServer.js";
-import { BasicInformationBehavior } from "../basic-information/BasicInformationBehavior.js";
 import { DeviceCertification } from "./DeviceCertification.js";
 import { OperationalCredentialsBehavior } from "./OperationalCredentialsBehavior.js";
 import {
@@ -305,9 +304,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 debugText: `Fabric ${fabricIndex} not found`,
             };
         }
-
-        const bi = this.agent.get(BasicInformationBehavior);
-        bi.events.leave?.emit({ fabricIndex }, this.context);
 
         await fabric.remove(this.session.id);
         // The state is updated on removal via commissionedFabricChanged event, see constructor

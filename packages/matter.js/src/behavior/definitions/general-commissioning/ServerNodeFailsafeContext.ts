@@ -9,6 +9,7 @@ import { Lifecycle } from "../../../common/Lifecycle.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { Node } from "../../../node/Node.js";
+import { Immutable } from "../../../util/Type.js";
 import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
 
 /**
@@ -17,7 +18,7 @@ import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCo
 export class ServerNodeFailsafeContext extends FailsafeContext {
     #node: Node;
     #storedState?: {
-        networks: Map<Endpoint, NetworkCommissioningBehavior.State["networks"]>;
+        networks: Map<Endpoint, Immutable<NetworkCommissioningBehavior.State["networks"]>>;
         /*
 
         When Fabrics are no longer managed centrally in FabricManager we need this. Maybe we change to this later,
@@ -82,17 +83,13 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
             await this.#node.visit(async endpoint => {
                 const networks = this.#storedState?.networks.get(endpoint);
                 if (networks) {
-                    context.agentFor(endpoint).get(NetworkCommissioningBehavior).state.networks = networks;
+                    context.agentFor(endpoint).get(NetworkCommissioningBehavior).state.networks = [...networks];
                 }
             });
         });
     }
 
     override async revokeFabric(fabric: Fabric) {
-        await this.#node.act(agent => {
-            agent.basicInformation.events.leave?.emit({ fabricIndex: fabric.fabricIndex }, agent.context);
-        });
-
         await fabric.remove();
 
         // await this.#restoreOperationalCredentials();
