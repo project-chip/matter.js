@@ -259,11 +259,14 @@ class ReactorBacking<T extends any[], R> {
         // offline option.  Can probably enforce that with types but right now we just throw an error at runtime
         if (context) {
             const result = this.#reactWithContext(context, this.#owner.backing, args);
+
             if (MaybePromise.is(result) && !this.#observable.isAsync) {
                 throw new ImplementationError(
                     `${this} returned a Promise but the observable is synchronous; you must set the "offline" option so this reactor runs with a dedicated transaction`,
                 );
             }
+
+            return result;
         }
 
         // Otherwise run in independent context and errors do not interfere with emitter
