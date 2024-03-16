@@ -71,7 +71,7 @@ npm run matter-legacystorageconverter -- --legacy-storage-path=<Path-to-Legcy-St
 > [!NOTICE]
 > The Conbverter might tell you to make sure to use the full parameters when starting the new example after conversion. This is needed in some cases because some data were not stored in the storage prior the new versions and are so missing in the storage.
 
-After this you can use the new Device example skript to start it.
+After this you can use the new Device example script to start it.
 
 ## Installation
 
