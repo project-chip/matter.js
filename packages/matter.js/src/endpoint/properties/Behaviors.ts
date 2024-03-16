@@ -496,7 +496,7 @@ export class Behaviors {
             },
 
             set() {
-                throw new ReadOnlyError();
+                throw new ReadOnlyError('The "state" property is read-only; you must use set() to modify state');
             },
 
             enumerable: true,
@@ -505,10 +505,6 @@ export class Behaviors {
         Object.defineProperty(this.#endpoint.events, type.id, {
             get: () => {
                 return this.#backingFor("events", type).events;
-            },
-
-            set() {
-                throw new ReadOnlyError();
             },
 
             enumerable: true,
