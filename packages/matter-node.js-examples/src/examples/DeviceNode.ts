@@ -177,7 +177,7 @@ async function getConfiguration() {
 
     const port = environment.vars.number("port") ?? 5540;
 
-    const uniqueId = environment.vars.string("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs().toString());
+    const uniqueId = environment.vars.string("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs()).toString();
 
     // Persist basic data to keep them also on restart
     deviceStorage.set("passcode", passcode);
