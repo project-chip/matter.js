@@ -35,7 +35,7 @@ const storageService = environment.get(StorageService);
 const legacyStorage = new StorageBackendDisk(legacyStoragePath);
 await legacyStorage.initialize();
 
-let uniqueIds: Record<string, string> = {};
+const uniqueIds: Record<string, string> = {};
 if (legacyNodes.includes("Device")) {
     console.log("Example Device found ...");
     legacyNodes.splice(legacyNodes.indexOf("Device"), 1);
