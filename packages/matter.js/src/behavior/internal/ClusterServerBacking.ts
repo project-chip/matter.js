@@ -6,7 +6,7 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { Attributes, Events } from "../../cluster/Cluster.js";
-import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
+import { AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import {
     ClusterServerObj,
@@ -133,8 +133,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
 
         this.#clusterServer = clusterServer;
 
-        // Monitor change events so we can notify the cluster server of data
-        // changes
+        // Monitor change events so we can notify the cluster server of data changes
         for (const name of elements.attributes) {
             createChangeHandler(this, name);
         }
@@ -299,25 +298,19 @@ function createChangeHandler(backing: ClusterServerBehaviorBacking, name: string
         return;
     }
 
-    if (attributeServer instanceof FabricScopedAttributeServer) {
-        observable.on((_value, _oldValue, context) => {
-            const session = context.session;
-            if (session instanceof SecureSession) {
-                attributeServer.updated(session);
-            } else {
-                // Can't notify if we don't know the fabric
-            }
-        });
-    } else if (attributeServer instanceof AttributeServer) {
-        observable.on((_value, _oldValue, context) => {
-            const session = context.session;
-            if (session instanceof SecureSession) {
-                attributeServer.updated(session);
-            } else {
-                attributeServer.updatedLocal();
-            }
-        });
+    // Ignore FixedAttributeServer (which is not an AttributeServer)
+    if (!(attributeServer instanceof AttributeServer)) {
+        return;
     }
+
+    observable.on((_value, _oldValue, context) => {
+        const session = context.session;
+        if (session instanceof SecureSession) {
+            attributeServer.updated(session);
+        } else {
+            attributeServer.updatedLocal();
+        }
+    });
 }
 
 function createEventHandler(backing: ClusterServerBehaviorBacking, name: string) {
