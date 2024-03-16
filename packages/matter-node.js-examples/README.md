@@ -15,6 +15,11 @@ For BLE usage please also see the [matter-node-ble.js README.md](../matter-node-
 ## Examples Overview
 The examples provided by this repository show different use cases demonstrating how to build different device types and show various ways to implement and interact with the matter.js structures. This section gives an overview regarding what the different examples demonstrate.
 
+> [!IMPORTANT]
+> With matter.js 0.8 we introduced a new API that is not compatible with the old API. The new API is more flexible and allows for more complex use cases. The old API is still supported but will be removed in a future release. The examples are provided for both APIs. The new API examples are named without "Legacy" in the filename and the npm run script is named without "-legacy". The old API examples are named with "Legacy" in the filename and the npm run script is named with "-legacy".
+> If you used the old Example scripts and want to just switch to use the new scripts you need to convert the device storage once. Please see below in the section about the ["Legacy Storage Converter"](#legacy-storage-converter).
+
+
 ### Legacy Device Examples
 These examples use the matter.js API up to 0.7, which is considered "Legacy" now because it will be replaced by a new API starting with 0.8. The functionality is still working, but should be considered deprecated and will be removed with a later release!
 The filenames of these examples were adjusted in 0.8 and a "Legacy" was added to the end of the filename and "-legacy" to the npm run script name (exception: DeviceNode is now called DeviceNodeFullLegacy). Other than that they are fully compatible with the pre-0.7 versions also regarding storage location and structure and can be directly used as before.
@@ -55,6 +60,18 @@ Additionally, these two examples are not directly configurable by CLI and mainly
 ## Controller example
 * **ControllerNode**: This example shows basically how a controller could be implemented by showing pairing and connections to a paired device. When there is an OnOff Endpoint with ID 1 then this is controlled and toggled.
 
+## Legacy Storage Converter
+The Legacy storage converter can convert the Device and Controller storages from the legacy examples. It will convert all relevant storage keys, but not the persisted cluster specific data (which should be acceptable because near to irrelevant for the device types we had examples for).
+
+To use the converter, you need to run the following command:
+```bash
+npm run matter-legacystorageconverter -- --legacy-storage-path=<Path-to-Legcy-Storage-Dir> --storage-path=<Path-to-New-Storage-Dir>
+```
+
+> [!NOTICE]
+> The Conbverter might tell you to make sure to use the full parameters when starting the new example after conversion. This is needed in some cases because some data were not stored in the storage prior the new versions and are so missing in the storage.
+
+After this you can use the new Device example skript to start it.
 
 ## Installation
 
