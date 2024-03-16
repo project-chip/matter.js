@@ -69,12 +69,20 @@ export type Branded<T, B> = T & Brand<B>;
 
 /**
  * Make a type immutable.
+ *
+ * TODO - might need to extend depending type (e.g. doesn't handle Maps, Sets or Promises yet)
+ *
+ * Good reference implementation here:
+ *
+ *     https://github.com/ts-essentials/ts-essentials/blob/master/lib/deep-readonly/index.ts
  */
 export type Immutable<T> = T extends (...args: any[]) => any
     ? T
-    : T extends object
-      ? { readonly [K in keyof T]: Immutable<T[K]> }
-      : T;
+    : T extends number // Necessary for our "branded" IDs
+      ? T
+      : T extends object
+        ? { readonly [K in keyof T]: Immutable<T[K]> }
+        : T;
 
 /**
  * Convert a union to an interface.
