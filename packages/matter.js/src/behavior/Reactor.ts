@@ -5,14 +5,14 @@
  */
 
 import type { Endpoint } from "../endpoint/Endpoint.js";
-import type { Observable } from "../util/Observable.js";
+import type { Observable, Observer } from "../util/Observable.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Behavior } from "./Behavior.js";
 import { Resource } from "./state/transaction/Resource.js";
 
 /**
- * A reactor is an {@link Observable} observer managed by a {@link Behavior}.  You install reactors using
- * {@link Behavior.reactTo} on the behavior that receives the event.
+ * A reactor is an {@link Observer} managed by a {@link Behavior}.  You install reactors using {@link Behavior.reactTo}
+ * on the behavior that receives the event.
  *
  * A reactor is similar to a normal handler installed with {@link Observable.on}.  It provides several benefits over
  * installing an observer directly:
