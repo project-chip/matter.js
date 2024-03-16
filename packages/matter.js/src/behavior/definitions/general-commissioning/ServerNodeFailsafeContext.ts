@@ -90,10 +90,6 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
     }
 
     override async revokeFabric(fabric: Fabric) {
-        await this.#node.act(agent => {
-            agent.basicInformation.events.leave?.emit({ fabricIndex: fabric.fabricIndex }, agent.context);
-        });
-
         await fabric.remove();
 
         // await this.#restoreOperationalCredentials();
