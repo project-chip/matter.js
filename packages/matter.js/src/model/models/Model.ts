@@ -101,15 +101,11 @@ export abstract class Model {
             }
         }
 
-        if (!parent) {
-            this.#parent = undefined;
-        } else {
-            this.#parent = parent;
-        }
-
         if (parent) {
             parent.children.push(this);
         }
+
+        // Note that parent updates this.#parent so don't touch that
     }
 
     /**
@@ -135,7 +131,22 @@ export abstract class Model {
      * generated identifier.
      */
     get key() {
-        return this.effectiveId?.toString();
+        const key = this.effectiveId?.toString();
+        if (key === undefined) {
+            return key;
+        }
+        const discriminator = this.discriminator;
+        if (discriminator === undefined) {
+            return key;
+        }
+        return `${key}␜${discriminator}`;
+    }
+
+    /**
+     * Obtain a discriminator that differentiates different models with the same name
+     */
+    get discriminator(): string | undefined {
+        return;
     }
 
     /**
@@ -155,17 +166,23 @@ export abstract class Model {
     set children(children: (Model | AnyElement)[]) {
         this.#children = Children(
             children,
+
             (child: Model) => {
                 if (child.#parent === this) {
                     return;
                 }
 
                 if (child.#parent) {
-                    child.parent = undefined;
+                    const position = child.#parent.children.indexOf(child);
+                    if (position !== -1) {
+                        child.#parent.children.splice(position, 1);
+                    }
+                    child.#parent = undefined;
                 }
 
                 child.#parent = this;
             },
+
             (child: Model) => {
                 if (child.#parent === this) {
                     child.#parent = undefined;

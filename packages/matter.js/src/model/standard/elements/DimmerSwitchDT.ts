@@ -22,6 +22,11 @@ Matter.children.push(DeviceType({
             children: [Requirement({ name: "DeviceTypeList", default: [ { deviceType: 260, revision: 2 } ], element: "attribute" })]
         }),
         Requirement({
+            name: "Identify", id: 0x3, conformance: "M", element: "serverCluster",
+            xref: { document: "device", section: "6.2.4" },
+            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+        }),
+        Requirement({
             name: "Identify", id: 0x3, conformance: "M", element: "clientCluster",
             xref: { document: "device", section: "6.2.4" },
             children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]

@@ -23,6 +23,11 @@ Matter.children.push(DeviceType({
         }),
 
         Requirement({
+            name: "Identify", id: 0x3, conformance: "[EZ, Target]", element: "serverCluster",
+            xref: { document: "device", section: "8.2.3" },
+            children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]
+        }),
+        Requirement({
             name: "Identify", id: 0x3, conformance: "[EZ, Initiator]", element: "clientCluster",
             xref: { document: "device", section: "8.2.3" },
             children: [Requirement({ name: "QUERY", conformance: "!Matter", element: "feature" })]

@@ -231,6 +231,9 @@ export class Block extends Entry {
 
         if (this.suffix) {
             parts.push(`${linePrefix}${this.suffix}`);
+            if (this.prefix && parts.length === 2) {
+                return parts.join("");
+            }
         }
         return parts.join("\n");
     }

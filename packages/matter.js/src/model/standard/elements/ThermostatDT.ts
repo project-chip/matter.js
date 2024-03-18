@@ -58,6 +58,10 @@ Matter.children.push(DeviceType({
             xref: { document: "device", section: "9.2.4" }
         }),
         Requirement({
+            name: "TimeSync", id: 0x38, conformance: "P, O", element: "serverCluster",
+            xref: { document: "device", section: "9.2.4" }
+        }),
+        Requirement({
             name: "TimeSync", id: 0x38, conformance: "P, O", element: "clientCluster",
             xref: { document: "device", section: "9.2.4" }
         }),

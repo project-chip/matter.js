@@ -80,6 +80,35 @@ describe("Model", () => {
             expect(parent2.children[0].name).equal("Bar1");
             expect(parent2.children[1].name).equal("Bar2");
         });
+
+        it("splices correctly", () => {
+            const parent = new ClusterModel({ name: "Foo" });
+
+            parent.children = [
+                { tag: "datatype", name: "Bar1" },
+                { tag: "datatype", name: "Bar2" },
+                { tag: "datatype", name: "Bar3" },
+            ];
+
+            const removed = parent.children.splice(
+                1,
+                1,
+                { tag: "datatype", name: "Bar4" },
+                { tag: "datatype", name: "Bar5" },
+            );
+
+            expect(removed.length === 1);
+            expect(removed[0].name === "Bar2");
+            expect(removed[0].parent === undefined);
+
+            expect(parent.children.length === 4);
+            expect(parent.children.map(({ name, parent }) => ({ name, parent: parent?.name }))).deep.equals([
+                { name: "Bar1", parent: "Foo" },
+                { name: "Bar4", parent: "Foo" },
+                { name: "Bar5", parent: "Foo" },
+                { name: "Bar3", parent: "Foo" },
+            ]);
+        });
     });
 
     describe("all", () => {

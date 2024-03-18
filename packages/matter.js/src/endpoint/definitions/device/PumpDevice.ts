@@ -17,6 +17,15 @@ import {
 import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
 import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
 import {
+    TemperatureMeasurementServer as BaseTemperatureMeasurementServer
+} from "../../../behavior/definitions/temperature-measurement/TemperatureMeasurementServer.js";
+import {
+    PressureMeasurementServer as BasePressureMeasurementServer
+} from "../../../behavior/definitions/pressure-measurement/PressureMeasurementServer.js";
+import {
+    FlowMeasurementServer as BaseFlowMeasurementServer
+} from "../../../behavior/definitions/flow-measurement/FlowMeasurementServer.js";
+import {
     TemperatureMeasurementBehavior as BaseTemperatureMeasurementBehavior
 } from "../../../behavior/definitions/temperature-measurement/TemperatureMeasurementBehavior.js";
 import {
@@ -92,6 +101,27 @@ export namespace PumpRequirements {
      *
      * We provide this alias for convenience.
      */
+    export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
+
+    /**
+     * The {@link PressureMeasurement} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const PressureMeasurementServer = BasePressureMeasurementServer;
+
+    /**
+     * The {@link FlowMeasurement} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const FlowMeasurementServer = BaseFlowMeasurementServer;
+
+    /**
+     * The {@link TemperatureMeasurement} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
     export const TemperatureMeasurementBehavior = BaseTemperatureMeasurementBehavior;
 
     /**
@@ -124,7 +154,15 @@ export namespace PumpRequirements {
             PumpConfigurationAndControl: PumpConfigurationAndControlServer,
             Identify: IdentifyServer
         },
-        optional: { LevelControl: LevelControlServer, Scenes: ScenesServer, Groups: GroupsServer }
+
+        optional: {
+            LevelControl: LevelControlServer,
+            Scenes: ScenesServer,
+            Groups: GroupsServer,
+            TemperatureMeasurement: TemperatureMeasurementServer,
+            PressureMeasurement: PressureMeasurementServer,
+            FlowMeasurement: FlowMeasurementServer
+        }
     };
 
     /**

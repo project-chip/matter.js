@@ -6,6 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
 import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
@@ -37,6 +38,13 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
 export interface ControlBridgeDevice extends Identity<typeof ControlBridgeDeviceDefinition> {}
 
 export namespace ControlBridgeRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * The {@link Identify} cluster is required by the Matter specification
      *
@@ -94,6 +102,11 @@ export namespace ControlBridgeRequirements {
     export const OccupancySensingBehavior = BaseOccupancySensingBehavior;
 
     /**
+     * An implementation for each server cluster supported by the endpoint per the Matter specification.
+     */
+    export const server = { mandatory: { Identify: IdentifyServer } };
+
+    /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
     export const client = {
@@ -118,7 +131,7 @@ export const ControlBridgeDeviceDefinition = MutableEndpoint({
     deviceType: 0x840,
     deviceRevision: 2,
     requirements: ControlBridgeRequirements,
-    behaviors: SupportedBehaviors()
+    behaviors: SupportedBehaviors(ControlBridgeRequirements.server.mandatory.Identify)
 });
 
 export const ControlBridgeDevice: ControlBridgeDevice = ControlBridgeDeviceDefinition;
