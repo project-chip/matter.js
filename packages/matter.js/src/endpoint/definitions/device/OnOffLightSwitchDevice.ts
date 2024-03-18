@@ -6,6 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
@@ -24,6 +25,13 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
 export interface OnOffLightSwitchDevice extends Identity<typeof OnOffLightSwitchDeviceDefinition> {}
 
 export namespace OnOffLightSwitchRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * The {@link Identify} cluster is required by the Matter specification
      *
@@ -53,6 +61,11 @@ export namespace OnOffLightSwitchRequirements {
     export const ScenesBehavior = BaseScenesBehavior;
 
     /**
+     * An implementation for each server cluster supported by the endpoint per the Matter specification.
+     */
+    export const server = { mandatory: { Identify: IdentifyServer } };
+
+    /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
     export const client = {
@@ -66,7 +79,7 @@ export const OnOffLightSwitchDeviceDefinition = MutableEndpoint({
     deviceType: 0x103,
     deviceRevision: 2,
     requirements: OnOffLightSwitchRequirements,
-    behaviors: SupportedBehaviors()
+    behaviors: SupportedBehaviors(OnOffLightSwitchRequirements.server.mandatory.Identify)
 });
 
 export const OnOffLightSwitchDevice: OnOffLightSwitchDevice = OnOffLightSwitchDeviceDefinition;

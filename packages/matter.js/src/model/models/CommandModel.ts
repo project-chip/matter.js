@@ -29,11 +29,20 @@ export class CommandModel extends ValueModel implements CommandElement {
     }
 
     /**
-     * Commands may re-use the ID for request and response so identification
-     * requires the ID in conjunction with the direction.
+     * Commands may re-use the ID for request and response so identification requires the ID in conjunction with the
+     * direction.
      */
-    override get key() {
-        return `${super.key}:${this.direction}`;
+    override get discriminator() {
+        // If direction is not present, rely on naming convention for discrimination.  This allows overrides to omit
+        // the direction without voiding matching
+        if (this.direction === undefined) {
+            if (this.name.endsWith("Response")) {
+                return CommandElement.Direction.Response;
+            }
+            return CommandElement.Direction.Request;
+        }
+
+        return this.direction;
     }
 
     constructor(definition: CommandElement.Properties) {

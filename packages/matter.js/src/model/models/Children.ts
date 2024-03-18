@@ -23,6 +23,13 @@ export interface Children<M extends Model = Model, E extends AnyElement = AnyEle
     push(...children: (M | E)[]): number;
 
     /**
+     * Array splice.
+     *
+     * Allows splicing in elements or models.
+     */
+    splice(index: number, deleteCount?: number, ...toAdd: (M | E)[]): M[];
+
+    /**
      * Access a model of specific type by ID or name.  This is an optimized operation that uses internal index lookup.
      */
     get<T extends Model>(type: Model.Type<T>, idOrName: number | string): T | undefined;
@@ -318,6 +325,36 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
         }
     }
 
+    // We implement "splice" for efficiency...  The default implementation moves elements one at a time, forcing us to search
+    // the array to see if it's already present each time
+    function splice(index: number, deleteCount?: number, ...toAdd: (AnyElement | Model)[]) {
+        // Upgrade elements to models if reified and adopt any new models
+        toAdd = toAdd.map(child => {
+            if (!(child instanceof Model)) {
+                if (reified) {
+                    child = Model.create(child);
+                } else {
+                    return child;
+                }
+            }
+            adopt(child);
+            return child;
+        });
+
+        // Perform the actual splice
+        const result = children.splice(index, deleteCount ?? 0, ...toAdd);
+
+        // Convert elements to models and disown elements that are already models
+        return result.map(child => {
+            if (child instanceof Model) {
+                disown(child);
+            } else {
+                child = Model.create(child);
+            }
+            return child;
+        });
+    }
+
     const result = new Proxy(children, {
         get: (_target, p, receiver) => {
             if (typeof p === "string" && p.match(/^[0-9]+$/)) {
@@ -343,6 +380,9 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
 
                 case "updateName":
                     return updateName;
+
+                case "splice":
+                    return splice;
 
                 case "toString":
                     return () => `[Children: ${children.length}]`;
@@ -370,6 +410,14 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                 }
             }
 
+            if (newValue.parent?.children === children) {
+                const currentIndex = children.indexOf(newValue);
+                if (currentIndex !== -1) {
+                    children.splice(currentIndex, 1);
+                }
+                return true;
+            }
+
             if (reified && !(newValue instanceof Model)) {
                 newValue = Model.create(newValue);
             }
@@ -391,7 +439,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
 
             delete children[p as unknown as number];
 
-            // Child may have been added elsewhere in the index so only delete if not present
+            // Child may have been added elsewhere in the index so only delete if not still present
             if (child instanceof Model && children.indexOf(child) === -1) {
                 deleteChild(child);
             }

@@ -6,6 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
@@ -30,6 +31,13 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
 export interface OnOffSensorDevice extends Identity<typeof OnOffSensorDeviceDefinition> {}
 
 export namespace OnOffSensorRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * The {@link Identify} cluster is required by the Matter specification
      *
@@ -73,6 +81,11 @@ export namespace OnOffSensorRequirements {
     export const ColorControlBehavior = BaseColorControlBehavior;
 
     /**
+     * An implementation for each server cluster supported by the endpoint per the Matter specification.
+     */
+    export const server = { mandatory: { Identify: IdentifyServer } };
+
+    /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
     export const client = {
@@ -92,7 +105,7 @@ export const OnOffSensorDeviceDefinition = MutableEndpoint({
     deviceType: 0x850,
     deviceRevision: 2,
     requirements: OnOffSensorRequirements,
-    behaviors: SupportedBehaviors()
+    behaviors: SupportedBehaviors(OnOffSensorRequirements.server.mandatory.Identify)
 });
 
 export const OnOffSensorDevice: OnOffSensorDevice = OnOffSensorDeviceDefinition;

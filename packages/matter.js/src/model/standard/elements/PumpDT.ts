@@ -46,6 +46,18 @@ Matter.children.push(DeviceType({
             xref: { document: "device", section: "5.3.4" }
         }),
         Requirement({
+            name: "TemperatureMeasurement", id: 0x402, conformance: "O", element: "serverCluster",
+            xref: { document: "device", section: "5.3.4" }
+        }),
+        Requirement({
+            name: "PressureMeasurement", id: 0x403, conformance: "O", element: "serverCluster",
+            xref: { document: "device", section: "5.3.4" }
+        }),
+        Requirement({
+            name: "FlowMeasurement", id: 0x404, conformance: "O", element: "serverCluster",
+            xref: { document: "device", section: "5.3.4" }
+        }),
+        Requirement({
             name: "TemperatureMeasurement", id: 0x402, conformance: "O", element: "clientCluster",
             xref: { document: "device", section: "5.3.4" }
         }),

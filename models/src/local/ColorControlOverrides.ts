@@ -31,8 +31,8 @@ LocalMatter.children.push({
         { tag: "attribute", id: 0x29, name: "Primary6Y", conformance: "NumberOfPrimaries > 5" },
         { tag: "attribute", id: 0x2a, name: "Primary6Intensity", conformance: "NumberOfPrimaries > 5" },
 
-        // Spec defines conformance on these as "CT | ColorTemperatureMireds" which doesn't
-        // make sense because conformance on ColorTemperatureMireds is "CT"
+        // Spec defines conformance on these as "CT | ColorTemperatureMireds" which doesn't make sense because
+        // conformance on ColorTemperatureMireds is "CT"
         {
             tag: "attribute",
             id: 0x400d,
@@ -48,5 +48,7 @@ LocalMatter.children.push({
 
         // Spec states the values of this bitmap are the same as the feature map
         { tag: "attribute", id: 0x400a, name: "ColorCapabilities", type: "FeatureMap" },
+
+        // The spec defines "direction"
     ],
 });

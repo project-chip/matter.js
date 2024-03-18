@@ -6,6 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { BindingBehavior as BaseBindingBehavior } from "../../../behavior/definitions/binding/BindingBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import {
@@ -39,6 +40,13 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
 export interface PumpControllerDevice extends Identity<typeof PumpControllerDeviceDefinition> {}
 
 export namespace PumpControllerRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * The {@link Binding} cluster is required by the Matter specification
      *
@@ -110,6 +118,11 @@ export namespace PumpControllerRequirements {
     export const FlowMeasurementBehavior = BaseFlowMeasurementBehavior;
 
     /**
+     * An implementation for each server cluster supported by the endpoint per the Matter specification.
+     */
+    export const server = { mandatory: { Identify: IdentifyServer } };
+
+    /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
     export const client = {
@@ -136,7 +149,7 @@ export const PumpControllerDeviceDefinition = MutableEndpoint({
     deviceType: 0x304,
     deviceRevision: 2,
     requirements: PumpControllerRequirements,
-    behaviors: SupportedBehaviors()
+    behaviors: SupportedBehaviors(PumpControllerRequirements.server.mandatory.Identify)
 });
 
 export const PumpControllerDevice: PumpControllerDevice = PumpControllerDeviceDefinition;

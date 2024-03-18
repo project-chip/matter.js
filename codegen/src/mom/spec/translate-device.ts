@@ -20,8 +20,8 @@ const ActualClusterNames = {
     NodeOperationalCredentials: "OperationalCredentials",
 };
 
-// The specification references to clusters are not entirely formal.  This
-// translator converts colloquial names to the actual cluster name
+// The specification references to clusters are not entirely formal.  This translator converts colloquial names to the
+// actual cluster name
 const ClusterName = (el: HTMLElement) => {
     const name = Identifier(el);
     return (ActualClusterNames as any)[name] ?? name;
@@ -188,9 +188,8 @@ function addClusters(device: DeviceTypeElement, deviceRef: DeviceReference) {
         conformance: Optional(Str),
     });
 
-    // CSA seems to mix in Zigbee just for old time's sake.  They reference
-    // clusters that aren't even in the Matter cluster spec.  Filter these
-    // out
+    // CSA seems to mix in Zigbee just for old time's sake.  They reference clusters that aren't even in the Matter
+    // cluster spec.  Filter these out
     clusterRecords = clusterRecords.filter(c => c.conformance !== "[Zigbee]");
 
     const clusters = translateRecordsToMatter("clusters", clusterRecords, RequirementElement);

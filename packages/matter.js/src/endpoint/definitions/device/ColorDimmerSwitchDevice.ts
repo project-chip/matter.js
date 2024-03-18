@@ -6,6 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
 import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
 import {
@@ -30,6 +31,13 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
 export interface ColorDimmerSwitchDevice extends Identity<typeof ColorDimmerSwitchDeviceDefinition> {}
 
 export namespace ColorDimmerSwitchRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * The {@link Identify} cluster is required by the Matter specification
      *
@@ -73,6 +81,11 @@ export namespace ColorDimmerSwitchRequirements {
     export const ScenesBehavior = BaseScenesBehavior;
 
     /**
+     * An implementation for each server cluster supported by the endpoint per the Matter specification.
+     */
+    export const server = { mandatory: { Identify: IdentifyServer } };
+
+    /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
     export const client = {
@@ -92,7 +105,7 @@ export const ColorDimmerSwitchDeviceDefinition = MutableEndpoint({
     deviceType: 0x105,
     deviceRevision: 2,
     requirements: ColorDimmerSwitchRequirements,
-    behaviors: SupportedBehaviors()
+    behaviors: SupportedBehaviors(ColorDimmerSwitchRequirements.server.mandatory.Identify)
 });
 
 export const ColorDimmerSwitchDevice: ColorDimmerSwitchDevice = ColorDimmerSwitchDeviceDefinition;
