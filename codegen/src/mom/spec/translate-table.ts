@@ -6,6 +6,7 @@
 
 import { Logger } from "@project-chip/matter.js/log";
 import { AnyElement, FieldElement, Specification } from "@project-chip/matter.js/model";
+import { isObject } from "@project-chip/matter.js/util";
 import { addDocumentation } from "./add-documentation.js";
 import { Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";
@@ -86,7 +87,7 @@ export function translateTable<T extends TableSchema>(
     nextField: for (const kv of Object.entries(schema)) {
         const [k] = kv;
         let [, v] = kv;
-        while (typeof v === "object") {
+        while (isObject(v)) {
             switch (v.option) {
                 case "optional":
                     optional.add(k);

@@ -5,6 +5,7 @@
  */
 
 import { camelize } from "../../util/String.js";
+import { isObject } from "../../util/Type.js";
 import { FieldValue } from "../definitions/index.js";
 import { Aspect } from "./Aspect.js";
 
@@ -81,7 +82,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
             if (typeof value === "string" || Array.isArray(value)) {
                 return value.length;
             }
-            if (typeof value === "object") {
+            if (isObject(value)) {
                 if (value.type === FieldValue.reference) {
                     value = valueOf(properties?.[camelize(value.name)]);
                 }

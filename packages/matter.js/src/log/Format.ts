@@ -7,6 +7,7 @@
 import { Lifecycle } from "../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { isObject } from "../util/Type.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { Level } from "./Level.js";
 
@@ -402,7 +403,7 @@ function renderValue(value: unknown, formatter: Formatter, squash: boolean): str
     if (value instanceof Error) {
         return renderDiagnostic(Diagnostic.error(value), formatter);
     }
-    if (typeof value === "object" && Symbol.iterator in value && !(value instanceof String)) {
+    if (isObject(value) && Symbol.iterator in value && !(value instanceof String)) {
         const list = sequenceToList(value as Iterable<unknown>);
         if (!list.length) {
             return "";
