@@ -186,13 +186,13 @@ async function getConfiguration() {
     );
     const deviceStorage = (await storageService.open("device")).createContext("data");
 
-    const isTemperature = deviceStorage.get("isTemperature", environment.vars.get("type") !== "humidity");
-    if (deviceStorage.has("isTemperature")) {
+    const isTemperature = await deviceStorage.get("isTemperature", environment.vars.get("type") !== "humidity");
+    if (await deviceStorage.has("isTemperature")) {
         console.log(
             `Device type ${isTemperature ? "temperature" : "humidity"} found in storage. --type parameter is ignored.`,
         );
     }
-    let interval = environment.vars.number("interval") ?? deviceStorage.get("interval", 60);
+    let interval = environment.vars.number("interval") ?? (await deviceStorage.get("interval", 60));
     if (interval < 1) {
         console.log(`Invalid Interval ${interval}, set to 60s`);
         interval = 60;
@@ -200,25 +200,26 @@ async function getConfiguration() {
 
     const deviceName = "Matter test device";
     const vendorName = "matter-node.js";
-    const passcode = environment.vars.number("passcode") ?? deviceStorage.get("passcode", 20202021);
-    const discriminator = environment.vars.number("discriminator") ?? deviceStorage.get("discriminator", 3840);
+    const passcode = environment.vars.number("passcode") ?? (await deviceStorage.get("passcode", 20202021));
+    const discriminator = environment.vars.number("discriminator") ?? (await deviceStorage.get("discriminator", 3840));
     // product name / id and vendor id should match what is in the device certificate
-    const vendorId = environment.vars.number("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
+    const vendorId = environment.vars.number("vendorid") ?? (await deviceStorage.get("vendorid", 0xfff1));
     const productName = `node-matter OnOff ${isTemperature ? "Temperature" : "Humidity"}`;
-    const productId = environment.vars.number("productid") ?? deviceStorage.get("productid", 0x8000);
+    const productId = environment.vars.number("productid") ?? (await deviceStorage.get("productid", 0x8000));
 
     const port = environment.vars.number("port") ?? 5540;
 
-    const uniqueId = environment.vars.string("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs().toString());
+    const uniqueId =
+        environment.vars.string("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs().toString()));
 
     // Persist basic data to keep them also on restart
-    deviceStorage.set("passcode", passcode);
-    deviceStorage.set("discriminator", discriminator);
-    deviceStorage.set("vendorid", vendorId);
-    deviceStorage.set("productid", productId);
-    deviceStorage.set("interval", interval);
-    deviceStorage.set("isTemperature", isTemperature);
-    deviceStorage.set("uniqueid", uniqueId);
+    await deviceStorage.set("passcode", passcode);
+    await deviceStorage.set("discriminator", discriminator);
+    await deviceStorage.set("vendorid", vendorId);
+    await deviceStorage.set("productid", productId);
+    await deviceStorage.set("interval", interval);
+    await deviceStorage.set("isTemperature", isTemperature);
+    await deviceStorage.set("uniqueid", uniqueId);
 
     return {
         isTemperature,

@@ -77,14 +77,16 @@ class ControllerNode {
          */
 
         const controllerStorage = (await storageService.open("controller")).createContext("data");
-        const ip = controllerStorage.has("ip") ? controllerStorage.get<string>("ip") : environment.vars.string("ip");
-        const port = controllerStorage.has("port")
+        const ip = (await controllerStorage.has("ip"))
+            ? controllerStorage.get<string>("ip")
+            : environment.vars.string("ip");
+        const port = (await controllerStorage.has("port"))
             ? controllerStorage.get<number>("port")
             : environment.vars.number("port");
-        const uniqueId = controllerStorage.has("uniqueid")
-            ? controllerStorage.get<string>("uniqueid")
+        const uniqueId = (await controllerStorage.has("uniqueid"))
+            ? await controllerStorage.get<string>("uniqueid")
             : environment.vars.string("uniqueid") ?? Time.nowMs().toString();
-        controllerStorage.set("uniqueid", uniqueId);
+        await controllerStorage.set("uniqueid", uniqueId);
 
         const pairingCode = environment.vars.string("pairingcode");
         let longDiscriminator, setupPin, shortDiscriminator;
@@ -96,9 +98,10 @@ class ControllerNode {
             logger.debug(`Data extracted from pairing code: ${Logger.toJSON(pairingCodeCodec)}`);
         } else {
             longDiscriminator =
-                environment.vars.number("longDiscriminator") ?? controllerStorage.get("longDiscriminator", 3840);
+                environment.vars.number("longDiscriminator") ??
+                (await controllerStorage.get("longDiscriminator", 3840));
             if (longDiscriminator > 4095) throw new Error("Discriminator value must be less than 4096");
-            setupPin = environment.vars.number("pin") ?? controllerStorage.get("pin", 20202021);
+            setupPin = environment.vars.number("pin") ?? (await controllerStorage.get("pin", 20202021));
         }
         if ((shortDiscriminator === undefined && longDiscriminator === undefined) || setupPin === undefined) {
             throw new Error(
