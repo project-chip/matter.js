@@ -24,7 +24,7 @@ export function assertBoolean(value: Val, path: SchemaErrorPath): asserts value 
 }
 
 export function assertObject(value: Val, path: SchemaErrorPath): asserts value is Val.Struct {
-    if (isObject(value) && !Array.isArray(value)) {
+    if (isObject(value)) {
         return;
     }
     throw new DatatypeError(path, "an object", value);
