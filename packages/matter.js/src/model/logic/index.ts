@@ -6,7 +6,7 @@
 
 export * from "./ClusterVariance.js";
 export * from "./DefaultValue.js";
-export * from "./MergeModels.js";
+export * from "./MergedModel.js";
 export * from "./ModelVariantTraversal.js";
 export * from "./ValidateModel.js";
 export * from "./cluster-variance/FeatureBitmap.js";

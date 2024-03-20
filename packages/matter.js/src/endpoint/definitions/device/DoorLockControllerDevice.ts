@@ -6,6 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { TimeSyncServer as BaseTimeSyncServer } from "../../../behavior/definitions/time-sync/TimeSyncServer.js";
 import { DoorLockBehavior as BaseDoorLockBehavior } from "../../../behavior/definitions/door-lock/DoorLockBehavior.js";
 import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
@@ -24,6 +25,13 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
 export interface DoorLockControllerDevice extends Identity<typeof DoorLockControllerDeviceDefinition> {}
 
 export namespace DoorLockControllerRequirements {
+    /**
+     * The {@link Identify} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * The {@link TimeSync} cluster is optional per the Matter specification
      *
@@ -62,7 +70,7 @@ export namespace DoorLockControllerRequirements {
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    export const server = { optional: { TimeSync: TimeSyncServer }, mandatory: {} };
+    export const server = { optional: { Identify: IdentifyServer, TimeSync: TimeSyncServer }, mandatory: {} };
 
     /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.

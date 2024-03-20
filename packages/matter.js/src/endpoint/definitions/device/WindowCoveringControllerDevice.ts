@@ -6,6 +6,7 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import {
     WindowCoveringBehavior as BaseWindowCoveringBehavior
 } from "../../../behavior/definitions/window-covering/WindowCoveringBehavior.js";
@@ -25,6 +26,13 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
 export interface WindowCoveringControllerDevice extends Identity<typeof WindowCoveringControllerDeviceDefinition> {}
 
 export namespace WindowCoveringControllerRequirements {
+    /**
+     * The {@link Identify} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * The {@link WindowCovering} cluster is required by the Matter specification
      *
@@ -52,6 +60,11 @@ export namespace WindowCoveringControllerRequirements {
      * We provide this alias for convenience.
      */
     export const ScenesBehavior = BaseScenesBehavior;
+
+    /**
+     * An implementation for each server cluster supported by the endpoint per the Matter specification.
+     */
+    export const server = { optional: { Identify: IdentifyServer }, mandatory: {} };
 
     /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.

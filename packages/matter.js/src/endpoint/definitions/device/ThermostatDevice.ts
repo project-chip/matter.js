@@ -13,6 +13,7 @@ import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/
 import {
     ThermostatUserInterfaceConfigurationServer as BaseThermostatUserInterfaceConfigurationServer
 } from "../../../behavior/definitions/thermostat-user-interface-configuration/ThermostatUserInterfaceConfigurationServer.js";
+import { TimeSyncServer as BaseTimeSyncServer } from "../../../behavior/definitions/time-sync/TimeSyncServer.js";
 import {
     RelativeHumidityMeasurementBehavior as BaseRelativeHumidityMeasurementBehavior
 } from "../../../behavior/definitions/relative-humidity-measurement/RelativeHumidityMeasurementBehavior.js";
@@ -81,6 +82,13 @@ export namespace ThermostatRequirements {
     export const ThermostatUserInterfaceConfigurationServer = BaseThermostatUserInterfaceConfigurationServer;
 
     /**
+     * The {@link TimeSync} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const TimeSyncServer = BaseTimeSyncServer;
+
+    /**
      * The {@link RelativeHumidityMeasurement} cluster is optional per the Matter specification
      *
      * We provide this alias for convenience.
@@ -120,10 +128,12 @@ export namespace ThermostatRequirements {
      */
     export const server = {
         mandatory: { Identify: IdentifyServer, Thermostat: ThermostatServer },
+
         optional: {
             Groups: GroupsServer,
             Scenes: ScenesServer,
-            ThermostatUserInterfaceConfiguration: ThermostatUserInterfaceConfigurationServer
+            ThermostatUserInterfaceConfiguration: ThermostatUserInterfaceConfigurationServer,
+            TimeSync: TimeSyncServer
         }
     };
 

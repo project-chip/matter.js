@@ -5,7 +5,7 @@
  */
 
 import { ClusterElement, ClusterModel, MatterElement, MatterModel } from "../../../src/model/index.js";
-import { MergeModels } from "../../../src/model/logic/index.js";
+import { MergedModel } from "../../../src/model/logic/index.js";
 
 // Utility function to perform merge.  Type resolution works differently
 // without the global types in MatterModel so we fake that up even though we're
@@ -14,7 +14,7 @@ function merge({ spec, chip }: { spec: MatterElement.Child; chip: MatterElement.
     const specMatter = new MatterModel({ name: "Spec", children: [spec] });
     const chipMatter = new MatterModel({ name: "Chip", children: [chip] });
 
-    return MergeModels({
+    return MergedModel({
         spec: specMatter.children[specMatter.children.length - 1],
         chip: chipMatter.children[chipMatter.children.length - 1],
     });

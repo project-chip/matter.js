@@ -21,8 +21,8 @@ export class RequirementModel extends Model implements RequirementElement {
     element!: RequirementElement.ElementType;
     default?: any;
 
-    override get key() {
-        return `${this.id ?? this.name}:${this.element}`;
+    override get discriminator() {
+        return this.element;
     }
 
     override get children(): Children<RequirementModel | FieldModel, RequirementElement | FieldElement> {

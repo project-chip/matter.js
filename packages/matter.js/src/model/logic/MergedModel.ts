@@ -14,8 +14,8 @@ import { ModelVariantTraversal, TraverseMap, VariantDetail } from "./ModelVarian
 /**
  * Merge multiple variants of an element into a single element.
  */
-export function MergeModels(variants: TraverseMap, priorities = MergeModels.DefaultPriorities): Model {
-    const priority = new PriorityHandler(priorities || MergeModels.DefaultPriorities);
+export function MergedModel(variants: TraverseMap, priorities = MergedModel.DefaultPriorities): Model {
+    const priority = new PriorityHandler(priorities || MergedModel.DefaultPriorities);
     const visitor = new MergeTraversal<Model>(priority, (variants, recurse) => {
         const merged = merge(variants);
 
@@ -23,17 +23,15 @@ export function MergeModels(variants: TraverseMap, priorities = MergeModels.Defa
             reparentToCanonicalParent(priority, variants);
         }
 
-        // If the manual override specifies a type but no children, ignore
-        // children from other variants.  This allows us to override to a type
-        // that doesn't have children
+        // If the manual override specifies a type but no children, ignore children from other variants.  This allows us
+        // to override to a type that doesn't have children
         const manual = priority.get(variants.tag, "type")[0];
         if (merged.type && variants.map[manual]?.type === merged.type && !variants.map[manual].children?.length) {
             return merged;
         }
 
-        // Update the type for any untyped variant.  This allows model logic
-        // relying on parent type to work without overrides specifying the type
-        // explicitly
+        // Update the type for any untyped variant.  This allows model logic relying on parent type to work without
+        // overrides specifying the type explicitly
         if (merged.type) {
             for (const variant of Object.values(variants.map)) {
                 if (variant.type === undefined) {
@@ -69,8 +67,7 @@ export function MergeModels(variants: TraverseMap, priorities = MergeModels.Defa
             }
         }
 
-        // Specialized support for constraint -- non-empty constraints should
-        // override "desc"
+        // Specialized support for constraint -- non-empty constraints should override "desc"
         const constraint = new Constraint(properties.constraint);
         if (constraint.desc) {
             for (const key of priority.get("*", "constraint")) {
@@ -135,8 +132,7 @@ class MergeTraversal<S> extends ModelVariantTraversal<S> {
             }
 
             if (sourceName === variantPriorities[0]) {
-                // Always prefer highest priority variant which is presumably
-                // a hand edit
+                // Always prefer highest priority variant which is presumably a hand edit
                 return variant;
             }
 
@@ -155,15 +151,13 @@ class MergeTraversal<S> extends ModelVariantTraversal<S> {
             const variantMetatype = variant.effectiveMetatype;
             if (!metatype) {
                 if (variantMetatype) {
-                    // This is not the highest priority type but it's actually
-                    // useful
+                    // This is not the highest priority type but it's actually useful
                     overridePriority = true;
                 }
             } else if (metatype === Metatype.integer) {
                 const variantMetatype = variant.effectiveMetatype;
                 if (variantMetatype === Metatype.enum || variantMetatype === Metatype.bitmap) {
-                    // Even though this is not the highest priority type, it's
-                    // more specific
+                    // Even though this is not the highest priority type, it's more specific
                     overridePriority = true;
                 }
             }
@@ -182,7 +176,7 @@ class MergeTraversal<S> extends ModelVariantTraversal<S> {
  * Utility class for working with merge priorities.
  */
 class PriorityHandler {
-    constructor(private priorities: MergeModels.Priorities) {}
+    constructor(private priorities: MergedModel.Priorities) {}
 
     /**
      * Get the priority for a specific tag and field.
@@ -203,26 +197,20 @@ class PriorityHandler {
 }
 
 /**
- * One complexity of merge is that types can either have children directly, or
- * they can reference a type that contains the children.  For example, the
- * specification defines most attributes as enums and lists values without
- * naming a separate enum type.
+ * One complexity of merge is that types can either have children directly, or they can reference a type that contains
+ * the children.  For example, the specification defines most attributes as enums and lists values without naming a
+ * separate enum type.
  *
- * CHIP XML OTOH doesn't support this structure -- it makes up enum names if
- * the spec doesn't define a separate type.
+ * CHIP XML OTOH doesn't support this structure -- it makes up enum names if the spec doesn't define a separate type.
  *
- * We want to do whatever the spec does.  In this case this means we need to
- * move the children from MyPropertyEnum into MyPropertyAttribute if the final
- * type will be enum8 rather than MyPropertyEnum.
+ * We want to do whatever the spec does.  In this case this means we need to move the children from MyPropertyEnum into
+ * MyPropertyAttribute if the final type will be enum8 rather than MyPropertyEnum.
  *
- * To keep things simple we do this in a separate preprocessing pass before
- * performing the actual merge.
+ * To keep things simple we do this in a separate preprocessing pass before performing the actual merge.
  *
- * Another simplifying assumption we make is that we will only ever move
- * children *into* the direct parent from the cluster-scoped type, not the
- * other way around.  We know this is true because CHIP doesn't support direct
- * children and the structures we build ourselves are already in the preferred
- * format.
+ * Another simplifying assumption we make is that we will only ever move children *into* the direct parent from the
+ * cluster-scoped type, not the other way around.  We know this is true because CHIP doesn't support direct children and
+ * the structures we build ourselves are already in the preferred format.
  */
 function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantDetail) {
     // Collect datatypes from which we move children so we can discard
@@ -237,20 +225,17 @@ function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantD
             return;
         }
 
-        // If the canonical type is a global type that can have children,
-        // variants that reference a local type with children need to be
-        // rewritten
+        // If the canonical type is a global type that can have children, variants that reference a local type with
+        // children need to be rewritten
         if (type.base?.global && Metatype.hasChildren(type.effectiveMetatype)) {
             for (const variantName in variants.map) {
-                // Skip if this is the canonical variant or this variant
-                // already has children
+                // Skip if this is the canonical variant or this variant already has children
                 const variant = variants.map[variantName];
                 if (variant === type || variant.children.length) {
                     continue;
                 }
 
-                // Skip if the base type is not local to the cluster or doesn't
-                // have children
+                // Skip if the base type is not local to the cluster or doesn't have children
                 const base = variant.base;
                 if (!(base instanceof ValueModel) || base.parent?.tag !== ElementTag.Cluster || !base.children.length) {
                     continue;
@@ -272,14 +257,14 @@ function reparentToCanonicalParent(priority: PriorityHandler, variants: VariantD
     });
     traversal.traverse(variants.map);
 
-    // Remove deparented datatypes.  We do this after recursing because
-    // removing from a set we're actively visiting may be problematic
+    // Remove deparented datatypes.  We do this after recursing because removing from a set we're actively visiting may
+    // be problematic
     deparented.forEach(m => (m.parent = undefined));
 
     return variants;
 }
 
-export namespace MergeModels {
+export namespace MergedModel {
     /**
      * Priorities define rules that control how values are merged.
      */
@@ -296,17 +281,15 @@ export namespace MergeModels {
     };
 
     /**
-     * A default set of priorities for the variants included with matter.js.
-     * We currently have "chip" as preferred over "spec" by default, but then
-     * have overridden to reverse this for a lot of fields.  Should probably
-     * revisit the default at some point.
+     * A default set of priorities for the variants included with matter.js. We currently have "chip" as preferred over
+     * "spec" by default, but then have overridden to reverse this for a lot of fields.  Should probably revisit the
+     * default at some point.
      */
     export const DefaultPriorities: Priorities = {
         "*": {
             "*": ["local", "chip", "spec"],
 
-            // Prefer spec for elements that are insufficiently defined in
-            // chip
+            // Prefer spec for elements that are insufficiently defined in chip
             conformance: ["local", "spec", "chip"],
             constraint: ["local", "spec", "chip"],
             quality: ["local", "spec", "chip"],
