@@ -4,17 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Storage, StorageError } from "./Storage.js";
+import { StorageError, SyncStorage } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
-export class StorageBackendMemory implements Storage {
+export class StorageBackendMemory extends SyncStorage {
     protected initialized = false;
 
-    constructor(protected store: any = {}) {}
+    constructor(protected store: any = {}) {
+        super();
+    }
 
     static async create(store: any = {}) {
         const storage = new StorageBackendMemory(store);
-        await storage.initialize();
+        storage.initialize();
         return storage;
     }
 
@@ -25,18 +27,18 @@ export class StorageBackendMemory implements Storage {
         return key;
     }
 
-    async initialize() {
+    initialize() {
         if (this.initialized) throw new StorageError("Storage already initialized!");
         this.initialized = true;
         // nothing else to do
     }
 
-    async close() {
+    close() {
         this.initialized = false;
         // nothing to do
     }
 
-    clear(): void {
+    clear() {
         this.store = {};
     }
 
@@ -46,7 +48,7 @@ export class StorageBackendMemory implements Storage {
         return this.store[this.createContextKey(contexts)]?.[key];
     }
 
-    set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
+    set(contexts: string[], key: string, value: SupportedStorageTypes) {
         if (!this.initialized) throw new StorageError("Storage is not initialized");
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         const contextKey = this.createContextKey(contexts);
@@ -56,19 +58,37 @@ export class StorageBackendMemory implements Storage {
         this.store[contextKey][key] = value;
     }
 
-    delete(contexts: string[], key: string): void {
+    delete(contexts: string[], key: string) {
         if (!this.initialized) throw new StorageError("Storage is not initialized");
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         delete this.store[this.createContextKey(contexts)]?.[key];
     }
 
-    keys(contexts: string[]): string[] {
+    keys(contexts: string[]) {
         if (!this.initialized) throw new StorageError("Storage is not initialized");
         if (!contexts.length) throw new StorageError("Context must not be empty!");
         return Object.keys(this.store[this.createContextKey(contexts)] ?? {});
     }
 
-    clearAll(contexts: string[]): void {
+    contexts(contexts: string[]) {
+        if (!this.initialized) throw new StorageError("Storage is not initialized");
+        const contextKey = contexts.length ? this.createContextKey(contexts) : "";
+        const startContextKey = contextKey.length ? `${contextKey}.` : "";
+        const foundContexts = new Array<string>();
+        Object.keys(this.store).forEach(key => {
+            if (key.startsWith(startContextKey)) {
+                const subKeys = key.substring(startContextKey.length).split(".");
+                if (subKeys.length < 1) return; // should never happen
+                const context = subKeys[0];
+                if (!foundContexts.includes(context)) {
+                    foundContexts.push(context);
+                }
+            }
+        });
+        return foundContexts;
+    }
+
+    clearAll(contexts: string[]) {
         if (!this.initialized) throw new StorageError("Storage is not initialized");
         const contextKey = this.createContextKey(contexts);
         if (contextKey.length) {

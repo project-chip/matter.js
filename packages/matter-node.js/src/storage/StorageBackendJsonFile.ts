@@ -37,7 +37,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
 
     override async initialize() {
         if (this.initialized) throw new StorageError("Storage already initialized!");
-        await super.initialize();
+        super.initialize();
         try {
             this.store = this.fromJson(await readFile(this.path, "utf-8"));
         } catch (error: any) {
@@ -58,7 +58,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         }
     }
 
-    override set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
+    override set(contexts: string[], key: string, value: SupportedStorageTypes): void {
         super.set(contexts, key, value);
         this.triggerCommit();
     }
@@ -90,6 +90,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     override async close() {
         this.commitTimer.stop();
         await this.commit();
+        super.close();
         this.closed = true;
         this.initialized = false;
     }
