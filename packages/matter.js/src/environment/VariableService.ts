@@ -6,7 +6,6 @@
 
 import { ImplementationError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
-import { isObject } from "../util/Type.js";
 import type { Environment } from "./Environment.js";
 import { Environmental } from "./Environmental.js";
 
@@ -244,8 +243,8 @@ export function merge(a: Record<string, any>, b: Record<string, any>) {
     for (const key in b) {
         const aval = a[key];
         const bval = b[key];
-        if (isObject(bval)) {
-            if (isObject(aval)) {
+        if (typeof bval === "object") {
+            if (typeof aval === "object") {
                 merged[key] = merge(aval, bval);
             } else {
                 merged[key] = bval;
