@@ -63,7 +63,7 @@ export class Fabric {
 
     private readonly scopedClusterData: Map<number, any>;
 
-    private removeCallbacks = new Array<() => Promise<void>>();
+    private removeCallbacks = new Array<() => MaybePromise<void>>();
     private persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
 
     constructor(
@@ -171,11 +171,11 @@ export class Fabric {
         }
     }
 
-    addRemoveCallback(callback: () => Promise<void>) {
+    addRemoveCallback(callback: () => MaybePromise<void>) {
         this.removeCallbacks.push(callback);
     }
 
-    deleteRemoveCallback(callback: () => Promise<void>) {
+    deleteRemoveCallback(callback: () => MaybePromise<void>) {
         const index = this.removeCallbacks.indexOf(callback);
         if (index >= 0) {
             this.removeCallbacks.splice(index, 1);
