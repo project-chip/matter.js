@@ -23,6 +23,7 @@ import { SecureSession } from "../session/SecureSession.js";
 import { SupportedStorageTypes } from "../storage/StringifyTools.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
+import { MaybePromise } from "../util/Promises.js";
 
 const logger = Logger.get("Fabric");
 
@@ -62,8 +63,8 @@ export class Fabric {
 
     private readonly scopedClusterData: Map<number, any>;
 
-    private removeCallbacks = new Array<() => void>();
-    private persistCallback: ((isUpdate?: boolean) => void) | undefined;
+    private removeCallbacks = new Array<() => Promise<void>>();
+    private persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
 
     constructor(
         readonly fabricIndex: FabricIndex,
@@ -128,9 +129,9 @@ export class Fabric {
         );
     }
 
-    setLabel(label: string) {
+    async setLabel(label: string) {
         this.label = label;
-        this.persist();
+        await this.persist();
     }
 
     getPublicKey() {
@@ -170,31 +171,33 @@ export class Fabric {
         }
     }
 
-    addRemoveCallback(callback: () => void) {
+    addRemoveCallback(callback: () => Promise<void>) {
         this.removeCallbacks.push(callback);
     }
 
-    deleteRemoveCallback(callback: () => void) {
+    deleteRemoveCallback(callback: () => Promise<void>) {
         const index = this.removeCallbacks.indexOf(callback);
         if (index >= 0) {
             this.removeCallbacks.splice(index, 1);
         }
     }
 
-    setPersistCallback(callback: (isUpdate?: boolean) => void) {
-        // TODO Remove "isUpdate" as soon as the fabric scoped data are removed from here/legacy API gets removed
+    setPersistCallback(callback: (isUpdate?: boolean) => MaybePromise<void>) {
+        // TODO Remove "isUpdate" parameter as soon as the fabric scoped data are removed from here/legacy API gets removed
         this.persistCallback = callback;
     }
 
     async remove(currentSessionId?: number) {
-        this.removeCallbacks.forEach(callback => callback());
+        for (const callback of this.removeCallbacks) {
+            await callback();
+        }
         for (const session of [...this.sessions]) {
             await session.destroy(false, session.id === currentSessionId); // Delay Close for current session only
         }
     }
 
     persist(isUpdate = true) {
-        this.persistCallback?.(isUpdate);
+        return this.persistCallback?.(isUpdate);
     }
 
     getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string): T | undefined {
@@ -210,7 +213,7 @@ export class Fabric {
             this.scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
         }
         this.scopedClusterData.get(cluster.id).set(clusterDataKey, value);
-        this.persist(false);
+        return this.persist(false);
     }
 
     deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
@@ -218,7 +221,7 @@ export class Fabric {
             return;
         }
         this.scopedClusterData.get(cluster.id).delete(clusterDataKey);
-        this.persist(false);
+        return this.persist(false);
     }
 
     hasScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
@@ -227,7 +230,7 @@ export class Fabric {
 
     deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
         this.scopedClusterData.delete(cluster.id);
-        this.persist(false);
+        return this.persist(false);
     }
 
     getScopedClusterDataKeys(cluster: Cluster<any, any, any, any, any>): string[] {

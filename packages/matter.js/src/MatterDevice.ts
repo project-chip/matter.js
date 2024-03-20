@@ -43,6 +43,7 @@ import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { Time, Timer } from "./time/Time.js";
+import { AsyncConstruction, asyncNew } from "./util/AsyncConstruction.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { Mutex } from "./util/Mutex.js";
 
@@ -60,14 +61,36 @@ export class MatterDevice {
     private announcementStartedTime: number | null = null;
     private isClosing = false;
     readonly #exchangeManager;
-    readonly #fabricManager;
-    readonly #sessionManager;
+    readonly #fabricManager: FabricManager;
+    readonly #sessionManager: SessionManager<MatterDevice>;
     #failsafeContext?: FailsafeContext;
 
     // Currently we do not put much effort into synchronizing announcements as it probably isn't really necessary.  But
     // this mutex prevents automated announcements from piling up and allows us to ensure announcements are complete
     // on close
     #announcementMutex = new Mutex(this);
+    #construction: AsyncConstruction<MatterDevice>;
+
+    get construction() {
+        return this.#construction;
+    }
+
+    static async create(
+        sessionStorage: StorageContext,
+        fabricStorage: StorageContext,
+        getCommissioningConfig: () => CommissioningOptions.Configuration,
+        commissioningChangedCallback: (fabricIndex: FabricIndex, fabricAction: FabricAction) => void,
+        sessionChangedCallback: (fabricIndex: FabricIndex) => void,
+    ) {
+        return asyncNew(
+            MatterDevice,
+            sessionStorage,
+            fabricStorage,
+            getCommissioningConfig,
+            commissioningChangedCallback,
+            sessionChangedCallback,
+        );
+    }
 
     constructor(
         readonly sessionStorage: StorageContext,
@@ -77,21 +100,18 @@ export class MatterDevice {
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
         this.#fabricManager = new FabricManager(fabricStorage);
-        this.#fabricManager.events.deleted.on(fabric => {
+
+        this.#fabricManager.events.deleted.on(async fabric => {
             const { fabricIndex, rootNodeId } = fabric;
             // When fabric is removed, also remove the resumption record
-            this.#sessionManager.removeResumptionRecord(rootNodeId);
+            await this.#sessionManager.removeResumptionRecord(rootNodeId);
             this.commissioningChangedCallback(fabricIndex, FabricAction.Removed);
         });
-        this.#fabricManager.events.added.on(({ fabricIndex }) =>
-            this.commissioningChangedCallback(fabricIndex, FabricAction.Added),
-        );
         this.#fabricManager.events.updated.on(({ fabricIndex }) =>
             this.commissioningChangedCallback(fabricIndex, FabricAction.Updated),
         );
 
         this.#sessionManager = new SessionManager(this, sessionStorage);
-        this.#sessionManager.initFromStorage(this.#fabricManager.getFabrics());
 
         this.#exchangeManager = new ExchangeManager<MatterDevice>(this.#sessionManager, this.channelManager);
 
@@ -129,6 +149,17 @@ export class MatterDevice {
             if (currentFabric !== undefined) {
                 this.sessionChangedCallback(currentFabric.fabricIndex);
             }
+        });
+
+        this.#construction = AsyncConstruction(this, async () => {
+            await this.#fabricManager.initFromStorage();
+
+            // Attach added events delayed because initialization from storage would else trigger it
+            this.#fabricManager.events.added.on(({ fabricIndex }) =>
+                this.commissioningChangedCallback(fabricIndex, FabricAction.Added),
+            );
+
+            await this.#sessionManager.initFromStorage(this.#fabricManager.getFabrics());
         });
     }
 
@@ -355,7 +386,7 @@ export class MatterDevice {
         return this.#sessionManager.findResumptionRecordById(resumptionId);
     }
 
-    saveResumptionRecord(resumptionRecord: ResumptionRecord) {
+    async saveResumptionRecord(resumptionRecord: ResumptionRecord) {
         return this.#sessionManager.saveResumptionRecord(resumptionRecord);
     }
 

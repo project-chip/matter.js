@@ -72,7 +72,7 @@ export class SubscriptionHandler {
     private readonly eventListeners = new Map<
         string,
         {
-            event: EventServer<any>;
+            event: EventServer<any, any>;
             listener?: (newEvent: EventStorageData<any>) => void;
         }
     >();

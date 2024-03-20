@@ -125,7 +125,7 @@ export class ServerPartStore implements PartStore {
     async saveNumber() {
         await this.#construction;
 
-        this.#storage.set(NUMBER_KEY, this.number);
+        await this.#storage.set(NUMBER_KEY, this.number);
     }
 
     async set(values: Record<string, undefined | Val.Struct>) {
@@ -154,9 +154,9 @@ export class ServerPartStore implements PartStore {
             for (const key in behaviorValues) {
                 const value = behaviorValues[key];
                 if (value === undefined) {
-                    behaviorStorage.delete(key);
+                    await behaviorStorage.delete(key);
                 } else {
-                    behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes);
+                    await behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes);
                 }
             }
         }
@@ -169,7 +169,7 @@ export class ServerPartStore implements PartStore {
     async delete() {
         await this.#construction;
 
-        this.#storage.clearAll();
+        await this.#storage.clearAll();
     }
 
     async #loadSubparts() {

@@ -74,7 +74,7 @@ export class PartStoreFactory extends PartStoreService {
 
         this.#construction = AsyncConstruction(this, async () => {
             // Load next number with excessive validation for the off-chance it somehow gets corrupted
-            this.#nextNumber = storage.get(NEXT_NUMBER_KEY, nextNumber) % 0xffff;
+            this.#nextNumber = (await storage.get(NEXT_NUMBER_KEY, nextNumber)) % 0xffff;
 
             if (!this.#nextNumber) {
                 this.#nextNumber = 1;
@@ -92,7 +92,7 @@ export class PartStoreFactory extends PartStoreService {
             await this.#numbersPersisted;
         }
 
-        this.#storage.clearAll();
+        await this.#storage.clearAll();
 
         this.#construction.setStatus(Lifecycle.Status.Inactive);
         this.#construction.start();
@@ -206,7 +206,7 @@ export class PartStoreFactory extends PartStoreService {
             }
 
             if (this.#nextNumber !== this.#persistedNextNumber) {
-                this.#storage.set(NEXT_NUMBER_KEY, this.#nextNumber);
+                await this.#storage.set(NEXT_NUMBER_KEY, this.#nextNumber);
                 this.#persistedNextNumber = this.#nextNumber;
             }
         };

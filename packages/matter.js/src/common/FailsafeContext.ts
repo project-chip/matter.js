@@ -110,7 +110,7 @@ export abstract class FailsafeContext {
         this.#failsafe.complete();
 
         if (this.fabricIndex !== undefined) {
-            this.#fabrics.persistFabrics();
+            await this.#fabrics.persistFabrics();
         }
 
         this.#failsafe = undefined;
@@ -143,9 +143,9 @@ export abstract class FailsafeContext {
         return fabric.fabricIndex;
     }
 
-    updateFabric(fabric: Fabric) {
-        this.#fabrics.updateFabric(fabric);
-        this.#sessions.updateFabricForResumptionRecords(fabric);
+    async updateFabric(fabric: Fabric) {
+        await this.#fabrics.updateFabric(fabric);
+        await this.#sessions.updateFabricForResumptionRecords(fabric);
     }
 
     /**
@@ -309,7 +309,7 @@ export abstract class FailsafeContext {
     abstract restoreNetworkState(): Promise<void>;
 
     async restoreFabric(fabric: Fabric) {
-        this.updateFabric(fabric);
+        await this.updateFabric(fabric);
     }
 
     abstract revokeFabric(fabric: Fabric): Promise<void>;

@@ -178,7 +178,9 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.adminFabricIndex = adminFabric.fabricIndex;
         this.state.adminVendorId = adminFabric.rootVendorId;
 
-        const removeCallback = this.callback(this.#fabricRemovedCallback);
+        const removeCallback = async () => {
+            this.callback(this.#fabricRemovedCallback);
+        };
 
         this.internal.stopMonitoringFabricForRemoval = () => {
             adminFabric.deleteRemoveCallback(removeCallback);

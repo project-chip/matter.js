@@ -64,9 +64,9 @@ export class ControllerStore implements Destructable {
     }
 
     async erase() {
-        this.#sessionStorage?.clearAll();
-        this.#credentialsStorage?.clearAll();
-        this.#nodesStorage?.clearAll();
+        await this.#sessionStorage?.clearAll();
+        await this.#credentialsStorage?.clearAll();
+        await this.#nodesStorage?.clearAll();
     }
 
     async close() {

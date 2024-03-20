@@ -61,7 +61,7 @@ AdministratorCommissioning.Cluster.commands = {
 /** Class which executed the cluster commands for the AdministratorCommissioning cluster. */
 class AdministratorCommissioningManager {
     private commissioningWindowTimeout?: Timer;
-    private fabricRemoveHandler = () => this.adminFabricIndexAttribute.setLocal(null);
+    private fabricRemoveHandler = async () => this.adminFabricIndexAttribute.setLocal(null);
 
     constructor(
         private readonly windowStatusAttribute: AttributeServer<AdministratorCommissioning.CommissioningWindowStatus>,
@@ -89,7 +89,7 @@ class AdministratorCommissioningManager {
 
         this.adminFabricIndexAttribute.setLocal(session.associatedFabric.fabricIndex);
         this.adminVendorIdAttribute.setLocal(session.associatedFabric.rootVendorId);
-        session.associatedFabric.addRemoveCallback(this.fabricRemoveHandler);
+        session.associatedFabric.addRemoveCallback(async () => this.fabricRemoveHandler());
     }
 
     /**

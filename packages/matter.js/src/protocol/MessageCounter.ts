@@ -7,6 +7,7 @@
 import { InternalError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { StorageContext } from "../storage/StorageContext.js";
+import { AsyncConstruction, asyncNew } from "../util/AsyncConstruction.js";
 
 /** Maximum 32 bit counter value. */
 export const MAX_COUNTER_VALUE_32BIT = 0xfffffffe;
@@ -57,7 +58,7 @@ export class MessageCounter {
         protected readonly rolloverInfoDifference = ROLLOVER_INFO_DIFFERENCE,
     ) {}
 
-    getIncrementedCounter() {
+    async getIncrementedCounter() {
         this.messageCounter++;
         if (this.messageCounter > MAX_COUNTER_VALUE_32BIT) {
             if (this.aboutToRolloverCallback !== undefined) {
@@ -77,6 +78,27 @@ export class MessageCounter {
 
 /** Enhanced Message counter that can be persisted and will be initialized from the persisted value (if existing). */
 export class PersistedMessageCounter extends MessageCounter {
+    #construction: AsyncConstruction<PersistedMessageCounter>;
+
+    get construction() {
+        return this.#construction;
+    }
+
+    static async create(
+        storageContext: StorageContext,
+        storageKey: string,
+        aboutToRolloverCallback?: () => void,
+        rolloverInfoDifference = ROLLOVER_INFO_DIFFERENCE,
+    ) {
+        return asyncNew(
+            PersistedMessageCounter,
+            storageContext,
+            storageKey,
+            aboutToRolloverCallback,
+            rolloverInfoDifference,
+        );
+    }
+
     constructor(
         private readonly storageContext: StorageContext,
         private readonly storageKey: string,
@@ -84,24 +106,26 @@ export class PersistedMessageCounter extends MessageCounter {
         rolloverInfoDifference = ROLLOVER_INFO_DIFFERENCE,
     ) {
         super(aboutToRolloverCallback, rolloverInfoDifference);
-        if (storageContext.has(storageKey)) {
-            this.messageCounter = storageContext.get<number>(storageKey);
-            if (this.messageCounter < 0 || this.messageCounter > MAX_COUNTER_VALUE_32BIT) {
-                throw new InternalError(`Invalid message counter value: ${this.messageCounter}`);
+        this.#construction = AsyncConstruction(this, async () => {
+            if (await storageContext.has(storageKey)) {
+                this.messageCounter = await storageContext.get<number>(storageKey);
+                if (this.messageCounter < 0 || this.messageCounter > MAX_COUNTER_VALUE_32BIT) {
+                    throw new InternalError(`Invalid message counter value: ${this.messageCounter}`);
+                }
+                // Make sure to call the callback if we are close to a rollover also for edge cases on initialization
+                if (
+                    this.aboutToRolloverCallback !== undefined &&
+                    this.messageCounter >= MAX_COUNTER_VALUE_32BIT - this.rolloverInfoDifference
+                ) {
+                    this.aboutToRolloverCallback();
+                }
             }
-            // Make sure to call the callback if we are close to a rollover also for edge cases on initialization
-            if (
-                this.aboutToRolloverCallback !== undefined &&
-                this.messageCounter >= MAX_COUNTER_VALUE_32BIT - this.rolloverInfoDifference
-            ) {
-                this.aboutToRolloverCallback();
-            }
-        }
+        });
     }
 
-    override getIncrementedCounter() {
-        const counter = super.getIncrementedCounter();
-        this.storageContext.set(this.storageKey, counter);
+    override async getIncrementedCounter() {
+        const counter = await super.getIncrementedCounter();
+        await this.storageContext.set(this.storageKey, counter);
         return counter;
     }
 }

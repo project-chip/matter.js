@@ -131,7 +131,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             await messenger.waitForSuccess();
 
             await messenger.close();
-            server.saveResumptionRecord(resumptionRecord);
+            await server.saveResumptionRecord(resumptionRecord);
         } else if (
             (peerResumptionId === undefined && peerResumeMic === undefined) ||
             (peerResumptionId !== undefined && peerResumeMic !== undefined && resumptionRecord === undefined)
@@ -232,7 +232,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             };
 
             await messenger.close();
-            server.saveResumptionRecord(resumptionRecord);
+            await server.saveResumptionRecord(resumptionRecord);
         } else {
             logger.info(
                 `Invalid resumption ID or resume MIC received from ${messenger.getChannelName()}`,
