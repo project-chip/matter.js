@@ -16,8 +16,8 @@ import { MaybePromise } from "./Promises.js";
 export async function asyncNew<const A extends any[], const C extends new (...args: A) => AsyncConstructable<any>>(
     constructable: C,
     ...args: A
-) {
-    return await new constructable(...args).construction;
+): Promise<InstanceType<C>> {
+    return new constructable(...args).construction;
 }
 
 /**
