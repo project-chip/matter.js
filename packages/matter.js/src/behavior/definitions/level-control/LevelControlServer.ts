@@ -4,11 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
+import { MoveToLevelRequest } from "./LevelControlInterface.js";
 
 /**
  * This is the default server implementation of {@link LevelControlBehavior}.
  */
-export class LevelControlServer extends LevelControlBehavior {}
+export class LevelControlServer extends LevelControlBehavior {
+    override async moveToLevel(request: MoveToLevelRequest) {
+        this.state.currentLevel = request.level;
+    }
+}
