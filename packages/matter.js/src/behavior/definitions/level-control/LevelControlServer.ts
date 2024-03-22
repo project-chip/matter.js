@@ -11,8 +11,7 @@ import { MoveToLevelRequest } from "./LevelControlInterface.js";
  * This is the default server implementation of {@link LevelControlBehavior}.
  */
 export class LevelControlServer extends LevelControlBehavior {
-
     override async moveToLevel(request: MoveToLevelRequest) {
         this.state.currentLevel = request.level;
-    } 
+    }
 }
