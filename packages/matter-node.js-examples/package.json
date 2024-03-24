@@ -61,7 +61,7 @@
         "matter-legacystorageconverter": "./dist/esm/examples/LegacyStorageConverter.js"
     },
     "devDependencies": {
-        "typescript": "^5.4.2"
+        "typescript": "~5.4.3"
     },
     "dependencies": {
         "@project-chip/matter-node-ble.js": "0.8.0-alpha.0-20240323-0dec5662",
