@@ -457,7 +457,7 @@ To use your own storage implementation you need to adjust the default Environmen
 To just replace the factory you could use
 
 ```javascript
-        Environment.default.get(StorageService).factory = (namespace: string) => new MayOwnStorage(namespace);
+        Environment.default.get(StorageService).factory = (namespace: string) => new MyOwnStorage(namespace);
 ```
 
 Your Storage need to implement the "Storage" interface of matter.js.
