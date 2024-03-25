@@ -41,7 +41,7 @@ import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
 import { RootRequirements } from "@project-chip/matter.js/endpoint/definitions";
 import { Environment, StorageService } from "@project-chip/matter.js/environment";
 import { FabricAction } from "@project-chip/matter.js/fabric";
-import { Level, Logger, levelFromString } from "@project-chip/matter.js/log";
+import { Logger, levelFromString } from "@project-chip/matter.js/log";
 import { ServerNode } from "@project-chip/matter.js/node";
 import { QrCode } from "@project-chip/matter.js/schema";
 import { Time } from "@project-chip/matter.js/time";
@@ -103,7 +103,7 @@ function executeCommand(scriptParamName: string) {
 const logFile = environment.vars.string("logfile.filename");
 if (logFile !== undefined) {
     Logger.addLogger("filelogger", await createFileLogger(logFile), {
-        defaultLogLevel: levelFromString(environment.vars.string("logfile.loglevel")) ?? Level.DEBUG,
+        defaultLogLevel: levelFromString(environment.vars.string("logfile.loglevel", "debug")),
     });
 }
 

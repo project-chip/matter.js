@@ -62,8 +62,6 @@ export abstract class NetworkRuntime {
         }
     }
 
-    abstract operationalPort: number;
-
     protected abstract start(): Promise<void>;
 
     protected abstract stop(): Promise<void>;

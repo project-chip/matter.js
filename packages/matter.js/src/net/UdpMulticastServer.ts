@@ -41,12 +41,14 @@ export class UdpMulticastServer {
                       netInterface,
                       listeningPort,
                       membershipAddresses: [broadcastAddressIpv4],
+                      reuseAddress: true,
                   }),
             await network.createUdpChannel({
                 type: "udp6",
                 netInterface,
                 listeningPort,
                 membershipAddresses: [broadcastAddressIpv6],
+                reuseAddress: true,
             }),
             netInterface,
         );
@@ -122,6 +124,7 @@ export class UdpMulticastServer {
             type: iPv4 ? "udp4" : "udp6",
             listeningPort: this.broadcastPort,
             netInterface,
+            reuseAddress: true,
         });
     }
 

@@ -13,7 +13,13 @@ import { Network, NetworkError } from "./Network.js";
 import { UdpChannel } from "./UdpChannel.js";
 
 export class UdpInterface implements NetInterface {
-    static async create(network: Network, type: "udp4" | "udp6", port?: number, host?: string, netInterface?: string) {
+    static async create(
+        network: Network,
+        type: "udp" | "udp4" | "udp6",
+        port?: number,
+        host?: string,
+        netInterface?: string,
+    ) {
         return new UdpInterface(
             await network.createUdpChannel({ listeningPort: port, type, netInterface, listeningAddress: host }),
         );
