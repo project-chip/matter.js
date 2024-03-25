@@ -385,3 +385,83 @@ Take a look at the [DeviceNodeFull.ts](../packages/matter-node.js-examples/src/e
 The devices itself and functionality are at least equal - if not better with the new API because we also did some fixes that were not in the 7.7.x versions.
 But most important is that the storage structure has changed between legacy and New API - this means that data are stored in a different way and so a device commissioned with the Legacy API will not work with the new API. You need to delete and recommission the device when migrating!
 
+### I get strange typing issues about non matching types or also not installed Components like Storage or such?
+
+Please check the package dependencies in your package.json and make sure that the versions of the matter.js package and all others (e.g. "matter-node.js" or "matter-node-ble.js") are exactly referencing the same version.
+
+### How do I find the names for all the state and events available on my device?
+
+The naming of all these elements is 100% in sync with the specification with the main difference that we use camel case. Change events for attributes always have "$Change" after the element name.
+
+The three ways to access the data are the following:
+
+* Use `endpoint.state.onOff.onOff` to read the OnOff attribute of the OnOff cluster of your endpoint
+* Use `await endpoint.set({ onOff: { onOff: true } })` to set the OnOff attribute of the OnOff cluster of your endpoint
+* Use `endpoint.events.onOff.onOff$Change.on(value => { ... })` to setup a change handler for the OnOff attribute of the OnOff cluster
+* Use `await server.set({ basicInformation: { reachable: false } })` to set the reachable event on the "Basic Information" cluster on the Root Endpoint of the server. This also automatically fires the "ReachableChanged" event
+* To fire events use `server.act(agent => agent.basicInformation.reachableChanged?.emit({ ... }, agent.context));`. This manually fires the "Reachable Changed" event which normally (see above) should not be needed, so serves as an example here.
+
+Here some examples for other attributes for other clusters:
+* `endpoint.state.identify.identifyTime` accesses the IdentifyTime attribute of the Identify cluster
+* `endpoint.state.temperatureMeasurement.measuredValue` accesses the MeasuredValue attribute of the "Temperature Measurement" cluster
+* `endpoint.levelControl.currentLevel` accessed the Current Level attribute of the "Level Control" cluster
+
+When building your device you need to know the Matter specifications at least a bit, so that you know the relevant cluster names and attributes.
+
+### How to prevent "Conformance errors" when using certain device types?
+
+Matter.js automatically initializes all cluster attributes with their defaults when creating the cluster and device instances. As seen in the examples you can override these defaults when you create the endpoint.
+
+In some cases, e.g. in a Device that uses the "Boolean State" cluster like a "Contact Sensor" device there are no defaults specified for the attributes and you might get an error like
+
+> ERROR  ClusterSer~orBacking Validating xxxx.aggregator.xxxx.booleanState.state.stateValue: Conformance "M": Field must be defined (128)
+
+which basically means that you need to provide a value for this attribute when creating the endpoint.
+
+You do this then by e.g.
+
+```javascript
+const endpoint = new Endpoint(ContactSensorDevice, {
+    booleanState: { 
+        stateValue: false 
+    }
+});
+```
+
+For the Occupancy Sensor it is comparable, but here you need to provide a bitmap field:
+
+```javascript
+const endpoint = new Endpoint(OccupancySensorDevice, {
+    occupancySensing: {
+        occupancy: {
+            occupied: true,
+            occupancySensorType: OccupancySensorType.Pir,
+            occupancySensorTypeBitmap: {
+                pir: true,
+                ultrasonic: false,
+                physicalContact: false,
+            }
+        } 
+    }
+});
+```
+
+### How do I remove an endpoint from an aggregator again?
+
+While you use the "add" method to add a new endpoint to an aggregator there is no remove method. To remove the endpoint you simply call `endpoint.close()` which automatically remove the endpoint from the aggregator. So be careful when to call "close" here and only do in these cases!
+
+### How do I use my own Storage implementation?
+
+To use your own storage implementation you need to adjust the default Environment or create your own one and adjust the Storage factory in the StorageService.
+
+To just replace the factory you could use
+
+```javascript
+        Environment.default.get(StorageService).factory = (namespace: string) => new MyOwnStorage(namespace);
+```
+
+Your Storage need to implement the "Storage" interface of matter.js.
+
+Alternatively, create on complete own Environment like [NodeJsEnvironment](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts).
+
+If needed (for logging purposes) you can also set a storage location to `storageService.location`.
