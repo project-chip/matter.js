@@ -51,7 +51,8 @@ describe("PasePairing", () => {
                 // Process pake1 and send pake2
                 const spake2p = Spake2p.create(Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]), w0);
 
-                const { w0: clientw0 } = await Spake2p.computeW0W1(serverPbkdfParameters, 20202021);
+                const { w0: clientw0, w1: clientw1 } = await Spake2p.computeW0W1(serverPbkdfParameters, 20202021);
+                expect(w0).deep.equal(clientw0);
                 const clientSpake2p = Spake2p.create(
                     Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]),
                     clientw0,
@@ -60,7 +61,9 @@ describe("PasePairing", () => {
 
                 const Y = spake2p.computeY();
                 try {
-                    await spake2p.computeSecretAndVerifiersFromX(L, X, Y);
+                    const { hBX: verifier } = await spake2p.computeSecretAndVerifiersFromX(L, X, Y);
+                    const { hBX } = await clientSpake2p.computeSecretAndVerifiersFromY(clientw1, X, Y);
+                    expect(verifier.equals(hBX)).true;
                 } catch (error) {
                     console.log(error);
                     expect(true).equals(false);
