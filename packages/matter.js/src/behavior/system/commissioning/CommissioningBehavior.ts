@@ -228,15 +228,15 @@ export class CommissioningBehavior extends Behavior {
     });
 
     #nodeOnline() {
-        if (!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics) {
+        const fabrics = this.endpoint.env.get(FabricManager).getFabrics();
+        if (!fabrics.length) {
             this.initiateCommissioning();
         } else {
-            const fabrics: Record<FabricIndex, ExposedFabricInformation> = {};
-            this.endpoint.env
-                .get(FabricManager)
-                .getFabrics()
-                .forEach(({ fabricIndex, externalInformation }) => (fabrics[fabricIndex] = externalInformation));
-            this.state.fabrics = fabrics;
+            const exposedFabrics: Record<FabricIndex, ExposedFabricInformation> = {};
+            fabrics.forEach(
+                ({ fabricIndex, externalInformation }) => (exposedFabrics[fabricIndex] = externalInformation),
+            );
+            this.state.fabrics = exposedFabrics;
         }
     }
 
