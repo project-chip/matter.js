@@ -33,7 +33,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
     static async fromPin(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
         logger.info(
-            `PASE server created from PIN ${setupPinCode} and params ${Logger.toJSON(pbkdfParameters)} with w0: ${w0.toString("hex")} and L: ${L.toHex()}.`,
+            `PASE server created from PIN ${setupPinCode} and params ${Logger.toJSON(pbkdfParameters)} with w0: ${w0.toString("hex")} and L: ${Logger.toJSON(L)} (${Array.isArray(L)}).`,
         );
         return new PaseServer(w0, L, pbkdfParameters);
     }
