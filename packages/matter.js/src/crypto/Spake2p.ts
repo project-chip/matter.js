@@ -6,15 +6,21 @@
 
 import BN from "bn.js";
 import { InternalError } from "../common/MatterError.js";
+import { Logger } from "../log/Logger.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { Crypto, ec } from "./Crypto.js";
+import { CRYPTO_GROUP_SIZE_BYTES } from "./CryptoConstants.js";
+
+const logger = Logger.get("Spake2p");
 
 const P256_CURVE = new ec("p256").curve;
 
 // M and N constants from https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01
 const M = P256_CURVE.decodePoint("02886e2f97ace46e55ba9dd7242579f2993b64e16ef3dcab95afd497333d8fa12f", "hex");
 const N = P256_CURVE.decodePoint("03d8bbd6c639c62937b04d997f38c3770719c629d7014d49a24b4f98baa1292b49", "hex");
+
+const CRYPTO_W_SIZE_BYTES = CRYPTO_GROUP_SIZE_BYTES + 8;
 
 export interface PbkdfParameters {
     iterations: number;
@@ -25,9 +31,11 @@ export class Spake2p {
     static async computeW0W1({ iterations, salt }: PbkdfParameters, pin: number) {
         const pinWriter = new DataWriter(Endian.Little);
         pinWriter.writeUInt32(pin);
-        const ws = await Crypto.pbkdf2(pinWriter.toByteArray(), salt, iterations, 80);
+        const ws = await Crypto.pbkdf2(pinWriter.toByteArray(), salt, iterations, CRYPTO_W_SIZE_BYTES * 2);
+        logger.info(`Computed w0w1: (${ws.length}) w0s=${ws.slice(0, 40).toHex()} w1s=${ws.slice(40, 80).toHex()}.`);
         const w0 = new BN(ws.slice(0, 40)).mod(P256_CURVE.n);
         const w1 = new BN(ws.slice(40, 80)).mod(P256_CURVE.n);
+        logger.info(`Computed w0w1: w0=${w0.toString("hex")} w1=${w1.toString("hex")}.`);
         return { w0, w1 };
     }
 
