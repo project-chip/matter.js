@@ -23,16 +23,22 @@ export class Project {
         }
 
         if (!this.pkg.src) {
-            throw new Error(`Found package ${this.pkg.json.name} but no src directory is present`);
+            //throw new Error(`Found package ${this.pkg.json.name} but no src directory is present`);
         }
     }
 
     async buildSource(format: Format) {
+        if (!this.pkg.src) {
+            return;
+        }
         await this.build(format, "src", `dist/${format}`);
         await this.specifyFormat("dist", format);
     }
 
     async buildTests(format: Format) {
+        if (!this.pkg.src) {
+            return;
+        }
         await ignoreError("ENOENT", async () => {
             if ((await stat(this.pkg.resolve("test"))).isDirectory()) {
                 await this.build(format, "test", `build/${format}/test`);
@@ -66,14 +72,23 @@ export class Project {
     }
 
     async buildDeclarations() {
+        if (!this.pkg.src) {
+            return;
+        }
         Typescript.emitDeclarations(this.pkg);
     }
 
     async validateTypes() {
+        if (!this.pkg.src) {
+            return;
+        }
         Typescript.validateTypes(this.pkg);
     }
 
     async installDeclarationFormat(format: Format) {
+        if (!this.pkg.src) {
+            return;
+        }
         const srcMaps = Array<[string, string]>();
 
         await cp(this.pkg.resolve("build/types/src"), this.pkg.resolve(`dist/${format}`), {
@@ -122,6 +137,9 @@ export class Project {
     }
 
     async installDeclarations() {
+        if (!this.pkg.src) {
+            return;
+        }
         await mkdir(this.pkg.resolve("dist"), { recursive: true });
         if (this.pkg.esm) {
             await this.installDeclarationFormat("esm");
@@ -137,6 +155,9 @@ export class Project {
     }
 
     private async build(format: Format, indir: string, outdir: string) {
+        if (!this.pkg.src) {
+            return;
+        }
         const config = (await ignoreError(
             "ERR_MODULE_NOT_FOUND",
             () => import(`file://${this.pkg.path}/build.config.js`),

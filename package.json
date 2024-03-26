@@ -2,6 +2,7 @@
   "name": "matter.js-monorepo",
   "private": true,
   "workspaces": [
+    "packages/elliptic",
     "packages/matter.js-tools",
     "packages/matter.js",
     "packages/matter-node.js",

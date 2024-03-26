@@ -9,6 +9,6 @@
         { "path": "packages/matter-node.js-examples" },
         { "path": "models" },
         { "path": "codegen" },
-        { "path": "chip-testing" }
+        { "path": "chip-testing" },
     ]
 }

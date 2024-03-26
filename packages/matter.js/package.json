@@ -34,7 +34,7 @@
     },
     "dependencies": {
         "bn.js": "^5.2.1",
-        "elliptic": "^6.5.5"
+        "elliptic": "^7.0.0"
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.8.0-alpha.0-20240323-0dec5662",
