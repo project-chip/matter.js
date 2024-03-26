@@ -2,7 +2,7 @@
 
 [![Saucelabs Test Status](https://saucelabs.com/browser-matrix/gh-indutny-elliptic.svg)](https://saucelabs.com/u/gh-indutny-elliptic)
 
-TEST!
+TEST!2
 Fast elliptic-curve cryptography in a plain javascript implementation.
 
 NOTE: Please take a look at http://safecurves.cr.yp.to/ before choosing a curve
