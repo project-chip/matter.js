@@ -7,7 +7,7 @@
 import { MatterController } from "../../MatterController.js";
 import { CommissioningOptions } from "../../behavior/system/commissioning/CommissioningOptions.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
-import { Crypto } from "../../crypto/Crypto.js";
+import { Crypto, ec } from "../../crypto/Crypto.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
@@ -15,12 +15,15 @@ import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
+const { numberToBytesBE } = ec;
+
 const logger = Logger.get("PaseClient");
 
 export class PaseClient {
     static async generatePakePasscodeVerifier(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
-        return ByteArray.concat(ByteArray.from(w0.toArray()), L);
+        const w0Bytes = numberToBytesBE(w0, 32);
+        return ByteArray.concat(w0Bytes, L);
     }
 
     static generateRandomPasscode() {

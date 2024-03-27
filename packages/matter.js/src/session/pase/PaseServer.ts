@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import BN from "bn.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
-import { Crypto } from "../../crypto/Crypto.js";
+import { Crypto, ec } from "../../crypto/Crypto.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
@@ -18,6 +17,8 @@ import { ChannelStatusResponseError } from "../../protocol/securechannel/SecureC
 import { Time, Timer } from "../../time/Time.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { DEFAULT_PASSCODE_ID, PaseServerMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
+
+const { bytesToNumberBE } = ec;
 
 const logger = Logger.get("PaseServer");
 
@@ -33,22 +34,22 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
     static async fromPin(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
         logger.info(
-            `PASE server created from PIN ${setupPinCode} and params ${Logger.toJSON(pbkdfParameters)} with w0: ${w0.toString("hex")} and L: ${Logger.toJSON(L)} (${Array.isArray(L)}).`,
+            `PASE server created from PIN ${setupPinCode} and params ${Logger.toJSON(pbkdfParameters)} with w0: (${w0.toString(16).length}) ${w0.toString(16)} and L: ${Logger.toJSON(L)} (${Array.isArray(L)}).`,
         );
         return new PaseServer(w0, L, pbkdfParameters);
     }
 
     static fromVerificationValue(verificationValue: ByteArray, pbkdfParameters?: PbkdfParameters) {
-        const w0 = new BN(verificationValue.slice(0, 32));
+        const w0 = bytesToNumberBE(verificationValue.slice(0, 32));
         const L = verificationValue.slice(32, 32 + 65);
         logger.info(
-            `PASE server created from Verifier and params ${Logger.toJSON(pbkdfParameters)} with w0: ${w0.toString("hex")} and L: ${L.toHex()}.`,
+            `PASE server created from Verifier and params ${Logger.toJSON(pbkdfParameters)} with w0: (${w0.toString(16).length}) ${w0.toString(16)} and L: ${L.toHex()}.`,
         );
         return new PaseServer(w0, L, pbkdfParameters);
     }
 
     constructor(
-        private readonly w0: BN,
+        private readonly w0: bigint,
         private readonly L: ByteArray,
         private readonly pbkdfParameters?: PbkdfParameters,
     ) {}
