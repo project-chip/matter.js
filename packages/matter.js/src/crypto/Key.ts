@@ -521,8 +521,11 @@ export function Key(properties: Partial<Key>) {
         if (!that.private) throw new KeyError("EC private key required to compute public point");
 
         const crv = that.crv;
+        let keyLength: number;
+
         switch (crv) {
             case CurveType.p256:
+                keyLength = 32;
                 // We can add the other point types easily by exposing more from @noble/curves
                 // case CurveType.p384:
                 // case CurveType.p521:
@@ -536,8 +539,8 @@ export function Key(properties: Partial<Key>) {
         const ecKey = ProjectivePoint.fromPrivateKey(that.privateKey);
 
         // Install
-        that.xBits = numberToBytesBE(ecKey.x, 32); // ???
-        that.yBits = numberToBytesBE(ecKey.y, 32); // ???
+        that.xBits = numberToBytesBE(ecKey.x, keyLength);
+        that.yBits = numberToBytesBE(ecKey.y, keyLength);
     }
 
     if (that.type === KeyType.EC) {
