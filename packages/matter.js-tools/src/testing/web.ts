@@ -134,7 +134,7 @@ function buildIndex(files: string[]) {
     const importMap = JSON.stringify({
         imports: Object.fromEntries(
             libraries.map(name => {
-                let path = `/packages/matter.js-tools/build/lib/${name.replace(/[@\/]/g, "_")}`;
+                let path = `/packages/matter.js-tools/build/lib/${name.replace(/[@/]/g, "_")}`;
                 if (!path.endsWith(".js")) {
                     path = `${path}.js`;
                 }
@@ -167,7 +167,7 @@ function buildIndex(files: string[]) {
 
 async function buildLibraries() {
     for (const name of libraries) {
-        let path = `build/lib/${name.replace(/[@\/]/g, "_")}`;
+        let path = `build/lib/${name.replace(/[@/]/g, "_")}`;
         if (!path.endsWith(".js")) {
             path = `${path}.js`;
         }
