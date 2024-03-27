@@ -7,18 +7,17 @@
 import { Crypto, Spake2p } from "@project-chip/matter.js/crypto";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
-import { BN } from "bn.js";
 
 describe("Spake2p", () => {
     describe("https://datatracker.ietf.org/doc/html/draft-bar-cfrg-spake2plus-01 test vectors", () => {
         const context = ByteArray.fromString("SPAKE2+-P256-SHA256-HKDF draft-01");
-        const w0 = new BN("e6887cf9bdfb7579c69bf47928a84514b5e355ac034863f7ffaf4390e67d798c", "hex");
-        const w1 = new BN("24b5ae4abda868ec9336ffc3b78ee31c5755bef1759227ef5372ca139b94e512", "hex");
+        const w0 = BigInt("0xe6887cf9bdfb7579c69bf47928a84514b5e355ac034863f7ffaf4390e67d798c");
+        const w1 = BigInt("0x24b5ae4abda868ec9336ffc3b78ee31c5755bef1759227ef5372ca139b94e512");
         const L = ByteArray.fromHex(
             "0495645cfb74df6e58f9748bb83a86620bab7c82e107f57d6870da8cbcb2ff9f7063a14b6402c62f99afcb9706a4d1a143273259fe76f1c605a3639745a92154b9",
         );
-        const x = new BN("5b478619804f4938d361fbba3a20648725222f0a54cc4c876139efe7d9a21786", "hex");
-        const y = new BN("766770dad8c8eecba936823c0aed044b8c3c4f7655e8beec44a15dcbcaf78e5e", "hex");
+        const x = BigInt("0x5b478619804f4938d361fbba3a20648725222f0a54cc4c876139efe7d9a21786");
+        const y = BigInt("0x766770dad8c8eecba936823c0aed044b8c3c4f7655e8beec44a15dcbcaf78e5e");
         const X = ByteArray.fromHex(
             "04a6db23d001723fb01fcfc9d08746c3c2a0a3feff8635d29cad2853e7358623425cf39712e928054561ba71e2dc11f300f1760e71eb177021a8f85e78689071cd",
         );

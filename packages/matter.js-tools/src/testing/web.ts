@@ -17,7 +17,14 @@ import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, Reporter } from "./reporter.js";
 import type { TestRunner } from "./runner.js";
 
-const libraries = ["chai", "chai-as-promised", "elliptic", "bn.js", "ansi-colors"];
+const libraries = [
+    "chai",
+    "chai-as-promised",
+    "ansi-colors",
+    "@noble/curves/abstract/modular",
+    "@noble/curves/abstract/utils",
+    "@noble/curves/p256",
+];
 
 export async function testWeb(runner: TestRunner, manual: boolean) {
     await buildLibraries();

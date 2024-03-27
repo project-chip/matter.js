@@ -50,7 +50,7 @@ export namespace NodeId {
      */
     export const getRandomOperationalNodeId = (): NodeId => {
         while (true) {
-            const randomBigInt = BigInt("0x" + Crypto.getRandomData(8).toHex());
+            const randomBigInt = Crypto.getRandomBigInt(8);
             if (randomBigInt >= OPERATIONAL_NODE_MIN && randomBigInt <= OPERATIONAL_NODE_MAX) {
                 return NodeId(randomBigInt);
             }
