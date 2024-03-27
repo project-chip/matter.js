@@ -471,26 +471,26 @@ describe("AttributeServerTest", () => {
             expect(server.getLocalForFabric(testFabric)).equal(3);
         });
 
-        it("should return the value from fabric context if set", () => {
+        it("should return the value from fabric context if set", async () => {
             const server = create();
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             expect(server.getLocalForFabric(testFabric)).equal(5);
         });
 
-        it("should return the value from fabric scoped storage when changed", () => {
+        it("should return the value from fabric scoped storage when changed", async () => {
             const server = create();
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             expect(server.getLocalForFabric(testFabric)).equal(5);
         });
 
-        it("should update the value from fabric scoped storage when set and trigger listeners", () => {
+        it("should update the value from fabric scoped storage when set and trigger listeners", async () => {
             let valueTriggered: number | undefined = undefined;
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
             const server = create();
 
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             server.addValueChangeListener((value, version) => {
                 valueTriggered = value;
@@ -511,12 +511,12 @@ describe("AttributeServerTest", () => {
             expect(datasource.version).equal(1);
         });
 
-        it("should handle the value from fabric scoped storage when set and trigger ony external listeners", () => {
+        it("should handle the value from fabric scoped storage when set and trigger ony external listeners", async () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
 
             const server = create({ isWritable: true });
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             server.addValueChangeListener(() => {
                 throw new Error("Should not be triggered");
@@ -539,19 +539,19 @@ describe("AttributeServerTest", () => {
             );
         });
 
-        it("should throw an error when trying to get getter method value locally", () => {
+        it("should throw an error when trying to get getter method value locally", async () => {
             const server = create({ getter: () => 7 });
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             expect(() => server.getLocalForFabric(testFabric)).throw(
                 'Fabric scoped attribute "test" can not be read locally when a custom getter is defined.',
             );
         });
 
-        it("should return value from getter when used non-locally", () => {
+        it("should return value from getter when used non-locally", async () => {
             const server = create({ getter: () => 7 });
             const testSession = { associatedFabric: testFabric } as SecureSession<MatterDevice>;
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             expect(server.get(testSession, true)).equal(7);
         });
 

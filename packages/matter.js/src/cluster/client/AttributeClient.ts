@@ -149,7 +149,7 @@ export class AttributeClient<T> {
         knownDataVersion?: number,
         isFabricFiltered = true,
     ) {
-        return await this.interactionClient.subscribeAttribute({
+        return this.interactionClient.subscribeAttribute({
             endpointId: this.endpointId,
             clusterId: this.clusterId,
             attribute: this.attribute,

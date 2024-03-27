@@ -25,6 +25,7 @@ import { TlvArray } from "../../../src/tlv/TlvArray.js";
 import { TlvNoArguments } from "../../../src/tlv/TlvNoArguments.js";
 import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../../src/tlv/TlvObject.js";
+import { isObject } from "../../../src/util/Type.js";
 
 // Metadata
 
@@ -198,7 +199,7 @@ export function stripFunctions(value: any): any {
     if (typeof value === "function") {
         return undefined;
     }
-    if (typeof value === "object" && value !== null) {
+    if (isObject(value)) {
         return Object.fromEntries(Object.entries(value).map(kv => [kv[0], stripFunctions(kv[1])]));
     }
     if (Array.isArray(value)) {

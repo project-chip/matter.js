@@ -60,6 +60,9 @@ export class ServerStore implements Destructable {
                 storage: this.#storageManager.createContext("root"),
             });
 
+            this.#eventStorage = this.#storage.createContext("events");
+            this.#eventHandler = await EventHandler.create(this.eventStorage);
+
             this.#logChange("Opened");
         };
 
@@ -71,9 +74,9 @@ export class ServerStore implements Destructable {
     }
 
     async erase() {
-        this.#sessionStorage?.clearAll();
-        this.#fabricStorage?.clearAll();
-        this.#eventStorage?.clearAll();
+        await this.#sessionStorage?.clearAll();
+        await this.#fabricStorage?.clearAll();
+        await this.#eventStorage?.clearAll();
         await this.#rootStore?.erase();
     }
 
@@ -86,14 +89,14 @@ export class ServerStore implements Destructable {
 
     get eventStorage() {
         if (!this.#eventStorage) {
-            this.#eventStorage = this.#storage.createContext("events");
+            throw new ImplementationError("Event storage accessed prior to initialization");
         }
         return this.#eventStorage;
     }
 
     get eventHandler() {
         if (!this.#eventHandler) {
-            this.#eventHandler = new EventHandler(this.eventStorage);
+            throw new ImplementationError("Event Handler accessed prior to initialization");
         }
         return this.#eventHandler;
     }

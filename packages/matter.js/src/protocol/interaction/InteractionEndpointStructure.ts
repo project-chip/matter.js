@@ -37,7 +37,7 @@ export class InteractionEndpointStructure {
     endpoints = new Map<EndpointNumber, EndpointInterface>();
     attributes = new Map<string, AnyAttributeServer<any>>();
     attributePaths = new Array<AttributePath>();
-    events = new Map<string, EventServer<any>>();
+    events = new Map<string, EventServer<any, any>>();
     eventPaths = new Array<EventPath>();
     commands = new Map<string, CommandServer<any, any>>();
     commandPaths = new Array<CommandPath>();
@@ -220,7 +220,7 @@ export class InteractionEndpointStructure {
         throw new StatusResponseError(`Attribute ${attributeId} does not exist`, StatusCode.UnsupportedAttribute);
     }
 
-    getEvent(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId): EventServer<any> | undefined {
+    getEvent(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId): EventServer<any, any> | undefined {
         return this.events.get(eventPathToId({ endpointId, clusterId, eventId }));
     }
 

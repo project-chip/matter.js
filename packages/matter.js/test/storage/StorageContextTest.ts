@@ -33,7 +33,7 @@ const CONTEXTx3 = [...CONTEXTx2, "subsubcontext"];
 
 async function create(contexts = CONTEXTx1) {
     const storage = new StorageBackendMemory();
-    await storage.initialize();
+    storage.initialize();
     const storageContext = new StorageContext(storage, contexts);
     return { storage, storageContext };
 }

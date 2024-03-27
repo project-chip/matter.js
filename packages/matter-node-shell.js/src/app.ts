@@ -97,31 +97,32 @@ async function main() {
                 await theNode.initialize(factoryReset);
 
                 if (logfile !== undefined) {
-                    theNode.Store.set("LogFile", logfile);
+                    await theNode.Store.set("LogFile", logfile);
                 }
                 if (theNode.Store.has("LogFile")) {
-                    const storedLogFileName = theNode.Store.get<string>("LogFile");
+                    const storedLogFileName = await theNode.Store.get<string>("LogFile");
                     if (storedLogFileName !== undefined) {
                         Logger.addLogger("file", await createFileLogger(storedLogFileName), {
-                            defaultLogLevel: theNode.Store.get<Level>("LoglevelFile", Level.DEBUG),
+                            defaultLogLevel: await theNode.Store.get<Level>("LoglevelFile", Level.DEBUG),
                             logFormat: Format.PLAIN,
                         });
                     }
                 }
-                setLogLevel("default", theNode.Store.get<string>("LogLevel", "info"));
+                setLogLevel("default", await theNode.Store.get<string>("LogLevel", "info"));
 
                 const theShell = new Shell(theNode, PROMPT);
 
                 if (bleHciId !== undefined) {
-                    theNode.Store.set("BleHciId", bleHciId);
+                    await theNode.Store.set("BleHciId", bleHciId);
                 }
 
                 if (ble) {
+                    const hciId = await theNode.Store.get<number>("BleHciId", 0);
                     // Initialize Ble
                     Ble.get = singleton(
                         () =>
                             new BleNode({
-                                hciId: theNode.Store.get<number>("BleHciId", 0),
+                                hciId,
                             }),
                     );
                 }

@@ -163,9 +163,9 @@ export class SessionManager<ContextT> {
         }
     }
 
-    removeResumptionRecord(peerNodeId: NodeId) {
+    async removeResumptionRecord(peerNodeId: NodeId) {
         this.#resumptionRecords.delete(peerNodeId);
-        this.storeResumptionRecords();
+        await this.storeResumptionRecords();
     }
 
     findOldestInactiveSession() {
@@ -252,22 +252,22 @@ export class SessionManager<ContextT> {
         return this.#resumptionRecords.get(nodeId);
     }
 
-    saveResumptionRecord(resumptionRecord: ResumptionRecord) {
+    async saveResumptionRecord(resumptionRecord: ResumptionRecord) {
         this.#resumptionRecords.set(resumptionRecord.peerNodeId, resumptionRecord);
-        this.storeResumptionRecords();
+        await this.storeResumptionRecords();
     }
 
-    updateFabricForResumptionRecords(fabric: Fabric) {
+    async updateFabricForResumptionRecords(fabric: Fabric) {
         const record = this.#resumptionRecords.get(fabric.rootNodeId);
         if (record === undefined) {
             throw new MatterFlowError("Resumption record not found. Should never happen.");
         }
         this.#resumptionRecords.set(fabric.rootNodeId, { ...record, fabric });
-        this.storeResumptionRecords();
+        await this.storeResumptionRecords();
     }
 
-    storeResumptionRecords() {
-        this.#sessionStorage.set<ResumptionStorageRecord[]>(
+    async storeResumptionRecords() {
+        await this.#sessionStorage.set<ResumptionStorageRecord[]>(
             "resumptionRecords",
             [...this.#resumptionRecords].map(
                 ([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters }]) => ({
@@ -282,8 +282,11 @@ export class SessionManager<ContextT> {
         );
     }
 
-    initFromStorage(fabrics: Fabric[]) {
-        const storedResumptionRecords = this.#sessionStorage.get<ResumptionStorageRecord[]>("resumptionRecords", []);
+    async initFromStorage(fabrics: Fabric[]) {
+        const storedResumptionRecords = await this.#sessionStorage.get<ResumptionStorageRecord[]>(
+            "resumptionRecords",
+            [],
+        );
 
         storedResumptionRecords.forEach(
             ({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId, sessionParameters }) => {
@@ -321,7 +324,7 @@ export class SessionManager<ContextT> {
     }
 
     async close() {
-        this.storeResumptionRecords();
+        await this.storeResumptionRecords();
         for (const session of this.#sessions) {
             await session?.end(false);
             this.#sessions.delete(session);

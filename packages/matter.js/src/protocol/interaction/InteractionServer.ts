@@ -94,7 +94,7 @@ export interface AttributeWithPath {
 
 export interface EventWithPath {
     path: TypeFromSchema<typeof TlvEventPath>;
-    event: EventServer<any>;
+    event: EventServer<any, any>;
 }
 
 export interface CommandWithPath {

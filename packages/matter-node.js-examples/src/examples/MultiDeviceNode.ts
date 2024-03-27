@@ -163,34 +163,36 @@ async function getConfiguration() {
     const devices = [];
     const numDevices = environment.vars.number("num") ?? 2;
     for (let i = 1; i <= numDevices; i++) {
-        const isSocket = deviceStorage.get(`isSocket${i}`, environment.vars.string(`type${i}`) === "socket");
-        if (deviceStorage.has(`isSocket${i}`)) {
+        const isSocket = await deviceStorage.get(`isSocket${i}`, environment.vars.string(`type${i}`) === "socket");
+        if (await deviceStorage.has(`isSocket${i}`)) {
             console.log(`Device type ${isSocket ? "socket" : "light"} found in storage. --type parameter is ignored.`);
         }
         const deviceName = `Matter ${environment.vars.string(`type${i}`) ?? "light"} device ${i}`;
         const vendorName = "matter-node.js";
         const passcode =
-            environment.vars.number(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
+            environment.vars.number(`passcode${i}`) ?? (await deviceStorage.get(`passcode${i}`, defaultPasscode++));
         const discriminator =
             environment.vars.number(`discriminator${i}`) ??
-            deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
+            (await deviceStorage.get(`discriminator${i}`, defaultDiscriminator++));
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = environment.vars.number(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xfff1);
+        const vendorId = environment.vars.number(`vendorid${i}`) ?? (await deviceStorage.get(`vendorid${i}`, 0xfff1));
         const productName = `node-matter OnOff-Device ${i}`;
-        const productId = environment.vars.number(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
+        const productId =
+            environment.vars.number(`productid${i}`) ?? (await deviceStorage.get(`productid${i}`, 0x8000));
 
         const port = environment.vars.number(`port${i}`) ?? defaultPort++;
 
         const uniqueId =
-            environment.vars.string(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
+            environment.vars.string(`uniqueid${i}`) ??
+            (await deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`));
 
         // Persist basic data to keep them also on restart
-        deviceStorage.set(`passcode${i}`, passcode);
-        deviceStorage.set(`discriminator${i}`, discriminator);
-        deviceStorage.set(`vendorid${i}`, vendorId);
-        deviceStorage.set(`productid${i}`, productId);
-        deviceStorage.set(`isSocket${i}`, isSocket);
-        deviceStorage.set(`uniqueid${i}`, uniqueId);
+        await deviceStorage.set(`passcode${i}`, passcode);
+        await deviceStorage.set(`discriminator${i}`, discriminator);
+        await deviceStorage.set(`vendorid${i}`, vendorId);
+        await deviceStorage.set(`productid${i}`, productId);
+        await deviceStorage.set(`isSocket${i}`, isSocket);
+        await deviceStorage.set(`uniqueid${i}`, uniqueId);
 
         devices.push({
             isSocket,

@@ -33,7 +33,7 @@ Object.keys(legacyLocalStorage).forEach(key => {
 const storageService = environment.get(StorageService);
 
 const legacyStorage = new StorageBackendDisk(legacyStoragePath);
-await legacyStorage.initialize();
+legacyStorage.initialize();
 
 const uniqueIds: Record<string, string> = {};
 if (legacyNodes.includes("Device")) {
@@ -42,19 +42,19 @@ if (legacyNodes.includes("Device")) {
 
     const newDeviceStorage = (await storageService.open("device")).createContext("data");
 
-    legacyStorage.keys(["Device"]).forEach(key => {
+    for (const key of legacyStorage.keys(["Device"])) {
         console.log("Migrate Device.", key);
         const value = legacyStorage.get(["Device"], key);
-        newDeviceStorage.set(key, value);
+        await newDeviceStorage.set(key, value);
         if (key === "uniqueid") {
             uniqueIds["0"] = String(value);
-            newDeviceStorage.set(key, String(value));
+            await newDeviceStorage.set(key, String(value));
         } else if (key.startsWith("uniqueid")) {
             const id = parseInt(key.substring(8));
             uniqueIds[id - 1] = String(value);
-            newDeviceStorage.set(key, String(value));
+            await newDeviceStorage.set(key, String(value));
         }
-    });
+    }
 }
 
 if (legacyNodes.includes("Controller")) {
@@ -63,15 +63,15 @@ if (legacyNodes.includes("Controller")) {
 
     const newControllerStorage = (await storageService.open("controller")).createContext("data");
 
-    legacyStorage.keys(["Controller"]).forEach(key => {
+    for (const key of legacyStorage.keys(["Controller"])) {
         console.log("Migrate Controller.", key);
         const value = legacyStorage.get(["Controller"], key);
-        newControllerStorage.set(key, value);
+        await newControllerStorage.set(key, value);
         if (key === "uniqueid") {
             uniqueIds["0"] = String(value);
-            newControllerStorage.set(key, String(value));
+            await newControllerStorage.set(key, String(value));
         }
-    });
+    }
 }
 
 console.log(uniqueIds);
@@ -93,29 +93,38 @@ for (const nodeId of legacyNodes) {
         // Migrate the controller storage
         const newControllerStorage = (await storageService.open("controller")).createContext("data");
         const uniqueId = Time.nowMs().toString();
-        newControllerStorage.set("uniqueid", uniqueId);
+        await newControllerStorage.set("uniqueid", uniqueId);
 
         const newNodeStorage = await storageService.open(uniqueId);
 
         const credentialsStorage = newNodeStorage.createContext("credentials");
-        credentialsStorage.set("rootCertId", rootCertId);
-        credentialsStorage.set(
+        await credentialsStorage.set("rootCertId", rootCertId);
+        await credentialsStorage.set(
             "nextCertificateId",
             legacyStorage.get(["0", "RootCertificateManager"], "nextCertificateId"),
         );
-        credentialsStorage.set("rootCertBytes", legacyStorage.get(["0", "RootCertificateManager"], "rootCertBytes"));
-        credentialsStorage.set(
+        await credentialsStorage.set(
+            "rootCertBytes",
+            legacyStorage.get(["0", "RootCertificateManager"], "rootCertBytes"),
+        );
+        await credentialsStorage.set(
             "rootKeyIdentifier",
             legacyStorage.get(["0", "RootCertificateManager"], "rootKeyIdentifier"),
         );
-        credentialsStorage.set("rootKeyPair", legacyStorage.get(["0", "RootCertificateManager"], "rootKeyPair"));
-        credentialsStorage.set("fabric", legacyStorage.get(["0", "MatterController"], "fabric"));
+        await credentialsStorage.set("rootKeyPair", legacyStorage.get(["0", "RootCertificateManager"], "rootKeyPair"));
+        await credentialsStorage.set("fabric", legacyStorage.get(["0", "MatterController"], "fabric"));
 
         const sessionsStorage = newNodeStorage.createContext("sessions");
-        sessionsStorage.set("resumptionRecords", legacyStorage.get([nodeId, "SessionManager"], "resumptionRecords"));
+        await sessionsStorage.set(
+            "resumptionRecords",
+            legacyStorage.get([nodeId, "SessionManager"], "resumptionRecords"),
+        );
 
         const nodesStorage = newNodeStorage.createContext("nodes");
-        nodesStorage.set("resumptionRecords", legacyStorage.get([nodeId, "MatterController"], "commissionedNodes"));
+        await nodesStorage.set(
+            "resumptionRecords",
+            legacyStorage.get([nodeId, "MatterController"], "commissionedNodes"),
+        );
 
         console.log(`Controller Node ${nodeId} with new unique id ${uniqueId} migrated successfully.`);
     } else {
@@ -130,14 +139,17 @@ for (const nodeId of legacyNodes) {
         }
 
         const eventsStorage = newNodeStorage.createContext("events");
-        eventsStorage.set("lastEventNumber", legacyStorage.get([nodeId, "EventHandler"], "lastEventNumber"));
+        await eventsStorage.set("lastEventNumber", legacyStorage.get([nodeId, "EventHandler"], "lastEventNumber"));
 
         const fabricsStorage = newNodeStorage.createContext("fabrics");
-        fabricsStorage.set("fabrics", legacyStorage.get([nodeId, "FabricManager"], "fabrics"));
-        fabricsStorage.set("nextFabricIndex", legacyStorage.get([nodeId, "FabricManager"], "nextFabricIndex"));
+        await fabricsStorage.set("fabrics", legacyStorage.get([nodeId, "FabricManager"], "fabrics"));
+        await fabricsStorage.set("nextFabricIndex", legacyStorage.get([nodeId, "FabricManager"], "nextFabricIndex"));
 
         const sessionsStorage = newNodeStorage.createContext("sessions");
-        sessionsStorage.set("resumptionRecords", legacyStorage.get([nodeId, "SessionManager"], "resumptionRecords"));
+        await sessionsStorage.set(
+            "resumptionRecords",
+            legacyStorage.get([nodeId, "SessionManager"], "resumptionRecords"),
+        );
 
         console.log(`Device Node ${nodeId} with unique id ${uniqueIds[nodeId]} migrated successfully.`);
     }

@@ -5,6 +5,7 @@
  */
 
 import { ByteArray } from "../../../util/ByteArray.js";
+import { isObject } from "../../../util/Type.js";
 import { DatatypeError, SchemaErrorPath } from "../../errors.js";
 import { Val } from "../Val.js";
 
@@ -23,7 +24,7 @@ export function assertBoolean(value: Val, path: SchemaErrorPath): asserts value 
 }
 
 export function assertObject(value: Val, path: SchemaErrorPath): asserts value is Val.Struct {
-    if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    if (isObject(value)) {
         return;
     }
     throw new DatatypeError(path, "an object", value);

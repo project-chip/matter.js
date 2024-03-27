@@ -14,11 +14,13 @@ import {
     Attributes,
     BasicInformation,
     BasicInformationCluster,
+    ClusterDatasource,
     ClusterServer,
     ClusterServerObj,
     Events,
     OnOffCluster,
     WritableAttribute,
+    asClusterServerInternal,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
 import {
@@ -55,7 +57,7 @@ import {
 } from "@project-chip/matter.js/interaction";
 import { MessageExchange } from "@project-chip/matter.js/protocol";
 import { SecureSession } from "@project-chip/matter.js/session";
-import { StorageBackendMemory, StorageContext, StorageManager } from "@project-chip/matter.js/storage";
+import { StorageBackendMemory, StorageContext, StorageManager, SyncStorage } from "@project-chip/matter.js/storage";
 import {
     TlvArray,
     TlvField,
@@ -852,7 +854,7 @@ describe("InteractionProtocol", () => {
         function addClusterServer(cluster: ClusterServerObj<any, any>) {
             endpoint.addClusterServer(cluster);
             let version = 0;
-            cluster.datasource = {
+            asClusterServerInternal<any, any, SyncStorage>(cluster)._setDatasource({
                 get version() {
                     return version;
                 },
@@ -866,7 +868,7 @@ describe("InteractionProtocol", () => {
                 },
 
                 changed() {},
-            };
+            } as ClusterDatasource<SyncStorage>);
         }
 
         if (cluster) {

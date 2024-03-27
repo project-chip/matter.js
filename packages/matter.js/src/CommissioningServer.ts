@@ -33,6 +33,7 @@ import {
     ClusterDatasource,
     ClusterServerHandlers,
     ClusterServerObj,
+    asClusterServerInternal,
 } from "./cluster/server/ClusterServerTypes.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
@@ -66,6 +67,7 @@ import {
 } from "./schema/PairingCodeSchema.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { MatterCoreSpecificationV1_1 } from "./spec/Specifications.js";
+import { SyncStorage } from "./storage/Storage.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { ByteArray } from "./util/ByteArray.js";
@@ -224,8 +226,8 @@ export class CommissioningServer extends MatterNode {
     private readonly productDescription: ProductDescription;
     private readonly certification: DeviceCertification;
 
-    private storage?: StorageContext;
-    private endpointStructureStorage?: StorageContext;
+    private storage?: StorageContext<SyncStorage>;
+    private endpointStructureStorage?: StorageContext<SyncStorage>;
     private mdnsScanner?: MdnsScanner;
     private mdnsBroadcaster?: MdnsBroadcaster;
     private mdnsInstanceBroadcaster?: MdnsInstanceBroadcaster;
@@ -612,7 +614,7 @@ export class CommissioningServer extends MatterNode {
         this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
 
         // TODO adjust later and refactor MatterDevice
-        this.deviceInstance = new MatterDevice(
+        const deviceInstance = await MatterDevice.create(
             // this.options.deviceName,
             // DeviceTypeId(this.options.deviceType),
             // vendorId,
@@ -653,14 +655,15 @@ export class CommissioningServer extends MatterNode {
                 }
             },
             (fabricIndex: FabricIndex) => this.options.activeSessionsChangedCallback?.(fabricIndex),
-        )
-            .addTransportInterface(
-                await UdpInterface.create(Network.get(), "udp6", this.port, this.options.listeningAddressIpv6),
-            )
-            .addScanner(this.mdnsScanner)
-            .addProtocolHandler(this.interactionServer);
+        );
+        deviceInstance.addTransportInterface(
+            await UdpInterface.create(Network.get(), "udp6", this.port, this.options.listeningAddressIpv6),
+        );
+        deviceInstance.addScanner(this.mdnsScanner);
+        deviceInstance.addProtocolHandler(this.interactionServer);
+        this.deviceInstance = deviceInstance;
         if (!this.ipv4Disabled) {
-            this.deviceInstance.addTransportInterface(
+            deviceInstance.addTransportInterface(
                 await UdpInterface.create(Network.get(), "udp4", this.port, this.options.listeningAddressIpv4),
             );
         }
@@ -671,11 +674,9 @@ export class CommissioningServer extends MatterNode {
             // BLE or SoftAP only relevant when not commissioned yet
             try {
                 const ble = Ble.get();
-                this.deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
+                deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
                 if (limitTo === undefined || limitTo.ble) {
-                    this.deviceInstance.addBroadcaster(
-                        ble.getBleBroadcaster(this.options.additionalBleAdvertisementData),
-                    );
+                    deviceInstance.addBroadcaster(ble.getBleBroadcaster(this.options.additionalBleAdvertisementData));
                 }
             } catch (error) {
                 if (error instanceof NoProviderError) {
@@ -691,10 +692,10 @@ export class CommissioningServer extends MatterNode {
         }
 
         if (limitTo === undefined || limitTo.onIpNetwork) {
-            this.deviceInstance.addBroadcaster(this.mdnsInstanceBroadcaster);
+            deviceInstance.addBroadcaster(this.mdnsInstanceBroadcaster);
         }
 
-        await this.deviceInstance.start();
+        await deviceInstance.start();
 
         // Send required events
         basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
@@ -870,10 +871,10 @@ export class CommissioningServer extends MatterNode {
      * Set the StorageManager instance. Should be only used internally
      * @param storage
      */
-    setStorage(storage: StorageContext) {
+    async setStorage(storage: StorageContext<SyncStorage>) {
         this.storage = storage;
         this.endpointStructureStorage = this.storage.createContext("EndpointStructure");
-        this.eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
+        this.eventHandler = await EventHandler.create(this.storage.createContext("EventHandler"));
     }
 
     /**
@@ -1023,17 +1024,17 @@ export class CommissioningServer extends MatterNode {
     }
 }
 
-class CommissioningServerClusterDatasource implements ClusterDatasource {
+class CommissioningServerClusterDatasource implements ClusterDatasource<SyncStorage> {
     #version: number;
     #clusterDescription: string;
-    #storage: StorageContext;
+    #storage: StorageContext<SyncStorage>;
     #eventHandler: EventHandler;
 
     constructor(
         endpoint: EndpointInterface,
         cluster: ClusterServerObj<any, any>,
-        storage: StorageContext,
-        eventHandler: EventHandler,
+        storage: StorageContext<SyncStorage>,
+        eventHandler: EventHandler<SyncStorage>,
     ) {
         this.#eventHandler = eventHandler;
         this.#clusterDescription = `cluster ${cluster.name} (${cluster.id})`;
@@ -1061,7 +1062,7 @@ class CommissioningServerClusterDatasource implements ClusterDatasource {
             }
         }
 
-        cluster.datasource = this;
+        asClusterServerInternal<any, any, SyncStorage>(cluster)._setDatasource(this);
     }
 
     get version() {

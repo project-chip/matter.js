@@ -66,10 +66,12 @@ export class MatterNode {
     }
 
     closeStorage() {
-        this.storage
-            ?.close()
-            .then(() => process.exit(0))
-            .catch(() => process.exit(1));
+        try {
+            this.storage?.close();
+            process.exit(0);
+        } catch {
+            process.exit(1);
+        }
     }
 
     async start() {

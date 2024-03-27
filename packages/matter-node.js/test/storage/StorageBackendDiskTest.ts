@@ -83,6 +83,19 @@ describe("Storage node-localstorage", () => {
         expect(value).deep.equal(["key"]);
     });
 
+    it("return contexts with subcontexts", () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        storage.set(["context", "subcontext"], "key", "value");
+        storage.set(["context", "subcontext2"], "key", "value");
+        storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
+
+        expect(storage.contexts(["context", "subcontext", "subsubcontext"])).deep.equal([]);
+        expect(storage.contexts(["context", "subcontext"])).deep.equal(["subsubcontext"]);
+        expect(storage.contexts(["context"])).deep.equal(["subcontext", "subcontext2"]);
+        expect(storage.contexts([])).deep.equal(["context"]);
+    });
+
     it("clear all keys with multiple contextes", () => {
         const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
 

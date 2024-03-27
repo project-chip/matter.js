@@ -9,7 +9,6 @@ import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
 
 const NUMBER_KEY = "__number__";
-const KNOWN_KEY = "__known__";
 
 /**
  * The server implementation of {@link PartStore}.
@@ -25,15 +24,10 @@ export class ServerPartStore implements PartStore {
     #childStorage: StorageContext;
     #childStores = {} as Record<string, ServerPartStore>;
 
-    // TODO - this is a temporary kludge, don't think it's possible right now to query for sub-contexts?  Instead we
-    // maintain this persistent list of all parts
-    #knownParts = new Set<string>();
-
-    // TODO - same issue here
     #knownBehaviors = new Set<string>();
 
     toString() {
-        return `storage:${this.#storage.contexts.join(".")}`;
+        return `storage:${this.#storage.thisContexts.join(".")}`;
     }
 
     get construction() {
@@ -74,13 +68,13 @@ export class ServerPartStore implements PartStore {
     }
 
     async #load() {
-        this.#knownBehaviors = new Set(this.#storage.get(KNOWN_KEY, Array<string>()));
+        this.#knownBehaviors = new Set(await this.#storage.contexts());
 
         for (const behaviorId of this.#knownBehaviors) {
             const behaviorValues = (this.#initialValues[behaviorId] = {} as Val.Struct);
             const behaviorStorage = this.#storage.createContext(behaviorId);
 
-            for (const key of behaviorStorage.keys()) {
+            for (const key of await behaviorStorage.keys()) {
                 behaviorValues[key] = behaviorStorage.get(key);
             }
         }
@@ -112,11 +106,6 @@ export class ServerPartStore implements PartStore {
         let store = this.#childStores[partId];
         if (store === undefined) {
             store = this.#childStores[partId] = new ServerPartStore(this.#childStorage.createContext(partId), false);
-
-            if (!this.#knownParts.has(partId)) {
-                this.#knownParts.add(partId);
-                this.#childStorage.set(KNOWN_KEY, [...this.#knownParts]);
-            }
         }
 
         return store;
@@ -125,13 +114,11 @@ export class ServerPartStore implements PartStore {
     async saveNumber() {
         await this.#construction;
 
-        this.#storage.set(NUMBER_KEY, this.number);
+        await this.#storage.set(NUMBER_KEY, this.number);
     }
 
     async set(values: Record<string, undefined | Val.Struct>) {
         await this.#construction;
-
-        let persistKnown = false;
 
         for (const behaviorId in values) {
             const behaviorValues = values[behaviorId];
@@ -139,43 +126,36 @@ export class ServerPartStore implements PartStore {
 
             if (behaviorValues === undefined) {
                 if (this.#knownBehaviors.has(behaviorId)) {
-                    behaviorStorage.clearAll();
+                    await behaviorStorage.clearAll();
                     this.#knownBehaviors.delete(behaviorId);
-                    persistKnown = true;
                 }
                 continue;
             }
 
             if (!this.#knownBehaviors.has(behaviorId)) {
                 this.#knownBehaviors.add(behaviorId);
-                persistKnown = true;
             }
 
             for (const key in behaviorValues) {
                 const value = behaviorValues[key];
                 if (value === undefined) {
-                    behaviorStorage.delete(key);
+                    await behaviorStorage.delete(key);
                 } else {
-                    behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes);
+                    await behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes);
                 }
             }
-        }
-
-        if (persistKnown) {
-            this.#storage.set(KNOWN_KEY, [...this.#knownBehaviors]);
         }
     }
 
     async delete() {
         await this.#construction;
 
-        this.#storage.clearAll();
+        await this.#storage.clearAll();
     }
 
     async #loadSubparts() {
-        this.#knownParts = new Set(this.#childStorage.get(KNOWN_KEY, Array<string>()));
-
-        for (const partId of this.#knownParts) {
+        const knownParts = await this.#childStorage.contexts();
+        for (const partId of knownParts) {
             await this.#loadKnownChildStores(partId);
         }
     }

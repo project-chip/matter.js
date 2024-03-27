@@ -107,7 +107,7 @@ export abstract class BehaviorBacking {
      * This is an optional extension point for derivatives.  Errors thrown here are recorded and place the behavior into
      * crashed state.
      */
-    protected invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
+    protected async invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
         return behavior.initialize(options);
     }
 

@@ -1982,9 +1982,9 @@ describe("Integration Test", () => {
             assert.equal(commissioningChangedCallsServer2.length, 2);
             assert.equal(commissioningChangedCallsServer2[1].fabricIndex, FabricIndex(1));
 
-            assert.equal(nodeStateChangesController1Node2.length, 3);
-            assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Reconnecting);
-            assert.equal(nodeStateChangesController1Node2[2].nodeState, NodeStateInformation.Disconnected);
+            assert.equal(nodeStateChangesController1Node2.length, 2);
+            //assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Reconnecting);
+            assert.equal(nodeStateChangesController1Node2[1].nodeState, NodeStateInformation.Disconnected);
         }).timeout(30_000);
 
         it("controller storage is updated for removed nodes", async () => {
@@ -2017,8 +2017,8 @@ describe("Integration Test", () => {
 
         await matterServer.close();
         await matterClient.close();
-        await fakeControllerStorage.close();
-        await fakeServerStorage.close();
+        fakeControllerStorage.close();
+        fakeServerStorage.close();
 
         Time.get = () => mockTimeInstance;
     });

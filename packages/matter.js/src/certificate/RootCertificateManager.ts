@@ -11,6 +11,7 @@ import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { Time } from "../time/Time.js";
+import { AsyncConstruction, asyncNew } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
 import {
     CertificateManager,
@@ -25,33 +26,44 @@ export class RootCertificateManager {
     private rootKeyIdentifier = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
     private rootCertBytes = this.generateRootCert();
     private nextCertificateId = 1;
+    #construction: AsyncConstruction<RootCertificateManager>;
+
+    get construction() {
+        return this.#construction;
+    }
+
+    static async create(storage: StorageContext) {
+        return asyncNew(RootCertificateManager, storage);
+    }
 
     constructor(storage: StorageContext) {
-        // Read from storage if we have them stored, else store the just generated data
-        if (storage.has("rootCertId")) {
-            try {
-                // Read and set the values from storage,
-                // if one fail we use the pre-generated values, else we overwrite them
-                const rootCertId = storage.get<bigint>("rootCertId");
-                const rootKeyPair = storage.get<BinaryKeyPair>("rootKeyPair");
-                const rootKeyIdentifier = storage.get<ByteArray>("rootKeyIdentifier");
-                const rootCertBytes = storage.get<ByteArray>("rootCertBytes");
-                const nextCertificateId = storage.get<number>("nextCertificateId");
-                this.rootCertId = rootCertId;
-                this.rootKeyPair = PrivateKey(rootKeyPair);
-                this.rootKeyIdentifier = rootKeyIdentifier;
-                this.rootCertBytes = rootCertBytes;
-                this.nextCertificateId = nextCertificateId;
-                return;
-            } catch (error) {
-                console.error("Failed to load root certificate from storage, generating new one", error);
+        this.#construction = AsyncConstruction(this, async () => {
+            // Read from storage if we have them stored, else store the just generated data
+            if (await storage.has("rootCertId")) {
+                try {
+                    // Read and set the values from storage,
+                    // if one fail we use the pre-generated values, else we overwrite them
+                    const rootCertId = await storage.get<bigint>("rootCertId");
+                    const rootKeyPair = await storage.get<BinaryKeyPair>("rootKeyPair");
+                    const rootKeyIdentifier = await storage.get<ByteArray>("rootKeyIdentifier");
+                    const rootCertBytes = await storage.get<ByteArray>("rootCertBytes");
+                    const nextCertificateId = await storage.get<number>("nextCertificateId");
+                    this.rootCertId = rootCertId;
+                    this.rootKeyPair = PrivateKey(rootKeyPair);
+                    this.rootKeyIdentifier = rootKeyIdentifier;
+                    this.rootCertBytes = rootCertBytes;
+                    this.nextCertificateId = nextCertificateId;
+                    return;
+                } catch (error) {
+                    console.error("Failed to load root certificate from storage, generating new one", error);
+                }
             }
-        }
-        storage.set("rootCertId", this.rootCertId);
-        storage.set("rootKeyPair", this.rootKeyPair.keyPair);
-        storage.set("rootKeyIdentifier", this.rootKeyIdentifier);
-        storage.set("rootCertBytes", this.rootCertBytes);
-        storage.set("nextCertificateId", this.nextCertificateId);
+            await storage.set("rootCertId", this.rootCertId);
+            await storage.set("rootKeyPair", this.rootKeyPair.keyPair);
+            await storage.set("rootKeyIdentifier", this.rootKeyIdentifier);
+            await storage.set("rootCertBytes", this.rootCertBytes);
+            await storage.set("nextCertificateId", this.nextCertificateId);
+        });
     }
 
     getRootCert() {

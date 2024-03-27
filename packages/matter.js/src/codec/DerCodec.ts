@@ -6,6 +6,7 @@
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
+import { isObject } from "../util/Type.js";
 
 export const OBJECT_ID_KEY = "_objectId";
 export const TAG_ID_KEY = "_tag";
@@ -67,14 +68,14 @@ export class DerCodec {
             return this.encodeOctetString(value);
         } else if (value instanceof Date) {
             return this.encodeDate(value);
-        } else if (typeof value === "object" && value[TAG_ID_KEY] !== undefined) {
+        } else if (isObject(value) && value[TAG_ID_KEY] !== undefined) {
             return this.encodeAnsi1(
                 value[TAG_ID_KEY],
                 value[BITS_PADDING] === undefined
                     ? value[BYTES_KEY]
                     : ByteArray.concat(ByteArray.of(value[BITS_PADDING]), value[BYTES_KEY]),
             );
-        } else if (typeof value === "object") {
+        } else if (isObject(value)) {
             return this.encodeObject(value);
         } else if (typeof value === "string") {
             return this.encodeString(value);

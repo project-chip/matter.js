@@ -261,12 +261,12 @@ async function commissioningServer({ storage, values }: { storage?: boolean; val
     });
 
     if (storage !== false) {
-        node.setStorage(testStorageContext);
+        await node.setStorage(testStorageContext);
     }
 
     if (values) {
         for (const key in values) {
-            endpointStorage.set(key, values[key]);
+            await endpointStorage.set(key, values[key]);
         }
     }
 

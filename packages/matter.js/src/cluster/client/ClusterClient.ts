@@ -60,7 +60,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             alwaysRequestFromRemote?: boolean,
             isFabricFiltered = true,
         ) => {
-            return await tryCatchAsync(
+            return tryCatchAsync(
                 async () => {
                     return await (attributes as any)[attributeName].get(isFabricFiltered, alwaysRequestFromRemote);
                 },
@@ -84,7 +84,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             isFabricFiltered?: boolean,
         ) => {
             (attributes as any)[attributeName].addListener(listener);
-            (attributes as any)[attributeName].subscribe(
+            return (attributes as any)[attributeName].subscribe(
                 minIntervalS,
                 maxIntervalS,
                 knownDataVersion,
@@ -111,7 +111,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             minimumEventNumber?: number | bigint,
             isFabricFiltered?: boolean,
         ) => {
-            return await tryCatchAsync(
+            return tryCatchAsync(
                 async () => {
                     return await (events as any)[eventName].get(minimumEventNumber, isFabricFiltered);
                 },
@@ -134,7 +134,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             isFabricFiltered?: boolean,
         ) => {
             (events as any)[eventName].addListener(listener);
-            (events as any)[eventName].subscribe(
+            return (events as any)[eventName].subscribe(
                 minIntervalS,
                 maxIntervalS,
                 isUrgent,
@@ -198,7 +198,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 dataVersionFilters,
             } = options;
 
-            return await interactionClient.subscribeMultipleAttributesAndEvents({
+            return interactionClient.subscribeMultipleAttributesAndEvents({
                 attributes: [{ endpointId: endpointId, clusterId: clusterId }],
                 events: [{ endpointId: endpointId, clusterId: clusterId }],
                 minIntervalFloorSeconds,

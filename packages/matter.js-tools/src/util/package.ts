@@ -108,7 +108,7 @@ export class Package {
     get dependencies() {
         let result = Array<string>();
         for (const type of ["dependencies", "devDependencies", "peerDependencies"]) {
-            if (typeof this.json[type] === "object") {
+            if (typeof this.json[type] === "object" && this.json[type] !== null) {
                 result = [...result, ...Object.keys(this.json[type])];
             }
         }

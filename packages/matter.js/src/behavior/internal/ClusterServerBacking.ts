@@ -25,6 +25,7 @@ import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
+import { isObject } from "../../util/Type.js";
 import { AccessControl } from "../AccessControl.js";
 import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
@@ -58,15 +59,9 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         this.#server = server;
     }
 
-    protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
-        const result = super.invokeInitializer(behavior, options);
-
-        if (MaybePromise.is(result)) {
-            const createClusterServer = () => this.#createClusterServer(behavior);
-            return result.then(createClusterServer);
-        }
-
-        this.#createClusterServer(behavior);
+    protected override async invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
+        await super.invokeInitializer(behavior, options);
+        await this.#createClusterServer(behavior);
     }
 
     protected override get datasourceOptions() {
@@ -76,7 +71,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         };
     }
 
-    #createClusterServer(behavior: Behavior) {
+    async #createClusterServer(behavior: Behavior) {
         const elements = new ValidatedElements(this.type);
         elements.report();
 
@@ -113,7 +108,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         // This must occur after cluster server is assigned to endpoint
         const eventHandler = this.eventHandler;
         const datasource = this.datasource;
-        clusterServer.datasource = {
+        await asClusterServerInternal(clusterServer)._setDatasource({
             get version() {
                 return datasource.version;
             },
@@ -129,7 +124,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
             increaseVersion() {
                 return datasource.version;
             },
-        };
+        });
 
         this.#clusterServer = clusterServer;
 
@@ -143,7 +138,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         }
 
         // Disable redundant command logging
-        const commandServers = (clusterServer as ClusterServerObjInternal<any, any, any>)._commands;
+        const commandServers = (clusterServer as ClusterServerObjInternal<any, any, any, any>)._commands;
         for (const name in commandServers) {
             const server = commandServers[name];
             if (server) {
@@ -175,7 +170,7 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
 
     const handleCommand: CommandHandler<any, any, any> = ({ request, message }) => {
         let requestDiagnostic: unknown;
-        if (request && typeof request === "object") {
+        if (isObject(request)) {
             requestDiagnostic = Diagnostic.dict(request);
         } else if (request !== undefined) {
             requestDiagnostic = request;
@@ -330,7 +325,7 @@ function createEventHandler(backing: ClusterServerBehaviorBacking, name: string)
         return;
     }
 
-    observable.on((payload, _context) => {
-        eventServer.triggerEvent(payload);
+    observable.on(async (payload, _context) => {
+        await eventServer.triggerEvent(payload);
     });
 }

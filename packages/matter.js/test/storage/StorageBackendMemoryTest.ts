@@ -68,6 +68,20 @@ describe("StorageBackendMemory", () => {
         expect(value).deep.equal(["key"]);
     });
 
+    it("return all contexts with multiple contextes", async () => {
+        const storage = await StorageBackendMemory.create();
+
+        storage.set(["context"], "key1", "value");
+        storage.set(["context", "subcontext"], "key2", "value");
+        storage.set(["context", "subcontext2"], "key2", "value");
+        storage.set(["context", "subcontext", "subsubcontext"], "key3", "value");
+
+        expect(storage.contexts(["context", "subcontext", "subsubcontext"])).deep.equal([]);
+        expect(storage.contexts(["context", "subcontext"])).deep.equal(["subsubcontext"]);
+        expect(storage.contexts(["context"])).deep.equal(["subcontext", "subcontext2"]);
+        expect(storage.contexts([])).deep.equal(["context"]);
+    });
+
     it("Throws error when context is empty on set", async () => {
         const storage = await StorageBackendMemory.create();
         expect(() => {
@@ -91,15 +105,14 @@ describe("StorageBackendMemory", () => {
 
     it("Throws error when context is empty on get with subcontext", async () => {
         const storage = await StorageBackendMemory.create();
-        expect(() => {
-            storage.get(["ok", ""], "key");
-        }).throw(StorageError, "Context must not be an empty string.");
+        expect(() => storage.get(["ok", ""], "key")).throws(StorageError, "Context must not be an empty string.");
     });
 
     it("Throws error when key is empty on get", async () => {
         const storage = await StorageBackendMemory.create();
-        expect(() => {
-            storage.get(["context", "subcontext"], "");
-        }).throw(StorageError, "Context and key must not be empty.");
+        expect(() => storage.get(["context", "subcontext"], "")).throws(
+            StorageError,
+            "Context and key must not be empty.",
+        );
     });
 });

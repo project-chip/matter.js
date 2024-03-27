@@ -49,6 +49,7 @@ import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvString } from "./tlv/TlvString.js";
+import { AsyncConstruction } from "./util/AsyncConstruction.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { isIPv6 } from "./util/Ip.js";
 import { anyPromise, createPromise } from "./util/Promises.js";
@@ -97,12 +98,13 @@ export class MatterController {
         adminFabricIndex: FabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
         caseAuthenticatedTags?: CaseAuthenticatedTag[],
     ): Promise<MatterController> {
-        const certificateManager = new RootCertificateManager(rootCertificateStorage);
+        const certificateManager = await RootCertificateManager.create(rootCertificateStorage);
 
+        let controller: MatterController;
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         if (fabricStorage.has("fabric")) {
-            const storedFabric = Fabric.createFromStorageObject(fabricStorage.get<FabricJsonObject>("fabric"));
-            return new MatterController(
+            const storedFabric = Fabric.createFromStorageObject(await fabricStorage.get<FabricJsonObject>("fabric"));
+            controller = new MatterController(
                 sessionStorage,
                 fabricStorage,
                 nodesStorage,
@@ -131,7 +133,7 @@ export class MatterController {
                 ),
             );
 
-            return new MatterController(
+            controller = new MatterController(
                 sessionStorage,
                 fabricStorage,
                 nodesStorage,
@@ -144,16 +146,23 @@ export class MatterController {
                 sessionClosedCallback,
             );
         }
+        await controller.construction;
+        return controller;
     }
 
-    readonly sessionManager;
+    readonly sessionManager: SessionManager<MatterController>;
     private readonly channelManager = new ChannelManager();
-    private readonly exchangeManager;
+    private readonly exchangeManager: ExchangeManager<MatterController>;
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
     private netInterfaceBle: NetInterface | undefined;
     private bleScanner: Scanner | undefined;
     private readonly commissionedNodes = new Map<NodeId, CommissionedNodeDetails>();
+    #construction: AsyncConstruction<MatterController>;
+
+    get construction() {
+        return this.#construction;
+    }
 
     constructor(
         readonly sessionStorage: StorageContext,
@@ -167,18 +176,7 @@ export class MatterController {
         private readonly adminVendorId: VendorId,
         private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void,
     ) {
-        // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
-        if (this.nodesStore.has("commissionedNodes")) {
-            const commissionedNodes = this.nodesStore.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
-            this.commissionedNodes.clear();
-            for (const [nodeId, details] of commissionedNodes) {
-                this.commissionedNodes.set(nodeId, details);
-            }
-        }
-
         this.sessionManager = new SessionManager(this, sessionStorage);
-        this.sessionManager.initFromStorage([this.fabric]);
-
         this.sessionManager.sessionClosed.on(async session => {
             if (!session.closingAfterExchangeFinished) {
                 // Delayed closing is executed when exchange is closed
@@ -193,6 +191,20 @@ export class MatterController {
             this.addTransportInterface(netInterfaceIpv4);
         }
         this.addTransportInterface(netInterfaceIpv6);
+
+        this.#construction = AsyncConstruction(this, async () => {
+            // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
+            if (await this.nodesStore.has("commissionedNodes")) {
+                const commissionedNodes =
+                    await this.nodesStore.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
+                this.commissionedNodes.clear();
+                for (const [nodeId, details] of commissionedNodes) {
+                    this.commissionedNodes.set(nodeId, details);
+                }
+            }
+
+            await this.sessionManager.initFromStorage([this.fabric]);
+        });
     }
 
     get nodeId() {
@@ -335,10 +347,10 @@ export class MatterController {
     async removeNode(nodeId: NodeId) {
         logger.info(`Removing commissioned node ${nodeId} from controller.`);
         await this.sessionManager.removeAllSessionsForNode(nodeId);
-        this.sessionManager.removeResumptionRecord(nodeId);
+        await this.sessionManager.removeResumptionRecord(nodeId);
         await this.channelManager.removeChannel(this.fabric, nodeId);
         this.commissionedNodes.delete(nodeId);
-        this.storeCommissionedNodes();
+        await this.storeCommissionedNodes();
     }
 
     /**
@@ -478,7 +490,7 @@ export class MatterController {
             throw error;
         }
 
-        this.fabricStorage.set("fabric", this.fabric.toStorageObject());
+        await this.fabricStorage.set("fabric", this.fabric.toStorageObject());
 
         return peerNodeId;
     }
@@ -492,7 +504,7 @@ export class MatterController {
         try {
             logger.debug(`Resume device connection to configured server at ${ip}:${port}`);
             const channel = await this.pair(peerNodeId, operationalAddress, discoveryData);
-            this.setOperationalDeviceData(peerNodeId, operationalAddress);
+            await this.setOperationalDeviceData(peerNodeId, operationalAddress);
             return channel;
         } catch (error) {
             if (
@@ -580,7 +592,7 @@ export class MatterController {
                 },
                 async (address, device) => {
                     const result = await this.pair(peerNodeId, address, device);
-                    this.setOperationalDeviceData(peerNodeId, address, {
+                    await this.setOperationalDeviceData(peerNodeId, address, {
                         ...discoveryData,
                         ...device,
                     });
@@ -693,7 +705,7 @@ export class MatterController {
         );
     }
 
-    private setOperationalDeviceData(
+    private async setOperationalDeviceData(
         nodeId: NodeId,
         operationalServerAddress: ServerAddressIp,
         discoveryData?: DiscoveryData,
@@ -707,10 +719,10 @@ export class MatterController {
             };
         }
         this.commissionedNodes.set(nodeId, nodeDetails);
-        this.storeCommissionedNodes();
+        await this.storeCommissionedNodes();
     }
 
-    enhanceCommissionedNodeDetails(
+    async enhanceCommissionedNodeDetails(
         nodeId: NodeId,
         data: { basicInformationData: Record<string, SupportedStorageTypes> },
     ) {
@@ -721,15 +733,15 @@ export class MatterController {
         const { basicInformationData } = data;
         nodeDetails.basicInformationData = basicInformationData;
         this.commissionedNodes.set(nodeId, nodeDetails);
-        this.storeCommissionedNodes();
+        await this.storeCommissionedNodes();
     }
 
     private getLastOperationalAddress(nodeId: NodeId) {
         return this.commissionedNodes.get(nodeId)?.operationalServerAddress;
     }
 
-    private storeCommissionedNodes() {
-        this.nodesStore.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
+    private async storeCommissionedNodes() {
+        await this.nodesStore.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
     }
 
     /**
@@ -773,7 +785,7 @@ export class MatterController {
         return this.sessionManager.findResumptionRecordByNodeId(nodeId);
     }
 
-    saveResumptionRecord(resumptionRecord: ResumptionRecord) {
+    async saveResumptionRecord(resumptionRecord: ResumptionRecord) {
         return this.sessionManager.saveResumptionRecord(resumptionRecord);
     }
 

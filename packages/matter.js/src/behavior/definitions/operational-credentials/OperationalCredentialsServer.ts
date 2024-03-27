@@ -265,7 +265,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const updateFabric = await timedOp.buildUpdatedFabric(nocValue, icacValue);
 
         // update FabricManager and Resumption records but leave current session intact
-        timedOp.updateFabric(updateFabric);
+        await timedOp.updateFabric(updateFabric);
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
@@ -273,7 +273,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         };
     }
 
-    override updateFabricLabel({ label }: UpdateFabricLabelRequest) {
+    override async updateFabricLabel({ label }: UpdateFabricLabelRequest) {
         const fabric = this.session.associatedFabric;
 
         const currentFabricIndex = fabric.fabricIndex;
@@ -288,7 +288,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             };
         }
 
-        fabric.setLabel(label);
+        await fabric.setLabel(label);
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     }

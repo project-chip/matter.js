@@ -289,7 +289,7 @@ export const OperationalCredentialsClusterHandler: (
         const updateFabric = await failsafeContext.buildUpdatedFabric(nocValue, icacValue);
 
         // update FabricManager and Resumption records but leave current session intact
-        failsafeContext.updateFabric(updateFabric);
+        await failsafeContext.updateFabric(updateFabric);
 
         // Update connected attributes
         nocs.updated(session);
@@ -324,7 +324,7 @@ export const OperationalCredentialsClusterHandler: (
             };
         }
 
-        fabric.setLabel(label);
+        await fabric.setLabel(label);
 
         fabrics.updated(session);
 
