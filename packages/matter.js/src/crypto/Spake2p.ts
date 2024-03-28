@@ -5,13 +5,10 @@
  */
 
 import { InternalError } from "../common/MatterError.js";
-import { Logger } from "../log/Logger.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { Crypto, ec } from "./Crypto.js";
 import { CRYPTO_GROUP_SIZE_BYTES } from "./CryptoConstants.js";
-
-const logger = Logger.get("Spake2p");
 
 const {
     p256: { ProjectivePoint, CURVE: P256_CURVE },
@@ -36,10 +33,8 @@ export class Spake2p {
         const pinWriter = new DataWriter(Endian.Little);
         pinWriter.writeUInt32(pin);
         const ws = await Crypto.pbkdf2(pinWriter.toByteArray(), salt, iterations, CRYPTO_W_SIZE_BYTES * 2);
-        logger.info(`Computed w0w1: (${ws.length}) w0s=${ws.slice(0, 40).toHex()} w1s=${ws.slice(40, 80).toHex()}.`);
         const w0 = mod(bytesToNumberBE(ws.slice(0, 40)), P256_CURVE.n);
         const w1 = mod(bytesToNumberBE(ws.slice(40, 80)), P256_CURVE.n);
-        logger.info(`Computed w0w1: w0=${w0.toString(16)} w1=${w1.toString(16)}.`);
         return { w0, w1 };
     }
 

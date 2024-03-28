@@ -33,18 +33,12 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
     static async fromPin(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
-        logger.info(
-            `PASE server created from PIN ${setupPinCode} and params ${Logger.toJSON(pbkdfParameters)} with w0: (${w0.toString(16).length}) ${w0.toString(16)} and L: ${Logger.toJSON(L)} (${Array.isArray(L)}).`,
-        );
         return new PaseServer(w0, L, pbkdfParameters);
     }
 
     static fromVerificationValue(verificationValue: ByteArray, pbkdfParameters?: PbkdfParameters) {
         const w0 = bytesToNumberBE(verificationValue.slice(0, 32));
         const L = verificationValue.slice(32, 32 + 65);
-        logger.info(
-            `PASE server created from Verifier and params ${Logger.toJSON(pbkdfParameters)} with w0: (${w0.toString(16).length}) ${w0.toString(16)} and L: ${L.toHex()}.`,
-        );
         return new PaseServer(w0, L, pbkdfParameters);
     }
 
@@ -113,10 +107,6 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}.`);
         }
 
-        logger.info(
-            `PbkdfParamRequest Data: requestPayload=${requestPayload.toHex()} sessionParams=${Logger.toJSON(sessionParams)} peerRandom=${peerRandom.toHex()} peerSessionid=${peerSessionId} hasPbkdfParameters=${hasPbkdfParameters}`,
-        );
-
         const sessionId = await server.getNextAvailableSessionId(); // Responder Session Id
         const random = Crypto.getRandom();
 
@@ -127,22 +117,16 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             sessionParams,
             pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters,
         });
-        logger.info(
-            `PbkdfParamResponse Data: responsePayload=${responsePayload.toHex()} pbkdfParameters=${Logger.toJSON(hasPbkdfParameters ? undefined : this.pbkdfParameters)} sessionId=${sessionId} random=${random.toHex()} sessionParams=${Logger.toJSON(sessionParams)}`,
-        );
 
         // Process pake1 and send pake2
         const spake2p = Spake2p.create(Crypto.hash([SPAKE_CONTEXT, requestPayload, responsePayload]), this.w0);
         const { x: X } = await messenger.readPasePake1();
-        logger.info(`PasePake1 Data: X=${X.toHex()}`);
         const Y = spake2p.computeY();
         const { Ke, hAY, hBX } = await spake2p.computeSecretAndVerifiersFromX(this.L, X, Y);
-        logger.info(`PasePake2 Data: Y=${Y.toHex()} Ke=${Ke.toHex()} hAY=${hAY.toHex()} hBX=verifier=${hBX.toHex()}`);
         await messenger.sendPasePake2({ y: Y, verifier: hBX });
 
         // Read and process pake3
         const { verifier } = await messenger.readPasePake3();
-        logger.info(`PasePake3 Data: verifier=${verifier.toHex()} vs hAY=${hAY.toHex()}`);
         if (!verifier.equals(hAY)) {
             throw new UnexpectedDataError("Received incorrect key confirmation from the initiator.");
         }
