@@ -50,6 +50,10 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         return this.#clusterServer;
     }
 
+    get runtime() {
+        return this.#server.endpoint.env.runtime;
+    }
+
     override get type() {
         return super.type as ClusterBehavior.Type;
     }
@@ -331,7 +335,10 @@ function createEventHandler(backing: ClusterServerBehaviorBacking, name: string)
         return;
     }
 
-    observable.on(async (payload, _context) => {
-        await eventServer.triggerEvent(payload);
+    observable.on((payload, _context) => {
+        const maybePromise = eventServer.triggerEvent(payload);
+        if (MaybePromise.is(maybePromise)) {
+            backing.runtime.add(maybePromise);
+        }
     });
 }
