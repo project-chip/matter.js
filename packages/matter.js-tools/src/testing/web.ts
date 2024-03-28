@@ -130,11 +130,15 @@ function consoleHandler(reporter: Reporter) {
     };
 }
 
+function packageFilename(packageName: string) {
+    return packageName.replace(/^@/, "").replace(/\//g, "_");
+}
+
 function buildIndex(files: string[]) {
     const importMap = JSON.stringify({
         imports: Object.fromEntries(
             libraries.map(name => {
-                let path = `/packages/matter.js-tools/build/lib/${name.replace(/[@/]/g, "_")}`;
+                let path = `/packages/matter.js-tools/build/lib/${packageFilename(name)}`;
                 if (!path.endsWith(".js")) {
                     path = `${path}.js`;
                 }
@@ -167,7 +171,7 @@ function buildIndex(files: string[]) {
 
 async function buildLibraries() {
     for (const name of libraries) {
-        let path = `build/lib/${name.replace(/[@/]/g, "_")}`;
+        let path = `build/lib/${packageFilename(name)}`;
         if (!path.endsWith(".js")) {
             path = `${path}.js`;
         }
@@ -178,10 +182,13 @@ async function buildLibraries() {
         }
 
         await build({
-            entryPoints: [Package.workspace.resolve(`node_modules/${name}`)],
+            entryPoints: [Package.workspace.findExport(name)],
             bundle: true,
             format: "esm",
             outfile,
+
+            // Grr esbuild doesn't respect this
+            //logOverride: { "empty-import-meta": "silent" },
         });
     }
 }

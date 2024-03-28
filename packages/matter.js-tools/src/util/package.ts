@@ -29,6 +29,10 @@ function findJson(filename: string, path: string = ".", title?: string) {
     }
 }
 
+function isDirectory(path: string) {
+    return !!ignoreErrorSync("ENOENT", () => statSync(path).isDirectory());
+}
+
 export class Package {
     path: string;
     json: PackageJson;
@@ -53,14 +57,18 @@ export class Package {
         this.esm = esm;
         this.cjs = cjs;
 
-        this.src = !!ignoreErrorSync("ENOENT", () => statSync(this.resolve("src")).isDirectory());
-        this.tests = !!ignoreErrorSync("ENOENT", () => statSync(this.resolve("test")).isDirectory());
+        this.src = isDirectory(this.resolve("src"));
+        this.tests = isDirectory(this.resolve("test"));
 
         this.library = !!(this.json.main || this.json.module || this.json.exports);
     }
 
     get name() {
         return this.json.name;
+    }
+
+    get exports() {
+        return this.json.exports;
     }
 
     resolve(path: string) {
@@ -115,14 +123,12 @@ export class Package {
         return [...new Set(result)];
     }
 
-    static set workingDir(wd: string) {
-        workingDir = wd;
+    get workspace() {
+        return Package.workspaceFor(this.path);
     }
 
-    static node(name: string) {
-        return new Package({
-            path: this.workspace.resolve(`node_modules/${name}`),
-        });
+    static set workingDir(wd: string) {
+        workingDir = wd;
     }
 
     static get workspace() {
@@ -141,6 +147,58 @@ export class Package {
             tools = new Package({ path: this.workspace.resolve("packages/matter.js-tools") });
         }
         return tools;
+    }
+
+    static findExport(name: string, type: "cjs" | "esm" = "esm") {
+        return this.workspace.findExport(name, type);
+    }
+
+    resolveExport(name: string, type: "cjs" | "esm" = "esm") {
+        if (!name.startsWith(".")) {
+            name = `./${name}`;
+        }
+        const exportDetail = this.exports?.[name];
+
+        if (exportDetail) {
+            const exp = findExportCondition(exportDetail, type);
+            if (exp) {
+                return this.resolve(exp);
+            }
+        }
+
+        if (name === ".") {
+            if (type === "esm" && this.json.module) {
+                return this.resolve(this.json.module);
+            }
+            if (this.json.main) {
+                return this.resolve(this.json.main);
+            }
+        }
+
+        throw new Error(`Cannot resolve export ${name} in package ${this.name}`);
+    }
+
+    findExport(name: string, type: "cjs" | "esm" = "esm") {
+        const segments = name.split("/");
+        let subdir = segments.shift() as string;
+        if (subdir.startsWith("@") && segments.length) {
+            subdir = `${subdir}/${segments.shift()}`;
+        }
+
+        let resolveIn = this.path;
+        while (true) {
+            if (isDirectory(resolve(resolveIn, "node_modules", subdir))) {
+                break;
+            }
+            const nextResolveIn = dirname(resolveIn);
+            if (nextResolveIn === resolveIn) {
+                throw new Error(`Cannot find module ${subdir} from ${this.path}`);
+            }
+            resolveIn = nextResolveIn;
+        }
+
+        const pkg = new Package({ path: resolve(resolveIn, "node_modules", subdir) });
+        return pkg.resolveExport(segments.length ? segments.join("/") : ".", type);
     }
 }
 
@@ -176,4 +234,25 @@ function selectFormats(json: any) {
     }
 
     return { esm, cjs };
+}
+
+function findExportCondition(detail: Record<string, any>, type: "esm" | "cjs"): string | undefined {
+    if (type === "esm" && detail.import) {
+        let exp = detail.import;
+        if (exp && typeof exp !== "string") {
+            exp = findExportCondition(exp, type);
+        }
+        if (exp) {
+            return exp;
+        }
+    }
+
+    let exp = detail.require ?? detail.node ?? detail.default;
+    if (exp && typeof exp !== "string") {
+        exp = findExportCondition(exp, type);
+    }
+
+    if (typeof exp === "string") {
+        return exp;
+    }
 }
