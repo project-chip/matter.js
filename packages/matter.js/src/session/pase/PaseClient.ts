@@ -22,8 +22,7 @@ const logger = Logger.get("PaseClient");
 export class PaseClient {
     static async generatePakePasscodeVerifier(setupPinCode: number, pbkdfParameters: PbkdfParameters) {
         const { w0, L } = await Spake2p.computeW0L(pbkdfParameters, setupPinCode);
-        const w0Bytes = numberToBytesBE(w0, 32);
-        return ByteArray.concat(w0Bytes, L);
+        return ByteArray.concat(numberToBytesBE(w0, 32), L);
     }
 
     static generateRandomPasscode() {
