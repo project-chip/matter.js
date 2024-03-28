@@ -64,7 +64,7 @@ export class StorageBackendMemory extends SyncStorage {
     ) {
         if (!this.initialized) throw new StorageError("Storage is not initialized");
         if (typeof keyOrValues === "string") {
-            this.#setKey(contexts, keyOrValues, value as SupportedStorageTypes);
+            this.#setKey(contexts, keyOrValues, value);
         } else {
             Object.entries(keyOrValues).forEach(([key, value]) => {
                 this.#setKey(contexts, key, value);

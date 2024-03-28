@@ -400,5 +400,5 @@ export function asClusterServerInternal<A extends Attributes, E extends Events>(
     if (!isClusterServerInternal(obj)) {
         throw new Error("Object is not a ClusterServerObj instance.");
     }
-    return obj as ClusterServerObjInternal<A, Commands, E>;
+    return obj;
 }
