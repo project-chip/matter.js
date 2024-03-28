@@ -4,11 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import BN from "bn.js";
+import * as mod from "@noble/curves/abstract/modular";
+import * as utils from "@noble/curves/abstract/utils";
+import { p256 } from "@noble/curves/p256";
 import { MatterError, NoProviderError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { PrivateKey } from "./Key.js";
+
+export const ec = {
+    p256,
+    ...utils,
+    ...mod,
+};
 
 export const CRYPTO_RANDOM_LENGTH = 32;
 export const CRYPTO_ENCRYPT_ALGORITHM = "aes-128-ccm";
@@ -48,9 +56,13 @@ export abstract class Crypto {
     static readonly getRandomBigUInt64 = (): bigint =>
         new DataReader(Crypto.get().getRandomData(8), Endian.Little).readUInt64();
 
-    static readonly getRandomBN = (size: number, maxValue: BN): BN => {
+    static readonly getRandomBigInt = (size: number, maxValue?: bigint): bigint => {
+        const { bytesToNumberBE } = ec;
+        if (maxValue === undefined) {
+            return bytesToNumberBE(Crypto.getRandomData(size));
+        }
         while (true) {
-            const random = new BN(Crypto.getRandomData(size));
+            const random = bytesToNumberBE(Crypto.getRandomData(size));
             if (random < maxValue) return random;
         }
     };
@@ -112,17 +124,6 @@ export abstract class Crypto {
     abstract createKeyPair(): PrivateKey;
     static readonly createKeyPair = (): PrivateKey => Crypto.get().createKeyPair();
 }
-
-// Elliptic requires some contortions to import.  TSC and esbuild are smart
-// enough to find the exports and transpile accordingly.  But node (as of 18)
-// is not.  Everybody is happy if we use a default export (which Node
-// recommends in their error message).  Except eslint, so I've disabled those
-// rules.
-//
-// Placing this here and exporting so we can keep these incantations in one
-// place.
-import elliptic from "elliptic";
-export const { ec } = elliptic;
 
 // Hook for testing frameworks
 if (typeof MatterHooks !== "undefined") {
