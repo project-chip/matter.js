@@ -25,6 +25,7 @@ import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
+import { isObject } from "../../util/Type.js";
 import { AccessControl } from "../AccessControl.js";
 import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
@@ -47,6 +48,10 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
 
     get clusterServer() {
         return this.#clusterServer;
+    }
+
+    get runtime() {
+        return this.#server.endpoint.env.runtime;
     }
 
     override get type() {
@@ -175,7 +180,7 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
 
     const handleCommand: CommandHandler<any, any, any> = ({ request, message }) => {
         let requestDiagnostic: unknown;
-        if (request && typeof request === "object") {
+        if (isObject(request)) {
             requestDiagnostic = Diagnostic.dict(request);
         } else if (request !== undefined) {
             requestDiagnostic = request;
@@ -331,6 +336,9 @@ function createEventHandler(backing: ClusterServerBehaviorBacking, name: string)
     }
 
     observable.on((payload, _context) => {
-        eventServer.triggerEvent(payload);
+        const maybePromise = eventServer.triggerEvent(payload);
+        if (MaybePromise.is(maybePromise)) {
+            backing.runtime.add(maybePromise);
+        }
     });
 }

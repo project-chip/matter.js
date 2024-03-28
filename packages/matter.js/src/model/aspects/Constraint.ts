@@ -5,6 +5,7 @@
  */
 
 import { camelize } from "../../util/String.js";
+import { isObject } from "../../util/Type.js";
 import { FieldValue } from "../definitions/index.js";
 import { Aspect } from "./Aspect.js";
 
@@ -77,13 +78,14 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
      */
     test(value: FieldValue, properties?: Record<string, any>) {
         // Helper that looks up "reference" field values in properties.  This is for constraints such as "min FieldName"
-        function valueOf(value: any) {
+        function valueOf(value: unknown) {
             if (typeof value === "string" || Array.isArray(value)) {
                 return value.length;
             }
-            if (typeof value === "object") {
-                if (value.type === FieldValue.reference) {
-                    value = valueOf(properties?.[camelize(value.name)]);
+            if (isObject(value)) {
+                const { type, name } = value;
+                if (type === FieldValue.reference && typeof name === "string") {
+                    value = valueOf(properties?.[camelize(name)]);
                 }
             }
 
@@ -105,14 +107,14 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 
         if (this.min !== undefined && this.min !== null) {
             const min = valueOf(this.min);
-            if ((min !== undefined && typeof min !== typeof value) || min > value) {
+            if ((min !== undefined && typeof min !== typeof value) || (min as typeof value) > value) {
                 return false;
             }
         }
 
         if (this.max !== undefined && this.max !== null) {
             const max = valueOf(this.max);
-            if ((max !== undefined && typeof max !== typeof value) || max < value) {
+            if ((max !== undefined && typeof max !== typeof value) || (max as typeof value) < value) {
                 return false;
             }
         }

@@ -31,6 +31,7 @@ import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
+import { SyncStorage } from "./storage/Storage.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 
@@ -361,7 +362,7 @@ export class CommissioningController extends MatterNode {
                 }
             }
         }
-        controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
+        await controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
     }
 
     private async enhanceDeviceDetailsFromRemote(nodeId: NodeId, pairedNode: PairedNode) {
@@ -382,7 +383,7 @@ export class CommissioningController extends MatterNode {
                     basicInformationData[attributeName] = value;
                 }
             }
-            controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
+            await controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
         } catch (error) {
             logger.info(`Error while enhancing basic information for node ${nodeId}: ${error}`);
         }
@@ -430,7 +431,7 @@ export class CommissioningController extends MatterNode {
      *
      * @param storage storage context to use
      */
-    setStorage(storage: StorageContext) {
+    setStorage(storage: StorageContext<SyncStorage>) {
         this.storage = storage;
         this.environment = undefined;
     }
@@ -564,7 +565,7 @@ export class CommissioningController extends MatterNode {
             const controllerStore = environment.get(ControllerStore);
             await controllerStore.erase();
         } else if (storage !== undefined) {
-            storage.clearAll();
+            await storage.clearAll();
         } else {
             throw new InternalError("Storage not initialized correctly."); // Should not happen
         }

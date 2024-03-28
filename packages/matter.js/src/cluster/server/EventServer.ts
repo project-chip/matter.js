@@ -9,13 +9,15 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { EventId } from "../../datatype/EventId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
+import { Storage, StorageOperationResult } from "../../storage/Storage.js";
 import { Time } from "../../time/Time.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { EventPriority } from "../Cluster.js";
 
 // TODO Add Fabric Scoped EventServer when needed
 
-export class EventServer<T> {
+export class EventServer<T, S extends Storage> {
     private eventList = new Array<EventData<T>>();
     private readonly listeners = new Array<(event: EventStorageData<T>) => void>();
     protected endpoint?: Endpoint;
@@ -35,14 +37,23 @@ export class EventServer<T> {
 
     // TODO Try to get rid of that late binding and simply things again
     //      potentially with refactoring out MatterDevice and MatterController
-    bindToEventHandler(eventHandler: EventHandler) {
+    bindToEventHandler(eventHandler: EventHandler<S>) {
         this.eventHandler = eventHandler;
         // Send all stored events to the new listener
+        const promises = new Array<PromiseLike<void>>();
         for (const event of this.eventList) {
             const finalEvent = this.eventHandler.pushEvent(event);
-            this.listeners.forEach(listener => listener(finalEvent));
+            if (finalEvent !== undefined && MaybePromise.is(finalEvent)) {
+                promises.push(finalEvent.then(e => this.listeners.forEach(listener => listener(e))));
+            } else {
+                this.listeners.forEach(listener => listener(finalEvent));
+            }
         }
         this.eventList = [];
+        if (promises.length > 0) {
+            return Promise.all(promises).then(() => Promise.resolve()) as StorageOperationResult<S>;
+        }
+        return undefined as StorageOperationResult<S>;
     }
 
     triggerEvent(data: T) {
@@ -62,8 +73,11 @@ export class EventServer<T> {
             this.eventList.push(event);
         } else {
             const finalEvent = this.eventHandler.pushEvent(event);
-            this.listeners.forEach(listener => listener(finalEvent));
+            return MaybePromise.then(finalEvent, e => {
+                this.listeners.forEach(listener => listener(e));
+            }) as StorageOperationResult<S>;
         }
+        return undefined as StorageOperationResult<S>;
     }
 
     addListener(listener: (event: EventStorageData<T>) => void) {

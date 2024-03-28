@@ -13,6 +13,7 @@ import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { capitalize } from "../../util/String.js";
 import { Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse } from "../Cluster.js";
 import { Scenes } from "../definitions/ScenesCluster.js";
@@ -108,7 +109,7 @@ export function ClusterServer<
             return datasource;
         },
 
-        set datasource(newDatasource: ClusterDatasource | undefined) {
+        set datasource(newDatasource: ClusterDatasource<any> | undefined) {
             // This is not legal but TS requires setters to accept getter type
             if (newDatasource === undefined) {
                 throw new InternalError("Cluster datasource cannot be unset");
@@ -132,7 +133,10 @@ export function ClusterServer<
 
             if (datasource.eventHandler) {
                 for (const eventName in events) {
-                    (events as any)[eventName].bindToEventHandler(datasource.eventHandler);
+                    const bindResult = (events as any)[eventName].bindToEventHandler(datasource.eventHandler);
+                    if (bindResult !== undefined && MaybePromise.is(bindResult)) {
+                        throw new InternalError("Binding events to event handler should never return a promise");
+                    }
                 }
             }
         },

@@ -153,7 +153,7 @@ describe("Fabric", () => {
             fabric.addSession(secureSession2);
 
             let removeCallbackCalled = false;
-            fabric.addRemoveCallback(() => {
+            fabric.addRemoveCallback(async () => {
                 removeCallbackCalled = true;
             });
 

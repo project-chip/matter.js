@@ -14,10 +14,12 @@ The main work (all changes without a GitHub username in brackets in the below li
   * IMPORTANT: We switch away from re-exporting all matter.js functionality in matter-node.js, so please adjust your imports and make sure that you include matter.js together with matter-node.js in your dependencies in the exact same version!
   * Changed BLE library (Bleno/Noble) to another fork with better support for Windows and UART devices
 * Matter-Core functionality:
+  * Breaking: Storage implementations got added new methods "contexts", "values" and a multi-set valiant that need to be implemented if you have own Storage implementations. Also, storages now derive from a SyncStorage or MaybeAsyncStorage class weather they are sync or async
   * Adjustment: Cluster versions do not need to be persisted, so remove in legacy and new API
   * Fix: Decode Empty nullable data types as null when they have constrains that would require a minimum length
   * Fix: Convert Error type of Network errors and handle in case of subscription failures
   * Fix: Fixes a cryptographic issue that failed PASE establishment in 1/255 times, Replace BN/elliptic by @noble/curves library
+  * Fix: Fixed ClusterClient methods set and subscribe to really return the Promise of the action 
 * matter.js API:
   * IMPORTANT: Introduction of new High level API with complete Device type support for Matter 1.1 types, see [migration guide](./docs/MIGRATION_GUIDE_08.md). For now the known API that we had up top 0.7 is still included and fully working and compatible when old imports are used, but called "Legacy" for now. It will be removed in a later version not yet decided.
   * Feature: Introduced Environment concept to centralize MDNS, storage and configuration and platform specific central functionalities (Replaces MatterServer from Legacy API).

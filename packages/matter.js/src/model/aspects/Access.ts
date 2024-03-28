@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { isObject } from "../../util/Type.js";
 import { Aspect } from "./Aspect.js";
 
 /**
@@ -56,9 +57,9 @@ export class Access extends Aspect<Access.Definition> implements Access.Ast {
 
         if (Array.isArray(definition)) {
             this.set(definition.flat());
-        } else if (typeof definition === "object") {
+        } else if (isObject(definition)) {
             Object.assign(this, definition);
-        } else if (definition !== undefined) {
+        } else if (definition !== undefined && definition !== null) {
             this.set(Array.from(Access.parse(this, definition)));
         }
     }

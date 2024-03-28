@@ -124,12 +124,14 @@ class ComposedDevice {
 
         const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
 
-        deviceStorage.set("passcode", passcode);
-        deviceStorage.set("discriminator", discriminator);
-        deviceStorage.set("vendorid", vendorId);
-        deviceStorage.set("productid", productId);
-        deviceStorage.set("isSocket", isSocket);
-        deviceStorage.set("uniqueid", uniqueId);
+        deviceStorage.set({
+            passcode,
+            discriminator,
+            vendorid: vendorId,
+            productid: productId,
+            isSocket,
+            uniqueid: uniqueId,
+        });
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -243,10 +245,8 @@ process.on("SIGINT", () => {
         .stop()
         .then(() => {
             // Pragmatic way to make sure the storage is correctly closed before the process ends.
-            storage
-                .close()
-                .then(() => process.exit(0))
-                .catch(err => console.error(err));
+            storage.close();
+            process.exit(0);
         })
         .catch(err => console.error(err));
 });

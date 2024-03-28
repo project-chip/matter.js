@@ -50,15 +50,15 @@ export class ScenesManager {
         );
     }
 
-    static setEndpointScenes(
+    static async setEndpointScenes(
         fabric: Fabric,
         endpointId: number,
         endpointScenes: Map<number, Map<number, scenesTableEntry>>,
     ) {
-        fabric.setScopedClusterDataValue(ScenesCluster, endpointId.toString(), endpointScenes);
+        await fabric.setScopedClusterDataValue(ScenesCluster, endpointId.toString(), endpointScenes);
     }
 
-    static setScenes(fabric: Fabric, endpointId: number, sceneEntries: scenesTableEntry[]) {
+    static async setScenes(fabric: Fabric, endpointId: number, sceneEntries: scenesTableEntry[]) {
         let endpointScenes = ScenesManager.getEndpointScenes(fabric, endpointId);
         if (endpointScenes === undefined) {
             endpointScenes = new Map<number, Map<number, scenesTableEntry>>();
@@ -75,7 +75,7 @@ export class ScenesManager {
             scenesGroupIdMap.set(sceneId, sceneEntry);
         }
 
-        ScenesManager.setEndpointScenes(fabric, endpointId, endpointScenes);
+        await ScenesManager.setEndpointScenes(fabric, endpointId, endpointScenes);
     }
 
     static getSceneEntry(
@@ -93,13 +93,13 @@ export class ScenesManager {
         return Array.from(endpointScenes.get(groupId)?.values() ?? []);
     }
 
-    static removeScene(fabric: Fabric, endpointId: number, groupId: GroupId, sceneId: number): boolean {
+    static async removeScene(fabric: Fabric, endpointId: number, groupId: GroupId, sceneId: number): Promise<boolean> {
         const endpointScenes = ScenesManager.getEndpointScenes(fabric, endpointId);
         if (endpointScenes !== undefined) {
             const groupScenes = endpointScenes.get(groupId);
             if (groupScenes !== undefined) {
                 if (groupScenes.delete(sceneId)) {
-                    fabric.persist(false); // persist scoped cluster data changes
+                    await fabric.persist(false); // persist scoped cluster data changes
                     return true;
                 }
             }
@@ -107,16 +107,16 @@ export class ScenesManager {
         return false;
     }
 
-    static removeAllScenesForGroup(fabric: Fabric, endpointId: number, groupId: number) {
+    static async removeAllScenesForGroup(fabric: Fabric, endpointId: number, groupId: number) {
         const endpointScenes = ScenesManager.getEndpointScenes(fabric, endpointId);
         if (endpointScenes !== undefined) {
             if (endpointScenes.delete(groupId)) {
-                fabric.persist(false); // persist scoped cluster data changes
+                await fabric.persist(false); // persist scoped cluster data changes
             }
         }
     }
 
-    static removeAllNonGlobalScenesForEndpoint(fabric: Fabric, endpointId: number) {
+    static async removeAllNonGlobalScenesForEndpoint(fabric: Fabric, endpointId: number) {
         const endpointScenes = ScenesManager.getEndpointScenes(fabric, endpointId);
         if (endpointScenes !== undefined) {
             endpointScenes.forEach((_groupScenes, groupId) => {
@@ -124,13 +124,13 @@ export class ScenesManager {
                     endpointScenes.delete(groupId);
                 }
             });
-            fabric.persist(false); // persist scoped cluster data changes
+            await fabric.persist(false); // persist scoped cluster data changes
         }
     }
 }
 
 export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesCluster> = () => {
-    const addSceneLogic = (
+    const addSceneLogic = async (
         endpointId: number,
         groupId: GroupId,
         sceneId: number,
@@ -154,7 +154,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             return { status: StatusCode.ConstraintError, groupId, sceneId };
         }
 
-        ScenesManager.setScenes(fabric, endpointId, [
+        await ScenesManager.setScenes(fabric, endpointId, [
             {
                 scenesGroupId: groupId,
                 sceneId,
@@ -176,7 +176,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             endpoint,
         }) => {
             assertSecureSession(session);
-            const result = addSceneLogic(
+            const result = await addSceneLogic(
                 endpoint.getNumber(),
                 groupId,
                 sceneId,
@@ -224,7 +224,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 return { status: StatusCode.InvalidCommand, groupId, sceneId };
             }
 
-            if (ScenesManager.removeScene(fabric, endpoint.getNumber(), groupId, sceneId)) {
+            if (await ScenesManager.removeScene(fabric, endpoint.getNumber(), groupId, sceneId)) {
                 sceneCount.updated(session);
                 return { status: StatusCode.Success, groupId, sceneId };
             }
@@ -239,7 +239,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 return { status: StatusCode.InvalidCommand, groupId };
             }
 
-            ScenesManager.removeAllScenesForGroup(fabric, endpoint.getNumber(), groupId);
+            await ScenesManager.removeAllScenesForGroup(fabric, endpoint.getNumber(), groupId);
 
             return { status: StatusCode.Success, groupId };
         },
@@ -280,7 +280,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                 newSceneEntry.sceneTransitionTime = existingSceneEntry.sceneTransitionTime ?? 0;
             }
 
-            ScenesManager.setScenes(fabric, endpoint.getNumber(), [newSceneEntry]);
+            await ScenesManager.setScenes(fabric, endpoint.getNumber(), [newSceneEntry]);
 
             currentScene.setLocal(sceneId);
             currentGroup.setLocal(groupId);
@@ -353,7 +353,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             endpoint,
         }) => {
             assertSecureSession(session);
-            const result = addSceneLogic(
+            const result = await addSceneLogic(
                 endpoint.getNumber(),
                 groupId,
                 sceneId,
@@ -424,7 +424,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                         transitionTime100ms,
                     }),
                 );
-                ScenesManager.setScenes(fabric, endpoint.getNumber(), newSceneEntries);
+                await ScenesManager.setScenes(fabric, endpoint.getNumber(), newSceneEntries);
             } else {
                 const sceneEntryFrom = ScenesManager.getSceneEntry(
                     fabric,
@@ -436,7 +436,7 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
                     return { status: StatusCode.NotFound, groupIdentifierFrom, sceneIdentifierFrom };
                 }
                 const { sceneName, sceneTransitionTime, transitionTime100ms, extensionFieldSets } = sceneEntryFrom;
-                ScenesManager.setScenes(fabric, endpoint.getNumber(), [
+                await ScenesManager.setScenes(fabric, endpoint.getNumber(), [
                     {
                         scenesGroupId: groupIdentifierTo,
                         sceneId: sceneIdentifierTo,

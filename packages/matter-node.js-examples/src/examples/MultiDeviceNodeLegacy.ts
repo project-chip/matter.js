@@ -258,10 +258,8 @@ process.on("SIGINT", () => {
         .stop()
         .then(() => {
             // Pragmatic way to make sure the storage is correctly closed before the process ends.
-            storage
-                .close()
-                .then(() => process.exit(0))
-                .catch(err => console.error(err));
+            storage.close();
+            process.exit(0);
         })
         .catch(err => console.error(err));
 });

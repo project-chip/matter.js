@@ -5,11 +5,12 @@
  */
 import { CommissioningController } from "./CommissioningController.js";
 import { CommissioningServer } from "./CommissioningServer.js";
-import { Logger } from "./log/Logger.js";
 import { MatterNode } from "./MatterNode.js";
+import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { Network, NetworkError } from "./net/Network.js";
+import { SyncStorage } from "./storage/Storage.js";
 import { StorageManager } from "./storage/StorageManager.js";
 
 const logger = Logger.get("MatterServer");
@@ -66,7 +67,7 @@ export class MatterServer {
      * @param options Optional MatterServer options
      */
     constructor(
-        private readonly storageManager: StorageManager,
+        private readonly storageManager: StorageManager<SyncStorage>,
         private readonly options?: MatterServerOptions,
     ) {}
 
@@ -129,7 +130,7 @@ export class MatterServer {
             throw new Error(`Node with storage key "${storageKey}" already exists.`);
         }
         commissioningServer.setPort(this.getNextMatterPort(commissioningServer.getPort()));
-        commissioningServer.setStorage(this.storageManager.createContext(storageKey));
+        await commissioningServer.setStorage(this.storageManager.createContext(storageKey));
         logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
         await this.prepareNode(commissioningServer);
         this.nodes.set(storageKey, commissioningServer);
@@ -239,9 +240,9 @@ export class MatterServer {
         for (const [key, node] of this.nodes.entries()) {
             try {
                 await this.prepareNode(node);
-            } catch (error) {
+            } catch (error: any) {
                 // TODO: Find a better way how to report back such issues and which nodes errored
-                logger.error(`Failed to start node with storageKey ${key}: ${error}`);
+                logger.error(`Failed to start node with storageKey ${key}:`, error);
             }
         }
     }

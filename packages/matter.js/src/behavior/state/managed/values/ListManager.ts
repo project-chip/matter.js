@@ -8,6 +8,7 @@ import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
 import { Access, ValueModel } from "../../../../model/index.js";
 import { StatusCode } from "../../../../protocol/interaction/StatusCode.js";
 import { serialize } from "../../../../util/String.js";
+import { isObject } from "../../../../util/Type.js";
 import { AccessControl } from "../../../AccessControl.js";
 import { ExpiredReferenceError, ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
@@ -151,12 +152,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
 
                     () => true,
 
-                    val =>
-                        Array.isArray(val)
-                            ? [...(val as Val.List)]
-                            : typeof val === "object" && val !== null
-                              ? { ...val }
-                              : val,
+                    val => (Array.isArray(val) ? [...(val as Val.List)] : isObject(val) ? { ...val } : val),
                 );
 
                 manageEntry(subref, session);
@@ -269,8 +265,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                 for (let i = 0; i < readVal().length; i++) {
                     const entry = readVal()[i] as undefined | { fabricIndex?: number };
                     if (
-                        typeof entry === "object" &&
-                        entry !== null &&
+                        isObject(entry) &&
                         (session.offline || !entry.fabricIndex || entry.fabricIndex === session.fabric)
                     ) {
                         length++;
@@ -318,7 +313,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                             // Skip iteration if the result would have incorrect fabricIndex
                             if (
                                 !next.done &&
-                                typeof next.value === "object" &&
+                                isObject(next.value) &&
                                 (next.value as { fabricIndex?: number }).fabricIndex !== session.fabric
                             ) {
                                 continue;

@@ -15,8 +15,8 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
         super();
     }
 
-    override async initialize() {
-        await super.initialize();
+    override initialize() {
+        super.initialize();
         try {
             this.store = this.fromJson(readFileSync(this.path, "utf-8"));
         } catch (error: any) {
@@ -29,17 +29,27 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
         }
     }
 
-    override set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
-        super.set(contexts, key, value);
+    override set(contexts: string[], key: string, value: SupportedStorageTypes): void;
+    override set(contexts: string[], values: Record<string, SupportedStorageTypes>): void;
+    override set(
+        contexts: string[],
+        keyOrValues: string | Record<string, SupportedStorageTypes>,
+        value?: SupportedStorageTypes,
+    ) {
+        if (typeof keyOrValues === "string") {
+            super.set(contexts, keyOrValues, value);
+        } else {
+            super.set(contexts, keyOrValues);
+        }
         this.commit();
     }
 
-    override delete(contexts: string[], key: string): void {
+    override delete(contexts: string[], key: string) {
         super.delete(contexts, key);
         this.commit();
     }
 
-    override clear(): void {
+    override clear() {
         super.clear();
         this.commit();
     }
@@ -53,10 +63,10 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
     override async close() {
         this.commit();
         this.closed = true;
-        await super.close();
+        super.close();
     }
 
-    private toJson(object: any): string {
+    private toJson(object: any) {
         return toJson(object, 1);
     }
 

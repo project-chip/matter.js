@@ -235,7 +235,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
 
         const { sessionStorage, fabricStorage } = this.owner.env.get(ServerStore);
 
-        this.#matterDevice = new MatterDevice(
+        const matterDevice = await MatterDevice.create(
             sessionStorage,
             fabricStorage,
             () => ({
@@ -249,11 +249,12 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             (_fabricIndex: FabricIndex) => {
                 // Wired differently using SessionBehavior
             },
-        )
-            .addProtocolHandler(this.#interactionServer)
-            .addScanner(mdnsScanner);
+        );
+        this.#matterDevice = matterDevice;
+        matterDevice.addProtocolHandler(this.#interactionServer);
+        matterDevice.addScanner(mdnsScanner);
 
-        this.#matterDevice.fabricManager.events.added.on(fabric => {
+        matterDevice.fabricManager.events.added.on(fabric => {
             const fabrics = this.#matterDevice?.fabricManager.getFabrics() ?? [];
             if (fabrics.length === 1 && fabrics[0].fabricIndex === fabric.fabricIndex) {
                 this.enableMdnsBroadcasting();
@@ -261,15 +262,15 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         });
 
         // Expose internal managers for other components in the environment
-        this.owner.env.set(SessionManager, this.#matterDevice.sessionManager);
-        this.owner.env.set(FabricManager, this.#matterDevice.fabricManager);
+        this.owner.env.set(SessionManager, matterDevice.sessionManager);
+        this.owner.env.set(FabricManager, matterDevice.fabricManager);
         this.owner.env.set(ExchangeManager, this.#matterDevice.exchangeManager);
 
         await this.owner.act(agent => agent.load(SessionsBehavior));
         this.owner.eventsOf(CommissioningBehavior).commissioned.on(() => this.endUncommissionedMode());
 
-        await this.addTransports(this.#matterDevice);
-        await this.addBroadcasters(this.#matterDevice);
+        await this.addTransports(matterDevice);
+        await this.addBroadcasters(matterDevice);
 
         await this.owner.set({ network: { operationalPort: this.operationalPort } });
 

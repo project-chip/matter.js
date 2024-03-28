@@ -6,6 +6,7 @@
 
 import { ImplementationError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
+import { isObject } from "../util/Type.js";
 import type { Environment } from "./Environment.js";
 import { Environmental } from "./Environmental.js";
 
@@ -199,10 +200,10 @@ function parseUnixStyle(values: Record<string, string | undefined>) {
 
     for (const key in values) {
         if (key.startsWith("MATTER_")) {
-            if (process.env[key] === undefined || process.env[key] === "") {
+            if (variables[key] === undefined || variables[key] === "") {
                 continue;
             }
-            addVariable(variables, key.slice(7).toLowerCase().split("_"), process.env[key]);
+            addVariable(variables, key.slice(7).toLowerCase().split("_"), variables[key]);
         }
     }
 
@@ -238,13 +239,13 @@ function parseArgvStyle(values: string[]) {
     return variables;
 }
 
-export function merge(a: Record<string, any>, b: Record<string, any>) {
+export function merge(a: VariableService.Map, b: VariableService.Map) {
     const merged = { ...a };
     for (const key in b) {
         const aval = a[key];
         const bval = b[key];
-        if (typeof bval === "object") {
-            if (typeof aval === "object") {
+        if (isObject(bval)) {
+            if (isObject(aval)) {
                 merged[key] = merge(aval, bval);
             } else {
                 merged[key] = bval;

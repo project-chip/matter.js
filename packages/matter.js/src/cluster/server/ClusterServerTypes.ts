@@ -15,6 +15,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Session } from "../../session/Session.js";
+import { Storage } from "../../storage/Storage.js";
 import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Merge } from "../../util/Type.js";
@@ -242,8 +243,8 @@ type ServerAttributeSubscribers<A extends Attributes> = {
 };
 
 export type EventServers<E extends Events> = Merge<
-    { [P in MandatoryEventNames<E>]: EventServer<EventType<E[P]>> },
-    { [P in OptionalEventNames<E>]?: EventServer<EventType<E[P]>> }
+    { [P in MandatoryEventNames<E>]: EventServer<EventType<E[P]>, any> },
+    { [P in OptionalEventNames<E>]?: EventServer<EventType<E[P]>, any> }
 >;
 type ServerEventTriggers<E extends Events> = {
     [P in MandatoryEventNames<E> as `trigger${Capitalize<string & P>}Event`]: (event: EventType<E[P]>) => void;
@@ -258,9 +259,9 @@ export type ClusterServerObjForCluster<C extends Cluster<any, any, any, any, any
     C["events"]
 >;
 
-export interface ClusterDatasource {
+export interface ClusterDatasource<S extends Storage = any> {
     readonly version: number;
-    readonly eventHandler?: EventHandler;
+    readonly eventHandler?: EventHandler<S>;
     increaseVersion(): number;
     changed(key: string, value: SupportedStorageTypes): void;
 }

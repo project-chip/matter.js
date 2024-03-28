@@ -21,7 +21,7 @@ TODO: If the Scenes server cluster is implemented on the same endpoint, the foll
  */
 
 export class GroupsManager {
-    static setGroup(fabric: Fabric, endpointId: number, groupId: GroupId, groupName: string) {
+    static async setGroup(fabric: Fabric, endpointId: number, groupId: GroupId, groupName: string) {
         let endpointGroups = fabric.getScopedClusterDataValue<Map<GroupId, string>>(
             GroupsCluster,
             endpointId.toString(),
@@ -31,7 +31,7 @@ export class GroupsManager {
         }
         endpointGroups.set(groupId, groupName || "");
 
-        fabric.setScopedClusterDataValue(GroupsCluster, endpointId.toString(), endpointGroups);
+        await fabric.setScopedClusterDataValue(GroupsCluster, endpointId.toString(), endpointGroups);
     }
 
     static getGroupName(fabric: Fabric, endpointId: number, groupId: GroupId): string | undefined {
@@ -57,27 +57,27 @@ export class GroupsManager {
         );
     }
 
-    static removeGroup(fabric: Fabric, endpointId: number, groupId: GroupId): boolean {
+    static async removeGroup(fabric: Fabric, endpointId: number, groupId: GroupId): Promise<boolean> {
         const endpointGroups = fabric.getScopedClusterDataValue<Map<GroupId, string>>(
             GroupsCluster,
             endpointId.toString(),
         );
         if (endpointGroups !== undefined) {
             if (endpointGroups.delete(groupId)) {
-                fabric.persist(false); // persist scoped cluster data changes
+                await fabric.persist(false); // persist scoped cluster data changes
                 return true;
             }
         }
         return false;
     }
 
-    static removeAllGroups(fabric: Fabric, endpointId: number) {
-        fabric.deleteScopedClusterDataValue(GroupsCluster, endpointId.toString());
+    static async removeAllGroups(fabric: Fabric, endpointId: number) {
+        await fabric.deleteScopedClusterDataValue(GroupsCluster, endpointId.toString());
     }
 }
 
 export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsCluster> = () => {
-    const addGroupLogic = (groupId: GroupId, groupName: string, fabric: Fabric, endpointId: number) => {
+    const addGroupLogic = async (groupId: GroupId, groupName: string, fabric: Fabric, endpointId: number) => {
         if (groupId < 1) {
             return { status: StatusCode.ConstraintError, groupId };
         }
@@ -85,7 +85,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
             return { status: StatusCode.ConstraintError, groupId };
         }
 
-        GroupsManager.setGroup(fabric, endpointId, groupId, groupName);
+        await GroupsManager.setGroup(fabric, endpointId, groupId, groupName);
 
         return { status: StatusCode.Success, groupId };
     };
@@ -135,8 +135,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
 
             assertSecureSession(session);
             const fabric = session.associatedFabric;
-            if (GroupsManager.removeGroup(session.associatedFabric, endpoint.getNumber(), groupId)) {
-                ScenesManager.removeAllScenesForGroup(fabric, endpoint.getNumber(), groupId);
+            if (await GroupsManager.removeGroup(session.associatedFabric, endpoint.getNumber(), groupId)) {
+                await ScenesManager.removeAllScenesForGroup(fabric, endpoint.getNumber(), groupId);
                 return { status: StatusCode.Success, groupId };
             }
             return { status: StatusCode.NotFound, groupId };
@@ -145,8 +145,8 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
         removeAllGroups: async ({ session, endpoint }) => {
             assertSecureSession(session);
             const fabric = session.associatedFabric;
-            GroupsManager.removeAllGroups(fabric, endpoint.getNumber());
-            ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.getNumber());
+            await GroupsManager.removeAllGroups(fabric, endpoint.getNumber());
+            await ScenesManager.removeAllNonGlobalScenesForEndpoint(fabric, endpoint.getNumber());
 
             return;
         },
@@ -157,7 +157,7 @@ export const GroupsClusterHandler: () => ClusterServerHandlers<typeof GroupsClus
                 if (identifyCluster.attributes.identifyTime.getLocal() > 0) {
                     // We identify ourselves currently
                     assertSecureSession(session);
-                    addGroupLogic(groupId, groupName, session.associatedFabric, endpoint.getNumber());
+                    await addGroupLogic(groupId, groupName, session.associatedFabric, endpoint.getNumber());
                 }
             }
 

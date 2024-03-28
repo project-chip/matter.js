@@ -21,6 +21,7 @@ describe("FabricManager", () => {
         storageManager = new StorageManager(storage);
         await storageManager.initialize();
         fabricManager = new FabricManager(storageManager.createContext("Context"));
+        await fabricManager.initFromStorage();
     });
 
     describe("adding Fabrics", () => {
@@ -37,6 +38,7 @@ describe("FabricManager", () => {
             const storage = new StorageManager(new StorageBackendMemory());
             await storage.initialize();
             const fabricManager = new FabricManager(storage.createContext("Context"));
+            await fabricManager.initFromStorage();
             const fabric = await buildFabric();
             fabricManager.addFabric(fabric);
 
@@ -51,7 +53,7 @@ describe("FabricManager", () => {
         it("add a new fabric and persist", async () => {
             const fabric = await buildFabric();
             fabricManager.addFabric(fabric);
-            fabricManager.persistFabrics();
+            await fabricManager.persistFabrics();
 
             assert.deepEqual(fabricManager.getFabrics(), [fabric]);
 
@@ -63,6 +65,7 @@ describe("FabricManager", () => {
             storage.set(["Context"], "fabrics", [fabric.toStorageObject()]);
 
             fabricManager = new FabricManager(storageManager.createContext("Context"));
+            await fabricManager.initFromStorage();
             assert.equal(fabricManager.getFabrics().length, 1);
             assert.deepEqual(fabricManager.getFabrics()[0].toStorageObject(), fabric.toStorageObject());
         });
@@ -72,14 +75,14 @@ describe("FabricManager", () => {
         it("remove an added fabric", async () => {
             const fabric = await buildFabric();
             fabricManager.addFabric(fabric);
-            fabricManager.removeFabric(fabric.fabricIndex);
+            await fabricManager.removeFabric(fabric.fabricIndex);
 
             assert.deepEqual(fabricManager.getFabrics(), []);
         });
 
         it("throws when removing a non-existent fabric", async () => {
-            assert.throws(
-                () => fabricManager.removeFabric(FabricIndex(1)),
+            await assert.rejects(
+                fabricManager.removeFabric(FabricIndex(1)),
                 new FabricNotFoundError(`Fabric with index 1 cannot be removed because it does not exist.`),
             );
         });
@@ -100,7 +103,7 @@ describe("FabricManager", () => {
         it("get next fabric index after adding fabric and removing it", async () => {
             const fabric = await buildFabric(fabricManager.getNextFabricIndex());
             fabricManager.addFabric(fabric);
-            fabricManager.removeFabric(fabric.fabricIndex);
+            await fabricManager.removeFabric(fabric.fabricIndex);
 
             assert.equal(fabricManager.getNextFabricIndex(), 2);
         });
@@ -128,7 +131,7 @@ describe("FabricManager", () => {
                 const fabric = await buildFabric(fabricManager.getNextFabricIndex());
                 fabricManager.addFabric(fabric);
             }
-            fabricManager.removeFabric(FabricIndex(100));
+            await fabricManager.removeFabric(FabricIndex(100));
 
             assert.equal(fabricManager.getNextFabricIndex(), 100);
         });
@@ -138,7 +141,7 @@ describe("FabricManager", () => {
                 const fabric = await buildFabric(fabricManager.getNextFabricIndex());
                 fabricManager.addFabric(fabric);
             }
-            fabricManager.removeFabric(FabricIndex(1));
+            await fabricManager.removeFabric(FabricIndex(1));
 
             assert.equal(fabricManager.getNextFabricIndex(), 1);
         });

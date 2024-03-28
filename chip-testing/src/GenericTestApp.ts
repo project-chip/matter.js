@@ -8,6 +8,7 @@
 import { getIntParameter, getParameter, hasParameter } from "@project-chip/matter-node.js/util";
 import { Environment } from "@project-chip/matter.js/environment";
 import { ClassExtends } from "@project-chip/matter.js/util";
+import { StorageBackendAsyncJsonFile } from "./storage/StorageBackendAsyncJsonFile.js";
 import { StorageBackendSyncJsonFile } from "./storage/StorageBackendSyncJsonFile.js";
 
 export interface TestInstance {
@@ -16,12 +17,16 @@ export interface TestInstance {
     stop: () => Promise<void>;
 }
 
-export async function startTestApp(appName: string, testInstanceClass: ClassExtends<TestInstance>) {
+export async function startTestApp(
+    appName: string,
+    testInstanceClass: ClassExtends<TestInstance>,
+    storageType: typeof StorageBackendSyncJsonFile | typeof StorageBackendAsyncJsonFile = StorageBackendSyncJsonFile,
+) {
     const storageName = `/tmp/chip_${getParameter("KVS") ?? "kvs"}`;
 
-    const storage = new StorageBackendSyncJsonFile(storageName);
+    const storage = new storageType(storageName);
     if (hasParameter("factoryreset")) {
-        storage.clear();
+        await storage.clear();
     }
 
     const testInstance = new testInstanceClass(storage, {
@@ -45,7 +50,7 @@ export async function startTestApp(appName: string, testInstanceClass: ClassExte
                 runtime.inactive
                     .then(() => {
                         storage
-                            .close()
+                            ?.close()
                             .then(() => {
                                 console.log(`======> Test instance successfully closed.`);
                                 process.exit(0);

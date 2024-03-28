@@ -22,6 +22,7 @@ import { GroupId } from "../datatype/GroupId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { isObject } from "../util/Type.js";
 
 /** Supported base types to stringify the data for the storage that can be used as keys and also values. */
 type SupportedStorageBaseTypes =
@@ -78,7 +79,7 @@ export function toJson(object: SupportedStorageTypes, spaces?: number): string {
                 return `{"${JSON_SPECIAL_KEY_TYPE}":"Uint8Array","${JSON_SPECIAL_KEY_VALUE}":"${value.toHex()}"}`;
             }
             //Node.js can sometimes pass in a native Buffer object in place of a Uint8Array, of which it is a subclass of, the Buffer class implements its own toJSON method which breaks our serialization.
-            if (value != null && typeof value === "object" && value.type === "Buffer" && Array.isArray(value.data)) {
+            if (isObject(value) && value.type === "Buffer" && Array.isArray(value.data)) {
                 return `{"${JSON_SPECIAL_KEY_TYPE}":"Uint8Array","${JSON_SPECIAL_KEY_VALUE}":"${Uint8Array.from(
                     value.data,
                 ).toHex()}"}`;

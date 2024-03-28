@@ -20,6 +20,7 @@ import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../
 import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { ClusterDatasource } from "./ClusterServerTypes.js";
 
@@ -643,7 +644,12 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                 const oldData = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
                 const oldValue = oldData?.value ?? this.defaultValue;
                 if (!isDeepEqual(value, oldValue)) {
-                    fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
+                    const setResult = fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
+                    if (MaybePromise.is(setResult)) {
+                        throw new ImplementationError(
+                            "Seems like an Asynchronous Storage is used with Legacy code paths which is forbidden!",
+                        );
+                    }
                     return true;
                 }
                 return false;
@@ -723,7 +729,12 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         const oldValue = this.getLocalForFabric(fabric);
         const valueChanged = !isDeepEqual(value, oldValue);
         if (valueChanged) {
-            fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
+            const setResult = fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
+            if (MaybePromise.is(setResult)) {
+                throw new ImplementationError(
+                    "Seems like an Asynchronous Storage is used with Legacy code paths which is forbidden!",
+                );
+            }
         }
         this.handleVersionAndTriggerListeners(value, oldValue, valueChanged); // TODO Make callbacks sense without fabric, but then they would have other signature?
     }

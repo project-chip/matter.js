@@ -4,57 +4,108 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Storage, StorageError } from "./Storage.js";
+import { MaybePromise } from "../util/Promises.js";
+import { Storage, StorageError, StorageOperationResult } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
-export class StorageContext {
+export class StorageContext<S extends Storage = any> {
     constructor(
-        private readonly storage: Storage,
-        readonly contexts: string[],
+        private readonly storage: S,
+        readonly thisContexts: string[],
     ) {}
 
-    get<T extends SupportedStorageTypes>(key: string, defaultValue?: T): T {
-        const value = this.storage.get<T>(this.contexts, key);
-        if (value !== undefined) return value;
+    get<T extends SupportedStorageTypes>(key: string, defaultValue?: T): StorageOperationResult<S, T> {
+        const value = this.storage.get(this.thisContexts, key);
+        if (value !== undefined) {
+            if (MaybePromise.is(value)) {
+                return value.then(v => {
+                    if (v !== undefined) return v;
+                    if (defaultValue === undefined) {
+                        throw new StorageError(
+                            `No value found for key ${key} in context ${this.thisContexts} and no default value specified!`,
+                        );
+                    }
+                    return defaultValue;
+                }) as StorageOperationResult<S, T>;
+            }
+            return value as StorageOperationResult<S, T>;
+        }
         if (defaultValue === undefined) {
             throw new StorageError(
-                `No value found for key ${key} in context ${this.contexts} and no default value specified!`,
+                `No value found for key ${key} in context ${this.thisContexts} and no default value specified!`,
             );
         }
-        return defaultValue;
+        return defaultValue as StorageOperationResult<S, T>;
     }
 
-    has(key: string): boolean {
-        return this.storage.get(this.contexts, key) !== undefined;
+    has(key: string) {
+        const value = this.storage.get(this.thisContexts, key);
+        if (value !== undefined) {
+            if (MaybePromise.is(value)) {
+                return value.then(v => v !== undefined) as StorageOperationResult<S, boolean>;
+            }
+            return true as StorageOperationResult<S, boolean>;
+        }
+        return false as StorageOperationResult<S, boolean>;
     }
 
-    set<T extends SupportedStorageTypes>(key: string, value: T): void {
-        this.storage.set<T>(this.contexts, key, value);
+    set(key: string, value: SupportedStorageTypes): StorageOperationResult<S>;
+    set(values: Record<string, SupportedStorageTypes>): StorageOperationResult<S>;
+    set(keyOrValues: string | Record<string, SupportedStorageTypes>, value?: SupportedStorageTypes) {
+        if (typeof keyOrValues === "string") {
+            return this.storage.set(this.thisContexts, keyOrValues, value) as StorageOperationResult<S>;
+        }
+        return this.storage.set(this.thisContexts, keyOrValues) as StorageOperationResult<S>;
     }
 
-    delete(key: string): void {
-        this.storage.delete(this.contexts, key);
+    delete(key: string) {
+        return this.storage.delete(this.thisContexts, key) as StorageOperationResult<S>;
     }
 
-    createContext(context: string) {
+    createContext(context: string): StorageContext<S> {
         if (context.length === 0) throw new StorageError("Context must not be an empty string");
         if (context.includes(".")) throw new StorageError("Context must not contain dots!");
-        return new StorageContext(this.storage, [...this.contexts, context]);
+        return new StorageContext(this.storage, [...this.thisContexts, context]);
     }
 
-    keys(): string[] {
-        return this.storage.keys(this.contexts);
+    keys() {
+        return this.storage.keys(this.thisContexts) as StorageOperationResult<S, string[]>;
+    }
+
+    values() {
+        return this.storage.values(this.thisContexts) as StorageOperationResult<
+            S,
+            Record<string, SupportedStorageTypes>
+        >;
+    }
+
+    contexts() {
+        return this.storage.contexts(this.thisContexts) as StorageOperationResult<S, string[]>;
     }
 
     /** Clears all keys in this context */
-    clear(): void {
-        for (const key of this.keys()) {
-            this.delete(key);
+    clear() {
+        const keys = this.keys();
+        if (MaybePromise.is(keys)) {
+            return keys.then(keys => {
+                return Promise.all(keys.map(key => this.delete(key))).then(() => Promise.resolve());
+            }) as StorageOperationResult<S>;
         }
+        const promises = new Array<PromiseLike<void>>();
+        keys.forEach(key => {
+            const promise = this.delete(key);
+            if (promise !== undefined && MaybePromise.is(promise)) {
+                promises.push(promise);
+            }
+        });
+        if (promises.length > 0) {
+            return Promise.all(promises).then(() => Promise.resolve()) as StorageOperationResult<S>;
+        }
+        return undefined as StorageOperationResult<S>;
     }
 
     /** Clears all keys in this context and all created sub-contexts. */
-    clearAll(): void {
-        this.storage.clearAll(this.contexts);
+    clearAll() {
+        return this.storage.clearAll(this.thisContexts) as StorageOperationResult<S>;
     }
 }

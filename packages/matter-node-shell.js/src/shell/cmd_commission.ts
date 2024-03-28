@@ -105,8 +105,8 @@ export default function commands(theNode: MatterNode) {
 
                                     if (theNode.Store.has("WiFiSsid") && theNode.Store.has("WiFiPassword")) {
                                         options.commissioning.wifiNetwork = {
-                                            wifiSsid: theNode.Store.get<string>("WiFiSsid", ""),
-                                            wifiCredentials: theNode.Store.get<string>("WiFiPassword", ""),
+                                            wifiSsid: await theNode.Store.get<string>("WiFiSsid", ""),
+                                            wifiCredentials: await theNode.Store.get<string>("WiFiPassword", ""),
                                         };
                                     }
                                     if (
@@ -114,8 +114,8 @@ export default function commands(theNode: MatterNode) {
                                         theNode.Store.has("ThreadOperationalDataset")
                                     ) {
                                         options.commissioning.threadNetwork = {
-                                            networkName: theNode.Store.get<string>("ThreadName", ""),
-                                            operationalDataset: theNode.Store.get<string>(
+                                            networkName: await theNode.Store.get<string>("ThreadName", ""),
+                                            operationalDataset: await theNode.Store.get<string>(
                                                 "ThreadOperationalDataset",
                                                 "",
                                             ),

@@ -8,6 +8,7 @@ import { ImplementationError } from "../../../../common/MatterError.js";
 import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
 import { Metatype, ValueModel } from "../../../../model/index.js";
 import { camelize } from "../../../../util/String.js";
+import { isObject } from "../../../../util/Type.js";
 import { SchemaImplementationError, WriteError } from "../../../errors.js";
 import { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
@@ -195,10 +196,7 @@ function ListPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervisor
                 const oldValue = index < target.length ? target[index] : undefined;
                 if (newValue === undefined || newValue === null || oldValue === undefined || oldValue === null) {
                     // If creating a new object, apply as a patch to the object's defaults before insertion
-                    if (entryDefaults && typeof newValue === "object" && newValue !== null) {
-                        if (entryDefaults === undefined) {
-                            entryDefaults = getDefaults(entry);
-                        }
+                    if (entryDefaults && isObject(newValue)) {
                         newValue = patchEntry(newValue as Val.Collection, { ...entryDefaults }, path.at(index));
                     }
 

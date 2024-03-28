@@ -13,7 +13,7 @@ import { Identify, IdentifyCluster } from "../../src/cluster/definitions/Identif
 import { WindowCovering } from "../../src/cluster/definitions/WindowCoveringCluster.js";
 import { AttributeServer, FixedAttributeServer } from "../../src/cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
-import { asClusterServerInternal } from "../../src/cluster/server/ClusterServerTypes.js";
+import { ClusterDatasource, asClusterServerInternal } from "../../src/cluster/server/ClusterServerTypes.js";
 import { ImplementationError } from "../../src/common/MatterError.js";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { CommandId } from "../../src/datatype/CommandId.js";
@@ -24,6 +24,7 @@ import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
 import { Level } from "../../src/log/Level.js";
+import { SyncStorage } from "../../src/storage/Storage.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { captureLogs } from "../support/logging.js";
@@ -566,7 +567,7 @@ describe("ClusterServer structure", () => {
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
         });
 
-        it("Verify init/destroy is called on CLusterServe when definedr", async () => {
+        it("Verify init/destroy is called on CLusterServe when defined", async () => {
             let initCalled = false;
             let destroyCalled = false;
             const server = ClusterServer(
@@ -604,7 +605,7 @@ describe("ClusterServer structure", () => {
                     return ++version;
                 },
                 changed() {},
-            };
+            } as ClusterDatasource<SyncStorage>;
             expect(initCalled).true;
 
             asClusterServerInternal(server)._close();
