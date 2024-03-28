@@ -10,6 +10,11 @@ import { MatterError, NotImplementedError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { ec } from "./Crypto.js";
 
+const {
+    numberToBytesBE,
+    p256: { ProjectivePoint },
+} = ec;
+
 class KeyError extends MatterError {}
 
 const JWK_KEYS = [
@@ -516,10 +521,14 @@ export function Key(properties: Partial<Key>) {
         if (!that.private) throw new KeyError("EC private key required to compute public point");
 
         const crv = that.crv;
+        let keyLength: number;
+
         switch (crv) {
             case CurveType.p256:
-            case CurveType.p384:
-            case CurveType.p521:
+                keyLength = 32;
+                // We can add the other point types easily by exposing more from @noble/curves
+                // case CurveType.p384:
+                // case CurveType.p521:
                 break;
 
             default:
@@ -527,12 +536,11 @@ export function Key(properties: Partial<Key>) {
         }
 
         // Compute
-        const elliptic = new ec(crv.toLowerCase().replace(/-/g, ""));
-        const ecKey = elliptic.keyFromPrivate(that.privateKey).getPublic();
+        const ecKey = ProjectivePoint.fromPrivateKey(that.privateKey);
 
         // Install
-        that.xBits = new ByteArray(ecKey.getX().toArray());
-        that.yBits = new ByteArray(ecKey.getY().toArray());
+        that.xBits = numberToBytesBE(ecKey.x, keyLength);
+        that.yBits = numberToBytesBE(ecKey.y, keyLength);
     }
 
     if (that.type === KeyType.EC) {

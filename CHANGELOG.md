@@ -17,6 +17,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Adjustment: Cluster versions do not need to be persisted, so remove in legacy and new API
   * Fix: Decode Empty nullable data types as null when they have constrains that would require a minimum length
   * Fix: Convert Error type of Network errors and handle in case of subscription failures
+  * Fix: Fixes a cryptographic issue that failed PASE establishment in 1/255 times, Replace BN/elliptic by @noble/curves library
 * matter.js API:
   * IMPORTANT: Introduction of new High level API with complete Device type support for Matter 1.1 types, see [migration guide](./docs/MIGRATION_GUIDE_08.md). For now the known API that we had up top 0.7 is still included and fully working and compatible when old imports are used, but called "Legacy" for now. It will be removed in a later version not yet decided.
   * Feature: Introduced Environment concept to centralize MDNS, storage and configuration and platform specific central functionalities (Replaces MatterServer from Legacy API).
