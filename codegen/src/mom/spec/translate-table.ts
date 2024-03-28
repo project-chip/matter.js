@@ -95,7 +95,7 @@ export function translateTable<T extends TableSchema>(
                     break;
 
                 case "alias":
-                    for (const source of v.sources) {
+                    for (const source of v.sources as string[]) {
                         aliases.push([source, k]);
                     }
                     v = v.wrapped;
@@ -106,7 +106,7 @@ export function translateTable<T extends TableSchema>(
                     break;
 
                 case "children":
-                    childTranslator = v.translator;
+                    childTranslator = v.translator as ChildTranslator;
                     continue nextField;
             }
         }

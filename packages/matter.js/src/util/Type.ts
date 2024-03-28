@@ -119,7 +119,7 @@ export type Identity<T> = T;
  * @param it The variable to test
  * @returns true if it is Record<string, any>
  */
-export function isObject(it: any): it is Record<string, any> {
+export function isObject(it: unknown): it is Record<string, unknown> {
     // This is necessary because:
     // typeof null === 'object'
     // typeof [] === 'object'
