@@ -9,7 +9,7 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { EventId } from "../../datatype/EventId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { EventData, EventHandler, EventStorageData } from "../../protocol/interaction/EventHandler.js";
-import { Storage, SyncStorage } from "../../storage/Storage.js";
+import { Storage, StorageOperationResult } from "../../storage/Storage.js";
 import { Time } from "../../time/Time.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
@@ -51,9 +51,9 @@ export class EventServer<T, S extends Storage> {
         }
         this.eventList = [];
         if (promises.length > 0) {
-            return Promise.all(promises).then(() => Promise.resolve()) as S extends SyncStorage ? void : Promise<void>;
+            return Promise.all(promises).then(() => Promise.resolve()) as StorageOperationResult<S>;
         }
-        return undefined as S extends SyncStorage ? void : Promise<void>;
+        return undefined as StorageOperationResult<S>;
     }
 
     triggerEvent(data: T) {
@@ -73,14 +73,11 @@ export class EventServer<T, S extends Storage> {
             this.eventList.push(event);
         } else {
             const finalEvent = this.eventHandler.pushEvent(event);
-            if (finalEvent !== undefined && MaybePromise.is(finalEvent)) {
-                return finalEvent.then(e => this.listeners.forEach(listener => listener(e))) as S extends SyncStorage
-                    ? void
-                    : Promise<void>;
-            }
-            this.listeners.forEach(listener => listener(finalEvent));
+            return MaybePromise.then(finalEvent, e => {
+                this.listeners.forEach(listener => listener(e));
+            }) as StorageOperationResult<S>;
         }
-        return undefined as S extends SyncStorage ? void : Promise<void>;
+        return undefined as StorageOperationResult<S>;
     }
 
     addListener(listener: (event: EventStorageData<T>) => void) {

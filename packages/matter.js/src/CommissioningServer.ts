@@ -33,7 +33,6 @@ import {
     ClusterDatasource,
     ClusterServerHandlers,
     ClusterServerObj,
-    asClusterServerInternal,
 } from "./cluster/server/ClusterServerTypes.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
@@ -1062,7 +1061,7 @@ class CommissioningServerClusterDatasource implements ClusterDatasource<SyncStor
             }
         }
 
-        asClusterServerInternal<any, any, SyncStorage>(cluster)._setDatasource(this);
+        cluster.datasource = this;
     }
 
     get version() {

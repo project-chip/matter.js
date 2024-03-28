@@ -239,12 +239,14 @@ async function getConfiguration() {
         environment.vars.string("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs().toString()));
 
     // Persist basic data to keep them also on restart
-    await deviceStorage.set("passcode", passcode);
-    await deviceStorage.set("discriminator", discriminator);
-    await deviceStorage.set("vendorid", vendorId);
-    await deviceStorage.set("productid", productId);
-    await deviceStorage.set("isSocket", isSocket);
-    await deviceStorage.set("uniqueid", uniqueId);
+    await deviceStorage.set({
+        passcode,
+        discriminator,
+        vendorid: vendorId,
+        productid: productId,
+        isSocket,
+        uniqueid: uniqueId,
+    });
 
     return {
         isSocket,

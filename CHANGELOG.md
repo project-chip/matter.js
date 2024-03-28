@@ -14,7 +14,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * IMPORTANT: We switch away from re-exporting all matter.js functionality in matter-node.js, so please adjust your imports and make sure that you include matter.js together with matter-node.js in your dependencies in the exact same version!
   * Changed BLE library (Bleno/Noble) to another fork with better support for Windows and UART devices
 * Matter-Core functionality:
-  * Breaking: Storage implementations got added a new method "contexts" which needs to e implemented if you have own Storage implementations. Also, storages now derive from a SyncStorage or MaybeAsyncStorage class weather they are sync or async
+  * Breaking: Storage implementations got added new methods "contexts", "values" and a multi-set valiant that need to be implemented if you have own Storage implementations. Also, storages now derive from a SyncStorage or MaybeAsyncStorage class weather they are sync or async
   * Adjustment: Cluster versions do not need to be persisted, so remove in legacy and new API
   * Fix: Decode Empty nullable data types as null when they have constrains that would require a minimum length
   * Fix: Convert Error type of Network errors and handle in case of subscription failures

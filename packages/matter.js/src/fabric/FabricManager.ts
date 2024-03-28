@@ -79,16 +79,11 @@ export class FabricManager {
         fabric.addRemoveCallback(async () => this.removeFabric(fabricIndex));
         fabric.setPersistCallback((isUpdate = true) => {
             const persistResult = this.persistFabrics();
-            if (MaybePromise.is(persistResult)) {
-                return persistResult.then(() => {
-                    if (isUpdate) {
-                        this.#events.updated.emit(fabric); // Assume Fabric got updated when persist callback is called
-                    }
-                });
-            }
-            if (isUpdate) {
-                this.#events.updated.emit(fabric); // Assume Fabric got updated when persist callback is called
-            }
+            return MaybePromise.then(persistResult, () => {
+                if (isUpdate) {
+                    this.#events.updated.emit(fabric); // Assume Fabric got updated when persist callback is called
+                }
+            });
         });
         if (this.#initializationDone) {
             this.#events.added.emit(fabric);

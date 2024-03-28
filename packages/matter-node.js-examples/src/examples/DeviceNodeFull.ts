@@ -132,12 +132,14 @@ const port = environment.vars.number("port") ?? 5540;
 
 const uniqueId = environment.vars.string("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs().toString()));
 
-await deviceStorage.set("passcode", passcode);
-await deviceStorage.set("discriminator", discriminator);
-await deviceStorage.set("vendorid", vendorId);
-await deviceStorage.set("productid", productId);
-await deviceStorage.set("isSocket", isSocket);
-await deviceStorage.set("uniqueid", uniqueId);
+await deviceStorage.set({
+    passcode,
+    discriminator,
+    vendorid: vendorId,
+    productid: productId,
+    isSocket,
+    uniqueid: uniqueId,
+});
 
 // Matter exposes functionality in groups called "clusters".  For this example device we override the matter.js "On/Off"
 // cluster implementation to print status to the console.

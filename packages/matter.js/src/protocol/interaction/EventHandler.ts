@@ -10,7 +10,7 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { Logger } from "../../log/Logger.js";
-import { Storage, SyncStorage } from "../../storage/Storage.js";
+import { Storage, StorageOperationResult } from "../../storage/Storage.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { AsyncConstruction } from "../../util/AsyncConstruction.js";
@@ -111,10 +111,10 @@ export class EventHandler<S extends Storage = any> {
             return setPromise.then(() => {
                 this.cleanUpEvents();
                 return eventData;
-            }) as S extends SyncStorage ? EventStorageData<any> : Promise<EventStorageData<any>>;
+            }) as StorageOperationResult<S, EventStorageData<any>>;
         }
         this.cleanUpEvents();
-        return eventData as S extends SyncStorage ? EventStorageData<any> : Promise<EventStorageData<any>>;
+        return eventData as StorageOperationResult<S, EventStorageData<any>>;
     }
 
     cleanUpEvents() {

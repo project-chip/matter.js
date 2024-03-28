@@ -12,7 +12,6 @@ import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { Storage, SyncStorage } from "../../storage/Storage.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { capitalize } from "../../util/String.js";
@@ -110,7 +109,7 @@ export function ClusterServer<
             return datasource;
         },
 
-        _setDatasource<S extends Storage>(newDatasource: ClusterDatasource<S> | undefined) {
+        set datasource(newDatasource: ClusterDatasource<any> | undefined) {
             // This is not legal but TS requires setters to accept getter type
             if (newDatasource === undefined) {
                 throw new InternalError("Cluster datasource cannot be unset");
@@ -133,20 +132,13 @@ export function ClusterServer<
             }
 
             if (datasource.eventHandler) {
-                const promises = new Array<PromiseLike<void>>();
                 for (const eventName in events) {
                     const bindResult = (events as any)[eventName].bindToEventHandler(datasource.eventHandler);
                     if (bindResult !== undefined && MaybePromise.is(bindResult)) {
-                        promises.push(bindResult);
+                        throw new InternalError("Binding events to event handler should never return a promise");
                     }
                 }
-                if (promises.length > 0) {
-                    return Promise.all(promises).then(() => Promise.resolve()) as S extends SyncStorage
-                        ? void
-                        : Promise<void>;
-                }
             }
-            return undefined as S extends SyncStorage ? void : Promise<void>;
         },
 
         _assignToEndpoint: (endpoint: EndpointInterface) => {

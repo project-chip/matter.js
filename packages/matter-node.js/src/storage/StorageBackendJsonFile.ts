@@ -58,8 +58,12 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         }
     }
 
-    override set(contexts: string[], key: string, value: SupportedStorageTypes): void {
-        super.set(contexts, key, value);
+    override set(
+        contexts: string[],
+        keyOrValues: string | Record<string, SupportedStorageTypes>,
+        value?: SupportedStorageTypes,
+    ): void {
+        super.set(contexts, keyOrValues, value);
         this.triggerCommit();
     }
 

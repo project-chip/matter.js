@@ -267,17 +267,18 @@ export class SessionManager<ContextT> {
     }
 
     async storeResumptionRecords() {
-        await this.#sessionStorage.set<ResumptionStorageRecord[]>(
+        await this.#sessionStorage.set(
             "resumptionRecords",
             [...this.#resumptionRecords].map(
-                ([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters }]) => ({
-                    nodeId,
-                    sharedSecret,
-                    resumptionId,
-                    fabricId: fabric.fabricId,
-                    peerNodeId: peerNodeId,
-                    sessionParameters,
-                }),
+                ([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters }]) =>
+                    ({
+                        nodeId,
+                        sharedSecret,
+                        resumptionId,
+                        fabricId: fabric.fabricId,
+                        peerNodeId: peerNodeId,
+                        sessionParameters,
+                    }) as ResumptionStorageRecord,
             ),
         );
     }

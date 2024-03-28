@@ -54,8 +54,20 @@ export class StorageBackendDisk extends SyncStorage {
         return fromJson(value) as T;
     }
 
-    set(contexts: string[], key: string, value: SupportedStorageTypes) {
-        this.localStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
+    set(contexts: string[], key: string, value: SupportedStorageTypes): void;
+    set(contexts: string[], values: Record<string, SupportedStorageTypes>): void;
+    set(
+        contexts: string[],
+        keyOrValues: string | Record<string, SupportedStorageTypes>,
+        value?: SupportedStorageTypes,
+    ) {
+        if (typeof keyOrValues === "string") {
+            this.localStorage.setItem(this.buildStorageKey(contexts, keyOrValues), toJson(value));
+        } else {
+            for (const [key, value] of Object.entries(keyOrValues)) {
+                this.localStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
+            }
+        }
     }
 
     delete(contexts: string[], key: string) {
@@ -73,6 +85,15 @@ export class StorageBackendDisk extends SyncStorage {
             }
         }
         return keys;
+    }
+
+    values(contexts: string[]) {
+        // Initialize and context checks are done by keys method
+        const values = {} as Record<string, SupportedStorageTypes>;
+        for (const key of this.keys(contexts)) {
+            values[key] = this.get(contexts, key);
+        }
+        return values;
     }
 
     contexts(contexts: string[]) {

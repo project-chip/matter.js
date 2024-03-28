@@ -597,9 +597,7 @@ describe("ClusterServer structure", () => {
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
             let version = 1;
-            asClusterServerInternal<IdentifyCluster["attributes"], IdentifyCluster["events"], SyncStorage>(
-                server,
-            )._setDatasource({
+            asClusterServerInternal(server).datasource = {
                 get version() {
                     return version;
                 },
@@ -607,7 +605,7 @@ describe("ClusterServer structure", () => {
                     return ++version;
                 },
                 changed() {},
-            } as ClusterDatasource<SyncStorage>);
+            } as ClusterDatasource<SyncStorage>;
             expect(initCalled).true;
 
             asClusterServerInternal(server)._close();

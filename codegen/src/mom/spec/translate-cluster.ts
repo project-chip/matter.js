@@ -15,7 +15,6 @@ import {
     Globals,
     Metatype,
 } from "@project-chip/matter.js/model";
-import { isObject } from "@project-chip/matter.js/util";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
 import { Bits, Code, Identifier, Integer, LowerIdentifier, NoSpace, Str, UpperIdentifier } from "./html-translators.js";
@@ -434,7 +433,7 @@ function translateValueChildren(
                     let name;
                     if (typeof constraint === "number") {
                         name = `Bit${constraint}`;
-                    } else if (isObject(constraint)) {
+                    } else if (typeof constraint === "object") {
                         name = `Bits${constraint.min}To${constraint.max - 1}`;
                     }
                     if (name) {

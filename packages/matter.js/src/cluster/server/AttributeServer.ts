@@ -735,8 +735,6 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                     "Seems like an Asynchronous Storage is used with Legacy code paths which is forbidden!",
                 );
             }
-
-            throw new InternalError("Legacy code reached which is no  longer supported on Legacy API.");
         }
         this.handleVersionAndTriggerListeners(value, oldValue, valueChanged); // TODO Make callbacks sense without fabric, but then they would have other signature?
     }

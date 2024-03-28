@@ -29,8 +29,18 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
         }
     }
 
-    override set(contexts: string[], key: string, value: SupportedStorageTypes) {
-        super.set(contexts, key, value);
+    override set(contexts: string[], key: string, value: SupportedStorageTypes): void;
+    override set(contexts: string[], values: Record<string, SupportedStorageTypes>): void;
+    override set(
+        contexts: string[],
+        keyOrValues: string | Record<string, SupportedStorageTypes>,
+        value?: SupportedStorageTypes,
+    ) {
+        if (typeof keyOrValues === "string") {
+            super.set(contexts, keyOrValues, value);
+        } else {
+            super.set(contexts, keyOrValues);
+        }
         this.commit();
     }
 

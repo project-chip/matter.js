@@ -108,6 +108,17 @@ describe("StorageContext", () => {
         expect(storageContext.has("key")).equal(true);
     });
 
+    it("check multi set of keys", async () => {
+        const { storageContext } = await create();
+
+        storageContext.set({ key: "value", key2: "value2" });
+
+        expect(storageContext.has("key")).equal(true);
+        expect(storageContext.has("key2")).equal(true);
+        expect(storageContext.get("key")).equal("value");
+        expect(storageContext.get("key2")).equal("value2");
+    });
+
     it("check if key is not set", async () => {
         const { storageContext } = await create();
 
@@ -196,6 +207,19 @@ describe("StorageContext", () => {
         const result = storageContext.keys();
 
         expect(result).deep.equal(["key", "key2", "key3", "key4"]);
+    });
+
+    it("get all values of a context", async () => {
+        const { storageContext } = await create(CONTEXTx2);
+
+        storageContext.set("key", "value");
+        storageContext.set("key2", "value2");
+        storageContext.set("key3", "value3");
+        storageContext.set("key4", "value4");
+
+        const result = storageContext.values();
+
+        expect(result).deep.equal({ key: "value", key2: "value2", key3: "value3", key4: "value4" });
     });
 
     it("clearing keys in a context works", async () => {

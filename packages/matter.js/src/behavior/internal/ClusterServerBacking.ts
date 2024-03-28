@@ -59,9 +59,15 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         this.#server = server;
     }
 
-    protected override async invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
-        await super.invokeInitializer(behavior, options);
-        await this.#createClusterServer(behavior);
+    protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
+        const result = super.invokeInitializer(behavior, options);
+
+        if (MaybePromise.is(result)) {
+            const createClusterServer = () => this.#createClusterServer(behavior);
+            return result.then(createClusterServer);
+        }
+
+        this.#createClusterServer(behavior);
     }
 
     protected override get datasourceOptions() {
@@ -71,7 +77,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         };
     }
 
-    async #createClusterServer(behavior: Behavior) {
+    #createClusterServer(behavior: Behavior) {
         const elements = new ValidatedElements(this.type);
         elements.report();
 
@@ -108,7 +114,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         // This must occur after cluster server is assigned to endpoint
         const eventHandler = this.eventHandler;
         const datasource = this.datasource;
-        await asClusterServerInternal(clusterServer)._setDatasource({
+        clusterServer.datasource = {
             get version() {
                 return datasource.version;
             },
@@ -124,7 +130,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
             increaseVersion() {
                 return datasource.version;
             },
-        });
+        };
 
         this.#clusterServer = clusterServer;
 
@@ -138,7 +144,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         }
 
         // Disable redundant command logging
-        const commandServers = (clusterServer as ClusterServerObjInternal<any, any, any, any>)._commands;
+        const commandServers = (clusterServer as ClusterServerObjInternal<any, any, any>)._commands;
         for (const name in commandServers) {
             const server = commandServers[name];
             if (server) {

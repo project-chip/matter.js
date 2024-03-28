@@ -196,7 +196,7 @@ function ListPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervisor
                 const oldValue = index < target.length ? target[index] : undefined;
                 if (newValue === undefined || newValue === null || oldValue === undefined || oldValue === null) {
                     // If creating a new object, apply as a patch to the object's defaults before insertion
-                    if (entryDefaults && isObject(newValue === "object")) {
+                    if (entryDefaults && isObject(newValue)) {
                         newValue = patchEntry(newValue as Val.Collection, { ...entryDefaults }, path.at(index));
                     }
 

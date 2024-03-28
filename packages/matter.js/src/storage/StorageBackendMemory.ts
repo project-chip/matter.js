@@ -48,14 +48,28 @@ export class StorageBackendMemory extends SyncStorage {
         return this.store[this.createContextKey(contexts)]?.[key];
     }
 
-    set(contexts: string[], key: string, value: SupportedStorageTypes) {
-        if (!this.initialized) throw new StorageError("Storage is not initialized");
+    #setKey(contexts: string[], key: string, value: SupportedStorageTypes) {
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         const contextKey = this.createContextKey(contexts);
         if (this.store[contextKey] === undefined) {
             this.store[contextKey] = {};
         }
         this.store[contextKey][key] = value;
+    }
+
+    set(
+        contexts: string[],
+        keyOrValues: string | Record<string, SupportedStorageTypes>,
+        value?: SupportedStorageTypes,
+    ) {
+        if (!this.initialized) throw new StorageError("Storage is not initialized");
+        if (typeof keyOrValues === "string") {
+            this.#setKey(contexts, keyOrValues, value as SupportedStorageTypes);
+        } else {
+            Object.entries(keyOrValues).forEach(([key, value]) => {
+                this.#setKey(contexts, key, value);
+            });
+        }
     }
 
     delete(contexts: string[], key: string) {
@@ -68,6 +82,15 @@ export class StorageBackendMemory extends SyncStorage {
         if (!this.initialized) throw new StorageError("Storage is not initialized");
         if (!contexts.length) throw new StorageError("Context must not be empty!");
         return Object.keys(this.store[this.createContextKey(contexts)] ?? {});
+    }
+
+    values(contexts: string[]) {
+        // Initialize and context checks are done by keys method
+        const values = {} as Record<string, SupportedStorageTypes>;
+        for (const key of this.keys(contexts)) {
+            values[key] = this.get(contexts, key);
+        }
+        return values;
     }
 
     contexts(contexts: string[]) {

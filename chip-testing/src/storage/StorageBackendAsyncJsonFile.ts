@@ -14,7 +14,7 @@ import {
 } from "@project-chip/matter.js/storage";
 import { readFile, writeFile } from "fs/promises";
 
-export class StorageBackendASyncJsonFile extends MaybeAsyncStorage {
+export class StorageBackendAsyncJsonFile extends MaybeAsyncStorage {
     /** We store changes after a value was set to the storage, but not more often than this setting (in ms). */
     private closed = false;
     private store?: StorageBackendMemory;
@@ -45,11 +45,21 @@ export class StorageBackendASyncJsonFile extends MaybeAsyncStorage {
         return this.store.get<T>(contexts, key);
     }
 
-    override async set(contexts: string[], key: string, value: SupportedStorageTypes) {
+    override async set(contexts: string[], key: string, value: SupportedStorageTypes): Promise<void>;
+    override async set(contexts: string[], values: Record<string, SupportedStorageTypes>): Promise<void>;
+    override async set(
+        contexts: string[],
+        keyOrValues: string | Record<string, SupportedStorageTypes>,
+        value?: SupportedStorageTypes,
+    ) {
         if (this.store === undefined) {
             throw new InternalError("Storage not initialized.");
         }
-        this.store.set(contexts, key, value);
+        if (typeof keyOrValues === "string") {
+            this.store.set(contexts, keyOrValues, value);
+        } else {
+            this.store.set(contexts, keyOrValues);
+        }
         await this.commit();
     }
 
@@ -92,6 +102,13 @@ export class StorageBackendASyncJsonFile extends MaybeAsyncStorage {
             throw new InternalError("Storage not initialized.");
         }
         return this.store.keys(contexts);
+    }
+
+    override async values(contexts: string[]) {
+        if (this.store === undefined) {
+            throw new InternalError("Storage not initialized.");
+        }
+        return this.store.values(contexts);
     }
 
     override async contexts(contexts: string[]) {

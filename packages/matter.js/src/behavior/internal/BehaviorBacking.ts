@@ -102,12 +102,12 @@ export abstract class BehaviorBacking {
     }
 
     /**
-     * Set state from options and invoke {@link Behavior.initialize}.
+     * Set state from options and invoke {@link Behavior.invokeInitializer}.
      *
      * This is an optional extension point for derivatives.  Errors thrown here are recorded and place the behavior into
      * crashed state.
      */
-    protected async invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
+    protected invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
         return behavior.initialize(options);
     }
 

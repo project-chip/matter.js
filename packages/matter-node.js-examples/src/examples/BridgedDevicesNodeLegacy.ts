@@ -117,11 +117,13 @@ class BridgedDevice {
 
         const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
 
-        deviceStorage.set("passcode", passcode);
-        deviceStorage.set("discriminator", discriminator);
-        deviceStorage.set("vendorid", vendorId);
-        deviceStorage.set("productid", productId);
-        deviceStorage.set("uniqueid", uniqueId);
+        deviceStorage.set({
+            passcode,
+            discriminator,
+            vendorid: vendorId,
+            productid: productId,
+            uniqueid: uniqueId,
+        });
 
         /**
          * Create Matter Server and CommissioningServer Node

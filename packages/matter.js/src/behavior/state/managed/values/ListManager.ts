@@ -281,7 +281,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                     for (let i = length; i < formerLength; i++) {
                         const entry = writeVal()[i] as undefined | { fabricIndex?: number };
                         if (
-                            isObject(entry) &&
+                            typeof entry === "object" &&
                             (session.offline || !entry.fabricIndex || entry.fabricIndex === session.fabric)
                         ) {
                             writeVal().splice(mapScopedToActual(i, false), 1);

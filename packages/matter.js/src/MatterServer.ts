@@ -242,8 +242,7 @@ export class MatterServer {
                 await this.prepareNode(node);
             } catch (error: any) {
                 // TODO: Find a better way how to report back such issues and which nodes errored
-                logger.error(`Failed to start node with storageKey ${key}: ${error}`);
-                logger.error(error.stack);
+                logger.error(`Failed to start node with storageKey ${key}:`, error);
             }
         }
     }

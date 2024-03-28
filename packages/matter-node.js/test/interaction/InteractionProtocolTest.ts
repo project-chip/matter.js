@@ -20,7 +20,6 @@ import {
     Events,
     OnOffCluster,
     WritableAttribute,
-    asClusterServerInternal,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
 import {
@@ -854,7 +853,7 @@ describe("InteractionProtocol", () => {
         function addClusterServer(cluster: ClusterServerObj<any, any>) {
             endpoint.addClusterServer(cluster);
             let version = 0;
-            asClusterServerInternal<any, any, SyncStorage>(cluster)._setDatasource({
+            cluster.datasource = {
                 get version() {
                     return version;
                 },
@@ -868,7 +867,7 @@ describe("InteractionProtocol", () => {
                 },
 
                 changed() {},
-            } as ClusterDatasource<SyncStorage>);
+            } as ClusterDatasource<SyncStorage>;
         }
 
         if (cluster) {

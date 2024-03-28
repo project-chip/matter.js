@@ -15,7 +15,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Session } from "../../session/Session.js";
-import { Storage, SyncStorage } from "../../storage/Storage.js";
+import { Storage } from "../../storage/Storage.js";
 import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Merge } from "../../util/Type.js";
@@ -325,12 +325,10 @@ export type ClusterServerObj<A extends Attributes, E extends Events> = {
     ServerEventTriggers<E>;
 
 /** Strongly typed interface of a cluster server */
-export type ClusterServerObjInternal<
-    A extends Attributes,
-    C extends Commands,
-    E extends Events,
-    S extends Storage,
-> = ClusterServerObj<A, E> & {
+export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E extends Events> = ClusterServerObj<
+    A,
+    E
+> & {
     /**
      * Cluster commands as array
      * @private
@@ -379,13 +377,6 @@ export type ClusterServerObjInternal<
      * @private
      */
     readonly _close: () => void;
-
-    /**
-     * Set the datasource to use for this server
-     */
-    readonly _setDatasource: (
-        newDatasource: ClusterDatasource<S> | undefined,
-    ) => S extends SyncStorage ? void : Promise<void>;
 };
 
 export function isClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
@@ -399,16 +390,15 @@ export function isClusterServerInternal<
     A extends Attributes,
     C extends Commands,
     E extends Events,
-    S extends Storage,
->(obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>): obj is ClusterServerObjInternal<A, C, E, S> {
+>(obj: ClusterClientObj<F, A, C, E> | ClusterServerObj<A, E>): obj is ClusterServerObjInternal<A, C, E> {
     return obj._type === "ClusterServer";
 }
 
-export function asClusterServerInternal<A extends Attributes, E extends Events, S extends Storage>(
+export function asClusterServerInternal<A extends Attributes, E extends Events>(
     obj: ClusterServerObj<A, E>,
-): ClusterServerObjInternal<A, Commands, E, S> {
+): ClusterServerObjInternal<A, Commands, E> {
     if (!isClusterServerInternal(obj)) {
         throw new Error("Object is not a ClusterServerObj instance.");
     }
-    return obj as ClusterServerObjInternal<A, Commands, E, S>;
+    return obj as ClusterServerObjInternal<A, Commands, E>;
 }

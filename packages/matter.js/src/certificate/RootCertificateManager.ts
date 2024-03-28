@@ -39,30 +39,28 @@ export class RootCertificateManager {
     constructor(storage: StorageContext) {
         this.#construction = AsyncConstruction(this, async () => {
             // Read from storage if we have them stored, else store the just generated data
-            if (await storage.has("rootCertId")) {
-                try {
-                    // Read and set the values from storage,
-                    // if one fail we use the pre-generated values, else we overwrite them
-                    const rootCertId = await storage.get<bigint>("rootCertId");
-                    const rootKeyPair = await storage.get<BinaryKeyPair>("rootKeyPair");
-                    const rootKeyIdentifier = await storage.get<ByteArray>("rootKeyIdentifier");
-                    const rootCertBytes = await storage.get<ByteArray>("rootCertBytes");
-                    const nextCertificateId = await storage.get<number>("nextCertificateId");
-                    this.rootCertId = rootCertId;
-                    this.rootKeyPair = PrivateKey(rootKeyPair);
-                    this.rootKeyIdentifier = rootKeyIdentifier;
-                    this.rootCertBytes = rootCertBytes;
-                    this.nextCertificateId = nextCertificateId;
-                    return;
-                } catch (error) {
-                    console.error("Failed to load root certificate from storage, generating new one", error);
-                }
+            const certValues = await storage.values();
+            if (
+                certValues.rootCertId !== undefined &&
+                certValues.rootKeyPair !== undefined &&
+                certValues.rootKeyIdentifier !== undefined &&
+                certValues.rootCertBytes !== undefined &&
+                certValues.nextCertificateId !== undefined
+            ) {
+                this.rootCertId = certValues.rootCertId as bigint;
+                this.rootKeyPair = PrivateKey(certValues.rootKeyPair as BinaryKeyPair);
+                this.rootKeyIdentifier = certValues.rootKeyIdentifier as ByteArray;
+                this.rootCertBytes = certValues.rootCertBytes as ByteArray;
+                this.nextCertificateId = certValues.nextCertificateId as number;
+                return;
             }
-            await storage.set("rootCertId", this.rootCertId);
-            await storage.set("rootKeyPair", this.rootKeyPair.keyPair);
-            await storage.set("rootKeyIdentifier", this.rootKeyIdentifier);
-            await storage.set("rootCertBytes", this.rootCertBytes);
-            await storage.set("nextCertificateId", this.nextCertificateId);
+            await storage.set({
+                rootCertId: this.rootCertId,
+                rootKeyPair: this.rootKeyPair.keyPair,
+                rootKeyIdentifier: this.rootKeyIdentifier,
+                rootCertBytes: this.rootCertBytes,
+                nextCertificateId: this.nextCertificateId,
+            });
         });
     }
 
