@@ -103,7 +103,7 @@ export type CommissioningControllerNodeOptions = {
 
     /**
      * Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate
-     * that the device is still available. Default it is set to 30s.
+     * that the device is still available. Default it is set to 60s.
      */
     readonly subscribeMaxIntervalCeilingSeconds?: number;
 
@@ -300,7 +300,7 @@ export class PairedNode {
         const initialSubscriptionData = await interactionClient.subscribeAllAttributesAndEvents({
             isUrgent: true,
             minIntervalFloorSeconds: this.options.subscribeMinIntervalFloorSeconds ?? 0,
-            maxIntervalCeilingSeconds: this.options.subscribeMaxIntervalCeilingSeconds ?? 30,
+            maxIntervalCeilingSeconds: this.options.subscribeMaxIntervalCeilingSeconds ?? 60,
             attributeListener: data => {
                 const {
                     path: { endpointId, clusterId, attributeId },
