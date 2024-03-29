@@ -4,35 +4,5 @@
         "outDir": "../dist/esm",
         "types": ["@project-chip/matter.js-tools", "globals"]
     },
-    "references": [{ "path": "../../matter.js-tools/src" }],
-    "typedocOptions": {
-        "entryPoints": [
-            "ble/export.ts",
-            "certificate/export.ts",
-            "cluster/export.ts",
-            "codec/export.ts",
-            "common/export.ts",
-            "crypto/export.ts",
-            "datatype/export.ts",
-            "device/export.ts",
-            "fabric/export.ts",
-            "log/export.ts",
-            "math/export.ts",
-            "mdns/export.ts",
-            "model/index.ts",
-            "net/export.ts",
-            "protocol/export.ts",
-            "protocol/interaction/export.ts",
-            "protocol/securechannel/export.ts",
-            "schema/export.ts",
-            "session/export.ts",
-            "spec/export.ts",
-            "storage/export.ts",
-            "time/export.ts",
-            "tlv/export.ts",
-            "util/export.ts",
-            "export.ts"
-        ],
-        "out": "../../../docs/matter.js"
-    }
+    "references": [{ "path": "../../matter.js-tools/src" }]
 }

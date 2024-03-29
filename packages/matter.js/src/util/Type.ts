@@ -87,7 +87,7 @@ export type Immutable<T> = T extends (...args: any[]) => any
 /**
  * Convert a union to an interface.
  *
- * {@see {@link https://stackoverflow.com/questions/50374908}}
+ * @see {@link https://stackoverflow.com/questions/50374908}
  */
 export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 

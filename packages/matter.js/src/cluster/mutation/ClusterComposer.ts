@@ -23,8 +23,6 @@ export class ClusterComposer<const T extends ClusterType> {
      * Build a cluster using selected feature flags.
      *
      * @param selection the name(s) of optional features to support
-     * @param original an optional pre-existing cluster; any injected elements present here will be used rather than
-     *     those in the source component
      * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
      */
     compose<const SelectionT extends ClusterComposer.FeatureSelection<T>>(selection: SelectionT) {
