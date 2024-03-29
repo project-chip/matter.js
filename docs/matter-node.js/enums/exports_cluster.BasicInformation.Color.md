@@ -38,7 +38,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:56
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:66
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:56
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:64
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:63
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:73
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:62
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:72
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:64
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:74
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:68
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:76
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:53
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:63
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:48
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:58
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:55
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:65
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:50
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:60
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:47
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:57
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:61
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:71
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:52
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:62
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:51
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:61
 
 ___
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:57
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:67
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:65
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:75
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:49
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:59
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:60
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:70
 
 ___
 
@@ -238,4 +238,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:59
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:69

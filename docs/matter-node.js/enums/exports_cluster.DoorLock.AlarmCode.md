@@ -33,7 +33,7 @@ Door ajar
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:238
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1168
 
 ___
 
@@ -45,7 +45,7 @@ Forced Door Open under Door Locked Condition
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:234
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1164
 
 ___
 
@@ -57,7 +57,7 @@ Force User SOS alarm
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:242
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1172
 
 ___
 
@@ -69,7 +69,7 @@ Tamper Alarm - front escutcheon removed from main
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:230
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1160
 
 ___
 
@@ -81,7 +81,7 @@ Lock Reset to Factory Defaults
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:218
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1148
 
 ___
 
@@ -93,7 +93,7 @@ Locking Mechanism Jammed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:214
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1144
 
 ___
 
@@ -105,7 +105,7 @@ Lock Radio Power Cycled
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:222
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1152
 
 ___
 
@@ -117,4 +117,4 @@ Tamper Alarm - wrong code entry limit
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:226
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1156

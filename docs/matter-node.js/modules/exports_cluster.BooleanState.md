@@ -6,28 +6,53 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/exports_cluster.BooleanState.Cluster.md)
+- [StateChangeEvent](../interfaces/exports_cluster.BooleanState.StateChangeEvent.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.BooleanState.md#cluster)
+- [ClusterInstance](exports_cluster.BooleanState.md#clusterinstance)
+- [Complete](exports_cluster.BooleanState.md#complete)
 - [TlvStateChangeEvent](exports_cluster.BooleanState.md#tlvstatechangeevent)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `stateValue`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\>  } ; `events`: \{ `stateChange`: [`OptionalEvent`](../interfaces/exports_cluster.OptionalEvent.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``69`` ; `name`: ``"BooleanState"`` ; `revision`: ``1``  }\>
-
-Boolean State
-
-This cluster provides an interface to a boolean state called StateValue.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 1.7
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.BooleanState.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:62
+
+packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:64
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `stateValue`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\>  } ; `events`: \{ `stateChange`: [`OptionalEvent`](../interfaces/exports_cluster.OptionalEvent.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``69`` ; `name`: ``"BooleanState"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.BooleanState.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:30
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.BooleanState.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:65
 
 ___
 
@@ -43,4 +68,4 @@ MatterApplicationClusterSpecificationV1_1 § 1.7.5.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:17

@@ -12,45 +12,15 @@
 
 ### Type Aliases
 
-- [Constructor](model.Model.md#constructor)
 - [LookupPredicate](model.Model.md#lookuppredicate)
 - [PropertyValidation](model.Model.md#propertyvalidation)
+- [Type](model.Model.md#type)
 
 ## Type Aliases
 
-### Constructor
-
-Ƭ **Constructor**\<`T`\>: (...`args`: `any`) => `T`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`Model`](../classes/model.Model-1.md) |
-
-#### Type declaration
-
-• (`...args`): `T`
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `...args` | `any` |
-
-##### Returns
-
-`T`
-
-#### Defined in
-
-[packages/matter.js/src/model/models/Model.ts:394](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L394)
-
-___
-
 ### LookupPredicate
 
-Ƭ **LookupPredicate**\<`T`\>: [`Constructor`](model.Model.md#constructor)\<`T`\> \| \{ `test`: (`model`: [`Model`](../classes/model.Model-1.md)) => `boolean` ; `type`: [`Constructor`](model.Model.md#constructor)\<`T`\>  }
+Ƭ **LookupPredicate**\<`T`\>: [`Type`](model.Model.md#type)\<`T`\> \| \{ `test`: (`model`: [`Model`](../classes/model.Model-1.md)) => `boolean` ; `type`: [`Type`](model.Model.md#type)\<`T`\>  }
 
 #### Type parameters
 
@@ -60,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:396](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L396)
+[packages/matter.js/src/model/models/Model.ts:452](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L452)
 
 ___
 
@@ -80,4 +50,34 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:400](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L400)
+[packages/matter.js/src/model/models/Model.ts:454](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L454)
+
+___
+
+### Type
+
+Ƭ **Type**\<`T`\>: (...`args`: `any`) => `T`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`Model`](../classes/model.Model-1.md) = [`Model`](../classes/model.Model-1.md) |
+
+#### Type declaration
+
+• (`...args`): `T`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...args` | `any` |
+
+##### Returns
+
+`T`
+
+#### Defined in
+
+[packages/matter.js/src/model/models/Model.ts:450](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L450)

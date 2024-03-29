@@ -11,16 +11,36 @@
 - [CertificateChainType](../enums/exports_cluster.OperationalCredentials.CertificateChainType.md)
 - [NodeOperationalCertStatus](../enums/exports_cluster.OperationalCredentials.NodeOperationalCertStatus.md)
 
+### Interfaces
+
+- [AddNocRequest](../interfaces/exports_cluster.OperationalCredentials.AddNocRequest.md)
+- [AddTrustedRootCertificateRequest](../interfaces/exports_cluster.OperationalCredentials.AddTrustedRootCertificateRequest.md)
+- [AttestationRequest](../interfaces/exports_cluster.OperationalCredentials.AttestationRequest.md)
+- [AttestationResponse](../interfaces/exports_cluster.OperationalCredentials.AttestationResponse.md)
+- [CertificateChainRequest](../interfaces/exports_cluster.OperationalCredentials.CertificateChainRequest.md)
+- [CertificateChainResponse](../interfaces/exports_cluster.OperationalCredentials.CertificateChainResponse.md)
+- [Cluster](../interfaces/exports_cluster.OperationalCredentials.Cluster.md)
+- [CsrRequest](../interfaces/exports_cluster.OperationalCredentials.CsrRequest.md)
+- [CsrResponse](../interfaces/exports_cluster.OperationalCredentials.CsrResponse.md)
+- [FabricDescriptorStruct](../interfaces/exports_cluster.OperationalCredentials.FabricDescriptorStruct.md)
+- [NOCStruct](../interfaces/exports_cluster.OperationalCredentials.NOCStruct.md)
+- [NocResponse](../interfaces/exports_cluster.OperationalCredentials.NocResponse.md)
+- [RemoveFabricRequest](../interfaces/exports_cluster.OperationalCredentials.RemoveFabricRequest.md)
+- [UpdateFabricLabelRequest](../interfaces/exports_cluster.OperationalCredentials.UpdateFabricLabelRequest.md)
+- [UpdateNocRequest](../interfaces/exports_cluster.OperationalCredentials.UpdateNocRequest.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.OperationalCredentials.md#cluster)
+- [ClusterInstance](exports_cluster.OperationalCredentials.md#clusterinstance)
+- [Complete](exports_cluster.OperationalCredentials.md#complete)
 - [TlvAddNocRequest](exports_cluster.OperationalCredentials.md#tlvaddnocrequest)
 - [TlvAddTrustedRootCertificateRequest](exports_cluster.OperationalCredentials.md#tlvaddtrustedrootcertificaterequest)
-- [TlvAttestationRequestRequest](exports_cluster.OperationalCredentials.md#tlvattestationrequestrequest)
+- [TlvAttestationRequest](exports_cluster.OperationalCredentials.md#tlvattestationrequest)
 - [TlvAttestationResponse](exports_cluster.OperationalCredentials.md#tlvattestationresponse)
-- [TlvCertificateChainRequestRequest](exports_cluster.OperationalCredentials.md#tlvcertificatechainrequestrequest)
+- [TlvCertificateChainRequest](exports_cluster.OperationalCredentials.md#tlvcertificatechainrequest)
 - [TlvCertificateChainResponse](exports_cluster.OperationalCredentials.md#tlvcertificatechainresponse)
-- [TlvCsrRequestRequest](exports_cluster.OperationalCredentials.md#tlvcsrrequestrequest)
+- [TlvCsrRequest](exports_cluster.OperationalCredentials.md#tlvcsrrequest)
 - [TlvCsrResponse](exports_cluster.OperationalCredentials.md#tlvcsrresponse)
 - [TlvFabricDescriptorStruct](exports_cluster.OperationalCredentials.md#tlvfabricdescriptorstruct)
 - [TlvNOCStruct](exports_cluster.OperationalCredentials.md#tlvnocstruct)
@@ -33,20 +53,37 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `commissionedFabrics`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `currentFabricIndex`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`FabricIndex`](exports_datatype.md#fabricindex), `any`\> ; `fabrics`: [`FabricScopedAttribute`](../interfaces/exports_cluster.FabricScopedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `nocs`: [`FabricScopedAttribute`](../interfaces/exports_cluster.FabricScopedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `supportedFabrics`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `trustedRootCertificates`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`Uint8Array`[], `any`\>  } ; `commands`: \{ `addNoc`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `addTrustedRootCertificate`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `attestationRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `certificateChainRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `csrRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeFabric`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `updateFabricLabel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `updateNoc`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``62`` ; `name`: ``"OperationalCredentials"`` ; `revision`: ``1``  }\>
-
-Operational Credentials
-
-This cluster is used to add or remove Node Operational credentials on a Commissionee or Node, as well as manage
-the associated Fabrics.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 11.17
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.OperationalCredentials.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:456
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1228
+
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1230
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `commissionedFabrics`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `currentFabricIndex`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`FabricIndex`](exports_datatype.md#fabricindex), `any`\> ; `fabrics`: [`FabricScopedAttribute`](../interfaces/exports_cluster.FabricScopedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `nocs`: [`FabricScopedAttribute`](../interfaces/exports_cluster.FabricScopedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `supportedFabrics`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `trustedRootCertificates`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`Uint8Array`[], `any`\>  } ; `commands`: \{ `addNoc`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `addTrustedRootCertificate`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `attestationRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `certificateChainRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `csrRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeFabric`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `updateFabricLabel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `updateNoc`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``62`` ; `name`: ``"OperationalCredentials"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.OperationalCredentials.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:574
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.OperationalCredentials.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:1231
 
 ___
 
@@ -62,7 +99,7 @@ MatterCoreSpecificationV1_1 § 11.17.6.8
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:194
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:265
 
 ___
 
@@ -78,13 +115,13 @@ MatterCoreSpecificationV1_1 § 11.17.6.13
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:445
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:561
 
 ___
 
-### TlvAttestationRequestRequest
+### TlvAttestationRequest
 
-• `Const` **TlvAttestationRequestRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvAttestationRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the OperationalCredentials attestationRequest command
 
@@ -94,7 +131,7 @@ MatterCoreSpecificationV1_1 § 11.17.6.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:92
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:111
 
 ___
 
@@ -115,13 +152,13 @@ MatterCoreSpecificationV1_1 § 11.17.6.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:105
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:131
 
 ___
 
-### TlvCertificateChainRequestRequest
+### TlvCertificateChainRequest
 
-• `Const` **TlvCertificateChainRequestRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvCertificateChainRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the OperationalCredentials certificateChainRequest command
 
@@ -131,7 +168,7 @@ MatterCoreSpecificationV1_1 § 11.17.6.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:141
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:179
 
 ___
 
@@ -147,13 +184,13 @@ MatterCoreSpecificationV1_1 § 11.17.6.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:149
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:194
 
 ___
 
-### TlvCsrRequestRequest
+### TlvCsrRequest
 
-• `Const` **TlvCsrRequestRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **TlvCsrRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the OperationalCredentials csrRequest command
 
@@ -163,7 +200,7 @@ MatterCoreSpecificationV1_1 § 11.17.6.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:163
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:215
 
 ___
 
@@ -184,7 +221,7 @@ MatterCoreSpecificationV1_1 § 11.17.6.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:177
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:236
 
 ___
 
@@ -200,7 +237,7 @@ MatterCoreSpecificationV1_1 § 11.17.4.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:41
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:53
 
 ___
 
@@ -219,7 +256,7 @@ MatterCoreSpecificationV1_1 § 11.17.4.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:19
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:21
 
 ___
 
@@ -245,7 +282,7 @@ MatterCoreSpecificationV1_1 § 11.17.6.10
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:390
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:468
 
 ___
 
@@ -261,7 +298,7 @@ MatterCoreSpecificationV1_1 § 11.17.6.12
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:437
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:546
 
 ___
 
@@ -277,7 +314,7 @@ MatterCoreSpecificationV1_1 § 11.17.6.11
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:428
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:530
 
 ___
 
@@ -293,4 +330,4 @@ MatterCoreSpecificationV1_1 § 11.17.6.9
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:418
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:513

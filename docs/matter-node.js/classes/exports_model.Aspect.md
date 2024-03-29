@@ -171,17 +171,24 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<`D`\>
+▸ **extend**\<`This`\>(`this`, `other`): `This`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Aspect`](exports_model.Aspect.md)\<`any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `this` | `This` |
 | `other` | `Exclude`\<`D`, ``"string"``\> |
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)\<`D`\>
+`This`
 
 #### Defined in
 

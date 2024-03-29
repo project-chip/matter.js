@@ -1,5 +1,5 @@
 {
-    "version": "0.8.0-alpha.0-20240329-133f426f",
+    "version": "0.8.0",
     "command": {
         "run": {
             "stream": true

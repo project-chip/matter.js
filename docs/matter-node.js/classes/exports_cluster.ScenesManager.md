@@ -101,7 +101,7 @@ ___
 
 ### removeAllNonGlobalScenesForEndpoint
 
-▸ **removeAllNonGlobalScenesForEndpoint**(`fabric`, `endpointId`): `void`
+▸ **removeAllNonGlobalScenesForEndpoint**(`fabric`, `endpointId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -112,7 +112,7 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -122,7 +122,7 @@ ___
 
 ### removeAllScenesForGroup
 
-▸ **removeAllScenesForGroup**(`fabric`, `endpointId`, `groupId`): `void`
+▸ **removeAllScenesForGroup**(`fabric`, `endpointId`, `groupId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -134,7 +134,7 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -144,7 +144,7 @@ ___
 
 ### removeScene
 
-▸ **removeScene**(`fabric`, `endpointId`, `groupId`, `sceneId`): `boolean`
+▸ **removeScene**(`fabric`, `endpointId`, `groupId`, `sceneId`): `Promise`\<`boolean`\>
 
 #### Parameters
 
@@ -157,7 +157,7 @@ ___
 
 #### Returns
 
-`boolean`
+`Promise`\<`boolean`\>
 
 #### Defined in
 
@@ -167,7 +167,7 @@ ___
 
 ### setEndpointScenes
 
-▸ **setEndpointScenes**(`fabric`, `endpointId`, `endpointScenes`): `void`
+▸ **setEndpointScenes**(`fabric`, `endpointId`, `endpointScenes`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -179,7 +179,7 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -189,7 +189,7 @@ ___
 
 ### setScenes
 
-▸ **setScenes**(`fabric`, `endpointId`, `sceneEntries`): `void`
+▸ **setScenes**(`fabric`, `endpointId`, `sceneEntries`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -201,7 +201,7 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 

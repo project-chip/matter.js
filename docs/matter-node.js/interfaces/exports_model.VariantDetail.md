@@ -21,12 +21,11 @@ Supplies operational information about a set of variants.
 
 • `Optional` **id**: `number`
 
-The highest priority ID across all variants, if any variant has an
-ID.
+The highest priority ID across all variants, if any variant has an ID.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:35
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:33
 
 ___
 
@@ -38,7 +37,7 @@ The actual variants.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:43
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:41
 
 ___
 
@@ -50,7 +49,7 @@ The canonical name to use for the variants.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:39
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:37
 
 ___
 
@@ -62,4 +61,4 @@ The shared tag across all variants.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:30
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:29

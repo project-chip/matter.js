@@ -28,4 +28,4 @@ The Node can be configured to use different units of temperature when conveying 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L70)

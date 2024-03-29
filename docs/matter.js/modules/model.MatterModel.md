@@ -14,8 +14,8 @@
 
 ### Child
 
-Ƭ **Child**: [`ClusterModel`](../classes/model.ClusterModel-1.md) \| [`DeviceTypeModel`](../classes/model.DeviceTypeModel.md) \| [`DatatypeModel`](../classes/model.DatatypeModel.md) \| [`AttributeModel`](../classes/model.AttributeModel.md) \| [`FabricModel`](../classes/model.FabricModel.md)
+Ƭ **Child**: [`ClusterModel`](../classes/model.ClusterModel-1.md) \| [`DeviceTypeModel`](../classes/model.DeviceTypeModel.md) \| [`FieldModel`](../classes/model.FieldModel.md) \| [`DatatypeModel`](../classes/model.DatatypeModel.md) \| [`AttributeModel`](../classes/model.AttributeModel.md) \| [`FabricModel`](../classes/model.FabricModel.md)
 
 #### Defined in
 
-[packages/matter.js/src/model/models/MatterModel.ts:78](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/MatterModel.ts#L78)
+[packages/matter.js/src/model/models/MatterModel.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/MatterModel.ts#L81)

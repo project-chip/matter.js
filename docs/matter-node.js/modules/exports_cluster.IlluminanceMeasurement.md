@@ -6,24 +6,48 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/exports_cluster.IlluminanceMeasurement.Cluster.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.IlluminanceMeasurement.md#cluster)
+- [ClusterInstance](exports_cluster.IlluminanceMeasurement.md#clusterinstance)
+- [Complete](exports_cluster.IlluminanceMeasurement.md#complete)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `lightSensorType`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `maxMeasuredValue`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `measuredValue`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `minMeasuredValue`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `tolerance`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } ; `id`: ``1024`` ; `name`: ``"IlluminanceMeasurement"`` ; `revision`: ``3``  }\>
-
-Illuminance Measurement
-
-Attributes and commands for configuring the measurement of illuminance, and reporting illuminance measurements.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 2.2
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.IlluminanceMeasurement.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/IlluminanceMeasurementCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/IlluminanceMeasurementCluster.d.ts:74
+
+packages/matter.js/dist/esm/cluster/definitions/IlluminanceMeasurementCluster.d.ts:76
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `lightSensorType`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `maxMeasuredValue`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `measuredValue`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `minMeasuredValue`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `tolerance`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } ; `id`: ``1024`` ; `name`: ``"IlluminanceMeasurement"`` ; `revision`: ``3``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.IlluminanceMeasurement.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/IlluminanceMeasurementCluster.d.ts:14
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.IlluminanceMeasurement.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/IlluminanceMeasurementCluster.d.ts:77

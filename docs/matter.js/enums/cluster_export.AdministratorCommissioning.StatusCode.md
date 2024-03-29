@@ -26,7 +26,7 @@ Could not be completed because another commissioning is in progress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:116](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L116)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:140](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L140)
 
 ___
 
@@ -42,7 +42,7 @@ Provided PAKE parameters were incorrectly formatted or otherwise invalid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:123](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:147](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L147)
 
 ___
 
@@ -58,4 +58,4 @@ No commissioning window was currently open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:130](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L130)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:154](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L154)

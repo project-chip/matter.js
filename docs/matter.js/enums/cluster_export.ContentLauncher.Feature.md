@@ -29,7 +29,7 @@ Device supports content search (non-app specific)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:443](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L443)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:574](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L574)
 
 ___
 
@@ -43,4 +43,4 @@ Device supports basic URL-based file playback
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:450](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L450)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:581](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L581)

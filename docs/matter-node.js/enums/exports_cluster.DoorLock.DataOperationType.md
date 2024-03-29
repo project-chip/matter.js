@@ -28,7 +28,7 @@ Data is being added or was added
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:539
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:85
 
 ___
 
@@ -40,7 +40,7 @@ Data is being cleared or was cleared
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:543
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:89
 
 ___
 
@@ -52,4 +52,4 @@ Data is being modified or was modified
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:547
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:93

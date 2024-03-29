@@ -42,6 +42,7 @@
 ### Variables
 
 - [FORBIDDEN\_PASSCODES](export.md#forbidden_passcodes)
+- [MATTER\_DATAMODEL\_VERSION](export.md#matter_datamodel_version)
 
 ## References
 
@@ -101,13 +102,13 @@ Re-exports [MatterDeviceLibrarySpecificationV1_2](../interfaces/exports_spec.Mat
 
 ### CommissioningControllerOptions
 
-Ƭ **CommissioningControllerOptions**: [`CommissioningControllerNodeOptions`](exports_device.md#commissioningcontrollernodeoptions) & \{ `adminFabricId?`: [`FabricId`](exports_datatype.md#fabricid) ; `adminFabricIndex?`: [`FabricIndex`](exports_datatype.md#fabricindex) ; `adminVendorId?`: [`VendorId`](exports_datatype.md#vendorid) ; `autoConnect?`: `boolean` ; `caseAuthenticatedTags?`: [`CaseAuthenticatedTag`](exports_datatype.md#caseauthenticatedtag)[] ; `listeningAddressIpv4?`: `string` ; `listeningAddressIpv6?`: `string` ; `localPort?`: `number`  }
+Ƭ **CommissioningControllerOptions**: [`CommissioningControllerNodeOptions`](exports_device.md#commissioningcontrollernodeoptions) & \{ `adminFabricId?`: [`FabricId`](exports_datatype.md#fabricid) ; `adminFabricIndex?`: [`FabricIndex`](exports_datatype.md#fabricindex) ; `adminVendorId?`: [`VendorId`](exports_datatype.md#vendorid) ; `autoConnect?`: `boolean` ; `caseAuthenticatedTags?`: [`CaseAuthenticatedTag`](exports_datatype.md#caseauthenticatedtag)[] ; `environment?`: \{ `environment`: [`Environment`](../classes/environment_export._internal_.Environment.md) ; `id`: `string`  } ; `listeningAddressIpv4?`: `string` ; `listeningAddressIpv6?`: `string` ; `localPort?`: `number`  }
 
 Constructor options for the CommissioningController class
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:27
+packages/matter.js/dist/esm/CommissioningController.d.ts:29
 
 ___
 
@@ -125,7 +126,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:19
+packages/matter.js/dist/esm/MatterServer.d.ts:20
 
 ___
 
@@ -137,7 +138,7 @@ Options needed to commission a new node
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:62
+packages/matter.js/dist/esm/CommissioningController.d.ts:78
 
 ___
 
@@ -154,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:9
+packages/matter.js/dist/esm/MatterServer.d.ts:10
 
 ## Variables
 
@@ -164,4 +165,21 @@ packages/matter.js/dist/esm/MatterServer.d.ts:9
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:26
+packages/matter.js/dist/esm/CommissioningServer.d.ts:25
+
+___
+
+### MATTER\_DATAMODEL\_VERSION
+
+• `Const` **MATTER\_DATAMODEL\_VERSION**: ``16``
+
+Data model revision used by this implementation
+Value of 16 means "Matter 1.0/1.1"
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/exports_spec.MatterCoreSpecificationV1_1.md) § 7.1.1
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningServer.d.ts:32

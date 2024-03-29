@@ -8,9 +8,18 @@
 
 - [\<internal\>](exports_common._internal_.md)
 
+### Namespaces
+
+- [FailsafeContext](exports_common.FailsafeContext.md)
+- [Lifecycle](exports_common.Lifecycle.md)
+
 ### Classes
 
-- [FailSafeManager](../classes/exports_common.FailSafeManager.md)
+- [CrashedDependencyError](../classes/exports_common.CrashedDependencyError.md)
+- [DependencyLifecycleError](../classes/exports_common.DependencyLifecycleError.md)
+- [DestroyedDependencyError](../classes/exports_common.DestroyedDependencyError.md)
+- [FailsafeContext](../classes/exports_common.FailsafeContext-1.md)
+- [FailsafeTimer](../classes/exports_common.FailsafeTimer.md)
 - [ImplementationError](../classes/exports_common.ImplementationError.md)
 - [InternalError](../classes/exports_common.InternalError.md)
 - [MatterError](../classes/exports_common.MatterError.md)
@@ -18,15 +27,23 @@
 - [MatterFlowError](../classes/exports_common.MatterFlowError.md)
 - [NoProviderError](../classes/exports_common.NoProviderError.md)
 - [NotImplementedError](../classes/exports_common.NotImplementedError.md)
+- [ReadOnlyError](../classes/exports_common.ReadOnlyError.md)
 - [UnexpectedDataError](../classes/exports_common.UnexpectedDataError.md)
+- [UninitializedDependencyError](../classes/exports_common.UninitializedDependencyError.md)
+- [UnsupportedDependencyError](../classes/exports_common.UnsupportedDependencyError.md)
+- [UnsupportedDependencyStatusError](../classes/exports_common.UnsupportedDependencyStatusError.md)
 - [ValidationError](../classes/exports_common.ValidationError.md)
 
 ### Interfaces
 
+- [Cancellable](../interfaces/exports_common.Cancellable.md)
 - [Channel](../interfaces/exports_common.Channel.md)
+- [CommissioningModeInstanceData](../interfaces/exports_common.CommissioningModeInstanceData.md)
+- [Destructable](../interfaces/exports_common.Destructable.md)
 - [InstanceBroadcaster](../interfaces/exports_common.InstanceBroadcaster.md)
 - [Listener](../interfaces/exports_common.Listener.md)
 - [Scanner](../interfaces/exports_common.Scanner.md)
+- [Startable](../interfaces/exports_common.Startable.md)
 - [TransportInterface](../interfaces/exports_common.TransportInterface.md)
 
 ### Type Aliases
@@ -35,7 +52,6 @@
 - [CommissionableDevice](exports_common.md#commissionabledevice)
 - [CommissionableDeviceIdentifiers](exports_common.md#commissionabledeviceidentifiers)
 - [CommissionerInstanceData](exports_common.md#commissionerinstancedata)
-- [CommissioningModeInstanceData](exports_common.md#commissioningmodeinstancedata)
 - [DiscoverableDevice](exports_common.md#discoverabledevice)
 - [DiscoveryData](exports_common.md#discoverydata)
 - [OperationalDevice](exports_common.md#operationaldevice)
@@ -114,32 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:231
-
-___
-
-### CommissioningModeInstanceData
-
-Ƭ **CommissioningModeInstanceData**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `deviceName` | `string` | Device name for commissionable announcements. |
-| `deviceType` | `number` | Device type for commissionable announcements. |
-| `discriminator` | `number` | Device discriminator for commissionable announcements. |
-| `pairingHint?` | [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof [`PairingHintBitmap`](exports_common.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
-| `pairingInstructions?` | `string` | Pairing Instruction of the device for commissionable announcements. |
-| `productId` | `number` | Product ID for commissionable announcements. |
-| `sessionActiveInterval?` | `number` | Session Active Interval of the device for commissionable announcements. |
-| `sessionActiveThreshold?` | `number` | Duration of time the node should stay Active after the last network activity. * |
-| `sessionIdleInterval?` | `number` | Session Idle Interval of the device for commissionable announcements. |
-| `vendorId` | [`VendorId`](exports_datatype.md#vendorid) | Vendor ID for commissionable announcements. |
-
-#### Defined in
-
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:209
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:224
 
 ___
 
@@ -212,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:247
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:240
 
 ___
 
@@ -249,7 +240,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Type declaration
@@ -297,7 +288,7 @@ packages/matter.js/dist/esm/common/ServerAddress.d.ts:6
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:9
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:10
 
 ___
 
@@ -307,7 +298,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:109
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:110
 
 ## Functions
 

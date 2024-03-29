@@ -4,15 +4,15 @@
 
 [storage/export](../modules/storage_export.md).StorageBackendMemory
 
+Matter.js uses this key/value API to manage persistent state.
+
 ## Hierarchy
 
-- **`StorageBackendMemory`**
+- [`SyncStorage`](storage_export.SyncStorage.md)
 
-  ↳ [`StorageBackendJsonFile`](storage_export.StorageBackendJsonFile.md)
+  ↳ **`StorageBackendMemory`**
 
-## Implements
-
-- [`Storage`](storage_export.Storage.md)
+  ↳↳ [`StorageBackendJsonFile`](storage_export.StorageBackendJsonFile.md)
 
 ## Table of contents
 
@@ -22,7 +22,9 @@
 
 ### Properties
 
+- [#private](storage_export.StorageBackendMemory.md##private)
 - [createContextKey](storage_export.StorageBackendMemory.md#createcontextkey)
+- [initialized](storage_export.StorageBackendMemory.md#initialized)
 - [store](storage_export.StorageBackendMemory.md#store)
 
 ### Methods
@@ -30,11 +32,14 @@
 - [clear](storage_export.StorageBackendMemory.md#clear)
 - [clearAll](storage_export.StorageBackendMemory.md#clearall)
 - [close](storage_export.StorageBackendMemory.md#close)
+- [contexts](storage_export.StorageBackendMemory.md#contexts)
 - [delete](storage_export.StorageBackendMemory.md#delete)
 - [get](storage_export.StorageBackendMemory.md#get)
 - [initialize](storage_export.StorageBackendMemory.md#initialize)
 - [keys](storage_export.StorageBackendMemory.md#keys)
 - [set](storage_export.StorageBackendMemory.md#set)
+- [values](storage_export.StorageBackendMemory.md#values)
+- [create](storage_export.StorageBackendMemory.md#create)
 
 ## Constructors
 
@@ -52,15 +57,39 @@
 
 [`StorageBackendMemory`](storage_export.StorageBackendMemory.md)
 
+#### Overrides
+
+[SyncStorage](storage_export.SyncStorage.md).[constructor](storage_export.SyncStorage.md#constructor)
+
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:10
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:12
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:9
+
+___
 
 ### createContextKey
 
 • `Private` **createContextKey**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:14
+
+___
+
+### initialized
+
+• `Protected` **initialized**: `boolean`
 
 #### Defined in
 
@@ -74,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:9
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:10
 
 ## Methods
 
@@ -88,7 +117,7 @@ packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:9
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:14
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:17
 
 ___
 
@@ -106,31 +135,55 @@ ___
 
 `void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[clearAll](storage_export.Storage.md#clearall)
+[SyncStorage](storage_export.SyncStorage.md).[clearAll](storage_export.SyncStorage.md#clearall)
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:19
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:24
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`\<`void`\>
+▸ **close**(): `void`
 
 #### Returns
 
-`Promise`\<`void`\>
+`void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[close](storage_export.Storage.md#close)
+[SyncStorage](storage_export.SyncStorage.md).[close](storage_export.SyncStorage.md#close)
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:13
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:16
+
+___
+
+### contexts
+
+▸ **contexts**(`contexts`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Overrides
+
+[SyncStorage](storage_export.SyncStorage.md).[contexts](storage_export.SyncStorage.md#contexts)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:23
 
 ___
 
@@ -149,13 +202,13 @@ ___
 
 `void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[delete](storage_export.Storage.md#delete)
+[SyncStorage](storage_export.SyncStorage.md).[delete](storage_export.SyncStorage.md#delete)
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:17
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:20
 
 ___
 
@@ -180,31 +233,31 @@ ___
 
 `undefined` \| `T`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[get](storage_export.Storage.md#get)
+[SyncStorage](storage_export.SyncStorage.md).[get](storage_export.SyncStorage.md#get)
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:15
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:18
 
 ___
 
 ### initialize
 
-▸ **initialize**(): `Promise`\<`void`\>
+▸ **initialize**(): `void`
 
 #### Returns
 
-`Promise`\<`void`\>
+`void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[initialize](storage_export.Storage.md#initialize)
+[SyncStorage](storage_export.SyncStorage.md).[initialize](storage_export.SyncStorage.md#initialize)
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:12
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:15
 
 ___
 
@@ -222,42 +275,80 @@ ___
 
 `string`[]
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[keys](storage_export.Storage.md#keys)
+[SyncStorage](storage_export.SyncStorage.md).[keys](storage_export.SyncStorage.md#keys)
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:18
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:21
 
 ___
 
 ### set
 
-▸ **set**\<`T`\>(`contexts`, `key`, `value`): `void`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
+▸ **set**(`contexts`, `keyOrValues`, `value?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `contexts` | `string`[] |
-| `key` | `string` |
-| `value` | `T` |
+| `keyOrValues` | `string` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> |
+| `value?` | [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
 
 #### Returns
 
 `void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[set](storage_export.Storage.md#set)
+[SyncStorage](storage_export.SyncStorage.md).[set](storage_export.SyncStorage.md#set)
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:16
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:19
+
+___
+
+### values
+
+▸ **values**(`contexts`): `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>
+
+#### Overrides
+
+[SyncStorage](storage_export.SyncStorage.md).[values](storage_export.SyncStorage.md#values)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:22
+
+___
+
+### create
+
+▸ **create**(`store?`): `Promise`\<[`StorageBackendMemory`](storage_export.StorageBackendMemory.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `store?` | `any` |
+
+#### Returns
+
+`Promise`\<[`StorageBackendMemory`](storage_export.StorageBackendMemory.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:13

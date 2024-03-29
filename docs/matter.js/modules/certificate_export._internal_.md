@@ -22,4 +22,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:346](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L346)
+[packages/matter.js/src/certificate/CertificateManager.ts:346](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L346)

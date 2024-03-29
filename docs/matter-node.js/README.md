@@ -15,22 +15,32 @@ A basic CLI reference implementation of a Matter Device and Controller (might be
 For questions on how to use or pair Matter devices or controllers please refer to the [base package Readme](../../README.md#pairing-and-usage-information)! Especially for Google special steps are needed and mostly Hub devices are needed.
 
 ## Exported functionality
-This library enhances Matter.js and implements the needed native functionality using Node.js 16+ as platform. The library exports the added Node.js specific implementations and also the core Matter protocol functionality as well as some helper functions as named exports.
-Because of this the library can be used as only dependency which makes sure the correct matter.js version is used.
+This library enhances Matter.js and implements the needed native functionality using Node.js 16+ as platform. The library exports the added Node.js specific implementations as named exports.
+Ideally you only need to import the main functionality as very first import of your application using
+
+```javascript
+import "@project-chip/matter-node.js";
+```
+
+to automatically register all needed Node.js specific features for the Environment and initialize the default environment.
+
+Most other functions should be imported from the @project-chip/matter.js package (unless it's Node.js specific functionality).
 
 For more details please refer to the [API Documentation](../../docs/matter-node.js).
 
 ### Node.js native enhanced exports
 
-| Export                                 | Description                                                                                         |
-|----------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `@project-chip/matter-node.js/crypto`  | Exports Crypto base functionality and Node.js specific implementation                               |
-| `@project-chip/matter-node.js/net`     | Exports network base functionality and Node.js specific implementation                              |
-| `@project-chip/matter-node.js/storage` | Exports storage base functionality and Node.js specific implementation of a directory based storage |
-| `@project-chip/matter-node.js/time`    | Exports Time/Timer base functionality and Node.js specific implementation                           |
-| `@project-chip/matter-node.js/util`    | Exports Basic Utility functionality and enhance it by adding some Node.js specific functionality    |
+| Export                                     | Description                                                                                                                                       |
+|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `@project-chip/matter-node.js/crypto`      | Exports Crypto base functionality and Node.js specific implementation                                                                             |
+| `@project-chip/matter-node.js/environment` | Exports Node.js specific environment implementation which includes Process management, CLI-, Env- and Configfile support and Tracing File support |
+| `@project-chip/matter-node.js/net`         | Exports network base functionality and Node.js specific implementation                                                                            |
+| `@project-chip/matter-node.js/storage`     | Exports storage base functionality and Node.js specific implementation of a directory based storage                                               |
+| `@project-chip/matter-node.js/time`        | Exports Time/Timer base functionality and Node.js specific implementation                                                                         |
+| `@project-chip/matter-node.js/util`        | Exports Basic Utility functionality and enhance it by adding some Node.js specific functionality                                                  |
 
-### Unchanged Re-Exports from Matter.js
+### Unchanged Re-Exports from Matter.js (Deprecated! Only used for Legacy API)
+The re-exports are deprecated as of 0.8+ release of matter.js. Please change your code to use these imports from matter.js directly and make sure to sync the versions of both packages (matter-node.js and matter.js) in your dependencies to not point to different versions!
 
 | Export                                       | Description                                                                      |
 |----------------------------------------------|----------------------------------------------------------------------------------|

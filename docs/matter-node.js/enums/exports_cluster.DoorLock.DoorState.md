@@ -33,7 +33,7 @@ Door state is ajar
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:505
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:44
 
 ___
 
@@ -45,7 +45,7 @@ Door state is closed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:489
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:28
 
 ___
 
@@ -57,7 +57,7 @@ Door state is currently forced open
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:497
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:36
 
 ___
 
@@ -69,7 +69,7 @@ Door state is jammed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:493
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:32
 
 ___
 
@@ -81,7 +81,7 @@ Door state is open
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:485
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:24
 
 ___
 
@@ -93,4 +93,4 @@ Door state is invalid for unspecified reason
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:501
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:40

@@ -15,7 +15,7 @@
 
 ### FabricIndex
 
-Re-exports [FabricIndex](exports_datatype.md#fabricindex)
+Re-exports [FabricIndex](exports_datatype.md#fabricindex-1)
 
 ___
 

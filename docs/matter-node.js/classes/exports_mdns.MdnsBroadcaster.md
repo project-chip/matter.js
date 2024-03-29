@@ -14,17 +14,14 @@ This class is handing MDNS Announcements for multiple instances/devices
 
 ### Properties
 
-- [activeCommissioningAnnouncements](exports_mdns.MdnsBroadcaster.md#activecommissioningannouncements)
-- [activeOperationalAnnouncements](exports_mdns.MdnsBroadcaster.md#activeoperationalannouncements)
-- [enableIpv4](exports_mdns.MdnsBroadcaster.md#enableipv4)
+- [#private](exports_mdns.MdnsBroadcaster.md##private)
 - [getIpRecords](exports_mdns.MdnsBroadcaster.md#getiprecords)
-- [mdnsServer](exports_mdns.MdnsBroadcaster.md#mdnsserver)
-- [network](exports_mdns.MdnsBroadcaster.md#network)
 
 ### Methods
 
 - [announce](exports_mdns.MdnsBroadcaster.md#announce)
 - [close](exports_mdns.MdnsBroadcaster.md#close)
+- [createInstanceBroadcaster](exports_mdns.MdnsBroadcaster.md#createinstancebroadcaster)
 - [expireAllAnnouncements](exports_mdns.MdnsBroadcaster.md#expireallannouncements)
 - [expireCommissioningAnnouncement](exports_mdns.MdnsBroadcaster.md#expirecommissioningannouncement)
 - [expireFabricAnnouncement](exports_mdns.MdnsBroadcaster.md#expirefabricannouncement)
@@ -38,12 +35,13 @@ This class is handing MDNS Announcements for multiple instances/devices
 
 ### constructor
 
-• **new MdnsBroadcaster**(`mdnsServer`, `enableIpv4?`): [`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)
+• **new MdnsBroadcaster**(`network`, `mdnsServer`, `enableIpv4?`): [`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `network` | [`Network`](net_export.Network.md) |
 | `mdnsServer` | [`MdnsServer`](exports_mdns.MdnsServer.md) |
 | `enableIpv4?` | `boolean` |
 
@@ -53,37 +51,17 @@ This class is handing MDNS Announcements for multiple instances/devices
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:23
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:21
 
 ## Properties
 
-### activeCommissioningAnnouncements
+### #private
 
-• `Private` `Readonly` **activeCommissioningAnnouncements**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:21
-
-___
-
-### activeOperationalAnnouncements
-
-• `Private` `Readonly` **activeOperationalAnnouncements**: `any`
+• `Private` **#private**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:22
-
-___
-
-### enableIpv4
-
-• `Private` `Optional` `Readonly` **enableIpv4**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:15
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:16
 
 ___
 
@@ -93,27 +71,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:25
-
-___
-
-### mdnsServer
-
-• `Private` `Readonly` **mdnsServer**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:14
-
-___
-
-### network
-
-• `Private` `Readonly` **network**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:20
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:24
 
 ## Methods
 
@@ -133,7 +91,7 @@ packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:32
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:31
 
 ___
 
@@ -147,7 +105,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:36
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:35
+
+___
+
+### createInstanceBroadcaster
+
+▸ **createInstanceBroadcaster**(`port`): [`MdnsInstanceBroadcaster`](exports_mdns._internal_.MdnsInstanceBroadcaster.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `port` | `number` |
+
+#### Returns
+
+[`MdnsInstanceBroadcaster`](exports_mdns._internal_.MdnsInstanceBroadcaster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:22
 
 ___
 
@@ -167,7 +145,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:35
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:34
 
 ___
 
@@ -187,7 +165,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:34
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:33
 
 ___
 
@@ -207,7 +185,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:33
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:32
 
 ___
 
@@ -223,7 +201,7 @@ Set the Broadcaster data to announce a device ready for commissioning in a speci
 | :------ | :------ |
 | `announcedNetPort` | `number` |
 | `mode` | `number` |
-| `«destructured»` | [`CommissioningModeInstanceData`](../modules/exports_common.md#commissioningmodeinstancedata) |
+| `«destructured»` | [`CommissioningModeInstanceData`](../interfaces/exports_common.CommissioningModeInstanceData.md) |
 
 #### Returns
 
@@ -231,7 +209,7 @@ Set the Broadcaster data to announce a device ready for commissioning in a speci
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:27
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:26
 
 ___
 
@@ -254,7 +232,7 @@ Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:31
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:30
 
 ___
 
@@ -278,7 +256,7 @@ Set the Broadcaster Data to announce a device for operative discovery (aka "alre
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:29
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:28
 
 ___
 
@@ -299,18 +277,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:24
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:23
 
 ___
 
 ### create
 
-▸ **create**(`options?`): `Promise`\<[`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)\>
+▸ **create**(`network`, `options?`): `Promise`\<[`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `network` | [`Network`](net_export.Network.md) |
 | `options?` | `Object` |
 | `options.enableIpv4?` | `boolean` |
 | `options.multicastInterface?` | `string` |
@@ -321,4 +300,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:16
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:17

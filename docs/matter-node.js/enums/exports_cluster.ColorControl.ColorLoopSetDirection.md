@@ -25,7 +25,7 @@ MatterApplicationClusterSpecificationV1_1 § 3.2.11.19.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:669
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:720
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:670
+packages/matter.js/dist/esm/cluster/definitions/ColorControlCluster.d.ts:721

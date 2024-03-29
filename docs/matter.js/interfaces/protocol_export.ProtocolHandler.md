@@ -13,7 +13,7 @@
 ## Implemented by
 
 - [`CaseServer`](../classes/session_export.CaseServer.md)
-- [`InteractionServer`](../classes/protocol_interaction_export.InteractionServer.md)
+- [`InteractionServer`](../classes/protocol_interaction_export.InteractionServer-1.md)
 - [`PaseServer`](../classes/session_export.PaseServer.md)
 - [`StatusReportOnlySecureChannelProtocol`](../classes/protocol_securechannel_export.StatusReportOnlySecureChannelProtocol.md)
 - [`SubscriptionClient`](../classes/protocol_interaction_export.SubscriptionClient.md)
@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ProtocolHandler.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ProtocolHandler.ts#L13)
+[packages/matter.js/src/protocol/ProtocolHandler.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/ProtocolHandler.ts#L13)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ProtocolHandler.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ProtocolHandler.ts#L11)
+[packages/matter.js/src/protocol/ProtocolHandler.ts:11](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/ProtocolHandler.ts#L11)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ProtocolHandler.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ProtocolHandler.ts#L12)
+[packages/matter.js/src/protocol/ProtocolHandler.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/ProtocolHandler.ts#L12)

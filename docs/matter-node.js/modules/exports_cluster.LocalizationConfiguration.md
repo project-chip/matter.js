@@ -6,30 +6,48 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/exports_cluster.LocalizationConfiguration.Cluster.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.LocalizationConfiguration.md#cluster)
+- [ClusterInstance](exports_cluster.LocalizationConfiguration.md#clusterinstance)
+- [Complete](exports_cluster.LocalizationConfiguration.md#complete)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `activeLocale`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`string`, `any`\> ; `supportedLocales`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`[], `any`\>  } ; `id`: ``43`` ; `name`: ``"LocalizationConfiguration"`` ; `revision`: ``1``  }\>
-
-Localization Configuration
-
-Nodes should be expected to be deployed to any and all regions of the world. These global regions may have
-differing common languages, units of measurements, and numerical formatting standards. As such, Nodes that
-visually or audibly convey information need a mechanism by which they can be configured to use a user’s
-preferred language, units, etc.
-
-This cluster supports an interface to a Node. It provides attributes for determining and configuring
-localization information that a Node shall utilize when conveying values to a user.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 11.3
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.LocalizationConfiguration.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/LocalizationConfigurationCluster.d.ts:23
+packages/matter.js/dist/esm/cluster/definitions/LocalizationConfigurationCluster.d.ts:54
+
+packages/matter.js/dist/esm/cluster/definitions/LocalizationConfigurationCluster.d.ts:56
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `activeLocale`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`string`, `any`\> ; `supportedLocales`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`[], `any`\>  } ; `id`: ``43`` ; `name`: ``"LocalizationConfiguration"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.LocalizationConfiguration.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/LocalizationConfigurationCluster.d.ts:14
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.LocalizationConfiguration.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/LocalizationConfigurationCluster.d.ts:57

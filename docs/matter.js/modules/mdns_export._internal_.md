@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:55](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L55)
+[packages/matter.js/src/mdns/MdnsScanner.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsScanner.ts#L57)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L51)
+[packages/matter.js/src/mdns/MdnsScanner.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsScanner.ts#L53)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:64](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsScanner.ts#L64)
+[packages/matter.js/src/mdns/MdnsScanner.ts:66](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsScanner.ts#L66)

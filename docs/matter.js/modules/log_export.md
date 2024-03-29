@@ -10,23 +10,141 @@
 
 ### Namespaces
 
+- [Diagnostic](log_export.Diagnostic.md)
+- [Format](log_export.Format.md)
 - [consoleLogger](log_export.consoleLogger.md)
 
 ### Enumerations
 
-- [Format](../enums/log_export.Format.md)
 - [Level](../enums/log_export.Level.md)
 
 ### Classes
 
-- [DiagnosticDictionary](../classes/log_export.DiagnosticDictionary.md)
 - [Logger](../classes/log_export.Logger.md)
+
+### Interfaces
+
+- [Diagnostic](../interfaces/log_export.Diagnostic-1.md)
+- [DiagnosticSource](../interfaces/log_export.DiagnosticSource.md)
+
+### Type Aliases
+
+- [Producer](log_export.md#producer)
+
+### Variables
+
+- [DiagnosticSource](log_export.md#diagnosticsource)
 
 ### Functions
 
+- [Diagnostic](log_export.md#diagnostic)
+- [Format](log_export.md#format)
 - [consoleLogger](log_export.md#consolelogger)
+- [levelFromString](log_export.md#levelfromstring)
+
+## Type Aliases
+
+### Producer
+
+Ƭ **Producer**: () => `string`
+
+#### Type declaration
+
+▸ (): `string`
+
+##### Returns
+
+`string`
+
+#### Defined in
+
+[packages/matter.js/src/log/Format.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Format.ts#L56)
+
+## Variables
+
+### DiagnosticSource
+
+• **DiagnosticSource**: `Object`
+
+Registry of diagnostic sources.
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `get [presentation]()` | [`Presentation`](../enums/log_export.Diagnostic.Presentation.md) |
+| `get [value]()` | ([`Diagnostic`](../interfaces/log_export.Diagnostic-1.md) \| [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md))[][] |
+| `add` | (`source`: [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md)) => `void` |
+| `delete` | (`source`: [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md)) => `void` |
+
+#### Defined in
+
+[packages/matter.js/src/log/DiagnosticSource.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/DiagnosticSource.ts#L14)
+
+[packages/matter.js/src/log/DiagnosticSource.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/DiagnosticSource.ts#L22)
 
 ## Functions
+
+### Diagnostic
+
+▸ **Diagnostic**(`presentation`, `value`): [`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)
+
+Create a diagnostic giving a value a specific presentation.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `presentation` | [`Status`](../enums/common_export.Lifecycle.Status.md) \| [`Presentation`](../enums/log_export.Diagnostic.Presentation.md) |
+| `value` | `unknown` |
+
+#### Returns
+
+[`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)
+
+#### Defined in
+
+[packages/matter.js/src/log/Diagnostic.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L23)
+
+___
+
+### Format
+
+▸ **Format**(`format`): (`now`: `Date`, `level`: [`Level`](../enums/log_export.Level.md), `facility`: `string`, `prefix`: `string`, `values`: `any`[]) => `string`
+
+Get a formatter for the specified format.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `format` | `string` |
+
+#### Returns
+
+`fn`
+
+▸ (`now`, `level`, `facility`, `prefix`, `values`): `string`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `now` | `Date` |
+| `level` | [`Level`](../enums/log_export.Level.md) |
+| `facility` | `string` |
+| `prefix` | `string` |
+| `values` | `any`[] |
+
+##### Returns
+
+`string`
+
+#### Defined in
+
+[packages/matter.js/src/log/Format.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Format.ts#L16)
+
+___
 
 ### consoleLogger
 
@@ -47,4 +165,29 @@ Log messages to the console.  This is the default logging mechanism.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:171](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/log/Logger.ts#L171)
+[packages/matter.js/src/log/Logger.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L16)
+
+___
+
+### levelFromString
+
+▸ **levelFromString**(`level`): [`Level`](../enums/log_export.Level.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `level` | `string` |
+
+#### Returns
+
+[`Level`](../enums/log_export.Level.md)
+
+**`License`**
+
+Copyright 2022-2024 Matter.js Authors
+SPDX-License-Identifier: Apache-2.0
+
+#### Defined in
+
+[packages/matter.js/src/log/Level.ts:7](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Level.ts#L7)

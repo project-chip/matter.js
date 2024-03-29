@@ -42,6 +42,7 @@
 ### Variables
 
 - [FORBIDDEN\_PASSCODES](export.md#forbidden_passcodes)
+- [MATTER\_DATAMODEL\_VERSION](export.md#matter_datamodel_version)
 
 ## References
 
@@ -101,13 +102,13 @@ Re-exports [MatterDeviceLibrarySpecificationV1_2](../interfaces/spec_export.Matt
 
 ### CommissioningControllerOptions
 
-Ƭ **CommissioningControllerOptions**: [`CommissioningControllerNodeOptions`](device_export.md#commissioningcontrollernodeoptions) & \{ `adminFabricId?`: [`FabricId`](datatype_export.md#fabricid) ; `adminFabricIndex?`: [`FabricIndex`](datatype_export.md#fabricindex) ; `adminVendorId?`: [`VendorId`](datatype_export.md#vendorid) ; `autoConnect?`: `boolean` ; `caseAuthenticatedTags?`: [`CaseAuthenticatedTag`](datatype_export.md#caseauthenticatedtag)[] ; `listeningAddressIpv4?`: `string` ; `listeningAddressIpv6?`: `string` ; `localPort?`: `number`  }
+Ƭ **CommissioningControllerOptions**: [`CommissioningControllerNodeOptions`](device_export.md#commissioningcontrollernodeoptions) & \{ `adminFabricId?`: [`FabricId`](datatype_export.md#fabricid) ; `adminFabricIndex?`: [`FabricIndex`](datatype_export.md#fabricindex) ; `adminVendorId?`: [`VendorId`](datatype_export.md#vendorid) ; `autoConnect?`: `boolean` ; `caseAuthenticatedTags?`: [`CaseAuthenticatedTag`](datatype_export.md#caseauthenticatedtag)[] ; `environment?`: \{ `environment`: [`Environment`](../classes/environment_export.Environment.md) ; `id`: `string`  } ; `listeningAddressIpv4?`: `string` ; `listeningAddressIpv6?`: `string` ; `localPort?`: `number`  }
 
 Constructor options for the CommissioningController class
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L42)
+[packages/matter.js/src/CommissioningController.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/CommissioningController.ts#L47)
 
 ___
 
@@ -125,7 +126,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterServer.ts#L31)
+[packages/matter.js/src/MatterServer.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterServer.ts#L32)
 
 ___
 
@@ -137,7 +138,7 @@ Options needed to commission a new node
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:85](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningController.ts#L85)
+[packages/matter.js/src/CommissioningController.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/CommissioningController.ts#L106)
 
 ___
 
@@ -154,7 +155,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterServer.ts#L19)
+[packages/matter.js/src/MatterServer.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterServer.ts#L20)
 
 ## Variables
 
@@ -164,4 +165,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L72)
+[packages/matter.js/src/CommissioningServer.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/CommissioningServer.ts#L77)
+
+___
+
+### MATTER\_DATAMODEL\_VERSION
+
+• `Const` **MATTER\_DATAMODEL\_VERSION**: ``16``
+
+Data model revision used by this implementation
+Value of 16 means "Matter 1.0/1.1"
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 7.1.1
+
+#### Defined in
+
+[packages/matter.js/src/CommissioningServer.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/CommissioningServer.ts#L87)

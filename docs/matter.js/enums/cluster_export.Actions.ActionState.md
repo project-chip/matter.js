@@ -29,7 +29,7 @@ The action is active
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:192](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L192)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:195](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L195)
 
 ___
 
@@ -41,7 +41,7 @@ The action has been disabled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:202](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:205](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L205)
 
 ___
 
@@ -53,7 +53,7 @@ The action is not active
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:187](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:190](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L190)
 
 ___
 
@@ -65,4 +65,4 @@ The action has been paused
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:197](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L197)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:200](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L200)

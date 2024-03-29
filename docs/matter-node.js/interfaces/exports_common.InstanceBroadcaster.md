@@ -6,11 +6,16 @@
 
 Interface for classes that allow to announce one Matter instance.
 
+## Implemented by
+
+- [`MdnsInstanceBroadcaster`](../classes/exports_mdns._internal_.MdnsInstanceBroadcaster.md)
+
 ## Table of contents
 
 ### Methods
 
 - [announce](exports_common.InstanceBroadcaster.md#announce)
+- [close](exports_common.InstanceBroadcaster.md#close)
 - [expireAllAnnouncements](exports_common.InstanceBroadcaster.md#expireallannouncements)
 - [expireCommissioningAnnouncement](exports_common.InstanceBroadcaster.md#expirecommissioningannouncement)
 - [expireFabricAnnouncement](exports_common.InstanceBroadcaster.md#expirefabricannouncement)
@@ -32,7 +37,23 @@ Send out announcements for this instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:267
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:260
+
+___
+
+### close
+
+▸ **close**(): `Promise`\<`void`\>
+
+Destroy the instance
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:268
 
 ___
 
@@ -48,7 +69,7 @@ Expire all announcements.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:273
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:266
 
 ___
 
@@ -64,7 +85,7 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:271
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:264
 
 ___
 
@@ -80,7 +101,7 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:269
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:262
 
 ___
 
@@ -95,7 +116,7 @@ Set a commissionable mode and details to announce a commissionable device.
 | Name | Type |
 | :------ | :------ |
 | `mode` | `number` |
-| `deviceData` | [`CommissioningModeInstanceData`](../modules/exports_common.md#commissioningmodeinstancedata) |
+| `deviceData` | [`CommissioningModeInstanceData`](exports_common.CommissioningModeInstanceData.md) |
 
 #### Returns
 
@@ -103,7 +124,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:258
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:251
 
 ___
 
@@ -125,7 +146,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:265
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:258
 
 ___
 
@@ -149,4 +170,4 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:263
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:256

@@ -19,7 +19,7 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`FabricElement`](exports_model.md#fabricelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`FabricElement`](../interfaces/exports_model.FabricElement-1.md)\>
 
 #### Defined in
 

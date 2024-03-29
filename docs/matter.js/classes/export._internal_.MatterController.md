@@ -12,26 +12,29 @@
 
 ### Properties
 
+- [#construction](export._internal_.MatterController.md##construction)
 - [adminVendorId](export._internal_.MatterController.md#adminvendorid)
 - [bleScanner](export._internal_.MatterController.md#blescanner)
 - [caseClient](export._internal_.MatterController.md#caseclient)
 - [certificateManager](export._internal_.MatterController.md#certificatemanager)
 - [channelManager](export._internal_.MatterController.md#channelmanager)
 - [commissionedNodes](export._internal_.MatterController.md#commissionednodes)
-- [controllerStorage](export._internal_.MatterController.md#controllerstorage)
 - [exchangeManager](export._internal_.MatterController.md#exchangemanager)
 - [fabric](export._internal_.MatterController.md#fabric)
+- [fabricStorage](export._internal_.MatterController.md#fabricstorage)
 - [mdnsScanner](export._internal_.MatterController.md#mdnsscanner)
 - [netInterfaceBle](export._internal_.MatterController.md#netinterfaceble)
 - [netInterfaceIpv4](export._internal_.MatterController.md#netinterfaceipv4)
 - [netInterfaceIpv6](export._internal_.MatterController.md#netinterfaceipv6)
+- [nodesStore](export._internal_.MatterController.md#nodesstore)
 - [paseClient](export._internal_.MatterController.md#paseclient)
 - [sessionClosedCallback](export._internal_.MatterController.md#sessionclosedcallback)
 - [sessionManager](export._internal_.MatterController.md#sessionmanager)
-- [storage](export._internal_.MatterController.md#storage)
+- [sessionStorage](export._internal_.MatterController.md#sessionstorage)
 
 ### Accessors
 
+- [construction](export._internal_.MatterController.md#construction)
 - [nodeId](export._internal_.MatterController.md#nodeid)
 
 ### Methods
@@ -44,7 +47,6 @@
 - [commissionDevice](export._internal_.MatterController.md#commissiondevice)
 - [connect](export._internal_.MatterController.md#connect)
 - [connectOrDiscoverNode](export._internal_.MatterController.md#connectordiscovernode)
-- [createSecureSession](export._internal_.MatterController.md#createsecuresession)
 - [disconnect](export._internal_.MatterController.md#disconnect)
 - [enhanceCommissionedNodeDetails](export._internal_.MatterController.md#enhancecommissionednodedetails)
 - [findResumptionRecordByNodeId](export._internal_.MatterController.md#findresumptionrecordbynodeid)
@@ -69,18 +71,20 @@
 
 ### constructor
 
-• **new MatterController**(`mdnsScanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `certificateManager`, `fabric`, `storage`, `adminVendorId`, `sessionClosedCallback?`): [`MatterController`](export._internal_.MatterController.md)
+• **new MatterController**(`sessionStorage`, `fabricStorage`, `nodesStore`, `mdnsScanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `certificateManager`, `fabric`, `adminVendorId`, `sessionClosedCallback?`): [`MatterController`](export._internal_.MatterController.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `sessionStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `fabricStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `nodesStore` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 | `mdnsScanner` | [`MdnsScanner`](mdns_export.MdnsScanner.md) |
 | `netInterfaceIpv4` | `undefined` \| [`NetInterface`](../interfaces/net_export.NetInterface.md) |
 | `netInterfaceIpv6` | [`NetInterface`](../interfaces/net_export.NetInterface.md) |
 | `certificateManager` | [`RootCertificateManager`](certificate_export.RootCertificateManager.md) |
 | `fabric` | [`Fabric`](fabric_export.Fabric.md) |
-| `storage` | [`StorageContext`](storage_export.StorageContext.md) |
 | `adminVendorId` | [`VendorId`](../modules/datatype_export.md#vendorid) |
 | `sessionClosedCallback?` | (`peerNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid)) => `void` |
 
@@ -90,9 +94,19 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:154](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L154)
+[packages/matter.js/src/MatterController.ts:167](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L167)
 
 ## Properties
+
+### #construction
+
+• `Private` **#construction**: [`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/MatterController.ts:161](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L161)
+
+___
 
 ### adminVendorId
 
@@ -100,7 +114,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:161](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L161)
+[packages/matter.js/src/MatterController.ts:176](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L176)
 
 ___
 
@@ -110,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:151](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L151)
+[packages/matter.js/src/MatterController.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L159)
 
 ___
 
@@ -120,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:148](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L148)
+[packages/matter.js/src/MatterController.ts:157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L157)
 
 ___
 
@@ -130,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:158](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L158)
+[packages/matter.js/src/MatterController.ts:174](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L174)
 
 ___
 
@@ -140,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:145](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L145)
+[packages/matter.js/src/MatterController.ts:154](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L154)
 
 ___
 
@@ -150,17 +164,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:152](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L152)
-
-___
-
-### controllerStorage
-
-• `Private` `Readonly` **controllerStorage**: [`StorageContext`](storage_export.StorageContext.md)
-
-#### Defined in
-
-[packages/matter.js/src/MatterController.ts:149](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L149)
+[packages/matter.js/src/MatterController.ts:160](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L160)
 
 ___
 
@@ -170,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L146)
+[packages/matter.js/src/MatterController.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L155)
 
 ___
 
@@ -180,7 +184,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:159](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L159)
+[packages/matter.js/src/MatterController.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L175)
+
+___
+
+### fabricStorage
+
+• `Readonly` **fabricStorage**: [`StorageContext`](storage_export.StorageContext.md)\<`any`\>
+
+#### Defined in
+
+[packages/matter.js/src/MatterController.ts:169](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L169)
 
 ___
 
@@ -190,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:155](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L155)
+[packages/matter.js/src/MatterController.ts:171](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L171)
 
 ___
 
@@ -200,7 +214,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:150](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L150)
+[packages/matter.js/src/MatterController.ts:158](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L158)
 
 ___
 
@@ -210,7 +224,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:156](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L156)
+[packages/matter.js/src/MatterController.ts:172](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L172)
 
 ___
 
@@ -220,7 +234,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:157](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L157)
+[packages/matter.js/src/MatterController.ts:173](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L173)
+
+___
+
+### nodesStore
+
+• `Readonly` **nodesStore**: [`StorageContext`](storage_export.StorageContext.md)\<`any`\>
+
+#### Defined in
+
+[packages/matter.js/src/MatterController.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L170)
 
 ___
 
@@ -230,7 +254,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:147](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L147)
+[packages/matter.js/src/MatterController.ts:156](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L156)
 
 ___
 
@@ -254,29 +278,43 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:162](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L162)
+[packages/matter.js/src/MatterController.ts:177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L177)
 
 ___
 
 ### sessionManager
 
-• `Private` `Readonly` **sessionManager**: [`SessionManager`](session_export.SessionManager.md)\<`this`\>
+• `Readonly` **sessionManager**: [`SessionManager`](session_export.SessionManager.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:144](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L144)
+[packages/matter.js/src/MatterController.ts:153](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L153)
 
 ___
 
-### storage
+### sessionStorage
 
-• `Private` `Readonly` **storage**: [`StorageContext`](storage_export.StorageContext.md)
+• `Readonly` **sessionStorage**: [`StorageContext`](storage_export.StorageContext.md)\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:160](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L160)
+[packages/matter.js/src/MatterController.ts:168](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L168)
 
 ## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`MatterController`](export._internal_.MatterController.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/MatterController.ts:163](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L163)
+
+___
 
 ### nodeId
 
@@ -288,7 +326,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:197](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L197)
+[packages/matter.js/src/MatterController.ts:210](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L210)
 
 ## Methods
 
@@ -308,7 +346,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:201](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L201)
+[packages/matter.js/src/MatterController.ts:214](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L214)
 
 ___
 
@@ -322,7 +360,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:800](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L800)
+[packages/matter.js/src/MatterController.ts:792](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L792)
 
 ___
 
@@ -336,7 +374,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:804](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L804)
+[packages/matter.js/src/MatterController.ts:796](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L796)
 
 ___
 
@@ -356,7 +394,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:205](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L205)
+[packages/matter.js/src/MatterController.ts:218](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L218)
 
 ___
 
@@ -382,7 +420,7 @@ request or the passode did not match to any discovered device/address.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:246](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L246)
+[packages/matter.js/src/MatterController.ts:259](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L259)
 
 ___
 
@@ -407,7 +445,7 @@ success.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:411](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L411)
+[packages/matter.js/src/MatterController.ts:424](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L424)
 
 ___
 
@@ -432,7 +470,7 @@ Returns a InteractionClient on success.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:734](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L734)
+[packages/matter.js/src/MatterController.ts:751](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L751)
 
 ___
 
@@ -455,36 +493,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:509](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L509)
-
-___
-
-### createSecureSession
-
-▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](session_export.SecureSession.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `args` | `Object` |
-| `args.fabric` | `undefined` \| [`Fabric`](fabric_export.Fabric.md) |
-| `args.isInitiator` | `boolean` |
-| `args.isResumption` | `boolean` |
-| `args.peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
-| `args.peerSessionId` | `number` |
-| `args.salt` | `Uint8Array` |
-| `args.sessionId` | `number` |
-| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/session_export.SessionParameters.md)\> |
-| `args.sharedSecret` | `Uint8Array` |
-
-#### Returns
-
-`Promise`\<[`SecureSession`](session_export.SecureSession.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
-
-#### Defined in
-
-[packages/matter.js/src/MatterController.ts:763](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L763)
+[packages/matter.js/src/MatterController.ts:522](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L522)
 
 ___
 
@@ -504,13 +513,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:329](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L329)
+[packages/matter.js/src/MatterController.ts:342](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L342)
 
 ___
 
 ### enhanceCommissionedNodeDetails
 
-▸ **enhanceCommissionedNodeDetails**(`nodeId`, `data`): `void`
+▸ **enhanceCommissionedNodeDetails**(`nodeId`, `data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -522,11 +531,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:708](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L708)
+[packages/matter.js/src/MatterController.ts:725](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L725)
 
 ___
 
@@ -546,21 +555,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:792](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L792)
+[packages/matter.js/src/MatterController.ts:784](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L784)
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/datatype_export.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/datatype_export.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/fabric_export.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) = session.nodeId; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) = session.peerNodeId; `secure`: `boolean` = session.isSecure }[]
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/datatype_export.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/datatype_export.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/fabric_export.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) = session.nodeId; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) = session.peerNodeId; `secure`: `boolean` = session.isSecure }[]
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:813](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L813)
+[packages/matter.js/src/MatterController.ts:805](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L805)
 
 ___
 
@@ -574,7 +583,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:673](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L673)
+[packages/matter.js/src/MatterController.ts:690](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L690)
 
 ___
 
@@ -588,7 +597,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:677](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L677)
+[packages/matter.js/src/MatterController.ts:694](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L694)
 
 ___
 
@@ -608,7 +617,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:722](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L722)
+[packages/matter.js/src/MatterController.ts:739](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L739)
 
 ___
 
@@ -622,7 +631,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:759](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L759)
+[packages/matter.js/src/MatterController.ts:776](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L776)
 
 ___
 
@@ -642,7 +651,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:788](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L788)
+[packages/matter.js/src/MatterController.ts:780](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L780)
 
 ___
 
@@ -668,7 +677,7 @@ is wrong.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:348](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L348)
+[packages/matter.js/src/MatterController.ts:361](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L361)
 
 ___
 
@@ -682,7 +691,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:669](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L669)
+[packages/matter.js/src/MatterController.ts:686](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L686)
 
 ___
 
@@ -706,7 +715,7 @@ Pair with an operational device (already commissioned) and establish a CASE sess
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:617](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L617)
+[packages/matter.js/src/MatterController.ts:634](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L634)
 
 ___
 
@@ -728,7 +737,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:485](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L485)
+[packages/matter.js/src/MatterController.ts:498](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L498)
 
 ___
 
@@ -748,7 +757,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:334](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L334)
+[packages/matter.js/src/MatterController.ts:347](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L347)
 
 ___
 
@@ -775,13 +784,13 @@ It returns the operational MessageChannel on success.
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:598](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L598)
+[packages/matter.js/src/MatterController.ts:615](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L615)
 
 ___
 
 ### saveResumptionRecord
 
-▸ **saveResumptionRecord**(`resumptionRecord`): `void`
+▸ **saveResumptionRecord**(`resumptionRecord`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -791,17 +800,17 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:796](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L796)
+[packages/matter.js/src/MatterController.ts:788](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L788)
 
 ___
 
 ### setOperationalDeviceData
 
-▸ **setOperationalDeviceData**(`nodeId`, `operationalServerAddress`, `discoveryData?`): `void`
+▸ **setOperationalDeviceData**(`nodeId`, `operationalServerAddress`, `discoveryData?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -813,40 +822,43 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:691](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L691)
+[packages/matter.js/src/MatterController.ts:708](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L708)
 
 ___
 
 ### storeCommissionedNodes
 
-▸ **storeCommissionedNodes**(): `void`
+▸ **storeCommissionedNodes**(): `Promise`\<`void`\>
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:726](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L726)
+[packages/matter.js/src/MatterController.ts:743](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L743)
 
 ___
 
 ### create
 
-▸ **create**(`scanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `storage`, `sessionClosedCallback?`, `adminVendorId?`, `adminFabricId?`, `adminFabricIndex?`, `caseAuthenticatedTags?`): `Promise`\<[`MatterController`](export._internal_.MatterController.md)\>
+▸ **create**(`sessionStorage`, `rootCertificateStorage`, `fabricStorage`, `nodesStorage`, `scanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `sessionClosedCallback?`, `adminVendorId?`, `adminFabricId?`, `adminFabricIndex?`, `caseAuthenticatedTags?`): `Promise`\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `sessionStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `rootCertificateStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `fabricStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `nodesStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 | `scanner` | [`MdnsScanner`](mdns_export.MdnsScanner.md) |
 | `netInterfaceIpv4` | `undefined` \| [`NetInterface`](../interfaces/net_export.NetInterface.md) |
 | `netInterfaceIpv6` | [`NetInterface`](../interfaces/net_export.NetInterface.md) |
-| `storage` | [`StorageContext`](storage_export.StorageContext.md) |
 | `sessionClosedCallback?` | (`peerNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid)) => `void` |
 | `adminVendorId` | [`VendorId`](../modules/datatype_export.md#vendorid) |
 | `adminFabricId` | [`FabricId`](../modules/datatype_export.md#fabricid) |
@@ -859,4 +871,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/MatterController.ts#L87)
+[packages/matter.js/src/MatterController.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/MatterController.ts#L87)

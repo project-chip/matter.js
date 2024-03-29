@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:32
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:29
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:33
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:27
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:31

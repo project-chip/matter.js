@@ -24,6 +24,7 @@ The root of a Matter model.
 
 ### Properties
 
+- [#private](exports_model.MatterModel-1.md##private)
 - [description](exports_model.MatterModel-1.md#description)
 - [details](exports_model.MatterModel-1.md#details)
 - [errors](exports_model.MatterModel-1.md#errors)
@@ -36,7 +37,7 @@ The root of a Matter model.
 - [type](exports_model.MatterModel-1.md#type)
 - [version](exports_model.MatterModel-1.md#version)
 - [xref](exports_model.MatterModel-1.md#xref)
-- [constructors](exports_model.MatterModel-1.md#constructors)
+- [types](exports_model.MatterModel-1.md#types)
 
 ### Accessors
 
@@ -47,6 +48,7 @@ The root of a Matter model.
 - [clusters](exports_model.MatterModel-1.md#clusters)
 - [datatypes](exports_model.MatterModel-1.md#datatypes)
 - [deviceTypes](exports_model.MatterModel-1.md#devicetypes)
+- [discriminator](exports_model.MatterModel-1.md#discriminator)
 - [effectiveId](exports_model.MatterModel-1.md#effectiveid)
 - [effectiveType](exports_model.MatterModel-1.md#effectivetype)
 - [effectiveXref](exports_model.MatterModel-1.md#effectivexref)
@@ -63,10 +65,10 @@ The root of a Matter model.
 
 - [add](exports_model.MatterModel-1.md#add)
 - [all](exports_model.MatterModel-1.md#all)
+- [clone](exports_model.MatterModel-1.md#clone)
 - [error](exports_model.MatterModel-1.md#error)
 - [get](exports_model.MatterModel-1.md#get)
 - [instanceOf](exports_model.MatterModel-1.md#instanceof)
-- [is](exports_model.MatterModel-1.md#is)
 - [member](exports_model.MatterModel-1.md#member)
 - [owner](exports_model.MatterModel-1.md#owner)
 - [references](exports_model.MatterModel-1.md#references)
@@ -86,7 +88,7 @@ The root of a Matter model.
 | Name | Type |
 | :------ | :------ |
 | `definition?` | [`Properties`](../modules/exports_model.MatterElement.md#properties) |
-| `globals?` | ([`AttributeElement`](../modules/exports_model.md#attributeelement) \| [`DatatypeElement`](../modules/exports_model.md#datatypeelement))[] |
+| `globals?` | ([`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) \| [`FieldElement`](../interfaces/exports_model.FieldElement-1.md) \| [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md))[] |
 
 #### Returns
 
@@ -98,9 +100,23 @@ The root of a Matter model.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:42
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:44
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Inherited from
+
+[Model](exports_model.Model-1.md).[#private](exports_model.Model-1.md##private)
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/Model.d.ts:13
+
+___
 
 ### description
 
@@ -116,7 +132,7 @@ MatterElement.description
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:20
+packages/matter.js/dist/esm/model/models/Model.d.ts:16
 
 ___
 
@@ -134,7 +150,7 @@ MatterElement.details
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:21
+packages/matter.js/dist/esm/model/models/Model.d.ts:17
 
 ___
 
@@ -148,7 +164,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:23
+packages/matter.js/dist/esm/model/models/Model.d.ts:19
 
 ___
 
@@ -168,7 +184,7 @@ MatterElement.global
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:27
+packages/matter.js/dist/esm/model/models/Model.d.ts:25
 
 ___
 
@@ -186,7 +202,7 @@ MatterElement.id
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:17
+packages/matter.js/dist/esm/model/models/Model.d.ts:20
 
 ___
 
@@ -202,7 +218,7 @@ Indicates that an element defines a datatype.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:35
+packages/matter.js/dist/esm/model/models/Model.d.ts:33
 
 ___
 
@@ -218,7 +234,7 @@ Indicates that an element may have type definitions as children.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:18
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:20
 
 ___
 
@@ -236,7 +252,7 @@ MatterElement.name
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:18
+packages/matter.js/dist/esm/model/models/Model.d.ts:21
 
 ___
 
@@ -254,7 +270,7 @@ MatterElement.tag
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:17
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:19
 
 ___
 
@@ -272,7 +288,7 @@ MatterElement.type
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:19
+packages/matter.js/dist/esm/model/models/Model.d.ts:15
 
 ___
 
@@ -286,7 +302,7 @@ MatterElement.version
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:19
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:21
 
 ___
 
@@ -304,13 +320,13 @@ MatterElement.xref
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:22
+packages/matter.js/dist/esm/model/models/Model.d.ts:18
 
 ___
 
-### constructors
+### types
 
-▪ `Static` **constructors**: `Object`
+▪ `Static` **types**: `Object`
 
 Factory support.  Populated by derivatives upon definition.
 
@@ -320,11 +336,11 @@ Factory support.  Populated by derivatives upon definition.
 
 #### Inherited from
 
-[Model](exports_model.Model-1.md).[constructors](exports_model.Model-1.md#constructors)
+[Model](exports_model.Model-1.md).[types](exports_model.Model-1.md#types)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:77
+packages/matter.js/dist/esm/model/models/Model.d.ts:78
 
 ## Accessors
 
@@ -344,7 +360,7 @@ Model.allowedBaseTags
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:108
+packages/matter.js/dist/esm/model/models/Model.d.ts:106
 
 ___
 
@@ -360,7 +376,7 @@ Global attributes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:35
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:37
 
 ___
 
@@ -386,13 +402,13 @@ ___
 
 ### children
 
-• `get` **children**(): [`Child`](../modules/exports_model.MatterModel.md#child)[]
+• `get` **children**(): [`Children`](../interfaces/exports_model._internal_.Children-1.md)\<[`Child`](../modules/exports_model.MatterModel.md#child), [`Child`](../modules/exports_model.MatterElement.md#child)\>
 
 Children of models are always models.
 
 #### Returns
 
-[`Child`](../modules/exports_model.MatterModel.md#child)[]
+[`Children`](../interfaces/exports_model._internal_.Children-1.md)\<[`Child`](../modules/exports_model.MatterModel.md#child), [`Child`](../modules/exports_model.MatterElement.md#child)\>
 
 #### Implementation of
 
@@ -404,7 +420,7 @@ Model.children
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:40
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:42
 
 • `set` **children**(`children`): `void`
 
@@ -430,7 +446,7 @@ Model.children
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:41
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:43
 
 ___
 
@@ -446,23 +462,23 @@ Clusters.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:23
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:25
 
 ___
 
 ### datatypes
 
-• `get` **datatypes**(): [`DatatypeModel`](exports_model.DatatypeModel.md)[]
+• `get` **datatypes**(): [`FieldModel`](exports_model.FieldModel.md)[]
 
 Global datatypes.
 
 #### Returns
 
-[`DatatypeModel`](exports_model.DatatypeModel.md)[]
+[`FieldModel`](exports_model.FieldModel.md)[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:31
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:33
 
 ___
 
@@ -478,7 +494,27 @@ Device types.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:27
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:29
+
+___
+
+### discriminator
+
+• `get` **discriminator**(): `undefined` \| `string`
+
+Obtain a discriminator that differentiates different models with the same name
+
+#### Returns
+
+`undefined` \| `string`
+
+#### Inherited from
+
+Model.discriminator
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/Model.d.ts:66
 
 ___
 
@@ -498,7 +534,7 @@ Model.effectiveId
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:60
+packages/matter.js/dist/esm/model/models/Model.d.ts:57
 
 ___
 
@@ -506,8 +542,7 @@ ___
 
 • `get` **effectiveType**(): `undefined` \| `string`
 
-In some circumstances the base type can be inferred.  This inference
-happens here.
+In some circumstances the base type can be inferred.  This inference happens here.
 
 Does not recurse so only returns the direct base type.
 
@@ -541,7 +576,7 @@ Model.effectiveXref
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:104
+packages/matter.js/dist/esm/model/models/Model.d.ts:102
 
 ___
 
@@ -549,8 +584,8 @@ ___
 
 • `get` **elements**(): [`AnyElement`](../modules/exports_model.md#anyelement)[]
 
-Element view of children.  For TypeScript this allows children to be
-added as elements.  For JavaScript this is identical to children().
+Element view of children.  For TypeScript this allows children to be added as elements.  For JavaScript this is
+identical to children().
 
 #### Returns
 
@@ -562,7 +597,7 @@ Model.elements
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:56
+packages/matter.js/dist/esm/model/models/Model.d.ts:53
 
 ___
 
@@ -578,7 +613,7 @@ Fabrics.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:39
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:41
 
 ___
 
@@ -586,8 +621,7 @@ ___
 
 • `get` **globalBase**(): `undefined` \| [`Model`](exports_model.Model-1.md)
 
-Get the first global base type.  This may have semantic meaning more
-specific than the base primitive type.
+Get the first global base type.  This may have semantic meaning more specific than the base primitive type.
 
 #### Returns
 
@@ -599,7 +633,7 @@ Model.globalBase
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:100
+packages/matter.js/dist/esm/model/models/Model.d.ts:98
 
 ___
 
@@ -607,8 +641,8 @@ ___
 
 • `get` **key**(): `undefined` \| `string`
 
-Get a string that uniquely identifies this model.  This is normally
-the effective ID but some models require a generated identifier.
+Get a string that uniquely identifies this model.  This is normally the effective ID but some models require a
+generated identifier.
 
 #### Returns
 
@@ -620,7 +654,7 @@ Model.key
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:65
+packages/matter.js/dist/esm/model/models/Model.d.ts:62
 
 ___
 
@@ -628,8 +662,7 @@ ___
 
 • `get` **parent**(): `undefined` \| [`Model`](exports_model.Model-1.md)
 
-The structural parent.  This is the model for the element that contains
-this element's definition.
+The structural parent.  This is the model for the element that contains this element's definition.
 
 #### Returns
 
@@ -641,7 +674,7 @@ Model.parent
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:50
+packages/matter.js/dist/esm/model/models/Model.d.ts:47
 
 • `set` **parent**(`parent`): `void`
 
@@ -661,7 +694,7 @@ Model.parent
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:51
+packages/matter.js/dist/esm/model/models/Model.d.ts:48
 
 ___
 
@@ -669,7 +702,9 @@ ___
 
 • `get` **path**(): `string`
 
-The full path ("." delimited) in the Matter tree.
+The path ("." delimited) in the Matter tree.
+
+This is informational and generally tries to adhere to JS API conventions.
 
 #### Returns
 
@@ -681,7 +716,7 @@ Model.path
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:45
+packages/matter.js/dist/esm/model/models/Model.d.ts:43
 
 ___
 
@@ -689,8 +724,7 @@ ___
 
 • `get` **shadow**(): `undefined` \| [`Model`](exports_model.Model-1.md)
 
-Get shadow model, if any.  A "shadow" is an element in my parent's
-inheritance hierarchy that I override.
+Get shadow model, if any.  A "shadow" is an element in my parent's inheritance hierarchy that I override.
 
 #### Returns
 
@@ -702,7 +736,7 @@ Model.shadow
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:95
+packages/matter.js/dist/esm/model/models/Model.d.ts:94
 
 ___
 
@@ -722,7 +756,7 @@ Model.valid
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:41
+packages/matter.js/dist/esm/model/models/Model.d.ts:37
 
 ## Methods
 
@@ -748,7 +782,7 @@ Add a child.  children.push works too but only accepts models.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:112
+packages/matter.js/dist/esm/model/models/Model.d.ts:110
 
 ___
 
@@ -768,7 +802,7 @@ Retrieve all models of a specific element type from local scope.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> | model class or a predicate object |
+| `constructor` | [`Type`](../modules/exports_model.Model.md#type)\<`T`\> | model class or a predicate object |
 
 #### Returns
 
@@ -780,7 +814,39 @@ Retrieve all models of a specific element type from local scope.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:122
+packages/matter.js/dist/esm/model/models/Model.d.ts:120
+
+___
+
+### clone
+
+▸ **clone**\<`This`\>(`this`): `This`
+
+Clone the model.  This deep copies all descendant child models but not other properties.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Model`](exports_model.Model-1.md) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | `This` |
+
+#### Returns
+
+`This`
+
+#### Inherited from
+
+[Model](exports_model.Model-1.md).[clone](exports_model.Model-1.md#clone)
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/Model.d.ts:160
 
 ___
 
@@ -807,13 +873,13 @@ Record a validation error for this model.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:138
+packages/matter.js/dist/esm/model/models/Model.d.ts:132
 
 ___
 
 ### get
 
-▸ **get**\<`T`\>(`constructor`, `key`): `T`
+▸ **get**\<`T`\>(`type`, `key`): `undefined` \| `T`
 
 Retrieve a specific model by ID or name.
 
@@ -827,12 +893,12 @@ Retrieve a specific model by ID or name.
 
 | Name | Type |
 | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> |
+| `type` | [`Type`](../modules/exports_model.Model.md#type)\<`T`\> |
 | `key` | `string` \| `number` |
 
 #### Returns
 
-`T`
+`undefined` \| `T`
 
 #### Inherited from
 
@@ -840,7 +906,7 @@ Retrieve a specific model by ID or name.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:126
+packages/matter.js/dist/esm/model/models/Model.d.ts:124
 
 ___
 
@@ -866,33 +932,7 @@ Does this model derive from another?
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:162
-
-___
-
-### is
-
-▸ **is**(`key`): `boolean`
-
-Check identity of element by name or ID.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `key` | `undefined` \| [`ElementSelector`](../modules/exports_model._internal_.md#elementselector) |
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-[Model](exports_model.Model-1.md).[is](exports_model.Model-1.md#is)
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/Model.d.ts:134
+packages/matter.js/dist/esm/model/models/Model.d.ts:156
 
 ___
 
@@ -906,7 +946,7 @@ Search the inheritance chain for a child property.
 
 | Name | Type |
 | :------ | :------ |
-| `key` | [`ElementSelector`](../modules/exports_model._internal_.md#elementselector) |
+| `key` | [`Selector`](../modules/exports_model._internal_.Children.md#selector) |
 | `allowedTags?` | [`ElementTag`](../enums/exports_model.ElementTag.md)[] |
 
 #### Returns
@@ -919,7 +959,7 @@ Search the inheritance chain for a child property.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:158
+packages/matter.js/dist/esm/model/models/Model.d.ts:152
 
 ___
 
@@ -939,7 +979,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 | Name | Type |
 | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> |
+| `constructor` | [`Type`](../modules/exports_model.Model.md#type)\<`T`\> |
 
 #### Returns
 
@@ -951,7 +991,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:130
+packages/matter.js/dist/esm/model/models/Model.d.ts:128
 
 ___
 
@@ -977,7 +1017,7 @@ Find all children that reference a specific type.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:154
+packages/matter.js/dist/esm/model/models/Model.d.ts:148
 
 ___
 
@@ -997,7 +1037,7 @@ Convert model to JSON.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:142
+packages/matter.js/dist/esm/model/models/Model.d.ts:136
 
 ___
 
@@ -1017,7 +1057,7 @@ Convert to non-class structure.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:146
+packages/matter.js/dist/esm/model/models/Model.d.ts:140
 
 ___
 
@@ -1043,7 +1083,7 @@ Apply a function to all tree elements.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:150
+packages/matter.js/dist/esm/model/models/Model.d.ts:144
 
 ___
 
@@ -1069,4 +1109,4 @@ Create a model for an element.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:116
+packages/matter.js/dist/esm/model/models/Model.d.ts:114

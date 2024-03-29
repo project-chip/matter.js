@@ -24,7 +24,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:33
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:34
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:30
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:31
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:34
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:35
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:36
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:37
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:35
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:36
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:32
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:33
 
 ___
 
@@ -84,4 +84,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:32

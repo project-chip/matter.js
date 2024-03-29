@@ -11,95 +11,124 @@
 - [Feature](../enums/exports_cluster.AudioOutput.Feature.md)
 - [OutputType](../enums/exports_cluster.AudioOutput.OutputType.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.AudioOutput.md#extension)
+- [Cluster](../interfaces/exports_cluster.AudioOutput.Cluster.md)
+- [Complete](../interfaces/exports_cluster.AudioOutput.Complete.md)
+- [OutputInfoStruct](../interfaces/exports_cluster.AudioOutput.OutputInfoStruct.md)
+- [RenameOutputRequest](../interfaces/exports_cluster.AudioOutput.RenameOutputRequest.md)
+- [SelectOutputRequest](../interfaces/exports_cluster.AudioOutput.SelectOutputRequest.md)
 
 ### Variables
 
 - [Base](exports_cluster.AudioOutput.md#base)
 - [Cluster](exports_cluster.AudioOutput.md#cluster)
+- [ClusterInstance](exports_cluster.AudioOutput.md#clusterinstance)
 - [Complete](exports_cluster.AudioOutput.md#complete)
+- [CompleteInstance](exports_cluster.AudioOutput.md#completeinstance)
 - [NameUpdatesComponent](exports_cluster.AudioOutput.md#nameupdatescomponent)
 - [TlvOutputInfoStruct](exports_cluster.AudioOutput.md#tlvoutputinfostruct)
 - [TlvRenameOutputRequest](exports_cluster.AudioOutput.md#tlvrenameoutputrequest)
 - [TlvSelectOutputRequest](exports_cluster.AudioOutput.md#tlvselectoutputrequest)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.AudioOutput.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `nameUpdates`: ``true``  } ? typeof [`NameUpdatesComponent`](exports_cluster.AudioOutput.md#nameupdatescomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:305
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentOutput`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `selectOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1291`` ; `name`: ``"AudioOutput"`` ; `revision`: ``1``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all AudioOutput clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `currentOutput`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } | - |
+| `attributes.currentOutput` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected OutputInfoStruct. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.5.3.2 |
+| `attributes.outputList` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> | This list provides the outputs supported by the device. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.5.3.1 |
+| `commands` | \{ `selectOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } | - |
+| `commands.selectOutput` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterApplicationClusterSpecificationV1_1 § 6.5.4 |
+| `extensions` | readonly [\{ `component`: \{ `commands`: \{ `renameOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `nameUpdates`: ``true``  }  }] | This metadata controls which AudioOutputCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.nameUpdates` | [`BitFlag`](exports_schema.md#bitflag) | NameUpdates Supports updates to output names |
+| `id` | ``1291`` | - |
+| `name` | ``"AudioOutput"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:86
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:128
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `selectOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: {} ; `features`: \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"AudioOutput"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentOutput`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `selectOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1291`` ; `name`: ``"AudioOutput"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.AudioOutput.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Audio Output
-
-This cluster provides an interface for controlling the Output on a Video Player device such as a TV.
-
-AudioOutputCluster supports optional features that you can enable with the AudioOutputCluster.with() factory
-method.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 6.5
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.AudioOutput.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:170
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:301
+
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:303
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `currentOutput`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `selectOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `commands`: \{ `renameOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `nameUpdates`: ``true``  }  }] ; `features`: \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1291`` ; `name`: ``"AudioOutput"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.AudioOutput.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:211
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `renameOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `nameUpdates`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `selectOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1291`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"AudioOutput"`` ; `revision`: ``1``  }\>
-
-This cluster supports all AudioOutput features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/exports_cluster.AudioOutput.Complete.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:316
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:386
+
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:388
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `renameOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `nameUpdates`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `selectOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"AudioOutput"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Complete](exports_cluster.AudioOutput.md#complete)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:307
 
 ___
 
 ### NameUpdatesComponent
 
-• `Const` **NameUpdatesComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `renameOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
+• `Const` **NameUpdatesComponent**: `Object`
 
 A AudioOutputCluster supports these elements if it supports feature NameUpdates.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `renameOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } |
+| `commands.renameOutput` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:144
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:96
 
 ___
 
@@ -115,7 +144,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.5.5.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:32
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:50
 
 ___
 
@@ -131,7 +160,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.5.4.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:18
 
 ___
 
@@ -147,4 +176,4 @@ MatterApplicationClusterSpecificationV1_1 § 6.5.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:83

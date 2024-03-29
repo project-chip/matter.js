@@ -6,12 +6,10 @@
 
 An operational view of conformance as defined by the Matter Specification.
 
-We extend the specification's syntax to add ">", "<", ">=" and "<=".  These
-are required to encode some portions of the specification that are described
-in prose.
+We extend the specification's syntax to add ">", "<", ">=" and "<=".  These are required to encode some portions of
+the specification that are described in prose.
 
-"Conformance" controls when a data field or cluster element is allowed or
-required.
+"Conformance" controls when a data field or cluster element is allowed or required.
 
 ## Hierarchy
 
@@ -34,6 +32,7 @@ required.
 ### Accessors
 
 - [empty](model.Conformance-1.md#empty)
+- [mandatory](model.Conformance-1.md#mandatory)
 - [type](model.Conformance-1.md#type)
 - [valid](model.Conformance-1.md#valid)
 
@@ -42,6 +41,7 @@ required.
 - [equals](model.Conformance-1.md#equals)
 - [error](model.Conformance-1.md#error)
 - [extend](model.Conformance-1.md#extend)
+- [isApplicable](model.Conformance-1.md#isapplicable)
 - [toString](model.Conformance-1.md#tostring)
 - [validateReferences](model.Conformance-1.md#validatereferences)
 - [valueOf](model.Conformance-1.md#valueof)
@@ -52,8 +52,7 @@ required.
 
 • **new Conformance**(`definition`): [`Conformance`](model.Conformance-1.md)
 
-Initialize from a Conformance.Definition or the conformance DSL defined
-by the Matter Specification.
+Initialize from a Conformance.Definition or the conformance DSL defined by the Matter Specification.
 
 #### Parameters
 
@@ -71,7 +70,7 @@ by the Matter Specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L35)
+[packages/matter.js/src/model/aspects/Conformance.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Conformance.ts#L32)
 
 ## Properties
 
@@ -81,7 +80,7 @@ by the Matter Specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L21)
+[packages/matter.js/src/model/aspects/Conformance.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Conformance.ts#L19)
 
 ___
 
@@ -95,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L17)
+[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L17)
 
 ___
 
@@ -109,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L18)
+[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L18)
 
 ## Accessors
 
@@ -127,21 +126,39 @@ Aspect.empty
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L27)
+[packages/matter.js/src/model/aspects/Conformance.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Conformance.ts#L25)
+
+___
+
+### mandatory
+
+• `get` **mandatory**(): `boolean`
+
+Is the associated element mandatory?
+
+This supports a limited subset of conformance and is only appropriate for field and requirement conformance.
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/matter.js/src/model/aspects/Conformance.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Conformance.ts#L70)
 
 ___
 
 ### type
 
-• `get` **type**(): [`Empty`](../enums/model.Conformance.Special.md#empty) \| [`Desc`](../enums/model.Conformance.Special.md#desc) \| [`Name`](../enums/model.Conformance.Special.md#name) \| [`Value`](../enums/model.Conformance.Special.md#value) \| [`Choice`](../enums/model.Conformance.Special.md#choice) \| [`Group`](../enums/model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/model.Conformance.Special.md#optionalif) \| [`Flag`](../enums/model.Conformance.Flag.md) \| [`NOT`](../enums/model.Conformance.Operator.md#not) \| [`EQ`](../enums/model.Conformance.Operator.md#eq) \| [`NE`](../enums/model.Conformance.Operator.md#ne) \| [`OR`](../enums/model.Conformance.Operator.md#or) \| [`XOR`](../enums/model.Conformance.Operator.md#xor) \| [`AND`](../enums/model.Conformance.Operator.md#and) \| [`GT`](../enums/model.Conformance.Operator.md#gt) \| [`LT`](../enums/model.Conformance.Operator.md#lt) \| [`GTE`](../enums/model.Conformance.Operator.md#gte) \| [`LTE`](../enums/model.Conformance.Operator.md#lte)
+• `get` **type**(): [`Flag`](../enums/model.Conformance.Flag.md) \| [`Empty`](../enums/model.Conformance.Special.md#empty) \| [`Desc`](../enums/model.Conformance.Special.md#desc) \| [`Name`](../enums/model.Conformance.Special.md#name) \| [`Value`](../enums/model.Conformance.Special.md#value) \| [`Choice`](../enums/model.Conformance.Special.md#choice) \| [`Group`](../enums/model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/model.Conformance.Special.md#optionalif) \| [`NOT`](../enums/model.Conformance.Operator.md#not) \| [`EQ`](../enums/model.Conformance.Operator.md#eq) \| [`NE`](../enums/model.Conformance.Operator.md#ne) \| [`OR`](../enums/model.Conformance.Operator.md#or) \| [`XOR`](../enums/model.Conformance.Operator.md#xor) \| [`AND`](../enums/model.Conformance.Operator.md#and) \| [`GT`](../enums/model.Conformance.Operator.md#gt) \| [`LT`](../enums/model.Conformance.Operator.md#lt) \| [`GTE`](../enums/model.Conformance.Operator.md#gte) \| [`LTE`](../enums/model.Conformance.Operator.md#lte)
 
 #### Returns
 
-[`Empty`](../enums/model.Conformance.Special.md#empty) \| [`Desc`](../enums/model.Conformance.Special.md#desc) \| [`Name`](../enums/model.Conformance.Special.md#name) \| [`Value`](../enums/model.Conformance.Special.md#value) \| [`Choice`](../enums/model.Conformance.Special.md#choice) \| [`Group`](../enums/model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/model.Conformance.Special.md#optionalif) \| [`Flag`](../enums/model.Conformance.Flag.md) \| [`NOT`](../enums/model.Conformance.Operator.md#not) \| [`EQ`](../enums/model.Conformance.Operator.md#eq) \| [`NE`](../enums/model.Conformance.Operator.md#ne) \| [`OR`](../enums/model.Conformance.Operator.md#or) \| [`XOR`](../enums/model.Conformance.Operator.md#xor) \| [`AND`](../enums/model.Conformance.Operator.md#and) \| [`GT`](../enums/model.Conformance.Operator.md#gt) \| [`LT`](../enums/model.Conformance.Operator.md#lt) \| [`GTE`](../enums/model.Conformance.Operator.md#gte) \| [`LTE`](../enums/model.Conformance.Operator.md#lte)
+[`Flag`](../enums/model.Conformance.Flag.md) \| [`Empty`](../enums/model.Conformance.Special.md#empty) \| [`Desc`](../enums/model.Conformance.Special.md#desc) \| [`Name`](../enums/model.Conformance.Special.md#name) \| [`Value`](../enums/model.Conformance.Special.md#value) \| [`Choice`](../enums/model.Conformance.Special.md#choice) \| [`Group`](../enums/model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/model.Conformance.Special.md#optionalif) \| [`NOT`](../enums/model.Conformance.Operator.md#not) \| [`EQ`](../enums/model.Conformance.Operator.md#eq) \| [`NE`](../enums/model.Conformance.Operator.md#ne) \| [`OR`](../enums/model.Conformance.Operator.md#or) \| [`XOR`](../enums/model.Conformance.Operator.md#xor) \| [`AND`](../enums/model.Conformance.Operator.md#and) \| [`GT`](../enums/model.Conformance.Operator.md#gt) \| [`LT`](../enums/model.Conformance.Operator.md#lt) \| [`GTE`](../enums/model.Conformance.Operator.md#gte) \| [`LTE`](../enums/model.Conformance.Operator.md#lte)
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L23)
+[packages/matter.js/src/model/aspects/Conformance.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Conformance.ts#L21)
 
 ___
 
@@ -159,7 +176,7 @@ Aspect.valid
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L20)
+[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L20)
 
 ## Methods
 
@@ -185,7 +202,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L40)
+[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L40)
 
 ___
 
@@ -210,23 +227,30 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L54)
+[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L54)
 
 ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](model.Aspect.md)\<[`Definition`](../modules/model.Conformance.md#definition)\>
+▸ **extend**\<`This`\>(`this`, `other`): `This`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Aspect`](model.Aspect.md)\<`any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `this` | `This` |
 | `other` | [`Definition`](../modules/model.Conformance.md#definition) |
 
 #### Returns
 
-[`Aspect`](model.Aspect.md)\<[`Definition`](../modules/model.Conformance.md#definition)\>
+`This`
 
 #### Inherited from
 
@@ -234,7 +258,36 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L65)
+[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L65)
+
+___
+
+### isApplicable
+
+▸ **isApplicable**(`features`, `supportedFeatures`): `boolean`
+
+Perform limited conformance evaluation to determine whether this conformance is applicable given a feature
+combination.
+
+Ignores subexpressions that reference field values.
+
+This is useful for filtering elements at compile time.  For complete accuracy you then need to filter at runtime
+once field values are known.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `features` | `Iterable`\<`string`\> |
+| `supportedFeatures` | `Iterable`\<`string`\> |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/matter.js/src/model/aspects/Conformance.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Conformance.ts#L97)
 
 ___
 
@@ -252,7 +305,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L68)
+[packages/matter.js/src/model/aspects/Conformance.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Conformance.ts#L104)
 
 ___
 
@@ -272,7 +325,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:64](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Conformance.ts#L64)
+[packages/matter.js/src/model/aspects/Conformance.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Conformance.ts#L61)
 
 ___
 
@@ -290,4 +343,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L47)
+[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L47)

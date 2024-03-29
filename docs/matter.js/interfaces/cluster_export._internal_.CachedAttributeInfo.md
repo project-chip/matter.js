@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterHelper.ts:98](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterHelper.ts#L98)
+[packages/matter.js/src/cluster/ClusterHelper.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/ClusterHelper.ts#L25)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterHelper.ts:99](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/ClusterHelper.ts#L99)
+[packages/matter.js/src/cluster/ClusterHelper.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/ClusterHelper.ts#L26)

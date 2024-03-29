@@ -1,14 +1,15 @@
 [@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventServer
 
-# Class: EventServer\<T\>
+# Class: EventServer\<T, S\>
 
 [\<internal\>](../modules/internal_.md).EventServer
 
 ## Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `S` | extends [`Storage`](../interfaces/internal_.Storage.md) |
 
 ## Table of contents
 
@@ -40,13 +41,14 @@
 
 ### constructor
 
-• **new EventServer**\<`T`\>(`id`, `clusterId`, `name`, `schema`, `priority`): [`EventServer`](internal_.EventServer.md)\<`T`\>
+• **new EventServer**\<`T`, `S`\>(`id`, `clusterId`, `name`, `schema`, `priority`): [`EventServer`](internal_.EventServer.md)\<`T`, `S`\>
 
 #### Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `S` | extends [`Storage`](../interfaces/internal_.Storage.md) |
 
 #### Parameters
 
@@ -60,11 +62,11 @@
 
 #### Returns
 
-[`EventServer`](internal_.EventServer.md)\<`T`\>
+[`EventServer`](internal_.EventServer.md)\<`T`, `S`\>
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:22
+matter.js/dist/esm/cluster/server/EventServer.d.ts:23
 
 ## Properties
 
@@ -74,7 +76,7 @@ matter.js/dist/esm/cluster/server/EventServer.d.ts:22
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:14
+matter.js/dist/esm/cluster/server/EventServer.d.ts:15
 
 ___
 
@@ -84,17 +86,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:20
+matter.js/dist/esm/cluster/server/EventServer.d.ts:21
 
 ___
 
 ### eventHandler
 
-• `Protected` `Optional` **eventHandler**: [`EventHandler`](internal_.EventHandler.md)
+• `Protected` `Optional` **eventHandler**: [`EventHandler`](internal_.EventHandler.md)\<`any`\>
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:21
+matter.js/dist/esm/cluster/server/EventServer.d.ts:22
 
 ___
 
@@ -104,7 +106,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:18
+matter.js/dist/esm/cluster/server/EventServer.d.ts:19
 
 ___
 
@@ -114,7 +116,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:13
+matter.js/dist/esm/cluster/server/EventServer.d.ts:14
 
 ___
 
@@ -124,7 +126,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:19
+matter.js/dist/esm/cluster/server/EventServer.d.ts:20
 
 ___
 
@@ -134,7 +136,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:15
+matter.js/dist/esm/cluster/server/EventServer.d.ts:16
 
 ___
 
@@ -144,7 +146,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:17
+matter.js/dist/esm/cluster/server/EventServer.d.ts:18
 
 ___
 
@@ -154,7 +156,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:16
+matter.js/dist/esm/cluster/server/EventServer.d.ts:17
 
 ## Methods
 
@@ -174,7 +176,7 @@ matter.js/dist/esm/cluster/server/EventServer.d.ts:16
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:26
+matter.js/dist/esm/cluster/server/EventServer.d.ts:27
 
 ___
 
@@ -194,27 +196,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:23
+matter.js/dist/esm/cluster/server/EventServer.d.ts:24
 
 ___
 
 ### bindToEventHandler
 
-▸ **bindToEventHandler**(`eventHandler`): `void`
+▸ **bindToEventHandler**(`eventHandler`): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `eventHandler` | [`EventHandler`](internal_.EventHandler.md) |
+| `eventHandler` | [`EventHandler`](internal_.EventHandler.md)\<`S`\> |
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:24
+matter.js/dist/esm/cluster/server/EventServer.d.ts:25
 
 ___
 
@@ -234,13 +236,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:27
+matter.js/dist/esm/cluster/server/EventServer.d.ts:28
 
 ___
 
 ### triggerEvent
 
-▸ **triggerEvent**(`data`): `void`
+▸ **triggerEvent**(`data`): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Parameters
 
@@ -250,8 +252,8 @@ ___
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/EventServer.d.ts:25
+matter.js/dist/esm/cluster/server/EventServer.d.ts:26

@@ -14,6 +14,7 @@
 - [CaseClientMessenger](../classes/exports_session.CaseClientMessenger.md)
 - [CaseServer](../classes/exports_session.CaseServer.md)
 - [CaseServerMessenger](../classes/exports_session.CaseServerMessenger.md)
+- [InsecureSession](../classes/exports_session.InsecureSession.md)
 - [MaximumPasePairingErrorsReachedError](../classes/exports_session.MaximumPasePairingErrorsReachedError.md)
 - [NoAssociatedFabricError](../classes/exports_session.NoAssociatedFabricError.md)
 - [PaseClient](../classes/exports_session.PaseClient.md)
@@ -23,7 +24,6 @@
 - [SecureSession](../classes/exports_session.SecureSession.md)
 - [Session](../classes/exports_session.Session.md)
 - [SessionManager](../classes/exports_session.SessionManager.md)
-- [UnsecureSession](../classes/exports_session.UnsecureSession.md)
 
 ### Interfaces
 
@@ -445,4 +445,4 @@ asserts session is SecureSession\<T\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:83
+packages/matter.js/dist/esm/session/SecureSession.d.ts:72

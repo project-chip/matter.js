@@ -24,7 +24,7 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`EventElement`](exports_model.md#eventelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`EventElement`](../interfaces/exports_model.EventElement-1.md)\>
 
 #### Defined in
 

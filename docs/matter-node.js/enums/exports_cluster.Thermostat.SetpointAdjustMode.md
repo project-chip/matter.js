@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:334
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:512
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:333
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:511
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:332
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:510

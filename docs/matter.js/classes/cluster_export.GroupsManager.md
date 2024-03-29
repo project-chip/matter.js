@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/GroupsServer.ts#L37)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/GroupsServer.ts#L37)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/GroupsServer.ts#L53)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/GroupsServer.ts#L53)
 
 ___
 
@@ -92,13 +92,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/GroupsServer.ts#L45)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/GroupsServer.ts#L45)
 
 ___
 
 ### removeAllGroups
 
-▸ **removeAllGroups**(`fabric`, `endpointId`): `void`
+▸ **removeAllGroups**(`fabric`, `endpointId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -109,17 +109,17 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:74](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/GroupsServer.ts#L74)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/GroupsServer.ts#L74)
 
 ___
 
 ### removeGroup
 
-▸ **removeGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
+▸ **removeGroup**(`fabric`, `endpointId`, `groupId`): `Promise`\<`boolean`\>
 
 #### Parameters
 
@@ -131,17 +131,17 @@ ___
 
 #### Returns
 
-`boolean`
+`Promise`\<`boolean`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/GroupsServer.ts#L60)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/GroupsServer.ts#L60)
 
 ___
 
 ### setGroup
 
-▸ **setGroup**(`fabric`, `endpointId`, `groupId`, `groupName`): `void`
+▸ **setGroup**(`fabric`, `endpointId`, `groupId`, `groupName`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -154,8 +154,8 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/GroupsServer.ts#L24)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/GroupsServer.ts#L24)

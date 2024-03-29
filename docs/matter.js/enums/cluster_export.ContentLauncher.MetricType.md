@@ -33,7 +33,7 @@ integer final value.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L60)
 
 ___
 
@@ -49,4 +49,4 @@ This value is used for dimensions defined in a number of Pixels.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L49)

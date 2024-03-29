@@ -4,8 +4,9 @@
 
 [exports/model](../modules/exports_model.md).FeatureSet
 
-A "feature set" is a set of features for a cluster.  The names of features
-present appear in this set.
+A "feature set" is a set of features for a cluster.  The names of features present appear in this set.
+
+TODO - Feature metadata is a bit messy and needs a refactor to consolidate available/supported and names/codes
 
 ## Hierarchy
 
@@ -26,6 +27,7 @@ present appear in this set.
 
 ### Methods
 
+- [is](exports_model.FeatureSet-1.md#is)
 - [map](exports_model.FeatureSet-1.md#map)
 
 ## Constructors
@@ -34,8 +36,8 @@ present appear in this set.
 
 • **new FeatureSet**(`definition?`): [`FeatureSet`](exports_model.FeatureSet-1.md)
 
-Create a new feature set from an iterable that returns active names or
-from an object of the form { [featureName: string]: true }
+Create a new feature set from an iterable that returns active names or from an object of the form { [featureName:
+string]: true }
 
 #### Parameters
 
@@ -53,7 +55,7 @@ Set\&lt;FeatureSet.Flag\&gt;.constructor
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:15
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:17
 
 ## Accessors
 
@@ -69,7 +71,7 @@ Access features as an array of feature names.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:19
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:21
 
 ___
 
@@ -85,9 +87,31 @@ Access features as an object mapping feature name -> true.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:23
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:25
 
 ## Methods
+
+### is
+
+▸ **is**(`other?`): `boolean`
+
+Determine if I am identical to another set.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `other?` | [`FeatureSet`](exports_model.FeatureSet-1.md) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:31
+
+___
 
 ### map
 
@@ -111,4 +135,4 @@ packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:23
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:26
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:32

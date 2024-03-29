@@ -6,9 +6,18 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/exports_cluster.ClientMonitoring.Cluster.md)
+- [MonitoringRegistration](../interfaces/exports_cluster.ClientMonitoring.MonitoringRegistration.md)
+- [RegisterClientMonitoringRequest](../interfaces/exports_cluster.ClientMonitoring.RegisterClientMonitoringRequest.md)
+- [UnregisterClientMonitoringRequest](../interfaces/exports_cluster.ClientMonitoring.UnregisterClientMonitoringRequest.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.ClientMonitoring.md#cluster)
+- [ClusterInstance](exports_cluster.ClientMonitoring.md#clusterinstance)
+- [Complete](exports_cluster.ClientMonitoring.md#complete)
 - [TlvMonitoringRegistration](exports_cluster.ClientMonitoring.md#tlvmonitoringregistration)
 - [TlvRegisterClientMonitoringRequest](exports_cluster.ClientMonitoring.md#tlvregisterclientmonitoringrequest)
 - [TlvUnregisterClientMonitoringRequest](exports_cluster.ClientMonitoring.md#tlvunregisterclientmonitoringrequest)
@@ -17,15 +26,37 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `activeModeInterval`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `activeModeThreshold`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `expectedClients`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `idleModeInterval`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `registerClientMonitoring`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `stayAwakeRequest`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, `void`, `any`\> ; `unregisterClientMonitoring`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `id`: ``4166`` ; `name`: ``"ClientMonitoring"`` ; `revision`: ``1``  }\>
-
-Client Monitoring
-
-Client Monitoring allows for ensuring that listed clients meet the required monitoring conditions on the server.
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.ClientMonitoring.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:33
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:75
+
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:77
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `activeModeInterval`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `activeModeThreshold`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `expectedClients`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `idleModeInterval`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `registerClientMonitoring`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `stayAwakeRequest`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, `void`, `any`\> ; `unregisterClientMonitoring`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `id`: ``4166`` ; `name`: ``"ClientMonitoring"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.ClientMonitoring.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:45
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.ClientMonitoring.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:78
 
 ___
 
@@ -35,7 +66,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:10
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:12
 
 ___
 
@@ -47,7 +78,7 @@ Input to the ClientMonitoring registerClientMonitoring command
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:21
 
 ___
 
@@ -59,4 +90,4 @@ Input to the ClientMonitoring unregisterClientMonitoring command
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:33

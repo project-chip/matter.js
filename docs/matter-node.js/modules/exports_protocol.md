@@ -15,6 +15,7 @@
 ### Classes
 
 - [ChannelManager](../classes/exports_protocol.ChannelManager.md)
+- [ChannelNotConnectedError](../classes/exports_protocol.ChannelNotConnectedError.md)
 - [CommissioningError](../classes/exports_protocol.CommissioningError.md)
 - [ControllerCommissioner](../classes/exports_protocol.ControllerCommissioner.md)
 - [ControllerDiscovery](../classes/exports_protocol.ControllerDiscovery.md)
@@ -103,4 +104,4 @@ Maximum 32 bit counter value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:8
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:9

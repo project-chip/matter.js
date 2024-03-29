@@ -32,6 +32,10 @@
 - [scopedClusterData](internal_.Fabric.md#scopedclusterdata)
 - [sessions](internal_.Fabric.md#sessions)
 
+### Accessors
+
+- [externalInformation](internal_.Fabric.md#externalinformation)
+
 ### Methods
 
 - [addRemoveCallback](internal_.Fabric.md#addremovecallback)
@@ -40,7 +44,6 @@
 - [deleteScopedClusterData](internal_.Fabric.md#deletescopedclusterdata)
 - [deleteScopedClusterDataValue](internal_.Fabric.md#deletescopedclusterdatavalue)
 - [getDestinationId](internal_.Fabric.md#getdestinationid)
-- [getExternalInformation](internal_.Fabric.md#getexternalinformation)
 - [getPublicKey](internal_.Fabric.md#getpublickey)
 - [getScopedClusterDataKeys](internal_.Fabric.md#getscopedclusterdatakeys)
 - [getScopedClusterDataValue](internal_.Fabric.md#getscopedclusterdatavalue)
@@ -90,7 +93,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:54
+matter.js/dist/esm/fabric/Fabric.d.ts:63
 
 ## Properties
 
@@ -100,7 +103,7 @@ matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:49
+matter.js/dist/esm/fabric/Fabric.d.ts:58
 
 ___
 
@@ -110,7 +113,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:36
+matter.js/dist/esm/fabric/Fabric.d.ts:45
 
 ___
 
@@ -120,7 +123,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:35
+matter.js/dist/esm/fabric/Fabric.d.ts:44
 
 ___
 
@@ -130,7 +133,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:44
+matter.js/dist/esm/fabric/Fabric.d.ts:53
 
 ___
 
@@ -140,7 +143,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:46
+matter.js/dist/esm/fabric/Fabric.d.ts:55
 
 ___
 
@@ -150,7 +153,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:41
+matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 ___
 
@@ -160,7 +163,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:48
+matter.js/dist/esm/fabric/Fabric.d.ts:57
 
 ___
 
@@ -170,7 +173,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:37
+matter.js/dist/esm/fabric/Fabric.d.ts:46
 
 ___
 
@@ -180,7 +183,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:47
+matter.js/dist/esm/fabric/Fabric.d.ts:56
 
 ___
 
@@ -190,7 +193,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:39
+matter.js/dist/esm/fabric/Fabric.d.ts:48
 
 ___
 
@@ -200,7 +203,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:45
+matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 ___
 
@@ -210,7 +213,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:53
+matter.js/dist/esm/fabric/Fabric.d.ts:62
 
 ___
 
@@ -220,7 +223,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:52
+matter.js/dist/esm/fabric/Fabric.d.ts:61
 
 ___
 
@@ -230,7 +233,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:43
+matter.js/dist/esm/fabric/Fabric.d.ts:52
 
 ___
 
@@ -240,7 +243,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:38
+matter.js/dist/esm/fabric/Fabric.d.ts:47
 
 ___
 
@@ -250,7 +253,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:40
+matter.js/dist/esm/fabric/Fabric.d.ts:49
 
 ___
 
@@ -260,7 +263,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:42
+matter.js/dist/esm/fabric/Fabric.d.ts:51
 
 ___
 
@@ -270,7 +273,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:51
+matter.js/dist/esm/fabric/Fabric.d.ts:60
 
 ___
 
@@ -280,7 +283,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:50
+matter.js/dist/esm/fabric/Fabric.d.ts:59
+
+## Accessors
+
+### externalInformation
+
+• `get` **externalInformation**(): [`ExposedFabricInformation`](../modules/internal_.md#exposedfabricinformation)
+
+#### Returns
+
+[`ExposedFabricInformation`](../modules/internal_.md#exposedfabricinformation)
+
+#### Defined in
+
+matter.js/dist/esm/fabric/Fabric.d.ts:85
 
 ## Methods
 
@@ -292,7 +309,7 @@ matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 | Name | Type |
 | :------ | :------ |
-| `callback` | () => `void` |
+| `callback` | () => [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\> |
 
 #### Returns
 
@@ -300,7 +317,7 @@ matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:65
+matter.js/dist/esm/fabric/Fabric.d.ts:74
 
 ___
 
@@ -320,7 +337,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:63
+matter.js/dist/esm/fabric/Fabric.d.ts:72
 
 ___
 
@@ -332,7 +349,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `callback` | () => `void` |
+| `callback` | () => [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\> |
 
 #### Returns
 
@@ -340,13 +357,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:66
+matter.js/dist/esm/fabric/Fabric.d.ts:75
 
 ___
 
 ### deleteScopedClusterData
 
-▸ **deleteScopedClusterData**(`cluster`): `void`
+▸ **deleteScopedClusterData**(`cluster`): `undefined` \| [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
 
 #### Parameters
 
@@ -356,17 +373,17 @@ ___
 
 #### Returns
 
-`void`
+`undefined` \| [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:74
+matter.js/dist/esm/fabric/Fabric.d.ts:83
 
 ___
 
 ### deleteScopedClusterDataValue
 
-▸ **deleteScopedClusterDataValue**(`cluster`, `clusterDataKey`): `void`
+▸ **deleteScopedClusterDataValue**(`cluster`, `clusterDataKey`): [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
 
 #### Parameters
 
@@ -377,11 +394,11 @@ ___
 
 #### Returns
 
-`void`
+[`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:72
+matter.js/dist/esm/fabric/Fabric.d.ts:81
 
 ___
 
@@ -402,30 +419,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:62
-
-___
-
-### getExternalInformation
-
-▸ **getExternalInformation**(): `Object`
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `fabricId` | [`FabricId`](../modules/internal_.md#fabricid) |
-| `fabricIndex` | [`FabricIndex`](../modules/internal_.md#fabricindex) |
-| `label` | `string` |
-| `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
-| `rootNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
-| `rootVendorId` | [`VendorId`](../modules/internal_.md#vendorid) |
-
-#### Defined in
-
-matter.js/dist/esm/fabric/Fabric.d.ts:76
+matter.js/dist/esm/fabric/Fabric.d.ts:71
 
 ___
 
@@ -439,7 +433,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:58
+matter.js/dist/esm/fabric/Fabric.d.ts:67
 
 ___
 
@@ -459,7 +453,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:75
+matter.js/dist/esm/fabric/Fabric.d.ts:84
 
 ___
 
@@ -486,7 +480,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:70
+matter.js/dist/esm/fabric/Fabric.d.ts:79
 
 ___
 
@@ -507,7 +501,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:73
+matter.js/dist/esm/fabric/Fabric.d.ts:82
 
 ___
 
@@ -528,21 +522,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:61
+matter.js/dist/esm/fabric/Fabric.d.ts:70
 
 ___
 
 ### persist
 
-▸ **persist**(): `void`
+▸ **persist**(`isUpdate?`): `undefined` \| [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `isUpdate?` | `boolean` |
 
 #### Returns
 
-`void`
+`undefined` \| [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:69
+matter.js/dist/esm/fabric/Fabric.d.ts:78
 
 ___
 
@@ -562,7 +562,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:68
+matter.js/dist/esm/fabric/Fabric.d.ts:77
 
 ___
 
@@ -582,13 +582,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:64
+matter.js/dist/esm/fabric/Fabric.d.ts:73
 
 ___
 
 ### setLabel
 
-▸ **setLabel**(`label`): `void`
+▸ **setLabel**(`label`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -598,11 +598,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:57
+matter.js/dist/esm/fabric/Fabric.d.ts:66
 
 ___
 
@@ -614,7 +614,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `callback` | () => `void` |
+| `callback` | (`isUpdate?`: `boolean`) => [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\> |
 
 #### Returns
 
@@ -622,13 +622,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:67
+matter.js/dist/esm/fabric/Fabric.d.ts:76
 
 ___
 
 ### setScopedClusterDataValue
 
-▸ **setScopedClusterDataValue**\<`T`\>(`cluster`, `clusterDataKey`, `value`): `void`
+▸ **setScopedClusterDataValue**\<`T`\>(`cluster`, `clusterDataKey`, `value`): `undefined` \| [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
 
 #### Type parameters
 
@@ -646,11 +646,11 @@ ___
 
 #### Returns
 
-`void`
+`undefined` \| [`MaybePromise`](../modules/internal_.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:71
+matter.js/dist/esm/fabric/Fabric.d.ts:80
 
 ___
 
@@ -670,7 +670,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:59
+matter.js/dist/esm/fabric/Fabric.d.ts:68
 
 ___
 
@@ -684,7 +684,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:55
+matter.js/dist/esm/fabric/Fabric.d.ts:64
 
 ___
 
@@ -705,7 +705,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:60
+matter.js/dist/esm/fabric/Fabric.d.ts:69
 
 ___
 
@@ -725,4 +725,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:56
+matter.js/dist/esm/fabric/Fabric.d.ts:65

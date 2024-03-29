@@ -10,6 +10,7 @@
 
 ### Namespaces
 
+- [EventEmitter](util_export.EventEmitter.md)
 - [serialize](util_export.serialize.md)
 
 ### Enumerations
@@ -18,16 +19,25 @@
 
 ### Classes
 
+- [BasicSet](../classes/util_export.BasicSet.md)
 - [Cache](../classes/util_export.Cache.md)
 - [DataReader](../classes/util_export.DataReader.md)
 - [DataWriter](../classes/util_export.DataWriter.md)
 - [EndOfStreamError](../classes/util_export.EndOfStreamError.md)
+- [EventEmitter](../classes/util_export.EventEmitter-1.md)
 - [NamedHandler](../classes/util_export.NamedHandler.md)
 - [NoResponseTimeoutError](../classes/util_export.NoResponseTimeoutError.md)
+- [PromiseTimeoutError](../classes/util_export.PromiseTimeoutError.md)
 - [Queue](../classes/util_export.Queue.md)
 
 ### Interfaces
 
+- [AsyncObservable](../interfaces/util_export.AsyncObservable.md)
+- [ImmutableSet](../interfaces/util_export.ImmutableSet.md)
+- [IndexedSet](../interfaces/util_export.IndexedSet.md)
+- [MutableSet](../interfaces/util_export.MutableSet.md)
+- [Observable](../interfaces/util_export.Observable.md)
+- [ObservableSet](../interfaces/util_export.ObservableSet.md)
 - [Stream](../interfaces/util_export.Stream.md)
 
 ### Type Aliases
@@ -39,14 +49,22 @@
 - [ByteArray](util_export.md#bytearray)
 - [ClassExtends](util_export.md#classextends)
 - [HandlerFunction](util_export.md#handlerfunction)
+- [Identity](util_export.md#identity)
+- [Immutable](util_export.md#immutable)
 - [MakeMandatory](util_export.md#makemandatory)
+- [MaybePromise](util_export.md#maybepromise)
+- [MaybePromiseLike](util_export.md#maybepromiselike)
 - [Merge](util_export.md#merge)
 - [MergeAll](util_export.md#mergeall)
+- [Observer](util_export.md#observer)
+- [ObserverErrorHandler](util_export.md#observererrorhandler)
 - [Pluck](util_export.md#pluck)
 - [Properties](util_export.md#properties)
+- [UnionToIntersection](util_export.md#uniontointersection)
 
 ### Variables
 
+- [AsyncObservable](util_export.md#asyncobservable)
 - [ByteArray](util_export.md#bytearray-1)
 - [FLOAT32\_MAX](util_export.md#float32_max)
 - [FLOAT32\_MIN](util_export.md#float32_min)
@@ -58,6 +76,8 @@
 - [INT64\_MIN](util_export.md#int64_min)
 - [INT8\_MAX](util_export.md#int8_max)
 - [INT8\_MIN](util_export.md#int8_min)
+- [MaybePromise](util_export.md#maybepromise-1)
+- [Observable](util_export.md#observable)
 - [UINT16\_MAX](util_export.md#uint16_max)
 - [UINT24\_MAX](util_export.md#uint24_max)
 - [UINT32\_MAX](util_export.md#uint32_max)
@@ -75,6 +95,7 @@
 - [commandExecutor](util_export.md#commandexecutor)
 - [commandlineParser](util_export.md#commandlineparser)
 - [createPromise](util_export.md#createpromise)
+- [decamelize](util_export.md#decamelize)
 - [describeList](util_export.md#describelist)
 - [extendPublicHandlerMethods](util_export.md#extendpublichandlermethods)
 - [getIntParameter](util_export.md#getintparameter)
@@ -86,6 +107,7 @@
 - [isIPv4](util_export.md#isipv4)
 - [isIPv6](util_export.md#isipv6)
 - [isNullish](util_export.md#isnullish)
+- [isObject](util_export.md#isobject)
 - [maxValue](util_export.md#maxvalue)
 - [minValue](util_export.md#minvalue)
 - [onSameNetwork](util_export.md#onsamenetwork)
@@ -95,6 +117,7 @@
 - [toBigInt](util_export.md#tobigint)
 - [toHexString](util_export.md#tohexstring)
 - [toNumber](util_export.md#tonumber)
+- [withTimeout](util_export.md#withtimeout)
 
 ## Type Aliases
 
@@ -123,7 +146,7 @@ Array types
 
 **`License`**
 
-Copyright 2022 The node-matter Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Type parameters
@@ -229,7 +252,7 @@ ___
 
 **`License`**
 
-Copyright 2022 The matter.js Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Type declaration
@@ -252,6 +275,66 @@ packages/matter.js/dist/esm/util/NamedHandler.d.ts:6
 
 ___
 
+### Identity
+
+Ƭ **Identity**\<`T`\>: `T`
+
+An identity type.
+
+You can't do:
+
+    interface Foo extends typeof Bar {}
+
+But you can do:
+
+    interface Foo extends Identity<typeof Bar> {}
+
+Without this type you'd have to do:
+
+    interface FooType = typeof Bar;
+    interface Foo extends FooType {};
+
+We have to do this a lot because we generate complex objects with detailed
+type information.  When exported, TS (as of 5.2) inlines the type of these
+objects in declarations which makes our declarations massive.  To avoid this
+we create an interface from the type then cast to the interface for export.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Type.d.ts:72
+
+___
+
+### Immutable
+
+Ƭ **Immutable**\<`T`\>: `T` extends (...`args`: `any`[]) => `any` ? `T` : `T` extends `number` ? `T` : `T` extends `object` ? \{ readonly [K in keyof T]: Immutable\<T[K]\> } : `T`
+
+Make a type immutable.
+
+TODO - might need to extend depending type (e.g. doesn't handle Maps, Sets or Promises yet)
+
+Good reference implementation here:
+
+    https://github.com/ts-essentials/ts-essentials/blob/master/lib/deep-readonly/index.ts
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Type.d.ts:42
+
+___
+
 ### MakeMandatory
 
 Ƭ **MakeMandatory**\<`T`\>: `Exclude`\<`T`, `undefined`\>
@@ -265,6 +348,46 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/util/Type.d.ts:26
+
+___
+
+### MaybePromise
+
+Ƭ **MaybePromise**\<`T`\>: `T` \| `PromiseLike`\<`T`\>
+
+Return type for functions that are optionally asynchronous.
+
+TODO - as currently defined MaybePromise of a Promise incorrectly wraps as a Promise of a Promise
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `void` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Promises.d.ts:43
+
+packages/matter.js/dist/esm/util/Promises.d.ts:48
+
+___
+
+### MaybePromiseLike
+
+Ƭ **MaybePromiseLike**\<`T`\>: `T` \| `PromiseLike`\<`T`\>
+
+Promise-like version of above.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `void` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Promises.d.ts:47
 
 ___
 
@@ -309,6 +432,73 @@ packages/matter.js/dist/esm/util/Type.d.ts:19
 
 ___
 
+### Observer
+
+Ƭ **Observer**\<`T`, `R`\>: (...`payload`: `T`) => [`MaybePromise`](util_export.md#maybepromise)\<`R` \| `undefined`\>
+
+A callback function for observables.
+
+The observer return value effects how an [Observable](util_export.md#observable) emits:
+
+  - If an observer returns undefined the [Observable](util_export.md#observable) invokes the next observer immediately.
+
+  - If an observer returns a Promise, the [Observable](util_export.md#observable) awaits the return value then continues as
+    described here.  The emitter must then await the Promise returned by [Observable.emit](../interfaces/util_export.Observable.md#emit).
+
+  - Any other return value is returned by [Observable.emit](../interfaces/util_export.Observable.md#emit) and subsequent observers do not see emission.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `any`[] = `any`[] |
+| `R` | `void` |
+
+#### Type declaration
+
+▸ (`...payload`): [`MaybePromise`](util_export.md#maybepromise)\<`R` \| `undefined`\>
+
+##### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `...payload` | `T` | a list of arguments to be emitted |
+
+##### Returns
+
+[`MaybePromise`](util_export.md#maybepromise)\<`R` \| `undefined`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Observable.d.ts:21
+
+___
+
+### ObserverErrorHandler
+
+Ƭ **ObserverErrorHandler**: (`error`: `Error`, `observer`: [`Observer`](util_export.md#observer)\<`any`[], `any`\>) => `void`
+
+#### Type declaration
+
+▸ (`error`, `observer`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `error` | `Error` |
+| `observer` | [`Observer`](util_export.md#observer)\<`any`[], `any`\> |
+
+##### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Observable.d.ts:69
+
+___
+
 ### Pluck
 
 Ƭ **Pluck**\<`K`, `T`\>: `T` extends [infer O, ...(infer R)] ? `K` extends keyof `O` ? [`O`[`K`], ...Pluck\<K, R\>] : [`Pluck`](util_export.md#pluck)\<`K`, `R`\> : `T` extends [] ? `T` : `never`
@@ -336,7 +526,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Index signature
@@ -347,7 +537,83 @@ SPDX-License-Identifier: Apache-2.0
 
 packages/matter.js/dist/esm/util/Type.d.ts:6
 
+___
+
+### UnionToIntersection
+
+Ƭ **UnionToIntersection**\<`U`\>: `U` extends `any` ? (`k`: `U`) => `void` : `never` extends (`k`: infer I) => `void` ? `I` : `never`
+
+Convert a union to an interface.
+
+**`See`**
+
+[https://stackoverflow.com/questions/50374908](https://stackoverflow.com/questions/50374908)
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `U` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Type.d.ts:50
+
 ## Variables
+
+### AsyncObservable
+
+• **AsyncObservable**: \<T, R\>(`errorHandler?`: [`ObserverErrorHandler`](util_export.md#observererrorhandler)) => [`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<`T`, `R`\>\<T_1, R_1\>(`errorHandler?`: [`ObserverErrorHandler`](util_export.md#observererrorhandler)) => [`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<`T_1`, `R_1`\>
+
+An [Observable](util_export.md#observable) that explicitly supports asynchronous results
+
+#### Type declaration
+
+▸ \<`T`, `R`\>(`errorHandler?`): [`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<`T`, `R`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `any`[] |
+| `R` | `void` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `errorHandler?` | [`ObserverErrorHandler`](util_export.md#observererrorhandler) |
+
+##### Returns
+
+[`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<`T`, `R`\>
+
+• **new AsyncObservable**\<`T_1`, `R_1`\>(`errorHandler?`): [`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<`T_1`, `R_1`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T_1` | extends `any`[] |
+| `R_1` | `void` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `errorHandler?` | [`ObserverErrorHandler`](util_export.md#observererrorhandler) |
+
+##### Returns
+
+[`AsyncObservable`](../interfaces/util_export.AsyncObservable.md)\<`T_1`, `R_1`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Observable.d.ts:66
+
+packages/matter.js/dist/esm/util/Observable.d.ts:80
+
+___
 
 ### ByteArray
 
@@ -461,6 +727,82 @@ packages/matter.js/dist/esm/util/Number.d.ts:11
 
 ___
 
+### MaybePromise
+
+• **MaybePromise**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `[toStringTag]` | `string` |
+| `catch` | \<T_1, TResult\>(`producer`: [`MaybePromise`](util_export.md#maybepromise)\<`T_1`\> \| () => [`MaybePromise`](util_export.md#maybepromise)\<`T_1`\>, `onrejected?`: ``null`` \| (`reason`: `any`) => [`MaybePromise`](util_export.md#maybepromise)\<`TResult`\>) => [`MaybePromise`](util_export.md#maybepromise)\<`TResult`\> |
+| `finally` | \<T_2\>(`producer`: [`MaybePromise`](util_export.md#maybepromise)\<`T_2`\> \| () => [`MaybePromise`](util_export.md#maybepromise)\<`T_2`\>, `onfinally?`: ``null`` \| () => [`MaybePromise`](util_export.md#maybepromise)\<`void`\>) => [`MaybePromise`](util_export.md#maybepromise)\<`T_2`\> |
+| `is` | \<T\>(`value`: [`MaybePromise`](util_export.md#maybepromise)\<`T`\>) => value is PromiseLike\<T\> |
+| `then` | \<I, O1, O2\>(`producer`: [`MaybePromise`](util_export.md#maybepromise)\<`I`\> \| () => [`MaybePromise`](util_export.md#maybepromise)\<`I`\>, `resolve?`: ``null`` \| (`input`: `I`) => [`MaybePromise`](util_export.md#maybepromise)\<`O1`\>, `reject?`: ``null`` \| (`error`: `any`) => [`MaybePromise`](util_export.md#maybepromise)\<`O2`\>) => [`MaybePromise`](util_export.md#maybepromise)\<`O1` \| `O2`\> |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Promises.d.ts:43
+
+packages/matter.js/dist/esm/util/Promises.d.ts:48
+
+___
+
+### Observable
+
+• **Observable**: \<T, R\>(`errorHandler?`: [`ObserverErrorHandler`](util_export.md#observererrorhandler)) => [`Observable`](../interfaces/util_export.Observable.md)\<`T`, `R`\>\<T_1, R_1\>(`errorHandler?`: [`ObserverErrorHandler`](util_export.md#observererrorhandler)) => [`Observable`](../interfaces/util_export.Observable.md)\<`T_1`, `R_1`\>
+
+A general implementation of [Observable](util_export.md#observable).
+
+#### Type declaration
+
+▸ \<`T`, `R`\>(`errorHandler?`): [`Observable`](../interfaces/util_export.Observable.md)\<`T`, `R`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `any`[] |
+| `R` | `void` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `errorHandler?` | [`ObserverErrorHandler`](util_export.md#observererrorhandler) |
+
+##### Returns
+
+[`Observable`](../interfaces/util_export.Observable.md)\<`T`, `R`\>
+
+• **new Observable**\<`T_1`, `R_1`\>(`errorHandler?`): [`Observable`](../interfaces/util_export.Observable.md)\<`T_1`, `R_1`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T_1` | extends `any`[] |
+| `R_1` | `void` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `errorHandler?` | [`ObserverErrorHandler`](util_export.md#observererrorhandler) |
+
+##### Returns
+
+[`Observable`](../interfaces/util_export.Observable.md)\<`T_1`, `R_1`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Observable.d.ts:28
+
+packages/matter.js/dist/esm/util/Observable.d.ts:73
+
+___
+
 ### UINT16\_MAX
 
 • `Const` **UINT16\_MAX**: ``65535``
@@ -507,7 +849,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
@@ -623,7 +965,7 @@ rejected
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Promises.d.ts:20
+packages/matter.js/dist/esm/util/Promises.d.ts:21
 
 ___
 
@@ -632,7 +974,7 @@ ___
 ▸ **camelize**(`name`, `upperFirst?`): `string`
 
 Converts identifiers of the form "foo-bar", "foo_bar", "foo bar", "foo*bar",
-"fooBar" or "FOOBar" into "FooBar" or "fooBar".
+"fooBar" or "FOOBar" into "fooBar" or "FooBar".
 
 #### Parameters
 
@@ -673,7 +1015,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
@@ -698,7 +1040,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/CommandLine.ts#L33)
+[packages/matter-node.js/src/util/CommandLine.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/util/CommandLine.ts#L33)
 
 ___
 
@@ -720,7 +1062,7 @@ Quote aware Command line parser
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
@@ -753,7 +1095,30 @@ Obtain a promise with functions to resolve and reject.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Promises.d.ts:11
+packages/matter.js/dist/esm/util/Promises.d.ts:12
+
+___
+
+### decamelize
+
+▸ **decamelize**(`name`, `separator?`): `string`
+
+Converts an identifier from CamelCase to snake_case.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
+| `separator?` | `string` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/String.d.ts:15
 
 ___
 
@@ -776,7 +1141,7 @@ Create a human readable version of a list of items.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/String.d.ts:34
+packages/matter.js/dist/esm/util/String.d.ts:38
 
 ___
 
@@ -823,7 +1188,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/CommandLine.ts#L25)
+[packages/matter-node.js/src/util/CommandLine.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/util/CommandLine.ts#L25)
 
 ___
 
@@ -843,7 +1208,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/CommandLine.ts#L12)
+[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/util/CommandLine.ts#L12)
 
 ___
 
@@ -863,7 +1228,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/CommandLine.ts#L19)
+[packages/matter-node.js/src/util/CommandLine.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/util/CommandLine.ts#L19)
 
 ___
 
@@ -924,7 +1289,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
@@ -949,7 +1314,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
@@ -997,6 +1362,30 @@ Same as "a == undefined" but keeps the kids happy
 #### Defined in
 
 packages/matter.js/dist/esm/util/Type.d.ts:25
+
+___
+
+### isObject
+
+▸ **isObject**(`it`): it is Record\<string, unknown\>
+
+Tests whether the given variable is a real object and not an Array
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `it` | `unknown` | The variable to test |
+
+#### Returns
+
+it is Record\<string, unknown\>
+
+true if it is Record<string, any>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Type.d.ts:78
 
 ___
 
@@ -1092,7 +1481,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/util/Node.ts#L11)
+[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/util/Node.ts#L11)
 
 ___
 
@@ -1114,7 +1503,7 @@ Like JSON.stringify but targets well-formed JS and is slightly more readable.
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/String.d.ts:15
+packages/matter.js/dist/esm/util/String.d.ts:19
 
 ___
 
@@ -1146,7 +1535,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
@@ -1212,3 +1601,35 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/util/Number.d.ts:21
+
+___
+
+### withTimeout
+
+▸ **withTimeout**\<`T`\>(`timeoutMs`, `promise`, `cancel?`): `Promise`\<`T`\>
+
+Create a promise with a timeout.
+
+By default rejects with [PromiseTimeoutError](../classes/util_export.PromiseTimeoutError.md) on timeout but you can override by supplying cancel.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `timeoutMs` | `number` | the timeout in milliseconds |
+| `promise` | `Promise`\<`T`\> | a promise that resolves or rejects when the timed task completes |
+| `cancel?` | () => `void` | invoked on timeout (default implementation throws [PromiseTimeoutError](../classes/util_export.PromiseTimeoutError.md)) |
+
+#### Returns
+
+`Promise`\<`T`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Promises.d.ts:37

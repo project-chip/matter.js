@@ -103,7 +103,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:55](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L55)
+[packages/matter.js/src/codec/DerCodec.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L56)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:88](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L88)
+[packages/matter.js/src/codec/DnsCodec.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L88)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:97](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L97)
+[packages/matter.js/src/codec/DnsCodec.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L97)
 
 ___
 
@@ -153,7 +153,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L72)
+[packages/matter.js/src/codec/DnsCodec.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L72)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:79](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L79)
+[packages/matter.js/src/codec/DnsCodec.ts:79](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L79)
 
 ___
 
@@ -199,7 +199,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L65)
+[packages/matter.js/src/codec/DnsCodec.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L65)
 
 ## Variables
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:14](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L14)
+[packages/matter.js/src/codec/DerCodec.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L15)
 
 ___
 
@@ -219,7 +219,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L12)
+[packages/matter.js/src/codec/DerCodec.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L13)
 
 ___
 
@@ -229,7 +229,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L13)
+[packages/matter.js/src/codec/DerCodec.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L14)
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:207](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L207)
+[packages/matter.js/src/codec/DerCodec.ts:218](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L218)
 
 ___
 
@@ -249,7 +249,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:228](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L228)
+[packages/matter.js/src/codec/DerCodec.ts:239](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L239)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:224](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L224)
+[packages/matter.js/src/codec/DerCodec.ts:235](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L235)
 
 ___
 
@@ -272,7 +272,7 @@ when needed.
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L17)
+[packages/matter.js/src/codec/DnsCodec.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L17)
 
 ___
 
@@ -286,7 +286,7 @@ MatterCoreSpecificationV1_2 § 4.4.4
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L16)
+[packages/matter.js/src/codec/MessageCodec.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L16)
 
 ___
 
@@ -296,7 +296,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:10](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L10)
+[packages/matter.js/src/codec/DerCodec.ts:11](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L11)
 
 ___
 
@@ -306,7 +306,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:208](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L208)
+[packages/matter.js/src/codec/DerCodec.ts:219](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L219)
 
 ___
 
@@ -316,7 +316,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L11)
+[packages/matter.js/src/codec/DerCodec.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L12)
 
 ## Functions
 
@@ -339,7 +339,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L35)
+[packages/matter.js/src/codec/DnsCodec.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L35)
 
 ___
 
@@ -362,7 +362,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L27)
+[packages/matter.js/src/codec/DnsCodec.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L27)
 
 ___
 
@@ -382,7 +382,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:212](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L212)
+[packages/matter.js/src/codec/DerCodec.ts:223](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L223)
 
 ___
 
@@ -402,7 +402,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:214](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L214)
+[packages/matter.js/src/codec/DerCodec.ts:225](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L225)
 
 ___
 
@@ -429,7 +429,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L41)
+[packages/matter.js/src/codec/DerCodec.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L42)
 
 ___
 
@@ -455,7 +455,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L46)
+[packages/matter.js/src/codec/DerCodec.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L47)
 
 ___
 
@@ -481,7 +481,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L50)
+[packages/matter.js/src/codec/DerCodec.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L51)
 
 ___
 
@@ -502,7 +502,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L40)
+[packages/matter.js/src/codec/DerCodec.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L41)
 
 ___
 
@@ -524,7 +524,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:216](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L216)
+[packages/matter.js/src/codec/DerCodec.ts:227](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L227)
 
 ___
 
@@ -549,7 +549,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L36)
+[packages/matter.js/src/codec/DerCodec.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L37)
 
 ___
 
@@ -569,7 +569,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:209](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L209)
+[packages/matter.js/src/codec/DerCodec.ts:220](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L220)
 
 ___
 
@@ -589,7 +589,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:232](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L232)
+[packages/matter.js/src/codec/DerCodec.ts:243](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L243)
 
 ___
 
@@ -609,7 +609,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:233](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L233)
+[packages/matter.js/src/codec/DerCodec.ts:244](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L244)
 
 ___
 
@@ -632,7 +632,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L19)
+[packages/matter.js/src/codec/DnsCodec.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L19)
 
 ___
 
@@ -666,7 +666,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:200](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L200)
+[packages/matter.js/src/codec/DerCodec.ts:211](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L211)
 
 ___
 
@@ -689,7 +689,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L51)
+[packages/matter.js/src/codec/DnsCodec.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L51)
 
 ___
 
@@ -709,7 +709,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:210](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DerCodec.ts#L210)
+[packages/matter.js/src/codec/DerCodec.ts:221](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DerCodec.ts#L221)
 
 ___
 
@@ -732,4 +732,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/DnsCodec.ts#L43)
+[packages/matter.js/src/codec/DnsCodec.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/DnsCodec.ts#L43)

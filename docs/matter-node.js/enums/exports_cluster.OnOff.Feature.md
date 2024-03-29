@@ -28,4 +28,4 @@ Behavior that supports lighting applications.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:111
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:258

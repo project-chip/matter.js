@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L48)
+[packages/matter.js/src/model/elements/ClusterElement.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L55)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L46)
+[packages/matter.js/src/model/elements/ClusterElement.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L53)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L47)
+[packages/matter.js/src/model/elements/ClusterElement.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L54)

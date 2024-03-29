@@ -24,34 +24,32 @@
 
 ### Properties
 
-- [\_closingAfterExchangeFinished](internal_.SecureSession.md#_closingafterexchangefinished)
-- [\_sendCloseMessageWhenClosing](internal_.SecureSession.md#_sendclosemessagewhenclosing)
+- [#private](internal_.SecureSession.md##private)
 - [activeIntervalMs](internal_.SecureSession.md#activeintervalms)
 - [activeThresholdMs](internal_.SecureSession.md#activethresholdms)
 - [activeTimestamp](internal_.SecureSession.md#activetimestamp)
-- [attestationKey](internal_.SecureSession.md#attestationkey)
 - [closeCallback](internal_.SecureSession.md#closecallback)
-- [context](internal_.SecureSession.md#context)
-- [decryptKey](internal_.SecureSession.md#decryptkey)
-- [encryptKey](internal_.SecureSession.md#encryptkey)
-- [fabric](internal_.SecureSession.md#fabric)
 - [generateNonce](internal_.SecureSession.md#generatenonce)
-- [id](internal_.SecureSession.md#id)
 - [idleIntervalMs](internal_.SecureSession.md#idleintervalms)
 - [messageCounter](internal_.SecureSession.md#messagecounter)
 - [messageReceptionState](internal_.SecureSession.md#messagereceptionstate)
-- [peerNodeId](internal_.SecureSession.md#peernodeid)
-- [peerSessionId](internal_.SecureSession.md#peersessionid)
-- [subscriptionChangedCallback](internal_.SecureSession.md#subscriptionchangedcallback)
-- [subscriptions](internal_.SecureSession.md#subscriptions)
 - [timestamp](internal_.SecureSession.md#timestamp)
 
 ### Accessors
 
+- [associatedFabric](internal_.SecureSession.md#associatedfabric)
 - [caseAuthenticatedTags](internal_.SecureSession.md#caseauthenticatedtags)
 - [closingAfterExchangeFinished](internal_.SecureSession.md#closingafterexchangefinished)
+- [context](internal_.SecureSession.md#context)
+- [fabric](internal_.SecureSession.md#fabric)
+- [id](internal_.SecureSession.md#id)
+- [isPase](internal_.SecureSession.md#ispase)
+- [isSecure](internal_.SecureSession.md#issecure)
 - [name](internal_.SecureSession.md#name)
+- [nodeId](internal_.SecureSession.md#nodeid)
 - [numberOfActiveSubscriptions](internal_.SecureSession.md#numberofactivesubscriptions)
+- [peerNodeId](internal_.SecureSession.md#peernodeid)
+- [peerSessionId](internal_.SecureSession.md#peersessionid)
 - [sendCloseMessageWhenClosing](internal_.SecureSession.md#sendclosemessagewhenclosing)
 
 ### Methods
@@ -64,19 +62,10 @@
 - [destroy](internal_.SecureSession.md#destroy)
 - [encode](internal_.SecureSession.md#encode)
 - [end](internal_.SecureSession.md#end)
-- [getAssociatedFabric](internal_.SecureSession.md#getassociatedfabric)
 - [getAttestationChallengeKey](internal_.SecureSession.md#getattestationchallengekey)
-- [getContext](internal_.SecureSession.md#getcontext)
-- [getFabric](internal_.SecureSession.md#getfabric)
-- [getId](internal_.SecureSession.md#getid)
 - [getIncrementedMessageCounter](internal_.SecureSession.md#getincrementedmessagecounter)
-- [getNodeId](internal_.SecureSession.md#getnodeid)
-- [getPeerNodeId](internal_.SecureSession.md#getpeernodeid)
-- [getPeerSessionId](internal_.SecureSession.md#getpeersessionid)
 - [getSessionParameters](internal_.SecureSession.md#getsessionparameters)
-- [isPase](internal_.SecureSession.md#ispase)
 - [isPeerActive](internal_.SecureSession.md#ispeeractive)
-- [isSecure](internal_.SecureSession.md#issecure)
 - [notifyActivity](internal_.SecureSession.md#notifyactivity)
 - [removeSubscription](internal_.SecureSession.md#removesubscription)
 - [updateMessageCounter](internal_.SecureSession.md#updatemessagecounter)
@@ -122,27 +111,17 @@
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:41
+matter.js/dist/esm/session/SecureSession.d.ts:30
 
 ## Properties
 
-### \_closingAfterExchangeFinished
+### #private
 
-• `Private` **\_closingAfterExchangeFinished**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:16
-
-___
-
-### \_sendCloseMessageWhenClosing
-
-• `Private` **\_sendCloseMessageWhenClosing**: `any`
+• `Private` **#private**: `any`
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:17
+matter.js/dist/esm/session/SecureSession.d.ts:15
 
 ___
 
@@ -188,16 +167,6 @@ matter.js/dist/esm/session/Session.d.ts:33
 
 ___
 
-### attestationKey
-
-• `Private` `Readonly` **attestationKey**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:25
-
-___
-
 ### closeCallback
 
 • `Protected` `Readonly` **closeCallback**: () => `Promise`\<`void`\>
@@ -220,63 +189,13 @@ matter.js/dist/esm/session/Session.d.ts:37
 
 ___
 
-### context
-
-• `Private` `Readonly` **context**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:18
-
-___
-
-### decryptKey
-
-• `Private` `Readonly` **decryptKey**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:23
-
-___
-
-### encryptKey
-
-• `Private` `Readonly` **encryptKey**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:24
-
-___
-
-### fabric
-
-• `Private` **fabric**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:20
-
-___
-
 ### generateNonce
 
 • `Private` **generateNonce**: `any`
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:81
-
-___
-
-### id
-
-• `Private` `Readonly` **id**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:19
+matter.js/dist/esm/session/SecureSession.d.ts:70
 
 ___
 
@@ -322,46 +241,6 @@ matter.js/dist/esm/session/Session.d.ts:39
 
 ___
 
-### peerNodeId
-
-• `Private` `Readonly` **peerNodeId**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:21
-
-___
-
-### peerSessionId
-
-• `Private` `Readonly` **peerSessionId**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:22
-
-___
-
-### subscriptionChangedCallback
-
-• `Private` `Readonly` **subscriptionChangedCallback**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:26
-
-___
-
-### subscriptions
-
-• `Private` `Readonly` **subscriptions**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:15
-
-___
-
 ### timestamp
 
 • **timestamp**: `number`
@@ -376,6 +255,24 @@ matter.js/dist/esm/session/Session.d.ts:32
 
 ## Accessors
 
+### associatedFabric
+
+• `get` **associatedFabric**(): [`Fabric`](internal_.Fabric.md)
+
+#### Returns
+
+[`Fabric`](internal_.Fabric.md)
+
+#### Overrides
+
+Session.associatedFabric
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:62
+
+___
+
 ### caseAuthenticatedTags
 
 • `get` **caseAuthenticatedTags**(): [`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[]
@@ -386,7 +283,7 @@ matter.js/dist/esm/session/Session.d.ts:32
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:55
+matter.js/dist/esm/session/SecureSession.d.ts:44
 
 ___
 
@@ -404,7 +301,93 @@ Session.closingAfterExchangeFinished
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:56
+matter.js/dist/esm/session/SecureSession.d.ts:45
+
+___
+
+### context
+
+• `get` **context**(): `T`
+
+#### Returns
+
+`T`
+
+#### Overrides
+
+Session.context
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:57
+
+___
+
+### fabric
+
+• `get` **fabric**(): `undefined` \| [`Fabric`](internal_.Fabric.md)
+
+#### Returns
+
+`undefined` \| [`Fabric`](internal_.Fabric.md)
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:53
+
+___
+
+### id
+
+• `get` **id**(): `number`
+
+#### Returns
+
+`number`
+
+#### Overrides
+
+Session.id
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:55
+
+___
+
+### isPase
+
+• `get` **isPase**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Overrides
+
+Session.isPase
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:48
+
+___
+
+### isSecure
+
+• `get` **isSecure**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Overrides
+
+Session.isSecure
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:47
 
 ___
 
@@ -422,7 +405,25 @@ Session.name
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:67
+matter.js/dist/esm/session/SecureSession.d.ts:56
+
+___
+
+### nodeId
+
+• `get` **nodeId**(): [`NodeId`](../modules/internal_.md#nodeid)
+
+#### Returns
+
+[`NodeId`](../modules/internal_.md#nodeid)
+
+#### Overrides
+
+Session.nodeId
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:59
 
 ___
 
@@ -436,7 +437,43 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:74
+matter.js/dist/esm/session/SecureSession.d.ts:61
+
+___
+
+### peerNodeId
+
+• `get` **peerNodeId**(): [`NodeId`](../modules/internal_.md#nodeid)
+
+#### Returns
+
+[`NodeId`](../modules/internal_.md#nodeid)
+
+#### Overrides
+
+Session.peerNodeId
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:60
+
+___
+
+### peerSessionId
+
+• `get` **peerSessionId**(): `number`
+
+#### Returns
+
+`number`
+
+#### Overrides
+
+Session.peerSessionId
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:58
 
 ___
 
@@ -450,7 +487,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:57
+matter.js/dist/esm/session/SecureSession.d.ts:46
 
 ## Methods
 
@@ -470,7 +507,7 @@ matter.js/dist/esm/session/SecureSession.d.ts:57
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:65
+matter.js/dist/esm/session/SecureSession.d.ts:54
 
 ___
 
@@ -490,7 +527,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:73
+matter.js/dist/esm/session/SecureSession.d.ts:63
 
 ___
 
@@ -510,7 +547,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:76
+matter.js/dist/esm/session/SecureSession.d.ts:65
 
 ___
 
@@ -530,7 +567,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:60
+matter.js/dist/esm/session/SecureSession.d.ts:49
 
 ___
 
@@ -555,7 +592,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:61
+matter.js/dist/esm/session/SecureSession.d.ts:50
 
 ___
 
@@ -582,7 +619,7 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:80
+matter.js/dist/esm/session/SecureSession.d.ts:69
 
 ___
 
@@ -606,7 +643,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:62
+matter.js/dist/esm/session/SecureSession.d.ts:51
 
 ___
 
@@ -633,25 +670,7 @@ Ends a session. Outstanding subscription data will be flushed before the session
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:78
-
-___
-
-### getAssociatedFabric
-
-▸ **getAssociatedFabric**(): [`Fabric`](internal_.Fabric.md)
-
-#### Returns
-
-[`Fabric`](internal_.Fabric.md)
-
-#### Overrides
-
-[Session](internal_.Session.md).[getAssociatedFabric](internal_.Session.md#getassociatedfabric)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:66
+matter.js/dist/esm/session/SecureSession.d.ts:67
 
 ___
 
@@ -665,67 +684,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:63
-
-___
-
-### getContext
-
-▸ **getContext**(): `T`
-
-#### Returns
-
-`T`
-
-#### Overrides
-
-[Session](internal_.Session.md).[getContext](internal_.Session.md#getcontext)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:68
-
-___
-
-### getFabric
-
-▸ **getFabric**(): `undefined` \| [`Fabric`](internal_.Fabric.md)
-
-#### Returns
-
-`undefined` \| [`Fabric`](internal_.Fabric.md)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:64
-
-___
-
-### getId
-
-▸ **getId**(): `number`
-
-#### Returns
-
-`number`
-
-#### Overrides
-
-[Session](internal_.Session.md).[getId](internal_.Session.md#getid)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:69
+matter.js/dist/esm/session/SecureSession.d.ts:52
 
 ___
 
 ### getIncrementedMessageCounter
 
-▸ **getIncrementedMessageCounter**(): `number`
+▸ **getIncrementedMessageCounter**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Inherited from
 
@@ -734,60 +703,6 @@ ___
 #### Defined in
 
 matter.js/dist/esm/session/Session.d.ts:49
-
-___
-
-### getNodeId
-
-▸ **getNodeId**(): [`NodeId`](../modules/internal_.md#nodeid)
-
-#### Returns
-
-[`NodeId`](../modules/internal_.md#nodeid)
-
-#### Overrides
-
-[Session](internal_.Session.md).[getNodeId](internal_.Session.md#getnodeid)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:71
-
-___
-
-### getPeerNodeId
-
-▸ **getPeerNodeId**(): [`NodeId`](../modules/internal_.md#nodeid)
-
-#### Returns
-
-[`NodeId`](../modules/internal_.md#nodeid)
-
-#### Overrides
-
-[Session](internal_.Session.md).[getPeerNodeId](internal_.Session.md#getpeernodeid)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:72
-
-___
-
-### getPeerSessionId
-
-▸ **getPeerSessionId**(): `number`
-
-#### Returns
-
-`number`
-
-#### Overrides
-
-[Session](internal_.Session.md).[getPeerSessionId](internal_.Session.md#getpeersessionid)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:70
 
 ___
 
@@ -809,24 +724,6 @@ matter.js/dist/esm/session/Session.d.ts:51
 
 ___
 
-### isPase
-
-▸ **isPase**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Overrides
-
-[Session](internal_.Session.md).[isPase](internal_.Session.md#ispase)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:59
-
-___
-
 ### isPeerActive
 
 ▸ **isPeerActive**(): `boolean`
@@ -842,24 +739,6 @@ ___
 #### Defined in
 
 matter.js/dist/esm/session/Session.d.ts:48
-
-___
-
-### isSecure
-
-▸ **isSecure**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Overrides
-
-[Session](internal_.Session.md).[isSecure](internal_.Session.md#issecure)
-
-#### Defined in
-
-matter.js/dist/esm/session/SecureSession.d.ts:58
 
 ___
 
@@ -903,7 +782,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:75
+matter.js/dist/esm/session/SecureSession.d.ts:64
 
 ___
 
@@ -966,4 +845,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:27
+matter.js/dist/esm/session/SecureSession.d.ts:16

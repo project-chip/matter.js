@@ -28,4 +28,4 @@ The ability to support CacheAndSync security policy and MCSP.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:361
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:428

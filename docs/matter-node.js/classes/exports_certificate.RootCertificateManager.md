@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [#private](exports_certificate.RootCertificateManager.md##private)
 - [generateRootCert](exports_certificate.RootCertificateManager.md#generaterootcert)
 - [nextCertificateId](exports_certificate.RootCertificateManager.md#nextcertificateid)
 - [rootCertBytes](exports_certificate.RootCertificateManager.md#rootcertbytes)
@@ -19,22 +20,27 @@
 - [rootKeyIdentifier](exports_certificate.RootCertificateManager.md#rootkeyidentifier)
 - [rootKeyPair](exports_certificate.RootCertificateManager.md#rootkeypair)
 
+### Accessors
+
+- [construction](exports_certificate.RootCertificateManager.md#construction)
+
 ### Methods
 
 - [generateNoc](exports_certificate.RootCertificateManager.md#generatenoc)
 - [getRootCert](exports_certificate.RootCertificateManager.md#getrootcert)
+- [create](exports_certificate.RootCertificateManager.md#create)
 
 ## Constructors
 
 ### constructor
 
-• **new RootCertificateManager**(`storageContext`): [`RootCertificateManager`](exports_certificate.RootCertificateManager.md)
+• **new RootCertificateManager**(`storage`): [`RootCertificateManager`](exports_certificate.RootCertificateManager.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storageContext` | [`StorageContext`](storage_export.StorageContext.md) |
+| `storage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 
 #### Returns
 
@@ -42,9 +48,19 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:21
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
+
+___
 
 ### generateRootCert
 
@@ -52,7 +68,7 @@ packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:23
 
 ___
 
@@ -62,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18
 
 ___
 
@@ -72,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
 
 ___
 
@@ -82,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
 
 ___
 
@@ -92,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
 
 ___
 
@@ -102,7 +118,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
+
+## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)\<[`RootCertificateManager`](exports_certificate.RootCertificateManager.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)\<[`RootCertificateManager`](exports_certificate.RootCertificateManager.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
 
 ## Methods
 
@@ -125,7 +155,7 @@ packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:20
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:24
 
 ___
 
@@ -139,4 +169,24 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:22
+
+___
+
+### create
+
+▸ **create**(`storage`): `Promise`\<[`RootCertificateManager`](exports_certificate.RootCertificateManager.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `storage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+
+#### Returns
+
+`Promise`\<[`RootCertificateManager`](exports_certificate.RootCertificateManager.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:20

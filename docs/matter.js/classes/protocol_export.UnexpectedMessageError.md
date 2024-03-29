@@ -45,7 +45,7 @@ Error base class for all errors thrown by this library.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageExchange.ts#L33)
+[packages/matter.js/src/protocol/MessageExchange.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageExchange.ts#L34)
 
 ## Properties
 
@@ -55,4 +55,4 @@ Error base class for all errors thrown by this library.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageExchange.ts#L35)
+[packages/matter.js/src/protocol/MessageExchange.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageExchange.ts#L36)

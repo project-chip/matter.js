@@ -20,6 +20,10 @@
 
 - [get](internal_.Ble.md#get)
 
+### Accessors
+
+- [enabled](internal_.Ble.md#enabled)
+
 ### Methods
 
 - [getBleBroadcaster](internal_.Ble.md#getblebroadcaster)
@@ -53,7 +57,21 @@
 
 #### Defined in
 
-matter.js/dist/esm/ble/Ble.d.ts:15
+matter.js/dist/esm/ble/Ble.d.ts:16
+
+## Accessors
+
+### enabled
+
+• `get` **enabled**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+matter.js/dist/esm/ble/Ble.d.ts:17
 
 ## Methods
 
@@ -73,7 +91,7 @@ matter.js/dist/esm/ble/Ble.d.ts:15
 
 #### Defined in
 
-matter.js/dist/esm/ble/Ble.d.ts:18
+matter.js/dist/esm/ble/Ble.d.ts:20
 
 ___
 
@@ -87,7 +105,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/ble/Ble.d.ts:17
+matter.js/dist/esm/ble/Ble.d.ts:19
 
 ___
 
@@ -101,7 +119,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/ble/Ble.d.ts:16
+matter.js/dist/esm/ble/Ble.d.ts:18
 
 ___
 
@@ -115,4 +133,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/ble/Ble.d.ts:19
+matter.js/dist/esm/ble/Ble.d.ts:21

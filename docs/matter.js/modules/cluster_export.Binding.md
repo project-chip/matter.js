@@ -6,61 +6,59 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/cluster_export.Binding.Cluster.md)
+- [TargetStruct](../interfaces/cluster_export.Binding.TargetStruct.md)
+
 ### Variables
 
 - [Cluster](cluster_export.Binding.md#cluster)
+- [ClusterInstance](cluster_export.Binding.md#clusterinstance)
+- [Complete](cluster_export.Binding.md#complete)
 - [TlvTargetStruct](cluster_export.Binding.md#tlvtargetstruct)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `binding`: [`WritableFabricScopedAttribute`](../interfaces/cluster_export.WritableFabricScopedAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `id`: ``30`` = 0x1e; `name`: ``"Binding"`` = "Binding"; `revision`: ``1`` = 1 }\>
-
-Binding
-
-NOTE
-
-This scope of this document is the Binding cluster as part of the Cluster Library. The Binding cluster is meant
-to replace the support from the Zigbee Device Object (ZDO) for supporting the binding table.
-
-A binding represents a persistent relationship between an endpoint and one or more other local or remote
-endpoints. A binding does not require that the relationship exists. It is up to the node application to set up
-the relationship.
-
-A binding is used to inform a client endpoint of one or more targets for a potential interaction. For example: a
-light switch that controls one or more light bulbs, needs to be told the nodes and endpoints of the bulbs, or
-told a group in which the bulbs are members. For example: A client that needs to subscribe to an occupancy
-sensor, needs to know the node and endpoint of the sensor.
-
-In such cases, a binding is used to direct a local endpoint to a target. The existence of the Binding cluster on
-the client endpoint, allows the creation of one or more binding entries (bindings) in the Binding cluster.
-
-Each binding indicates another endpoint or cluster on another endpoint. Multiple bindings are allowed, depending
-on the interaction.
-
-A binding is either a unicast binding, where the target is a single endpoint on a single node, or a groupcast
-binding, where the target is a group, which may indicate multiple endpoints on multiple nodes. The binding may
-also target a single cluster on the target endpoint(s).
-
-When a client cluster requires a target for an interaction, the Binding cluster shall exist on the same endpoint.
-
-Once a binding entry is created on the Binding cluster, the client endpoint may initiate interactions to the
-binding target.
-
-**`See`**
-
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.6
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.Binding.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L124)
+
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:126](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L126)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `binding`: [`WritableFabricScopedAttribute`](../interfaces/cluster_export.WritableFabricScopedAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](datatype_export.md#clusterid)\<`number`\>\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `id`: ``30`` = 0x1e; `name`: ``"Binding"`` = "Binding"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.Binding.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L71)
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/cluster_export.Binding.Cluster.md) = `Cluster`
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L127)
 
 ___
 
 ### TlvTargetStruct
 
-• `Const` **TlvTargetStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>
+• `Const` **TlvTargetStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](datatype_export.md#clusterid)\<`number`\>\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>
 
 **`See`**
 
@@ -68,4 +66,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L27)

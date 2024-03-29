@@ -29,7 +29,7 @@ Command failed: Requested playback command is invalid in the current playback st
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:43
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:81
 
 ___
 
@@ -41,7 +41,7 @@ Command failed: This endpoint is not active for playback.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:52
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:90
 
 ___
 
@@ -54,7 +54,7 @@ attempting to fast-forward during a commercial might return NotAllowed.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:48
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:86
 
 ___
 
@@ -67,7 +67,7 @@ the media.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:62
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:100
 
 ___
 
@@ -80,7 +80,7 @@ fastest speed supported by the server in the respective direction.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:57
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:95
 
 ___
 
@@ -92,4 +92,4 @@ Command succeeded
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:39
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:77

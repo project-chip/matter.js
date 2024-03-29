@@ -50,7 +50,7 @@ Create a new Matter server instance
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `storageManager` | [`StorageManager`](storage_export.StorageManager.md) | Storage manager instance to use for all nodes |
+| `storageManager` | [`StorageManager`](storage_export.StorageManager.md)\<[`SyncStorage`](storage_export.SyncStorage.md)\> | Storage manager instance to use for all nodes |
 | `options?` | [`MatterServerOptions`](../modules/export.md#matterserveroptions) | Optional MatterServer options |
 
 #### Returns
@@ -59,7 +59,7 @@ Create a new Matter server instance
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:52
+packages/matter.js/dist/esm/MatterServer.d.ts:53
 
 ## Properties
 
@@ -69,7 +69,7 @@ packages/matter.js/dist/esm/MatterServer.d.ts:52
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:45
+packages/matter.js/dist/esm/MatterServer.d.ts:46
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:54
+packages/matter.js/dist/esm/MatterServer.d.ts:55
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:44
+packages/matter.js/dist/esm/MatterServer.d.ts:45
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:43
+packages/matter.js/dist/esm/MatterServer.d.ts:44
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:42
+packages/matter.js/dist/esm/MatterServer.d.ts:43
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:40
+packages/matter.js/dist/esm/MatterServer.d.ts:41
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:89
+packages/matter.js/dist/esm/MatterServer.d.ts:90
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:41
+packages/matter.js/dist/esm/MatterServer.d.ts:42
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:39
+packages/matter.js/dist/esm/MatterServer.d.ts:40
 
 ## Accessors
 
@@ -163,7 +163,7 @@ packages/matter.js/dist/esm/MatterServer.d.ts:39
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:53
+packages/matter.js/dist/esm/MatterServer.d.ts:54
 
 ## Methods
 
@@ -186,7 +186,7 @@ Add a Controller node to the server
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:76
+packages/matter.js/dist/esm/MatterServer.d.ts:77
 
 ___
 
@@ -209,7 +209,7 @@ Add a CommissioningServer node to the server
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:61
+packages/matter.js/dist/esm/MatterServer.d.ts:62
 
 ___
 
@@ -225,7 +225,7 @@ Close the server and all nodes
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:93
+packages/matter.js/dist/esm/MatterServer.d.ts:94
 
 ___
 
@@ -248,7 +248,7 @@ Remove a Controller node from the server, close the Controller and optionally de
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:83
+packages/matter.js/dist/esm/MatterServer.d.ts:84
 
 ___
 
@@ -272,7 +272,7 @@ storage context.
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:69
+packages/matter.js/dist/esm/MatterServer.d.ts:70
 
 ___
 
@@ -289,4 +289,4 @@ be announced/paired immediately.
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:88
+packages/matter.js/dist/esm/MatterServer.d.ts:89

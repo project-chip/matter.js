@@ -24,21 +24,21 @@
 
 ### Child
 
-Ƭ **Child**: [`DatatypeElement`](model.md#datatypeelement) \| [`AttributeElement`](model.md#attributeelement) \| [`CommandElement`](model.md#commandelement) \| [`EventElement`](model.md#eventelement)
+Ƭ **Child**: [`DatatypeElement`](../interfaces/model.DatatypeElement-1.md) \| [`AttributeElement`](../interfaces/model.AttributeElement-1.md) \| [`CommandElement`](../interfaces/model.CommandElement-1.md) \| [`EventElement`](../interfaces/model.EventElement-1.md) \| [`FieldElement`](../interfaces/model.FieldElement-1.md)
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L43)
+[packages/matter.js/src/model/elements/ClusterElement.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L50)
 
 ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`ClusterElement`](model.md#clusterelement)\>
+Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`ClusterElement`](../interfaces/model.ClusterElement-1.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L42)
+[packages/matter.js/src/model/elements/ClusterElement.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L49)
 
 ___
 
@@ -48,9 +48,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L40)
+[packages/matter.js/src/model/elements/ClusterElement.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L47)
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L41)
+[packages/matter.js/src/model/elements/ClusterElement.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L48)
 
 ## Variables
 
@@ -60,6 +60,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L40)
+[packages/matter.js/src/model/elements/ClusterElement.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L47)
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/ClusterElement.ts#L41)
+[packages/matter.js/src/model/elements/ClusterElement.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/ClusterElement.ts#L48)

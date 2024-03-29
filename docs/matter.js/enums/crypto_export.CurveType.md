@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L42)
+[packages/matter.js/src/crypto/Key.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/crypto/Key.ts#L47)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L43)
+[packages/matter.js/src/crypto/Key.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/crypto/Key.ts#L48)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/crypto/Key.ts#L44)
+[packages/matter.js/src/crypto/Key.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/crypto/Key.ts#L49)

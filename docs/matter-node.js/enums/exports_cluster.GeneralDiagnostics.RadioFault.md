@@ -30,7 +30,7 @@ The Node has encountered a fault with its BLE radio.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:210
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:220
 
 ___
 
@@ -42,7 +42,7 @@ The Node has encountered a fault with its cellular radio.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:198
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:208
 
 ___
 
@@ -54,7 +54,7 @@ The Node has encountered a fault with its Ethernet controller.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:214
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:224
 
 ___
 
@@ -66,7 +66,7 @@ The Node has encountered a fault with its NFC radio.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:206
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:216
 
 ___
 
@@ -78,7 +78,7 @@ The Node has encountered a fault with its802.15.4 radio.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:202
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:212
 
 ___
 
@@ -90,7 +90,7 @@ The Node has encountered an unspecified radio fault.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:190
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:200
 
 ___
 
@@ -102,4 +102,4 @@ The Node has encountered a fault with its Wi-Fi radio.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:194
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:204

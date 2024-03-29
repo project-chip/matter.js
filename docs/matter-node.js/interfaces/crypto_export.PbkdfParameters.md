@@ -19,7 +19,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Spake2p.d.ts:9
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:8
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Spake2p.d.ts:10
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:9

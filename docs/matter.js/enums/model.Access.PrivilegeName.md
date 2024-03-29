@@ -23,7 +23,7 @@ Reverse map of Privilege.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:317](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L317)
+[packages/matter.js/src/model/aspects/Access.ts:331](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L331)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:316](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L316)
+[packages/matter.js/src/model/aspects/Access.ts:330](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L330)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:315](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L315)
+[packages/matter.js/src/model/aspects/Access.ts:329](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L329)
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:314](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L314)
+[packages/matter.js/src/model/aspects/Access.ts:328](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L328)

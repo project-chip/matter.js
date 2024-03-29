@@ -13,15 +13,22 @@
 - [MovementStatus](../enums/exports_cluster.WindowCovering.MovementStatus.md)
 - [WindowCoveringType](../enums/exports_cluster.WindowCovering.WindowCoveringType.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.WindowCovering.md#extension)
+- [Cluster](../interfaces/exports_cluster.WindowCovering.Cluster.md)
+- [Complete](../interfaces/exports_cluster.WindowCovering.Complete.md)
+- [GoToLiftPercentageRequest](../interfaces/exports_cluster.WindowCovering.GoToLiftPercentageRequest.md)
+- [GoToLiftValueRequest](../interfaces/exports_cluster.WindowCovering.GoToLiftValueRequest.md)
+- [GoToTiltPercentageRequest](../interfaces/exports_cluster.WindowCovering.GoToTiltPercentageRequest.md)
+- [GoToTiltValueRequest](../interfaces/exports_cluster.WindowCovering.GoToTiltValueRequest.md)
 
 ### Variables
 
 - [Base](exports_cluster.WindowCovering.md#base)
 - [Cluster](exports_cluster.WindowCovering.md#cluster)
+- [ClusterInstance](exports_cluster.WindowCovering.md#clusterinstance)
 - [Complete](exports_cluster.WindowCovering.md#complete)
+- [CompleteInstance](exports_cluster.WindowCovering.md#completeinstance)
 - [ConfigStatus](exports_cluster.WindowCovering.md#configstatus)
 - [LiftAndAbsolutePositionComponent](exports_cluster.WindowCovering.md#liftandabsolutepositioncomponent)
 - [LiftAndPositionAwareLiftAndAbsolutePositionComponent](exports_cluster.WindowCovering.md#liftandpositionawareliftandabsolutepositioncomponent)
@@ -39,70 +46,95 @@
 - [TlvGoToTiltPercentageRequest](exports_cluster.WindowCovering.md#tlvgototiltpercentagerequest)
 - [TlvGoToTiltValueRequest](exports_cluster.WindowCovering.md#tlvgototiltvaluerequest)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.WindowCovering.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `absolutePosition`: ``true`` ; `lift`: ``true`` ; `positionAwareLift`: ``true``  } ? typeof [`LiftAndPositionAwareLiftAndAbsolutePositionComponent`](exports_cluster.WindowCovering.md#liftandpositionawareliftandabsolutepositioncomponent) : {} & `SF` extends \{ `absolutePosition`: ``true`` ; `positionAwareTilt`: ``true`` ; `tilt`: ``true``  } ? typeof [`TiltAndPositionAwareTiltAndAbsolutePositionComponent`](exports_cluster.WindowCovering.md#tiltandpositionawaretiltandabsolutepositioncomponent) : {} & `SF` extends \{ `lift`: ``true``  } ? typeof [`LiftComponent`](exports_cluster.WindowCovering.md#liftcomponent) : {} & `SF` extends \{ `tilt`: ``true``  } ? typeof [`TiltComponent`](exports_cluster.WindowCovering.md#tiltcomponent) : {} & `SF` extends \{ `lift`: ``true`` ; `positionAwareLift`: ``true``  } ? typeof [`LiftAndPositionAwareLiftComponent`](exports_cluster.WindowCovering.md#liftandpositionawareliftcomponent) : {} & `SF` extends \{ `positionAwareTilt`: ``true`` ; `tilt`: ``true``  } ? typeof [`TiltAndPositionAwareTiltComponent`](exports_cluster.WindowCovering.md#tiltandpositionawaretiltcomponent) : {} & `SF` extends \{ `absolutePosition`: ``true`` ; `lift`: ``true``  } ? typeof [`LiftAndAbsolutePositionComponent`](exports_cluster.WindowCovering.md#liftandabsolutepositioncomponent) : {} & `SF` extends \{ `absolutePosition`: ``true`` ; `tilt`: ``true``  } ? typeof [`TiltAndAbsolutePositionComponent`](exports_cluster.WindowCovering.md#tiltandabsolutepositioncomponent) : {} & `SF` extends \{ `lift`: ``false`` ; `positionAwareLift`: ``true``  } ? `never` : {} & `SF` extends \{ `positionAwareTilt`: ``true`` ; `tilt`: ``false``  } ? `never` : {} & `SF` extends \{ `lift`: ``false`` ; `tilt`: ``false``  } ? `never` : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:1593
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `configStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `endProductType`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`EndProductType`](../enums/exports_cluster.WindowCovering.EndProductType.md), `any`\> ; `mode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `operationalStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `safetyStatus`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `type`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`WindowCoveringType`](../enums/exports_cluster.WindowCovering.WindowCoveringType.md), `any`\>  } ; `commands`: \{ `downOrClose`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `stopMotion`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `upOrOpen`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `features`: \{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``258`` ; `name`: ``"WindowCovering"`` ; `revision`: ``5``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all WindowCovering clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `configStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `endProductType`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`EndProductType`](../enums/exports_cluster.WindowCovering.EndProductType.md), `any`\> ; `mode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `operationalStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `safetyStatus`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `type`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`WindowCoveringType`](../enums/exports_cluster.WindowCovering.WindowCoveringType.md), `any`\>  } | - |
+| `attributes.configStatus` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | The ConfigStatus attribute makes configuration and status information available. To change settings, devices shall write to the Mode attribute of the Window Covering Settings Attribute Set. The behavior causing the setting or clearing of each bit is vendor specific. See table below for details on each bit. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.5.8 |
+| `attributes.endProductType` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`EndProductType`](../enums/exports_cluster.WindowCovering.EndProductType.md), `any`\> | The EndProductType attribute identifies the product type in complement of the main category indicated by the Type attribute. The window covering shall set this value to one of the values in the table below. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.5.16 |
+| `attributes.mode` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | The Mode attribute allows configuration of the Window Covering, such as: reversing the motor direction, placing the Window Covering into calibration mode, placing the motor into maintenance mode, disabling the network, and disabling status LEDs. See below for details. In the case a device does not support or implement a specific mode, e.g. the device has a specific installation method and reversal is not relevant or the device does not include a maintenance mode, any write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits set, must be ignored and a response containing the status of CONSTRAINT_ERROR will be returned. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.5.21 |
+| `attributes.operationalStatus` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | The OperationalStatus attribute keeps track of currently ongoing operations and applies to all type of devices. See below for details about the meaning of individual bits. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.5.15 |
+| `attributes.safetyStatus` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | The SafetyStatus attribute reflects the state of the safety sensors and the common issues preventing movements. By default for nominal operation all flags are cleared (0). A device might support none, one or several bit flags from this attribute (all optional). See below for details about the meaning of individual bits. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.5.22 |
+| `attributes.type` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`WindowCoveringType`](../enums/exports_cluster.WindowCovering.WindowCoveringType.md), `any`\> | The Type attribute identifies the type of window covering being controlled by this endpoint and shall be set to one of the non-reserved values in the table below. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.5.1 |
+| `commands` | \{ `downOrClose`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `stopMotion`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `upOrOpen`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } | - |
+| `commands.downOrClose` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will adjust its position so the physical lift/slide and tilt is at the maximum closed/down position. This will happen as fast as possible. The server attributes supported shall be updated as follows: if Position Aware feature is supported: • TargetPositionLiftPercent100ths attribute shall be set to 100.00%. • TargetPositionTiltPercent100ths attribute shall be set to 100.00%. The server positioning attributes will follow the movements, once the movement has successfully finished, the server attributes shall be updated as follows: if Position Aware feature is supported: • CurrentPositionLiftPercent100ths attribute shall be 100.00%. • CurrentPositionLiftPercentage attribute shall be 100%. • CurrentPositionTiltPercent100ths attribute shall be 100.00%. • CurrentPositionTiltPercentage attribute shall be 100%. if Absolute Position feature is supported: • CurrentPositionLift attribute shall be equal to the InstalledClosedLimitLift attribute. • CurrentPositionTilt attribute shall be equal to the InstalledClosedLimitTilt attribute. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.6.2 |
+| `commands.stopMotion` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will stop any adjusting to the physical tilt and lift/slide that is currently occurring. The server attributes supported shall be updated as follows: • TargetPositionLiftPercent100ths attribute will be set to CurrentPositionLiftPercent100ths attribute value. • TargetPositionTiltPercent100ths attribute will be set to CurrentPositionTiltPercent100ths attribute value. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.6.3 |
+| `commands.upOrOpen` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will adjust its position so the physical lift/slide and tilt is at the maximum open/up position. This will happen as fast as possible. The server attributes shall be updated as follows: if Position Aware feature is supported: • TargetPositionLiftPercent100ths attribute shall be set to 0.00%. • TargetPositionTiltPercent100ths attribute shall be set to 0.00%. The server positioning attributes will follow the movements, once the movement has successfully finished, the server attributes shall be updated as follows: if Position Aware feature is supported: • CurrentPositionLiftPercent100ths attribute shall be 0.00%. • CurrentPositionLiftPercentage attribute shall be 0%. • CurrentPositionTiltPercent100ths attribute shall be 0.00%. • CurrentPositionTiltPercentage attribute shall be 0%. if Absolute Position feature is supported: • CurrentPositionLift attribute shall be equal to the InstalledOpenLimitLift attribute. • CurrentPositionTilt attribute shall be equal to the InstalledOpenLimitTilt attribute. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.3.6.1 |
+| `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `currentPositionLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `installedClosedLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitLift`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\>  }  } ; `flags`: \{ `absolutePosition`: ``true`` ; `lift`: ``true`` ; `positionAwareLift`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `currentPositionTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `installedClosedLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitTilt`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\>  }  } ; `flags`: \{ `absolutePosition`: ``true`` ; `positionAwareTilt`: ``true`` ; `tilt`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `numberOfActuationsLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `goToLiftPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `lift`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `numberOfActuationsTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `goToTiltPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `tilt`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `currentPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `currentPositionLiftPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `targetPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  } ; `commands`: \{ `goToLiftPercentage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `lift`: ``true`` ; `positionAwareLift`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `currentPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `currentPositionTiltPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `targetPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  } ; `commands`: \{ `goToTiltPercentage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `positionAwareTilt`: ``true`` ; `tilt`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `goToLiftValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `absolutePosition`: ``true`` ; `lift`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `goToTiltValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `absolutePosition`: ``true`` ; `tilt`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `lift`: ``false`` ; `positionAwareLift`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `positionAwareTilt`: ``true`` ; `tilt`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `lift`: ``false`` ; `tilt`: ``false``  }  }] | This metadata controls which WindowCoveringCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.absolutePosition` | [`BitFlag`](exports_schema.md#bitflag) | AbsolutePosition Absolute positioning is supported. |
+| `features.lift` | [`BitFlag`](exports_schema.md#bitflag) | Lift Lift Control and behavior for lifting/sliding window coverings |
+| `features.positionAwareLift` | [`BitFlag`](exports_schema.md#bitflag) | PositionAwareLift Position Aware lift control is supported. |
+| `features.positionAwareTilt` | [`BitFlag`](exports_schema.md#bitflag) | PositionAwareTilt Position Aware tilt control is supported. |
+| `features.tilt` | [`BitFlag`](exports_schema.md#bitflag) | Tilt Tilt Control and behavior for tilting window coverings |
+| `id` | ``258`` | - |
+| `name` | ``"WindowCovering"`` | - |
+| `revision` | ``5`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:303
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:627
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `downOrClose`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `stopMotion`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `upOrOpen`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `events`: {} ; `features`: \{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"WindowCovering"`` ; `revision`: ``5`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `configStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `endProductType`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`EndProductType`](../enums/exports_cluster.WindowCovering.EndProductType.md), `any`\> ; `mode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `operationalStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `safetyStatus`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `type`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`WindowCoveringType`](../enums/exports_cluster.WindowCovering.WindowCoveringType.md), `any`\>  } ; `commands`: \{ `downOrClose`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `stopMotion`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `upOrOpen`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `features`: \{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``258`` ; `name`: ``"WindowCovering"`` ; `revision`: ``5``  }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.WindowCovering.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Window Covering
-
-The window covering cluster provides an interface for controlling and adjusting automatic window coverings such
-as drapery motors, automatic shades, curtains and blinds.
-
-WindowCoveringCluster supports optional features that you can enable with the WindowCoveringCluster.with()
-factory method.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 5.3
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.WindowCovering.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:904
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:1895
+
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:1897
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`ExtensibleOnly`](../interfaces/exports_cluster.MutableCluster.ExtensibleOnly.md)\<\{ `attributes`: \{ `configStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `endProductType`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`EndProductType`](../enums/exports_cluster.WindowCovering.EndProductType.md), `any`\> ; `mode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `operationalStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `safetyStatus`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `type`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`WindowCoveringType`](../enums/exports_cluster.WindowCovering.WindowCoveringType.md), `any`\>  } ; `commands`: \{ `downOrClose`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `stopMotion`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `upOrOpen`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `currentPositionLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `installedClosedLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitLift`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\>  }  } ; `flags`: \{ `absolutePosition`: ``true`` ; `lift`: ``true`` ; `positionAwareLift`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `currentPositionTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `installedClosedLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitTilt`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\>  }  } ; `flags`: \{ `absolutePosition`: ``true`` ; `positionAwareTilt`: ``true`` ; `tilt`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `numberOfActuationsLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `goToLiftPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `lift`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `numberOfActuationsTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `goToTiltPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `tilt`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `currentPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `currentPositionLiftPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `targetPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  } ; `commands`: \{ `goToLiftPercentage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `lift`: ``true`` ; `positionAwareLift`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `currentPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `currentPositionTiltPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `targetPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  } ; `commands`: \{ `goToTiltPercentage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `positionAwareTilt`: ``true`` ; `tilt`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `goToLiftValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `absolutePosition`: ``true`` ; `lift`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `goToTiltValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `absolutePosition`: ``true`` ; `tilt`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `lift`: ``false`` ; `positionAwareLift`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `positionAwareTilt`: ``true`` ; `tilt`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `lift`: ``false`` ; `tilt`: ``false``  }  }] ; `features`: \{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``258`` ; `name`: ``"WindowCovering"`` ; `revision`: ``5``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.WindowCovering.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:1257
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `clusterRevision`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `never`\> ; `configStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `currentPositionLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean` ; `positionAwareLift`: `boolean`  }]  } ; `currentPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `currentPositionLiftPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `lift`: `boolean` ; `positionAwareLift`: `boolean`  }]  } ; `currentPositionTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }]  } ; `currentPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `currentPositionTiltPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }]  } ; `endProductType`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`EndProductType`](../enums/exports_cluster.WindowCovering.EndProductType.md), `any`\> ; `eventList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<\{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `installedClosedLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `installedClosedLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `absolutePosition`: `boolean` ; `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `installedOpenLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `installedOpenLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `absolutePosition`: `boolean` ; `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `mode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `numberOfActuationsLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `lift`: `boolean`  }]  } ; `numberOfActuationsTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `tilt`: `boolean`  }]  } ; `operationalStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `physicalClosedLimitLift`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean` ; `positionAwareLift`: `boolean`  }]  } ; `physicalClosedLimitTilt`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }]  } ; `safetyStatus`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `targetPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `targetPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `type`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`WindowCoveringType`](../enums/exports_cluster.WindowCovering.WindowCoveringType.md), `any`\>  } ; `commands`: \{ `downOrClose`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `goToLiftPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `lift`: `boolean`  }]  } ; `goToLiftValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean`  }]  } ; `goToTiltPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `tilt`: `boolean`  }]  } ; `goToTiltValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `tilt`: `boolean`  }]  } ; `stopMotion`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `upOrOpen`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `features`: \{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``258`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"WindowCovering"`` ; `revision`: ``5``  }\>
-
-This cluster supports all WindowCovering features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/exports_cluster.WindowCovering.Complete.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:1635
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:2401
+
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:2403
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `configStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `currentPositionLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean` ; `positionAwareLift`: `boolean`  }]  } ; `currentPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `currentPositionLiftPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `lift`: `boolean` ; `positionAwareLift`: `boolean`  }]  } ; `currentPositionTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }]  } ; `currentPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `currentPositionTiltPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }]  } ; `endProductType`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`EndProductType`](../enums/exports_cluster.WindowCovering.EndProductType.md), `any`\> ; `installedClosedLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `installedClosedLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `absolutePosition`: `boolean` ; `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `installedOpenLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `installedOpenLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `absolutePosition`: `boolean` ; `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `mode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `numberOfActuationsLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `lift`: `boolean`  }]  } ; `numberOfActuationsTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `tilt`: `boolean`  }]  } ; `operationalStatus`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `physicalClosedLimitLift`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean` ; `positionAwareLift`: `boolean`  }]  } ; `physicalClosedLimitTilt`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }]  } ; `safetyStatus`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `targetPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `targetPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `type`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`WindowCoveringType`](../enums/exports_cluster.WindowCovering.WindowCoveringType.md), `any`\>  } ; `commands`: \{ `downOrClose`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `goToLiftPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `lift`: `boolean` ; `positionAwareLift`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `lift`: `boolean`  }]  } ; `goToLiftValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `lift`: `boolean`  }]  } ; `goToTiltPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `positionAwareTilt`: `boolean` ; `tilt`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `tilt`: `boolean`  }]  } ; `goToTiltValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: [] \| [\{ `absolutePosition`: `boolean` ; `tilt`: `boolean`  }]  } ; `stopMotion`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `upOrOpen`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `features`: \{ `absolutePosition`: [`BitFlag`](exports_schema.md#bitflag) ; `lift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareLift`: [`BitFlag`](exports_schema.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](exports_schema.md#bitflag) ; `tilt`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``258`` ; `name`: ``"WindowCovering"`` ; `revision`: ``5``  }\>
+
+**`See`**
+
+[Complete](exports_cluster.WindowCovering.md#complete)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:1901
 
 ___
 
@@ -130,56 +162,93 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.5.8
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:96
 
 ___
 
 ### LiftAndAbsolutePositionComponent
 
-• `Const` **LiftAndAbsolutePositionComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `goToLiftValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
+• `Const` **LiftAndAbsolutePositionComponent**: `Object`
 
 A WindowCoveringCluster supports these elements if it supports features Lift and AbsolutePosition.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `goToLiftValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } |
+| `commands.goToLiftValue` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:858
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:552
 
 ___
 
 ### LiftAndPositionAwareLiftAndAbsolutePositionComponent
 
-• `Const` **LiftAndPositionAwareLiftAndAbsolutePositionComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `currentPositionLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `installedClosedLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitLift`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\>  }  }\>
+• `Const` **LiftAndPositionAwareLiftAndAbsolutePositionComponent**: `Object`
 
 A WindowCoveringCluster supports these elements if it supports features Lift, PositionAwareLift and
 AbsolutePosition.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `currentPositionLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `installedClosedLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitLift`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitLift`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\>  } |
+| `attributes.currentPositionLift` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> |
+| `attributes.installedClosedLimitLift` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> |
+| `attributes.installedOpenLimitLift` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> |
+| `attributes.physicalClosedLimitLift` | [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:603
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:297
 
 ___
 
 ### LiftAndPositionAwareLiftComponent
 
-• `Const` **LiftAndPositionAwareLiftComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `currentPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `currentPositionLiftPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `targetPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  } ; `commands`: \{ `goToLiftPercentage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
+• `Const` **LiftAndPositionAwareLiftComponent**: `Object`
 
 A WindowCoveringCluster supports these elements if it supports features Lift and PositionAwareLift.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `currentPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `currentPositionLiftPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `targetPositionLiftPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  } |
+| `attributes.currentPositionLiftPercent100ths` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> |
+| `attributes.currentPositionLiftPercentage` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> |
+| `attributes.targetPositionLiftPercent100ths` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> |
+| `commands` | \{ `goToLiftPercentage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } |
+| `commands.goToLiftPercentage` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:751
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:445
 
 ___
 
 ### LiftComponent
 
-• `Const` **LiftComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `numberOfActuationsLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `goToLiftPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
+• `Const` **LiftComponent**: `Object`
 
 A WindowCoveringCluster supports these elements if it supports feature Lift.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `numberOfActuationsLift`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } |
+| `attributes.numberOfActuationsLift` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> |
+| `commands` | \{ `goToLiftPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } |
+| `commands.goToLiftPercentage` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:674
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:368
 
 ___
 
@@ -204,7 +273,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.5.21
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:142
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:204
 
 ___
 
@@ -228,7 +297,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.5.15
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:74
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:136
 
 ___
 
@@ -261,56 +330,93 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.5.22
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:178
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:240
 
 ___
 
 ### TiltAndAbsolutePositionComponent
 
-• `Const` **TiltAndAbsolutePositionComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `goToTiltValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
+• `Const` **TiltAndAbsolutePositionComponent**: `Object`
 
 A WindowCoveringCluster supports these elements if it supports features Tilt and AbsolutePosition.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `goToTiltValue`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } |
+| `commands.goToTiltValue` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:877
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:571
 
 ___
 
 ### TiltAndPositionAwareTiltAndAbsolutePositionComponent
 
-• `Const` **TiltAndPositionAwareTiltAndAbsolutePositionComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `currentPositionTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `installedClosedLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitTilt`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\>  }  }\>
+• `Const` **TiltAndPositionAwareTiltAndAbsolutePositionComponent**: `Object`
 
 A WindowCoveringCluster supports these elements if it supports features Tilt, PositionAwareTilt and
 AbsolutePosition.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `currentPositionTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `installedClosedLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitTilt`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitTilt`: [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\>  } |
+| `attributes.currentPositionTilt` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> |
+| `attributes.installedClosedLimitTilt` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> |
+| `attributes.installedOpenLimitTilt` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> |
+| `attributes.physicalClosedLimitTilt` | [`OptionalFixedAttribute`](../interfaces/exports_cluster.OptionalFixedAttribute.md)\<`number`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:639
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:333
 
 ___
 
 ### TiltAndPositionAwareTiltComponent
 
-• `Const` **TiltAndPositionAwareTiltComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `currentPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `currentPositionTiltPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `targetPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  } ; `commands`: \{ `goToTiltPercentage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
+• `Const` **TiltAndPositionAwareTiltComponent**: `Object`
 
 A WindowCoveringCluster supports these elements if it supports features Tilt and PositionAwareTilt.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `currentPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> ; `currentPositionTiltPercentage`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> ; `targetPositionTiltPercent100ths`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  } |
+| `attributes.currentPositionTiltPercent100ths` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> |
+| `attributes.currentPositionTiltPercentage` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| ``null``, `any`\> |
+| `attributes.targetPositionTiltPercent100ths` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\> |
+| `commands` | \{ `goToTiltPercentage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } |
+| `commands.goToTiltPercentage` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:804
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:498
 
 ___
 
 ### TiltComponent
 
-• `Const` **TiltComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `numberOfActuationsTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `goToTiltPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
+• `Const` **TiltComponent**: `Object`
 
 A WindowCoveringCluster supports these elements if it supports feature Tilt.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `numberOfActuationsTilt`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\>  } |
+| `attributes.numberOfActuationsTilt` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> |
+| `commands` | \{ `goToTiltPercentage`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } |
+| `commands.goToTiltPercentage` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:712
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:406
 
 ___
 
@@ -326,7 +432,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.6.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:236
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:18
 
 ___
 
@@ -342,7 +448,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.6.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:252
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:48
 
 ___
 
@@ -358,7 +464,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.6.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:244
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:33
 
 ___
 
@@ -374,4 +480,4 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.6.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:260
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:63

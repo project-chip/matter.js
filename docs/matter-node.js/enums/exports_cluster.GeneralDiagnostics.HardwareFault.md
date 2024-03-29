@@ -34,7 +34,7 @@ The Node has encountered a fault with at least one of its audio outputs.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:169
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:179
 
 ___
 
@@ -46,7 +46,7 @@ The Node has encountered an over-temperature fault that is not resettable.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:157
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:167
 
 ___
 
@@ -58,7 +58,7 @@ The Node has encountered a fault with its non-volatile memory.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:177
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:187
 
 ___
 
@@ -70,7 +70,7 @@ The Node has encountered a fault with at least one of its power sources.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:161
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:171
 
 ___
 
@@ -82,7 +82,7 @@ The Node has encountered a fault with at least one of its radios.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:145
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:155
 
 ___
 
@@ -94,7 +94,7 @@ The Node has encountered an over-temperature fault that is resettable.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:153
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:163
 
 ___
 
@@ -106,7 +106,7 @@ The Node has encountered a fault with at least one of its sensors.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:149
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:159
 
 ___
 
@@ -118,7 +118,7 @@ The Node has encountered disallowed physical tampering.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:181
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:191
 
 ___
 
@@ -130,7 +130,7 @@ The Node has encountered an unspecified fault.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:141
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:151
 
 ___
 
@@ -142,7 +142,7 @@ The Node has encountered a fault with at least one of its user interfaces.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:173
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:183
 
 ___
 
@@ -154,4 +154,4 @@ The Node has encountered a fault with at least one of its visual displays.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:165
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:175

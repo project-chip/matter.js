@@ -1,0 +1,469 @@
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / behavior/definitions/operational-credentials/export
+
+# Module: behavior/definitions/operational-credentials/export
+
+## Table of contents
+
+### Modules
+
+- [\<internal\>](behavior_definitions_operational_credentials_export._internal_.md)
+
+### Namespaces
+
+- [OperationalCredentialsBehavior](behavior_definitions_operational_credentials_export.OperationalCredentialsBehavior.md)
+- [OperationalCredentialsInterface](behavior_definitions_operational_credentials_export.OperationalCredentialsInterface.md)
+- [OperationalCredentialsServer](behavior_definitions_operational_credentials_export.OperationalCredentialsServer.md)
+
+### Classes
+
+- [OperationalCredentialsServer](../classes/behavior_definitions_operational_credentials_export.OperationalCredentialsServer-1.md)
+
+### Interfaces
+
+- [OperationalCredentialsBehavior](../interfaces/behavior_definitions_operational_credentials_export.OperationalCredentialsBehavior-1.md)
+
+### Type Aliases
+
+- [AddNocRequest](behavior_definitions_operational_credentials_export.md#addnocrequest)
+- [AddTrustedRootCertificateRequest](behavior_definitions_operational_credentials_export.md#addtrustedrootcertificaterequest)
+- [AttestationRequest](behavior_definitions_operational_credentials_export.md#attestationrequest)
+- [AttestationResponse](behavior_definitions_operational_credentials_export.md#attestationresponse)
+- [CertificateChainRequest](behavior_definitions_operational_credentials_export.md#certificatechainrequest)
+- [CertificateChainResponse](behavior_definitions_operational_credentials_export.md#certificatechainresponse)
+- [CsrRequest](behavior_definitions_operational_credentials_export.md#csrrequest)
+- [CsrResponse](behavior_definitions_operational_credentials_export.md#csrresponse)
+- [NocResponse](behavior_definitions_operational_credentials_export.md#nocresponse)
+- [OperationalCredentialsInterface](behavior_definitions_operational_credentials_export.md#operationalcredentialsinterface)
+- [RemoveFabricRequest](behavior_definitions_operational_credentials_export.md#removefabricrequest)
+- [UpdateFabricLabelRequest](behavior_definitions_operational_credentials_export.md#updatefabriclabelrequest)
+- [UpdateNocRequest](behavior_definitions_operational_credentials_export.md#updatenocrequest)
+
+### Variables
+
+- [OperationalCredentialsBehavior](behavior_definitions_operational_credentials_export.md#operationalcredentialsbehavior)
+
+## Type Aliases
+
+### AddNocRequest
+
+Ƭ **AddNocRequest**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvAddNocRequest`](cluster_export.OperationalCredentials.md#tlvaddnocrequest)\>
+
+This command shall add a new NOC chain to the device and commission a new Fabric association upon successful
+validation of all arguments and preconditions.
+
+The new value shall immediately be reflected in the NOCs list attribute.
+
+A Commissioner or Administrator shall issue this command after issuing the CSRRequest command and receiving its
+response.
+
+A Commissioner or Administrator SHOULD issue this command after performing the Attestation Procedure.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.8
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L107)
+
+___
+
+### AddTrustedRootCertificateRequest
+
+Ƭ **AddTrustedRootCertificateRequest**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvAddTrustedRootCertificateRequest`](cluster_export.OperationalCredentials.md#tlvaddtrustedrootcertificaterequest)\>
+
+This command shall add a Trusted Root CA Certificate, provided as its Matter Certificate Encoding representation, to
+the TrustedRootCertificates Attribute list and shall ensure the next AddNOC command executed uses the provided
+certificate as its root of trust.
+
+If the certificate from the RootCACertificate field is already installed, based on exact byte-for-byte equality,
+then this command shall succeed with no change to the list.
+
+If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe Command”), then
+this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+
+If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer period, which would
+cause the new invocation to add a second root certificate within a given fail- safe timer period, then this command
+shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+
+If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
+command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+
+If the certificate from the RootCACertificate field fails any validity checks, not fulfilling all the requirements
+for a valid Matter Certificate Encoding representation, including a truncated or oversize value, then this command
+shall fail with an INVALID_COMMAND status code sent back to the initiator.
+
+Note that the only method of removing a trusted root is by removing the Fabric that uses it as its root of trust
+using the RemoveFabric command.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.13
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:296](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L296)
+
+___
+
+### AttestationRequest
+
+Ƭ **AttestationRequest**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvAttestationRequest`](cluster_export.OperationalCredentials.md#tlvattestationrequest)\>
+
+This command shall be generated to request the Attestation Information, in the form of an AttestationResponse
+Command. If the AttestationNonce that is provided in the command is malformed, a
+
+recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce field shall be used in
+the computation of the Attestation Information.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.1
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L23)
+
+___
+
+### AttestationResponse
+
+Ƭ **AttestationResponse**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvAttestationResponse`](cluster_export.OperationalCredentials.md#tlvattestationresponse)\>
+
+This command shall be generated in response to an Attestation Request command.
+
+See Section 11.17.4.7, “Attestation Information” for details about the generation of the fields within this response
+command.
+
+See Section F.2, “Device Attestation Response test vector” for an example computation of an AttestationResponse.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.2
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L35)
+
+___
+
+### CertificateChainRequest
+
+Ƭ **CertificateChainRequest**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvCertificateChainRequest`](cluster_export.OperationalCredentials.md#tlvcertificatechainrequest)\>
+
+If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail with a Status
+Code of INVALID_COMMAND.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.3
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L43)
+
+___
+
+### CertificateChainResponse
+
+Ƭ **CertificateChainResponse**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvCertificateChainResponse`](cluster_export.OperationalCredentials.md#tlvcertificatechainresponse)\>
+
+This command shall be generated in response to a CertificateChainRequest command.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.4
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L50)
+
+___
+
+### CsrRequest
+
+Ƭ **CsrRequest**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvCsrRequest`](cluster_export.OperationalCredentials.md#tlvcsrrequest)\>
+
+This command shall be generated to execute the Node Operational CSR Procedure and subsequently return the NOCSR
+Information, in the form of a CSRResponse Command.
+
+The CSRNonce field shall be used in the computation of the NOCSR Information. If the CSRNonce is malformed, then
+this command shall fail with an INVALID_COMMAND status code.
+
+If the IsForUpdateNOC field is present and set to true, but the command was received over a PASE session, the
+command shall fail with an INVALID_COMMAND status code, as it would never be possible to use a resulting subsequent
+certificate issued from the CSR with the UpdateNOC command, which is forbidden over PASE sessions.
+
+If the IsForUpdateNOC field is present and set to true, the internal state of the CSR associated keypair shall be
+tagged as being for a subsequent UpdateNOC, otherwise the internal state of the CSR shall be tagged as being for a
+subsequent AddNOC. See Section 11.17.6.8, “AddNOC Command” and Section 11.17.6.9, “UpdateNOC Command” for details
+about the processing.
+
+If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe Command”), then
+this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+
+If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
+command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+
+If the Node Operational Key Pair generated during processing of the Node Operational CSR Procedure is found to
+collide with an existing key pair already previously generated and installed, and that check had been executed, then
+this command shall fail with a FAILURE status code sent back to the initiator.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.5
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L80)
+
+___
+
+### CsrResponse
+
+Ƭ **CsrResponse**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvCsrResponse`](cluster_export.OperationalCredentials.md#tlvcsrresponse)\>
+
+This command shall be generated in response to a CSRRequest Command.
+
+See Section 11.17.4.9, “NOCSR Information” for details about the generation of the fields within this response
+command.
+
+See Section F.3, “Node Operational CSR Response test vector” for an example computation of a CSRResponse.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.6
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L92)
+
+___
+
+### NocResponse
+
+Ƭ **NocResponse**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvNocResponse`](cluster_export.OperationalCredentials.md#tlvnocresponse)\>
+
+This command shall be generated in response to the following commands:
+
+  • AddNOC
+
+  • UpdateNOC
+
+  • UpdateFabricLabel
+
+  • RemoveFabric
+
+It provides status information about the success or failure of those commands.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.10
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L124)
+
+___
+
+### OperationalCredentialsInterface
+
+Ƭ **OperationalCredentialsInterface**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `components` | [\{ `flags`: {} ; `methods`: [`Base`](../interfaces/behavior_definitions_operational_credentials_export.OperationalCredentialsInterface.Base.md)  }] |
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:298](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L298)
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:540](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L540)
+
+___
+
+### RemoveFabricRequest
+
+Ƭ **RemoveFabricRequest**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvRemoveFabricRequest`](cluster_export.OperationalCredentials.md#tlvremovefabricrequest)\>
+
+This command is used by Administrators to remove a given Fabric and delete all associated fabric-scoped data.
+
+If the given Fabric being removed is the last one to reference a given Trusted Root CA Certificate stored in the
+Trusted Root Certificates list, then that Trusted Root Certificate shall be removed.
+
+WARNING
+
+This command, if referring to an already existing Fabric not under the control of the invoking Administrator, shall
+ONLY be invoked after obtaining some form of explicit user consent through some method executed by the Administrator
+or Commissioner. This method of obtaining consent SHOULD employ as much data as possible about the existing Fabric
+associations within the Fabrics list, so that likelihood is as small as possible of a user removing a Fabric
+unwittingly. If a method exists for an Administrator or Commissioner to convey Fabric Removal to an entity related
+to that Fabric, whether in-band or out-of-band, then this method SHOULD be used to notify the other Administrative
+Domain’s party of the removal. Otherwise, users may only observe the removal of a Fabric association as persistently
+failing attempts to reach a Node operationally.
+
+This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is to be
+removed from the device.
+
+Effect on Receipt
+
+If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then an NOCResponse
+with a StatusCode of InvalidFabricIndex shall be returned for the command and there shall NOT be any permanent
+changes to any device data.
+
+Otherwise, one of the following outcomes shall occur:
+
+  1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall delete all
+     Matter related data on the node which was created since it was commissioned. This includes all Fabric-Scoped
+     data, including Access Control List, bindings, scenes, group keys,
+
+operational certificates, etc. All Trusted Roots shall also be removed. Any Matter related data including logs,
+secure sessions, exchanges and interaction model constructs shall also be removed. Since this operation involves the
+removal of the secure session data that may underpin the current set of exchanges, the Node invoking the command
+SHOULD NOT expect a response before terminating its secure session with the target.
+
+2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
+irrevocably deleting all associated Fabric-Scoped data, including Access Control List, bindings, group keys,
+operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational certificate shall
+also be removed. All secure sessions, exchanges and interaction model constructs related to the Operational Identity
+under the given Fabric shall also be removed. Following the removal, an NOCResponse with a StatusCode of OK shall be
+returned.
+
+3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of irrevocably
+deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, group keys, operational
+certificates, etc. Any remaining Trusted Roots no longer referenced by any operational certificate shall also be
+removed. All secure sessions, exchanges and interaction model constructs related to the Operational Identity under
+the given Fabric shall also be removed. Since this operation involves the removal of the secure session data that
+may underpin the current set of exchanges, the Node invoking the command SHOULD NOT expect a response before
+terminating its secure session with the target.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.12
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:267](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L267)
+
+___
+
+### UpdateFabricLabelRequest
+
+Ƭ **UpdateFabricLabelRequest**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvUpdateFabricLabelRequest`](cluster_export.OperationalCredentials.md#tlvupdatefabriclabelrequest)\>
+
+This command shall be used by an Administrator to set the user-visible Label field for a given Fabric, as reflected
+by entries in the Fabrics attribute.
+
+The Label SHOULD be used by Administrators to provide additional per-fabric context when operations such as
+RemoveFabric are used.
+
+This field shall contain the label to set for the fabric associated with the current secure session.
+
+Effect on Receipt
+
+If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not the
+accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the command and there
+shall NOT be any permanent changes to any Fabric data.
+
+Otherwise, the Label field for the accesing fabric shall immediately be updated to reflect the
+
+Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be returned.
+
+If the command was invoked within a fail-safe context after a successful UpdateNOC command, then the label update
+shall apply to the pending update state that will be reverted if fail-safe expires prior to a CommissioningComplete
+command. In other words, label updates apply to the state of the Fabrics Attribute as currently visible, even for an
+existing fabric currently in process of being updated.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.11
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:211](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L211)
+
+___
+
+### UpdateNocRequest
+
+Ƭ **UpdateNocRequest**: [`TypeFromSchema`](tlv_export.md#typefromschema)\<typeof [`TlvUpdateNocRequest`](cluster_export.OperationalCredentials.md#tlvupdatenocrequest)\>
+
+This command shall replace the NOC and optional associated ICAC (if present) scoped under the accessing fabric upon
+successful validation of all arguments and preconditions. The new value shall immediately be reflected in the NOCs
+list attribute.
+
+A Commissioner or Administrator shall issue this command after issuing the CSRRequest Command and receiving its
+response.
+
+A Commissioner or Administrator SHOULD issue this command after performing the Attestation Procedure.
+
+Effect When Received
+
+If this command is received without an armed fail-safe context (see Section 11.9.6.2, “ArmFailSafe Command”), then
+this command shall fail with a FAILSAFE_REQUIRED status code sent back to the initiator.
+
+If a prior UpdateNOC or AddNOC command was successfully executed within the fail-safe timer period, then this
+command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+
+If a prior AddTrustedRootCertificate command was successfully invoked within the fail-safe timer period, then this
+command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator, since the only valid following
+logical operation is invoking the AddNOC command.
+
+If the prior CSRRequest state that preceded UpdateNOC had the IsForUpdateNOC field indicated as false, then this
+command shall fail with a CONSTRAINT_ERROR status code sent back to the initiator.
+
+If any of the following conditions arise, the Node shall process an error by responding with an NOCResponse with a
+StatusCode of InvalidNOC as described in Section 11.17.6.7.2, “Handling Errors”:
+
+  • The NOC provided in the NOCValue does not refer in its subject to the FabricID associated with the accessing
+    fabric.
+
+  • The ICAC provided in the ICACValue (if present) has a FabricID in its subject that does not match the FabricID
+    associated with the accessing fabric.
+
+Otherwise, the command is considered an update of existing credentials for a given Fabric, and the following shall
+apply:
+
+  1. The Operational Certificate under the accessing fabric index in the NOCs list shall be updated to match the
+     incoming NOCValue and ICACValue (if present), such that the Node’s Operational Identifier within the Fabric
+     immediately changes.
+
+    a. The operational key pair associated with the incoming NOC from the NOCValue, and generated by the prior
+       CSRRequest command, shall be committed to permanent storage, for subsequent use during CASE.
+
+    b. The operational discovery service record shall immediately reflect the new Operational Identifier.
+
+    c. All internal data reflecting the prior operational identifier of the Node within the Fabric shall be revoked
+       and removed, to an outcome equivalent to the disappearance of the prior Node, except for the ongoing CASE
+       session context, which shall temporarily remain valid until the NOCResponse has been successfully delivered
+       or until the next transport-layer error, so that the response can be received by the Administrator invoking
+       the command.
+
+Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex field matching the
+FabricIndex under which the updated NOC is scoped.
+
+**`See`**
+
+[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.9
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:183](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L183)
+
+## Variables
+
+### OperationalCredentialsBehavior
+
+• `Const` **OperationalCredentialsBehavior**: [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Cluster`](../interfaces/cluster_export.OperationalCredentials.Cluster.md), [`Type`](../interfaces/behavior_cluster_export.ClusterBehavior.Type.md)\<[`Of`](../interfaces/cluster_export.ClusterType.Of.md)\<\{ `attributes`: {} = \{}; `commands`: {} = \{}; `events`: {} = \{}; `id`: ``0`` = 0; `name`: ``"Unknown"`` = "Unknown"; `revision`: ``0`` = 0 }\>, typeof [`ClusterBehavior`](behavior_cluster_export.ClusterBehavior.md), [`OperationalCredentialsInterface`](behavior_definitions_operational_credentials_export.md#operationalcredentialsinterface)\>, [`OperationalCredentialsInterface`](behavior_definitions_operational_credentials_export.md#operationalcredentialsinterface)\>
+
+OperationalCredentialsBehavior is the base class for objects that support interaction with OperationalCredentials.Cluster.
+
+#### Defined in
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L17)
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L22)
+
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsBehavior.ts#L24)

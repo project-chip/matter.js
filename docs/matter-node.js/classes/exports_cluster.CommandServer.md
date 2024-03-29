@@ -29,6 +29,7 @@
 
 ### Methods
 
+- [debug](exports_cluster.CommandServer.md#debug)
 - [invoke](exports_cluster.CommandServer.md#invoke)
 
 ## Constructors
@@ -54,7 +55,7 @@
 | `requestSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
-| `handler` | (`request`: `RequestT`, `session`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
+| `handler` | (`request`: `RequestT`, `session`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
 
 #### Returns
 
@@ -68,7 +69,7 @@ packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 ### handler
 
-• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
+• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Type declaration
 
@@ -81,7 +82,7 @@ packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 | `request` | `RequestT` |
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
 
 ##### Returns
 
@@ -153,6 +154,26 @@ packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 ## Methods
 
+### debug
+
+▸ **debug**(`message`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message` | `string` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:32
+
+___
+
 ### invoke
 
 ▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
@@ -164,7 +185,7 @@ packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `args` | [`TlvStream`](../modules/exports_tlv.md#tlvstream) |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
 
 #### Returns
 

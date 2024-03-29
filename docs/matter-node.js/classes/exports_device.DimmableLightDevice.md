@@ -21,9 +21,9 @@
 - [commandHandler](exports_device.DimmableLightDevice.md#commandhandler)
 - [deviceType](exports_device.DimmableLightDevice.md#devicetype)
 - [deviceTypes](exports_device.DimmableLightDevice.md#devicetypes)
-- [id](exports_device.DimmableLightDevice.md#id)
 - [isLighting](exports_device.DimmableLightDevice.md#islighting)
 - [name](exports_device.DimmableLightDevice.md#name)
+- [number](exports_device.DimmableLightDevice.md#number)
 - [uniqueStorageKey](exports_device.DimmableLightDevice.md#uniquestoragekey)
 
 ### Methods
@@ -38,9 +38,9 @@
 - [addFixedLabel](exports_device.DimmableLightDevice.md#addfixedlabel)
 - [addOnOffListener](exports_device.DimmableLightDevice.md#addonofflistener)
 - [addUserLabel](exports_device.DimmableLightDevice.md#adduserlabel)
+- [close](exports_device.DimmableLightDevice.md#close)
 - [createOptionalClusterClient](exports_device.DimmableLightDevice.md#createoptionalclusterclient)
 - [createOptionalClusterServer](exports_device.DimmableLightDevice.md#createoptionalclusterserver)
-- [destroy](exports_device.DimmableLightDevice.md#destroy)
 - [determineUniqueID](exports_device.DimmableLightDevice.md#determineuniqueid)
 - [getAllClusterClients](exports_device.DimmableLightDevice.md#getallclusterclients)
 - [getAllClusterServers](exports_device.DimmableLightDevice.md#getallclusterservers)
@@ -52,7 +52,7 @@
 - [getClusterServerById](exports_device.DimmableLightDevice.md#getclusterserverbyid)
 - [getCurrentLevel](exports_device.DimmableLightDevice.md#getcurrentlevel)
 - [getDeviceTypes](exports_device.DimmableLightDevice.md#getdevicetypes)
-- [getId](exports_device.DimmableLightDevice.md#getid)
+- [getNumber](exports_device.DimmableLightDevice.md#getnumber)
 - [getOnOff](exports_device.DimmableLightDevice.md#getonoff)
 - [hasClusterClient](exports_device.DimmableLightDevice.md#hasclusterclient)
 - [hasClusterServer](exports_device.DimmableLightDevice.md#hasclusterserver)
@@ -78,8 +78,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>\> |
-| `dimmableAttributeValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `currentLevel`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<``null`` \| `number`, `any`\> ; `defaultMoveRate`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `maxLevel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> ; `minLevel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> ; `offTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onLevel`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onOffTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `onTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `frequency`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `lighting`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `onOff`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `frequency`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `lighting`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `onOff`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>\> |
+| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>\> |
+| `dimmableAttributeValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `currentLevel`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<``null`` \| `number`, `any`\> ; `defaultMoveRate`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `maxLevel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> ; `minLevel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number`, `any`\> ; `offTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onLevel`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onOffTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `onTransitionTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `coupleColorTempToLevel`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `executeIfOff`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes)\<\{ `frequency`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `lighting`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `onOff`: [`BitFlag`](../modules/exports_schema.md#bitflag)  }\>\>\> |
 | `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) |
 
 #### Returns
@@ -134,21 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:19
-
-___
-
-### id
-
-• **id**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
-
-#### Inherited from
-
-[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[id](exports_device._internal_.DimmableBaseDevice.md#id)
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:20
 
 ___
 
@@ -176,7 +162,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+
+___
+
+### number
+
+• **number**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+
+#### Inherited from
+
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[number](exports_device._internal_.DimmableBaseDevice.md#number)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ## Methods
 
@@ -284,7 +284,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
 
 #### Returns
 
@@ -296,7 +296,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -329,7 +329,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -360,7 +360,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -518,7 +518,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -570,7 +570,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+
+___
+
+### close
+
+▸ **close**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[close](exports_device._internal_.DimmableBaseDevice.md#close)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -642,24 +660,6 @@ packages/matter.js/dist/esm/device/Device.d.ts:115
 
 ___
 
-### destroy
-
-▸ **destroy**(): `void`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[destroy](exports_device._internal_.DimmableBaseDevice.md#destroy)
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Endpoint.d.ts:37
-
-___
-
 ### determineUniqueID
 
 ▸ **determineUniqueID**(): `undefined` \| `string`
@@ -674,7 +674,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56
 
 ___
 
@@ -692,7 +692,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -710,7 +710,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -734,7 +734,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -752,7 +752,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -810,7 +810,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -868,7 +868,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -904,13 +904,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
-### getId
+### getNumber
 
-▸ **getId**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+▸ **getNumber**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Returns
 
@@ -918,11 +918,11 @@ ___
 
 #### Inherited from
 
-[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getId](exports_device._internal_.DimmableBaseDevice.md#getid)
+[DimmableBaseDevice](exports_device._internal_.DimmableBaseDevice.md).[getNumber](exports_device._internal_.DimmableBaseDevice.md#getnumber)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -974,7 +974,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -1008,7 +1008,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -1032,7 +1032,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -1132,7 +1132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -1207,7 +1207,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -1258,7 +1258,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -1297,7 +1297,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:59
+packages/matter.js/dist/esm/device/Endpoint.d.ts:60
 
 ___
 
@@ -1315,4 +1315,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57

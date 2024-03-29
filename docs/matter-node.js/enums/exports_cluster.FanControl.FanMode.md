@@ -46,7 +46,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.4.6.1.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:76
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:115
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:59
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:98
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:57
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:96
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:97
 
 ___
 
@@ -126,7 +126,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.4.6.1.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:56
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:95
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:60
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:99
 
 ___
 
@@ -146,4 +146,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:77
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:116

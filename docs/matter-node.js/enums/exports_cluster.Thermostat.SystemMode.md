@@ -34,7 +34,7 @@ Demand is generated for either Cooling or Heating, as required
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:74
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:252
 
 ___
 
@@ -46,7 +46,7 @@ Demand is only generated for Cooling
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:78
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:256
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:92
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:270
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:86
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:264
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:91
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:269
 
 ___
 
@@ -90,7 +90,7 @@ Demand is only generated for Heating
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:82
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:260
 
 ___
 
@@ -102,7 +102,7 @@ The Thermostat does not generate demand for Cooling or Heating
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:70
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:248
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:90
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:268
 
 ___
 
@@ -124,4 +124,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:93
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:271

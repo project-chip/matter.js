@@ -12,10 +12,21 @@
 - [DownloadProtocol](../enums/exports_cluster.OtaSoftwareUpdateProvider.DownloadProtocol.md)
 - [Status](../enums/exports_cluster.OtaSoftwareUpdateProvider.Status.md)
 
+### Interfaces
+
+- [ApplyUpdateRequest](../interfaces/exports_cluster.OtaSoftwareUpdateProvider.ApplyUpdateRequest.md)
+- [ApplyUpdateResponse](../interfaces/exports_cluster.OtaSoftwareUpdateProvider.ApplyUpdateResponse.md)
+- [Cluster](../interfaces/exports_cluster.OtaSoftwareUpdateProvider.Cluster.md)
+- [NotifyUpdateAppliedRequest](../interfaces/exports_cluster.OtaSoftwareUpdateProvider.NotifyUpdateAppliedRequest.md)
+- [QueryImageRequest](../interfaces/exports_cluster.OtaSoftwareUpdateProvider.QueryImageRequest.md)
+- [QueryImageResponse](../interfaces/exports_cluster.OtaSoftwareUpdateProvider.QueryImageResponse.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.OtaSoftwareUpdateProvider.md#cluster)
-- [TlvApplyUpdateRequestRequest](exports_cluster.OtaSoftwareUpdateProvider.md#tlvapplyupdaterequestrequest)
+- [ClusterInstance](exports_cluster.OtaSoftwareUpdateProvider.md#clusterinstance)
+- [Complete](exports_cluster.OtaSoftwareUpdateProvider.md#complete)
+- [TlvApplyUpdateRequest](exports_cluster.OtaSoftwareUpdateProvider.md#tlvapplyupdaterequest)
 - [TlvApplyUpdateResponse](exports_cluster.OtaSoftwareUpdateProvider.md#tlvapplyupdateresponse)
 - [TlvNotifyUpdateAppliedRequest](exports_cluster.OtaSoftwareUpdateProvider.md#tlvnotifyupdateappliedrequest)
 - [TlvQueryImageRequest](exports_cluster.OtaSoftwareUpdateProvider.md#tlvqueryimagerequest)
@@ -25,25 +36,43 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `commands`: \{ `applyUpdateRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `notifyUpdateApplied`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `queryImage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``41`` ; `name`: ``"OtaSoftwareUpdateProvider"`` ; `revision`: ``1``  }\>
-
-OTA Software Update Provider
-
-Provides an interface for providing OTA software updates
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 11.19.6
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.OtaSoftwareUpdateProvider.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:138
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:259
+
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:261
 
 ___
 
-### TlvApplyUpdateRequestRequest
+### ClusterInstance
 
-• `Const` **TlvApplyUpdateRequestRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `commands`: \{ `applyUpdateRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `notifyUpdateApplied`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `queryImage`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``41`` ; `name`: ``"OtaSoftwareUpdateProvider"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.OtaSoftwareUpdateProvider.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:167
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.OtaSoftwareUpdateProvider.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:262
+
+___
+
+### TlvApplyUpdateRequest
+
+• `Const` **TlvApplyUpdateRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
 
@@ -53,7 +82,7 @@ MatterCoreSpecificationV1_1 § 11.19.6.5.18
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:91
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:105
 
 ___
 
@@ -67,7 +96,7 @@ MatterCoreSpecificationV1_1 § 11.19.6.5.20
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:118
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:139
 
 ___
 
@@ -83,7 +112,7 @@ MatterCoreSpecificationV1_1 § 11.19.6.5.22
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:127
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:153
 
 ___
 
@@ -99,7 +128,7 @@ MatterCoreSpecificationV1_1 § 11.19.6.5.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:40
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:42
 
 ___
 
@@ -113,4 +142,4 @@ MatterCoreSpecificationV1_1 § 11.19.6.5.10
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:76
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:85

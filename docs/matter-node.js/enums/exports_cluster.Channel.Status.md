@@ -26,7 +26,7 @@ More than one equal match for the ChannelInfoStruct passed in.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:144
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:138
 
 ___
 
@@ -38,7 +38,7 @@ No matches for the ChannelInfoStruct passed in.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:148
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:142
 
 ___
 
@@ -50,4 +50,4 @@ Command succeeded
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:140
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:134

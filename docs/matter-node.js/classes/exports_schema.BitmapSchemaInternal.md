@@ -151,7 +151,7 @@ provided, rest is unset.
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\> \| [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`T`\> |
+| `value` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`T`\> |
 
 #### Returns
 
@@ -175,7 +175,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\> |
+| `value` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`T`\> |
 
 #### Returns
 

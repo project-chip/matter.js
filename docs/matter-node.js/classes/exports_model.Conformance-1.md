@@ -6,12 +6,10 @@
 
 An operational view of conformance as defined by the Matter Specification.
 
-We extend the specification's syntax to add ">", "<", ">=" and "<=".  These
-are required to encode some portions of the specification that are described
-in prose.
+We extend the specification's syntax to add ">", "<", ">=" and "<=".  These are required to encode some portions of
+the specification that are described in prose.
 
-"Conformance" controls when a data field or cluster element is allowed or
-required.
+"Conformance" controls when a data field or cluster element is allowed or required.
 
 ## Hierarchy
 
@@ -34,6 +32,7 @@ required.
 ### Accessors
 
 - [empty](exports_model.Conformance-1.md#empty)
+- [mandatory](exports_model.Conformance-1.md#mandatory)
 - [type](exports_model.Conformance-1.md#type)
 - [valid](exports_model.Conformance-1.md#valid)
 
@@ -42,6 +41,7 @@ required.
 - [equals](exports_model.Conformance-1.md#equals)
 - [error](exports_model.Conformance-1.md#error)
 - [extend](exports_model.Conformance-1.md#extend)
+- [isApplicable](exports_model.Conformance-1.md#isapplicable)
 - [toString](exports_model.Conformance-1.md#tostring)
 - [validateReferences](exports_model.Conformance-1.md#validatereferences)
 - [valueOf](exports_model.Conformance-1.md#valueof)
@@ -52,8 +52,7 @@ required.
 
 • **new Conformance**(`definition`): [`Conformance`](exports_model.Conformance-1.md)
 
-Initialize from a Conformance.Definition or the conformance DSL defined
-by the Matter Specification.
+Initialize from a Conformance.Definition or the conformance DSL defined by the Matter Specification.
 
 #### Parameters
 
@@ -71,7 +70,7 @@ by the Matter Specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:26
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:23
 
 ## Properties
 
@@ -81,7 +80,7 @@ packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:26
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:19
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:17
 
 ___
 
@@ -127,21 +126,39 @@ Aspect.empty
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:19
+
+___
+
+### mandatory
+
+• `get` **mandatory**(): `boolean`
+
+Is the associated element mandatory?
+
+This supports a limited subset of conformance and is only appropriate for field and requirement conformance.
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:30
 
 ___
 
 ### type
 
-• `get` **type**(): [`Special`](../enums/exports_model.Conformance.Special.md) \| [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`NOT`](../enums/exports_model.Conformance.Operator.md#not) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte)
+• `get` **type**(): [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Special`](../enums/exports_model.Conformance.Special.md) \| [`NOT`](../enums/exports_model.Conformance.Operator.md#not) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte)
 
 #### Returns
 
-[`Special`](../enums/exports_model.Conformance.Special.md) \| [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`NOT`](../enums/exports_model.Conformance.Operator.md#not) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte)
+[`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Special`](../enums/exports_model.Conformance.Special.md) \| [`NOT`](../enums/exports_model.Conformance.Operator.md#not) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:20
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:18
 
 ___
 
@@ -216,17 +233,24 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Conformance.md#definition)\>
+▸ **extend**\<`This`\>(`this`, `other`): `This`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Aspect`](exports_model.Aspect.md)\<`any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `this` | `This` |
 | `other` | [`Definition`](../modules/exports_model.Conformance.md#definition) |
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Conformance.md#definition)\>
+`This`
 
 #### Inherited from
 
@@ -235,6 +259,35 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:25
+
+___
+
+### isApplicable
+
+▸ **isApplicable**(`features`, `supportedFeatures`): `boolean`
+
+Perform limited conformance evaluation to determine whether this conformance is applicable given a feature
+combination.
+
+Ignores subexpressions that reference field values.
+
+This is useful for filtering elements at compile time.  For complete accuracy you then need to filter at runtime
+once field values are known.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `features` | `Iterable`\<`string`\> |
+| `supportedFeatures` | `Iterable`\<`string`\> |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:40
 
 ___
 
@@ -252,7 +305,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:28
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:41
 
 ___
 
@@ -272,7 +325,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:27
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:24
 
 ___
 

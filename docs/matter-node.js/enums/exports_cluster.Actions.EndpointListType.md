@@ -37,7 +37,7 @@ MatterCoreSpecificationV1_1 § 9.14.4.5.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:282
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:291
 
 ___
 
@@ -59,7 +59,7 @@ MatterCoreSpecificationV1_1 § 9.14.4.5.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:294
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:303
 
 ___
 
@@ -82,4 +82,4 @@ MatterCoreSpecificationV1_1 § 9.14.4.5.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:307
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:316

@@ -22,8 +22,13 @@
 - [netListeners](net_export.UdpChannelFake.md#netlisteners)
 - [simulatedNetwork](net_export.UdpChannelFake.md#simulatednetwork)
 
+### Accessors
+
+- [port](net_export.UdpChannelFake.md#port)
+
 ### Methods
 
+- [[asyncDispose]](net_export.UdpChannelFake.md#[asyncdispose])
 - [close](net_export.UdpChannelFake.md#close)
 - [onData](net_export.UdpChannelFake.md#ondata)
 - [send](net_export.UdpChannelFake.md#send)
@@ -101,7 +106,39 @@ ___
 
 packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:15
 
+## Accessors
+
+### port
+
+• `get` **port**(): `number`
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+UdpChannel.port
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:22
+
 ## Methods
+
+### [asyncDispose]
+
+▸ **[asyncDispose]**(): `Promise`\<`void`\>
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:21
+
+___
 
 ### close
 

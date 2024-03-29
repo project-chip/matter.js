@@ -14,8 +14,8 @@
 
 ### Child
 
-Ƭ **Child**: [`DatatypeModel`](../classes/exports_model.DatatypeModel.md) \| [`AttributeModel`](../classes/exports_model.AttributeModel.md) \| [`CommandModel`](../classes/exports_model.CommandModel.md) \| [`EventModel`](../classes/exports_model.EventModel.md)
+Ƭ **Child**: [`DatatypeModel`](../classes/exports_model.DatatypeModel.md) \| [`AttributeModel`](../classes/exports_model.AttributeModel.md) \| [`CommandModel`](../classes/exports_model.CommandModel.md) \| [`EventModel`](../classes/exports_model.EventModel.md) \| [`FieldModel`](../classes/exports_model.FieldModel.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:31
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:40

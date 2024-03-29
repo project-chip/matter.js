@@ -24,7 +24,7 @@ Covering is moving from open to closed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:103
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:165
 
 ___
 
@@ -36,7 +36,7 @@ Covering is moving from closed to open
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:99
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:161
 
 ___
 
@@ -48,4 +48,4 @@ Covering is not moving
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:95
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:157

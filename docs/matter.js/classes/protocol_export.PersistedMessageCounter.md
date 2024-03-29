@@ -20,15 +20,21 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 ### Properties
 
+- [#construction](protocol_export.PersistedMessageCounter.md##construction)
 - [aboutToRolloverCallback](protocol_export.PersistedMessageCounter.md#abouttorollovercallback)
 - [messageCounter](protocol_export.PersistedMessageCounter.md#messagecounter)
 - [rolloverInfoDifference](protocol_export.PersistedMessageCounter.md#rolloverinfodifference)
 - [storageContext](protocol_export.PersistedMessageCounter.md#storagecontext)
 - [storageKey](protocol_export.PersistedMessageCounter.md#storagekey)
 
+### Accessors
+
+- [construction](protocol_export.PersistedMessageCounter.md#construction)
+
 ### Methods
 
 - [getIncrementedCounter](protocol_export.PersistedMessageCounter.md#getincrementedcounter)
+- [create](protocol_export.PersistedMessageCounter.md#create)
 
 ## Constructors
 
@@ -40,7 +46,7 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `storageContext` | [`StorageContext`](storage_export.StorageContext.md) | `undefined` |
+| `storageContext` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> | `undefined` |
 | `storageKey` | `string` | `undefined` |
 | `aboutToRolloverCallback?` | () => `void` | `undefined` |
 | `rolloverInfoDifference` | `number` | `ROLLOVER_INFO_DIFFERENCE` |
@@ -55,9 +61,19 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L80)
+[packages/matter.js/src/protocol/MessageCounter.ts:102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L102)
 
 ## Properties
+
+### #construction
+
+• `Private` **#construction**: [`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`PersistedMessageCounter`](protocol_export.PersistedMessageCounter.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/protocol/MessageCounter.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L81)
+
+___
 
 ### aboutToRolloverCallback
 
@@ -77,7 +93,7 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L56)
+[packages/matter.js/src/protocol/MessageCounter.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L57)
 
 ___
 
@@ -91,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L48)
+[packages/matter.js/src/protocol/MessageCounter.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L49)
 
 ___
 
@@ -105,17 +121,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L57)
+[packages/matter.js/src/protocol/MessageCounter.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L58)
 
 ___
 
 ### storageContext
 
-• `Private` `Readonly` **storageContext**: [`StorageContext`](storage_export.StorageContext.md)
+• `Private` `Readonly` **storageContext**: [`StorageContext`](storage_export.StorageContext.md)\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L81)
+[packages/matter.js/src/protocol/MessageCounter.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L103)
 
 ___
 
@@ -125,17 +141,31 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:82](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L82)
+[packages/matter.js/src/protocol/MessageCounter.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L104)
+
+## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`PersistedMessageCounter`](protocol_export.PersistedMessageCounter.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`PersistedMessageCounter`](protocol_export.PersistedMessageCounter.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/protocol/MessageCounter.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L83)
 
 ## Methods
 
 ### getIncrementedCounter
 
-▸ **getIncrementedCounter**(): `number`
+▸ **getIncrementedCounter**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Overrides
 
@@ -143,4 +173,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:102](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L102)
+[packages/matter.js/src/protocol/MessageCounter.ts:126](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L126)
+
+___
+
+### create
+
+▸ **create**(`storageContext`, `storageKey`, `aboutToRolloverCallback?`, `rolloverInfoDifference?`): `Promise`\<[`PersistedMessageCounter`](protocol_export.PersistedMessageCounter.md)\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `storageContext` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> | `undefined` |
+| `storageKey` | `string` | `undefined` |
+| `aboutToRolloverCallback?` | () => `void` | `undefined` |
+| `rolloverInfoDifference` | `number` | `ROLLOVER_INFO_DIFFERENCE` |
+
+#### Returns
+
+`Promise`\<[`PersistedMessageCounter`](protocol_export.PersistedMessageCounter.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/protocol/MessageCounter.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L87)

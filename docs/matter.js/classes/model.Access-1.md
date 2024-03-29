@@ -38,6 +38,7 @@ or cluster element.
 
 ### Accessors
 
+- [complete](model.Access-1.md#complete)
 - [empty](model.Access-1.md#empty)
 - [readable](model.Access-1.md#readable)
 - [valid](model.Access-1.md#valid)
@@ -78,7 +79,7 @@ by the Matter Specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L41)
+[packages/matter.js/src/model/aspects/Access.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L55)
 
 ## Properties
 
@@ -92,7 +93,7 @@ by the Matter Specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L17)
+[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L17)
 
 ___
 
@@ -106,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L18)
+[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L18)
 
 ___
 
@@ -120,7 +121,7 @@ Access.Ast.fabric
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L20)
+[packages/matter.js/src/model/aspects/Access.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L21)
 
 ___
 
@@ -134,7 +135,7 @@ Access.Ast.readPriv
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L18)
+[packages/matter.js/src/model/aspects/Access.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L19)
 
 ___
 
@@ -148,7 +149,7 @@ Access.Ast.rw
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L17)
+[packages/matter.js/src/model/aspects/Access.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L18)
 
 ___
 
@@ -162,7 +163,7 @@ Access.Ast.timed
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L21)
+[packages/matter.js/src/model/aspects/Access.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L22)
 
 ___
 
@@ -176,9 +177,27 @@ Access.Ast.writePriv
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L19)
+[packages/matter.js/src/model/aspects/Access.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L20)
 
 ## Accessors
+
+### complete
+
+• `get` **complete**(): `boolean`
+
+Determine whether this access is fully specified.  This means we know
+whether reads and/or writes are allowed and if so the required access
+levels.
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/matter.js/src/model/aspects/Access.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L43)
+
+___
 
 ### empty
 
@@ -194,7 +213,7 @@ Aspect.empty
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L31)
+[packages/matter.js/src/model/aspects/Access.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L32)
 
 ___
 
@@ -208,7 +227,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L23)
+[packages/matter.js/src/model/aspects/Access.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L24)
 
 ___
 
@@ -226,7 +245,7 @@ Aspect.valid
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L20)
+[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L20)
 
 ___
 
@@ -240,7 +259,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L27)
+[packages/matter.js/src/model/aspects/Access.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L28)
 
 ## Methods
 
@@ -266,7 +285,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L40)
+[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L40)
 
 ___
 
@@ -291,23 +310,30 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L54)
+[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L54)
 
 ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](model.Aspect.md)\<[`Definition`](../modules/model.Access.md#definition)\>
+▸ **extend**\<`This`\>(`this`, `other`): `This`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Aspect`](model.Aspect.md)\<`any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `this` | `This` |
 | `other` | [`Definition`](../modules/model.Access.md#definition) |
 
 #### Returns
 
-[`Aspect`](model.Aspect.md)\<[`Definition`](../modules/model.Access.md#definition)\>
+`This`
 
 #### Inherited from
 
@@ -315,7 +341,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L65)
+[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L65)
 
 ___
 
@@ -335,7 +361,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:167](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L167)
+[packages/matter.js/src/model/aspects/Access.ts:181](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L181)
 
 ___
 
@@ -355,7 +381,7 @@ Displays access using the standard Matter syntax.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:135](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L135)
+[packages/matter.js/src/model/aspects/Access.ts:149](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L149)
 
 ___
 
@@ -373,7 +399,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Aspect.ts#L47)
+[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Aspect.ts#L47)
 
 ___
 
@@ -397,4 +423,4 @@ lenient.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L57)
+[packages/matter.js/src/model/aspects/Access.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L71)

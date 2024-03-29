@@ -41,9 +41,8 @@ Visits multiple model hierarchies simultaneously and builds state.
 
 • **new ModelVariantTraversal**\<`S`\>(`sourceNames`): [`ModelVariantTraversal`](exports_model.ModelVariantTraversal.md)\<`S`\>
 
-Create a new visitor.  Must list the valid names of sources.  The order
-of this list implies the priority used for choosing a name when multiple
-model variants have different names.
+Create a new visitor.  Must list the valid names of sources.  The order of this list implies the priority used
+for choosing a name when multiple model variants have different names.
 
 #### Type parameters
 
@@ -63,7 +62,7 @@ model variants have different names.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:58
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:55
 
 ## Properties
 
@@ -73,7 +72,7 @@ packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:58
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:50
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:48
 
 ___
 
@@ -85,7 +84,7 @@ Create a VariantDetail from a VariantMap.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:90
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:85
 
 ___
 
@@ -95,7 +94,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:86
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:81
 
 ___
 
@@ -105,7 +104,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:52
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:50
 
 ___
 
@@ -115,7 +114,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:49
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:47
 
 ___
 
@@ -127,7 +126,7 @@ This is the function that actually recurses during the visit.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:85
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:80
 
 ___
 
@@ -137,7 +136,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:51
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:49
 
 ## Methods
 
@@ -159,7 +158,7 @@ Determine if we are entering a cluster and install cluster state if so.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:81
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:76
 
 ___
 
@@ -167,8 +166,8 @@ ___
 
 ▸ **getCanonicalName**(`model`): `string`
 
-Get the canonical name for a model.  Within cluster scope alternate
-names may be selected, otherwise the name of the model is returned.
+Get the canonical name for a model.  Within cluster scope alternate names may be selected, otherwise the name of
+the model is returned.
 
 #### Parameters
 
@@ -182,7 +181,7 @@ names may be selected, otherwise the name of the model is returned.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:77
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:72
 
 ___
 
@@ -190,8 +189,7 @@ ___
 
 ▸ **traverse**(`variants`): `S`
 
-Initiate traversal.  The class is stateful so this call should not be
-invoked while traversal is ongoing.
+Initiate traversal.  The class is stateful so this call should not be invoked while traversal is ongoing.
 
 #### Parameters
 
@@ -205,7 +203,7 @@ invoked while traversal is ongoing.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:63
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:59
 
 ___
 
@@ -213,9 +211,8 @@ ___
 
 ▸ **visit**(`variants`, `recurse`): `S`
 
-This is the primary callback.  It is invoked for every set of variants
-during traversal.  It may optionally return state that is returned
-from traverse().
+This is the primary callback.  It is invoked for every set of variants during traversal.  It may optionally
+return state that is returned from traverse().
 
 #### Parameters
 
@@ -230,4 +227,4 @@ from traverse().
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:72
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:67

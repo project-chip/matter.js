@@ -4,6 +4,8 @@
 
 [storage/export](../modules/storage_export.md).StorageBackendJsonFile
 
+Matter.js uses this key/value API to manage persistent state.
+
 ## Hierarchy
 
 - [`StorageBackendMemory`](storage_export.StorageBackendMemory.md)
@@ -18,6 +20,7 @@
 
 ### Properties
 
+- [#private](storage_export.StorageBackendJsonFile.md##private)
 - [closed](storage_export.StorageBackendJsonFile.md#closed)
 - [commitTimer](storage_export.StorageBackendJsonFile.md#committimer)
 - [committed](storage_export.StorageBackendJsonFile.md#committed)
@@ -33,6 +36,7 @@
 - [clearAll](storage_export.StorageBackendJsonFile.md#clearall)
 - [close](storage_export.StorageBackendJsonFile.md#close)
 - [commit](storage_export.StorageBackendJsonFile.md#commit)
+- [contexts](storage_export.StorageBackendJsonFile.md#contexts)
 - [delete](storage_export.StorageBackendJsonFile.md#delete)
 - [fromJson](storage_export.StorageBackendJsonFile.md#fromjson)
 - [get](storage_export.StorageBackendJsonFile.md#get)
@@ -41,6 +45,8 @@
 - [set](storage_export.StorageBackendJsonFile.md#set)
 - [toJson](storage_export.StorageBackendJsonFile.md#tojson)
 - [triggerCommit](storage_export.StorageBackendJsonFile.md#triggercommit)
+- [values](storage_export.StorageBackendJsonFile.md#values)
+- [create](storage_export.StorageBackendJsonFile.md#create)
 
 ## Constructors
 
@@ -64,9 +70,23 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L27)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L28)
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Inherited from
+
+[StorageBackendMemory](storage_export.StorageBackendMemory.md).[#private](storage_export.StorageBackendMemory.md##private)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:9
+
+___
 
 ### closed
 
@@ -74,7 +94,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L23)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L25)
 
 ___
 
@@ -84,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L22)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L22)
 
 ___
 
@@ -94,17 +114,21 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L20)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L20)
 
 ___
 
 ### initialized
 
-• `Private` **initialized**: `boolean` = `false`
+• `Protected` **initialized**: `boolean`
+
+#### Inherited from
+
+[StorageBackendMemory](storage_export.StorageBackendMemory.md).[initialized](storage_export.StorageBackendMemory.md#initialized)
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L24)
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:11
 
 ___
 
@@ -114,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L27)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L28)
 
 ___
 
@@ -132,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L25)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L26)
 
 ___
 
@@ -146,7 +170,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:9
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:10
 
 ___
 
@@ -158,7 +182,7 @@ We store changes after a value was set to the storage, but not more often than t
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L19)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L19)
 
 ## Methods
 
@@ -176,7 +200,7 @@ We store changes after a value was set to the storage, but not more often than t
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L63)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L75)
 
 ___
 
@@ -200,7 +224,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:19
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:24
 
 ___
 
@@ -218,7 +242,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:82](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L82)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L94)
 
 ___
 
@@ -232,7 +256,31 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L68)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L80)
+
+___
+
+### contexts
+
+▸ **contexts**(`contexts`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Inherited from
+
+[StorageBackendMemory](storage_export.StorageBackendMemory.md).[contexts](storage_export.StorageBackendMemory.md#contexts)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:23
 
 ___
 
@@ -257,7 +305,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:58](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L58)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L70)
 
 ___
 
@@ -277,7 +325,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:92](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L92)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L106)
 
 ___
 
@@ -308,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:15
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:18
 
 ___
 
@@ -326,7 +374,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L31)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L38)
 
 ___
 
@@ -350,27 +398,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:18
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:21
 
 ___
 
 ### set
 
-▸ **set**\<`T`\>(`contexts`, `key`, `value`): `void`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
+▸ **set**(`contexts`, `keyOrValues`, `value?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `contexts` | `string`[] |
-| `key` | `string` |
-| `value` | `T` |
+| `keyOrValues` | `string` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> |
+| `value?` | [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
 
 #### Returns
 
@@ -382,7 +424,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L53)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L61)
 
 ___
 
@@ -402,7 +444,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:88](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L88)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L102)
 
 ___
 
@@ -416,4 +458,52 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L44)
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L52)
+
+___
+
+### values
+
+▸ **values**(`contexts`): `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>
+
+#### Inherited from
+
+[StorageBackendMemory](storage_export.StorageBackendMemory.md).[values](storage_export.StorageBackendMemory.md#values)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:22
+
+___
+
+### create
+
+▸ **create**(`path`): `Promise`\<[`StorageBackendJsonFile`](storage_export.StorageBackendJsonFile.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `path` | `string` |
+
+#### Returns
+
+`Promise`\<[`StorageBackendJsonFile`](storage_export.StorageBackendJsonFile.md)\>
+
+#### Overrides
+
+[StorageBackendMemory](storage_export.StorageBackendMemory.md).[create](storage_export.StorageBackendMemory.md#create)
+
+#### Defined in
+
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L32)

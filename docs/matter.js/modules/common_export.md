@@ -8,9 +8,18 @@
 
 - [\<internal\>](common_export._internal_.md)
 
+### Namespaces
+
+- [FailsafeContext](common_export.FailsafeContext.md)
+- [Lifecycle](common_export.Lifecycle.md)
+
 ### Classes
 
-- [FailSafeManager](../classes/common_export.FailSafeManager.md)
+- [CrashedDependencyError](../classes/common_export.CrashedDependencyError.md)
+- [DependencyLifecycleError](../classes/common_export.DependencyLifecycleError.md)
+- [DestroyedDependencyError](../classes/common_export.DestroyedDependencyError.md)
+- [FailsafeContext](../classes/common_export.FailsafeContext-1.md)
+- [FailsafeTimer](../classes/common_export.FailsafeTimer.md)
 - [ImplementationError](../classes/common_export.ImplementationError.md)
 - [InternalError](../classes/common_export.InternalError.md)
 - [MatterError](../classes/common_export.MatterError.md)
@@ -18,15 +27,23 @@
 - [MatterFlowError](../classes/common_export.MatterFlowError.md)
 - [NoProviderError](../classes/common_export.NoProviderError.md)
 - [NotImplementedError](../classes/common_export.NotImplementedError.md)
+- [ReadOnlyError](../classes/common_export.ReadOnlyError.md)
 - [UnexpectedDataError](../classes/common_export.UnexpectedDataError.md)
+- [UninitializedDependencyError](../classes/common_export.UninitializedDependencyError.md)
+- [UnsupportedDependencyError](../classes/common_export.UnsupportedDependencyError.md)
+- [UnsupportedDependencyStatusError](../classes/common_export.UnsupportedDependencyStatusError.md)
 - [ValidationError](../classes/common_export.ValidationError.md)
 
 ### Interfaces
 
+- [Cancellable](../interfaces/common_export.Cancellable.md)
 - [Channel](../interfaces/common_export.Channel.md)
+- [CommissioningModeInstanceData](../interfaces/common_export.CommissioningModeInstanceData.md)
+- [Destructable](../interfaces/common_export.Destructable.md)
 - [InstanceBroadcaster](../interfaces/common_export.InstanceBroadcaster.md)
 - [Listener](../interfaces/common_export.Listener.md)
 - [Scanner](../interfaces/common_export.Scanner.md)
+- [Startable](../interfaces/common_export.Startable.md)
 - [TransportInterface](../interfaces/common_export.TransportInterface.md)
 
 ### Type Aliases
@@ -35,7 +52,6 @@
 - [CommissionableDevice](common_export.md#commissionabledevice)
 - [CommissionableDeviceIdentifiers](common_export.md#commissionabledeviceidentifiers)
 - [CommissionerInstanceData](common_export.md#commissionerinstancedata)
-- [CommissioningModeInstanceData](common_export.md#commissioningmodeinstancedata)
 - [DiscoverableDevice](common_export.md#discoverabledevice)
 - [DiscoveryData](common_export.md#discoverydata)
 - [OperationalDevice](common_export.md#operationaldevice)
@@ -69,7 +85,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L56)
+[packages/matter.js/src/common/Scanner.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Scanner.ts#L56)
 
 ___
 
@@ -79,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L63)
+[packages/matter.js/src/common/Scanner.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Scanner.ts#L63)
 
 ___
 
@@ -92,7 +108,7 @@ Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:77](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L77)
+[packages/matter.js/src/common/Scanner.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Scanner.ts#L77)
 
 ___
 
@@ -114,32 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:165](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L165)
-
-___
-
-### CommissioningModeInstanceData
-
-Ƭ **CommissioningModeInstanceData**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `deviceName` | `string` | Device name for commissionable announcements. |
-| `deviceType` | `number` | Device type for commissionable announcements. |
-| `discriminator` | `number` | Device discriminator for commissionable announcements. |
-| `pairingHint?` | [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof [`PairingHintBitmap`](common_export.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
-| `pairingInstructions?` | `string` | Pairing Instruction of the device for commissionable announcements. |
-| `productId` | `number` | Product ID for commissionable announcements. |
-| `sessionActiveInterval?` | `number` | Session Active Interval of the device for commissionable announcements. |
-| `sessionActiveThreshold?` | `number` | Duration of time the node should stay Active after the last network activity. * |
-| `sessionIdleInterval?` | `number` | Session Idle Interval of the device for commissionable announcements. |
-| `vendorId` | [`VendorId`](datatype_export.md#vendorid) | Vendor ID for commissionable announcements. |
-
-#### Defined in
-
-[packages/matter.js/src/common/InstanceBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L133)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:154](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L154)
 
 ___
 
@@ -155,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L51)
+[packages/matter.js/src/common/Scanner.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Scanner.ts#L51)
 
 ___
 
@@ -184,7 +175,7 @@ The properties are named identical as in the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L16)
+[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Scanner.ts#L16)
 
 ___
 
@@ -194,7 +185,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Scanner.ts#L59)
+[packages/matter.js/src/common/Scanner.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Scanner.ts#L59)
 
 ___
 
@@ -212,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:188](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L188)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L177)
 
 ___
 
@@ -222,7 +213,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ServerAddress.ts#L18)
+[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/ServerAddress.ts#L18)
 
 ___
 
@@ -239,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ServerAddress.ts#L13)
+[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/ServerAddress.ts#L13)
 
 ___
 
@@ -249,7 +240,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Type declaration
@@ -262,7 +253,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ServerAddress.ts#L7)
+[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/ServerAddress.ts#L7)
 
 ## Variables
 
@@ -297,7 +288,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L11)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L12)
 
 ___
 
@@ -307,7 +298,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:131](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L131)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L132)
 
 ## Functions
 
@@ -327,7 +318,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/ServerAddress.ts#L20)
+[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/ServerAddress.ts#L20)
 
 ___
 
@@ -360,7 +351,7 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/TryCatchHandler.ts#L19)
+[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/TryCatchHandler.ts#L19)
 
 ___
 
@@ -393,4 +384,4 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/TryCatchHandler.ts#L47)
+[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/TryCatchHandler.ts#L47)

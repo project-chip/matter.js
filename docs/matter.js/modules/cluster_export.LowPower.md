@@ -6,24 +6,48 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/cluster_export.LowPower.Cluster.md)
+
 ### Variables
 
 - [Cluster](cluster_export.LowPower.md#cluster)
+- [ClusterInstance](cluster_export.LowPower.md#clusterinstance)
+- [Complete](cluster_export.LowPower.md#complete)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `sleep`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``1288`` = 0x508; `name`: ``"LowPower"`` = "LowPower"; `revision`: ``1`` = 1 }\>
-
-Low Power
-
-This cluster provides an interface for managing low power mode on a device.
-
-**`See`**
-
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.9
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.LowPower.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L42)
+
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L44)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `commands`: \{ `sleep`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``1288`` = 0x508; `name`: ``"LowPower"`` = "LowPower"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.LowPower.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L20)
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/cluster_export.LowPower.Cluster.md) = `Cluster`
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L46)

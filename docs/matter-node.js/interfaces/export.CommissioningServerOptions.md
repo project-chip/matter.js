@@ -46,10 +46,6 @@ about the open sessions and their status.
 
 ▸ (`fabricIndex`): `void`
 
-This callback is called when sessions to the device are established, closed or subscriptions get added or
-removed. The provided fabricIndex can be used together with getActiveSessionInformation() to get more details
-about the open sessions and their status.
-
 ##### Parameters
 
 | Name | Type |
@@ -62,7 +58,7 @@ about the open sessions and their status.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:113
+packages/matter.js/dist/esm/CommissioningServer.d.ts:124
 
 ___
 
@@ -74,7 +70,7 @@ Optional Vendor specific additional BLE Advertisement data.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:59
+packages/matter.js/dist/esm/CommissioningServer.d.ts:65
 
 ___
 
@@ -87,20 +83,29 @@ not set here.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:83
+packages/matter.js/dist/esm/CommissioningServer.d.ts:89
 
 ___
 
 ### certificates
 
-• `Optional` **certificates**: [`OperationalCredentialsServerConf`](exports_cluster.OperationalCredentialsServerConf.md)
+• `Optional` **certificates**: `Object`
 
 Vendor specific certificates to be used for the OperationalCredentials cluster. If not set Test certificates
 (official Chip tool test Root certificate is used) are generated automatically.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `certificationDeclaration` | `Uint8Array` |
+| `deviceCertificate` | `Uint8Array` |
+| `deviceIntermediateCertificate` | `Uint8Array` |
+| `devicePrivateKey` | `Uint8Array` |
+
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:93
+packages/matter.js/dist/esm/CommissioningServer.d.ts:99
 
 ___
 
@@ -116,10 +121,6 @@ fabricIndex can be used together with getCommissionedFabricInformation() to get 
 
 ▸ (`fabricIndex`): `void`
 
-This callback is called when the device is commissioned or decommissioned to a fabric/controller. The provided
-fabricIndex can be used together with getCommissionedFabricInformation() to get more details about the fabric
-(or if this fabricIndex is missing it was deleted).
-
 ##### Parameters
 
 | Name | Type |
@@ -132,7 +133,7 @@ fabricIndex can be used together with getCommissionedFabricInformation() to get 
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:107
+packages/matter.js/dist/esm/CommissioningServer.d.ts:118
 
 ___
 
@@ -144,7 +145,7 @@ Should the device directly be announced automatically by the MatterServer of man
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:61
+packages/matter.js/dist/esm/CommissioningServer.d.ts:67
 
 ___
 
@@ -156,7 +157,7 @@ The device name to be used for the BasicInformation cluster.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:47
+packages/matter.js/dist/esm/CommissioningServer.d.ts:53
 
 ___
 
@@ -168,7 +169,7 @@ The device type to be used for the BasicInformation cluster.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:49
+packages/matter.js/dist/esm/CommissioningServer.d.ts:55
 
 ___
 
@@ -180,19 +181,19 @@ The Discriminator to use for initial commissioning.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:55
+packages/matter.js/dist/esm/CommissioningServer.d.ts:61
 
 ___
 
 ### flowType
 
-• `Optional` **flowType**: [`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)
+• `Optional` **flowType**: [`CommissioningFlowType`](../enums/exports_schema.CommissioningFlowType.md)
 
 The Flow type of the Commissioning flow used in announcements.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:57
+packages/matter.js/dist/esm/CommissioningServer.d.ts:63
 
 ___
 
@@ -205,7 +206,7 @@ Use these options to limit the allowed countries for regulatory configuration.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:98
+packages/matter.js/dist/esm/CommissioningServer.d.ts:109
 
 ___
 
@@ -217,7 +218,7 @@ IPv4 listener address, defaults to all interfaces.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:43
+packages/matter.js/dist/esm/CommissioningServer.d.ts:49
 
 ___
 
@@ -229,7 +230,7 @@ IPv6 listener address, defaults to all interfaces.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:45
+packages/matter.js/dist/esm/CommissioningServer.d.ts:51
 
 ___
 
@@ -241,7 +242,7 @@ The next endpoint ID to be assigned to a new endpoint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:51
+packages/matter.js/dist/esm/CommissioningServer.d.ts:57
 
 ___
 
@@ -253,7 +254,7 @@ The passcode/pin of the device to use for initial commissioning.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:53
+packages/matter.js/dist/esm/CommissioningServer.d.ts:59
 
 ___
 
@@ -265,7 +266,7 @@ Port of the server, normally automatically managed.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:41
+packages/matter.js/dist/esm/CommissioningServer.d.ts:47
 
 ___
 
@@ -278,7 +279,7 @@ and inside the range requested by the connected controller.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:66
+packages/matter.js/dist/esm/CommissioningServer.d.ts:72
 
 ___
 
@@ -292,7 +293,7 @@ limits.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:72
+packages/matter.js/dist/esm/CommissioningServer.d.ts:78
 
 ___
 
@@ -306,4 +307,4 @@ powered on in parallel not all send at the same timepoint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:78
+packages/matter.js/dist/esm/CommissioningServer.d.ts:84

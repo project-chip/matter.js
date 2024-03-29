@@ -16,7 +16,7 @@
 
   ↳ [`SecureSession`](internal_.SecureSession.md)
 
-  ↳ [`UnsecureSession`](internal_.UnsecureSession.md)
+  ↳ [`InsecureSession`](internal_.InsecureSession.md)
 
 ## Table of contents
 
@@ -29,10 +29,18 @@
 - [activeIntervalMs](internal_.Session.md#activeintervalms)
 - [activeThresholdMs](internal_.Session.md#activethresholdms)
 - [activeTimestamp](internal_.Session.md#activetimestamp)
+- [associatedFabric](internal_.Session.md#associatedfabric)
 - [closeCallback](internal_.Session.md#closecallback)
+- [context](internal_.Session.md#context)
+- [id](internal_.Session.md#id)
 - [idleIntervalMs](internal_.Session.md#idleintervalms)
+- [isPase](internal_.Session.md#ispase)
+- [isSecure](internal_.Session.md#issecure)
 - [messageCounter](internal_.Session.md#messagecounter)
 - [messageReceptionState](internal_.Session.md#messagereceptionstate)
+- [nodeId](internal_.Session.md#nodeid)
+- [peerNodeId](internal_.Session.md#peernodeid)
+- [peerSessionId](internal_.Session.md#peersessionid)
 - [timestamp](internal_.Session.md#timestamp)
 
 ### Accessors
@@ -46,17 +54,9 @@
 - [destroy](internal_.Session.md#destroy)
 - [encode](internal_.Session.md#encode)
 - [end](internal_.Session.md#end)
-- [getAssociatedFabric](internal_.Session.md#getassociatedfabric)
-- [getContext](internal_.Session.md#getcontext)
-- [getId](internal_.Session.md#getid)
 - [getIncrementedMessageCounter](internal_.Session.md#getincrementedmessagecounter)
-- [getNodeId](internal_.Session.md#getnodeid)
-- [getPeerNodeId](internal_.Session.md#getpeernodeid)
-- [getPeerSessionId](internal_.Session.md#getpeersessionid)
 - [getSessionParameters](internal_.Session.md#getsessionparameters)
-- [isPase](internal_.Session.md#ispase)
 - [isPeerActive](internal_.Session.md#ispeeractive)
-- [isSecure](internal_.Session.md#issecure)
 - [notifyActivity](internal_.Session.md#notifyactivity)
 - [updateMessageCounter](internal_.Session.md#updatemessagecounter)
 
@@ -123,6 +123,16 @@ matter.js/dist/esm/session/Session.d.ts:33
 
 ___
 
+### associatedFabric
+
+• `Abstract` **associatedFabric**: [`Fabric`](internal_.Fabric.md)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:59
+
+___
+
 ### closeCallback
 
 • `Protected` `Readonly` **closeCallback**: () => `Promise`\<`void`\>
@@ -141,6 +151,26 @@ matter.js/dist/esm/session/Session.d.ts:37
 
 ___
 
+### context
+
+• `Abstract` **context**: `T`
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:54
+
+___
+
+### id
+
+• `Abstract` **id**: `number`
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:55
+
+___
+
 ### idleIntervalMs
 
 • `Protected` `Readonly` **idleIntervalMs**: `number`
@@ -148,6 +178,26 @@ ___
 #### Defined in
 
 matter.js/dist/esm/session/Session.d.ts:34
+
+___
+
+### isPase
+
+• `Abstract` **isPase**: `boolean`
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:53
+
+___
+
+### isSecure
+
+• `Abstract` **isSecure**: `boolean`
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:52
 
 ___
 
@@ -168,6 +218,36 @@ ___
 #### Defined in
 
 matter.js/dist/esm/session/Session.d.ts:39
+
+___
+
+### nodeId
+
+• `Abstract` **nodeId**: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:57
+
+___
+
+### peerNodeId
+
+• `Abstract` **peerNodeId**: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid)
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:58
+
+___
+
+### peerSessionId
+
+• `Abstract` **peerSessionId**: `number`
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:56
 
 ___
 
@@ -226,7 +306,7 @@ matter.js/dist/esm/session/Session.d.ts:30
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:54
+matter.js/dist/esm/session/Session.d.ts:60
 
 ___
 
@@ -247,7 +327,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:62
+matter.js/dist/esm/session/Session.d.ts:63
 
 ___
 
@@ -267,7 +347,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:55
+matter.js/dist/esm/session/Session.d.ts:61
 
 ___
 
@@ -287,105 +367,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:61
-
-___
-
-### getAssociatedFabric
-
-▸ **getAssociatedFabric**(): [`Fabric`](internal_.Fabric.md)
-
-#### Returns
-
-[`Fabric`](internal_.Fabric.md)
-
-#### Defined in
-
-matter.js/dist/esm/session/Session.d.ts:63
-
-___
-
-### getContext
-
-▸ **getContext**(): `T`
-
-#### Returns
-
-`T`
-
-#### Defined in
-
-matter.js/dist/esm/session/Session.d.ts:56
-
-___
-
-### getId
-
-▸ **getId**(): `number`
-
-#### Returns
-
-`number`
-
-#### Defined in
-
-matter.js/dist/esm/session/Session.d.ts:57
+matter.js/dist/esm/session/Session.d.ts:62
 
 ___
 
 ### getIncrementedMessageCounter
 
-▸ **getIncrementedMessageCounter**(): `number`
+▸ **getIncrementedMessageCounter**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Defined in
 
 matter.js/dist/esm/session/Session.d.ts:49
-
-___
-
-### getNodeId
-
-▸ **getNodeId**(): `undefined` \| [`NodeId`](../modules/internal_.md#nodeid)
-
-#### Returns
-
-`undefined` \| [`NodeId`](../modules/internal_.md#nodeid)
-
-#### Defined in
-
-matter.js/dist/esm/session/Session.d.ts:59
-
-___
-
-### getPeerNodeId
-
-▸ **getPeerNodeId**(): `undefined` \| [`NodeId`](../modules/internal_.md#nodeid)
-
-#### Returns
-
-`undefined` \| [`NodeId`](../modules/internal_.md#nodeid)
-
-#### Defined in
-
-matter.js/dist/esm/session/Session.d.ts:60
-
-___
-
-### getPeerSessionId
-
-▸ **getPeerSessionId**(): `number`
-
-#### Returns
-
-`number`
-
-#### Defined in
-
-matter.js/dist/esm/session/Session.d.ts:58
 
 ___
 
@@ -403,20 +399,6 @@ matter.js/dist/esm/session/Session.d.ts:51
 
 ___
 
-### isPase
-
-▸ **isPase**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-matter.js/dist/esm/session/Session.d.ts:53
-
-___
-
 ### isPeerActive
 
 ▸ **isPeerActive**(): `boolean`
@@ -428,20 +410,6 @@ ___
 #### Defined in
 
 matter.js/dist/esm/session/Session.d.ts:48
-
-___
-
-### isSecure
-
-▸ **isSecure**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-matter.js/dist/esm/session/Session.d.ts:52
 
 ___
 

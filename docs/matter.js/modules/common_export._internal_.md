@@ -37,4 +37,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:8](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/TryCatchHandler.ts#L8)
+[packages/matter.js/src/common/TryCatchHandler.ts:8](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/TryCatchHandler.ts#L8)

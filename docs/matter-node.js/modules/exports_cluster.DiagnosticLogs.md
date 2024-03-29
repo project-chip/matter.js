@@ -12,41 +12,61 @@
 - [Status](../enums/exports_cluster.DiagnosticLogs.Status.md)
 - [TransferProtocol](../enums/exports_cluster.DiagnosticLogs.TransferProtocol.md)
 
+### Interfaces
+
+- [Cluster](../interfaces/exports_cluster.DiagnosticLogs.Cluster.md)
+- [RetrieveLogsRequest](../interfaces/exports_cluster.DiagnosticLogs.RetrieveLogsRequest.md)
+- [RetrieveLogsResponse](../interfaces/exports_cluster.DiagnosticLogs.RetrieveLogsResponse.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.DiagnosticLogs.md#cluster)
-- [TlvRetrieveLogsRequestRequest](exports_cluster.DiagnosticLogs.md#tlvretrievelogsrequestrequest)
+- [ClusterInstance](exports_cluster.DiagnosticLogs.md#clusterinstance)
+- [Complete](exports_cluster.DiagnosticLogs.md#complete)
+- [TlvRetrieveLogsRequest](exports_cluster.DiagnosticLogs.md#tlvretrievelogsrequest)
 - [TlvRetrieveLogsResponse](exports_cluster.DiagnosticLogs.md#tlvretrievelogsresponse)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `commands`: \{ `retrieveLogsRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``50`` ; `name`: ``"DiagnosticLogs"`` ; `revision`: ``1``  }\>
-
-Diagnostic Logs
-
-This Cluster supports an interface to a Node. It provides commands for retrieving unstructured diagnostic logs
-from a Node that may be used to aid in diagnostics. It will often be the case that unstructured diagnostic logs
-will be Node-wide and not specific to any subset of Endpoints. When present, this Cluster shall be implemented
-once for the Node. The Node SHOULD also implement the BDX Initiator and BDX Sender roles as defined in the BDX
-Protocol.
-
-NOTE Support for Diagnostic Logs cluster is provisional.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 11.10
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.DiagnosticLogs.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:223
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:341
+
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:343
 
 ___
 
-### TlvRetrieveLogsRequestRequest
+### ClusterInstance
 
-• `Const` **TlvRetrieveLogsRequestRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `commands`: \{ `retrieveLogsRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``50`` ; `name`: ``"DiagnosticLogs"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.DiagnosticLogs.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:230
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.DiagnosticLogs.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:344
+
+___
+
+### TlvRetrieveLogsRequest
+
+• `Const` **TlvRetrieveLogsRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DiagnosticLogs retrieveLogsRequest command
 
@@ -56,7 +76,7 @@ MatterCoreSpecificationV1_1 § 11.10.5.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:68
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:70
 
 ___
 
@@ -73,4 +93,4 @@ MatterCoreSpecificationV1_1 § 11.10.5.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:178
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:187

@@ -25,6 +25,7 @@ MatterDeviceLibrarySpecificationV1_0 § 1.1.5
 - [Node](exports_device.DeviceClasses.md#node)
 - [Server](exports_device.DeviceClasses.md#server)
 - [Simple](exports_device.DeviceClasses.md#simple)
+- [Utility](exports_device.DeviceClasses.md#utility)
 
 ## Enumeration Members
 
@@ -37,7 +38,7 @@ Application devices types are typically the most datatype endpoints on a node an
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:19
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:24
 
 ___
 
@@ -50,7 +51,7 @@ its power source is available to the Bridge
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:48
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:53
 
 ___
 
@@ -62,7 +63,7 @@ There exists a client application cluster on the endpoint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:33
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:38
 
 ___
 
@@ -74,7 +75,7 @@ The device type is composed of 2 or more device types.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:37
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:42
 
 ___
 
@@ -89,7 +90,7 @@ application device type.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:31
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:36
 
 ___
 
@@ -101,7 +102,7 @@ The endpoint is an Initiator for Zigbee EZ-Mode Finding & Binding.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:41
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:46
 
 ___
 
@@ -113,7 +114,7 @@ The endpoint is a Target for Zigbee EZ-Mode Finding & Binding.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:43
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:48
 
 ___
 
@@ -125,7 +126,7 @@ Composed device type that is composed of 2 or more endpoints with the same devic
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:39
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:44
 
 ___
 
@@ -149,7 +150,7 @@ There exists a server application cluster on the endpoint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:35
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:40
 
 ___
 
@@ -162,4 +163,17 @@ A Simple device type supports local control that is persistent, independent, and
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/DeviceTypes.d.ts:24
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:29
+
+___
+
+### Utility
+
+• **Utility** = ``"Utility"``
+
+Utility device type.
+A Utility device type supports configuration and settings.
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:19

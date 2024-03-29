@@ -33,7 +33,7 @@ decoded bytes in a ByteArray
 
 #### Defined in
 
-[packages/matter.js/src/codec/Base64Codec.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/Base64Codec.ts#L91)
+[packages/matter.js/src/codec/Base64Codec.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/Base64Codec.ts#L91)
 
 ___
 
@@ -58,4 +58,4 @@ an encoded string
 
 #### Defined in
 
-[packages/matter.js/src/codec/Base64Codec.ts:52](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/Base64Codec.ts#L52)
+[packages/matter.js/src/codec/Base64Codec.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/Base64Codec.ts#L52)

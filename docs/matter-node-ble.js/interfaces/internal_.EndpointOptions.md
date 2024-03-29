@@ -19,7 +19,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/device/Endpoint.d.ts:15
+matter.js/dist/esm/device/Endpoint.d.ts:16
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/Endpoint.d.ts:16
+matter.js/dist/esm/device/Endpoint.d.ts:17

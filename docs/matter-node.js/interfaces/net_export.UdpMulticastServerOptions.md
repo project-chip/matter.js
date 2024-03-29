@@ -12,6 +12,7 @@
 - [broadcastAddressIpv6](net_export.UdpMulticastServerOptions.md#broadcastaddressipv6)
 - [listeningPort](net_export.UdpMulticastServerOptions.md#listeningport)
 - [netInterface](net_export.UdpMulticastServerOptions.md#netinterface)
+- [network](net_export.UdpMulticastServerOptions.md#network)
 
 ## Properties
 
@@ -21,7 +22,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:9
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:12
 
 ___
 
@@ -31,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:10
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:11
 
 ___
 
@@ -41,7 +42,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:8
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:10
 
 ___
 
@@ -51,4 +52,14 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:11
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:13
+
+___
+
+### network
+
+• **network**: [`Network`](../classes/net_export.Network.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:9

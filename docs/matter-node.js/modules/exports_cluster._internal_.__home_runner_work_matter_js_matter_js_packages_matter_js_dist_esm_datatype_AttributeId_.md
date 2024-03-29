@@ -15,7 +15,7 @@
 
 ### AttributeId
 
-Re-exports [AttributeId](exports_datatype.md#attributeid)
+Re-exports [AttributeId](exports_datatype.md#attributeid-1)
 
 ___
 

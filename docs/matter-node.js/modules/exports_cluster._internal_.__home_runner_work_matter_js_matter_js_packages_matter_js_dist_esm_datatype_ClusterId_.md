@@ -15,7 +15,7 @@
 
 ### ClusterId
 
-Re-exports [ClusterId](exports_datatype.md#clusterid)
+Re-exports [ClusterId](exports_datatype.md#clusterid-1)
 
 ___
 

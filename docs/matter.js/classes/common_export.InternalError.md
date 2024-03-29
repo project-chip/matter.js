@@ -43,4 +43,25 @@ report such errors.
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082
+
+• **new InternalError**(`message?`, `options?`): [`InternalError`](common_export.InternalError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`InternalError`](common_export.InternalError.md)
+
+#### Inherited from
+
+[MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1082

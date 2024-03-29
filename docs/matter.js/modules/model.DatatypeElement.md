@@ -25,38 +25,38 @@
 
 ### ListValues
 
-Ƭ **ListValues**: [`DatatypeElement`](model.md#datatypeelement)[]
+Ƭ **ListValues**: [`FieldElement`](../interfaces/model.FieldElement-1.md)[]
 
 We express enum values as IntElements as this gives us conformance
 and other metadata.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L50)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L50)
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L73)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L73)
 
 ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`DatatypeElement`](model.md#datatypeelement)\>
+Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`DatatypeElement`](../interfaces/model.DatatypeElement-1.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L41)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L41)
 
 ___
 
 ### Tag
 
-Ƭ **Tag**: [`Datatype`](../enums/model.ElementTag.md#datatype)
+Ƭ **Tag**: typeof [`Datatype`](../enums/model.ElementTag.md#datatype)
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L39)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L39)
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L40)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L40)
 
 ___
 
@@ -75,19 +75,19 @@ generating the Matter enum we ignore the string keys.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L81)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L81)
 
 ## Variables
 
 ### Tag
 
-• **Tag**: [`Datatype`](../enums/model.ElementTag.md#datatype)
+• `Const` **Tag**: [`Datatype`](../enums/model.ElementTag.md#datatype) = `ElementTag.Datatype`
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L39)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L39)
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L40)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L40)
 
 ## Functions
 
@@ -113,4 +113,4 @@ we can't use a TypeScript enum directly.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/DatatypeElement.ts#L50)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/DatatypeElement.ts#L50)

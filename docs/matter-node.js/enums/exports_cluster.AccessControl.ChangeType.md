@@ -26,7 +26,7 @@ Entry or extension was added
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:208
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:225
 
 ___
 
@@ -38,7 +38,7 @@ Entry or extension was changed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:204
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:221
 
 ___
 
@@ -50,4 +50,4 @@ Entry or extension was removed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:212
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:229

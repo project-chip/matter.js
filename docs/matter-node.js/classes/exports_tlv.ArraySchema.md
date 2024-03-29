@@ -97,7 +97,7 @@ ___
 
 ### maxLength
 
-• `Private` `Readonly` **maxLength**: `any`
+• `Readonly` **maxLength**: `number`
 
 #### Defined in
 
@@ -107,7 +107,7 @@ ___
 
 ### minLength
 
-• `Private` `Readonly` **minLength**: `any`
+• `Readonly` **minLength**: `number`
 
 #### Defined in
 

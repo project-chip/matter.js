@@ -27,7 +27,7 @@ The battery is at full charge
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:628
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:623
 
 ___
 
@@ -39,7 +39,7 @@ The battery is charging
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:624
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:619
 
 ___
 
@@ -51,7 +51,7 @@ The battery is not charging
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:632
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:627
 
 ___
 
@@ -63,4 +63,4 @@ Unable to determine the charging state
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:620
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:615

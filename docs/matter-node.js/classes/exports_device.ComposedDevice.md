@@ -22,8 +22,8 @@ A ComposedDevice is a special endpoint that allows to combine multiple sub devic
 ### Properties
 
 - [deviceTypes](exports_device.ComposedDevice.md#devicetypes)
-- [id](exports_device.ComposedDevice.md#id)
 - [name](exports_device.ComposedDevice.md#name)
+- [number](exports_device.ComposedDevice.md#number)
 - [uniqueStorageKey](exports_device.ComposedDevice.md#uniquestoragekey)
 
 ### Methods
@@ -34,7 +34,7 @@ A ComposedDevice is a special endpoint that allows to combine multiple sub devic
 - [addDevice](exports_device.ComposedDevice.md#adddevice)
 - [addFixedLabel](exports_device.ComposedDevice.md#addfixedlabel)
 - [addUserLabel](exports_device.ComposedDevice.md#adduserlabel)
-- [destroy](exports_device.ComposedDevice.md#destroy)
+- [close](exports_device.ComposedDevice.md#close)
 - [determineUniqueID](exports_device.ComposedDevice.md#determineuniqueid)
 - [getAllClusterClients](exports_device.ComposedDevice.md#getallclusterclients)
 - [getAllClusterServers](exports_device.ComposedDevice.md#getallclusterservers)
@@ -46,7 +46,7 @@ A ComposedDevice is a special endpoint that allows to combine multiple sub devic
 - [getClusterServerById](exports_device.ComposedDevice.md#getclusterserverbyid)
 - [getDeviceTypes](exports_device.ComposedDevice.md#getdevicetypes)
 - [getDevices](exports_device.ComposedDevice.md#getdevices)
-- [getId](exports_device.ComposedDevice.md#getid)
+- [getNumber](exports_device.ComposedDevice.md#getnumber)
 - [hasClusterClient](exports_device.ComposedDevice.md#hasclusterclient)
 - [hasClusterServer](exports_device.ComposedDevice.md#hasclusterserver)
 - [removeChildEndpoint](exports_device.ComposedDevice.md#removechildendpoint)
@@ -97,21 +97,7 @@ packages/matter.js/dist/esm/device/ComposedDevice.d.ts:16
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:19
-
-___
-
-### id
-
-• **id**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
-
-#### Inherited from
-
-[Endpoint](exports_device.Endpoint.md).[id](exports_device.Endpoint.md#id)
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:20
 
 ___
 
@@ -125,7 +111,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+
+___
+
+### number
+
+• **number**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[number](exports_device.Endpoint.md#number)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ## Methods
 
@@ -151,7 +151,7 @@ packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
 
 #### Returns
 
@@ -163,7 +163,7 @@ packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -227,7 +227,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -299,13 +299,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
-### destroy
+### close
 
-▸ **destroy**(): `void`
+▸ **close**(): `void`
 
 #### Returns
 
@@ -313,11 +313,11 @@ ___
 
 #### Inherited from
 
-[Endpoint](exports_device.Endpoint.md).[destroy](exports_device.Endpoint.md#destroy)
+[Endpoint](exports_device.Endpoint.md).[close](exports_device.Endpoint.md#close)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:37
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -335,7 +335,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56
 
 ___
 
@@ -353,7 +353,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -371,7 +371,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -395,7 +395,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -413,7 +413,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -447,7 +447,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:44
+packages/matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -471,7 +471,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -505,7 +505,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:43
+packages/matter.js/dist/esm/device/Endpoint.d.ts:44
 
 ___
 
@@ -529,7 +529,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -547,7 +547,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
@@ -569,9 +569,9 @@ packages/matter.js/dist/esm/device/ComposedDevice.d.ts:27
 
 ___
 
-### getId
+### getNumber
 
-▸ **getId**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+▸ **getNumber**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Returns
 
@@ -579,11 +579,11 @@ ___
 
 #### Inherited from
 
-[Endpoint](exports_device.Endpoint.md).[getId](exports_device.Endpoint.md#getid)
+[Endpoint](exports_device.Endpoint.md).[getNumber](exports_device.Endpoint.md#getnumber)
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -617,7 +617,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -651,7 +651,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -675,7 +675,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -693,7 +693,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -739,7 +739,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -763,7 +763,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -781,7 +781,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:59
+packages/matter.js/dist/esm/device/Endpoint.d.ts:60
 
 ___
 

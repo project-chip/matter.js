@@ -33,7 +33,7 @@ Node.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:49](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L49)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L52)
 
 ___
 
@@ -52,7 +52,7 @@ support to an end-user.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L32)
 
 ___
 
@@ -71,4 +71,4 @@ currently commissioned (and/or connected) or has previously been commissioned (a
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L39)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L42)

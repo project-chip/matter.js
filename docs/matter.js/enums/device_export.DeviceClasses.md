@@ -25,6 +25,7 @@ This represents a Root Node for devices.
 - [Node](device_export.DeviceClasses.md#node)
 - [Server](device_export.DeviceClasses.md#server)
 - [Simple](device_export.DeviceClasses.md#simple)
+- [Utility](device_export.DeviceClasses.md#utility)
 
 ## Enumeration Members
 
@@ -37,7 +38,7 @@ Application devices types are typically the most datatype endpoints on a node an
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L24)
+[packages/matter.js/src/device/DeviceTypes.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L30)
 
 ___
 
@@ -50,7 +51,7 @@ its power source is available to the Bridge
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:62](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L62)
+[packages/matter.js/src/device/DeviceTypes.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L68)
 
 ___
 
@@ -62,7 +63,7 @@ There exists a client application cluster on the endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L41)
+[packages/matter.js/src/device/DeviceTypes.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L47)
 
 ___
 
@@ -74,7 +75,7 @@ The device type is composed of 2 or more device types.
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L47)
+[packages/matter.js/src/device/DeviceTypes.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L53)
 
 ___
 
@@ -89,7 +90,7 @@ application device type.
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L38)
+[packages/matter.js/src/device/DeviceTypes.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L44)
 
 ___
 
@@ -101,7 +102,7 @@ The endpoint is an Initiator for Zigbee EZ-Mode Finding & Binding.
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L53)
+[packages/matter.js/src/device/DeviceTypes.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L59)
 
 ___
 
@@ -113,7 +114,7 @@ The endpoint is a Target for Zigbee EZ-Mode Finding & Binding.
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L56)
+[packages/matter.js/src/device/DeviceTypes.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L62)
 
 ___
 
@@ -125,7 +126,7 @@ Composed device type that is composed of 2 or more endpoints with the same devic
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L50)
+[packages/matter.js/src/device/DeviceTypes.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L56)
 
 ___
 
@@ -137,7 +138,7 @@ Node device type.
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L18)
+[packages/matter.js/src/device/DeviceTypes.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L18)
 
 ___
 
@@ -149,7 +150,7 @@ There exists a server application cluster on the endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L44)
+[packages/matter.js/src/device/DeviceTypes.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L50)
 
 ___
 
@@ -162,4 +163,17 @@ A Simple device type supports local control that is persistent, independent, and
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L30)
+[packages/matter.js/src/device/DeviceTypes.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L36)
+
+___
+
+### Utility
+
+• **Utility** = ``"Utility"``
+
+Utility device type.
+A Utility device type supports configuration and settings.
+
+#### Defined in
+
+[packages/matter.js/src/device/DeviceTypes.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L24)

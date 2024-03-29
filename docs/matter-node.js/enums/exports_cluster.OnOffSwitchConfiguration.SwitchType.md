@@ -22,7 +22,7 @@ The value of the OnOffSwitchConfiguration switchType attribute
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffSwitchConfigurationCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/OnOffSwitchConfigurationCluster.d.ts:16
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffSwitchConfigurationCluster.d.ts:16
+packages/matter.js/dist/esm/cluster/definitions/OnOffSwitchConfigurationCluster.d.ts:17
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffSwitchConfigurationCluster.d.ts:14
+packages/matter.js/dist/esm/cluster/definitions/OnOffSwitchConfigurationCluster.d.ts:15

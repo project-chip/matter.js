@@ -28,4 +28,4 @@ Definition of one registered Logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:254](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/log/Logger.ts#L254)
+[packages/matter.js/src/log/Logger.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L68)

@@ -1,14 +1,15 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [cluster/export](../modules/cluster_export.md) / EventServer
 
-# Class: EventServer\<T\>
+# Class: EventServer\<T, S\>
 
 [cluster/export](../modules/cluster_export.md).EventServer
 
 ## Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) |
 
 ## Table of contents
 
@@ -40,13 +41,14 @@
 
 ### constructor
 
-• **new EventServer**\<`T`\>(`id`, `clusterId`, `name`, `schema`, `priority`): [`EventServer`](cluster_export.EventServer.md)\<`T`\>
+• **new EventServer**\<`T`, `S`\>(`id`, `clusterId`, `name`, `schema`, `priority`): [`EventServer`](cluster_export.EventServer.md)\<`T`, `S`\>
 
 #### Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) |
 
 #### Parameters
 
@@ -60,11 +62,11 @@
 
 #### Returns
 
-[`EventServer`](cluster_export.EventServer.md)\<`T`\>
+[`EventServer`](cluster_export.EventServer.md)\<`T`, `S`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L24)
+[packages/matter.js/src/cluster/server/EventServer.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L26)
 
 ## Properties
 
@@ -74,7 +76,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L26)
+[packages/matter.js/src/cluster/server/EventServer.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L28)
 
 ___
 
@@ -84,27 +86,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L21)
+[packages/matter.js/src/cluster/server/EventServer.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L23)
 
 ___
 
 ### eventHandler
 
-• `Protected` `Optional` **eventHandler**: [`EventHandler`](protocol_interaction_export._internal_.EventHandler.md)
+• `Protected` `Optional` **eventHandler**: [`EventHandler`](protocol_interaction_export.EventHandler.md)\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L22)
+[packages/matter.js/src/cluster/server/EventServer.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L24)
 
 ___
 
 ### eventList
 
-• `Private` **eventList**: [`EventData`](../interfaces/cluster_export._internal_.EventData.md)\<`T`\>[]
+• `Private` **eventList**: [`EventData`](../interfaces/protocol_interaction_export.EventData.md)\<`T`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L19)
+[packages/matter.js/src/cluster/server/EventServer.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L21)
 
 ___
 
@@ -114,17 +116,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L25)
+[packages/matter.js/src/cluster/server/EventServer.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L27)
 
 ___
 
 ### listeners
 
-• `Private` `Readonly` **listeners**: (`event`: [`EventStorageData`](../interfaces/protocol_interaction_export._internal_.EventStorageData.md)\<`T`\>) => `void`[]
+• `Private` `Readonly` **listeners**: (`event`: [`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`T`\>) => `void`[]
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L20)
+[packages/matter.js/src/cluster/server/EventServer.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L22)
 
 ___
 
@@ -134,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L27)
+[packages/matter.js/src/cluster/server/EventServer.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L29)
 
 ___
 
@@ -144,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L29)
+[packages/matter.js/src/cluster/server/EventServer.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L31)
 
 ___
 
@@ -154,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L28)
+[packages/matter.js/src/cluster/server/EventServer.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L30)
 
 ## Methods
 
@@ -166,7 +168,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/protocol_interaction_export._internal_.EventStorageData.md)\<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -174,7 +176,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:69](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L69)
+[packages/matter.js/src/cluster/server/EventServer.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L83)
 
 ___
 
@@ -194,27 +196,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L32)
+[packages/matter.js/src/cluster/server/EventServer.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L34)
 
 ___
 
 ### bindToEventHandler
 
-▸ **bindToEventHandler**(`eventHandler`): `void`
+▸ **bindToEventHandler**(`eventHandler`): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `eventHandler` | [`EventHandler`](protocol_interaction_export._internal_.EventHandler.md) |
+| `eventHandler` | [`EventHandler`](protocol_interaction_export.EventHandler.md)\<`S`\> |
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L38)
+[packages/matter.js/src/cluster/server/EventServer.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L40)
 
 ___
 
@@ -226,7 +228,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/protocol_interaction_export._internal_.EventStorageData.md)\<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -234,13 +236,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L73)
+[packages/matter.js/src/cluster/server/EventServer.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L87)
 
 ___
 
 ### triggerEvent
 
-▸ **triggerEvent**(`data`): `void`
+▸ **triggerEvent**(`data`): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Parameters
 
@@ -250,8 +252,8 @@ ___
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/EventServer.ts#L48)
+[packages/matter.js/src/cluster/server/EventServer.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/EventServer.ts#L59)

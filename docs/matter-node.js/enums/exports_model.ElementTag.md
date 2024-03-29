@@ -20,6 +20,7 @@ We use "tag" to differentiate elements so we can use "type" for datatypes.
 - [Endpoint](exports_model.ElementTag.md#endpoint)
 - [Event](exports_model.ElementTag.md#event)
 - [Fabric](exports_model.ElementTag.md#fabric)
+- [Field](exports_model.ElementTag.md#field)
 - [Matter](exports_model.ElementTag.md#matter)
 - [Node](exports_model.ElementTag.md#node)
 - [Requirement](exports_model.ElementTag.md#requirement)
@@ -106,13 +107,23 @@ packages/matter.js/dist/esm/model/definitions/ElementTag.d.ts:12
 
 ___
 
+### Field
+
+• **Field** = ``"field"``
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/definitions/ElementTag.d.ts:21
+
+___
+
 ### Matter
 
 • **Matter** = ``"matter"``
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/ElementTag.d.ts:22
+packages/matter.js/dist/esm/model/definitions/ElementTag.d.ts:23
 
 ___
 
@@ -132,4 +143,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/definitions/ElementTag.d.ts:21
+packages/matter.js/dist/esm/model/definitions/ElementTag.d.ts:22

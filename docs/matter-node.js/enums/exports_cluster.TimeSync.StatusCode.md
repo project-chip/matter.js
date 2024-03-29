@@ -24,4 +24,4 @@ MatterCoreSpecificationV1_1 § 11.16.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:147
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:233

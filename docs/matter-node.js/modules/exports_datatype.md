@@ -11,6 +11,7 @@
 ### Namespaces
 
 - [CaseAuthenticatedTag](exports_datatype.CaseAuthenticatedTag.md)
+- [ClusterId](exports_datatype.ClusterId.md)
 - [FabricIndex](exports_datatype.FabricIndex.md)
 - [NodeId](exports_datatype.NodeId.md)
 
@@ -20,11 +21,15 @@
 - [CaseAuthenticatedTag](exports_datatype.md#caseauthenticatedtag)
 - [ClusterId](exports_datatype.md#clusterid)
 - [CommandId](exports_datatype.md#commandid)
+- [DataVersion](exports_datatype.md#dataversion)
 - [DeviceTypeId](exports_datatype.md#devicetypeid)
 - [EndpointNumber](exports_datatype.md#endpointnumber)
+- [EntryIndex](exports_datatype.md#entryindex)
 - [EventId](exports_datatype.md#eventid)
+- [EventNumber](exports_datatype.md#eventnumber)
 - [FabricId](exports_datatype.md#fabricid)
 - [FabricIndex](exports_datatype.md#fabricindex)
+- [FieldId](exports_datatype.md#fieldid)
 - [GroupId](exports_datatype.md#groupid)
 - [NodeId](exports_datatype.md#nodeid)
 - [SubjectId](exports_datatype.md#subjectid)
@@ -36,11 +41,15 @@
 - [TlvCaseAuthenticatedTag](exports_datatype.md#tlvcaseauthenticatedtag)
 - [TlvClusterId](exports_datatype.md#tlvclusterid)
 - [TlvCommandId](exports_datatype.md#tlvcommandid)
+- [TlvDataVersion](exports_datatype.md#tlvdataversion)
 - [TlvDeviceTypeId](exports_datatype.md#tlvdevicetypeid)
 - [TlvEndpointNumber](exports_datatype.md#tlvendpointnumber)
+- [TlvEntryIndex](exports_datatype.md#tlventryindex)
 - [TlvEventId](exports_datatype.md#tlveventid)
+- [TlvEventNumber](exports_datatype.md#tlveventnumber)
 - [TlvFabricId](exports_datatype.md#tlvfabricid)
 - [TlvFabricIndex](exports_datatype.md#tlvfabricindex)
+- [TlvFieldId](exports_datatype.md#tlvfieldid)
 - [TlvGroupId](exports_datatype.md#tlvgroupid)
 - [TlvNodeId](exports_datatype.md#tlvnodeid)
 - [TlvSubjectId](exports_datatype.md#tlvsubjectid)
@@ -52,11 +61,15 @@
 - [CaseAuthenticatedTag](exports_datatype.md#caseauthenticatedtag-1)
 - [ClusterId](exports_datatype.md#clusterid-1)
 - [CommandId](exports_datatype.md#commandid-1)
+- [DataVersion](exports_datatype.md#dataversion-1)
 - [DeviceTypeId](exports_datatype.md#devicetypeid-1)
 - [EndpointNumber](exports_datatype.md#endpointnumber-1)
+- [EntryIndex](exports_datatype.md#entryindex-1)
 - [EventId](exports_datatype.md#eventid-1)
+- [EventNumber](exports_datatype.md#eventnumber-1)
 - [FabricId](exports_datatype.md#fabricid-1)
 - [FabricIndex](exports_datatype.md#fabricindex-1)
+- [FieldId](exports_datatype.md#fieldid-1)
 - [GroupId](exports_datatype.md#groupid-1)
 - [NodeId](exports_datatype.md#nodeid-1)
 - [VendorId](exports_datatype.md#vendorid-1)
@@ -103,7 +116,7 @@ ___
 
 ### ClusterId
 
-Ƭ **ClusterId**: [`Branded`](util_export.md#branded)\<`number`, ``"ClusterId"``\>
+Ƭ **ClusterId**\<`ID`\>: [`Branded`](util_export.md#branded)\<`ID`, ``"ClusterId"``\>
 
 A Cluster Identifier is a 32 bit number and SHALL reference a single cluster specification and
 SHALL define conformance to that specification.
@@ -112,11 +125,19 @@ SHALL define conformance to that specification.
 
 MatterCoreSpecificationV1_0 § 7.10
 
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ID` | extends `number` = `number` |
+
 #### Defined in
+
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:16
 
 packages/matter.js/dist/esm/datatype/ClusterId.d.ts:15
 
-packages/matter.js/dist/esm/datatype/ClusterId.d.ts:14
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:17
 
 ___
 
@@ -138,15 +159,40 @@ packages/matter.js/dist/esm/datatype/CommandId.d.ts:13
 
 ___
 
+### DataVersion
+
+Ƭ **DataVersion**: [`Branded`](util_export.md#branded)\<`number`, ``"DataVersion"``\>
+
+A "data version" is an unsigned 32-bit integer that identifies a specific
+version of cluster attribute data.
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.18.2.26
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/DataVersion.d.ts:15
+
+packages/matter.js/dist/esm/datatype/DataVersion.d.ts:14
+
+___
+
 ### DeviceTypeId
 
-Ƭ **DeviceTypeId**: [`Branded`](util_export.md#branded)\<`number`, ``"DeviceTypeId"``\>
+Ƭ **DeviceTypeId**\<`ID`\>: [`Branded`](util_export.md#branded)\<`ID`, ``"DeviceTypeId"``\>
 
 A Device type ID is a 32-bit number that defines the type of the device.
 
 **`See`**
 
 MatterCoreSpecificationV1_0 § 7.15
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ID` | extends `number` = `number` |
 
 #### Defined in
 
@@ -174,6 +220,25 @@ packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:13
 
 ___
 
+### EntryIndex
+
+Ƭ **EntryIndex**: [`Branded`](util_export.md#branded)\<`number`, ``"EntryIndex"``\>
+
+An "entry index" is a 16-bit unsigned integer that identifies a specific
+entry in a list.
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.18.2.23
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/EntryIndex.d.ts:15
+
+packages/matter.js/dist/esm/datatype/EntryIndex.d.ts:14
+
+___
+
 ### EventId
 
 Ƭ **EventId**: [`Branded`](util_export.md#branded)\<`number`, ``"EventId"``\>
@@ -189,6 +254,25 @@ MatterCoreSpecificationV1_0 § 7.18.2.17
 packages/matter.js/dist/esm/datatype/EventId.d.ts:14
 
 packages/matter.js/dist/esm/datatype/EventId.d.ts:13
+
+___
+
+### EventNumber
+
+Ƭ **EventNumber**: [`Branded`](util_export.md#branded)\<`number` \| `bigint`, ``"EventNumber"``\>
+
+An "event number" is an increasing 64-bit unsigned integer assigned to
+cluster events.
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.14.2.1
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/EventNumber.d.ts:15
+
+packages/matter.js/dist/esm/datatype/EventNumber.d.ts:14
 
 ___
 
@@ -233,6 +317,25 @@ packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:19
 packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:18
 
 packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:20
+
+___
+
+### FieldId
+
+Ƭ **FieldId**: [`Branded`](util_export.md#branded)\<`number`, ``"FieldId"``\>
+
+A "field ID" is an unsigned 32-bit integer that identifies a specific field
+in a cluster struct type.
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.18.2.18
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/FieldId.d.ts:15
+
+packages/matter.js/dist/esm/datatype/FieldId.d.ts:14
 
 ___
 
@@ -343,13 +446,13 @@ ___
 
 ### TlvClusterId
 
-• `Const` **TlvClusterId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`ClusterId`](exports_datatype.md#clusterid), `number`\>
+• `Const` **TlvClusterId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>, `number`\>
 
 Tlv schema for a cluster Id.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/ClusterId.d.ts:17
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:22
 
 ___
 
@@ -365,9 +468,21 @@ packages/matter.js/dist/esm/datatype/CommandId.d.ts:16
 
 ___
 
+### TlvDataVersion
+
+• `Const` **TlvDataVersion**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`DataVersion`](exports_datatype.md#dataversion), `number`\>
+
+TLV schema for a data version.
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/DataVersion.d.ts:17
+
+___
+
 ### TlvDeviceTypeId
 
-• `Const` **TlvDeviceTypeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`DeviceTypeId`](exports_datatype.md#devicetypeid), `number`\>
+• `Const` **TlvDeviceTypeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`DeviceTypeId`](exports_datatype.md#devicetypeid)\<`number`\>, `number`\>
 
 Tlv schema for a Device type ID.
 
@@ -389,6 +504,18 @@ packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:16
 
 ___
 
+### TlvEntryIndex
+
+• `Const` **TlvEntryIndex**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`EntryIndex`](exports_datatype.md#entryindex), `number`\>
+
+TLV schema for an entry index.
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/EntryIndex.d.ts:17
+
+___
+
 ### TlvEventId
 
 • `Const` **TlvEventId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`EventId`](exports_datatype.md#eventid), `number`\>
@@ -398,6 +525,18 @@ Tlv schema for an Event Id.
 #### Defined in
 
 packages/matter.js/dist/esm/datatype/EventId.d.ts:16
+
+___
+
+### TlvEventNumber
+
+• `Const` **TlvEventNumber**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`EventNumber`](exports_datatype.md#eventnumber), `number` \| `bigint`\>
+
+TLV schema for a data version.
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/EventNumber.d.ts:17
 
 ___
 
@@ -422,6 +561,18 @@ Tlv Schema for a Fabric Index.
 #### Defined in
 
 packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:29
+
+___
+
+### TlvFieldId
+
+• `Const` **TlvFieldId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`FieldId`](exports_datatype.md#fieldid), `number`\>
+
+TLV schema for a field ID.
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/FieldId.d.ts:17
 
 ___
 
@@ -515,21 +666,27 @@ ___
 
 ### ClusterId
 
-▸ **ClusterId**(`v`): [`ClusterId`](exports_datatype.md#clusterid)
+▸ **ClusterId**\<`ID`\>(`id`): [`ClusterId`](exports_datatype.md#clusterid)\<`ID`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ID` | extends `number` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `id` | `ID` |
 
 #### Returns
 
-[`ClusterId`](exports_datatype.md#clusterid)
+[`ClusterId`](exports_datatype.md#clusterid)\<`ID`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/ClusterId.d.ts:15
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:16
 
 ___
 
@@ -553,19 +710,45 @@ packages/matter.js/dist/esm/datatype/CommandId.d.ts:14
 
 ___
 
-### DeviceTypeId
+### DataVersion
 
-▸ **DeviceTypeId**(`v`): [`DeviceTypeId`](exports_datatype.md#devicetypeid)
+▸ **DataVersion**(`id`): [`DataVersion`](exports_datatype.md#dataversion)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `id` | `number` |
 
 #### Returns
 
-[`DeviceTypeId`](exports_datatype.md#devicetypeid)
+[`DataVersion`](exports_datatype.md#dataversion)
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/DataVersion.d.ts:15
+
+___
+
+### DeviceTypeId
+
+▸ **DeviceTypeId**\<`ID`\>(`v`): [`DeviceTypeId`](exports_datatype.md#devicetypeid)\<`ID`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ID` | extends `number` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `v` | `ID` |
+
+#### Returns
+
+[`DeviceTypeId`](exports_datatype.md#devicetypeid)\<`ID`\>
 
 #### Defined in
 
@@ -593,6 +776,26 @@ packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:14
 
 ___
 
+### EntryIndex
+
+▸ **EntryIndex**(`id`): [`EntryIndex`](exports_datatype.md#entryindex)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`EntryIndex`](exports_datatype.md#entryindex)
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/EntryIndex.d.ts:15
+
+___
+
 ### EventId
 
 ▸ **EventId**(`v`): [`EventId`](exports_datatype.md#eventid)
@@ -610,6 +813,26 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/datatype/EventId.d.ts:14
+
+___
+
+### EventNumber
+
+▸ **EventNumber**(`id`): [`EventNumber`](exports_datatype.md#eventnumber)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` \| `bigint` |
+
+#### Returns
+
+[`EventNumber`](exports_datatype.md#eventnumber)
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/EventNumber.d.ts:15
 
 ___
 
@@ -650,6 +873,26 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:19
+
+___
+
+### FieldId
+
+▸ **FieldId**(`id`): [`FieldId`](exports_datatype.md#fieldid)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`FieldId`](exports_datatype.md#fieldid)
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/FieldId.d.ts:15
 
 ___
 

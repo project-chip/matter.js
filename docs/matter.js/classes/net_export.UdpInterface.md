@@ -20,6 +20,10 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 - [server](net_export.UdpInterface.md#server)
 
+### Accessors
+
+- [port](net_export.UdpInterface.md#port)
+
 ### Methods
 
 - [close](net_export.UdpInterface.md#close)
@@ -45,7 +49,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpInterface.ts#L22)
+[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpInterface.ts#L22)
 
 ## Properties
 
@@ -55,7 +59,21 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpInterface.ts#L22)
+[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpInterface.ts#L22)
+
+## Accessors
+
+### port
+
+• `get` **port**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+[packages/matter.js/src/net/UdpInterface.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpInterface.ts#L38)
 
 ## Methods
 
@@ -73,7 +91,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpInterface.ts#L37)
+[packages/matter.js/src/net/UdpInterface.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpInterface.ts#L42)
 
 ___
 
@@ -97,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpInterface.ts#L32)
+[packages/matter.js/src/net/UdpInterface.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpInterface.ts#L32)
 
 ___
 
@@ -121,18 +139,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpInterface.ts#L24)
+[packages/matter.js/src/net/UdpInterface.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpInterface.ts#L24)
 
 ___
 
 ### create
 
-▸ **create**(`type`, `port?`, `host?`, `netInterface?`): `Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
+▸ **create**(`network`, `type`, `port?`, `host?`, `netInterface?`): `Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `network` | [`Network`](net_export.Network.md) |
 | `type` | ``"udp4"`` \| ``"udp6"`` |
 | `port?` | `number` |
 | `host?` | `string` |
@@ -144,4 +163,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpInterface.ts#L16)
+[packages/matter.js/src/net/UdpInterface.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpInterface.ts#L16)

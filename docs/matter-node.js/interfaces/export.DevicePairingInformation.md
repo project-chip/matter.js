@@ -21,7 +21,7 @@ Represents device pairing information.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:31
+packages/matter.js/dist/esm/CommissioningServer.d.ts:37
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:32
+packages/matter.js/dist/esm/CommissioningServer.d.ts:38

@@ -34,7 +34,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.5.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:22
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:84
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:83
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:26
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:88
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:79
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:18
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:80
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:19
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:81
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:20
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:82
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:23
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:85
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:87
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:86
 
 ___
 
@@ -134,4 +134,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:27
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:89

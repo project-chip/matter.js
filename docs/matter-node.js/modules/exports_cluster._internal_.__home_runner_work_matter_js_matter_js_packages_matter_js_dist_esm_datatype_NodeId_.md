@@ -15,7 +15,7 @@
 
 ### NodeId
 
-Re-exports [NodeId](exports_datatype.md#nodeid)
+Re-exports [NodeId](exports_datatype.md#nodeid-1)
 
 ___
 

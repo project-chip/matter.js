@@ -50,6 +50,8 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`DiscoveryError`](protocol_export.DiscoveryError.md)
 
+  ↳↳ [`ChannelNotConnectedError`](protocol_export.ChannelNotConnectedError.md)
+
   ↳↳ [`RetransmissionLimitReachedError`](protocol_export.RetransmissionLimitReachedError.md)
 
   ↳↳ [`UnexpectedMessageError`](protocol_export.UnexpectedMessageError.md)
@@ -61,6 +63,8 @@ Error base class for all errors thrown by this library.
   ↳↳ [`ChannelStatusResponseError`](protocol_securechannel_export.ChannelStatusResponseError.md)
 
   ↳↳ [`StorageError`](storage_export.StorageError.md)
+
+  ↳↳ [`PromiseTimeoutError`](util_export.PromiseTimeoutError.md)
 
   ↳↳ [`EndOfStreamError`](util_export.EndOfStreamError.md)
 
@@ -94,4 +98,25 @@ Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082
+
+• **new MatterError**(`message?`, `options?`): [`MatterError`](common_export.MatterError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`MatterError`](common_export.MatterError.md)
+
+#### Inherited from
+
+Error.constructor
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1082

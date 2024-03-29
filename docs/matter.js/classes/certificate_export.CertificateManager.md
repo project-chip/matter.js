@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:570](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L570)
+[packages/matter.js/src/certificate/CertificateManager.ts:570](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L570)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:601](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L601)
+[packages/matter.js/src/certificate/CertificateManager.ts:601](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L601)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:429](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L429)
+[packages/matter.js/src/certificate/CertificateManager.ts:429](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L429)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:616](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L616)
+[packages/matter.js/src/certificate/CertificateManager.ts:616](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L616)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:382](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L382)
+[packages/matter.js/src/certificate/CertificateManager.ts:382](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L382)
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:522](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L522)
+[packages/matter.js/src/certificate/CertificateManager.ts:522](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L522)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:475](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L475)
+[packages/matter.js/src/certificate/CertificateManager.ts:475](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L475)
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:349](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L349)
+[packages/matter.js/src/certificate/CertificateManager.ts:349](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L349)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:597](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L597)
+[packages/matter.js/src/certificate/CertificateManager.ts:597](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L597)
 
 ___
 
@@ -237,4 +237,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:593](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/CertificateManager.ts#L593)
+[packages/matter.js/src/certificate/CertificateManager.ts:593](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/CertificateManager.ts#L593)

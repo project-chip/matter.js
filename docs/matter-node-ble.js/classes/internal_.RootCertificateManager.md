@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [#private](internal_.RootCertificateManager.md##private)
 - [generateRootCert](internal_.RootCertificateManager.md#generaterootcert)
 - [nextCertificateId](internal_.RootCertificateManager.md#nextcertificateid)
 - [rootCertBytes](internal_.RootCertificateManager.md#rootcertbytes)
@@ -19,22 +20,27 @@
 - [rootKeyIdentifier](internal_.RootCertificateManager.md#rootkeyidentifier)
 - [rootKeyPair](internal_.RootCertificateManager.md#rootkeypair)
 
+### Accessors
+
+- [construction](internal_.RootCertificateManager.md#construction)
+
 ### Methods
 
 - [generateNoc](internal_.RootCertificateManager.md#generatenoc)
 - [getRootCert](internal_.RootCertificateManager.md#getrootcert)
+- [create](internal_.RootCertificateManager.md#create)
 
 ## Constructors
 
 ### constructor
 
-• **new RootCertificateManager**(`storageContext`): [`RootCertificateManager`](internal_.RootCertificateManager.md)
+• **new RootCertificateManager**(`storage`): [`RootCertificateManager`](internal_.RootCertificateManager.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storageContext` | [`StorageContext`](internal_.StorageContext.md) |
+| `storage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
 
 #### Returns
 
@@ -42,9 +48,19 @@
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:21
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
+
+___
 
 ### generateRootCert
 
@@ -52,7 +68,7 @@ matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:23
 
 ___
 
@@ -62,7 +78,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18
 
 ___
 
@@ -72,7 +88,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
 
 ___
 
@@ -82,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
 
 ___
 
@@ -92,7 +108,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
 
 ___
 
@@ -102,7 +118,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
+
+## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/internal_.AsyncConstruction-1.md)\<[`RootCertificateManager`](internal_.RootCertificateManager.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/internal_.AsyncConstruction-1.md)\<[`RootCertificateManager`](internal_.RootCertificateManager.md)\>
+
+#### Defined in
+
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
 
 ## Methods
 
@@ -125,7 +155,7 @@ matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:20
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:24
 
 ___
 
@@ -139,4 +169,24 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:22
+
+___
+
+### create
+
+▸ **create**(`storage`): `Promise`\<[`RootCertificateManager`](internal_.RootCertificateManager.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `storage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+
+#### Returns
+
+`Promise`\<[`RootCertificateManager`](internal_.RootCertificateManager.md)\>
+
+#### Defined in
+
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:20

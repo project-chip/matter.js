@@ -68,7 +68,7 @@ Creates a new BTP session handler
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:143](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L143)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L148)
 
 ## Properties
 
@@ -78,7 +78,7 @@ Creates a new BTP session handler
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L35)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L36)
 
 ___
 
@@ -90,7 +90,7 @@ The client window size to use
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:147](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L147)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L152)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L31)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L32)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L32)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L33)
 
 ___
 
@@ -124,15 +124,13 @@ Callback to disconnect the BLE transport
 
 ▸ (): `Promise`\<`void`\>
 
-Callback to disconnect the BLE transport
-
 ##### Returns
 
 `Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:149](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L149)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:154](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L154)
 
 ___
 
@@ -144,7 +142,7 @@ The fragment size to use for the messages
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L146)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:151](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L151)
 
 ___
 
@@ -158,8 +156,6 @@ Callback to handle a Matter message payload
 
 ▸ (`data`): `Promise`\<`void`\>
 
-Callback to handle a Matter message payload
-
 ##### Parameters
 
 | Name | Type |
@@ -172,7 +168,7 @@ Callback to handle a Matter message payload
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:150](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L150)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L155)
 
 ___
 
@@ -182,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L42)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L47)
 
 ___
 
@@ -192,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L38)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L41)
 
 ___
 
@@ -202,7 +198,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L34)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L35)
 
 ___
 
@@ -212,7 +208,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L33)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L34)
 
 ___
 
@@ -222,7 +218,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L39)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L42)
 
 ___
 
@@ -232,7 +228,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L41)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L44)
 
 ___
 
@@ -242,7 +238,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L40)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L43)
 
 ___
 
@@ -252,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L37)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L40)
 
 ___
 
@@ -266,8 +262,6 @@ Callback to write data to the BLE transport
 
 ▸ (`data`): `Promise`\<`void`\>
 
-Callback to write data to the BLE transport
-
 ##### Parameters
 
 | Name | Type |
@@ -280,7 +274,7 @@ Callback to write data to the BLE transport
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:148](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L148)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:153](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L153)
 
 ## Methods
 
@@ -297,7 +291,7 @@ the peer SHALL close the BTP session and report an error to the application.
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:444](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L444)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:450](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L450)
 
 ___
 
@@ -314,7 +308,7 @@ acknowledgement
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:414](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L414)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:420](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L420)
 
 ___
 
@@ -330,7 +324,7 @@ Close the BTP session. This method is called when the BLE transport is disconnec
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:400](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L400)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:406](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L406)
 
 ___
 
@@ -353,7 +347,7 @@ Checks if incoming ackNumber and sent sequence number exceeds the client window 
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:465](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L465)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:471](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L471)
 
 ___
 
@@ -369,7 +363,7 @@ Increments sequence number for the packets and round it off to 0 when it reaches
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:454](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L454)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:460](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L460)
 
 ___
 
@@ -392,7 +386,7 @@ ExchangeManager layer
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:171](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L171)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:176](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L176)
 
 ___
 
@@ -406,7 +400,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:313](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L313)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:318](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L318)
 
 ___
 
@@ -430,7 +424,7 @@ should be sent.
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:299](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L299)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:304](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L304)
 
 ___
 
@@ -453,7 +447,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:110](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L110)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L115)
 
 ___
 
@@ -479,4 +473,4 @@ Factory method to create a new BTPSessionHandler from a received handshake reque
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/BtpSessionHandler.ts#L45)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L50)

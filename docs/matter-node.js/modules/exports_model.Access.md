@@ -26,13 +26,14 @@
 ### Variables
 
 - [A](exports_model.Access.md#a)
+- [Default](exports_model.Access.md#default)
 - [F](exports_model.Access.md#f)
 - [M](exports_model.Access.md#m)
 - [MA](exports_model.Access.md#ma)
 - [O](exports_model.Access.md#o)
 - [OA](exports_model.Access.md#oa)
 - [OM](exports_model.Access.md#om)
-- [PrivilegePriority](exports_model.Access.md#privilegepriority)
+- [PrivilegeLevel](exports_model.Access.md#privilegelevel)
 - [R](exports_model.Access.md#r)
 - [RW](exports_model.Access.md#rw)
 - [RWo](exports_model.Access.md#rwo)
@@ -63,7 +64,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:40
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:46
 
 ___
 
@@ -75,7 +76,7 @@ All valid privilege tags.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:162
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:168
 
 ___
 
@@ -90,7 +91,7 @@ like `[ RW, VA ]` or `[ Access.Rw.W, Access.Privilege.Operate ]`.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:173
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:179
 
 ___
 
@@ -102,7 +103,7 @@ All atomic access control values.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:136
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:142
 
 ___
 
@@ -114,7 +115,7 @@ A defined set of access control values.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:140
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:146
 
 ___
 
@@ -126,7 +127,7 @@ All valid timed tags.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:166
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:172
 
 ## Variables
 
@@ -136,7 +137,17 @@ packages/matter.js/dist/esm/model/aspects/Access.d.ts:166
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:151
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:157
+
+___
+
+### Default
+
+• `Const` **Default**: [`Access`](../classes/exports_model.Access-1.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:182
 
 ___
 
@@ -146,7 +157,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:146
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:152
 
 ___
 
@@ -156,7 +167,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:150
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:156
 
 ___
 
@@ -166,7 +177,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:157
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:163
 
 ___
 
@@ -176,7 +187,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:149
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:155
 
 ___
 
@@ -186,7 +197,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:156
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:162
 
 ___
 
@@ -196,13 +207,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:155
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:161
 
 ___
 
-### PrivilegePriority
+### PrivilegeLevel
 
-• `Const` **PrivilegePriority**: `Object`
+• `Const` **PrivilegeLevel**: `Object`
 
 Relative ordering of privilege.
 
@@ -217,7 +228,7 @@ Relative ordering of privilege.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:118
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:124
 
 ___
 
@@ -227,7 +238,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:141
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:147
 
 ___
 
@@ -237,7 +248,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:143
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:149
 
 ___
 
@@ -247,7 +258,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:144
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:150
 
 ___
 
@@ -257,7 +268,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:147
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:153
 
 ___
 
@@ -267,7 +278,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:158
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:164
 
 ___
 
@@ -277,7 +288,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:145
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:151
 
 ___
 
@@ -287,7 +298,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:148
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:154
 
 ___
 
@@ -297,7 +308,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:154
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:160
 
 ___
 
@@ -307,7 +318,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:153
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:159
 
 ___
 
@@ -317,7 +328,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:152
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:158
 
 ___
 
@@ -327,4 +338,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:142
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:148

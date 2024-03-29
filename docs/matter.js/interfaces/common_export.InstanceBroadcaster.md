@@ -8,13 +8,14 @@ Interface for classes that allow to announce one Matter instance.
 
 ## Implemented by
 
-- [`MdnsInstanceBroadcaster`](../classes/export._internal_.MdnsInstanceBroadcaster.md)
+- [`MdnsInstanceBroadcaster`](../classes/node_export._internal_.MdnsInstanceBroadcaster.md)
 
 ## Table of contents
 
 ### Methods
 
 - [announce](common_export.InstanceBroadcaster.md#announce)
+- [close](common_export.InstanceBroadcaster.md#close)
 - [expireAllAnnouncements](common_export.InstanceBroadcaster.md#expireallannouncements)
 - [expireCommissioningAnnouncement](common_export.InstanceBroadcaster.md#expirecommissioningannouncement)
 - [expireFabricAnnouncement](common_export.InstanceBroadcaster.md#expirefabricannouncement)
@@ -36,7 +37,23 @@ Send out announcements for this instance.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:214](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L214)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:203](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L203)
+
+___
+
+### close
+
+▸ **close**(): `Promise`\<`void`\>
+
+Destroy the instance
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[packages/matter.js/src/common/InstanceBroadcaster.ts:215](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L215)
 
 ___
 
@@ -52,7 +69,7 @@ Expire all announcements.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:223](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L223)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:212](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L212)
 
 ___
 
@@ -68,7 +85,7 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:220](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L220)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:209](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L209)
 
 ___
 
@@ -84,7 +101,7 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:217](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L217)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:206](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L206)
 
 ___
 
@@ -99,7 +116,7 @@ Set a commissionable mode and details to announce a commissionable device.
 | Name | Type |
 | :------ | :------ |
 | `mode` | `number` |
-| `deviceData` | [`CommissioningModeInstanceData`](../modules/common_export.md#commissioningmodeinstancedata) |
+| `deviceData` | [`CommissioningModeInstanceData`](common_export.CommissioningModeInstanceData.md) |
 
 #### Returns
 
@@ -107,7 +124,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:202](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L202)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:191](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L191)
 
 ___
 
@@ -129,7 +146,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:211](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L211)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:200](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L200)
 
 ___
 
@@ -153,4 +170,4 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:208](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/InstanceBroadcaster.ts#L208)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:197](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/InstanceBroadcaster.ts#L197)

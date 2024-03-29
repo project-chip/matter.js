@@ -20,6 +20,10 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 - [server](net_export.UdpInterface.md#server)
 
+### Accessors
+
+- [port](net_export.UdpInterface.md#port)
+
 ### Methods
 
 - [close](net_export.UdpInterface.md#close)
@@ -45,7 +49,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:15
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:16
 
 ## Properties
 
@@ -55,7 +59,21 @@ packages/matter.js/dist/esm/net/UdpInterface.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:13
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:14
+
+## Accessors
+
+### port
+
+• `get` **port**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:19
 
 ## Methods
 
@@ -73,7 +91,7 @@ packages/matter.js/dist/esm/net/UdpInterface.d.ts:13
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:18
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:20
 
 ___
 
@@ -97,7 +115,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:17
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:18
 
 ___
 
@@ -121,18 +139,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:16
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:17
 
 ___
 
 ### create
 
-▸ **create**(`type`, `port?`, `host?`, `netInterface?`): `Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
+▸ **create**(`network`, `type`, `port?`, `host?`, `netInterface?`): `Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `network` | [`Network`](net_export.Network.md) |
 | `type` | ``"udp4"`` \| ``"udp6"`` |
 | `port?` | `number` |
 | `host?` | `string` |
@@ -144,4 +163,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:14
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:15

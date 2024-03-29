@@ -25,7 +25,7 @@ The action was interrupted by another command or interaction
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:489
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:605
 
 ___
 
@@ -37,4 +37,4 @@ Other reason not listed in the row(s) below
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:485
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:601

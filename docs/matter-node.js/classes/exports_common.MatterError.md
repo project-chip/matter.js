@@ -26,6 +26,8 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`FabricScopeError`](exports_cluster.FabricScopeError.md)
 
+  ↳↳ [`CryptoError`](crypto_export.CryptoError.md)
+
   ↳↳ [`NoProviderError`](exports_common.NoProviderError.md)
 
   ↳↳ [`InternalError`](exports_common.InternalError.md)
@@ -35,8 +37,6 @@ Error base class for all errors thrown by this library.
   ↳↳ [`UnexpectedDataError`](exports_common.UnexpectedDataError.md)
 
   ↳↳ [`ImplementationError`](exports_common.ImplementationError.md)
-
-  ↳↳ [`CryptoError`](crypto_export.CryptoError.md)
 
   ↳↳ [`FabricNotFoundError`](exports_fabric.FabricNotFoundError.md)
 
@@ -50,6 +50,8 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`DiscoveryError`](exports_protocol.DiscoveryError.md)
 
+  ↳↳ [`ChannelNotConnectedError`](exports_protocol.ChannelNotConnectedError.md)
+
   ↳↳ [`RetransmissionLimitReachedError`](exports_protocol.RetransmissionLimitReachedError.md)
 
   ↳↳ [`UnexpectedMessageError`](exports_protocol.UnexpectedMessageError.md)
@@ -61,6 +63,8 @@ Error base class for all errors thrown by this library.
   ↳↳ [`ChannelStatusResponseError`](exports_securechannel.ChannelStatusResponseError.md)
 
   ↳↳ [`StorageError`](storage_export.StorageError.md)
+
+  ↳↳ [`PromiseTimeoutError`](util_export.PromiseTimeoutError.md)
 
   ↳↳ [`EndOfStreamError`](util_export.EndOfStreamError.md)
 
@@ -94,4 +98,4 @@ Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082

@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [FabricAction](../enums/exports_fabric.FabricAction.md)
+
 ### Classes
 
 - [Fabric](../classes/exports_fabric.Fabric.md)
@@ -14,9 +18,31 @@
 
 ### Type Aliases
 
+- [ExposedFabricInformation](exports_fabric.md#exposedfabricinformation)
 - [FabricJsonObject](exports_fabric.md#fabricjsonobject)
 
 ## Type Aliases
+
+### ExposedFabricInformation
+
+Ƭ **ExposedFabricInformation**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `fabricId` | [`FabricId`](exports_datatype.md#fabricid) |
+| `fabricIndex` | [`FabricIndex`](exports_datatype.md#fabricindex) |
+| `label` | `string` |
+| `nodeId` | [`NodeId`](exports_datatype.md#nodeid) |
+| `rootNodeId` | [`NodeId`](exports_datatype.md#nodeid) |
+| `rootVendorId` | [`VendorId`](exports_datatype.md#vendorid) |
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:35
+
+___
 
 ### FabricJsonObject
 
@@ -45,4 +71,4 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:16
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:17

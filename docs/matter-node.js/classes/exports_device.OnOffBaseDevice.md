@@ -27,9 +27,9 @@ Abstract Base class for OnOff devices
 - [commandHandler](exports_device.OnOffBaseDevice.md#commandhandler)
 - [deviceType](exports_device.OnOffBaseDevice.md#devicetype)
 - [deviceTypes](exports_device.OnOffBaseDevice.md#devicetypes)
-- [id](exports_device.OnOffBaseDevice.md#id)
 - [isLighting](exports_device.OnOffBaseDevice.md#islighting)
 - [name](exports_device.OnOffBaseDevice.md#name)
+- [number](exports_device.OnOffBaseDevice.md#number)
 - [uniqueStorageKey](exports_device.OnOffBaseDevice.md#uniquestoragekey)
 
 ### Methods
@@ -43,9 +43,9 @@ Abstract Base class for OnOff devices
 - [addFixedLabel](exports_device.OnOffBaseDevice.md#addfixedlabel)
 - [addOnOffListener](exports_device.OnOffBaseDevice.md#addonofflistener)
 - [addUserLabel](exports_device.OnOffBaseDevice.md#adduserlabel)
+- [close](exports_device.OnOffBaseDevice.md#close)
 - [createOptionalClusterClient](exports_device.OnOffBaseDevice.md#createoptionalclusterclient)
 - [createOptionalClusterServer](exports_device.OnOffBaseDevice.md#createoptionalclusterserver)
-- [destroy](exports_device.OnOffBaseDevice.md#destroy)
 - [determineUniqueID](exports_device.OnOffBaseDevice.md#determineuniqueid)
 - [getAllClusterClients](exports_device.OnOffBaseDevice.md#getallclusterclients)
 - [getAllClusterServers](exports_device.OnOffBaseDevice.md#getallclusterservers)
@@ -56,7 +56,7 @@ Abstract Base class for OnOff devices
 - [getClusterServer](exports_device.OnOffBaseDevice.md#getclusterserver)
 - [getClusterServerById](exports_device.OnOffBaseDevice.md#getclusterserverbyid)
 - [getDeviceTypes](exports_device.OnOffBaseDevice.md#getdevicetypes)
-- [getId](exports_device.OnOffBaseDevice.md#getid)
+- [getNumber](exports_device.OnOffBaseDevice.md#getnumber)
 - [getOnOff](exports_device.OnOffBaseDevice.md#getonoff)
 - [hasClusterClient](exports_device.OnOffBaseDevice.md#hasclusterclient)
 - [hasClusterServer](exports_device.OnOffBaseDevice.md#hasclusterserver)
@@ -140,21 +140,7 @@ OnOffBaseDevice\_base.deviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:19
-
-___
-
-### id
-
-• **id**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
-
-#### Inherited from
-
-OnOffBaseDevice\_base.id
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:20
 
 ___
 
@@ -178,7 +164,21 @@ OnOffBaseDevice\_base.name
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+
+___
+
+### number
+
+• **number**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+
+#### Inherited from
+
+OnOffBaseDevice\_base.number
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ___
 
@@ -192,7 +192,7 @@ OnOffBaseDevice\_base.uniqueStorageKey
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ## Methods
 
@@ -259,7 +259,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
 
 #### Returns
 
@@ -271,7 +271,7 @@ OnOffBaseDevice\_base.addChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -304,7 +304,7 @@ OnOffBaseDevice\_base.addClusterClient
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -335,7 +335,7 @@ OnOffBaseDevice\_base.addClusterServer
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -438,7 +438,7 @@ OnOffBaseDevice\_base.addFixedLabel
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -486,7 +486,25 @@ OnOffBaseDevice\_base.addUserLabel
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+
+___
+
+### close
+
+▸ **close**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+OnOffBaseDevice\_base.close
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -558,24 +576,6 @@ packages/matter.js/dist/esm/device/Device.d.ts:115
 
 ___
 
-### destroy
-
-▸ **destroy**(): `void`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-OnOffBaseDevice\_base.destroy
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Endpoint.d.ts:37
-
-___
-
 ### determineUniqueID
 
 ▸ **determineUniqueID**(): `undefined` \| `string`
@@ -590,7 +590,7 @@ OnOffBaseDevice\_base.determineUniqueID
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56
 
 ___
 
@@ -608,7 +608,7 @@ OnOffBaseDevice\_base.getAllClusterClients
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -626,7 +626,7 @@ OnOffBaseDevice\_base.getAllClusterServers
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -650,7 +650,7 @@ OnOffBaseDevice\_base.getChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -668,7 +668,7 @@ OnOffBaseDevice\_base.getChildEndpoints
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -726,7 +726,7 @@ OnOffBaseDevice\_base.getClusterClientById
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -784,7 +784,7 @@ OnOffBaseDevice\_base.getClusterServerById
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -802,13 +802,13 @@ OnOffBaseDevice\_base.getDeviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
-### getId
+### getNumber
 
-▸ **getId**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+▸ **getNumber**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Returns
 
@@ -816,11 +816,11 @@ ___
 
 #### Inherited from
 
-OnOffBaseDevice\_base.getId
+OnOffBaseDevice\_base.getNumber
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -868,7 +868,7 @@ OnOffBaseDevice\_base.hasClusterClient
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -902,7 +902,7 @@ OnOffBaseDevice\_base.hasClusterServer
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -926,7 +926,7 @@ OnOffBaseDevice\_base.removeChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -999,7 +999,7 @@ OnOffBaseDevice\_base.removeFromStructure
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -1050,7 +1050,7 @@ OnOffBaseDevice\_base.setDeviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -1097,7 +1097,7 @@ OnOffBaseDevice\_base.setStructureChangedCallback
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -1132,7 +1132,7 @@ OnOffBaseDevice\_base.updatePartsList
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:59
+packages/matter.js/dist/esm/device/Endpoint.d.ts:60
 
 ___
 
@@ -1150,4 +1150,4 @@ OnOffBaseDevice\_base.verifyRequiredClusters
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57

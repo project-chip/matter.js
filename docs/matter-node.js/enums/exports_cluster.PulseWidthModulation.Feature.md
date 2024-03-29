@@ -31,7 +31,7 @@ control.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PulseWidthModulationCluster.d.ts:143
+packages/matter.js/dist/esm/cluster/definitions/PulseWidthModulationCluster.d.ts:243
 
 ___
 
@@ -45,7 +45,7 @@ Behavior that supports lighting applications
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PulseWidthModulationCluster.d.ts:136
+packages/matter.js/dist/esm/cluster/definitions/PulseWidthModulationCluster.d.ts:236
 
 ___
 
@@ -59,4 +59,4 @@ Dependency with the On/Off cluster
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PulseWidthModulationCluster.d.ts:130
+packages/matter.js/dist/esm/cluster/definitions/PulseWidthModulationCluster.d.ts:230

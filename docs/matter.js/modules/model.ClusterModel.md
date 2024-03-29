@@ -14,8 +14,8 @@
 
 ### Child
 
-Ƭ **Child**: [`DatatypeModel`](../classes/model.DatatypeModel.md) \| [`AttributeModel`](../classes/model.AttributeModel.md) \| [`CommandModel`](../classes/model.CommandModel.md) \| [`EventModel`](../classes/model.EventModel.md)
+Ƭ **Child**: [`DatatypeModel`](../classes/model.DatatypeModel.md) \| [`AttributeModel`](../classes/model.AttributeModel.md) \| [`CommandModel`](../classes/model.CommandModel.md) \| [`EventModel`](../classes/model.EventModel.md) \| [`FieldModel`](../classes/model.FieldModel.md)
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ClusterModel.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ClusterModel.ts#L73)
+[packages/matter.js/src/model/models/ClusterModel.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ClusterModel.ts#L92)

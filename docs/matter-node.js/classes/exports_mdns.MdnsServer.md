@@ -39,12 +39,13 @@
 
 ### constructor
 
-• **new MdnsServer**(`multicastServer`, `netInterface`): [`MdnsServer`](exports_mdns.MdnsServer.md)
+• **new MdnsServer**(`network`, `multicastServer`, `netInterface`): [`MdnsServer`](exports_mdns.MdnsServer.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `network` | [`Network`](net_export.Network.md) |
 | `multicastServer` | [`UdpMulticastServer`](net_export.UdpMulticastServer.md) |
 | `netInterface` | `undefined` \| `string` |
 
@@ -54,7 +55,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:26
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:27
 
 ## Properties
 
@@ -64,7 +65,7 @@ packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:26
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:31
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:32
 
 ___
 
@@ -74,7 +75,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:37
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:38
 
 ___
 
@@ -84,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:30
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:31
 
 ___
 
@@ -94,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:16
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:18
 
 ___
 
@@ -104,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:17
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:19
 
 ___
 
@@ -114,7 +115,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:22
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:17
 
 ___
 
@@ -124,7 +125,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:38
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:39
 
 ___
 
@@ -134,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:25
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:26
 
 ___
 
@@ -144,7 +145,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:24
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:25
 
 ___
 
@@ -154,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:23
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:24
 
 ___
 
@@ -164,7 +165,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:32
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:33
 
 ## Methods
 
@@ -184,7 +185,7 @@ packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:32
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:33
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:34
 
 ___
 
@@ -205,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:27
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:28
 
 ___
 
@@ -226,7 +227,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:28
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:29
 
 ___
 
@@ -240,7 +241,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:36
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:37
 
 ___
 
@@ -261,7 +262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:34
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:35
 
 ___
 
@@ -282,7 +283,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:29
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:30
 
 ___
 
@@ -304,18 +305,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:35
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:36
 
 ___
 
 ### create
 
-▸ **create**(`options?`): `Promise`\<[`MdnsServer`](exports_mdns.MdnsServer.md)\>
+▸ **create**(`network`, `options?`): `Promise`\<[`MdnsServer`](exports_mdns.MdnsServer.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `network` | [`Network`](net_export.Network.md) |
 | `options?` | `Object` |
 | `options.enableIpv4?` | `boolean` |
 | `options.netInterface?` | `string` |
@@ -326,4 +328,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:18
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:20

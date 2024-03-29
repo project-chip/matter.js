@@ -40,4 +40,25 @@ Error base class for all errors thrown by this library.
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082
+
+• **new FabricTableFullError**(`message?`, `options?`): [`FabricTableFullError`](fabric_export.FabricTableFullError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`FabricTableFullError`](fabric_export.FabricTableFullError.md)
+
+#### Inherited from
+
+[MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1082

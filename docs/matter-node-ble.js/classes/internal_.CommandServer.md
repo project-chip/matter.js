@@ -29,6 +29,7 @@
 
 ### Methods
 
+- [debug](internal_.CommandServer.md#debug)
 - [invoke](internal_.CommandServer.md#invoke)
 
 ## Constructors
@@ -54,7 +55,7 @@
 | `requestSchema` | [`TlvSchema`](internal_.TlvSchema.md)\<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](internal_.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
-| `handler` | (`request`: `RequestT`, `session`: [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`Endpoint`](internal_.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
+| `handler` | (`request`: `RequestT`, `session`: [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
 
 #### Returns
 
@@ -68,7 +69,7 @@ matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 ### handler
 
-• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`Endpoint`](internal_.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
+• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Type declaration
 
@@ -81,7 +82,7 @@ matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 | `request` | `RequestT` |
 | `session` | [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/internal_.Message.md) |
-| `endpoint` | [`Endpoint`](internal_.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md) |
 
 ##### Returns
 
@@ -153,6 +154,26 @@ matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 ## Methods
 
+### debug
+
+▸ **debug**(`message`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message` | `string` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:32
+
+___
+
 ### invoke
 
 ▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
@@ -164,7 +185,7 @@ matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 | `session` | [`Session`](internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `args` | [`TlvStream`](../modules/internal_.md#tlvstream) |
 | `message` | [`Message`](../interfaces/internal_.Message.md) |
-| `endpoint` | [`Endpoint`](internal_.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md) |
 
 #### Returns
 

@@ -321,17 +321,24 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Quality.md#definition)\>
+▸ **extend**\<`This`\>(`this`, `other`): `This`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Aspect`](exports_model.Aspect.md)\<`any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `this` | `This` |
 | `other` | [`Definition`](../modules/exports_model.Quality.md#definition) |
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Quality.md#definition)\>
+`This`
 
 #### Inherited from
 

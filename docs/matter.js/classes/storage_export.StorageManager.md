@@ -1,8 +1,14 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [storage/export](../modules/storage_export.md) / StorageManager
 
-# Class: StorageManager
+# Class: StorageManager\<S\>
 
 [storage/export](../modules/storage_export.md).StorageManager
+
+## Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) = `any` |
 
 ## Table of contents
 
@@ -25,21 +31,27 @@
 
 ### constructor
 
-• **new StorageManager**(`storage`): [`StorageManager`](storage_export.StorageManager.md)
+• **new StorageManager**\<`S`\>(`storage`): [`StorageManager`](storage_export.StorageManager.md)\<`S`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) = `any` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storage` | [`Storage`](storage_export.Storage.md) |
+| `storage` | `S` |
 
 #### Returns
 
-[`StorageManager`](storage_export.StorageManager.md)
+[`StorageManager`](storage_export.StorageManager.md)\<`S`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageManager.ts#L13)
+[packages/matter.js/src/storage/StorageManager.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageManager.ts#L14)
 
 ## Properties
 
@@ -49,37 +61,37 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageManager.ts#L11)
+[packages/matter.js/src/storage/StorageManager.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageManager.ts#L12)
 
 ___
 
 ### storage
 
-• `Private` **storage**: [`Storage`](storage_export.Storage.md)
+• `Private` **storage**: `S`
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageManager.ts#L13)
+[packages/matter.js/src/storage/StorageManager.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageManager.ts#L14)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`\<`void`\>
+▸ **close**(): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Returns
 
-`Promise`\<`void`\>
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageManager.ts#L20)
+[packages/matter.js/src/storage/StorageManager.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageManager.ts#L26)
 
 ___
 
 ### createContext
 
-▸ **createContext**(`context`): [`StorageContext`](storage_export.StorageContext.md)
+▸ **createContext**(`context`): [`StorageContext`](storage_export.StorageContext.md)\<`S`\>
 
 #### Parameters
 
@@ -89,22 +101,22 @@ ___
 
 #### Returns
 
-[`StorageContext`](storage_export.StorageContext.md)
+[`StorageContext`](storage_export.StorageContext.md)\<`S`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageManager.ts#L24)
+[packages/matter.js/src/storage/StorageManager.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageManager.ts#L30)
 
 ___
 
 ### initialize
 
-▸ **initialize**(): `Promise`\<`void`\>
+▸ **initialize**(): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Returns
 
-`Promise`\<`void`\>
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:15](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageManager.ts#L15)
+[packages/matter.js/src/storage/StorageManager.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageManager.ts#L16)

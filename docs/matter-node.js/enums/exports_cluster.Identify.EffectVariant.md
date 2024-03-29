@@ -24,4 +24,4 @@ MatterApplicationClusterSpecificationV1_1 § 1.2.6.3.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:87
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:119

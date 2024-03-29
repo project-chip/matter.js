@@ -4,6 +4,8 @@
 
 [log/export](../modules/log_export.md).Level
 
+Logging severity levels.
+
 ## Table of contents
 
 ### Enumeration Members
@@ -12,6 +14,7 @@
 - [ERROR](log_export.Level.md#error)
 - [FATAL](log_export.Level.md#fatal)
 - [INFO](log_export.Level.md#info)
+- [NOTICE](log_export.Level.md#notice)
 - [WARN](log_export.Level.md#warn)
 
 ## Enumeration Members
@@ -22,27 +25,27 @@
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/log/Logger.ts#L12)
+[packages/matter.js/src/log/Level.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Level.ts#L30)
 
 ___
 
 ### ERROR
 
-• **ERROR** = ``3``
+• **ERROR** = ``4``
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:15](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/log/Logger.ts#L15)
+[packages/matter.js/src/log/Level.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Level.ts#L34)
 
 ___
 
 ### FATAL
 
-• **FATAL** = ``4``
+• **FATAL** = ``5``
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/log/Logger.ts#L16)
+[packages/matter.js/src/log/Level.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Level.ts#L35)
 
 ___
 
@@ -52,14 +55,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/log/Logger.ts#L13)
+[packages/matter.js/src/log/Level.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Level.ts#L31)
+
+___
+
+### NOTICE
+
+• **NOTICE** = ``2``
+
+#### Defined in
+
+[packages/matter.js/src/log/Level.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Level.ts#L32)
 
 ___
 
 ### WARN
 
-• **WARN** = ``2``
+• **WARN** = ``3``
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:14](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/log/Logger.ts#L14)
+[packages/matter.js/src/log/Level.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Level.ts#L33)

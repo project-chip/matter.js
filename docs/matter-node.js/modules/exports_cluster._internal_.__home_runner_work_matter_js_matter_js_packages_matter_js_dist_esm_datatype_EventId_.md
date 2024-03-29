@@ -15,7 +15,7 @@
 
 ### EventId
 
-Re-exports [EventId](exports_datatype.md#eventid)
+Re-exports [EventId](exports_datatype.md#eventid-1)
 
 ___
 

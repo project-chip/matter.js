@@ -29,7 +29,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.5.5.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:39
 
 ___
 
@@ -41,7 +41,7 @@ HDMI
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:20
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:38
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:23
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:41
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:42
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:22
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:40
 
 ___
 
@@ -81,4 +81,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:43

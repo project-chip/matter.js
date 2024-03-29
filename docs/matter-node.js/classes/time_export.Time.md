@@ -31,6 +31,8 @@
 - [getTimer](time_export.Time.md#gettimer-1)
 - [now](time_export.Time.md#now-1)
 - [nowMs](time_export.Time.md#nowms-1)
+- [register](time_export.Time.md#register)
+- [unregister](time_export.Time.md#unregister)
 
 ## Constructors
 
@@ -58,22 +60,23 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:8
+packages/matter.js/dist/esm/time/Time.d.ts:9
 
 ___
 
 ### getPeriodicTimer
 
-▪ `Static` `Readonly` **getPeriodicTimer**: (`intervalMs`: `number`, `callback`: [`TimerCallback`](../modules/time_export.md#timercallback)) => [`Timer`](../interfaces/time_export.Timer.md)
+▪ `Static` `Readonly` **getPeriodicTimer**: (`name`: `string`, `intervalMs`: `number`, `callback`: [`TimerCallback`](../modules/time_export.md#timercallback)) => [`Timer`](../interfaces/time_export.Timer.md)
 
 #### Type declaration
 
-▸ (`intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ (`name`, `intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `intervalMs` | `number` |
 | `callback` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
@@ -83,22 +86,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:18
+packages/matter.js/dist/esm/time/Time.d.ts:19
 
 ___
 
 ### getTimer
 
-▪ `Static` `Readonly` **getTimer**: (`durationMs`: `number`, `callback`: [`TimerCallback`](../modules/time_export.md#timercallback)) => [`Timer`](../interfaces/time_export.Timer.md)
+▪ `Static` `Readonly` **getTimer**: (`name`: `string`, `durationMs`: `number`, `callback`: [`TimerCallback`](../modules/time_export.md#timercallback)) => [`Timer`](../interfaces/time_export.Timer.md)
 
 #### Type declaration
 
-▸ (`durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ (`name`, `durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `durationMs` | `number` |
 | `callback` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
@@ -108,7 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:15
+packages/matter.js/dist/esm/time/Time.d.ts:16
 
 ___
 
@@ -126,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:10
+packages/matter.js/dist/esm/time/Time.d.ts:11
 
 ___
 
@@ -144,22 +148,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:12
+packages/matter.js/dist/esm/time/Time.d.ts:13
 
 ___
 
 ### sleep
 
-▪ `Static` `Readonly` **sleep**: (`durationMs`: `number`) => `Promise`\<`void`\>
+▪ `Static` `Readonly` **sleep**: (`name`: `string`, `durationMs`: `number`) => `Promise`\<`void`\>
 
 #### Type declaration
 
-▸ (`durationMs`): `Promise`\<`void`\>
+▸ (`name`, `durationMs`): `Promise`\<`void`\>
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `durationMs` | `number` |
 
 ##### Returns
@@ -168,13 +173,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:19
+packages/matter.js/dist/esm/time/Time.d.ts:20
 
 ## Methods
 
 ### getPeriodicTimer
 
-▸ **getPeriodicTimer**(`intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ **getPeriodicTimer**(`name`, `intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 Returns a timer that will periodically call callback at intervalMs intervals.
 
@@ -182,6 +187,7 @@ Returns a timer that will periodically call callback at intervalMs intervals.
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `intervalMs` | `number` |
 | `callback` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
@@ -191,13 +197,13 @@ Returns a timer that will periodically call callback at intervalMs intervals.
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:17
+packages/matter.js/dist/esm/time/Time.d.ts:18
 
 ___
 
 ### getTimer
 
-▸ **getTimer**(`durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ **getTimer**(`name`, `durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 Returns a timer that will call callback after durationMs has passed.
 
@@ -205,6 +211,7 @@ Returns a timer that will call callback after durationMs has passed.
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `durationMs` | `number` |
 | `callback` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
@@ -214,7 +221,7 @@ Returns a timer that will call callback after durationMs has passed.
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:14
+packages/matter.js/dist/esm/time/Time.d.ts:15
 
 ___
 
@@ -228,7 +235,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:9
+packages/matter.js/dist/esm/time/Time.d.ts:10
 
 ___
 
@@ -242,4 +249,44 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:11
+packages/matter.js/dist/esm/time/Time.d.ts:12
+
+___
+
+### register
+
+▸ **register**(`timer`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `timer` | [`Timer`](../interfaces/time_export.Timer.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/time/Time.d.ts:21
+
+___
+
+### unregister
+
+▸ **unregister**(`timer`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `timer` | [`Timer`](../interfaces/time_export.Timer.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/time/Time.d.ts:22

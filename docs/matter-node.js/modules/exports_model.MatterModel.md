@@ -14,8 +14,8 @@
 
 ### Child
 
-Ƭ **Child**: [`ClusterModel`](../classes/exports_model.ClusterModel-1.md) \| [`DeviceTypeModel`](../classes/exports_model.DeviceTypeModel.md) \| [`DatatypeModel`](../classes/exports_model.DatatypeModel.md) \| [`AttributeModel`](../classes/exports_model.AttributeModel.md) \| [`FabricModel`](../classes/exports_model.FabricModel.md)
+Ƭ **Child**: [`ClusterModel`](../classes/exports_model.ClusterModel-1.md) \| [`DeviceTypeModel`](../classes/exports_model.DeviceTypeModel.md) \| [`FieldModel`](../classes/exports_model.FieldModel.md) \| [`DatatypeModel`](../classes/exports_model.DatatypeModel.md) \| [`AttributeModel`](../classes/exports_model.AttributeModel.md) \| [`FabricModel`](../classes/exports_model.FabricModel.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/MatterModel.d.ts:45
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:47

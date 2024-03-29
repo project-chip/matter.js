@@ -39,6 +39,7 @@ or cluster element.
 
 ### Accessors
 
+- [complete](exports_model.Access-1.md#complete)
 - [empty](exports_model.Access-1.md#empty)
 - [readable](exports_model.Access-1.md#readable)
 - [valid](exports_model.Access-1.md#valid)
@@ -78,7 +79,7 @@ by the Matter Specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:27
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:33
 
 ## Properties
 
@@ -158,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:37
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:43
 
 ___
 
@@ -189,6 +190,24 @@ Access.Ast.writePriv
 packages/matter.js/dist/esm/model/aspects/Access.d.ts:17
 
 ## Accessors
+
+### complete
+
+• `get` **complete**(): `boolean`
+
+Determine whether this access is fully specified.  This means we know
+whether reads and/or writes are allowed and if so the required access
+levels.
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:28
+
+___
 
 ### empty
 
@@ -307,17 +326,24 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Access.md#definition)\>
+▸ **extend**\<`This`\>(`this`, `other`): `This`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Aspect`](exports_model.Aspect.md)\<`any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `this` | `This` |
 | `other` | [`Definition`](../modules/exports_model.Access.md#definition) |
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Access.md#definition)\>
+`This`
 
 #### Inherited from
 
@@ -345,7 +371,7 @@ Displays access using the standard Matter syntax.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:36
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:42
 
 ___
 
@@ -387,4 +413,4 @@ lenient.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Access.d.ts:32
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:38

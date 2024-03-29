@@ -10,14 +10,25 @@
 
 - [Feature](../enums/exports_cluster.Groups.Feature.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.Groups.md#extension)
+- [AddGroupIfIdentifyingRequest](../interfaces/exports_cluster.Groups.AddGroupIfIdentifyingRequest.md)
+- [AddGroupRequest](../interfaces/exports_cluster.Groups.AddGroupRequest.md)
+- [AddGroupResponse](../interfaces/exports_cluster.Groups.AddGroupResponse.md)
+- [Cluster](../interfaces/exports_cluster.Groups.Cluster.md)
+- [GetGroupMembershipRequest](../interfaces/exports_cluster.Groups.GetGroupMembershipRequest.md)
+- [GetGroupMembershipResponse](../interfaces/exports_cluster.Groups.GetGroupMembershipResponse.md)
+- [RemoveGroupRequest](../interfaces/exports_cluster.Groups.RemoveGroupRequest.md)
+- [RemoveGroupResponse](../interfaces/exports_cluster.Groups.RemoveGroupResponse.md)
+- [ViewGroupRequest](../interfaces/exports_cluster.Groups.ViewGroupRequest.md)
+- [ViewGroupResponse](../interfaces/exports_cluster.Groups.ViewGroupResponse.md)
 
 ### Variables
 
 - [Base](exports_cluster.Groups.md#base)
 - [Cluster](exports_cluster.Groups.md#cluster)
+- [ClusterInstance](exports_cluster.Groups.md#clusterinstance)
+- [Complete](exports_cluster.Groups.md#complete)
 - [NameSupport](exports_cluster.Groups.md#namesupport)
 - [TlvAddGroupIfIdentifyingRequest](exports_cluster.Groups.md#tlvaddgroupifidentifyingrequest)
 - [TlvAddGroupRequest](exports_cluster.Groups.md#tlvaddgrouprequest)
@@ -29,68 +40,73 @@
 - [TlvViewGroupRequest](exports_cluster.Groups.md#tlvviewgrouprequest)
 - [TlvViewGroupResponse](exports_cluster.Groups.md#tlvviewgroupresponse)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.Groups.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  }
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:511
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `nameSupport`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } ; `commands`: \{ `addGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `addGroupIfIdentifying`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getGroupMembership`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeAllGroups`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `viewGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: \{ `groupNames`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``4`` ; `name`: ``"Groups"`` ; `revision`: ``4``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all Groups clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `nameSupport`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } | - |
+| `attributes.nameSupport` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This attribute provides legacy, read-only access to whether the Group Names feature is supported. The most significant bit, bit 7, shall be equal to bit 0 of the FeatureMap attribute. All other bits shall be 0. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.6.1 |
+| `commands` | \{ `addGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `addGroupIfIdentifying`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getGroupMembership`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeAllGroups`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `viewGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } | - |
+| `commands.addGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The AddGroup command allows a client to add group membership in a particular group for the server endpoint. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.1 |
+| `commands.addGroupIfIdentifying` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the server endpoint, on condition that the endpoint is identifying itself. Identifying functionality is controlled using the Identify cluster, (see Identify). This command might be used to assist configuring group membership in the absence of a commissioning tool. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.6 |
+| `commands.getGroupMembership` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The GetGroupMembership command allows a client to inquire about the group membership of the server endpoint, in a number of ways. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.3 |
+| `commands.removeAllGroups` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | The RemoveAllGroups command allows a client to direct the server to remove all group associations for the server endpoint. The RemoveAllGroups command has no data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.5 |
+| `commands.removeGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The RemoveGroup command allows a client to request that the server removes the membership for the server endpoint, if any, in a particular group. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.4 |
+| `commands.viewGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse command containing the name string for a particular group. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.2 |
+| `extensions` | readonly [] | This metadata controls which GroupsCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `groupNames`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.groupNames` | [`BitFlag`](exports_schema.md#bitflag) | GroupNames The ability to store a name for a group. |
+| `id` | ``4`` | - |
+| `name` | ``"Groups"`` | - |
+| `revision` | ``4`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:142
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:231
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `addGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `addGroupIfIdentifying`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getGroupMembership`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeAllGroups`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `viewGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `events`: {} ; `features`: \{ `groupNames`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"Groups"`` ; `revision`: ``4`` ; `supportedFeatures`: \{ `groupNames`: ``true``  } ; `unknown`: ``false``  } & `Omit`\<\{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `addGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `addGroupIfIdentifying`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getGroupMembership`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeAllGroups`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `viewGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `events`: {} ; `features`: \{ `groupNames`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``4`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"Groups"`` ; `revision`: ``4`` ; `supportedFeatures`: \{ `groupNames`: ``true``  } ; `unknown`: ``false``  }, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.Groups.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `groupNames`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Groups
-
-The Groups cluster manages, per endpoint, the content of the node-wide Group Table that is part of the
-underlying interaction layer.
-
-In a network supporting fabrics, group IDs referenced by attributes or other elements of this cluster are scoped
-to the accessing fabric.
-
-The Groups cluster is scoped to the endpoint. Groups cluster commands support discovering the endpoint
-membership in a group, adding the endpoint to a group, removing the endpoint from a group, removing endpoint
-membership from all groups. All commands defined in this cluster shall only affect groups scoped to the
-accessing fabric.
-
-When group names are supported, the server stores a name string, which is set by the client for each assigned
-group and indicated in response to a client request.
-
-Note that configuration of group addresses for outgoing commands is achieved using the Message Layer mechanisms
-where the Group Table is not involved. Hence this cluster does not play a part in that.
-
-GroupsCluster supports optional features that you can enable with the GroupsCluster.with() factory method.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 1.3
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.Groups.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:268
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:473
+
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:475
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `nameSupport`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } ; `commands`: \{ `addGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `addGroupIfIdentifying`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getGroupMembership`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeAllGroups`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `viewGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `extensions`: readonly [] ; `features`: \{ `groupNames`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``4`` ; `name`: ``"Groups"`` ; `revision`: ``4`` ; `supportedFeatures`: \{ `groupNames`: ``true``  }  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.Groups.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:340
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.Groups.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:476
 
 ___
 
@@ -112,7 +128,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.6.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:19
 
 ___
 
@@ -128,7 +144,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:122
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:204
 
 ___
 
@@ -144,7 +160,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:28
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:30
 
 ___
 
@@ -160,7 +176,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:37
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:46
 
 ___
 
@@ -176,7 +192,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:64
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:94
 
 ___
 
@@ -216,7 +232,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.9
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:96
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:133
 
 ___
 
@@ -232,7 +248,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:105
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:173
 
 ___
 
@@ -248,7 +264,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.10
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:113
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:188
 
 ___
 
@@ -264,7 +280,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:62
 
 ___
 
@@ -280,4 +296,4 @@ MatterApplicationClusterSpecificationV1_1 § 1.3.7.8
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/GroupsCluster.d.ts:77

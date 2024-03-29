@@ -61,16 +61,16 @@
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `data`: [`DecodedAttributeReportValue`](protocol_interaction_export.md#decodedattributereportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
+| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `data`: [`DecodedAttributeReportValue`](protocol_interaction_export.md#decodedattributereportvalue)\<`any`\>) => `void` | - |
 | `autoSubscribe?` | `boolean` | Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient instances. With this reading attributes values is mostly looked up in the locally cached data. Additionally more features like reaction on shutdown event or endpoint structure changes (for bridges) are done internally automatically. |
-| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `data`: [`DecodedEventReportValue`](protocol_interaction_export.md#decodedeventreportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
-| `stateInformationCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `state`: [`NodeStateInformation`](../enums/device_export.NodeStateInformation.md)) => `void` | Optional callback method which is called when the state of the node changes. This can be used to detect when the node goes offline or comes back online. |
-| `subscribeMaxIntervalCeilingSeconds?` | `number` | Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate that the device is still available. Default it is set to 30s. |
+| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `data`: [`DecodedEventReportValue`](protocol_interaction_export.md#decodedeventreportvalue)\<`any`\>) => `void` | - |
+| `stateInformationCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `state`: [`NodeStateInformation`](../enums/device_export.NodeStateInformation.md)) => `void` | - |
+| `subscribeMaxIntervalCeilingSeconds?` | `number` | Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate that the device is still available. Default it is set to 60s. |
 | `subscribeMinIntervalFloorSeconds?` | `number` | Minimum subscription interval when values are changed. Default it is set to 0s. |
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/PairedNode.ts#L91)
+[packages/matter.js/src/device/PairedNode.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/PairedNode.ts#L92)
 
 ___
 
@@ -85,9 +85,9 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 | Name | Type |
 | :------ | :------ |
-| `clusterClientFilter?` | (`endpoint`: [`Endpoint`](../classes/device_export.Endpoint.md), `cluster`: [`ClusterClientObj`](cluster_export.md#clusterclientobj)\<`any`, `any`, `any`, `any`\>) => `boolean` |
-| `clusterServerFilter?` | (`endpoint`: [`Endpoint`](../classes/device_export.Endpoint.md), `cluster`: [`ClusterServerObj`](cluster_export.md#clusterserverobj)\<`any`, `any`\>) => `boolean` |
-| `endpointFilter?` | (`endpoint`: [`Endpoint`](../classes/device_export.Endpoint.md)) => `boolean` |
+| `clusterClientFilter?` | (`endpoint`: [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md), `cluster`: [`ClusterClientObj`](cluster_export.md#clusterclientobj)\<`any`, `any`, `any`, `any`\>) => `boolean` |
+| `clusterServerFilter?` | (`endpoint`: [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md), `cluster`: [`ClusterServerObj`](cluster_export.md#clusterserverobj)\<`any`, `any`\>) => `boolean` |
+| `endpointFilter?` | (`endpoint`: [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md)) => `boolean` |
 | `logAttributeObjectValues?` | `boolean` |
 | `logAttributePrimitiveValues?` | `boolean` |
 | `logChildEndpoints?` | `boolean` |
@@ -103,7 +103,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
 
 ## Variables
 
@@ -117,7 +117,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:113](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L113)
+[packages/matter.js/src/device/DeviceTypes.ts:119](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L119)
 
 ## Functions
 
@@ -147,7 +147,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:78](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L78)
+[packages/matter.js/src/device/DeviceTypes.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L84)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:983](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L983)
+[packages/matter.js/src/device/DeviceTypes.ts:989](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L989)
 
 ___
 
@@ -197,7 +197,7 @@ the custom ones are used if defined
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L29)
+[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L29)
 
 ___
 
@@ -231,7 +231,7 @@ for multiple clusters
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L34)
+[packages/matter.js/src/device/OnOffDevices.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L34)
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:992](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DeviceTypes.ts#L992)
+[packages/matter.js/src/device/DeviceTypes.ts:998](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DeviceTypes.ts#L998)
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](../classes/device_export.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md) |
 | `options` | [`EndpointLoggingOptions`](device_export.md#endpointloggingoptions) |
 
 #### Returns
@@ -272,4 +272,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:235](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/EndpointStructureLogger.ts#L235)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/EndpointStructureLogger.ts#L237)

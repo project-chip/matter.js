@@ -37,7 +37,7 @@ Actor represents an actor credited in video media content; for example, “Gaby 
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:747
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:791
 
 ___
 
@@ -49,7 +49,7 @@ Channel represents the identifying data for a television channel; for example, "
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:751
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:795
 
 ___
 
@@ -61,7 +61,7 @@ A character represented in video media content; for example, “Snow White”
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:755
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:799
 
 ___
 
@@ -73,7 +73,7 @@ A director of the video media content; for example, “Spike Lee”
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:759
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:803
 
 ___
 
@@ -87,7 +87,7 @@ entity.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:765
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:809
 
 ___
 
@@ -103,7 +103,7 @@ of the MOVIE MediaType, rather than attempting to match to a single title.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:773
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:817
 
 ___
 
@@ -115,7 +115,7 @@ Genre represents the genre of video media content such as action, drama or comed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:777
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:821
 
 ___
 
@@ -127,7 +127,7 @@ League represents the categorical information for a sporting league; for example
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:781
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:825
 
 ___
 
@@ -139,7 +139,7 @@ Popularity indicates whether the user asks for popular content.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:785
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:829
 
 ___
 
@@ -151,7 +151,7 @@ The provider (MSP) the user wants this media to be played on; for example, "Netf
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:789
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:833
 
 ___
 
@@ -163,7 +163,7 @@ Sport represents the categorical information of a sport; for example, football
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:793
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:837
 
 ___
 
@@ -176,7 +176,7 @@ Washington Huskies"
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:798
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:842
 
 ___
 
@@ -189,7 +189,7 @@ The type of content requested. Supported types are "Movie", "MovieSeries", "TVSe
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:803
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:847
 
 ___
 
@@ -202,4 +202,4 @@ Sea".
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:808
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:852

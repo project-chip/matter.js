@@ -40,4 +40,4 @@ Error that throws when Commissioning fails and process can not be continued.
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082

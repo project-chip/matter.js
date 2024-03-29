@@ -40,7 +40,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.13
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:285
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:524
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:290
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:529
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:286
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:525
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:284
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:523
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:282
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:521
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:283
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:522
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:288
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:527
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:289
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:528
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:287
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:526
 
 ___
 
@@ -130,4 +130,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:281
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:520

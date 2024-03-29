@@ -19,7 +19,7 @@
 
 ### extensionFieldSets
 
-• **extensionFieldSets**: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `attributeValue`: [`FieldType`](exports_tlv.FieldType.md)\<[`TlvStream`](../modules/exports_tlv.md#tlvstream)\>  }\>[]\> ; `clusterId`: [`FieldType`](exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\>  }\>[]
+• **extensionFieldSets**: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeValueList`: [`FieldType`](exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `attributeValue`: [`FieldType`](exports_tlv.FieldType.md)\<[`TlvStream`](../modules/exports_tlv.md#tlvstream)\>  }\>[]\> ; `clusterId`: [`FieldType`](exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\>  }\>[]
 
 See the Scene Table Extensions subsections of individual clusters. A Scene Table Extension SHALL only use attributes
 marked with "S" in the Quality column of the cluster definition. Each extension field set holds a set of values of

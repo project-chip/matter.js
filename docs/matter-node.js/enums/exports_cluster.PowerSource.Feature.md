@@ -31,7 +31,7 @@ A battery power source
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:709
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:1047
 
 ___
 
@@ -45,7 +45,7 @@ A rechargeable battery power source (requires Battery feature)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:715
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:1053
 
 ___
 
@@ -59,7 +59,7 @@ A replaceable battery power source (requires Battery feature)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:721
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:1059
 
 ___
 
@@ -73,4 +73,4 @@ A wired power source
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:703
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:1041

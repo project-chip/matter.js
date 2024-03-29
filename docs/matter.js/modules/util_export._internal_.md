@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Array.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/Array.ts#L11)
+[packages/matter.js/src/util/Array.ts:11](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Array.ts#L11)
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L35)
+[packages/matter.js/src/util/NamedHandler.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/NamedHandler.ts#L35)

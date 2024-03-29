@@ -15,6 +15,7 @@ Interface for classes that allow to announce one Matter instance.
 ### Methods
 
 - [announce](internal_.InstanceBroadcaster.md#announce)
+- [close](internal_.InstanceBroadcaster.md#close)
 - [expireAllAnnouncements](internal_.InstanceBroadcaster.md#expireallannouncements)
 - [expireCommissioningAnnouncement](internal_.InstanceBroadcaster.md#expirecommissioningannouncement)
 - [expireFabricAnnouncement](internal_.InstanceBroadcaster.md#expirefabricannouncement)
@@ -36,7 +37,23 @@ Send out announcements for this instance.
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:267
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:260
+
+___
+
+### close
+
+▸ **close**(): `Promise`\<`void`\>
+
+Destroy the instance
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:268
 
 ___
 
@@ -52,7 +69,7 @@ Expire all announcements.
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:273
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:266
 
 ___
 
@@ -68,7 +85,7 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:271
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:264
 
 ___
 
@@ -84,7 +101,7 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:269
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:262
 
 ___
 
@@ -99,7 +116,7 @@ Set a commissionable mode and details to announce a commissionable device.
 | Name | Type |
 | :------ | :------ |
 | `mode` | `number` |
-| `deviceData` | [`CommissioningModeInstanceData`](../modules/internal_.md#commissioningmodeinstancedata) |
+| `deviceData` | [`CommissioningModeInstanceData`](internal_.CommissioningModeInstanceData.md) |
 
 #### Returns
 
@@ -107,7 +124,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:258
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:251
 
 ___
 
@@ -129,7 +146,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:265
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:258
 
 ___
 
@@ -153,4 +170,4 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:263
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:256

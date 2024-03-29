@@ -28,4 +28,4 @@ Supports updates to output names
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:81
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:123

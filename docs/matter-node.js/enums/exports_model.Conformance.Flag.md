@@ -22,7 +22,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:86
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:99
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:87
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:100
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:83
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:96
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:84
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:97
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:85
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:98

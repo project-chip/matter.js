@@ -44,4 +44,25 @@ Error thrown when an unexpected case in the matter flow is encountered. Please r
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082
+
+• **new MatterFlowError**(`message?`, `options?`): [`MatterFlowError`](common_export.MatterFlowError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`MatterFlowError`](common_export.MatterFlowError.md)
+
+#### Inherited from
+
+[MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1082

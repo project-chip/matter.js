@@ -28,4 +28,4 @@ Node makes available the metrics for high watermark related to memory consumptio
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:82
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:133

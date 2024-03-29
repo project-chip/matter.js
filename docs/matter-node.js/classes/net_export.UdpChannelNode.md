@@ -19,6 +19,10 @@
 - [netInterface](net_export.UdpChannelNode.md#netinterface)
 - [socket](net_export.UdpChannelNode.md#socket)
 
+### Accessors
+
+- [port](net_export.UdpChannelNode.md#port)
+
 ### Methods
 
 - [close](net_export.UdpChannelNode.md#close)
@@ -45,7 +49,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:101](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/net/UdpChannelNode.ts#L101)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/net/UdpChannelNode.ts#L101)
 
 ## Properties
 
@@ -55,7 +59,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:103](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/net/UdpChannelNode.ts#L103)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/net/UdpChannelNode.ts#L103)
 
 ___
 
@@ -65,7 +69,25 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:102](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/net/UdpChannelNode.ts#L102)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/net/UdpChannelNode.ts#L102)
+
+## Accessors
+
+### port
+
+• `get` **port**(): `number`
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+UdpChannel.port
+
+#### Defined in
+
+[packages/matter-node.js/src/net/UdpChannelNode.ts:143](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/net/UdpChannelNode.ts#L143)
 
 ## Methods
 
@@ -83,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:133](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/net/UdpChannelNode.ts#L133)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:135](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/net/UdpChannelNode.ts#L135)
 
 ___
 
@@ -111,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:106](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/net/UdpChannelNode.ts#L106)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/net/UdpChannelNode.ts#L106)
 
 ___
 
@@ -137,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:121](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/net/UdpChannelNode.ts#L121)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:121](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/net/UdpChannelNode.ts#L121)
 
 ___
 
@@ -157,4 +179,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/net/UdpChannelNode.ts#L44)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/net/UdpChannelNode.ts#L44)

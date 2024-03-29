@@ -17,7 +17,7 @@
 
 ### Administer
 
-• **Administer** = ``3``
+• **Administer** = ``4``
 
 #### Defined in
 
@@ -27,7 +27,7 @@ ___
 
 ### Manage
 
-• **Manage** = ``2``
+• **Manage** = ``3``
 
 #### Defined in
 
@@ -37,7 +37,7 @@ ___
 
 ### Operate
 
-• **Operate** = ``1``
+• **Operate** = ``2``
 
 #### Defined in
 
@@ -47,7 +47,7 @@ ___
 
 ### View
 
-• **View** = ``0``
+• **View** = ``1``
 
 #### Defined in
 

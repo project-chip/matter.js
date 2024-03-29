@@ -4,18 +4,17 @@
 
 [exports/model](../modules/exports_model.md).AttributeModel
 
-Each ValueElement has a corresponding implementation that derives from
-this class.
+A cluster property description.
 
 ## Hierarchy
 
-- [`ValueModel`](exports_model.ValueModel.md)
+- [`PropertyModel`](exports_model.PropertyModel.md)
 
   ↳ **`AttributeModel`**
 
 ## Implements
 
-- [`AttributeElement`](../modules/exports_model.md#attributeelement)
+- [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md)
 
 ## Table of contents
 
@@ -25,6 +24,7 @@ this class.
 
 ### Properties
 
+- [#private](exports_model.AttributeModel.md##private)
 - [byteSize](exports_model.AttributeModel.md#bytesize)
 - [default](exports_model.AttributeModel.md#default)
 - [description](exports_model.AttributeModel.md#description)
@@ -40,7 +40,7 @@ this class.
 - [type](exports_model.AttributeModel.md#type)
 - [xref](exports_model.AttributeModel.md#xref)
 - [Tag](exports_model.AttributeModel.md#tag-1)
-- [constructors](exports_model.AttributeModel.md#constructors)
+- [types](exports_model.AttributeModel.md#types)
 
 ### Accessors
 
@@ -54,6 +54,7 @@ this class.
 - [deprecated](exports_model.AttributeModel.md#deprecated)
 - [directMetatype](exports_model.AttributeModel.md#directmetatype)
 - [disallowed](exports_model.AttributeModel.md#disallowed)
+- [discriminator](exports_model.AttributeModel.md#discriminator)
 - [effectiveAccess](exports_model.AttributeModel.md#effectiveaccess)
 - [effectiveConformance](exports_model.AttributeModel.md#effectiveconformance)
 - [effectiveConstraint](exports_model.AttributeModel.md#effectiveconstraint)
@@ -67,6 +68,7 @@ this class.
 - [fabricScoped](exports_model.AttributeModel.md#fabricscoped)
 - [fixed](exports_model.AttributeModel.md#fixed)
 - [globalBase](exports_model.AttributeModel.md#globalbase)
+- [isGlobalAttribute](exports_model.AttributeModel.md#isglobalattribute)
 - [key](exports_model.AttributeModel.md#key)
 - [listEntry](exports_model.AttributeModel.md#listentry)
 - [mandatory](exports_model.AttributeModel.md#mandatory)
@@ -88,10 +90,10 @@ this class.
 - [add](exports_model.AttributeModel.md#add)
 - [all](exports_model.AttributeModel.md#all)
 - [bitDefinition](exports_model.AttributeModel.md#bitdefinition)
+- [clone](exports_model.AttributeModel.md#clone)
 - [error](exports_model.AttributeModel.md#error)
 - [get](exports_model.AttributeModel.md#get)
 - [instanceOf](exports_model.AttributeModel.md#instanceof)
-- [is](exports_model.AttributeModel.md#is)
 - [member](exports_model.AttributeModel.md#member)
 - [owner](exports_model.AttributeModel.md#owner)
 - [references](exports_model.AttributeModel.md#references)
@@ -99,6 +101,7 @@ this class.
 - [valueOf](exports_model.AttributeModel.md#valueof)
 - [visit](exports_model.AttributeModel.md#visit)
 - [create](exports_model.AttributeModel.md#create)
+- [isGlobal](exports_model.AttributeModel.md#isglobal)
 
 ## Constructors
 
@@ -118,43 +121,41 @@ this class.
 
 #### Overrides
 
-[ValueModel](exports_model.ValueModel.md).[constructor](exports_model.ValueModel.md#constructor)
+[PropertyModel](exports_model.PropertyModel.md).[constructor](exports_model.PropertyModel.md#constructor)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:15
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:17
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Inherited from
+
+[PropertyModel](exports_model.PropertyModel.md).[#private](exports_model.PropertyModel.md##private)
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/Model.d.ts:13
+
+___
 
 ### byteSize
 
 • `Optional` **byteSize**: [`Size`](../modules/exports_model.ValueElement.md#size)
 
-#### Implementation of
-
-AttributeElement.byteSize
-
-#### Inherited from
-
-[ValueModel](exports_model.ValueModel.md).[byteSize](exports_model.ValueModel.md#bytesize)
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:16
-
-___
-
-### default
-
-• `Optional` **default**: [`FieldValue`](../modules/exports_model.md#fieldvalue)
+Applies to numeric types.
 
 #### Implementation of
 
-AttributeElement.default
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[byteSize](../interfaces/exports_model.AttributeElement-1.md#bytesize)
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[default](exports_model.ValueModel.md#default)
+[PropertyModel](exports_model.PropertyModel.md).[byteSize](exports_model.PropertyModel.md#bytesize)
 
 #### Defined in
 
@@ -162,21 +163,43 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:17
 
 ___
 
+### default
+
+• `Optional` **default**: [`FieldValue`](../modules/exports_model.md#fieldvalue)
+
+The default value for the element.
+
+#### Implementation of
+
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[default](../interfaces/exports_model.AttributeElement-1.md#default)
+
+#### Inherited from
+
+[PropertyModel](exports_model.PropertyModel.md).[default](exports_model.PropertyModel.md#default)
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:18
+
+___
+
 ### description
 
 • `Optional` **description**: `string`
 
+A short summary of the element.
+
 #### Implementation of
 
-AttributeElement.description
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[description](../interfaces/exports_model.AttributeElement-1.md#description)
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[description](exports_model.ValueModel.md#description)
+[PropertyModel](exports_model.PropertyModel.md).[description](exports_model.PropertyModel.md#description)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:20
+packages/matter.js/dist/esm/model/models/Model.d.ts:16
 
 ___
 
@@ -184,17 +207,19 @@ ___
 
 • `Optional` **details**: `string`
 
+A paragraph summary of the element.
+
 #### Implementation of
 
-AttributeElement.details
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[details](../interfaces/exports_model.AttributeElement-1.md#details)
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[details](exports_model.ValueModel.md#details)
+[PropertyModel](exports_model.PropertyModel.md).[details](exports_model.PropertyModel.md#details)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:21
+packages/matter.js/dist/esm/model/models/Model.d.ts:17
 
 ___
 
@@ -204,11 +229,11 @@ ___
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[errors](exports_model.ValueModel.md#errors)
+[PropertyModel](exports_model.PropertyModel.md).[errors](exports_model.PropertyModel.md#errors)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:23
+packages/matter.js/dist/esm/model/models/Model.d.ts:19
 
 ___
 
@@ -220,15 +245,15 @@ Flag set on elements loaded from Globals.
 
 #### Implementation of
 
-AttributeElement.global
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[global](../interfaces/exports_model.AttributeElement-1.md#global)
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[global](exports_model.ValueModel.md#global)
+[PropertyModel](exports_model.PropertyModel.md).[global](exports_model.PropertyModel.md#global)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:27
+packages/matter.js/dist/esm/model/models/Model.d.ts:25
 
 ___
 
@@ -238,11 +263,11 @@ ___
 
 #### Implementation of
 
-AttributeElement.id
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[id](../interfaces/exports_model.AttributeElement-1.md#id)
 
 #### Overrides
 
-[ValueModel](exports_model.ValueModel.md).[id](exports_model.ValueModel.md#id)
+[PropertyModel](exports_model.PropertyModel.md).[id](exports_model.PropertyModel.md#id)
 
 #### Defined in
 
@@ -258,11 +283,11 @@ Indicates that an element defines a datatype.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[isType](exports_model.ValueModel.md#istype)
+[PropertyModel](exports_model.PropertyModel.md).[isType](exports_model.PropertyModel.md#istype)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:19
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:20
 
 ___
 
@@ -274,11 +299,11 @@ Indicates that an element may have type definitions as children.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[isTypeScope](exports_model.ValueModel.md#istypescope)
+[PropertyModel](exports_model.PropertyModel.md).[isTypeScope](exports_model.PropertyModel.md#istypescope)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:31
+packages/matter.js/dist/esm/model/models/Model.d.ts:29
 
 ___
 
@@ -288,11 +313,11 @@ ___
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[metatype](exports_model.ValueModel.md#metatype)
+[PropertyModel](exports_model.PropertyModel.md).[metatype](exports_model.PropertyModel.md#metatype)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:18
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:19
 
 ___
 
@@ -300,17 +325,20 @@ ___
 
 • **name**: `string`
 
+The key used for storing this element.  A "human appropriate" semantic
+differentiator.
+
 #### Implementation of
 
-AttributeElement.name
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[name](../interfaces/exports_model.AttributeElement-1.md#name)
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[name](exports_model.ValueModel.md#name)
+[PropertyModel](exports_model.PropertyModel.md).[name](exports_model.PropertyModel.md#name)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:18
+packages/matter.js/dist/esm/model/models/Model.d.ts:21
 
 ___
 
@@ -320,11 +348,11 @@ ___
 
 #### Implementation of
 
-AttributeElement.tag
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[tag](../interfaces/exports_model.AttributeElement-1.md#tag)
 
 #### Overrides
 
-[ValueModel](exports_model.ValueModel.md).[tag](exports_model.ValueModel.md#tag)
+[PropertyModel](exports_model.PropertyModel.md).[tag](exports_model.PropertyModel.md#tag)
 
 #### Defined in
 
@@ -336,17 +364,20 @@ ___
 
 • `Optional` **type**: `string`
 
+If an element derives from another element, the name of the parent
+element goes here.
+
 #### Implementation of
 
-AttributeElement.type
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[type](../interfaces/exports_model.AttributeElement-1.md#type)
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[type](exports_model.ValueModel.md#type)
+[PropertyModel](exports_model.PropertyModel.md).[type](exports_model.PropertyModel.md#type)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:19
+packages/matter.js/dist/esm/model/models/Model.d.ts:15
 
 ___
 
@@ -354,17 +385,19 @@ ___
 
 • `Optional` **xref**: [`CrossReference`](exports_model.Model.CrossReference.md)
 
+Reference to Matter specification document.
+
 #### Implementation of
 
-AttributeElement.xref
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[xref](../interfaces/exports_model.AttributeElement-1.md#xref)
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[xref](exports_model.ValueModel.md#xref)
+[PropertyModel](exports_model.PropertyModel.md).[xref](exports_model.PropertyModel.md#xref)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:22
+packages/matter.js/dist/esm/model/models/Model.d.ts:18
 
 ___
 
@@ -374,13 +407,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:16
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:18
 
 ___
 
-### constructors
+### types
 
-▪ `Static` **constructors**: `Object`
+▪ `Static` **types**: `Object`
 
 Factory support.  Populated by derivatives upon definition.
 
@@ -390,11 +423,11 @@ Factory support.  Populated by derivatives upon definition.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[constructors](exports_model.ValueModel.md#constructors)
+[PropertyModel](exports_model.PropertyModel.md).[types](exports_model.PropertyModel.md#types)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:77
+packages/matter.js/dist/esm/model/models/Model.d.ts:78
 
 ## Accessors
 
@@ -402,23 +435,27 @@ packages/matter.js/dist/esm/model/models/Model.d.ts:77
 
 • `get` **access**(): [`Access`](exports_model.Access-1.md)
 
+Authorization limits.
+
 #### Returns
 
 [`Access`](exports_model.Access-1.md)
 
 #### Implementation of
 
-AttributeElement.access
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[access](../interfaces/exports_model.AttributeElement-1.md#access)
 
 #### Inherited from
 
-ValueModel.access
+PropertyModel.access
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:28
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:29
 
 • `set` **access**(`definition`): `void`
+
+Authorization limits.
 
 #### Parameters
 
@@ -432,15 +469,15 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:28
 
 #### Implementation of
 
-AttributeElement.access
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[access](../interfaces/exports_model.AttributeElement-1.md#access)
 
 #### Inherited from
 
-ValueModel.access
+PropertyModel.access
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:29
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:30
 
 ___
 
@@ -457,11 +494,11 @@ Datatype models.
 
 #### Inherited from
 
-ValueModel.allowedBaseTags
+PropertyModel.allowedBaseTags
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:79
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:80
 
 ___
 
@@ -477,45 +514,45 @@ ValueModels may only derive from ValueModels.
 
 #### Inherited from
 
-ValueModel.base
+PropertyModel.base
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:74
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:75
 
 ___
 
 ### children
 
-• `get` **children**(): [`DatatypeModel`](exports_model.DatatypeModel.md)[]
+• `get` **children**(): [`Children`](../interfaces/exports_model._internal_.Children-1.md)\<[`FieldModel`](exports_model.FieldModel.md), [`FieldElement`](../interfaces/exports_model.FieldElement-1.md)\>
 
-Children of models are always models.
+Child elements.
 
 #### Returns
 
-[`DatatypeModel`](exports_model.DatatypeModel.md)[]
+[`Children`](../interfaces/exports_model._internal_.Children-1.md)\<[`FieldModel`](exports_model.FieldModel.md), [`FieldElement`](../interfaces/exports_model.FieldElement-1.md)\>
 
 #### Implementation of
 
-AttributeElement.children
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[children](../interfaces/exports_model.AttributeElement-1.md#children)
 
 #### Inherited from
 
-ValueModel.children
+PropertyModel.children
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:20
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:21
 
 • `set` **children**(`children`): `void`
 
-Children can be added as models or elements.
+Child elements.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `children` | ([`DatatypeElement`](../modules/exports_model.md#datatypeelement) \| [`DatatypeModel`](exports_model.DatatypeModel.md))[] |
+| `children` | ([`FieldElement`](../interfaces/exports_model.FieldElement-1.md) \| [`FieldModel`](exports_model.FieldModel.md))[] |
 
 #### Returns
 
@@ -523,15 +560,15 @@ Children can be added as models or elements.
 
 #### Implementation of
 
-AttributeElement.children
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[children](../interfaces/exports_model.AttributeElement-1.md#children)
 
 #### Inherited from
 
-ValueModel.children
+PropertyModel.children
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:21
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:22
 
 ___
 
@@ -539,29 +576,33 @@ ___
 
 • `get` **conformance**(): [`Conformance`](exports_model.Conformance-1.md)
 
+Optionality control.
+
 #### Returns
 
 [`Conformance`](exports_model.Conformance-1.md)
 
 #### Implementation of
 
-AttributeElement.conformance
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[conformance](../interfaces/exports_model.AttributeElement-1.md#conformance)
 
 #### Inherited from
 
-ValueModel.conformance
+PropertyModel.conformance
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:25
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:26
 
 • `set` **conformance**(`definition`): `void`
+
+Optionality control.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `definition` | [`Conformance`](exports_model.Conformance-1.md) \| [`Definition`](../modules/exports_model.Conformance.md#definition) |
+| `definition` | [`Definition`](../modules/exports_model.Conformance.md#definition) \| [`Conformance`](exports_model.Conformance-1.md) |
 
 #### Returns
 
@@ -569,15 +610,15 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:25
 
 #### Implementation of
 
-AttributeElement.conformance
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[conformance](../interfaces/exports_model.AttributeElement-1.md#conformance)
 
 #### Inherited from
 
-ValueModel.conformance
+PropertyModel.conformance
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:26
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:27
 
 ___
 
@@ -585,29 +626,33 @@ ___
 
 • `get` **constraint**(): [`Constraint`](exports_model.Constraint-1.md)
 
+Limits on values.
+
 #### Returns
 
 [`Constraint`](exports_model.Constraint-1.md)
 
 #### Implementation of
 
-AttributeElement.constraint
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[constraint](../interfaces/exports_model.AttributeElement-1.md#constraint)
 
 #### Inherited from
 
-ValueModel.constraint
+PropertyModel.constraint
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:22
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:23
 
 • `set` **constraint**(`definition`): `void`
+
+Limits on values.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `definition` | [`Constraint`](exports_model.Constraint-1.md) \| [`Definition`](../modules/exports_model.Constraint.md#definition) |
+| `definition` | [`Definition`](../modules/exports_model.Constraint.md#definition) \| [`Constraint`](exports_model.Constraint-1.md) |
 
 #### Returns
 
@@ -615,15 +660,15 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:22
 
 #### Implementation of
 
-AttributeElement.constraint
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[constraint](../interfaces/exports_model.AttributeElement-1.md#constraint)
 
 #### Inherited from
 
-ValueModel.constraint
+PropertyModel.constraint
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:23
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:24
 
 ___
 
@@ -639,11 +684,11 @@ Get the first derived ancestor with children, if any.
 
 #### Inherited from
 
-ValueModel.definingModel
+PropertyModel.definingModel
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:66
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:67
 
 ___
 
@@ -659,11 +704,11 @@ Is this model deprecated?
 
 #### Inherited from
 
-ValueModel.deprecated
+PropertyModel.deprecated
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:91
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:92
 
 ___
 
@@ -679,11 +724,11 @@ The metatype for this model's type, ignoring inheritance.
 
 #### Inherited from
 
-ValueModel.directMetatype
+PropertyModel.directMetatype
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:62
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:63
 
 ___
 
@@ -699,11 +744,31 @@ Is this model disallowed?
 
 #### Inherited from
 
-ValueModel.disallowed
+PropertyModel.disallowed
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:95
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:96
+
+___
+
+### discriminator
+
+• `get` **discriminator**(): `undefined` \| `string`
+
+Obtain a discriminator that differentiates different models with the same name
+
+#### Returns
+
+`undefined` \| `string`
+
+#### Inherited from
+
+PropertyModel.discriminator
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/Model.d.ts:66
 
 ___
 
@@ -717,11 +782,11 @@ ___
 
 #### Inherited from
 
-ValueModel.effectiveAccess
+PropertyModel.effectiveAccess
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:30
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:31
 
 ___
 
@@ -735,11 +800,11 @@ ___
 
 #### Inherited from
 
-ValueModel.effectiveConformance
+PropertyModel.effectiveConformance
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:27
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:28
 
 ___
 
@@ -753,11 +818,11 @@ ___
 
 #### Inherited from
 
-ValueModel.effectiveConstraint
+PropertyModel.effectiveConstraint
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:24
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:25
 
 ___
 
@@ -775,11 +840,11 @@ a default from subfields.
 
 #### Inherited from
 
-ValueModel.effectiveDefault
+PropertyModel.effectiveDefault
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:58
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:59
 
 ___
 
@@ -795,11 +860,11 @@ Allows subclasses to pull a working ID from an alternate source.
 
 #### Inherited from
 
-ValueModel.effectiveId
+PropertyModel.effectiveId
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:60
+packages/matter.js/dist/esm/model/models/Model.d.ts:57
 
 ___
 
@@ -815,11 +880,11 @@ The working metatype for this object.
 
 #### Inherited from
 
-ValueModel.effectiveMetatype
+PropertyModel.effectiveMetatype
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:52
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:53
 
 ___
 
@@ -833,11 +898,11 @@ ___
 
 #### Inherited from
 
-ValueModel.effectiveQuality
+PropertyModel.effectiveQuality
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:33
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:34
 
 ___
 
@@ -853,11 +918,11 @@ The "effective type" may be inferred from context.
 
 #### Inherited from
 
-ValueModel.effectiveType
+PropertyModel.effectiveType
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:48
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:49
 
 ___
 
@@ -873,11 +938,11 @@ A local or parent xref.
 
 #### Inherited from
 
-ValueModel.effectiveXref
+PropertyModel.effectiveXref
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:104
+packages/matter.js/dist/esm/model/models/Model.d.ts:102
 
 ___
 
@@ -885,8 +950,8 @@ ___
 
 • `get` **elements**(): [`AnyElement`](../modules/exports_model.md#anyelement)[]
 
-Element view of children.  For TypeScript this allows children to be
-added as elements.  For JavaScript this is identical to children().
+Element view of children.  For TypeScript this allows children to be added as elements.  For JavaScript this is
+identical to children().
 
 #### Returns
 
@@ -894,11 +959,11 @@ added as elements.  For JavaScript this is identical to children().
 
 #### Inherited from
 
-ValueModel.elements
+PropertyModel.elements
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:56
+packages/matter.js/dist/esm/model/models/Model.d.ts:53
 
 ___
 
@@ -912,7 +977,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:13
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:15
 
 ___
 
@@ -926,7 +991,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:14
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:16
 
 ___
 
@@ -934,8 +999,7 @@ ___
 
 • `get` **globalBase**(): `undefined` \| [`Model`](exports_model.Model-1.md)
 
-Get the first global base type.  This may have semantic meaning more
-specific than the base primitive type.
+Get the first global base type.  This may have semantic meaning more specific than the base primitive type.
 
 #### Returns
 
@@ -943,11 +1007,29 @@ specific than the base primitive type.
 
 #### Inherited from
 
-ValueModel.globalBase
+PropertyModel.globalBase
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:100
+packages/matter.js/dist/esm/model/models/Model.d.ts:98
+
+___
+
+### isGlobalAttribute
+
+• `get` **isGlobalAttribute**(): `undefined` \| ``true``
+
+#### Returns
+
+`undefined` \| ``true``
+
+#### Overrides
+
+PropertyModel.isGlobalAttribute
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:13
 
 ___
 
@@ -955,8 +1037,8 @@ ___
 
 • `get` **key**(): `undefined` \| `string`
 
-Get a string that uniquely identifies this model.  This is normally
-the effective ID but some models require a generated identifier.
+Get a string that uniquely identifies this model.  This is normally the effective ID but some models require a
+generated identifier.
 
 #### Returns
 
@@ -964,31 +1046,31 @@ the effective ID but some models require a generated identifier.
 
 #### Inherited from
 
-ValueModel.key
+PropertyModel.key
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:65
+packages/matter.js/dist/esm/model/models/Model.d.ts:62
 
 ___
 
 ### listEntry
 
-• `get` **listEntry**(): `undefined` \| [`DatatypeModel`](exports_model.DatatypeModel.md)
+• `get` **listEntry**(): `undefined` \| [`FieldModel`](exports_model.FieldModel.md)
 
 Get the entry type for lists, if any.
 
 #### Returns
 
-`undefined` \| [`DatatypeModel`](exports_model.DatatypeModel.md)
+`undefined` \| [`FieldModel`](exports_model.FieldModel.md)
 
 #### Inherited from
 
-ValueModel.listEntry
+PropertyModel.listEntry
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:70
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:71
 
 ___
 
@@ -996,8 +1078,7 @@ ___
 
 • `get` **mandatory**(): `boolean`
 
-Is this model mandatory?  This supports a limited subset of conformance
-and is only appropriate for field conformance.
+Is the model mandatory?
 
 #### Returns
 
@@ -1005,7 +1086,7 @@ and is only appropriate for field conformance.
 
 #### Inherited from
 
-ValueModel.mandatory
+PropertyModel.mandatory
 
 #### Defined in
 
@@ -1015,21 +1096,21 @@ ___
 
 ### members
 
-• `get` **members**(): [`DatatypeModel`](exports_model.DatatypeModel.md)[]
+• `get` **members**(): [`FieldModel`](exports_model.FieldModel.md)[]
 
 Retrieve all datatype members.
 
 #### Returns
 
-[`DatatypeModel`](exports_model.DatatypeModel.md)[]
+[`FieldModel`](exports_model.FieldModel.md)[]
 
 #### Inherited from
 
-ValueModel.members
+PropertyModel.members
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:83
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:84
 
 ___
 
@@ -1047,11 +1128,11 @@ manipulate the data.  This accessor retrieves this model.
 
 #### Inherited from
 
-ValueModel.metabase
+PropertyModel.metabase
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:39
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:40
 
 ___
 
@@ -1067,11 +1148,11 @@ Can this model be omitted?
 
 #### Inherited from
 
-ValueModel.nullable
+PropertyModel.nullable
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:99
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:100
 
 ___
 
@@ -1087,7 +1168,7 @@ Determine whether this element overrides key properties of its shadow.
 
 #### Inherited from
 
-ValueModel.overridesShadow
+PropertyModel.overridesShadow
 
 #### Defined in
 
@@ -1099,8 +1180,7 @@ ___
 
 • `get` **parent**(): `undefined` \| [`Model`](exports_model.Model-1.md)
 
-The structural parent.  This is the model for the element that contains
-this element's definition.
+The structural parent.  This is the model for the element that contains this element's definition.
 
 #### Returns
 
@@ -1108,11 +1188,11 @@ this element's definition.
 
 #### Inherited from
 
-ValueModel.parent
+PropertyModel.parent
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:50
+packages/matter.js/dist/esm/model/models/Model.d.ts:47
 
 • `set` **parent**(`parent`): `void`
 
@@ -1128,11 +1208,11 @@ packages/matter.js/dist/esm/model/models/Model.d.ts:50
 
 #### Inherited from
 
-ValueModel.parent
+PropertyModel.parent
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:51
+packages/matter.js/dist/esm/model/models/Model.d.ts:48
 
 ___
 
@@ -1140,7 +1220,9 @@ ___
 
 • `get` **path**(): `string`
 
-The full path ("." delimited) in the Matter tree.
+The path ("." delimited) in the Matter tree.
+
+This is informational and generally tries to adhere to JS API conventions.
 
 #### Returns
 
@@ -1148,11 +1230,11 @@ The full path ("." delimited) in the Matter tree.
 
 #### Inherited from
 
-ValueModel.path
+PropertyModel.path
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:45
+packages/matter.js/dist/esm/model/models/Model.d.ts:43
 
 ___
 
@@ -1169,11 +1251,11 @@ for enums and bitmaps.  Otherwise it's the metabase.
 
 #### Inherited from
 
-ValueModel.primitiveBase
+PropertyModel.primitiveBase
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:44
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:45
 
 ___
 
@@ -1181,29 +1263,33 @@ ___
 
 • `get` **quality**(): [`Quality`](exports_model.Quality-1.md)
 
+Other qualities not covered by conformance or access.
+
 #### Returns
 
 [`Quality`](exports_model.Quality-1.md)
 
 #### Implementation of
 
-AttributeElement.quality
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[quality](../interfaces/exports_model.AttributeElement-1.md#quality)
 
 #### Inherited from
 
-ValueModel.quality
+PropertyModel.quality
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:31
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:32
 
 • `set` **quality**(`definition`): `void`
+
+Other qualities not covered by conformance or access.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `definition` | [`Quality`](exports_model.Quality-1.md) \| [`Definition`](../modules/exports_model.Quality.md#definition) |
+| `definition` | [`Definition`](../modules/exports_model.Quality.md#definition) \| [`Quality`](exports_model.Quality-1.md) |
 
 #### Returns
 
@@ -1211,15 +1297,15 @@ packages/matter.js/dist/esm/model/models/ValueModel.d.ts:31
 
 #### Implementation of
 
-AttributeElement.quality
+[AttributeElement](../interfaces/exports_model.AttributeElement-1.md).[quality](../interfaces/exports_model.AttributeElement-1.md#quality)
 
 #### Inherited from
 
-ValueModel.quality
+PropertyModel.quality
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:32
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:33
 
 ___
 
@@ -1227,8 +1313,7 @@ ___
 
 • `get` **shadow**(): `undefined` \| [`Model`](exports_model.Model-1.md)
 
-Get shadow model, if any.  A "shadow" is an element in my parent's
-inheritance hierarchy that I override.
+Get shadow model, if any.  A "shadow" is an element in my parent's inheritance hierarchy that I override.
 
 #### Returns
 
@@ -1236,11 +1321,11 @@ inheritance hierarchy that I override.
 
 #### Inherited from
 
-ValueModel.shadow
+PropertyModel.shadow
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:95
+packages/matter.js/dist/esm/model/models/Model.d.ts:94
 
 ___
 
@@ -1256,11 +1341,11 @@ Did validation find errors?
 
 #### Inherited from
 
-ValueModel.valid
+PropertyModel.valid
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:41
+packages/matter.js/dist/esm/model/models/Model.d.ts:37
 
 ___
 
@@ -1276,11 +1361,11 @@ Collect constraints and conformance for this type and all base types.
 
 #### Inherited from
 
-ValueModel.validationAspects
+PropertyModel.validationAspects
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/ValueModel.d.ts:87
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:88
 
 ___
 
@@ -1294,7 +1379,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:12
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:14
 
 ## Methods
 
@@ -1316,11 +1401,11 @@ Add a child.  children.push works too but only accepts models.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[add](exports_model.ValueModel.md#add)
+[PropertyModel](exports_model.PropertyModel.md).[add](exports_model.PropertyModel.md#add)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:112
+packages/matter.js/dist/esm/model/models/Model.d.ts:110
 
 ___
 
@@ -1340,7 +1425,7 @@ Retrieve all models of a specific element type from local scope.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> | model class or a predicate object |
+| `constructor` | [`Type`](../modules/exports_model.Model.md#type)\<`T`\> | model class or a predicate object |
 
 #### Returns
 
@@ -1348,17 +1433,17 @@ Retrieve all models of a specific element type from local scope.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[all](exports_model.ValueModel.md#all)
+[PropertyModel](exports_model.PropertyModel.md).[all](exports_model.PropertyModel.md#all)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:122
+packages/matter.js/dist/esm/model/models/Model.d.ts:120
 
 ___
 
 ### bitDefinition
 
-▸ **bitDefinition**(`bit`): `undefined` \| [`DatatypeModel`](exports_model.DatatypeModel.md)
+▸ **bitDefinition**(`bit`): `undefined` \| [`FieldModel`](exports_model.FieldModel.md)
 
 Search the inheritance chain for a bitmap field defining a specific bit.
 
@@ -1370,15 +1455,47 @@ Search the inheritance chain for a bitmap field defining a specific bit.
 
 #### Returns
 
-`undefined` \| [`DatatypeModel`](exports_model.DatatypeModel.md)
+`undefined` \| [`FieldModel`](exports_model.FieldModel.md)
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[bitDefinition](exports_model.ValueModel.md#bitdefinition)
+[PropertyModel](exports_model.PropertyModel.md).[bitDefinition](exports_model.PropertyModel.md#bitdefinition)
 
 #### Defined in
 
 packages/matter.js/dist/esm/model/models/ValueModel.d.ts:112
+
+___
+
+### clone
+
+▸ **clone**\<`This`\>(`this`): `This`
+
+Clone the model.  This deep copies all descendant child models but not other properties.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Model`](exports_model.Model-1.md) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | `This` |
+
+#### Returns
+
+`This`
+
+#### Inherited from
+
+[PropertyModel](exports_model.PropertyModel.md).[clone](exports_model.PropertyModel.md#clone)
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/Model.d.ts:160
 
 ___
 
@@ -1401,17 +1518,17 @@ Record a validation error for this model.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[error](exports_model.ValueModel.md#error)
+[PropertyModel](exports_model.PropertyModel.md).[error](exports_model.PropertyModel.md#error)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:138
+packages/matter.js/dist/esm/model/models/Model.d.ts:132
 
 ___
 
 ### get
 
-▸ **get**\<`T`\>(`constructor`, `key`): `T`
+▸ **get**\<`T`\>(`type`, `key`): `undefined` \| `T`
 
 Retrieve a specific model by ID or name.
 
@@ -1425,20 +1542,20 @@ Retrieve a specific model by ID or name.
 
 | Name | Type |
 | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> |
+| `type` | [`Type`](../modules/exports_model.Model.md#type)\<`T`\> |
 | `key` | `string` \| `number` |
 
 #### Returns
 
-`T`
+`undefined` \| `T`
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[get](exports_model.ValueModel.md#get)
+[PropertyModel](exports_model.PropertyModel.md).[get](exports_model.PropertyModel.md#get)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:126
+packages/matter.js/dist/esm/model/models/Model.d.ts:124
 
 ___
 
@@ -1460,37 +1577,11 @@ Does this model derive from another?
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[instanceOf](exports_model.ValueModel.md#instanceof)
+[PropertyModel](exports_model.PropertyModel.md).[instanceOf](exports_model.PropertyModel.md#instanceof)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:162
-
-___
-
-### is
-
-▸ **is**(`key`): `boolean`
-
-Check identity of element by name or ID.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `key` | `undefined` \| [`ElementSelector`](../modules/exports_model._internal_.md#elementselector) |
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-[ValueModel](exports_model.ValueModel.md).[is](exports_model.ValueModel.md#is)
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/models/Model.d.ts:134
+packages/matter.js/dist/esm/model/models/Model.d.ts:156
 
 ___
 
@@ -1504,7 +1595,7 @@ Search the inheritance chain for a child property.
 
 | Name | Type |
 | :------ | :------ |
-| `key` | [`ElementSelector`](../modules/exports_model._internal_.md#elementselector) |
+| `key` | [`Selector`](../modules/exports_model._internal_.Children.md#selector) |
 | `allowedTags?` | [`ElementTag`](../enums/exports_model.ElementTag.md)[] |
 
 #### Returns
@@ -1513,11 +1604,11 @@ Search the inheritance chain for a child property.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[member](exports_model.ValueModel.md#member)
+[PropertyModel](exports_model.PropertyModel.md).[member](exports_model.PropertyModel.md#member)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:158
+packages/matter.js/dist/esm/model/models/Model.d.ts:152
 
 ___
 
@@ -1537,7 +1628,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 | Name | Type |
 | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> |
+| `constructor` | [`Type`](../modules/exports_model.Model.md#type)\<`T`\> |
 
 #### Returns
 
@@ -1545,11 +1636,11 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[owner](exports_model.ValueModel.md#owner)
+[PropertyModel](exports_model.PropertyModel.md).[owner](exports_model.PropertyModel.md#owner)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:130
+packages/matter.js/dist/esm/model/models/Model.d.ts:128
 
 ___
 
@@ -1571,11 +1662,11 @@ Find all children that reference a specific type.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[references](exports_model.ValueModel.md#references)
+[PropertyModel](exports_model.PropertyModel.md).[references](exports_model.PropertyModel.md#references)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:154
+packages/matter.js/dist/esm/model/models/Model.d.ts:148
 
 ___
 
@@ -1591,11 +1682,11 @@ Convert model to JSON.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[toJSON](exports_model.ValueModel.md#tojson)
+[PropertyModel](exports_model.PropertyModel.md).[toJSON](exports_model.PropertyModel.md#tojson)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:142
+packages/matter.js/dist/esm/model/models/Model.d.ts:136
 
 ___
 
@@ -1611,7 +1702,7 @@ Convert to non-class structure.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[valueOf](exports_model.ValueModel.md#valueof)
+[PropertyModel](exports_model.PropertyModel.md).[valueOf](exports_model.PropertyModel.md#valueof)
 
 #### Defined in
 
@@ -1637,11 +1728,11 @@ Apply a function to all tree elements.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[visit](exports_model.ValueModel.md#visit)
+[PropertyModel](exports_model.PropertyModel.md).[visit](exports_model.PropertyModel.md#visit)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:150
+packages/matter.js/dist/esm/model/models/Model.d.ts:144
 
 ___
 
@@ -1663,8 +1754,28 @@ Create a model for an element.
 
 #### Inherited from
 
-[ValueModel](exports_model.ValueModel.md).[create](exports_model.ValueModel.md#create)
+[PropertyModel](exports_model.PropertyModel.md).[create](exports_model.PropertyModel.md#create)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/models/Model.d.ts:116
+packages/matter.js/dist/esm/model/models/Model.d.ts:114
+
+___
+
+### isGlobal
+
+▸ **isGlobal**(`id`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/AttributeModel.d.ts:12

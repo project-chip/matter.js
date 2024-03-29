@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [FabricAction](../enums/fabric_export.FabricAction.md)
+
 ### Classes
 
 - [Fabric](../classes/fabric_export.Fabric.md)
@@ -14,9 +18,31 @@
 
 ### Type Aliases
 
+- [ExposedFabricInformation](fabric_export.md#exposedfabricinformation)
 - [FabricJsonObject](fabric_export.md#fabricjsonobject)
 
 ## Type Aliases
+
+### ExposedFabricInformation
+
+Ƭ **ExposedFabricInformation**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `fabricId` | [`FabricId`](datatype_export.md#fabricid) |
+| `fabricIndex` | [`FabricIndex`](datatype_export.md#fabricindex) |
+| `label` | `string` |
+| `nodeId` | [`NodeId`](datatype_export.md#nodeid) |
+| `rootNodeId` | [`NodeId`](datatype_export.md#nodeid) |
+| `rootVendorId` | [`VendorId`](datatype_export.md#vendorid) |
+
+#### Defined in
+
+[packages/matter.js/src/fabric/Fabric.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/fabric/Fabric.ts#L52)
+
+___
 
 ### FabricJsonObject
 
@@ -45,4 +71,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/fabric/Fabric.ts#L32)
+[packages/matter.js/src/fabric/Fabric.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/fabric/Fabric.ts#L33)

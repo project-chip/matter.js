@@ -24,10 +24,11 @@
 - [EventElement](exports_model.EventElement.md)
 - [FabricElement](exports_model.FabricElement.md)
 - [FeatureSet](exports_model.FeatureSet.md)
+- [FieldElement](exports_model.FieldElement.md)
 - [FieldValue](exports_model.FieldValue.md)
 - [MatterElement](exports_model.MatterElement.md)
 - [MatterModel](exports_model.MatterModel.md)
-- [MergeModels](exports_model.MergeModels.md)
+- [MergedModel](exports_model.MergedModel.md)
 - [Metatype](exports_model.Metatype.md)
 - [Model](exports_model.Model.md)
 - [NodeElement](exports_model.NodeElement.md)
@@ -59,33 +60,36 @@
 - [EventModel](../classes/exports_model.EventModel.md)
 - [FabricModel](../classes/exports_model.FabricModel.md)
 - [FeatureSet](../classes/exports_model.FeatureSet-1.md)
+- [FieldModel](../classes/exports_model.FieldModel.md)
 - [MatterModel](../classes/exports_model.MatterModel-1.md)
 - [Model](../classes/exports_model.Model-1.md)
 - [ModelVariantTraversal](../classes/exports_model.ModelVariantTraversal.md)
 - [NodeModel](../classes/exports_model.NodeModel.md)
+- [PropertyModel](../classes/exports_model.PropertyModel.md)
 - [Quality](../classes/exports_model.Quality-1.md)
 - [RequirementModel](../classes/exports_model.RequirementModel.md)
 - [ValueModel](../classes/exports_model.ValueModel.md)
 
 ### Interfaces
 
+- [AttributeElement](../interfaces/exports_model.AttributeElement-1.md)
+- [BaseElement](../interfaces/exports_model.BaseElement-1.md)
+- [ClusterElement](../interfaces/exports_model.ClusterElement-1.md)
+- [CommandElement](../interfaces/exports_model.CommandElement-1.md)
+- [DatatypeElement](../interfaces/exports_model.DatatypeElement-1.md)
+- [DeviceTypeElement](../interfaces/exports_model.DeviceTypeElement-1.md)
+- [EndpointElement](../interfaces/exports_model.EndpointElement-1.md)
+- [EventElement](../interfaces/exports_model.EventElement-1.md)
+- [FabricElement](../interfaces/exports_model.FabricElement-1.md)
+- [FieldElement](../interfaces/exports_model.FieldElement-1.md)
 - [VariantDetail](../interfaces/exports_model.VariantDetail.md)
 
 ### Type Aliases
 
 - [AnyElement](exports_model.md#anyelement)
 - [AnyValueElement](exports_model.md#anyvalueelement)
-- [AttributeElement](exports_model.md#attributeelement)
-- [BaseElement](exports_model.md#baseelement)
-- [ClusterElement](exports_model.md#clusterelement)
 - [ClusterVariance](exports_model.md#clustervariance)
-- [CommandElement](exports_model.md#commandelement)
-- [DatatypeElement](exports_model.md#datatypeelement)
 - [DefinitionError](exports_model.md#definitionerror)
-- [DeviceTypeElement](exports_model.md#devicetypeelement)
-- [EndpointElement](exports_model.md#endpointelement)
-- [EventElement](exports_model.md#eventelement)
-- [FabricElement](exports_model.md#fabricelement)
 - [FeatureBitmap](exports_model.md#featurebitmap)
 - [FeatureFlags](exports_model.md#featureflags)
 - [FeatureNames](exports_model.md#featurenames)
@@ -122,25 +126,25 @@
 
 ### Functions
 
-- [AttributeElement](exports_model.md#attributeelement-1)
-- [BaseElement](exports_model.md#baseelement-1)
-- [ClusterElement](exports_model.md#clusterelement-1)
+- [AttributeElement](exports_model.md#attributeelement)
+- [BaseElement](exports_model.md#baseelement)
+- [ClusterElement](exports_model.md#clusterelement)
 - [ClusterVariance](exports_model.md#clustervariance-1)
-- [CommandElement](exports_model.md#commandelement-1)
-- [DatatypeElement](exports_model.md#datatypeelement-1)
+- [CommandElement](exports_model.md#commandelement)
+- [DatatypeElement](exports_model.md#datatypeelement)
 - [DefaultValue](exports_model.md#defaultvalue)
-- [DeviceTypeElement](exports_model.md#devicetypeelement-1)
-- [EndpointElement](exports_model.md#endpointelement-1)
-- [EventElement](exports_model.md#eventelement-1)
-- [FabricElement](exports_model.md#fabricelement-1)
+- [DeviceTypeElement](exports_model.md#devicetypeelement)
+- [EndpointElement](exports_model.md#endpointelement)
+- [EventElement](exports_model.md#eventelement)
+- [FabricElement](exports_model.md#fabricelement)
 - [FeatureBitmap](exports_model.md#featurebitmap-1)
+- [FieldElement](exports_model.md#fieldelement)
 - [IllegalFeatureCombinations](exports_model.md#illegalfeaturecombinations-1)
 - [InferredComponents](exports_model.md#inferredcomponents-1)
 - [MatterElement](exports_model.md#matterelement-1)
-- [MergeModels](exports_model.md#mergemodels)
+- [MergedModel](exports_model.md#mergedmodel)
 - [NamedComponents](exports_model.md#namedcomponents-1)
 - [NodeElement](exports_model.md#nodeelement-1)
-- [RecordValidator](exports_model.md#recordvalidator)
 - [RequirementElement](exports_model.md#requirementelement-1)
 - [ValidateModel](exports_model.md#validatemodel)
 - [ValueElement](exports_model.md#valueelement-1)
@@ -151,7 +155,7 @@
 
 ### AnyElement
 
-Ƭ **AnyElement**: [`AnyValueElement`](exports_model.md#anyvalueelement) \| [`ClusterElement`](exports_model.md#clusterelement) \| [`DeviceTypeElement`](exports_model.md#devicetypeelement) \| [`RequirementElement`](exports_model.md#requirementelement) \| [`EndpointElement`](exports_model.md#endpointelement) \| [`FabricElement`](exports_model.md#fabricelement) \| [`NodeElement`](exports_model.md#nodeelement) \| [`MatterElement`](exports_model.md#matterelement)
+Ƭ **AnyElement**: [`AnyValueElement`](exports_model.md#anyvalueelement) \| [`ClusterElement`](../interfaces/exports_model.ClusterElement-1.md) \| [`DeviceTypeElement`](../interfaces/exports_model.DeviceTypeElement-1.md) \| [`RequirementElement`](exports_model.md#requirementelement) \| [`EndpointElement`](../interfaces/exports_model.EndpointElement-1.md) \| [`FabricElement`](../interfaces/exports_model.FabricElement-1.md) \| [`NodeElement`](exports_model.md#nodeelement) \| [`MatterElement`](exports_model.md#matterelement)
 
 Any Matter element.
 
@@ -163,79 +167,13 @@ ___
 
 ### AnyValueElement
 
-Ƭ **AnyValueElement**: [`AttributeElement`](exports_model.md#attributeelement) \| [`CommandElement`](exports_model.md#commandelement) \| [`EventElement`](exports_model.md#eventelement) \| [`DatatypeElement`](exports_model.md#datatypeelement)
+Ƭ **AnyValueElement**: [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) \| [`CommandElement`](../interfaces/exports_model.CommandElement-1.md) \| [`EventElement`](../interfaces/exports_model.EventElement-1.md) \| [`FieldElement`](../interfaces/exports_model.FieldElement-1.md) \| [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md)
 
 All Matter data elements.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/AnyValueElement.d.ts:13
-
-___
-
-### AttributeElement
-
-Ƭ **AttributeElement**: [`ValueElement`](exports_model.md#valueelement) & \{ `id`: [`Mei`](exports_model.md#mei) ; `tag`: \`$\{Tag}\`  }
-
-A cluster property description.
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:16
-
-packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:12
-
-packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:17
-
-___
-
-### BaseElement
-
-Ƭ **BaseElement**: `Object`
-
-Per the Matter specification, an element is a data construct that supports
-an instance of data.  So, a class.
-
-Elements as defined by this package are a static data structure.  Each
-element has a corresponding "Model" that is a proper class with runtime
-functionality related to the element.
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `children?` | [`AnyElement`](exports_model.md#anyelement)[] | Child elements. |
-| `description?` | `string` | A short summary of the element. |
-| `details?` | `string` | A paragraph summary of the element. |
-| `global?` | `boolean` | Is this a global element? Global elements are defined in Globals.ts and are available in-scope for every cluster. |
-| `id?` | `number` | The ID of the element per Matter specification, either global or context-specific. A "machine appropriate" semantic differentiator. |
-| `name` | `string` | The key used for storing this element. A "human appropriate" semantic differentiator. |
-| `type?` | `string` | If an element derives from another element, the name of the parent element goes here. |
-| `xref?` | [`CrossReference`](exports_model.Specification.md#crossreference) | Reference to Matter specification document. |
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:54
-
-packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:16
-
-packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:55
-
-___
-
-### ClusterElement
-
-Ƭ **ClusterElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children?`: [`Child`](exports_model.ClusterElement.md#child)[] ; `classification?`: \`$\{Classification}\` ; `id?`: [`Mei`](exports_model.md#mei) ; `singleton?`: `boolean` ; `tag`: \`$\{Tag}\`  }
-
-A cluster describes a set of related functionality.
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:28
-
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:15
-
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:29
+packages/matter.js/dist/esm/model/elements/AnyValueElement.d.ts:14
 
 ___
 
@@ -262,38 +200,6 @@ packages/matter.js/dist/esm/model/logic/ClusterVariance.d.ts:13
 
 ___
 
-### CommandElement
-
-Ƭ **CommandElement**: [`ValueElement`](exports_model.md#valueelement) & \{ `direction?`: \`$\{Direction}\` ; `id`: [`Mei`](exports_model.md#mei) ; `response?`: `string` ; `tag`: \`$\{Tag}\`  }
-
-A command describes a remote procedure call.
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:18
-
-packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:12
-
-packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:19
-
-___
-
-### DatatypeElement
-
-Ƭ **DatatypeElement**: [`ValueElement`](exports_model.md#valueelement) & \{ `children?`: [`DatatypeElement`](exports_model.md#datatypeelement)[] ; `id?`: [`Mei`](exports_model.md#mei) ; `metatype?`: \`$\{Metatype}\` ; `tag`: \`$\{Tag}\`  }
-
-A datatype element defines a standalone datatype.
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:28
-
-packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:12
-
-packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:29
-
-___
-
 ### DefinitionError
 
 Ƭ **DefinitionError**: `Object`
@@ -312,72 +218,6 @@ Describes an error in model construction.
 #### Defined in
 
 packages/matter.js/dist/esm/model/definitions/DefinitionError.d.ts:9
-
-___
-
-### DeviceTypeElement
-
-Ƭ **DeviceTypeElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `category?`: `string` ; `children?`: ([`RequirementElement`](exports_model.md#requirementelement) \| [`DatatypeElement`](exports_model.md#datatypeelement))[] ; `classification`: \`$\{Classification}\` ; `id?`: [`Mei`](exports_model.md#mei) ; `tag`: \`$\{Tag}\`  }
-
-Details on a specific device as defined in the Matter specification.
-
-TODO - extract/merge DeviceTypes.ts?
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:22
-
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:15
-
-packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:23
-
-___
-
-### EndpointElement
-
-Ƭ **EndpointElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children`: [`DeviceTypeElement`](exports_model.md#devicetypeelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
-
-Runtime representation of an endpoint.
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:17
-
-packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:12
-
-packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:18
-
-___
-
-### EventElement
-
-Ƭ **EventElement**: [`ValueElement`](exports_model.md#valueelement) & \{ `id`: [`Mei`](exports_model.md#mei) ; `priority?`: \`$\{Priority}\` ; `tag`: \`$\{Tag}\`  }
-
-An event is triggered by endpoints.
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:17
-
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:12
-
-packages/matter.js/dist/esm/model/elements/EventElement.d.ts:18
-
-___
-
-### FabricElement
-
-Ƭ **FabricElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children`: [`NodeElement`](exports_model.md#nodeelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
-
-Runtime representation of a fabric.
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/elements/FabricElement.d.ts:17
-
-packages/matter.js/dist/esm/model/elements/FabricElement.d.ts:12
-
-packages/matter.js/dist/esm/model/elements/FabricElement.d.ts:18
 
 ___
 
@@ -443,7 +283,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:20
+packages/matter.js/dist/esm/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:18
 
 packages/matter.js/dist/esm/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:8
 
@@ -507,17 +347,17 @@ ___
 
 ### MatterElement
 
-Ƭ **MatterElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children`: [`Child`](exports_model.MatterElement.md#child)[] ; `tag`: \`$\{Matter}\` ; `version?`: `string`  }
+Ƭ **MatterElement**: [`BaseElement`](../interfaces/exports_model.BaseElement-1.md) & \{ `children`: [`Child`](exports_model.MatterElement.md#child)[] ; `tag`: \`$\{Matter}\` ; `version?`: `string`  }
 
 The root model element.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:22
-
-packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:17
-
 packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:23
+
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:18
+
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:24
 
 ___
 
@@ -535,7 +375,7 @@ ___
 
 Ƭ **NamedComponent**: [`InferredComponent`](exports_model.md#inferredcomponent) & \{ `documentation`: `string` ; `name`: `string`  }
 
-An inferred with generated name and documentation.
+An inferred component with generated name and documentation.
 
 #### Defined in
 
@@ -559,7 +399,7 @@ ___
 
 ### NodeElement
 
-Ƭ **NodeElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children?`: [`EndpointElement`](exports_model.md#endpointelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
+Ƭ **NodeElement**: [`BaseElement`](../interfaces/exports_model.BaseElement-1.md) & \{ `children?`: [`EndpointElement`](../interfaces/exports_model.EndpointElement-1.md)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
 
 Runtime representation of a node.
 
@@ -575,17 +415,17 @@ ___
 
 ### RequirementElement
 
-Ƭ **RequirementElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `access?`: [`Definition`](exports_model.Access.md#definition) ; `children?`: ([`RequirementElement`](exports_model.md#requirementelement) \| [`DatatypeElement`](exports_model.md#datatypeelement))[] ; `conformance?`: [`Definition`](exports_model.Conformance.md#definition) ; `constraint?`: [`Definition`](exports_model.Constraint.md#definition) ; `element`: \`$\{ElementType}\` ; `quality?`: [`Definition`](exports_model.Quality.md#definition) ; `tag`: \`$\{Tag}\`  }
+Ƭ **RequirementElement**: [`BaseElement`](../interfaces/exports_model.BaseElement-1.md) & \{ `access?`: [`Definition`](exports_model.Access.md#definition) ; `children?`: ([`RequirementElement`](exports_model.md#requirementelement) \| [`FieldElement`](../interfaces/exports_model.FieldElement-1.md))[] ; `conformance?`: [`Definition`](exports_model.Conformance.md#definition) ; `constraint?`: [`Definition`](exports_model.Constraint.md#definition) ; `default?`: `any` ; `element`: \`$\{ElementType}\` ; `quality?`: [`Definition`](exports_model.Quality.md#definition) ; `tag`: \`$\{Tag}\`  }
 
 Describes a cluster or cluster element requirement for a device.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:24
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:25
 
 packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:12
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:25
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:26
 
 ___
 
@@ -601,13 +441,13 @@ Input to traverse().
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:20
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:19
 
 ___
 
 ### ValueElement
 
-Ƭ **ValueElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `access?`: [`Definition`](exports_model.Access.md#definition) ; `byteSize?`: [`Size`](exports_model.ValueElement.md#size) ; `children?`: [`AnyValueElement`](exports_model.md#anyvalueelement)[] ; `conformance?`: [`Definition`](exports_model.Conformance.md#definition) ; `constraint?`: [`Definition`](exports_model.Constraint.md#definition) ; `default?`: [`FieldValue`](exports_model.md#fieldvalue) ; `quality?`: [`Definition`](exports_model.Quality.md#definition) ; `type?`: `string`  }
+Ƭ **ValueElement**: [`BaseElement`](../interfaces/exports_model.BaseElement-1.md) & \{ `access?`: [`Definition`](exports_model.Access.md#definition) ; `byteSize?`: [`Size`](exports_model.ValueElement.md#size) ; `children?`: [`AnyValueElement`](exports_model.md#anyvalueelement)[] ; `conformance?`: [`Definition`](exports_model.Conformance.md#definition) ; `constraint?`: [`Definition`](exports_model.Constraint.md#definition) ; `default?`: [`FieldValue`](exports_model.md#fieldvalue) ; `quality?`: [`Definition`](exports_model.Quality.md#definition) ; `type?`: `string`  }
 
 A base element for all elements that represent data values.
 
@@ -646,9 +486,8 @@ ___
 
 Ƭ **VariantMap**: `Object`
 
-This is a map of equivalent models keyed by "source name".  The source
-name is a string that identifies the source of the variant, such as "chip",
-"spec" or "local".
+This is a map of equivalent models keyed by "source name".  The source name is a string that identifies the source of
+the variant, such as "chip", "spec" or "local".
 
 #### Index signature
 
@@ -656,7 +495,7 @@ name is a string that identifies the source of the variant, such as "chip",
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:14
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:13
 
 ## Variables
 
@@ -686,7 +525,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/Globals.d.ts:10
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:11
 
 ___
 
@@ -706,83 +545,83 @@ these types or derive new types.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `AcceptedCommandListList` | [`AttributeElement`](exports_model.md#attributeelement) | - |
-| `AttributeList` | [`AttributeElement`](exports_model.md#attributeelement) | - |
-| `ClusterRevision` | [`AttributeElement`](exports_model.md#attributeelement) | - |
-| `EventList` | [`AttributeElement`](exports_model.md#attributeelement) | - |
-| `FabricIndex` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `FeatureMap` | [`AttributeElement`](exports_model.md#attributeelement) | - |
-| `GeneratedCommandList` | [`AttributeElement`](exports_model.md#attributeelement) | - |
-| `SubjectId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `actionId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `any` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `attributeId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `bool` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `clusterId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `commandId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `dataVer` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `date` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `deviceTypeId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `double` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `endpointNo` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `entryIdx` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `enum16` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `enum8` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `epochS` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `epochUs` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `eui64` | [`DatatypeElement`](exports_model.md#datatypeelement) | **`Deprecated`** by Matter specification |
-| `eventId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `eventNo` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `fabricId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `fabricIdx` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `fieldId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `groupId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `hwadr` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `int16` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `int24` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `int32` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `int40` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `int48` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `int56` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `int64` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `int8` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `ipadr` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `ipv4adr` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `ipv6adr` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `ipv6pre` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `list` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `map16` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `map32` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `map64` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `map8` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `nodeId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `octstr` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `percent` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `percent100ths` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `posixMs` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `priority` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `single` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `status` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `string` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `struct` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `systimeMs` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `systimeUs` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `tod` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `transactionId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `uint16` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `uint24` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `uint32` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `uint40` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `uint48` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `uint56` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `uint64` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `uint8` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
-| `utc` | [`DatatypeElement`](exports_model.md#datatypeelement) | **`Deprecated`** by Matter specification |
-| `vendorId` | [`DatatypeElement`](exports_model.md#datatypeelement) | - |
+| `AcceptedCommandList` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
+| `AttributeList` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
+| `ClusterRevision` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
+| `EventList` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
+| `FabricIndex` | [`FieldElement`](../interfaces/exports_model.FieldElement-1.md) | - |
+| `FeatureMap` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
+| `GeneratedCommandList` | [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) | - |
+| `SubjectId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `actionId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `any` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `attributeId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `bool` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `clusterId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `commandId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `dataVer` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `date` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `deviceTypeId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `double` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `endpointNo` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `entryIdx` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `enum16` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `enum8` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `epochS` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `epochUs` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `eui64` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | **`Deprecated`** by Matter specification |
+| `eventId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `eventNo` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `fabricId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `fabricIdx` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `fieldId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `groupId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `hwadr` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `int16` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `int24` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `int32` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `int40` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `int48` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `int56` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `int64` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `int8` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `ipadr` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `ipv4adr` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `ipv6adr` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `ipv6pre` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `list` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `map16` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `map32` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `map64` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `map8` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `nodeId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `octstr` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `percent` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `percent100ths` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `posixMs` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `priority` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `single` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `status` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `string` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `struct` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `systimeMs` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `systimeUs` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `tod` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `transactionId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `uint16` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `uint24` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `uint32` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `uint40` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `uint48` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `uint56` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `uint64` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `uint8` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
+| `utc` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | **`Deprecated`** by Matter specification |
+| `vendorId` | [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) | - |
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/Globals.d.ts:24
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:25
 
 ___
 
@@ -814,7 +653,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/Globals.d.ts:8
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:9
 
 ___
 
@@ -824,7 +663,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/Globals.d.ts:9
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:10
 
 ___
 
@@ -834,7 +673,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/Globals.d.ts:12
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:13
 
 ___
 
@@ -844,7 +683,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/Globals.d.ts:13
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:14
 
 ___
 
@@ -854,7 +693,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/Globals.d.ts:14
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:15
 
 ___
 
@@ -864,13 +703,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/Globals.d.ts:11
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:12
 
 ## Functions
 
 ### AttributeElement
 
-▸ **AttributeElement**(`definition`): [`AttributeElement`](exports_model.md#attributeelement)
+▸ **AttributeElement**(`definition`): [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md)
 
 #### Parameters
 
@@ -880,7 +719,7 @@ packages/matter.js/dist/esm/model/elements/Globals.d.ts:11
 
 #### Returns
 
-[`AttributeElement`](exports_model.md#attributeelement)
+[`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md)
 
 #### Defined in
 
@@ -890,18 +729,18 @@ ___
 
 ### BaseElement
 
-▸ **BaseElement**(`tag`, `definition`): [`BaseElement`](exports_model.md#baseelement)
+▸ **BaseElement**(`tag`, `definition`): [`BaseElement`](../interfaces/exports_model.BaseElement-1.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `tag` | [`ElementTag`](../enums/exports_model.ElementTag.md) |
-| `definition` | [`BaseElement`](exports_model.md#baseelement) |
+| `definition` | [`BaseElement`](../interfaces/exports_model.BaseElement-1.md) |
 
 #### Returns
 
-[`BaseElement`](exports_model.md#baseelement)
+[`BaseElement`](../interfaces/exports_model.BaseElement-1.md)
 
 #### Defined in
 
@@ -911,7 +750,7 @@ ___
 
 ### ClusterElement
 
-▸ **ClusterElement**(`definition`): [`ClusterElement`](exports_model.md#clusterelement)
+▸ **ClusterElement**(`definition`): [`ClusterElement`](../interfaces/exports_model.ClusterElement-1.md)
 
 #### Parameters
 
@@ -921,11 +760,11 @@ ___
 
 #### Returns
 
-[`ClusterElement`](exports_model.md#clusterelement)
+[`ClusterElement`](../interfaces/exports_model.ClusterElement-1.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:34
 
 ___
 
@@ -954,7 +793,7 @@ ___
 
 ### CommandElement
 
-▸ **CommandElement**(`definition`): [`CommandElement`](exports_model.md#commandelement)
+▸ **CommandElement**(`definition`): [`CommandElement`](../interfaces/exports_model.CommandElement-1.md)
 
 #### Parameters
 
@@ -964,7 +803,7 @@ ___
 
 #### Returns
 
-[`CommandElement`](exports_model.md#commandelement)
+[`CommandElement`](../interfaces/exports_model.CommandElement-1.md)
 
 #### Defined in
 
@@ -974,7 +813,7 @@ ___
 
 ### DatatypeElement
 
-▸ **DatatypeElement**(`definition`): [`DatatypeElement`](exports_model.md#datatypeelement)
+▸ **DatatypeElement**(`definition`): [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md)
 
 #### Parameters
 
@@ -984,7 +823,7 @@ ___
 
 #### Returns
 
-[`DatatypeElement`](exports_model.md#datatypeelement)
+[`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md)
 
 #### Defined in
 
@@ -1021,7 +860,7 @@ ___
 
 ### DeviceTypeElement
 
-▸ **DeviceTypeElement**(`definition`): [`DeviceTypeElement`](exports_model.md#devicetypeelement)
+▸ **DeviceTypeElement**(`definition`): [`DeviceTypeElement`](../interfaces/exports_model.DeviceTypeElement-1.md)
 
 #### Parameters
 
@@ -1031,7 +870,7 @@ ___
 
 #### Returns
 
-[`DeviceTypeElement`](exports_model.md#devicetypeelement)
+[`DeviceTypeElement`](../interfaces/exports_model.DeviceTypeElement-1.md)
 
 #### Defined in
 
@@ -1041,7 +880,7 @@ ___
 
 ### EndpointElement
 
-▸ **EndpointElement**(`definition`): [`EndpointElement`](exports_model.md#endpointelement)
+▸ **EndpointElement**(`definition`): [`EndpointElement`](../interfaces/exports_model.EndpointElement-1.md)
 
 #### Parameters
 
@@ -1051,7 +890,7 @@ ___
 
 #### Returns
 
-[`EndpointElement`](exports_model.md#endpointelement)
+[`EndpointElement`](../interfaces/exports_model.EndpointElement-1.md)
 
 #### Defined in
 
@@ -1061,7 +900,7 @@ ___
 
 ### EventElement
 
-▸ **EventElement**(`definition`): [`EventElement`](exports_model.md#eventelement)
+▸ **EventElement**(`definition`): [`EventElement`](../interfaces/exports_model.EventElement-1.md)
 
 #### Parameters
 
@@ -1071,7 +910,7 @@ ___
 
 #### Returns
 
-[`EventElement`](exports_model.md#eventelement)
+[`EventElement`](../interfaces/exports_model.EventElement-1.md)
 
 #### Defined in
 
@@ -1081,7 +920,7 @@ ___
 
 ### FabricElement
 
-▸ **FabricElement**(`definition`): [`BaseElement`](exports_model.md#baseelement)
+▸ **FabricElement**(`definition`): [`BaseElement`](../interfaces/exports_model.BaseElement-1.md)
 
 #### Parameters
 
@@ -1091,7 +930,7 @@ ___
 
 #### Returns
 
-[`BaseElement`](exports_model.md#baseelement)
+[`BaseElement`](../interfaces/exports_model.BaseElement-1.md)
 
 #### Defined in
 
@@ -1119,19 +958,37 @@ packages/matter.js/dist/esm/model/logic/cluster-variance/FeatureBitmap.d.ts:14
 
 ___
 
+### FieldElement
+
+▸ **FieldElement**(`definition`): [`FieldElement`](../interfaces/exports_model.FieldElement-1.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `definition` | [`Properties`](exports_model.FieldElement.md#properties) |
+
+#### Returns
+
+[`FieldElement`](../interfaces/exports_model.FieldElement-1.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/elements/FieldElement.d.ts:21
+
+___
+
 ### IllegalFeatureCombinations
 
 ▸ **IllegalFeatureCombinations**(`cluster`): `Object`
 
-Analyzes feature conformance to ascertain feature combinations that are
-unsupported.  Uses rules to match the conformance AST.
+Analyzes feature conformance to ascertain feature combinations that are unsupported.  Uses rules to match the
+conformance AST.
 
-Rule matching is not exhaustive but supports a significant subset of the
-conformance dialect that is inclusive of all feature conformances used by
-the 1.1 specifications.
+Rule matching is not exhaustive but supports a significant subset of the conformance dialect that is inclusive of all
+feature conformances used by the 1.1 specifications.
 
-Throws an error if conformance does not adhere to supported rules.  This
-indicates the ruleset needs augmentation.
+Throws an error if conformance does not adhere to supported rules.  This indicates the ruleset needs augmentation.
 
 #### Parameters
 
@@ -1150,7 +1007,7 @@ indicates the ruleset needs augmentation.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:20
+packages/matter.js/dist/esm/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:18
 
 ___
 
@@ -1192,13 +1049,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:22
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:23
 
 ___
 
-### MergeModels
+### MergedModel
 
-▸ **MergeModels**(`variants`, `priorities?`): [`Model`](../classes/exports_model.Model-1.md)
+▸ **MergedModel**(`variants`, `priorities?`): [`Model`](../classes/exports_model.Model-1.md)
 
 Merge multiple variants of an element into a single element.
 
@@ -1207,7 +1064,7 @@ Merge multiple variants of an element into a single element.
 | Name | Type |
 | :------ | :------ |
 | `variants` | [`TraverseMap`](exports_model.md#traversemap) |
-| `priorities?` | [`Priorities`](exports_model.MergeModels.md#priorities) |
+| `priorities?` | [`Priorities`](exports_model.MergedModel.md#priorities) |
 
 #### Returns
 
@@ -1215,7 +1072,7 @@ Merge multiple variants of an element into a single element.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/MergeModels.d.ts:11
+packages/matter.js/dist/esm/model/logic/MergedModel.d.ts:11
 
 ___
 
@@ -1267,34 +1124,6 @@ packages/matter.js/dist/esm/model/elements/NodeElement.d.ts:17
 
 ___
 
-### RecordValidator
-
-▸ **RecordValidator**(`fields`, `featureMap`, `features`): [`RecordValidator`](../interfaces/exports_model._internal_.RecordValidator.md)
-
-Creates a utility object that can validate records based on a model.
-
-TODO - doesn't currently recurse into children
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `fields` | [`ValueModel`](../classes/exports_model.ValueModel.md)[] | defines the record to test |
-| `featureMap` | [`ValueModel`](../classes/exports_model.ValueModel.md) | - |
-| `features` | [`FeatureSet`](../classes/exports_model.FeatureSet-1.md) | active features |
-
-#### Returns
-
-[`RecordValidator`](../interfaces/exports_model._internal_.RecordValidator.md)
-
-a Validator
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/logic/RecordValidator.d.ts:19
-
-___
-
 ### RequirementElement
 
 ▸ **RequirementElement**(`definition`): [`RequirementElement`](exports_model.md#requirementelement)
@@ -1311,7 +1140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:24
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:25
 
 ___
 

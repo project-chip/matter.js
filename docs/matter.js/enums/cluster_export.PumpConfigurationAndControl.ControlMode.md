@@ -38,7 +38,7 @@ pump is entirely determined by the pump.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:209](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L209)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:211](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L211)
 
 ___
 
@@ -59,7 +59,7 @@ MaxMeasuredValue] attributes of the remote flow sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:185](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L185)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:187](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L187)
 
 ___
 
@@ -80,7 +80,7 @@ MaxConstPressure] attributes. In case of a remote pressure sensor, this will be 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:162](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L162)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:164](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L164)
 
 ___
 
@@ -99,7 +99,7 @@ attributes.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:150](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L150)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L152)
 
 ___
 
@@ -120,7 +120,7 @@ attributes. In case of a remote temperature sensor, this will be the range deriv
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:197](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L197)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:199](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L199)
 
 ___
 
@@ -140,4 +140,4 @@ flow ⇒ lower internal setpoint).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:173](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L173)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L175)

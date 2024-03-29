@@ -38,4 +38,25 @@ Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082
+
+• **new NoAssociatedFabricError**(`message?`, `options?`): [`NoAssociatedFabricError`](session_export.NoAssociatedFabricError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`NoAssociatedFabricError`](session_export.NoAssociatedFabricError.md)
+
+#### Inherited from
+
+Error.constructor
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1082

@@ -6,7 +6,7 @@
 
 ### Classes
 
-- [DiagnosticDictionary](../classes/exports_mdns._internal_.DiagnosticDictionary.md)
+- [MdnsInstanceBroadcaster](../classes/exports_mdns._internal_.MdnsInstanceBroadcaster.md)
 
 ### Type Aliases
 
@@ -20,4 +20,4 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:12
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:13

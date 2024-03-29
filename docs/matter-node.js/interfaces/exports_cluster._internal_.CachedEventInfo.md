@@ -19,7 +19,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/ClusterHelper.d.ts:21
+packages/matter.js/dist/esm/cluster/ClusterHelper.d.ts:19
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/ClusterHelper.d.ts:22
+packages/matter.js/dist/esm/cluster/ClusterHelper.d.ts:20

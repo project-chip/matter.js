@@ -26,7 +26,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.3.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:360
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:28
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:361
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:29
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:359
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:27
