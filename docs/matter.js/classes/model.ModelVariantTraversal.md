@@ -41,9 +41,8 @@ Visits multiple model hierarchies simultaneously and builds state.
 
 • **new ModelVariantTraversal**\<`S`\>(`sourceNames`): [`ModelVariantTraversal`](model.ModelVariantTraversal.md)\<`S`\>
 
-Create a new visitor.  Must list the valid names of sources.  The order
-of this list implies the priority used for choosing a name when multiple
-model variants have different names.
+Create a new visitor.  Must list the valid names of sources.  The order of this list implies the priority used
+for choosing a name when multiple model variants have different names.
 
 #### Type parameters
 
@@ -63,7 +62,7 @@ model variants have different names.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L64)
 
 ## Properties
 
@@ -73,17 +72,17 @@ model variants have different names.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:58](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L58)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L56)
 
 ___
 
 ### modelTraversal
 
-• `Private` **modelTraversal**: [`ModelTraversal`](model._internal_.ModelTraversal-1.md)
+• `Private` **modelTraversal**: [`ModelTraversal`](model._internal_.ModelTraversal.md)
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L60)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L58)
 
 ___
 
@@ -93,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L64)
 
 ___
 
@@ -103,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L59)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L57)
 
 ## Methods
 
@@ -125,7 +124,7 @@ Create a VariantDetail from a VariantMap.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:268](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L268)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:267](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L267)
 
 ___
 
@@ -147,7 +146,7 @@ Determine if we are entering a cluster and install cluster state if so.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:128](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L128)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:123](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L123)
 
 ___
 
@@ -155,8 +154,8 @@ ___
 
 ▸ **getCanonicalName**(`model`): `string`
 
-Get the canonical name for a model.  Within cluster scope alternate
-names may be selected, otherwise the name of the model is returned.
+Get the canonical name for a model.  Within cluster scope alternate names may be selected, otherwise the name of
+the model is returned.
 
 #### Parameters
 
@@ -170,7 +169,7 @@ names may be selected, otherwise the name of the model is returned.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L115)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L110)
 
 ___
 
@@ -190,7 +189,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:197](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L197)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:192](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L192)
 
 ___
 
@@ -198,8 +197,7 @@ ___
 
 ▸ **traverse**(`variants`): `S`
 
-Initiate traversal.  The class is stateful so this call should not be
-invoked while traversal is ongoing.
+Initiate traversal.  The class is stateful so this call should not be invoked while traversal is ongoing.
 
 #### Parameters
 
@@ -213,7 +211,7 @@ invoked while traversal is ongoing.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L73)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L69)
 
 ___
 
@@ -221,9 +219,8 @@ ___
 
 ▸ **visit**(`variants`, `recurse`): `S`
 
-This is the primary callback.  It is invoked for every set of variants
-during traversal.  It may optionally return state that is returned
-from traverse().
+This is the primary callback.  It is invoked for every set of variants during traversal.  It may optionally
+return state that is returned from traverse().
 
 #### Parameters
 
@@ -238,7 +235,7 @@ from traverse().
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:109](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L109)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L104)
 
 ___
 
@@ -260,4 +257,4 @@ This is the function that actually recurses during the visit.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:141](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L141)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:136](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L136)

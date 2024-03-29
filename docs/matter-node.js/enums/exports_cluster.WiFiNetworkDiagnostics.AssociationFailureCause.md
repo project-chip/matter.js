@@ -27,7 +27,7 @@ An error occurred during association.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:94
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:103
 
 ___
 
@@ -39,7 +39,7 @@ An error occurred during authentication.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:98
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:107
 
 ___
 
@@ -51,7 +51,7 @@ The specified SSID could not be found.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:102
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:111
 
 ___
 
@@ -63,4 +63,4 @@ The reason for the failure is unknown.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:90
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:99

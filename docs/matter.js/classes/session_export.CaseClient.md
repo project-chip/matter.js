@@ -45,4 +45,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseClient.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/case/CaseClient.ts#L35)
+[packages/matter.js/src/session/case/CaseClient.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/case/CaseClient.ts#L35)

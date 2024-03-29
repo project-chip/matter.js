@@ -23,11 +23,6 @@
 
 Ƭ **TimerCallback**: () => `any`
 
-**`License`**
-
-Copyright 2022-2023 Project CHIP Authors
-SPDX-License-Identifier: Apache-2.0
-
 #### Type declaration
 
 ▸ (): `any`
@@ -38,4 +33,4 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/esm/time/Time.d.ts:6
+packages/matter.js/dist/esm/time/Time.d.ts:7

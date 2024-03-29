@@ -22,4 +22,4 @@ Timed access required.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:337](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/aspects/Access.ts#L337)
+[packages/matter.js/src/model/aspects/Access.ts:351](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L351)

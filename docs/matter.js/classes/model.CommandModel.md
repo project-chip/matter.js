@@ -4,8 +4,7 @@
 
 [model](../modules/model.md).CommandModel
 
-Each ValueElement has a corresponding implementation that derives from
-this class.
+A command describes a remote procedure call.
 
 ## Hierarchy
 
@@ -15,7 +14,7 @@ this class.
 
 ## Implements
 
-- [`CommandElement`](../modules/model.md#commandelement)
+- [`CommandElement`](../interfaces/model.CommandElement-1.md)
 
 ## Table of contents
 
@@ -25,6 +24,10 @@ this class.
 
 ### Properties
 
+- [#children](model.CommandModel.md##children)
+- [#id](model.CommandModel.md##id)
+- [#name](model.CommandModel.md##name)
+- [#parent](model.CommandModel.md##parent)
 - [byteSize](model.CommandModel.md#bytesize)
 - [default](model.CommandModel.md#default)
 - [description](model.CommandModel.md#description)
@@ -42,7 +45,7 @@ this class.
 - [type](model.CommandModel.md#type)
 - [xref](model.CommandModel.md#xref)
 - [Tag](model.CommandModel.md#tag-1)
-- [constructors](model.CommandModel.md#constructors)
+- [types](model.CommandModel.md#types)
 
 ### Accessors
 
@@ -56,6 +59,7 @@ this class.
 - [deprecated](model.CommandModel.md#deprecated)
 - [directMetatype](model.CommandModel.md#directmetatype)
 - [disallowed](model.CommandModel.md#disallowed)
+- [discriminator](model.CommandModel.md#discriminator)
 - [effectiveAccess](model.CommandModel.md#effectiveaccess)
 - [effectiveConformance](model.CommandModel.md#effectiveconformance)
 - [effectiveConstraint](model.CommandModel.md#effectiveconstraint)
@@ -90,10 +94,10 @@ this class.
 - [add](model.CommandModel.md#add)
 - [all](model.CommandModel.md#all)
 - [bitDefinition](model.CommandModel.md#bitdefinition)
+- [clone](model.CommandModel.md#clone)
 - [error](model.CommandModel.md#error)
 - [get](model.CommandModel.md#get)
 - [instanceOf](model.CommandModel.md#instanceof)
-- [is](model.CommandModel.md#is)
 - [member](model.CommandModel.md#member)
 - [owner](model.CommandModel.md#owner)
 - [references](model.CommandModel.md#references)
@@ -124,17 +128,75 @@ this class.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L39)
+[packages/matter.js/src/model/models/CommandModel.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L48)
 
 ## Properties
+
+### #children
+
+• `Private` `Optional` **#children**: [`Children`](../interfaces/model._internal_.Children-1.md)\<[`Model`](model.Model-1.md), [`AnyElement`](../modules/model.md#anyelement)\>
+
+#### Inherited from
+
+[ValueModel](model.ValueModel.md).[#children](model.ValueModel.md##children)
+
+#### Defined in
+
+[packages/matter.js/src/model/models/Model.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L45)
+
+___
+
+### #id
+
+• `Private` `Optional` **#id**: `number` = `undefined`
+
+#### Inherited from
+
+[ValueModel](model.ValueModel.md).[#id](model.ValueModel.md##id)
+
+#### Defined in
+
+[packages/matter.js/src/model/models/Model.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L27)
+
+___
+
+### #name
+
+• `Private` **#name**: `string`
+
+#### Inherited from
+
+[ValueModel](model.ValueModel.md).[#name](model.ValueModel.md##name)
+
+#### Defined in
+
+[packages/matter.js/src/model/models/Model.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L28)
+
+___
+
+### #parent
+
+• `Private` `Optional` **#parent**: [`Model`](model.Model-1.md)
+
+#### Inherited from
+
+[ValueModel](model.ValueModel.md).[#parent](model.ValueModel.md##parent)
+
+#### Defined in
+
+[packages/matter.js/src/model/models/Model.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L46)
+
+___
 
 ### byteSize
 
 • `Optional` **byteSize**: [`Size`](../modules/model.ValueElement.md#size)
 
+Applies to numeric types.
+
 #### Implementation of
 
-CommandElement.byteSize
+[CommandElement](../interfaces/model.CommandElement-1.md).[byteSize](../interfaces/model.CommandElement-1.md#bytesize)
 
 #### Inherited from
 
@@ -142,7 +204,7 @@ CommandElement.byteSize
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L30)
+[packages/matter.js/src/model/models/ValueModel.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L31)
 
 ___
 
@@ -150,9 +212,11 @@ ___
 
 • `Optional` **default**: [`FieldValue`](../modules/model.md#fieldvalue)
 
+The default value for the element.
+
 #### Implementation of
 
-CommandElement.default
+[CommandElement](../interfaces/model.CommandElement-1.md).[default](../interfaces/model.CommandElement-1.md#default)
 
 #### Inherited from
 
@@ -160,7 +224,7 @@ CommandElement.default
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L31)
+[packages/matter.js/src/model/models/ValueModel.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L32)
 
 ___
 
@@ -168,9 +232,11 @@ ___
 
 • `Optional` **description**: `string`
 
+A short summary of the element.
+
 #### Implementation of
 
-CommandElement.description
+[CommandElement](../interfaces/model.CommandElement-1.md).[description](../interfaces/model.CommandElement-1.md#description)
 
 #### Inherited from
 
@@ -178,7 +244,7 @@ CommandElement.description
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L26)
+[packages/matter.js/src/model/models/Model.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L20)
 
 ___
 
@@ -186,9 +252,11 @@ ___
 
 • `Optional` **details**: `string`
 
+A paragraph summary of the element.
+
 #### Implementation of
 
-CommandElement.details
+[CommandElement](../interfaces/model.CommandElement-1.md).[details](../interfaces/model.CommandElement-1.md#details)
 
 #### Inherited from
 
@@ -196,7 +264,7 @@ CommandElement.details
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L27)
+[packages/matter.js/src/model/models/Model.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L21)
 
 ___
 
@@ -206,11 +274,11 @@ ___
 
 #### Implementation of
 
-CommandElement.direction
+[CommandElement](../interfaces/model.CommandElement-1.md).[direction](../interfaces/model.CommandElement-1.md#direction)
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L16)
+[packages/matter.js/src/model/models/CommandModel.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L16)
 
 ___
 
@@ -224,7 +292,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L29)
+[packages/matter.js/src/model/models/Model.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L23)
 
 ___
 
@@ -236,7 +304,7 @@ Flag set on elements loaded from Globals.
 
 #### Implementation of
 
-CommandElement.global
+[CommandElement](../interfaces/model.CommandElement-1.md).[global](../interfaces/model.CommandElement-1.md#global)
 
 #### Inherited from
 
@@ -244,7 +312,7 @@ CommandElement.global
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L34)
+[packages/matter.js/src/model/models/Model.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L33)
 
 ___
 
@@ -254,7 +322,7 @@ ___
 
 #### Implementation of
 
-CommandElement.id
+[CommandElement](../interfaces/model.CommandElement-1.md).[id](../interfaces/model.CommandElement-1.md#id)
 
 #### Overrides
 
@@ -262,7 +330,7 @@ CommandElement.id
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:15](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L15)
+[packages/matter.js/src/model/models/CommandModel.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L15)
 
 ___
 
@@ -278,7 +346,7 @@ Indicates that an element defines a datatype.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L33)
+[packages/matter.js/src/model/models/ValueModel.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L34)
 
 ___
 
@@ -294,7 +362,7 @@ Indicates that an element may have type definitions as children.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L39)
+[packages/matter.js/src/model/models/Model.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L38)
 
 ___
 
@@ -308,7 +376,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L32)
+[packages/matter.js/src/model/models/ValueModel.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L33)
 
 ___
 
@@ -316,9 +384,12 @@ ___
 
 • **name**: `string`
 
+The key used for storing this element.  A "human appropriate" semantic
+differentiator.
+
 #### Implementation of
 
-CommandElement.name
+[CommandElement](../interfaces/model.CommandElement-1.md).[name](../interfaces/model.CommandElement-1.md#name)
 
 #### Inherited from
 
@@ -326,7 +397,7 @@ CommandElement.name
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L24)
+[packages/matter.js/src/model/models/Model.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L25)
 
 ___
 
@@ -336,11 +407,11 @@ ___
 
 #### Implementation of
 
-CommandElement.response
+[CommandElement](../interfaces/model.CommandElement-1.md).[response](../interfaces/model.CommandElement-1.md#response)
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L17)
+[packages/matter.js/src/model/models/CommandModel.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L17)
 
 ___
 
@@ -350,7 +421,7 @@ ___
 
 #### Implementation of
 
-CommandElement.tag
+[CommandElement](../interfaces/model.CommandElement-1.md).[tag](../interfaces/model.CommandElement-1.md#tag)
 
 #### Overrides
 
@@ -358,7 +429,7 @@ CommandElement.tag
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:14](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L14)
+[packages/matter.js/src/model/models/CommandModel.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L14)
 
 ___
 
@@ -366,9 +437,12 @@ ___
 
 • `Optional` **type**: `string`
 
+If an element derives from another element, the name of the parent
+element goes here.
+
 #### Implementation of
 
-CommandElement.type
+[CommandElement](../interfaces/model.CommandElement-1.md).[type](../interfaces/model.CommandElement-1.md#type)
 
 #### Inherited from
 
@@ -376,7 +450,7 @@ CommandElement.type
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L25)
+[packages/matter.js/src/model/models/Model.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L19)
 
 ___
 
@@ -384,9 +458,11 @@ ___
 
 • `Optional` **xref**: [`CrossReference`](model.Model.CrossReference.md)
 
+Reference to Matter specification document.
+
 #### Implementation of
 
-CommandElement.xref
+[CommandElement](../interfaces/model.CommandElement-1.md).[xref](../interfaces/model.CommandElement-1.md#xref)
 
 #### Inherited from
 
@@ -394,7 +470,7 @@ CommandElement.xref
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L28)
+[packages/matter.js/src/model/models/Model.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L22)
 
 ___
 
@@ -404,13 +480,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L47)
+[packages/matter.js/src/model/models/CommandModel.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L56)
 
 ___
 
-### constructors
+### types
 
-▪ `Static` **constructors**: `Object`
+▪ `Static` **types**: `Object`
 
 Factory support.  Populated by derivatives upon definition.
 
@@ -420,11 +496,11 @@ Factory support.  Populated by derivatives upon definition.
 
 #### Inherited from
 
-[ValueModel](model.ValueModel.md).[constructors](model.ValueModel.md#constructors)
+[ValueModel](model.ValueModel.md).[types](model.ValueModel.md#types)
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:192](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L192)
+[packages/matter.js/src/model/models/Model.ts:199](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L199)
 
 ## Accessors
 
@@ -432,13 +508,15 @@ Factory support.  Populated by derivatives upon definition.
 
 • `get` **access**(): [`Access`](model.Access-1.md)
 
+Authorization limits.
+
 #### Returns
 
 [`Access`](model.Access-1.md)
 
 #### Implementation of
 
-CommandElement.access
+[CommandElement](../interfaces/model.CommandElement-1.md).[access](../interfaces/model.CommandElement-1.md#access)
 
 #### Inherited from
 
@@ -446,9 +524,11 @@ ValueModel.access
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L63)
+[packages/matter.js/src/model/models/ValueModel.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L64)
 
 • `set` **access**(`definition`): `void`
+
+Authorization limits.
 
 #### Parameters
 
@@ -462,7 +542,7 @@ ValueModel.access
 
 #### Implementation of
 
-CommandElement.access
+[CommandElement](../interfaces/model.CommandElement-1.md).[access](../interfaces/model.CommandElement-1.md#access)
 
 #### Inherited from
 
@@ -470,7 +550,7 @@ ValueModel.access
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:66](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L66)
+[packages/matter.js/src/model/models/ValueModel.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L67)
 
 ___
 
@@ -491,7 +571,7 @@ ValueModel.allowedBaseTags
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:180](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L180)
+[packages/matter.js/src/model/models/ValueModel.ts:181](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L181)
 
 ___
 
@@ -511,23 +591,23 @@ ValueModel.base
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:172](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L172)
+[packages/matter.js/src/model/models/ValueModel.ts:173](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L173)
 
 ___
 
 ### children
 
-• `get` **children**(): [`DatatypeModel`](model.DatatypeModel.md)[]
+• `get` **children**(): [`Children`](../interfaces/model._internal_.Children-1.md)\<[`FieldModel`](model.FieldModel.md), [`FieldElement`](../interfaces/model.FieldElement-1.md)\>
 
-Children of models are always models.
+Child elements.
 
 #### Returns
 
-[`DatatypeModel`](model.DatatypeModel.md)[]
+[`Children`](../interfaces/model._internal_.Children-1.md)\<[`FieldModel`](model.FieldModel.md), [`FieldElement`](../interfaces/model.FieldElement-1.md)\>
 
 #### Implementation of
 
-CommandElement.children
+[CommandElement](../interfaces/model.CommandElement-1.md).[children](../interfaces/model.CommandElement-1.md#children)
 
 #### Inherited from
 
@@ -535,17 +615,17 @@ ValueModel.children
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L35)
+[packages/matter.js/src/model/models/ValueModel.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L36)
 
 • `set` **children**(`children`): `void`
 
-Children can be added as models or elements.
+Child elements.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `children` | ([`DatatypeElement`](../modules/model.md#datatypeelement) \| [`DatatypeModel`](model.DatatypeModel.md))[] |
+| `children` | ([`FieldElement`](../interfaces/model.FieldElement-1.md) \| [`FieldModel`](model.FieldModel.md))[] |
 
 #### Returns
 
@@ -553,7 +633,7 @@ Children can be added as models or elements.
 
 #### Implementation of
 
-CommandElement.children
+[CommandElement](../interfaces/model.CommandElement-1.md).[children](../interfaces/model.CommandElement-1.md#children)
 
 #### Inherited from
 
@@ -561,7 +641,7 @@ ValueModel.children
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L39)
+[packages/matter.js/src/model/models/ValueModel.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L40)
 
 ___
 
@@ -569,13 +649,15 @@ ___
 
 • `get` **conformance**(): [`Conformance`](model.Conformance-1.md)
 
+Optionality control.
+
 #### Returns
 
 [`Conformance`](model.Conformance-1.md)
 
 #### Implementation of
 
-CommandElement.conformance
+[CommandElement](../interfaces/model.CommandElement-1.md).[conformance](../interfaces/model.CommandElement-1.md#conformance)
 
 #### Inherited from
 
@@ -583,15 +665,17 @@ ValueModel.conformance
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L53)
+[packages/matter.js/src/model/models/ValueModel.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L54)
 
 • `set` **conformance**(`definition`): `void`
+
+Optionality control.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `definition` | [`Conformance`](model.Conformance-1.md) \| [`Definition`](../modules/model.Conformance.md#definition) |
+| `definition` | [`Definition`](../modules/model.Conformance.md#definition) \| [`Conformance`](model.Conformance-1.md) |
 
 #### Returns
 
@@ -599,7 +683,7 @@ ValueModel.conformance
 
 #### Implementation of
 
-CommandElement.conformance
+[CommandElement](../interfaces/model.CommandElement-1.md).[conformance](../interfaces/model.CommandElement-1.md#conformance)
 
 #### Inherited from
 
@@ -607,7 +691,7 @@ ValueModel.conformance
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L56)
+[packages/matter.js/src/model/models/ValueModel.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L57)
 
 ___
 
@@ -615,13 +699,15 @@ ___
 
 • `get` **constraint**(): [`Constraint`](model.Constraint-1.md)
 
+Limits on values.
+
 #### Returns
 
 [`Constraint`](model.Constraint-1.md)
 
 #### Implementation of
 
-CommandElement.constraint
+[CommandElement](../interfaces/model.CommandElement-1.md).[constraint](../interfaces/model.CommandElement-1.md#constraint)
 
 #### Inherited from
 
@@ -629,15 +715,17 @@ ValueModel.constraint
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L43)
+[packages/matter.js/src/model/models/ValueModel.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L44)
 
 • `set` **constraint**(`definition`): `void`
+
+Limits on values.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `definition` | [`Constraint`](model.Constraint-1.md) \| [`Definition`](../modules/model.Constraint.md#definition) |
+| `definition` | [`Definition`](../modules/model.Constraint.md#definition) \| [`Constraint`](model.Constraint-1.md) |
 
 #### Returns
 
@@ -645,7 +733,7 @@ ValueModel.constraint
 
 #### Implementation of
 
-CommandElement.constraint
+[CommandElement](../interfaces/model.CommandElement-1.md).[constraint](../interfaces/model.CommandElement-1.md#constraint)
 
 #### Inherited from
 
@@ -653,7 +741,7 @@ ValueModel.constraint
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L46)
+[packages/matter.js/src/model/models/ValueModel.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L47)
 
 ___
 
@@ -673,7 +761,7 @@ ValueModel.definingModel
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:158](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L158)
+[packages/matter.js/src/model/models/ValueModel.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L159)
 
 ___
 
@@ -693,7 +781,7 @@ ValueModel.deprecated
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:220](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L220)
+[packages/matter.js/src/model/models/ValueModel.ts:223](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L223)
 
 ___
 
@@ -713,7 +801,7 @@ ValueModel.directMetatype
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:149](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L149)
+[packages/matter.js/src/model/models/ValueModel.ts:150](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L150)
 
 ___
 
@@ -733,7 +821,28 @@ ValueModel.disallowed
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:227](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L227)
+[packages/matter.js/src/model/models/ValueModel.ts:230](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L230)
+
+___
+
+### discriminator
+
+• `get` **discriminator**(): [`Direction`](../enums/model.CommandElement.Direction.md)
+
+Commands may re-use the ID for request and response so identification requires the ID in conjunction with the
+direction.
+
+#### Returns
+
+[`Direction`](../enums/model.CommandElement.Direction.md)
+
+#### Overrides
+
+ValueModel.discriminator
+
+#### Defined in
+
+[packages/matter.js/src/model/models/CommandModel.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L35)
 
 ___
 
@@ -751,7 +860,7 @@ ValueModel.effectiveAccess
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:69](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L69)
+[packages/matter.js/src/model/models/ValueModel.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L70)
 
 ___
 
@@ -769,7 +878,7 @@ ValueModel.effectiveConformance
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L59)
+[packages/matter.js/src/model/models/ValueModel.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L60)
 
 ___
 
@@ -787,7 +896,7 @@ ValueModel.effectiveConstraint
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:49](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L49)
+[packages/matter.js/src/model/models/ValueModel.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L50)
 
 ___
 
@@ -809,7 +918,7 @@ ValueModel.effectiveDefault
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:142](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L142)
+[packages/matter.js/src/model/models/ValueModel.ts:143](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L143)
 
 ___
 
@@ -829,7 +938,7 @@ ValueModel.effectiveId
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:112](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L112)
+[packages/matter.js/src/model/models/Model.ts:125](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L125)
 
 ___
 
@@ -849,7 +958,7 @@ ValueModel.effectiveMetatype
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:130](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L130)
+[packages/matter.js/src/model/models/ValueModel.ts:131](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L131)
 
 ___
 
@@ -867,7 +976,7 @@ ValueModel.effectiveQuality
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:79](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L79)
+[packages/matter.js/src/model/models/ValueModel.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L80)
 
 ___
 
@@ -887,7 +996,7 @@ ValueModel.effectiveType
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:119](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L119)
+[packages/matter.js/src/model/models/ValueModel.ts:120](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L120)
 
 ___
 
@@ -907,7 +1016,7 @@ ValueModel.effectiveXref
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:230](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L230)
+[packages/matter.js/src/model/models/Model.ts:234](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L234)
 
 ___
 
@@ -915,8 +1024,8 @@ ___
 
 • `get` **elements**(): [`AnyElement`](../modules/model.md#anyelement)[]
 
-Element view of children.  For TypeScript this allows children to be
-added as elements.  For JavaScript this is identical to children().
+Element view of children.  For TypeScript this allows children to be added as elements.  For JavaScript this is
+identical to children().
 
 #### Returns
 
@@ -928,7 +1037,7 @@ ValueModel.elements
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:102](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L102)
+[packages/matter.js/src/model/models/Model.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L115)
 
 ___
 
@@ -936,8 +1045,7 @@ ___
 
 • `get` **globalBase**(): `undefined` \| [`Model`](model.Model-1.md)
 
-Get the first global base type.  This may have semantic meaning more
-specific than the base primitive type.
+Get the first global base type.  This may have semantic meaning more specific than the base primitive type.
 
 #### Returns
 
@@ -949,7 +1057,7 @@ ValueModel.globalBase
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:223](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L223)
+[packages/matter.js/src/model/models/Model.ts:227](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L227)
 
 ___
 
@@ -963,7 +1071,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L19)
+[packages/matter.js/src/model/models/CommandModel.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L19)
 
 ___
 
@@ -977,40 +1085,40 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L23)
+[packages/matter.js/src/model/models/CommandModel.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L23)
 
 ___
 
 ### key
 
-• `get` **key**(): `string`
+• `get` **key**(): `undefined` \| `string`
 
-Commands may re-use the ID for request and response so identification
-requires the ID in conjunction with the direction.
+Get a string that uniquely identifies this model.  This is normally the effective ID but some models require a
+generated identifier.
 
 #### Returns
 
-`string`
+`undefined` \| `string`
 
-#### Overrides
+#### Inherited from
 
 ValueModel.key
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L35)
+[packages/matter.js/src/model/models/Model.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L133)
 
 ___
 
 ### listEntry
 
-• `get` **listEntry**(): `undefined` \| [`DatatypeModel`](model.DatatypeModel.md)
+• `get` **listEntry**(): `undefined` \| [`FieldModel`](model.FieldModel.md)
 
 Get the entry type for lists, if any.
 
 #### Returns
 
-`undefined` \| [`DatatypeModel`](model.DatatypeModel.md)
+`undefined` \| [`FieldModel`](model.FieldModel.md)
 
 #### Inherited from
 
@@ -1018,7 +1126,7 @@ ValueModel.listEntry
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:165](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L165)
+[packages/matter.js/src/model/models/ValueModel.ts:166](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L166)
 
 ___
 
@@ -1026,8 +1134,7 @@ ___
 
 • `get` **mandatory**(): `boolean`
 
-Is this model mandatory?  This supports a limited subset of conformance
-and is only appropriate for field conformance.
+Is the model mandatory?
 
 #### Returns
 
@@ -1039,19 +1146,19 @@ ValueModel.mandatory
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:242](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L242)
+[packages/matter.js/src/model/models/ValueModel.ts:244](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L244)
 
 ___
 
 ### members
 
-• `get` **members**(): [`DatatypeModel`](model.DatatypeModel.md)[]
+• `get` **members**(): [`FieldModel`](model.FieldModel.md)[]
 
 Retrieve all datatype members.
 
 #### Returns
 
-[`DatatypeModel`](model.DatatypeModel.md)[]
+[`FieldModel`](model.FieldModel.md)[]
 
 #### Inherited from
 
@@ -1059,7 +1166,7 @@ ValueModel.members
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:190](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L190)
+[packages/matter.js/src/model/models/ValueModel.ts:193](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L193)
 
 ___
 
@@ -1081,7 +1188,7 @@ ValueModel.metabase
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:88](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L88)
+[packages/matter.js/src/model/models/ValueModel.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L89)
 
 ___
 
@@ -1101,7 +1208,7 @@ ValueModel.nullable
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:234](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L234)
+[packages/matter.js/src/model/models/ValueModel.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L237)
 
 ___
 
@@ -1121,7 +1228,7 @@ ValueModel.overridesShadow
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:263](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L263)
+[packages/matter.js/src/model/models/ValueModel.ts:251](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L251)
 
 ___
 
@@ -1129,8 +1236,7 @@ ___
 
 • `get` **parent**(): `undefined` \| [`Model`](model.Model-1.md)
 
-The structural parent.  This is the model for the element that contains
-this element's definition.
+The structural parent.  This is the model for the element that contains this element's definition.
 
 #### Returns
 
@@ -1142,7 +1248,7 @@ ValueModel.parent
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L71)
+[packages/matter.js/src/model/models/Model.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L88)
 
 • `set` **parent**(`parent`): `void`
 
@@ -1162,7 +1268,7 @@ ValueModel.parent
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:75](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L75)
+[packages/matter.js/src/model/models/Model.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L92)
 
 ___
 
@@ -1170,7 +1276,9 @@ ___
 
 • `get` **path**(): `string`
 
-The full path ("." delimited) in the Matter tree.
+The path ("." delimited) in the Matter tree.
+
+This is informational and generally tries to adhere to JS API conventions.
 
 #### Returns
 
@@ -1182,7 +1290,7 @@ ValueModel.path
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L59)
+[packages/matter.js/src/model/models/Model.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L60)
 
 ___
 
@@ -1203,7 +1311,7 @@ ValueModel.primitiveBase
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:96](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L96)
+[packages/matter.js/src/model/models/ValueModel.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L97)
 
 ___
 
@@ -1211,13 +1319,15 @@ ___
 
 • `get` **quality**(): [`Quality`](model.Quality-1.md)
 
+Other qualities not covered by conformance or access.
+
 #### Returns
 
 [`Quality`](model.Quality-1.md)
 
 #### Implementation of
 
-CommandElement.quality
+[CommandElement](../interfaces/model.CommandElement-1.md).[quality](../interfaces/model.CommandElement-1.md#quality)
 
 #### Inherited from
 
@@ -1225,15 +1335,17 @@ ValueModel.quality
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L73)
+[packages/matter.js/src/model/models/ValueModel.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L74)
 
 • `set` **quality**(`definition`): `void`
+
+Other qualities not covered by conformance or access.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `definition` | [`Quality`](model.Quality-1.md) \| [`Definition`](../modules/model.Quality.md#definition) |
+| `definition` | [`Definition`](../modules/model.Quality.md#definition) \| [`Quality`](model.Quality-1.md) |
 
 #### Returns
 
@@ -1241,7 +1353,7 @@ ValueModel.quality
 
 #### Implementation of
 
-CommandElement.quality
+[CommandElement](../interfaces/model.CommandElement-1.md).[quality](../interfaces/model.CommandElement-1.md#quality)
 
 #### Inherited from
 
@@ -1249,21 +1361,21 @@ ValueModel.quality
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:76](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L76)
+[packages/matter.js/src/model/models/ValueModel.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L77)
 
 ___
 
 ### responseModel
 
-• `get` **responseModel**(): `undefined` \| [`Model`](model.Model-1.md)
+• `get` **responseModel**(): [`ValueModel`](model.ValueModel.md)
 
 #### Returns
 
-`undefined` \| [`Model`](model.Model-1.md)
+[`ValueModel`](model.ValueModel.md)
 
 #### Defined in
 
-[packages/matter.js/src/model/models/CommandModel.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/CommandModel.ts#L27)
+[packages/matter.js/src/model/models/CommandModel.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/CommandModel.ts#L27)
 
 ___
 
@@ -1271,8 +1383,7 @@ ___
 
 • `get` **shadow**(): `undefined` \| [`Model`](model.Model-1.md)
 
-Get shadow model, if any.  A "shadow" is an element in my parent's
-inheritance hierarchy that I override.
+Get shadow model, if any.  A "shadow" is an element in my parent's inheritance hierarchy that I override.
 
 #### Returns
 
@@ -1284,7 +1395,7 @@ ValueModel.shadow
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:215](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L215)
+[packages/matter.js/src/model/models/Model.ts:220](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L220)
 
 ___
 
@@ -1304,7 +1415,7 @@ ValueModel.valid
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:52](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L52)
+[packages/matter.js/src/model/models/Model.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L51)
 
 ___
 
@@ -1324,7 +1435,7 @@ ValueModel.validationAspects
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:197](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L197)
+[packages/matter.js/src/model/models/ValueModel.ts:200](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L200)
 
 ## Methods
 
@@ -1350,7 +1461,7 @@ Add a child.  children.push works too but only accepts models.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:244](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L244)
+[packages/matter.js/src/model/models/Model.ts:248](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L248)
 
 ___
 
@@ -1370,7 +1481,7 @@ Retrieve all models of a specific element type from local scope.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/model.Model.md#constructor)\<`T`\> | model class or a predicate object |
+| `constructor` | [`Type`](../modules/model.Model.md#type)\<`T`\> | model class or a predicate object |
 
 #### Returns
 
@@ -1382,13 +1493,13 @@ Retrieve all models of a specific element type from local scope.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:268](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L268)
+[packages/matter.js/src/model/models/Model.ts:272](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L272)
 
 ___
 
 ### bitDefinition
 
-▸ **bitDefinition**(`bit`): `undefined` \| [`DatatypeModel`](model.DatatypeModel.md)
+▸ **bitDefinition**(`bit`): `undefined` \| [`FieldModel`](model.FieldModel.md)
 
 Search the inheritance chain for a bitmap field defining a specific bit.
 
@@ -1400,7 +1511,7 @@ Search the inheritance chain for a bitmap field defining a specific bit.
 
 #### Returns
 
-`undefined` \| [`DatatypeModel`](model.DatatypeModel.md)
+`undefined` \| [`FieldModel`](model.FieldModel.md)
 
 #### Inherited from
 
@@ -1408,7 +1519,39 @@ Search the inheritance chain for a bitmap field defining a specific bit.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:289](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L289)
+[packages/matter.js/src/model/models/ValueModel.ts:277](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L277)
+
+___
+
+### clone
+
+▸ **clone**\<`This`\>(`this`): `This`
+
+Clone the model.  This deep copies all descendant child models but not other properties.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Model`](model.Model-1.md) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | `This` |
+
+#### Returns
+
+`This`
+
+#### Inherited from
+
+[ValueModel](model.ValueModel.md).[clone](model.ValueModel.md#clone)
+
+#### Defined in
+
+[packages/matter.js/src/model/models/Model.ts:370](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L370)
 
 ___
 
@@ -1435,13 +1578,13 @@ Record a validation error for this model.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:303](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L303)
+[packages/matter.js/src/model/models/Model.ts:296](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L296)
 
 ___
 
 ### get
 
-▸ **get**\<`T`\>(`constructor`, `key`): `T`
+▸ **get**\<`T`\>(`type`, `key`): `undefined` \| `T`
 
 Retrieve a specific model by ID or name.
 
@@ -1455,12 +1598,12 @@ Retrieve a specific model by ID or name.
 
 | Name | Type |
 | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/model.Model.md#constructor)\<`T`\> |
+| `type` | [`Type`](../modules/model.Model.md#type)\<`T`\> |
 | `key` | `string` \| `number` |
 
 #### Returns
 
-`T`
+`undefined` \| `T`
 
 #### Inherited from
 
@@ -1468,7 +1611,7 @@ Retrieve a specific model by ID or name.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:275](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L275)
+[packages/matter.js/src/model/models/Model.ts:279](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L279)
 
 ___
 
@@ -1494,33 +1637,7 @@ Does this model derive from another?
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:373](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L373)
-
-___
-
-### is
-
-▸ **is**(`key`): `boolean`
-
-Check identity of element by name or ID.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `key` | `undefined` \| [`ElementSelector`](../modules/model._internal_.ModelTraversal.md#elementselector) |
-
-#### Returns
-
-`boolean`
-
-#### Inherited from
-
-[ValueModel](model.ValueModel.md).[is](model.ValueModel.md#is)
-
-#### Defined in
-
-[packages/matter.js/src/model/models/Model.ts:291](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L291)
+[packages/matter.js/src/model/models/Model.ts:363](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L363)
 
 ___
 
@@ -1534,7 +1651,7 @@ Search the inheritance chain for a child property.
 
 | Name | Type |
 | :------ | :------ |
-| `key` | [`ElementSelector`](../modules/model._internal_.ModelTraversal.md#elementselector) |
+| `key` | [`Selector`](../modules/model._internal_.Children.md#selector) |
 | `allowedTags` | [`ElementTag`](../enums/model.ElementTag.md)[] |
 
 #### Returns
@@ -1547,7 +1664,7 @@ Search the inheritance chain for a child property.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:363](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L363)
+[packages/matter.js/src/model/models/Model.ts:356](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L356)
 
 ___
 
@@ -1567,7 +1684,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 | Name | Type |
 | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/model.Model.md#constructor)\<`T`\> |
+| `constructor` | [`Type`](../modules/model.Model.md#type)\<`T`\> |
 
 #### Returns
 
@@ -1579,7 +1696,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:284](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L284)
+[packages/matter.js/src/model/models/Model.ts:289](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L289)
 
 ___
 
@@ -1605,7 +1722,7 @@ Find all children that reference a specific type.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:356](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L356)
+[packages/matter.js/src/model/models/Model.ts:349](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L349)
 
 ___
 
@@ -1625,7 +1742,7 @@ Convert model to JSON.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:319](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L319)
+[packages/matter.js/src/model/models/Model.ts:312](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L312)
 
 ___
 
@@ -1645,7 +1762,7 @@ Convert to non-class structure.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ValueModel.ts:293](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/ValueModel.ts#L293)
+[packages/matter.js/src/model/models/ValueModel.ts:281](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/ValueModel.ts#L281)
 
 ___
 
@@ -1671,7 +1788,7 @@ Apply a function to all tree elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:349](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L349)
+[packages/matter.js/src/model/models/Model.ts:342](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L342)
 
 ___
 
@@ -1697,4 +1814,4 @@ Create a model for an element.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:251](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/models/Model.ts#L251)
+[packages/matter.js/src/model/models/Model.ts:255](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Model.ts#L255)

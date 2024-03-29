@@ -28,4 +28,4 @@ Commands exposed by the CommissioningServer
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:118
+packages/matter.js/dist/esm/CommissioningServer.d.ts:129

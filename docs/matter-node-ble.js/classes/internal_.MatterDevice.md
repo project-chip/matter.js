@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [#private](internal_.MatterDevice.md##private)
 - [activeCommissioningEndCallback](internal_.MatterDevice.md#activecommissioningendcallback)
 - [activeCommissioningMode](internal_.MatterDevice.md#activecommissioningmode)
 - [announceAsCommissionable](internal_.MatterDevice.md#announceascommissionable)
@@ -20,38 +21,37 @@
 - [broadcasters](internal_.MatterDevice.md#broadcasters)
 - [channelManager](internal_.MatterDevice.md#channelmanager)
 - [commissioningChangedCallback](internal_.MatterDevice.md#commissioningchangedcallback)
-- [deviceName](internal_.MatterDevice.md#devicename)
-- [deviceType](internal_.MatterDevice.md#devicetype)
-- [discriminator](internal_.MatterDevice.md#discriminator)
-- [exchangeManager](internal_.MatterDevice.md#exchangemanager)
-- [fabricManager](internal_.MatterDevice.md#fabricmanager)
-- [failSafeContext](internal_.MatterDevice.md#failsafecontext)
-- [failSafeExpired](internal_.MatterDevice.md#failsafeexpired)
-- [initialPasscode](internal_.MatterDevice.md#initialpasscode)
+- [fabricStorage](internal_.MatterDevice.md#fabricstorage)
+- [getCommissioningConfig](internal_.MatterDevice.md#getcommissioningconfig)
 - [isClosing](internal_.MatterDevice.md#isclosing)
-- [productId](internal_.MatterDevice.md#productid)
 - [scanners](internal_.MatterDevice.md#scanners)
 - [secureChannelProtocol](internal_.MatterDevice.md#securechannelprotocol)
 - [sessionChangedCallback](internal_.MatterDevice.md#sessionchangedcallback)
-- [sessionManager](internal_.MatterDevice.md#sessionmanager)
-- [storage](internal_.MatterDevice.md#storage)
+- [sessionStorage](internal_.MatterDevice.md#sessionstorage)
 - [transportInterfaces](internal_.MatterDevice.md#transportinterfaces)
-- [vendorId](internal_.MatterDevice.md#vendorid)
+
+### Accessors
+
+- [construction](internal_.MatterDevice.md#construction)
+- [exchangeManager](internal_.MatterDevice.md#exchangemanager)
+- [fabricManager](internal_.MatterDevice.md#fabricmanager)
+- [failsafeContext](internal_.MatterDevice.md#failsafecontext)
+- [sessionManager](internal_.MatterDevice.md#sessionmanager)
 
 ### Methods
 
 - [addBroadcaster](internal_.MatterDevice.md#addbroadcaster)
-- [addFabric](internal_.MatterDevice.md#addfabric)
 - [addProtocolHandler](internal_.MatterDevice.md#addprotocolhandler)
 - [addScanner](internal_.MatterDevice.md#addscanner)
 - [addTransportInterface](internal_.MatterDevice.md#addtransportinterface)
 - [allowBasicCommissioning](internal_.MatterDevice.md#allowbasiccommissioning)
 - [allowEnhancedCommissioning](internal_.MatterDevice.md#allowenhancedcommissioning)
 - [announce](internal_.MatterDevice.md#announce)
-- [armFailSafe](internal_.MatterDevice.md#armfailsafe)
 - [assertFailSafeArmed](internal_.MatterDevice.md#assertfailsafearmed)
-- [completeCommission](internal_.MatterDevice.md#completecommission)
-- [createSecureSession](internal_.MatterDevice.md#createsecuresession)
+- [beginTimed](internal_.MatterDevice.md#begintimed)
+- [close](internal_.MatterDevice.md#close)
+- [deleteBroadcaster](internal_.MatterDevice.md#deletebroadcaster)
+- [deleteTransportInterface](internal_.MatterDevice.md#deletetransportinterface)
 - [endCommissioning](internal_.MatterDevice.md#endcommissioning)
 - [existsOpenPaseSession](internal_.MatterDevice.md#existsopenpasesession)
 - [findDevice](internal_.MatterDevice.md#finddevice)
@@ -60,41 +60,33 @@
 - [getActiveSessionInformation](internal_.MatterDevice.md#getactivesessioninformation)
 - [getFabricByIndex](internal_.MatterDevice.md#getfabricbyindex)
 - [getFabrics](internal_.MatterDevice.md#getfabrics)
-- [getFailSafeContext](internal_.MatterDevice.md#getfailsafecontext)
 - [getNextAvailableSessionId](internal_.MatterDevice.md#getnextavailablesessionid)
-- [getNextFabricIndex](internal_.MatterDevice.md#getnextfabricindex)
 - [hasBroadcaster](internal_.MatterDevice.md#hasbroadcaster)
 - [hasProtocolHandler](internal_.MatterDevice.md#hasprotocolhandler)
 - [initiateExchange](internal_.MatterDevice.md#initiateexchange)
 - [isCommissioned](internal_.MatterDevice.md#iscommissioned)
 - [isFailsafeArmed](internal_.MatterDevice.md#isfailsafearmed)
-- [removePaseSession](internal_.MatterDevice.md#removepasesession)
 - [saveResumptionRecord](internal_.MatterDevice.md#saveresumptionrecord)
 - [sendCommissionableAnnouncement](internal_.MatterDevice.md#sendcommissionableannouncement)
 - [sendFabricAnnouncements](internal_.MatterDevice.md#sendfabricannouncements)
 - [start](internal_.MatterDevice.md#start)
 - [startAnnouncement](internal_.MatterDevice.md#startannouncement)
-- [stop](internal_.MatterDevice.md#stop)
-- [updateFabric](internal_.MatterDevice.md#updatefabric)
+- [create](internal_.MatterDevice.md#create)
 
 ## Constructors
 
 ### constructor
 
-• **new MatterDevice**(`deviceName`, `deviceType`, `vendorId`, `productId`, `discriminator`, `initialPasscode`, `storage`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](internal_.MatterDevice.md)
+• **new MatterDevice**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](internal_.MatterDevice.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `deviceName` | `string` |
-| `deviceType` | [`DeviceTypeId`](../modules/internal_.md#devicetypeid) |
-| `vendorId` | [`VendorId`](../modules/internal_.md#vendorid) |
-| `productId` | `number` |
-| `discriminator` | `number` |
-| `initialPasscode` | `number` |
-| `storage` | [`StorageContext`](internal_.StorageContext.md) |
-| `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex)) => `void` |
+| `sessionStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `fabricStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `getCommissioningConfig` | () => [`Configuration`](../interfaces/internal_.Configuration-1.md) |
+| `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/internal_.FabricAction.md)) => `void` |
 | `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex)) => `void` |
 
 #### Returns
@@ -103,9 +95,19 @@
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:54
+matter.js/dist/esm/MatterDevice.d.ts:44
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterDevice.d.ts:26
+
+___
 
 ### activeCommissioningEndCallback
 
@@ -113,7 +115,7 @@ matter.js/dist/esm/MatterDevice.d.ts:54
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:49
+matter.js/dist/esm/MatterDevice.d.ts:38
 
 ___
 
@@ -123,7 +125,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:48
+matter.js/dist/esm/MatterDevice.d.ts:37
 
 ___
 
@@ -133,7 +135,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:64
+matter.js/dist/esm/MatterDevice.d.ts:63
 
 ___
 
@@ -143,7 +145,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:50
+matter.js/dist/esm/MatterDevice.d.ts:39
 
 ___
 
@@ -153,7 +155,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:51
+matter.js/dist/esm/MatterDevice.d.ts:40
 
 ___
 
@@ -163,7 +165,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:41
+matter.js/dist/esm/MatterDevice.d.ts:33
 
 ___
 
@@ -173,7 +175,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:45
+matter.js/dist/esm/MatterDevice.d.ts:35
 
 ___
 
@@ -183,87 +185,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:38
+matter.js/dist/esm/MatterDevice.d.ts:30
 
 ___
 
-### deviceName
+### fabricStorage
 
-• `Private` `Readonly` **deviceName**: `any`
+• `Readonly` **fabricStorage**: [`StorageContext`](internal_.StorageContext.md)\<`any`\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:31
+matter.js/dist/esm/MatterDevice.d.ts:28
 
 ___
 
-### deviceType
+### getCommissioningConfig
 
-• `Private` `Readonly` **deviceType**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:32
-
-___
-
-### discriminator
-
-• `Private` `Readonly` **discriminator**: `any`
+• `Private` `Readonly` **getCommissioningConfig**: `any`
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:35
-
-___
-
-### exchangeManager
-
-• `Private` `Readonly` **exchangeManager**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:46
-
-___
-
-### fabricManager
-
-• `Private` `Readonly` **fabricManager**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:43
-
-___
-
-### failSafeContext
-
-• `Private` `Optional` **failSafeContext**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:53
-
-___
-
-### failSafeExpired
-
-• `Private` **failSafeExpired**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:89
-
-___
-
-### initialPasscode
-
-• `Private` `Readonly` **initialPasscode**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:36
+matter.js/dist/esm/MatterDevice.d.ts:29
 
 ___
 
@@ -273,17 +215,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:52
-
-___
-
-### productId
-
-• `Private` `Readonly` **productId**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:34
+matter.js/dist/esm/MatterDevice.d.ts:41
 
 ___
 
@@ -293,7 +225,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:40
+matter.js/dist/esm/MatterDevice.d.ts:32
 
 ___
 
@@ -303,7 +235,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:47
+matter.js/dist/esm/MatterDevice.d.ts:36
 
 ___
 
@@ -313,27 +245,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:39
+matter.js/dist/esm/MatterDevice.d.ts:31
 
 ___
 
-### sessionManager
+### sessionStorage
 
-• `Private` `Readonly` **sessionManager**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:44
-
-___
-
-### storage
-
-• `Private` `Readonly` **storage**: `any`
+• `Readonly` **sessionStorage**: [`StorageContext`](internal_.StorageContext.md)\<`any`\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:37
+matter.js/dist/esm/MatterDevice.d.ts:27
 
 ___
 
@@ -343,17 +265,77 @@ ___
 
 #### Defined in
 
+matter.js/dist/esm/MatterDevice.d.ts:34
+
+## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/internal_.AsyncConstruction-1.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/internal_.AsyncConstruction-1.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
+
+#### Defined in
+
 matter.js/dist/esm/MatterDevice.d.ts:42
 
 ___
 
-### vendorId
+### exchangeManager
 
-• `Private` `Readonly` **vendorId**: `any`
+• `get` **exchangeManager**(): [`ExchangeManager`](internal_.ExchangeManager.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
+
+#### Returns
+
+[`ExchangeManager`](internal_.ExchangeManager.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:33
+matter.js/dist/esm/MatterDevice.d.ts:47
+
+___
+
+### fabricManager
+
+• `get` **fabricManager**(): [`FabricManager`](internal_.FabricManager.md)
+
+#### Returns
+
+[`FabricManager`](internal_.FabricManager.md)
+
+#### Defined in
+
+matter.js/dist/esm/MatterDevice.d.ts:45
+
+___
+
+### failsafeContext
+
+• `get` **failsafeContext**(): [`FailsafeContext`](internal_.FailsafeContext-1.md)
+
+#### Returns
+
+[`FailsafeContext`](internal_.FailsafeContext-1.md)
+
+#### Defined in
+
+matter.js/dist/esm/MatterDevice.d.ts:48
+
+___
+
+### sessionManager
+
+• `get` **sessionManager**(): [`SessionManager`](internal_.SessionManager.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
+
+#### Returns
+
+[`SessionManager`](internal_.SessionManager.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterDevice.d.ts:46
 
 ## Methods
 
@@ -373,27 +355,7 @@ matter.js/dist/esm/MatterDevice.d.ts:33
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:57
-
-___
-
-### addFabric
-
-▸ **addFabric**(`fabric`): `Promise`\<[`FabricIndex`](../modules/internal_.md#fabricindex)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `fabric` | [`Fabric`](internal_.Fabric.md) |
-
-#### Returns
-
-`Promise`\<[`FabricIndex`](../modules/internal_.md#fabricindex)\>
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:81
+matter.js/dist/esm/MatterDevice.d.ts:54
 
 ___
 
@@ -413,7 +375,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:60
+matter.js/dist/esm/MatterDevice.d.ts:59
 
 ___
 
@@ -433,19 +395,19 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:55
+matter.js/dist/esm/MatterDevice.d.ts:52
 
 ___
 
 ### addTransportInterface
 
-▸ **addTransportInterface**(`netInterface`): `this`
+▸ **addTransportInterface**(`transport`): `this`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `netInterface` | [`TransportInterface`](../interfaces/internal_.TransportInterface.md) |
+| `transport` | [`TransportInterface`](../interfaces/internal_.TransportInterface.md) |
 
 #### Returns
 
@@ -453,7 +415,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:58
+matter.js/dist/esm/MatterDevice.d.ts:56
 
 ___
 
@@ -473,7 +435,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:97
+matter.js/dist/esm/MatterDevice.d.ts:75
 
 ___
 
@@ -495,7 +457,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:96
+matter.js/dist/esm/MatterDevice.d.ts:74
 
 ___
 
@@ -515,30 +477,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:63
-
-___
-
-### armFailSafe
-
-▸ **armFailSafe**(`expiryLengthSeconds`, `maxCumulativeFailsafeSeconds`, `associatedFabric`, `endpoint`): `Promise`\<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `expiryLengthSeconds` | `number` |
-| `maxCumulativeFailsafeSeconds` | `number` |
-| `associatedFabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
-| `endpoint` | [`Endpoint`](internal_.Endpoint.md) |
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:90
+matter.js/dist/esm/MatterDevice.d.ts:62
 
 ___
 
@@ -558,13 +497,19 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:88
+matter.js/dist/esm/MatterDevice.d.ts:50
 
 ___
 
-### completeCommission
+### beginTimed
 
-▸ **completeCommission**(): `Promise`\<`void`\>
+▸ **beginTimed**(`failsafeContext`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `failsafeContext` | [`FailsafeContext`](internal_.FailsafeContext-1.md) |
 
 #### Returns
 
@@ -572,36 +517,61 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:94
+matter.js/dist/esm/MatterDevice.d.ts:49
 
 ___
 
-### createSecureSession
+### close
 
-▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](internal_.SecureSession.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>\>
+▸ **close**(): `Promise`\<`void`\>
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterDevice.d.ts:82
+
+___
+
+### deleteBroadcaster
+
+▸ **deleteBroadcaster**(`broadcaster`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `args` | `Object` |
-| `args.fabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
-| `args.isInitiator` | `boolean` |
-| `args.isResumption` | `boolean` |
-| `args.peerNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
-| `args.peerSessionId` | `number` |
-| `args.salt` | `Uint8Array` |
-| `args.sessionId` | `number` |
-| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/internal_.SessionParameters.md)\> |
-| `args.sharedSecret` | `Uint8Array` |
+| `broadcaster` | [`InstanceBroadcaster`](../interfaces/internal_.InstanceBroadcaster.md) |
 
 #### Returns
 
-`Promise`\<[`SecureSession`](internal_.SecureSession.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:67
+matter.js/dist/esm/MatterDevice.d.ts:55
+
+___
+
+### deleteTransportInterface
+
+▸ **deleteTransportInterface**(`transport`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `transport` | [`TransportInterface`](../interfaces/internal_.TransportInterface.md) |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterDevice.d.ts:57
 
 ___
 
@@ -615,7 +585,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:98
+matter.js/dist/esm/MatterDevice.d.ts:76
 
 ___
 
@@ -629,7 +599,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:99
+matter.js/dist/esm/MatterDevice.d.ts:77
 
 ___
 
@@ -651,7 +621,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:100
+matter.js/dist/esm/MatterDevice.d.ts:78
 
 ___
 
@@ -672,7 +642,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:78
+matter.js/dist/esm/MatterDevice.d.ts:66
 
 ___
 
@@ -692,21 +662,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:85
+matter.js/dist/esm/MatterDevice.d.ts:70
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/internal_.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/internal_.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:105
+matter.js/dist/esm/MatterDevice.d.ts:83
 
 ___
 
@@ -726,7 +696,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:83
+matter.js/dist/esm/MatterDevice.d.ts:68
 
 ___
 
@@ -740,21 +710,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:93
-
-___
-
-### getFailSafeContext
-
-▸ **getFailSafeContext**(): [`FailSafeManager`](internal_.FailSafeManager.md)
-
-#### Returns
-
-[`FailSafeManager`](internal_.FailSafeManager.md)
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:92
+matter.js/dist/esm/MatterDevice.d.ts:72
 
 ___
 
@@ -768,21 +724,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:66
-
-___
-
-### getNextFabricIndex
-
-▸ **getNextFabricIndex**(): [`FabricIndex`](../modules/internal_.md#fabricindex)
-
-#### Returns
-
-[`FabricIndex`](../modules/internal_.md#fabricindex)
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:80
+matter.js/dist/esm/MatterDevice.d.ts:65
 
 ___
 
@@ -802,7 +744,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:56
+matter.js/dist/esm/MatterDevice.d.ts:53
 
 ___
 
@@ -822,7 +764,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:59
+matter.js/dist/esm/MatterDevice.d.ts:58
 
 ___
 
@@ -844,7 +786,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:84
+matter.js/dist/esm/MatterDevice.d.ts:69
 
 ___
 
@@ -858,7 +800,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:95
+matter.js/dist/esm/MatterDevice.d.ts:73
 
 ___
 
@@ -872,27 +814,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:91
-
-___
-
-### removePaseSession
-
-▸ **removePaseSession**(): `Promise`\<`void`\>
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:87
+matter.js/dist/esm/MatterDevice.d.ts:51
 
 ___
 
 ### saveResumptionRecord
 
-▸ **saveResumptionRecord**(`resumptionRecord`): `void`
+▸ **saveResumptionRecord**(`resumptionRecord`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -902,11 +830,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:86
+matter.js/dist/esm/MatterDevice.d.ts:71
 
 ___
 
@@ -927,7 +855,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:65
+matter.js/dist/esm/MatterDevice.d.ts:64
 
 ___
 
@@ -948,7 +876,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:82
+matter.js/dist/esm/MatterDevice.d.ts:67
 
 ___
 
@@ -962,7 +890,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:61
+matter.js/dist/esm/MatterDevice.d.ts:60
 
 ___
 
@@ -976,38 +904,28 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:62
+matter.js/dist/esm/MatterDevice.d.ts:61
 
 ___
 
-### stop
+### create
 
-▸ **stop**(): `Promise`\<`void`\>
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-matter.js/dist/esm/MatterDevice.d.ts:104
-
-___
-
-### updateFabric
-
-▸ **updateFabric**(`fabric`): `void`
+▸ **create**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `commissioningChangedCallback`, `sessionChangedCallback`): `Promise`\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `fabric` | [`Fabric`](internal_.Fabric.md) |
+| `sessionStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `fabricStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `getCommissioningConfig` | () => [`Configuration`](../interfaces/internal_.Configuration-1.md) |
+| `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/internal_.FabricAction.md)) => `void` |
+| `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex)) => `void` |
 
 #### Returns
 
-`void`
+`Promise`\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterDevice.d.ts:79
+matter.js/dist/esm/MatterDevice.d.ts:43

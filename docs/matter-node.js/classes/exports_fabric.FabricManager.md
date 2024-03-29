@@ -12,10 +12,11 @@
 
 ### Properties
 
-- [fabricRemoveCallback](exports_fabric.FabricManager.md#fabricremovecallback)
-- [fabricStorage](exports_fabric.FabricManager.md#fabricstorage)
-- [fabrics](exports_fabric.FabricManager.md#fabrics)
-- [nextFabricIndex](exports_fabric.FabricManager.md#nextfabricindex)
+- [#private](exports_fabric.FabricManager.md##private)
+
+### Accessors
+
+- [events](exports_fabric.FabricManager.md#events)
 
 ### Methods
 
@@ -23,6 +24,7 @@
 - [findFabricFromDestinationId](exports_fabric.FabricManager.md#findfabricfromdestinationid)
 - [getFabrics](exports_fabric.FabricManager.md#getfabrics)
 - [getNextFabricIndex](exports_fabric.FabricManager.md#getnextfabricindex)
+- [initFromStorage](exports_fabric.FabricManager.md#initfromstorage)
 - [persistFabrics](exports_fabric.FabricManager.md#persistfabrics)
 - [removeFabric](exports_fabric.FabricManager.md#removefabric)
 - [revokeFabric](exports_fabric.FabricManager.md#revokefabric)
@@ -32,14 +34,13 @@
 
 ### constructor
 
-• **new FabricManager**(`storage`, `fabricRemoveCallback?`): [`FabricManager`](exports_fabric.FabricManager.md)
+• **new FabricManager**(`fabricStorage`): [`FabricManager`](exports_fabric.FabricManager.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storage` | [`StorageContext`](storage_export.StorageContext.md) |
-| `fabricRemoveCallback?` | (`fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex), `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid)) => `void` |
+| `fabricStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 
 #### Returns
 
@@ -47,47 +48,37 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:22
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:25
 
 ## Properties
 
-### fabricRemoveCallback
+### #private
 
-• `Private` `Optional` `Readonly` **fabricRemoveCallback**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:18
-
-___
-
-### fabricStorage
-
-• `Private` `Readonly` **fabricStorage**: `any`
+• `Private` **#private**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:21
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:24
 
-___
+## Accessors
 
-### fabrics
+### events
 
-• `Private` `Readonly` **fabrics**: `any`
+• `get` **events**(): `Object`
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `added` | [`Observable`](../interfaces/util_export.Observable.md)\<[fabric: Fabric], `void`\> |
+| `deleted` | [`Observable`](../interfaces/util_export.Observable.md)\<[fabric: Fabric], `void`\> |
+| `updated` | [`Observable`](../interfaces/util_export.Observable.md)\<[fabric: Fabric], `void`\> |
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:20
-
-___
-
-### nextFabricIndex
-
-• `Private` **nextFabricIndex**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:19
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:27
 
 ## Methods
 
@@ -107,7 +98,7 @@ packages/matter.js/dist/esm/fabric/FabricManager.d.ts:19
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:25
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:34
 
 ___
 
@@ -128,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:28
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:37
 
 ___
 
@@ -142,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:27
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:36
 
 ___
 
@@ -156,27 +147,41 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:23
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:32
+
+___
+
+### initFromStorage
+
+▸ **initFromStorage**(): `Promise`\<`void`\>
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:26
 
 ___
 
 ### persistFabrics
 
-▸ **persistFabrics**(): `void`
+▸ **persistFabrics**(): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Returns
 
-`void`
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:24
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:33
 
 ___
 
 ### removeFabric
 
-▸ **removeFabric**(`fabricIndex`): `void`
+▸ **removeFabric**(`fabricIndex`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -186,11 +191,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:26
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:35
 
 ___
 
@@ -210,13 +215,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:30
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:39
 
 ___
 
 ### updateFabric
 
-▸ **updateFabric**(`fabric`): `void`
+▸ **updateFabric**(`fabric`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -226,8 +231,8 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:29
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:38

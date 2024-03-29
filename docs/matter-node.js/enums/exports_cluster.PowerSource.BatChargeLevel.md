@@ -26,7 +26,7 @@ Charge level is critical, immediate intervention is required
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:98
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:86
 
 ___
 
@@ -38,7 +38,7 @@ Charge level is nominal
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:90
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:78
 
 ___
 
@@ -50,4 +50,4 @@ Charge level is low, intervention may soon be required.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:94
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:82

@@ -6,26 +6,48 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/exports_cluster.ProxyDiscovery.Cluster.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.ProxyDiscovery.md#cluster)
+- [ClusterInstance](exports_cluster.ProxyDiscovery.md#clusterinstance)
+- [Complete](exports_cluster.ProxyDiscovery.md#complete)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `commands`: \{ `proxyDiscoverRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``67`` ; `name`: ``"ProxyDiscovery"`` ; `revision`: ``1``  }\>
-
-Proxy Discovery
-
-This cluster contains commands needed to do proxy discovery as defined in the Section 9.15.7.3, “Step 2: Proxy
-Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the overall Section 9.15.7, “Proxy Discovery
-& Assignment Flow”.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 9.15.13
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.ProxyDiscovery.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ProxyDiscoveryCluster.d.ts:19
+packages/matter.js/dist/esm/cluster/definitions/ProxyDiscoveryCluster.d.ts:34
+
+packages/matter.js/dist/esm/cluster/definitions/ProxyDiscoveryCluster.d.ts:36
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `commands`: \{ `proxyDiscoverRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``67`` ; `name`: ``"ProxyDiscovery"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.ProxyDiscovery.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ProxyDiscoveryCluster.d.ts:14
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.ProxyDiscovery.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ProxyDiscoveryCluster.d.ts:37

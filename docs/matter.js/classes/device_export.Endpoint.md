@@ -4,6 +4,10 @@
 
 [device/export](../modules/device_export.md).Endpoint
 
+The primary interface for Matter.js endpoint implementations.
+
+TODO - this is a transitional interface that allows us to have multiple implementations of the legacy endpoint API
+
 ## Hierarchy
 
 - **`Endpoint`**
@@ -18,6 +22,10 @@
 
   ↳ [`Device`](device_export.Device.md)
 
+## Implements
+
+- [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md)
+
 ## Table of contents
 
 ### Constructors
@@ -31,8 +39,8 @@
 - [clusterServers](device_export.Endpoint.md#clusterservers)
 - [descriptorCluster](device_export.Endpoint.md#descriptorcluster)
 - [deviceTypes](device_export.Endpoint.md#devicetypes)
-- [id](device_export.Endpoint.md#id)
 - [name](device_export.Endpoint.md#name)
+- [number](device_export.Endpoint.md#number)
 - [structureChangedCallback](device_export.Endpoint.md#structurechangedcallback)
 - [uniqueStorageKey](device_export.Endpoint.md#uniquestoragekey)
 
@@ -43,7 +51,7 @@
 - [addClusterServer](device_export.Endpoint.md#addclusterserver)
 - [addFixedLabel](device_export.Endpoint.md#addfixedlabel)
 - [addUserLabel](device_export.Endpoint.md#adduserlabel)
-- [destroy](device_export.Endpoint.md#destroy)
+- [close](device_export.Endpoint.md#close)
 - [determineUniqueID](device_export.Endpoint.md#determineuniqueid)
 - [getAllClusterClients](device_export.Endpoint.md#getallclusterclients)
 - [getAllClusterServers](device_export.Endpoint.md#getallclusterservers)
@@ -54,7 +62,7 @@
 - [getClusterServer](device_export.Endpoint.md#getclusterserver)
 - [getClusterServerById](device_export.Endpoint.md#getclusterserverbyid)
 - [getDeviceTypes](device_export.Endpoint.md#getdevicetypes)
-- [getId](device_export.Endpoint.md#getid)
+- [getNumber](device_export.Endpoint.md#getnumber)
 - [hasClusterClient](device_export.Endpoint.md#hasclusterclient)
 - [hasClusterServer](device_export.Endpoint.md#hasclusterserver)
 - [removeChildEndpoint](device_export.Endpoint.md#removechildendpoint)
@@ -85,7 +93,7 @@ Create a new Endpoint instance.
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:52](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L52)
+[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L53)
 
 ## Properties
 
@@ -95,7 +103,7 @@ Create a new Endpoint instance.
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L36)
+[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L37)
 
 ___
 
@@ -105,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L35)
+[packages/matter.js/src/device/Endpoint.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L36)
 
 ___
 
@@ -115,17 +123,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L34)
+[packages/matter.js/src/device/Endpoint.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L35)
 
 ___
 
 ### descriptorCluster
 
-• `Private` **descriptorCluster**: [`ClusterServerObjForCluster`](../modules/cluster_export.md#clusterserverobjforcluster)\<[`Definition`](../modules/cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `clientList`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)[], `any`\> ; `deviceTypeList`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\> ; `revision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>[], `any`\> ; `partsList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)[], `any`\> ; `serverList`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)[], `any`\>  } ; `id`: ``29`` = 0x1d; `name`: ``"Descriptor"`` = "Descriptor"; `revision`: ``1`` = 1 }\>\>
+• `Private` **descriptorCluster**: [`ClusterServerObjForCluster`](../modules/cluster_export.md#clusterserverobjforcluster)\<[`Cluster`](../interfaces/cluster_export.Descriptor.Cluster.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L44)
+[packages/matter.js/src/device/Endpoint.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L45)
 
 ___
 
@@ -137,17 +145,7 @@ One or multiple DeviceTypeDefinitions of the endpoint
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L53)
-
-___
-
-### id
-
-• **id**: `undefined` \| [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
-
-#### Defined in
-
-[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L37)
+[packages/matter.js/src/device/Endpoint.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L54)
 
 ___
 
@@ -155,9 +153,27 @@ ___
 
 • **name**: `string` = `""`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[name](../interfaces/endpoint_export.EndpointInterface.md#name)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L39)
+[packages/matter.js/src/device/Endpoint.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L40)
+
+___
+
+### number
+
+• **number**: `undefined` \| [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
+
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[number](../interfaces/endpoint_export.EndpointInterface.md#number)
+
+#### Defined in
+
+[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L38)
 
 ___
 
@@ -175,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L40)
+[packages/matter.js/src/device/Endpoint.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L41)
 
 ___
 
@@ -185,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L38)
+[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L39)
 
 ## Methods
 
@@ -197,15 +213,19 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](device_export.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md) |
 
 #### Returns
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[addChildEndpoint](../interfaces/endpoint_export.EndpointInterface.md#addchildendpoint)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:256](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L256)
+[packages/matter.js/src/device/Endpoint.ts:257](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L257)
 
 ___
 
@@ -232,9 +252,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[addClusterClient](../interfaces/endpoint_export.EndpointInterface.md#addclusterclient)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:173](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L173)
+[packages/matter.js/src/device/Endpoint.ts:174](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L174)
 
 ___
 
@@ -259,9 +283,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[addClusterServer](../interfaces/endpoint_export.EndpointInterface.md#addclusterserver)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L146)
+[packages/matter.js/src/device/Endpoint.ts:147](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L147)
 
 ___
 
@@ -282,7 +310,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L106)
+[packages/matter.js/src/device/Endpoint.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L107)
 
 ___
 
@@ -303,21 +331,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:126](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L126)
+[packages/matter.js/src/device/Endpoint.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L127)
 
 ___
 
-### destroy
+### close
 
-▸ **destroy**(): `void`
+▸ **close**(): `void`
 
 #### Returns
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[close](../interfaces/endpoint_export.EndpointInterface.md#close)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:93](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L93)
+[packages/matter.js/src/device/Endpoint.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L94)
 
 ___
 
@@ -329,9 +361,13 @@ ___
 
 `undefined` \| `string`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[determineUniqueID](../interfaces/endpoint_export.EndpointInterface.md#determineuniqueid)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:283](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L283)
+[packages/matter.js/src/device/Endpoint.ts:291](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L291)
 
 ___
 
@@ -343,9 +379,13 @@ ___
 
 [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[getAllClusterClients](../interfaces/endpoint_export.EndpointInterface.md#getallclusterclients)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:343](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L343)
+[packages/matter.js/src/device/Endpoint.ts:351](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L351)
 
 ___
 
@@ -357,9 +397,13 @@ ___
 
 [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[getAllClusterServers](../interfaces/endpoint_export.EndpointInterface.md#getallclusterservers)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:339](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L339)
+[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L347)
 
 ___
 
@@ -377,9 +421,13 @@ ___
 
 `undefined` \| [`Endpoint`](device_export.Endpoint.md)
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[getChildEndpoint](../interfaces/endpoint_export.EndpointInterface.md#getchildendpoint)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:265](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L265)
+[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L273)
 
 ___
 
@@ -391,9 +439,13 @@ ___
 
 [`Endpoint`](device_export.Endpoint.md)[]
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[getChildEndpoints](../interfaces/endpoint_export.EndpointInterface.md#getchildendpoints)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:269](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L269)
+[packages/matter.js/src/device/Endpoint.ts:277](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L277)
 
 ___
 
@@ -421,9 +473,13 @@ ___
 
 `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[getClusterClient](../interfaces/endpoint_export.EndpointInterface.md#getclusterclient)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:198](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L198)
+[packages/matter.js/src/device/Endpoint.ts:199](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L199)
 
 ___
 
@@ -443,7 +499,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:212](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L212)
+[packages/matter.js/src/device/Endpoint.ts:213](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L213)
 
 ___
 
@@ -471,9 +527,13 @@ ___
 
 `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[getClusterServer](../interfaces/endpoint_export.EndpointInterface.md#getclusterserver)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:183](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L183)
+[packages/matter.js/src/device/Endpoint.ts:184](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L184)
 
 ___
 
@@ -491,9 +551,13 @@ ___
 
 `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[getClusterServerById](../interfaces/endpoint_export.EndpointInterface.md#getclusterserverbyid)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:208](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L208)
+[packages/matter.js/src/device/Endpoint.ts:209](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L209)
 
 ___
 
@@ -507,21 +571,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L236)
+[packages/matter.js/src/device/Endpoint.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L237)
 
 ___
 
-### getId
+### getNumber
 
-▸ **getId**(): [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
+▸ **getNumber**(): [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
 
 #### Returns
 
 [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[getNumber](../interfaces/endpoint_export.EndpointInterface.md#getnumber)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L99)
+[packages/matter.js/src/device/Endpoint.ts:100](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L100)
 
 ___
 
@@ -551,7 +619,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:226](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L226)
+[packages/matter.js/src/device/Endpoint.ts:227](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L227)
 
 ___
 
@@ -579,9 +647,13 @@ ___
 
 `boolean`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[hasClusterServer](../interfaces/endpoint_export.EndpointInterface.md#hasclusterserver)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:216](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L216)
+[packages/matter.js/src/device/Endpoint.ts:217](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L217)
 
 ___
 
@@ -601,7 +673,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L273)
+[packages/matter.js/src/device/Endpoint.ts:281](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L281)
 
 ___
 
@@ -613,9 +685,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[removeFromStructure](../interfaces/endpoint_export.EndpointInterface.md#removefromstructure)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L85)
+[packages/matter.js/src/device/Endpoint.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L86)
 
 ___
 
@@ -635,7 +711,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L240)
+[packages/matter.js/src/device/Endpoint.ts:241](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L241)
 
 ___
 
@@ -653,9 +729,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[setStructureChangedCallback](../interfaces/endpoint_export.EndpointInterface.md#setstructurechangedcallback)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L80)
+[packages/matter.js/src/device/Endpoint.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L81)
 
 ___
 
@@ -667,9 +747,13 @@ ___
 
 [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)[]
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[updatePartsList](../interfaces/endpoint_export.EndpointInterface.md#updatepartslist)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L347)
+[packages/matter.js/src/device/Endpoint.ts:355](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L355)
 
 ___
 
@@ -681,6 +765,10 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/endpoint_export.EndpointInterface.md).[verifyRequiredClusters](../interfaces/endpoint_export.EndpointInterface.md#verifyrequiredclusters)
+
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:305](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L305)
+[packages/matter.js/src/device/Endpoint.ts:313](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L313)

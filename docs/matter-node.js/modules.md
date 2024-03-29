@@ -7,6 +7,8 @@
 ### Modules
 
 - [crypto/export](modules/crypto_export.md)
+- [crypto/export](modules/crypto_export-1.md)
+- [environment/export](modules/environment_export.md)
 - [export](modules/export.md)
 - [exports/ble](modules/exports_ble.md)
 - [exports/certificate](modules/exports_certificate.md)
@@ -26,6 +28,7 @@
 - [exports/session](modules/exports_session.md)
 - [exports/spec](modules/exports_spec.md)
 - [exports/tlv](modules/exports_tlv.md)
+- [log/export](modules/log_export.md)
 - [net/export](modules/net_export.md)
 - [storage/export](modules/storage_export.md)
 - [time/export](modules/time_export.md)

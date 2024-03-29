@@ -13,7 +13,7 @@
 ## Implemented by
 
 - [`CaseServer`](../classes/exports_session.CaseServer.md)
-- [`InteractionServer`](../classes/exports_interaction.InteractionServer.md)
+- [`InteractionServer`](../classes/exports_interaction.InteractionServer-1.md)
 - [`PaseServer`](../classes/exports_session.PaseServer.md)
 - [`StatusReportOnlySecureChannelProtocol`](../classes/exports_securechannel.StatusReportOnlySecureChannelProtocol.md)
 - [`SubscriptionClient`](../classes/exports_interaction.SubscriptionClient.md)

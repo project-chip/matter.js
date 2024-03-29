@@ -14,6 +14,7 @@
 
 - [attributePaths](exports_interaction.InteractionEndpointStructure.md#attributepaths)
 - [attributes](exports_interaction.InteractionEndpointStructure.md#attributes)
+- [change](exports_interaction.InteractionEndpointStructure.md#change)
 - [commandPaths](exports_interaction.InteractionEndpointStructure.md#commandpaths)
 - [commands](exports_interaction.InteractionEndpointStructure.md#commands)
 - [endpoints](exports_interaction.InteractionEndpointStructure.md#endpoints)
@@ -25,7 +26,7 @@
 ### Methods
 
 - [clear](exports_interaction.InteractionEndpointStructure.md#clear)
-- [destroy](exports_interaction.InteractionEndpointStructure.md#destroy)
+- [close](exports_interaction.InteractionEndpointStructure.md#close)
 - [getAttribute](exports_interaction.InteractionEndpointStructure.md#getattribute)
 - [getAttributes](exports_interaction.InteractionEndpointStructure.md#getattributes)
 - [getClusterServer](exports_interaction.InteractionEndpointStructure.md#getclusterserver)
@@ -67,7 +68,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:23
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:24
 
 ___
 
@@ -77,7 +78,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:22
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:23
+
+___
+
+### change
+
+• **change**: [`Observable`](../interfaces/util_export.Observable.md)\<`any`[], `void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:29
 
 ___
 
@@ -87,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:27
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:28
 
 ___
 
@@ -97,17 +108,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:26
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:27
 
 ___
 
 ### endpoints
 
-• **endpoints**: `Map`\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber), [`Endpoint`](exports_device.Endpoint.md)\>
+• **endpoints**: `Map`\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber), [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:21
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:22
 
 ___
 
@@ -117,17 +128,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:25
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:26
 
 ___
 
 ### events
 
-• **events**: `Map`\<`string`, [`EventServer`](exports_cluster.EventServer.md)\<`any`\>\>
+• **events**: `Map`\<`string`, [`EventServer`](exports_cluster.EventServer.md)\<`any`, `any`\>\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:24
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:25
 
 ___
 
@@ -137,7 +148,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:31
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:33
 
 ___
 
@@ -147,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:32
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:34
 
 ## Methods
 
@@ -161,13 +172,13 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:30
 
 ___
 
-### destroy
+### close
 
-▸ **destroy**(): `void`
+▸ **close**(): `void`
 
 #### Returns
 
@@ -175,7 +186,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:29
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:31
 
 ___
 
@@ -197,7 +208,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:44
 
 ___
 
@@ -209,7 +220,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
 | `onlyWritable?` | `boolean` |
 
 #### Returns
@@ -218,7 +229,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:51
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:53
 
 ___
 
@@ -239,7 +250,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:40
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:42
 
 ___
 
@@ -261,7 +272,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:48
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:50
 
 ___
 
@@ -273,7 +284,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`CommandId`](../modules/exports_datatype.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\> ; `commandId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`CommandId`](../modules/exports_datatype.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\>  }\>[] |
 
 #### Returns
 
@@ -281,13 +292,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:53
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:55
 
 ___
 
 ### getEndpoint
 
-▸ **getEndpoint**(`endpointId`): `undefined` \| [`Endpoint`](exports_device.Endpoint.md)
+▸ **getEndpoint**(`endpointId`): `undefined` \| [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)
 
 #### Parameters
 
@@ -297,17 +308,17 @@ ___
 
 #### Returns
 
-`undefined` \| [`Endpoint`](exports_device.Endpoint.md)
+`undefined` \| [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:40
 
 ___
 
 ### getEvent
 
-▸ **getEvent**(`endpointId`, `clusterId`, `eventId`): `undefined` \| [`EventServer`](exports_cluster.EventServer.md)\<`any`\>
+▸ **getEvent**(`endpointId`, `clusterId`, `eventId`): `undefined` \| [`EventServer`](exports_cluster.EventServer.md)\<`any`, `any`\>
 
 #### Parameters
 
@@ -319,11 +330,11 @@ ___
 
 #### Returns
 
-`undefined` \| [`EventServer`](exports_cluster.EventServer.md)\<`any`\>
+`undefined` \| [`EventServer`](exports_cluster.EventServer.md)\<`any`, `any`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:47
 
 ___
 
@@ -335,7 +346,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
 
 #### Returns
 
@@ -343,7 +354,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:52
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:54
 
 ___
 
@@ -365,7 +376,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:43
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:45
 
 ___
 
@@ -386,7 +397,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:41
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:43
 
 ___
 
@@ -408,7 +419,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:49
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:51
 
 ___
 
@@ -428,7 +439,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:39
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:41
 
 ___
 
@@ -450,7 +461,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:48
 
 ___
 
@@ -462,7 +473,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
 
 #### Returns
 
@@ -470,7 +481,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:30
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:32
 
 ___
 
@@ -482,27 +493,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:35
-
-___
-
-### resolveCommandName
-
-▸ **resolveCommandName**(`«destructured»`): `string`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`CommandId`](../modules/exports_datatype.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](../modules/exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -514,6 +505,26 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.
 
 ___
 
+### resolveCommandName
+
+▸ **resolveCommandName**(`«destructured»`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `«destructured»` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\> ; `commandId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`CommandId`](../modules/exports_datatype.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\>  }\> |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:39
+
+___
+
 ### resolveEventName
 
 ▸ **resolveEventName**(`«destructured»`): `string`
@@ -522,7 +533,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -530,7 +541,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:36
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:38
 
 ___
 
@@ -554,7 +565,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:34
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:36
 
 ___
 
@@ -574,7 +585,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:33
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:35
 
 ___
 
@@ -596,7 +607,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:46
 
 ___
 
@@ -618,7 +629,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:50
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:52
 
 ___
 
@@ -640,4 +651,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:49

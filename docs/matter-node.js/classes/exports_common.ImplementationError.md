@@ -13,6 +13,10 @@ provided data. if you are sure your code is correct please report the issue.
 
   ↳ **`ImplementationError`**
 
+  ↳↳ [`DependencyLifecycleError`](exports_common.DependencyLifecycleError.md)
+
+  ↳↳ [`ReadOnlyError`](exports_common.ReadOnlyError.md)
+
 ## Table of contents
 
 ### Constructors
@@ -41,4 +45,4 @@ provided data. if you are sure your code is correct please report the issue.
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082

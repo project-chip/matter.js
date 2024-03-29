@@ -30,7 +30,7 @@ LatchingSwitch
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:78
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:290
 
 ___
 
@@ -42,7 +42,7 @@ MomentarySwitch
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:82
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:294
 
 ___
 
@@ -54,7 +54,7 @@ MomentarySwitchLongPress
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:90
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:302
 
 ___
 
@@ -66,7 +66,7 @@ MomentarySwitchMultiPress
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:94
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:306
 
 ___
 
@@ -78,4 +78,4 @@ MomentarySwitchRelease
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:86
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:298

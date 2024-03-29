@@ -24,21 +24,21 @@
 
 ### Child
 
-Ƭ **Child**: [`DatatypeElement`](exports_model.md#datatypeelement) \| [`AttributeElement`](exports_model.md#attributeelement) \| [`CommandElement`](exports_model.md#commandelement) \| [`EventElement`](exports_model.md#eventelement)
+Ƭ **Child**: [`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md) \| [`AttributeElement`](../interfaces/exports_model.AttributeElement-1.md) \| [`CommandElement`](../interfaces/exports_model.CommandElement-1.md) \| [`EventElement`](../interfaces/exports_model.EventElement-1.md) \| [`FieldElement`](../interfaces/exports_model.FieldElement-1.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:33
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:39
 
 ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`ClusterElement`](exports_model.md#clusterelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`ClusterElement`](../interfaces/exports_model.ClusterElement-1.md)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:32
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:38
 
 ___
 
@@ -48,9 +48,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:30
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:36
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:37
 
 ## Variables
 
@@ -60,6 +60,6 @@ packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:31
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:30
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:36
 
-packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:37

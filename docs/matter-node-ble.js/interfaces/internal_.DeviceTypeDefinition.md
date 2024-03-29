@@ -27,7 +27,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:52
+matter.js/dist/esm/device/DeviceTypes.d.ts:57
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:53
+matter.js/dist/esm/device/DeviceTypes.d.ts:58
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:51
+matter.js/dist/esm/device/DeviceTypes.d.ts:56
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:59
+matter.js/dist/esm/device/DeviceTypes.d.ts:64
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:57
+matter.js/dist/esm/device/DeviceTypes.d.ts:62
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:58
+matter.js/dist/esm/device/DeviceTypes.d.ts:63
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:56
+matter.js/dist/esm/device/DeviceTypes.d.ts:61
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:55
+matter.js/dist/esm/device/DeviceTypes.d.ts:60
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:54
+matter.js/dist/esm/device/DeviceTypes.d.ts:59
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:60
+matter.js/dist/esm/device/DeviceTypes.d.ts:65

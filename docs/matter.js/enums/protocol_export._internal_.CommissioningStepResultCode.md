@@ -22,7 +22,7 @@ Result code of a single commissioning step.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:69](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ControllerCommissioner.ts#L69)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/ControllerCommissioner.ts#L69)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:70](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ControllerCommissioner.ts#L70)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/ControllerCommissioner.ts#L70)
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ControllerCommissioner.ts#L68)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/ControllerCommissioner.ts#L68)

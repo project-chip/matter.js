@@ -36,7 +36,7 @@ Physical lock type is cylindrical lock
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:63
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1021
 
 ___
 
@@ -48,7 +48,7 @@ Physical lock type is dead latch
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:75
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1033
 
 ___
 
@@ -60,7 +60,7 @@ Physical lock type is dead bolt
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:39
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:997
 
 ___
 
@@ -72,7 +72,7 @@ Physical lock type is door furniture
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:79
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1037
 
 ___
 
@@ -84,7 +84,7 @@ Physical lock type is interconnected lock
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:71
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1029
 
 ___
 
@@ -96,7 +96,7 @@ Physical lock type is latch bolt
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:59
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1017
 
 ___
 
@@ -108,7 +108,7 @@ Physical lock type is magnetic
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:43
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1001
 
 ___
 
@@ -120,7 +120,7 @@ Physical lock type is mortise
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:51
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1009
 
 ___
 
@@ -132,7 +132,7 @@ Physical lock type is other
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:47
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1005
 
 ___
 
@@ -144,7 +144,7 @@ Physical lock type is rim
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:55
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1013
 
 ___
 
@@ -156,4 +156,4 @@ Physical lock type is tubular lock
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:67
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1025

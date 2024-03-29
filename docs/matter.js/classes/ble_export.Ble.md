@@ -14,6 +14,10 @@
 
 - [get](ble_export.Ble.md#get)
 
+### Accessors
+
+- [enabled](ble_export.Ble.md#enabled)
+
 ### Methods
 
 - [getBleBroadcaster](ble_export.Ble.md#getblebroadcaster)
@@ -35,7 +39,7 @@
 
 ### get
 
-▪ `Static` **get**: () => [`Ble`](ble_export.Ble.md)
+▪ `Static` **get**: () => [`Ble`](ble_export.Ble.md) = `BleDisabled`
 
 #### Type declaration
 
@@ -47,7 +51,21 @@
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/Ble.ts#L17)
+[packages/matter.js/src/ble/Ble.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/Ble.ts#L21)
+
+## Accessors
+
+### enabled
+
+• `get` **enabled**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/matter.js/src/ble/Ble.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/Ble.ts#L23)
 
 ## Methods
 
@@ -67,7 +85,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/Ble.ts#L23)
+[packages/matter.js/src/ble/Ble.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/Ble.ts#L29)
 
 ___
 
@@ -81,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/Ble.ts#L22)
+[packages/matter.js/src/ble/Ble.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/Ble.ts#L28)
 
 ___
 
@@ -95,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/Ble.ts#L21)
+[packages/matter.js/src/ble/Ble.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/Ble.ts#L27)
 
 ___
 
@@ -109,4 +127,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/ble/Ble.ts#L24)
+[packages/matter.js/src/ble/Ble.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/Ble.ts#L30)

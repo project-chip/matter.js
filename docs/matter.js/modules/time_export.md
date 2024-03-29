@@ -32,4 +32,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:9](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L9)
+[packages/matter.js/src/time/Time.ts:11](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L11)

@@ -20,15 +20,21 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 ### Properties
 
+- [#private](exports_protocol.PersistedMessageCounter.md##private)
 - [aboutToRolloverCallback](exports_protocol.PersistedMessageCounter.md#abouttorollovercallback)
 - [messageCounter](exports_protocol.PersistedMessageCounter.md#messagecounter)
 - [rolloverInfoDifference](exports_protocol.PersistedMessageCounter.md#rolloverinfodifference)
 - [storageContext](exports_protocol.PersistedMessageCounter.md#storagecontext)
 - [storageKey](exports_protocol.PersistedMessageCounter.md#storagekey)
 
+### Accessors
+
+- [construction](exports_protocol.PersistedMessageCounter.md#construction)
+
 ### Methods
 
 - [getIncrementedCounter](exports_protocol.PersistedMessageCounter.md#getincrementedcounter)
+- [create](exports_protocol.PersistedMessageCounter.md#create)
 
 ## Constructors
 
@@ -40,7 +46,7 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 | Name | Type |
 | :------ | :------ |
-| `storageContext` | [`StorageContext`](storage_export.StorageContext.md) |
+| `storageContext` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 | `storageKey` | `string` |
 | `aboutToRolloverCallback?` | () => `void` |
 | `rolloverInfoDifference?` | `number` |
@@ -55,9 +61,19 @@ Enhanced Message counter that can be persisted and will be initialized from the 
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:51
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:55
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:50
+
+___
 
 ### aboutToRolloverCallback
 
@@ -77,7 +93,7 @@ packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:51
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:36
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:37
 
 ___
 
@@ -91,7 +107,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:38
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:39
 
 ___
 
@@ -105,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:37
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:38
 
 ___
 
@@ -115,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:49
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:51
 
 ___
 
@@ -125,17 +141,31 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:50
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:52
+
+## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)\<[`PersistedMessageCounter`](exports_protocol.PersistedMessageCounter.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)\<[`PersistedMessageCounter`](exports_protocol.PersistedMessageCounter.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:53
 
 ## Methods
 
 ### getIncrementedCounter
 
-▸ **getIncrementedCounter**(): `number`
+▸ **getIncrementedCounter**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Overrides
 
@@ -143,4 +173,27 @@ packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:50
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:52
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:56
+
+___
+
+### create
+
+▸ **create**(`storageContext`, `storageKey`, `aboutToRolloverCallback?`, `rolloverInfoDifference?`): `Promise`\<[`PersistedMessageCounter`](exports_protocol.PersistedMessageCounter.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `storageContext` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `storageKey` | `string` |
+| `aboutToRolloverCallback?` | () => `void` |
+| `rolloverInfoDifference?` | `number` |
+
+#### Returns
+
+`Promise`\<[`PersistedMessageCounter`](exports_protocol.PersistedMessageCounter.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:54

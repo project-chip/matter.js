@@ -46,7 +46,7 @@ Base class for all attribute servers.
 
 ### constructor
 
-• **new BaseAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`): [`BaseAttributeServer`](internal_.BaseAttributeServer.md)\<`T`\>
+• **new BaseAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`): [`BaseAttributeServer`](internal_.BaseAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -64,7 +64,8 @@ Base class for all attribute servers.
 | `isWritable` | `boolean` |
 | `isSubscribable` | `boolean` |
 | `requiresTimedInteraction` | `boolean` |
-| `defaultValue` | `T` |
+| `initValue` | `T` |
+| `defaultValue` | `undefined` \| `T` |
 
 #### Returns
 
@@ -72,7 +73,7 @@ Base class for all attribute servers.
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:45
 
 ## Properties
 
@@ -82,7 +83,7 @@ matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
 
 ___
 
@@ -92,7 +93,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
 
 ___
 
@@ -102,7 +103,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:31
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
 
 ___
 
@@ -112,7 +113,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
 
 ___
 
@@ -122,7 +123,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
 
 ___
 
@@ -132,7 +133,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:32
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
 
 ___
 
@@ -142,7 +143,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
 
 ___
 
@@ -152,7 +153,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
 
 ___
 
@@ -164,7 +165,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 ## Methods
 
@@ -184,7 +185,7 @@ matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:45
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:47
 
 ___
 
@@ -207,7 +208,7 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:50
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:52
 
 ___
 
@@ -227,4 +228,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:46

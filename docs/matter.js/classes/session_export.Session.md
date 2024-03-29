@@ -14,9 +14,9 @@
 
 - **`Session`**
 
-  ↳ [`SecureSession`](session_export.SecureSession.md)
+  ↳ [`InsecureSession`](session_export.InsecureSession.md)
 
-  ↳ [`UnsecureSession`](session_export.UnsecureSession.md)
+  ↳ [`SecureSession`](session_export.SecureSession.md)
 
 ## Table of contents
 
@@ -29,10 +29,18 @@
 - [activeIntervalMs](session_export.Session.md#activeintervalms)
 - [activeThresholdMs](session_export.Session.md#activethresholdms)
 - [activeTimestamp](session_export.Session.md#activetimestamp)
+- [associatedFabric](session_export.Session.md#associatedfabric)
 - [closeCallback](session_export.Session.md#closecallback)
+- [context](session_export.Session.md#context)
+- [id](session_export.Session.md#id)
 - [idleIntervalMs](session_export.Session.md#idleintervalms)
+- [isPase](session_export.Session.md#ispase)
+- [isSecure](session_export.Session.md#issecure)
 - [messageCounter](session_export.Session.md#messagecounter)
 - [messageReceptionState](session_export.Session.md#messagereceptionstate)
+- [nodeId](session_export.Session.md#nodeid)
+- [peerNodeId](session_export.Session.md#peernodeid)
+- [peerSessionId](session_export.Session.md#peersessionid)
 - [timestamp](session_export.Session.md#timestamp)
 
 ### Accessors
@@ -46,17 +54,9 @@
 - [destroy](session_export.Session.md#destroy)
 - [encode](session_export.Session.md#encode)
 - [end](session_export.Session.md#end)
-- [getAssociatedFabric](session_export.Session.md#getassociatedfabric)
-- [getContext](session_export.Session.md#getcontext)
-- [getId](session_export.Session.md#getid)
 - [getIncrementedMessageCounter](session_export.Session.md#getincrementedmessagecounter)
-- [getNodeId](session_export.Session.md#getnodeid)
-- [getPeerNodeId](session_export.Session.md#getpeernodeid)
-- [getPeerSessionId](session_export.Session.md#getpeersessionid)
 - [getSessionParameters](session_export.Session.md#getsessionparameters)
-- [isPase](session_export.Session.md#ispase)
 - [isPeerActive](session_export.Session.md#ispeeractive)
-- [isSecure](session_export.Session.md#issecure)
 - [notifyActivity](session_export.Session.md#notifyactivity)
 - [updateMessageCounter](session_export.Session.md#updatemessagecounter)
 
@@ -89,7 +89,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L50)
+[packages/matter.js/src/session/Session.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L50)
 
 ## Properties
 
@@ -99,7 +99,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L44)
+[packages/matter.js/src/session/Session.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L44)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L45)
+[packages/matter.js/src/session/Session.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L45)
 
 ___
 
@@ -119,7 +119,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L42)
+[packages/matter.js/src/session/Session.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L42)
+
+___
+
+### associatedFabric
+
+• `Abstract` **associatedFabric**: [`Fabric`](fabric_export.Fabric.md)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L115)
 
 ___
 
@@ -137,7 +147,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L46)
+[packages/matter.js/src/session/Session.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L46)
+
+___
+
+### context
+
+• `Abstract` **context**: `T`
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L110)
+
+___
+
+### id
+
+• `Abstract` **id**: `number`
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L111)
 
 ___
 
@@ -147,7 +177,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L43)
+[packages/matter.js/src/session/Session.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L43)
+
+___
+
+### isPase
+
+• `Abstract` **isPase**: `boolean`
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:109](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L109)
+
+___
+
+### isSecure
+
+• `Abstract` **isSecure**: `boolean`
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L108)
 
 ___
 
@@ -157,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L47)
+[packages/matter.js/src/session/Session.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L47)
 
 ___
 
@@ -167,7 +217,37 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:48](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L48)
+[packages/matter.js/src/session/Session.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L48)
+
+___
+
+### nodeId
+
+• `Abstract` **nodeId**: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L113)
+
+___
+
+### peerNodeId
+
+• `Abstract` **peerNodeId**: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid)
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L114)
+
+___
+
+### peerSessionId
+
+• `Abstract` **peerSessionId**: `number`
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:112](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L112)
 
 ___
 
@@ -177,7 +257,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L41)
+[packages/matter.js/src/session/Session.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L41)
 
 ## Accessors
 
@@ -191,7 +271,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L40)
+[packages/matter.js/src/session/Session.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L40)
 
 ___
 
@@ -205,7 +285,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L39)
+[packages/matter.js/src/session/Session.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L39)
 
 ## Methods
 
@@ -226,7 +306,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:110](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L110)
+[packages/matter.js/src/session/Session.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L117)
 
 ___
 
@@ -247,7 +327,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:118](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L118)
+[packages/matter.js/src/session/Session.ts:120](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L120)
 
 ___
 
@@ -267,7 +347,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:111](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L111)
+[packages/matter.js/src/session/Session.ts:118](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L118)
 
 ___
 
@@ -287,105 +367,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:117](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L117)
-
-___
-
-### getAssociatedFabric
-
-▸ **getAssociatedFabric**(): [`Fabric`](fabric_export.Fabric.md)
-
-#### Returns
-
-[`Fabric`](fabric_export.Fabric.md)
-
-#### Defined in
-
-[packages/matter.js/src/session/Session.ts:119](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L119)
-
-___
-
-### getContext
-
-▸ **getContext**(): `T`
-
-#### Returns
-
-`T`
-
-#### Defined in
-
-[packages/matter.js/src/session/Session.ts:112](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L112)
-
-___
-
-### getId
-
-▸ **getId**(): `number`
-
-#### Returns
-
-`number`
-
-#### Defined in
-
-[packages/matter.js/src/session/Session.ts:113](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L113)
+[packages/matter.js/src/session/Session.ts:119](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L119)
 
 ___
 
 ### getIncrementedMessageCounter
 
-▸ **getIncrementedMessageCounter**(): `number`
+▸ **getIncrementedMessageCounter**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L91)
-
-___
-
-### getNodeId
-
-▸ **getNodeId**(): `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid)
-
-#### Returns
-
-`undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid)
-
-#### Defined in
-
-[packages/matter.js/src/session/Session.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L115)
-
-___
-
-### getPeerNodeId
-
-▸ **getPeerNodeId**(): `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid)
-
-#### Returns
-
-`undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid)
-
-#### Defined in
-
-[packages/matter.js/src/session/Session.ts:116](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L116)
-
-___
-
-### getPeerSessionId
-
-▸ **getPeerSessionId**(): `number`
-
-#### Returns
-
-`number`
-
-#### Defined in
-
-[packages/matter.js/src/session/Session.ts:114](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L114)
+[packages/matter.js/src/session/Session.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L91)
 
 ___
 
@@ -399,21 +395,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:99](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L99)
-
-___
-
-### isPase
-
-▸ **isPase**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-[packages/matter.js/src/session/Session.ts:109](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L109)
+[packages/matter.js/src/session/Session.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L99)
 
 ___
 
@@ -427,21 +409,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L87)
-
-___
-
-### isSecure
-
-▸ **isSecure**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-[packages/matter.js/src/session/Session.ts:108](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L108)
+[packages/matter.js/src/session/Session.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L87)
 
 ___
 
@@ -461,7 +429,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:79](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L79)
+[packages/matter.js/src/session/Session.ts:79](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L79)
 
 ___
 
@@ -482,4 +450,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:95](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/Session.ts#L95)
+[packages/matter.js/src/session/Session.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/Session.ts#L95)

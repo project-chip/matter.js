@@ -46,7 +46,7 @@ a number of messages before the rollover callback is called (Default 1000).
 
 #### Defined in
 
-matter.js/dist/esm/protocol/MessageCounter.d.ts:44
+matter.js/dist/esm/protocol/MessageCounter.d.ts:45
 
 ## Properties
 
@@ -64,7 +64,7 @@ matter.js/dist/esm/protocol/MessageCounter.d.ts:44
 
 #### Defined in
 
-matter.js/dist/esm/protocol/MessageCounter.d.ts:36
+matter.js/dist/esm/protocol/MessageCounter.d.ts:37
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/MessageCounter.d.ts:38
+matter.js/dist/esm/protocol/MessageCounter.d.ts:39
 
 ___
 
@@ -84,18 +84,18 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/MessageCounter.d.ts:37
+matter.js/dist/esm/protocol/MessageCounter.d.ts:38
 
 ## Methods
 
 ### getIncrementedCounter
 
-▸ **getIncrementedCounter**(): `number`
+▸ **getIncrementedCounter**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/MessageCounter.d.ts:45
+matter.js/dist/esm/protocol/MessageCounter.d.ts:46

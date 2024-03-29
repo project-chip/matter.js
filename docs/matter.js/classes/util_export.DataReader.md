@@ -70,7 +70,7 @@ Reader that auto-increments its offset after each read.
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:15](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L15)
+[packages/matter.js/src/util/DataReader.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L15)
 
 ## Properties
 
@@ -80,7 +80,7 @@ Reader that auto-increments its offset after each read.
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L16)
+[packages/matter.js/src/util/DataReader.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L16)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L12)
+[packages/matter.js/src/util/DataReader.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L12)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L11)
+[packages/matter.js/src/util/DataReader.ts:11](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L11)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L13)
+[packages/matter.js/src/util/DataReader.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L13)
 
 ## Methods
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L81)
+[packages/matter.js/src/util/DataReader.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L81)
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:92](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L92)
+[packages/matter.js/src/util/DataReader.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L92)
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:77](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L77)
+[packages/matter.js/src/util/DataReader.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L77)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L73)
+[packages/matter.js/src/util/DataReader.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L73)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L68)
+[packages/matter.js/src/util/DataReader.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L68)
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L59)
+[packages/matter.js/src/util/DataReader.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L59)
 
 ___
 
@@ -220,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:55](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L55)
+[packages/matter.js/src/util/DataReader.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L55)
 
 ___
 
@@ -234,7 +234,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L43)
+[packages/matter.js/src/util/DataReader.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L43)
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L47)
+[packages/matter.js/src/util/DataReader.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L47)
 
 ___
 
@@ -262,7 +262,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L51)
+[packages/matter.js/src/util/DataReader.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L51)
 
 ___
 
@@ -276,7 +276,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L39)
+[packages/matter.js/src/util/DataReader.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L39)
 
 ___
 
@@ -290,7 +290,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L27)
+[packages/matter.js/src/util/DataReader.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L27)
 
 ___
 
@@ -304,7 +304,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L31)
+[packages/matter.js/src/util/DataReader.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L31)
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L35)
+[packages/matter.js/src/util/DataReader.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L35)
 
 ___
 
@@ -332,7 +332,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L23)
+[packages/matter.js/src/util/DataReader.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L23)
 
 ___
 
@@ -352,7 +352,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L63)
+[packages/matter.js/src/util/DataReader.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L63)
 
 ___
 
@@ -372,4 +372,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/DataReader.ts:85](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/DataReader.ts#L85)
+[packages/matter.js/src/util/DataReader.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/DataReader.ts#L85)

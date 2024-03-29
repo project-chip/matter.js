@@ -19,16 +19,16 @@ Supported combined types to stringify the data for the storage that can be used 
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StringifyTools.ts#L39)
+[packages/matter.js/src/storage/StringifyTools.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StringifyTools.ts#L52)
 
 ___
 
 ### SupportedStorageBaseTypes
 
-Ƭ **SupportedStorageBaseTypes**: `string` \| `number` \| `boolean` \| `bigint` \| [`ByteArray`](util_export.md#bytearray) \| [`AttributeId`](datatype_export.md#attributeid) \| [`ClusterId`](datatype_export.md#clusterid) \| [`CommandId`](datatype_export.md#commandid) \| [`EndpointNumber`](datatype_export.md#endpointnumber) \| [`EventId`](datatype_export.md#eventid) \| [`FabricId`](datatype_export.md#fabricid) \| [`FabricIndex`](datatype_export.md#fabricindex) \| [`GroupId`](datatype_export.md#groupid) \| [`NodeId`](datatype_export.md#nodeid) \| [`VendorId`](datatype_export.md#vendorid)
+Ƭ **SupportedStorageBaseTypes**: `string` \| `number` \| `boolean` \| `bigint` \| [`ByteArray`](util_export.md#bytearray) \| [`AttributeId`](datatype_export.md#attributeid) \| [`CaseAuthenticatedTag`](datatype_export.md#caseauthenticatedtag) \| [`ClusterId`](datatype_export.md#clusterid) \| [`CommandId`](datatype_export.md#commandid) \| [`DataVersion`](datatype_export.md#dataversion) \| [`DeviceTypeId`](datatype_export.md#devicetypeid) \| [`EndpointNumber`](datatype_export.md#endpointnumber) \| [`EntryIndex`](datatype_export.md#entryindex) \| [`EventId`](datatype_export.md#eventid) \| [`EventNumber`](datatype_export.md#eventnumber) \| [`FabricId`](datatype_export.md#fabricid) \| [`FabricIndex`](datatype_export.md#fabricindex) \| [`FieldId`](datatype_export.md#fieldid) \| [`GroupId`](datatype_export.md#groupid) \| [`NodeId`](datatype_export.md#nodeid) \| [`VendorId`](datatype_export.md#vendorid)
 
 Supported base types to stringify the data for the storage that can be used as keys and also values.
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StringifyTools.ts#L21)
+[packages/matter.js/src/storage/StringifyTools.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StringifyTools.ts#L28)

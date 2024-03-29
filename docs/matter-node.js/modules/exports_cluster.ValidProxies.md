@@ -6,29 +6,53 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/exports_cluster.ValidProxies.Cluster.md)
+- [ValidProxyStruct](../interfaces/exports_cluster.ValidProxies.ValidProxyStruct.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.ValidProxies.md#cluster)
+- [ClusterInstance](exports_cluster.ValidProxies.md#clusterinstance)
+- [Complete](exports_cluster.ValidProxies.md#complete)
 - [TlvValidProxyStruct](exports_cluster.ValidProxies.md#tlvvalidproxystruct)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `validProxyList`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `commands`: \{ `getValidProxiesRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``68`` ; `name`: ``"ValidProxies"`` ; `revision`: ``1``  }\>
-
-Proxy Valid
-
-This cluster provides a means for a device to be told of the valid set of possible proxies that can proxy
-subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignment Flow”.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 9.15.15
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.ValidProxies.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:26
+packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:59
+
+packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:61
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `validProxyList`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `getValidProxiesRequest`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``68`` ; `name`: ``"ValidProxies"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.ValidProxies.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:30
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.ValidProxies.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:62
 
 ___
 
@@ -44,4 +68,4 @@ MatterCoreSpecificationV1_1 § 9.15.15.4.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:17

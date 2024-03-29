@@ -26,7 +26,7 @@ The UserStatus enum used in various commands shall indicate what the status is f
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:607](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L607)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:134](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L134)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:609](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L609)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:136](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L136)
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:608](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L608)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:135](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L135)

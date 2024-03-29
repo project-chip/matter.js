@@ -12,66 +12,83 @@
 - [Feature](../enums/exports_cluster.KeypadInput.Feature.md)
 - [Status](../enums/exports_cluster.KeypadInput.Status.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.KeypadInput.md#extension)
+- [Cluster](../interfaces/exports_cluster.KeypadInput.Cluster.md)
+- [SendKeyRequest](../interfaces/exports_cluster.KeypadInput.SendKeyRequest.md)
+- [SendKeyResponse](../interfaces/exports_cluster.KeypadInput.SendKeyResponse.md)
 
 ### Variables
 
 - [Base](exports_cluster.KeypadInput.md#base)
 - [Cluster](exports_cluster.KeypadInput.md#cluster)
+- [ClusterInstance](exports_cluster.KeypadInput.md#clusterinstance)
+- [Complete](exports_cluster.KeypadInput.md#complete)
 - [TlvSendKeyRequest](exports_cluster.KeypadInput.md#tlvsendkeyrequest)
 - [TlvSendKeyResponse](exports_cluster.KeypadInput.md#tlvsendkeyresponse)
-
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.KeypadInput.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  }
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:381
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `commands`: \{ `sendKey`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: \{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1289`` ; `name`: ``"KeypadInput"`` ; `revision`: ``1``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all KeypadInput clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `commands` | \{ `sendKey`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } | - |
+| `commands.sendKey` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall process a keycode as input to the media device. If a second SendKey request with the same KeyCode value is received within 200ms, then the endpoint will consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200ms, then the endpoint will consider the last key press to be a release. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.8.3.1 |
+| `extensions` | readonly [] | This metadata controls which KeypadInputCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.locationKeys` | [`BitFlag`](exports_schema.md#bitflag) | LocationKeys Supports CEC keys 0x0A (Settings) and 0x09 (Home) |
+| `features.navigationKeyCodes` | [`BitFlag`](exports_schema.md#bitflag) | NavigationKeyCodes Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU |
+| `features.numberKeys` | [`BitFlag`](exports_schema.md#bitflag) | NumberKeys Supports numeric input 0..9 |
+| `id` | ``1289`` | - |
+| `name` | ``"KeypadInput"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:170
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:186
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `sendKey`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `events`: {} ; `features`: \{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"KeypadInput"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `commands`: \{ `sendKey`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: \{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1289`` ; `name`: ``"KeypadInput"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.KeypadInput.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Keypad Input
-
-This cluster provides an interface for key code based input and control on a device like a Video Player or an
-endpoint like a Content App. This may include text or action commands such as UP, DOWN, and SELECT.
-
-KeypadInputCluster supports optional features that you can enable with the KeypadInputCluster.with() factory
-method.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 6.8
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.KeypadInput.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:232
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:312
+
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:314
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `commands`: \{ `sendKey`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `extensions`: readonly [] ; `features`: \{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1289`` ; `name`: ``"KeypadInput"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.KeypadInput.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:245
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.KeypadInput.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:315
 
 ___
 
@@ -87,7 +104,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.8.3.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:104
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:106
 
 ___
 
@@ -103,4 +120,4 @@ MatterApplicationClusterSpecificationV1_1 § 6.8.3.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:134
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:143

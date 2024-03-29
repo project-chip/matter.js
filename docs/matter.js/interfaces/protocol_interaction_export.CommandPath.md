@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:69](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L69)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L74)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:70](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L70)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L75)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L68)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L73)

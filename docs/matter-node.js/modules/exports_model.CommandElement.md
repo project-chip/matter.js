@@ -23,7 +23,7 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`CommandElement`](exports_model.md#commandelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`CommandElement`](../interfaces/exports_model.CommandElement-1.md)\>
 
 #### Defined in
 

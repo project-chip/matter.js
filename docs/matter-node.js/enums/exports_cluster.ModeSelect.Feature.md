@@ -28,4 +28,4 @@ Dependency with the On/Off cluster
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:112
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:152

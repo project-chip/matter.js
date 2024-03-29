@@ -15,6 +15,7 @@
 ### Classes
 
 - [ChannelManager](../classes/protocol_export.ChannelManager.md)
+- [ChannelNotConnectedError](../classes/protocol_export.ChannelNotConnectedError.md)
 - [CommissioningError](../classes/protocol_export.CommissioningError.md)
 - [ControllerCommissioner](../classes/protocol_export.ControllerCommissioner.md)
 - [ControllerDiscovery](../classes/protocol_export.ControllerDiscovery.md)
@@ -72,7 +73,7 @@ User specific options for the Commissioning process
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/ControllerCommissioner.ts#L39)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/ControllerCommissioner.ts#L39)
 
 ___
 
@@ -91,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageExchange.ts#L41)
+[packages/matter.js/src/protocol/MessageExchange.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageExchange.ts#L42)
 
 ## Variables
 
@@ -103,4 +104,4 @@ Maximum 32 bit counter value.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L12)
+[packages/matter.js/src/protocol/MessageCounter.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L13)

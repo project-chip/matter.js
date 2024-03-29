@@ -15,7 +15,7 @@
 
 ### CommandId
 
-Re-exports [CommandId](exports_datatype.md#commandid)
+Re-exports [CommandId](exports_datatype.md#commandid-1)
 
 ___
 

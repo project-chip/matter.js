@@ -12,9 +12,20 @@
 - [AccessControlEntryPrivilege](../enums/exports_cluster.AccessControl.AccessControlEntryPrivilege.md)
 - [ChangeType](../enums/exports_cluster.AccessControl.ChangeType.md)
 
+### Interfaces
+
+- [AccessControlEntryChangedEvent](../interfaces/exports_cluster.AccessControl.AccessControlEntryChangedEvent.md)
+- [AccessControlEntryStruct](../interfaces/exports_cluster.AccessControl.AccessControlEntryStruct.md)
+- [AccessControlExtensionChangedEvent](../interfaces/exports_cluster.AccessControl.AccessControlExtensionChangedEvent.md)
+- [AccessControlExtensionStruct](../interfaces/exports_cluster.AccessControl.AccessControlExtensionStruct.md)
+- [AccessControlTargetStruct](../interfaces/exports_cluster.AccessControl.AccessControlTargetStruct.md)
+- [Cluster](../interfaces/exports_cluster.AccessControl.Cluster.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.AccessControl.md#cluster)
+- [ClusterInstance](exports_cluster.AccessControl.md#clusterinstance)
+- [Complete](exports_cluster.AccessControl.md#complete)
 - [TlvAccessControlEntryChangedEvent](exports_cluster.AccessControl.md#tlvaccesscontrolentrychangedevent)
 - [TlvAccessControlEntryStruct](exports_cluster.AccessControl.md#tlvaccesscontrolentrystruct)
 - [TlvAccessControlExtensionChangedEvent](exports_cluster.AccessControl.md#tlvaccesscontrolextensionchangedevent)
@@ -25,25 +36,37 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `accessControlEntriesPerFabric`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `acl`: [`WritableFabricScopedAttribute`](../interfaces/exports_cluster.WritableFabricScopedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `extension`: [`OptionalWritableFabricScopedAttribute`](../interfaces/exports_cluster.OptionalWritableFabricScopedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `subjectsPerAccessControlEntry`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `targetsPerAccessControlEntry`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `accessControlEntryChanged`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `accessControlExtensionChanged`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``31`` ; `name`: ``"AccessControl"`` ; `revision`: ``1``  }\>
-
-Access Control
-
-The Access Control Cluster exposes a data model view of a Node’s Access Control List (ACL), which codifies the
-rules used to manage and enforce Access Control for the Node’s endpoints and their associated cluster instances.
-Access to this Access Control Cluster itself requires a special Administer privilege level, such that only Nodes
-granted such privilege (hereafter termed "Administrators") can manage the Access Control Cluster.
-
-The Access Control Cluster shall be present on the root node endpoint of each Node, and shall NOT be present on
-any other Endpoint of any Node.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 9.10
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.AccessControl.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:394
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:808
+
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:810
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `accessControlEntriesPerFabric`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `acl`: [`WritableFabricScopedAttribute`](../interfaces/exports_cluster.WritableFabricScopedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `extension`: [`OptionalWritableFabricScopedAttribute`](../interfaces/exports_cluster.OptionalWritableFabricScopedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `subjectsPerAccessControlEntry`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `targetsPerAccessControlEntry`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `accessControlEntryChanged`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `accessControlExtensionChanged`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``31`` ; `name`: ``"AccessControl"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.AccessControl.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:415
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.AccessControl.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:811
 
 ___
 
@@ -59,7 +82,7 @@ MatterCoreSpecificationV1_1 § 9.10.7.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:219
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:236
 
 ___
 
@@ -73,7 +96,7 @@ MatterCoreSpecificationV1_1 § 9.10.4.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:79
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:86
 
 ___
 
@@ -89,7 +112,7 @@ MatterCoreSpecificationV1_1 § 9.10.7.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:358
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:382
 
 ___
 
@@ -103,7 +126,7 @@ MatterCoreSpecificationV1_1 § 9.10.4.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:180
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:192
 
 ___
 
@@ -117,4 +140,4 @@ MatterCoreSpecificationV1_1 § 9.10.4.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:71
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:73

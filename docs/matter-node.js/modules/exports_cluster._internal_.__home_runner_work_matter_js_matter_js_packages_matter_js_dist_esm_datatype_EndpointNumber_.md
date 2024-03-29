@@ -15,7 +15,7 @@
 
 ### EndpointNumber
 
-Re-exports [EndpointNumber](exports_datatype.md#endpointnumber)
+Re-exports [EndpointNumber](exports_datatype.md#endpointnumber-1)
 
 ___
 

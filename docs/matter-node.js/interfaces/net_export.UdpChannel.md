@@ -11,11 +11,29 @@
 
 ## Table of contents
 
+### Accessors
+
+- [port](net_export.UdpChannel.md#port)
+
 ### Methods
 
 - [close](net_export.UdpChannel.md#close)
 - [onData](net_export.UdpChannel.md#ondata)
 - [send](net_export.UdpChannel.md#send)
+
+## Accessors
+
+### port
+
+• `get` **port**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/UdpChannel.d.ts:19
 
 ## Methods
 

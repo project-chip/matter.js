@@ -12,29 +12,35 @@
 
 ### Properties
 
+- [#construction](certificate_export.RootCertificateManager.md##construction)
 - [nextCertificateId](certificate_export.RootCertificateManager.md#nextcertificateid)
 - [rootCertBytes](certificate_export.RootCertificateManager.md#rootcertbytes)
 - [rootCertId](certificate_export.RootCertificateManager.md#rootcertid)
 - [rootKeyIdentifier](certificate_export.RootCertificateManager.md#rootkeyidentifier)
 - [rootKeyPair](certificate_export.RootCertificateManager.md#rootkeypair)
 
+### Accessors
+
+- [construction](certificate_export.RootCertificateManager.md#construction)
+
 ### Methods
 
 - [generateNoc](certificate_export.RootCertificateManager.md#generatenoc)
 - [generateRootCert](certificate_export.RootCertificateManager.md#generaterootcert)
 - [getRootCert](certificate_export.RootCertificateManager.md#getrootcert)
+- [create](certificate_export.RootCertificateManager.md#create)
 
 ## Constructors
 
 ### constructor
 
-• **new RootCertificateManager**(`storageContext`): [`RootCertificateManager`](certificate_export.RootCertificateManager.md)
+• **new RootCertificateManager**(`storage`): [`RootCertificateManager`](certificate_export.RootCertificateManager.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storageContext` | [`StorageContext`](storage_export.StorageContext.md) |
+| `storage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 
 #### Returns
 
@@ -42,9 +48,19 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L29)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L39)
 
 ## Properties
+
+### #construction
+
+• `Private` **#construction**: [`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`RootCertificateManager`](certificate_export.RootCertificateManager.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/certificate/RootCertificateManager.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L29)
+
+___
 
 ### nextCertificateId
 
@@ -52,7 +68,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L27)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L28)
 
 ___
 
@@ -62,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L26)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L27)
 
 ___
 
@@ -72,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L23)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L24)
 
 ___
 
@@ -82,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L25)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L26)
 
 ___
 
@@ -92,7 +108,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L24)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L25)
+
+## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`RootCertificateManager`](certificate_export.RootCertificateManager.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)\<[`RootCertificateManager`](certificate_export.RootCertificateManager.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/certificate/RootCertificateManager.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L31)
 
 ## Methods
 
@@ -115,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:86](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L86)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L94)
 
 ___
 
@@ -129,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L63)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L71)
 
 ___
 
@@ -143,4 +173,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/certificate/RootCertificateManager.ts#L59)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L67)
+
+___
+
+### create
+
+▸ **create**(`storage`): `Promise`\<[`RootCertificateManager`](certificate_export.RootCertificateManager.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `storage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+
+#### Returns
+
+`Promise`\<[`RootCertificateManager`](certificate_export.RootCertificateManager.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/certificate/RootCertificateManager.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L35)

@@ -29,7 +29,7 @@ Command failed: Requested playback command is invalid in the current playback st
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L95)
 
 ___
 
@@ -41,7 +41,7 @@ Command failed: This endpoint is not active for playback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L106)
 
 ___
 
@@ -54,7 +54,7 @@ attempting to fast-forward during a commercial might return NotAllowed.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L63)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L101)
 
 ___
 
@@ -67,7 +67,7 @@ the media.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:118](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L118)
 
 ___
 
@@ -80,7 +80,7 @@ fastest speed supported by the server in the respective direction.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:74](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L74)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:112](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L112)
 
 ___
 
@@ -92,4 +92,4 @@ Command succeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:52](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L52)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L90)

@@ -25,9 +25,9 @@
 - [commandHandler](exports_device._internal_.DimmableBaseDevice.md#commandhandler)
 - [deviceType](exports_device._internal_.DimmableBaseDevice.md#devicetype)
 - [deviceTypes](exports_device._internal_.DimmableBaseDevice.md#devicetypes)
-- [id](exports_device._internal_.DimmableBaseDevice.md#id)
 - [isLighting](exports_device._internal_.DimmableBaseDevice.md#islighting)
 - [name](exports_device._internal_.DimmableBaseDevice.md#name)
+- [number](exports_device._internal_.DimmableBaseDevice.md#number)
 - [uniqueStorageKey](exports_device._internal_.DimmableBaseDevice.md#uniquestoragekey)
 
 ### Methods
@@ -42,9 +42,9 @@
 - [addFixedLabel](exports_device._internal_.DimmableBaseDevice.md#addfixedlabel)
 - [addOnOffListener](exports_device._internal_.DimmableBaseDevice.md#addonofflistener)
 - [addUserLabel](exports_device._internal_.DimmableBaseDevice.md#adduserlabel)
+- [close](exports_device._internal_.DimmableBaseDevice.md#close)
 - [createOptionalClusterClient](exports_device._internal_.DimmableBaseDevice.md#createoptionalclusterclient)
 - [createOptionalClusterServer](exports_device._internal_.DimmableBaseDevice.md#createoptionalclusterserver)
-- [destroy](exports_device._internal_.DimmableBaseDevice.md#destroy)
 - [determineUniqueID](exports_device._internal_.DimmableBaseDevice.md#determineuniqueid)
 - [getAllClusterClients](exports_device._internal_.DimmableBaseDevice.md#getallclusterclients)
 - [getAllClusterServers](exports_device._internal_.DimmableBaseDevice.md#getallclusterservers)
@@ -56,7 +56,7 @@
 - [getClusterServerById](exports_device._internal_.DimmableBaseDevice.md#getclusterserverbyid)
 - [getCurrentLevel](exports_device._internal_.DimmableBaseDevice.md#getcurrentlevel)
 - [getDeviceTypes](exports_device._internal_.DimmableBaseDevice.md#getdevicetypes)
-- [getId](exports_device._internal_.DimmableBaseDevice.md#getid)
+- [getNumber](exports_device._internal_.DimmableBaseDevice.md#getnumber)
 - [getOnOff](exports_device._internal_.DimmableBaseDevice.md#getonoff)
 - [hasClusterClient](exports_device._internal_.DimmableBaseDevice.md#hasclusterclient)
 - [hasClusterServer](exports_device._internal_.DimmableBaseDevice.md#hasclusterserver)
@@ -139,21 +139,7 @@ DimmableBaseDevice\_base.deviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:19
-
-___
-
-### id
-
-• **id**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
-
-#### Inherited from
-
-DimmableBaseDevice\_base.id
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:20
 
 ___
 
@@ -181,7 +167,21 @@ DimmableBaseDevice\_base.name
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+
+___
+
+### number
+
+• **number**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+
+#### Inherited from
+
+DimmableBaseDevice\_base.number
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ___
 
@@ -195,7 +195,7 @@ DimmableBaseDevice\_base.uniqueStorageKey
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ## Methods
 
@@ -289,7 +289,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
 
 #### Returns
 
@@ -301,7 +301,7 @@ DimmableBaseDevice\_base.addChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -334,7 +334,7 @@ DimmableBaseDevice\_base.addClusterClient
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -365,7 +365,7 @@ DimmableBaseDevice\_base.addClusterServer
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -519,7 +519,7 @@ DimmableBaseDevice\_base.addFixedLabel
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -571,7 +571,25 @@ DimmableBaseDevice\_base.addUserLabel
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+
+___
+
+### close
+
+▸ **close**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+DimmableBaseDevice\_base.close
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -643,24 +661,6 @@ packages/matter.js/dist/esm/device/Device.d.ts:115
 
 ___
 
-### destroy
-
-▸ **destroy**(): `void`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-DimmableBaseDevice\_base.destroy
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Endpoint.d.ts:37
-
-___
-
 ### determineUniqueID
 
 ▸ **determineUniqueID**(): `undefined` \| `string`
@@ -675,7 +675,7 @@ DimmableBaseDevice\_base.determineUniqueID
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56
 
 ___
 
@@ -693,7 +693,7 @@ DimmableBaseDevice\_base.getAllClusterClients
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -711,7 +711,7 @@ DimmableBaseDevice\_base.getAllClusterServers
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -735,7 +735,7 @@ DimmableBaseDevice\_base.getChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -753,7 +753,7 @@ DimmableBaseDevice\_base.getChildEndpoints
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -811,7 +811,7 @@ DimmableBaseDevice\_base.getClusterClientById
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -869,7 +869,7 @@ DimmableBaseDevice\_base.getClusterServerById
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -901,13 +901,13 @@ DimmableBaseDevice\_base.getDeviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
-### getId
+### getNumber
 
-▸ **getId**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+▸ **getNumber**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Returns
 
@@ -915,11 +915,11 @@ ___
 
 #### Inherited from
 
-DimmableBaseDevice\_base.getId
+DimmableBaseDevice\_base.getNumber
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -971,7 +971,7 @@ DimmableBaseDevice\_base.hasClusterClient
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -1005,7 +1005,7 @@ DimmableBaseDevice\_base.hasClusterServer
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -1029,7 +1029,7 @@ DimmableBaseDevice\_base.removeChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -1129,7 +1129,7 @@ DimmableBaseDevice\_base.removeFromStructure
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -1200,7 +1200,7 @@ DimmableBaseDevice\_base.setDeviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -1251,7 +1251,7 @@ DimmableBaseDevice\_base.setStructureChangedCallback
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -1290,7 +1290,7 @@ DimmableBaseDevice\_base.updatePartsList
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:59
+packages/matter.js/dist/esm/device/Endpoint.d.ts:60
 
 ___
 
@@ -1308,4 +1308,4 @@ DimmableBaseDevice\_base.verifyRequiredClusters
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57

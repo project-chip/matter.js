@@ -4,16 +4,32 @@
 
 ## Table of contents
 
+### References
+
+- [Selector](exports_model._internal_.md#selector)
+
+### Namespaces
+
+- [Children](exports_model._internal_.Children.md)
+
 ### Interfaces
 
-- [RecordValidationResult](../interfaces/exports_model._internal_.RecordValidationResult.md)
-- [RecordValidator](../interfaces/exports_model._internal_.RecordValidator.md)
+- [Children](../interfaces/exports_model._internal_.Children-1.md)
 
 ### Type Aliases
 
 - [ClusterState](exports_model._internal_.md#clusterstate)
-- [ElementSelector](exports_model._internal_.md#elementselector)
 - [NameMapping](exports_model._internal_.md#namemapping)
+
+### Functions
+
+- [Children](exports_model._internal_.md#children)
+
+## References
+
+### Selector
+
+Re-exports [Selector](exports_model._internal_.Children.md#selector)
 
 ## Type Aliases
 
@@ -31,17 +47,7 @@ This type manages state that changes when we enter a cluster.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:99
-
-___
-
-### ElementSelector
-
-Ƭ **ElementSelector**: `string` \| `number` \| (`model`: [`Model`](../classes/exports_model.Model-1.md)) => `boolean`
-
-#### Defined in
-
-packages/matter.js/dist/esm/model/logic/ModelTraversal.d.ts:129
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:94
 
 ___
 
@@ -53,4 +59,35 @@ Map of Model -> name
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:95
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:90
+
+## Functions
+
+### Children
+
+▸ **Children**\<`M`, `E`\>(`initial`, `adopt`, `disown`): [`Children`](../interfaces/exports_model._internal_.Children-1.md)\<`M`, [`AnyElement`](exports_model.md#anyelement)\>
+
+Invoked by [Model](../classes/exports_model.Model-1.md) to instantiate a new child array.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `M` | extends [`Model`](../classes/exports_model.Model-1.md) = [`Model`](../classes/exports_model.Model-1.md) |
+| `E` | extends [`AnyElement`](exports_model.md#anyelement) = [`AnyElement`](exports_model.md#anyelement) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initial` | `Iterable`\<[`AnyElement`](exports_model.md#anyelement) \| `M`\> |
+| `adopt` | (`child`: [`Model`](../classes/exports_model.Model-1.md)) => `void` |
+| `disown` | (`child`: [`Model`](../classes/exports_model.Model-1.md)) => `boolean` |
+
+#### Returns
+
+[`Children`](../interfaces/exports_model._internal_.Children-1.md)\<`M`, [`AnyElement`](exports_model.md#anyelement)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/models/Children.d.ts:48

@@ -19,7 +19,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:12
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:13
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:13
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:14

@@ -1,8 +1,14 @@
 [@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / StorageContext
 
-# Class: StorageContext
+# Class: StorageContext\<S\>
 
 [\<internal\>](../modules/internal_.md).StorageContext
+
+## Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/internal_.Storage.md) = `any` |
 
 ## Table of contents
 
@@ -12,52 +18,50 @@
 
 ### Properties
 
-- [contexts](internal_.StorageContext.md#contexts)
 - [storage](internal_.StorageContext.md#storage)
+- [thisContexts](internal_.StorageContext.md#thiscontexts)
 
 ### Methods
 
 - [clear](internal_.StorageContext.md#clear)
 - [clearAll](internal_.StorageContext.md#clearall)
+- [contexts](internal_.StorageContext.md#contexts)
 - [createContext](internal_.StorageContext.md#createcontext)
 - [delete](internal_.StorageContext.md#delete)
 - [get](internal_.StorageContext.md#get)
 - [has](internal_.StorageContext.md#has)
 - [keys](internal_.StorageContext.md#keys)
 - [set](internal_.StorageContext.md#set)
+- [values](internal_.StorageContext.md#values)
 
 ## Constructors
 
 ### constructor
 
-• **new StorageContext**(`storage`, `contexts`): [`StorageContext`](internal_.StorageContext.md)
+• **new StorageContext**\<`S`\>(`storage`, `thisContexts`): [`StorageContext`](internal_.StorageContext.md)\<`S`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/internal_.Storage.md) = `any` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storage` | [`Storage`](internal_.Storage.md) |
-| `contexts` | `string`[] |
+| `storage` | `S` |
+| `thisContexts` | `string`[] |
 
 #### Returns
 
-[`StorageContext`](internal_.StorageContext.md)
+[`StorageContext`](internal_.StorageContext.md)\<`S`\>
 
 #### Defined in
 
 matter.js/dist/esm/storage/StorageContext.d.ts:11
 
 ## Properties
-
-### contexts
-
-• `Private` `Readonly` **contexts**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/storage/StorageContext.d.ts:10
-
-___
 
 ### storage
 
@@ -67,43 +71,67 @@ ___
 
 matter.js/dist/esm/storage/StorageContext.d.ts:9
 
+___
+
+### thisContexts
+
+• `Readonly` **thisContexts**: `string`[]
+
+#### Defined in
+
+matter.js/dist/esm/storage/StorageContext.d.ts:10
+
 ## Methods
 
 ### clear
 
-▸ **clear**(): `void`
+▸ **clear**(): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 Clears all keys in this context
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Defined in
 
-matter.js/dist/esm/storage/StorageContext.d.ts:19
+matter.js/dist/esm/storage/StorageContext.d.ts:22
 
 ___
 
 ### clearAll
 
-▸ **clearAll**(): `void`
+▸ **clearAll**(): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 Clears all keys in this context and all created sub-contexts.
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Defined in
 
-matter.js/dist/esm/storage/StorageContext.d.ts:21
+matter.js/dist/esm/storage/StorageContext.d.ts:24
+
+___
+
+### contexts
+
+▸ **contexts**(): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `string`[]\>
+
+#### Returns
+
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `string`[]\>
+
+#### Defined in
+
+matter.js/dist/esm/storage/StorageContext.d.ts:20
 
 ___
 
 ### createContext
 
-▸ **createContext**(`context`): [`StorageContext`](internal_.StorageContext.md)
+▸ **createContext**(`context`): [`StorageContext`](internal_.StorageContext.md)\<`S`\>
 
 #### Parameters
 
@@ -113,17 +141,17 @@ ___
 
 #### Returns
 
-[`StorageContext`](internal_.StorageContext.md)
+[`StorageContext`](internal_.StorageContext.md)\<`S`\>
 
 #### Defined in
 
-matter.js/dist/esm/storage/StorageContext.d.ts:16
+matter.js/dist/esm/storage/StorageContext.d.ts:17
 
 ___
 
 ### delete
 
-▸ **delete**(`key`): `void`
+▸ **delete**(`key`): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Parameters
 
@@ -133,17 +161,17 @@ ___
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Defined in
 
-matter.js/dist/esm/storage/StorageContext.d.ts:15
+matter.js/dist/esm/storage/StorageContext.d.ts:16
 
 ___
 
 ### get
 
-▸ **get**\<`T`\>(`key`, `defaultValue?`): `T`
+▸ **get**\<`T`\>(`key`, `defaultValue?`): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `T`\>
 
 #### Type parameters
 
@@ -160,7 +188,7 @@ ___
 
 #### Returns
 
-`T`
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `T`\>
 
 #### Defined in
 
@@ -170,7 +198,7 @@ ___
 
 ### has
 
-▸ **has**(`key`): `boolean`
+▸ **has**(`key`): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `boolean`\>
 
 #### Parameters
 
@@ -180,7 +208,7 @@ ___
 
 #### Returns
 
-`boolean`
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `boolean`\>
 
 #### Defined in
 
@@ -190,39 +218,63 @@ ___
 
 ### keys
 
-▸ **keys**(): `string`[]
+▸ **keys**(): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `string`[]\>
 
 #### Returns
 
-`string`[]
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `string`[]\>
 
 #### Defined in
 
-matter.js/dist/esm/storage/StorageContext.d.ts:17
+matter.js/dist/esm/storage/StorageContext.d.ts:18
 
 ___
 
 ### set
 
-▸ **set**\<`T`\>(`key`, `value`): `void`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`SupportedStorageTypes`](../modules/internal_.md#supportedstoragetypes) |
+▸ **set**(`key`, `value`): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `key` | `string` |
-| `value` | `T` |
+| `value` | [`SupportedStorageTypes`](../modules/internal_.md#supportedstoragetypes) |
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
 
 #### Defined in
 
 matter.js/dist/esm/storage/StorageContext.d.ts:14
+
+▸ **set**(`values`): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `values` | `Record`\<`string`, [`SupportedStorageTypes`](../modules/internal_.md#supportedstoragetypes)\> |
+
+#### Returns
+
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`\>
+
+#### Defined in
+
+matter.js/dist/esm/storage/StorageContext.d.ts:15
+
+___
+
+### values
+
+▸ **values**(): [`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `Record`\<`string`, [`SupportedStorageTypes`](../modules/internal_.md#supportedstoragetypes)\>\>
+
+#### Returns
+
+[`StorageOperationResult`](../modules/internal_.md#storageoperationresult)\<`S`, `Record`\<`string`, [`SupportedStorageTypes`](../modules/internal_.md#supportedstoragetypes)\>\>
+
+#### Defined in
+
+matter.js/dist/esm/storage/StorageContext.d.ts:19

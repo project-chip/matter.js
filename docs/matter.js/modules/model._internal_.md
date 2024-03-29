@@ -6,20 +6,19 @@
 
 ### References
 
-- [ElementSelector](model._internal_.md#elementselector)
+- [Selector](model._internal_.md#selector)
 
 ### Namespaces
 
-- [ModelTraversal](model._internal_.ModelTraversal.md)
+- [Children](model._internal_.Children.md)
 
 ### Classes
 
-- [ModelTraversal](../classes/model._internal_.ModelTraversal-1.md)
+- [ModelTraversal](../classes/model._internal_.ModelTraversal.md)
 
 ### Interfaces
 
-- [RecordValidationResult](../interfaces/model._internal_.RecordValidationResult.md)
-- [RecordValidator](../interfaces/model._internal_.RecordValidator.md)
+- [Children](../interfaces/model._internal_.Children-1.md)
 
 ### Type Aliases
 
@@ -27,11 +26,15 @@
 - [ClusterState](model._internal_.md#clusterstate)
 - [NameMapping](model._internal_.md#namemapping)
 
+### Functions
+
+- [Children](model._internal_.md#children)
+
 ## References
 
-### ElementSelector
+### Selector
 
-Re-exports [ElementSelector](model._internal_.ModelTraversal.md#elementselector)
+Re-exports [Selector](model._internal_.Children.md#selector)
 
 ## Type Aliases
 
@@ -49,7 +52,7 @@ Re-exports [ElementSelector](model._internal_.ModelTraversal.md#elementselector)
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:198](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L198)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:193](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L193)
 
 ___
 
@@ -67,7 +70,7 @@ This type manages state that changes when we enter a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:314](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L314)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:313](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L313)
 
 ___
 
@@ -79,4 +82,35 @@ Map of Model -> name
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:309](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L309)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:308](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L308)
+
+## Functions
+
+### Children
+
+▸ **Children**\<`M`, `E`\>(`initial`, `adopt`, `disown`): [`Children`](../interfaces/model._internal_.Children-1.md)\<`M`, [`AnyElement`](model.md#anyelement)\>
+
+Invoked by [Model](../classes/model.Model-1.md) to instantiate a new child array.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `M` | extends [`Model`](../classes/model.Model-1.md) = [`Model`](../classes/model.Model-1.md) |
+| `E` | extends [`AnyElement`](model.md#anyelement) = [`AnyElement`](model.md#anyelement) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initial` | `Iterable`\<[`AnyElement`](model.md#anyelement) \| `M`\> |
+| `adopt` | (`child`: [`Model`](../classes/model.Model-1.md)) => `void` |
+| `disown` | (`child`: [`Model`](../classes/model.Model-1.md)) => `boolean` |
+
+#### Returns
+
+[`Children`](../interfaces/model._internal_.Children-1.md)\<`M`, [`AnyElement`](model.md#anyelement)\>
+
+#### Defined in
+
+[packages/matter.js/src/model/models/Children.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Children.ts#L59)

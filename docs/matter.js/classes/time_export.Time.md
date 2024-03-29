@@ -24,7 +24,9 @@
 - [getTimer](time_export.Time.md#gettimer-1)
 - [now](time_export.Time.md#now-1)
 - [nowMs](time_export.Time.md#nowms-1)
+- [register](time_export.Time.md#register)
 - [sleep](time_export.Time.md#sleep)
+- [unregister](time_export.Time.md#unregister)
 
 ## Constructors
 
@@ -52,13 +54,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L12)
+[packages/matter.js/src/time/Time.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L16)
 
 ## Methods
 
 ### getPeriodicTimer
 
-▸ **getPeriodicTimer**(`intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ **getPeriodicTimer**(`name`, `intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 Returns a timer that will periodically call callback at intervalMs intervals.
 
@@ -66,6 +68,7 @@ Returns a timer that will periodically call callback at intervalMs intervals.
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `intervalMs` | `number` |
 | `callback` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
@@ -75,13 +78,13 @@ Returns a timer that will periodically call callback at intervalMs intervals.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L26)
+[packages/matter.js/src/time/Time.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L30)
 
 ___
 
 ### getTimer
 
-▸ **getTimer**(`durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ **getTimer**(`name`, `durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 Returns a timer that will call callback after durationMs has passed.
 
@@ -89,6 +92,7 @@ Returns a timer that will call callback after durationMs has passed.
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `durationMs` | `number` |
 | `callback` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
@@ -98,7 +102,7 @@ Returns a timer that will call callback after durationMs has passed.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L21)
+[packages/matter.js/src/time/Time.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L25)
 
 ___
 
@@ -112,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:14](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L14)
+[packages/matter.js/src/time/Time.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L18)
 
 ___
 
@@ -126,18 +130,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L17)
+[packages/matter.js/src/time/Time.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L21)
 
 ___
 
 ### getPeriodicTimer
 
-▸ **getPeriodicTimer**(`intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ **getPeriodicTimer**(`name`, `intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `intervalMs` | `number` |
 | `callback` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
@@ -147,18 +152,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L27)
+[packages/matter.js/src/time/Time.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L31)
 
 ___
 
 ### getTimer
 
-▸ **getTimer**(`durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ **getTimer**(`name`, `durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `durationMs` | `number` |
 | `callback` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
@@ -168,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L22)
+[packages/matter.js/src/time/Time.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L26)
 
 ___
 
@@ -182,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:15](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L15)
+[packages/matter.js/src/time/Time.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L19)
 
 ___
 
@@ -196,18 +202,39 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L18)
+[packages/matter.js/src/time/Time.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L22)
 
 ___
 
-### sleep
+### register
 
-▸ **sleep**(`durationMs`): `Promise`\<`void`\>
+▸ **register**(`timer`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `timer` | [`Timer`](../interfaces/time_export.Timer.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/time/Time.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L37)
+
+___
+
+### sleep
+
+▸ **sleep**(`name`, `durationMs`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
 | `durationMs` | `number` |
 
 #### Returns
@@ -216,4 +243,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/time/Time.ts#L30)
+[packages/matter.js/src/time/Time.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L34)
+
+___
+
+### unregister
+
+▸ **unregister**(`timer`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `timer` | [`Timer`](../interfaces/time_export.Timer.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/time/Time.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/time/Time.ts#L42)

@@ -10,7 +10,7 @@
 
 ### Enumerations
 
-- [CommissionningFlowType](../enums/exports_schema.CommissionningFlowType.md)
+- [CommissioningFlowType](../enums/exports_schema.CommissioningFlowType.md)
 
 ### Classes
 

@@ -10,15 +10,25 @@
 
 - [Feature](../enums/exports_cluster.Switch.Feature.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.Switch.md#extension)
+- [Cluster](../interfaces/exports_cluster.Switch.Cluster.md)
+- [Complete](../interfaces/exports_cluster.Switch.Complete.md)
+- [InitialPressEvent](../interfaces/exports_cluster.Switch.InitialPressEvent.md)
+- [LongPressEvent](../interfaces/exports_cluster.Switch.LongPressEvent.md)
+- [LongReleaseEvent](../interfaces/exports_cluster.Switch.LongReleaseEvent.md)
+- [MultiPressCompleteEvent](../interfaces/exports_cluster.Switch.MultiPressCompleteEvent.md)
+- [MultiPressOngoingEvent](../interfaces/exports_cluster.Switch.MultiPressOngoingEvent.md)
+- [ShortReleaseEvent](../interfaces/exports_cluster.Switch.ShortReleaseEvent.md)
+- [SwitchLatchedEvent](../interfaces/exports_cluster.Switch.SwitchLatchedEvent.md)
 
 ### Variables
 
 - [Base](exports_cluster.Switch.md#base)
 - [Cluster](exports_cluster.Switch.md#cluster)
+- [ClusterInstance](exports_cluster.Switch.md#clusterinstance)
 - [Complete](exports_cluster.Switch.md#complete)
+- [CompleteInstance](exports_cluster.Switch.md#completeinstance)
 - [LatchingSwitchComponent](exports_cluster.Switch.md#latchingswitchcomponent)
 - [MomentarySwitchComponent](exports_cluster.Switch.md#momentaryswitchcomponent)
 - [MomentarySwitchLongPressComponent](exports_cluster.Switch.md#momentaryswitchlongpresscomponent)
@@ -32,139 +42,186 @@
 - [TlvShortReleaseEvent](exports_cluster.Switch.md#tlvshortreleaseevent)
 - [TlvSwitchLatchedEvent](exports_cluster.Switch.md#tlvswitchlatchedevent)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.Switch.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `momentarySwitchMultiPress`: ``true``  } ? typeof [`MomentarySwitchMultiPressComponent`](exports_cluster.Switch.md#momentaryswitchmultipresscomponent) : {} & `SF` extends \{ `latchingSwitch`: ``true``  } ? typeof [`LatchingSwitchComponent`](exports_cluster.Switch.md#latchingswitchcomponent) : {} & `SF` extends \{ `momentarySwitch`: ``true``  } ? typeof [`MomentarySwitchComponent`](exports_cluster.Switch.md#momentaryswitchcomponent) : {} & `SF` extends \{ `momentarySwitchLongPress`: ``true``  } ? typeof [`MomentarySwitchLongPressComponent`](exports_cluster.Switch.md#momentaryswitchlongpresscomponent) : {} & `SF` extends \{ `momentarySwitchRelease`: ``true``  } ? typeof [`MomentarySwitchReleaseComponent`](exports_cluster.Switch.md#momentaryswitchreleasecomponent) : {} & `SF` extends \{ `momentarySwitch`: ``false`` ; `momentarySwitchRelease`: ``true``  } ? `never` : {} & `SF` extends \{ `momentarySwitch`: ``false`` ; `momentarySwitchLongPress`: ``true``  } ? `never` : {} & `SF` extends \{ `momentarySwitchLongPress`: ``true`` ; `momentarySwitchRelease`: ``false``  } ? `never` : {} & `SF` extends \{ `momentarySwitch`: ``false`` ; `momentarySwitchMultiPress`: ``true``  } ? `never` : {} & `SF` extends \{ `momentarySwitchMultiPress`: ``true`` ; `momentarySwitchRelease`: ``false``  } ? `never` : {} & `SF` extends \{ `latchingSwitch`: ``true`` ; `momentarySwitch`: ``true``  } ? `never` : {} & `SF` extends \{ `latchingSwitch`: ``false`` ; `momentarySwitch`: ``false``  } ? `never` : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:485
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentPosition`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `features`: \{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``59`` ; `name`: ``"Switch"`` ; `revision`: ``1``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all Switch clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `currentPosition`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } | - |
+| `attributes.currentPosition` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> | This attribute shall indicate the position of the switch. The valid range is zero to NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the switch: for example the "open" state of a rocker switch, or the "idle" state of a push button switch. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.11.5.2 |
+| `attributes.numberOfPositions` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> | This attribute shall indicate the maximum number of positions the switch has. Any kind of switch has a minimum of 2 positions. Also see Section 1.11.10, “NumberOfPositions > 2” for the case NumberOfPositions>2. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.11.5.1 |
+| `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `multiPressMax`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `multiPressComplete`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `multiPressOngoing`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchMultiPress`: ``true``  }  }, \{ `component`: \{ `events`: \{ `switchLatched`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `latchingSwitch`: ``true``  }  }, \{ `component`: \{ `events`: \{ `initialPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitch`: ``true``  }  }, \{ `component`: \{ `events`: \{ `longPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `longRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchLongPress`: ``true``  }  }, \{ `component`: \{ `events`: \{ `shortRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchRelease`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchRelease`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchLongPress`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitchLongPress`: ``true`` ; `momentarySwitchRelease`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchMultiPress`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitchMultiPress`: ``true`` ; `momentarySwitchRelease`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `latchingSwitch`: ``true`` ; `momentarySwitch`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `latchingSwitch`: ``false`` ; `momentarySwitch`: ``false``  }  }] | This metadata controls which SwitchCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.latchingSwitch` | [`BitFlag`](exports_schema.md#bitflag) | LatchingSwitch |
+| `features.momentarySwitch` | [`BitFlag`](exports_schema.md#bitflag) | MomentarySwitch |
+| `features.momentarySwitchLongPress` | [`BitFlag`](exports_schema.md#bitflag) | MomentarySwitchLongPress |
+| `features.momentarySwitchMultiPress` | [`BitFlag`](exports_schema.md#bitflag) | MomentarySwitchMultiPress |
+| `features.momentarySwitchRelease` | [`BitFlag`](exports_schema.md#bitflag) | MomentarySwitchRelease |
+| `id` | ``59`` | - |
+| `name` | ``"Switch"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:99
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:311
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: {} ; `events`: {} ; `features`: \{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"Switch"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentPosition`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `features`: \{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``59`` ; `name`: ``"Switch"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.Switch.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Switch
-
-This cluster exposes interactions with a switch device, for the purpose of using those interactions by other
-devices.
-
-Two types of switch devices are supported: latching switch (e.g. rocker switch) and momentary switch (e.g. push
-button), distinguished with their feature flags.
-
-Interactions with the switch device are exposed as attributes (for the latching switch) and as events (for both
-types of switches).
-
-An interested client may subscribe to these attributes/events and thus be informed of the interactions, and can
-perform actions based on this, for example by sending commands to perform an action such as controlling a light
-or a window shade.
-
-SwitchCluster supports optional features that you can enable with the SwitchCluster.with() factory method.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 1.11
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.Switch.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:325
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:849
+
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:851
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`ExtensibleOnly`](../interfaces/exports_cluster.MutableCluster.ExtensibleOnly.md)\<\{ `attributes`: \{ `currentPosition`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `multiPressMax`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `multiPressComplete`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `multiPressOngoing`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchMultiPress`: ``true``  }  }, \{ `component`: \{ `events`: \{ `switchLatched`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `latchingSwitch`: ``true``  }  }, \{ `component`: \{ `events`: \{ `initialPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitch`: ``true``  }  }, \{ `component`: \{ `events`: \{ `longPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `longRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchLongPress`: ``true``  }  }, \{ `component`: \{ `events`: \{ `shortRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchRelease`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchRelease`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchLongPress`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitchLongPress`: ``true`` ; `momentarySwitchRelease`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchMultiPress`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitchMultiPress`: ``true`` ; `momentarySwitchRelease`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `latchingSwitch`: ``true`` ; `momentarySwitch`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `latchingSwitch`: ``false`` ; `momentarySwitch`: ``false``  }  }] ; `features`: \{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``59`` ; `name`: ``"Switch"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.Switch.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:571
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `clusterRevision`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `never`\> ; `currentPosition`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `eventList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<\{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `multiPressMax`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchMultiPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfPositions`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `initialPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitch`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `longPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchLongPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `longRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchLongPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `multiPressComplete`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchMultiPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `multiPressOngoing`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchMultiPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `shortRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchRelease`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `switchLatched`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `latchingSwitch`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: \{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``59`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"Switch"`` ; `revision`: ``1``  }\>
-
-This cluster supports all Switch features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/exports_cluster.Switch.Complete.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:525
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:988
+
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:990
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `currentPosition`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `multiPressMax`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchMultiPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfPositions`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `initialPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitch`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `longPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchLongPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `longRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchLongPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `multiPressComplete`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchMultiPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `multiPressOngoing`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchMultiPress`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `shortRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `momentarySwitchRelease`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `switchLatched`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `latchingSwitch`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: \{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``59`` ; `name`: ``"Switch"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Complete](exports_cluster.Switch.md#complete)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:855
 
 ___
 
 ### LatchingSwitchComponent
 
-• `Const` **LatchingSwitchComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `events`: \{ `switchLatched`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
+• `Const` **LatchingSwitchComponent**: `Object`
 
 A SwitchCluster supports these elements if it supports feature LatchingSwitch.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `events` | \{ `switchLatched`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } |
+| `events.switchLatched` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:214
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:190
 
 ___
 
 ### MomentarySwitchComponent
 
-• `Const` **MomentarySwitchComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `events`: \{ `initialPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
+• `Const` **MomentarySwitchComponent**: `Object`
 
 A SwitchCluster supports these elements if it supports feature MomentarySwitch.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `events` | \{ `initialPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } |
+| `events.initialPress` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:232
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:208
 
 ___
 
 ### MomentarySwitchLongPressComponent
 
-• `Const` **MomentarySwitchLongPressComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `events`: \{ `longPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `longRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
+• `Const` **MomentarySwitchLongPressComponent**: `Object`
 
 A SwitchCluster supports these elements if it supports feature MomentarySwitchLongPress.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `events` | \{ `longPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `longRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } |
+| `events.longPress` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+| `events.longRelease` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:249
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:225
 
 ___
 
 ### MomentarySwitchMultiPressComponent
 
-• `Const` **MomentarySwitchMultiPressComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `multiPressMax`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `multiPressComplete`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `multiPressOngoing`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
+• `Const` **MomentarySwitchMultiPressComponent**: `Object`
 
 A SwitchCluster supports these elements if it supports feature MomentarySwitchMultiPress.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `multiPressMax`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } |
+| `attributes.multiPressMax` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> |
+| `events` | \{ `multiPressComplete`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `multiPressOngoing`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } |
+| `events.multiPressComplete` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+| `events.multiPressOngoing` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:147
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:123
 
 ___
 
 ### MomentarySwitchReleaseComponent
 
-• `Const` **MomentarySwitchReleaseComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `events`: \{ `shortRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
+• `Const` **MomentarySwitchReleaseComponent**: `Object`
 
 A SwitchCluster supports these elements if it supports feature MomentarySwitchRelease.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `events` | \{ `shortRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } |
+| `events.shortRelease` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:281
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:257
 
 ___
 
@@ -180,7 +237,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.11.7.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:42
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:65
 
 ___
 
@@ -196,7 +253,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.11.7.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:50
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:80
 
 ___
 
@@ -212,7 +269,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.11.7.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:95
 
 ___
 
@@ -228,7 +285,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.11.7.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:34
 
 ___
 
@@ -244,7 +301,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.11.7.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:16
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:18
 
 ___
 
@@ -260,7 +317,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.11.7.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:110
 
 ___
 
@@ -276,4 +333,4 @@ MatterApplicationClusterSpecificationV1_1 § 1.11.7.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/SwitchCluster.d.ts:50

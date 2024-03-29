@@ -13,15 +13,27 @@
 - [Parameter](../enums/cluster_export.ContentLauncher.Parameter.md)
 - [Status](../enums/cluster_export.ContentLauncher.Status.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](cluster_export.ContentLauncher.md#extension)
+- [AdditionalInfoStruct](../interfaces/cluster_export.ContentLauncher.AdditionalInfoStruct.md)
+- [BrandingInformationStruct](../interfaces/cluster_export.ContentLauncher.BrandingInformationStruct.md)
+- [Cluster](../interfaces/cluster_export.ContentLauncher.Cluster.md)
+- [Complete](../interfaces/cluster_export.ContentLauncher.Complete.md)
+- [ContentSearchStruct](../interfaces/cluster_export.ContentLauncher.ContentSearchStruct.md)
+- [DimensionStruct](../interfaces/cluster_export.ContentLauncher.DimensionStruct.md)
+- [LaunchContentRequest](../interfaces/cluster_export.ContentLauncher.LaunchContentRequest.md)
+- [LaunchUrlRequest](../interfaces/cluster_export.ContentLauncher.LaunchUrlRequest.md)
+- [LauncherResponse](../interfaces/cluster_export.ContentLauncher.LauncherResponse.md)
+- [ParameterStruct](../interfaces/cluster_export.ContentLauncher.ParameterStruct.md)
+- [StyleInformationStruct](../interfaces/cluster_export.ContentLauncher.StyleInformationStruct.md)
 
 ### Variables
 
 - [Base](cluster_export.ContentLauncher.md#base)
 - [Cluster](cluster_export.ContentLauncher.md#cluster)
+- [ClusterInstance](cluster_export.ContentLauncher.md#clusterinstance)
 - [Complete](cluster_export.ContentLauncher.md#complete)
+- [CompleteInstance](cluster_export.ContentLauncher.md#completeinstance)
 - [ContentSearchComponent](cluster_export.ContentLauncher.md#contentsearchcomponent)
 - [ContentSearchOrUrlPlaybackComponent](cluster_export.ContentLauncher.md#contentsearchorurlplaybackcomponent)
 - [SupportedStreamingProtocols](cluster_export.ContentLauncher.md#supportedstreamingprotocols)
@@ -36,94 +48,112 @@
 - [TlvStyleInformationStruct](cluster_export.ContentLauncher.md#tlvstyleinformationstruct)
 - [UrlPlaybackComponent](cluster_export.ContentLauncher.md#urlplaybackcomponent)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](cluster_export.ContentLauncher.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `urlPlayback`: ``true``  } ? typeof [`UrlPlaybackComponent`](cluster_export.ContentLauncher.md#urlplaybackcomponent) : {} & `SF` extends \{ `contentSearch`: ``true``  } ? typeof [`ContentSearchComponent`](cluster_export.ContentLauncher.md#contentsearchcomponent) : {} & `SF` extends \{ `contentSearch`: ``true``  } \| \{ `urlPlayback`: ``true``  } ? typeof [`ContentSearchOrUrlPlaybackComponent`](cluster_export.ContentLauncher.md#contentsearchorurlplaybackcomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:578](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L578)
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `features`: \{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``1290`` = 0x50a; `name`: ``"ContentLauncher"`` = "ContentLauncher"; `revision`: ``1`` = 1 }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all ContentLauncher clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`string`[], `any`\> ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `dash`: [`BitFlag`](schema_export.md#bitflag) ; `hls`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\>  } ; `commands`: \{ `launchUrl`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `background`: ... ; `logo`: ... ; `progressBar`: ... ; `providerName`: ... ; `splash`: ... ; `waterMark`: ...  }\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\>  }  } = UrlPlaybackComponent; `flags`: \{ `urlPlayback`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `launchContent`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `parameterList`: ...  }\>\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\>  }  } = ContentSearchComponent; `flags`: \{ `contentSearch`: ``true`` = true }  }, \{ `component`: {} = ContentSearchOrUrlPlaybackComponent; `flags`: \{ `contentSearch`: ``true`` = true }  }, \{ `component`: {} = ContentSearchOrUrlPlaybackComponent; `flags`: \{ `urlPlayback`: ``true`` = true }  }] | This metadata controls which ContentLauncherCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  } | - |
+| `features.contentSearch` | [`BitFlag`](schema_export.md#bitflag) | ContentSearch Device supports content search (non-app specific) |
+| `features.urlPlayback` | [`BitFlag`](schema_export.md#bitflag) | UrlPlayback Device supports basic URL-based file playback |
+| `id` | ``1290`` | - |
+| `name` | ``"ContentLauncher"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:456](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L456)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:587](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L587)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<{}, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  }\>\> ; `commands`: {} ; `events`: {} ; `features`: \{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: [`Branded`](util_export.md#branded)\<``1290`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"ContentLauncher"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `features`: \{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``1290`` = 0x50a; `name`: ``"ContentLauncher"`` = "ContentLauncher"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.ContentLauncher.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  }, `T`\>\> = extender }
-
-Content Launcher
-
-This cluster provides an interface for launching content on a Video Player device such as a Streaming Media
-Player, Smart TV or Smart Screen.
-
-ContentLauncherCluster supports optional features that you can enable with the ContentLauncherCluster.with()
-factory method.
-
-**`See`**
-
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.ContentLauncher.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:547](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L547)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:636](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L636)
+
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:638](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L638)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`string`[], `any`\> ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `dash`: [`BitFlag`](schema_export.md#bitflag) ; `hls`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\>  } ; `commands`: \{ `launchUrl`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<...\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\>  }  } = UrlPlaybackComponent; `flags`: \{ `urlPlayback`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `launchContent`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<...\>\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\>  }  } = ContentSearchComponent; `flags`: \{ `contentSearch`: ``true`` = true }  }, \{ `component`: {} = ContentSearchOrUrlPlaybackComponent; `flags`: \{ `contentSearch`: ``true`` = true }  }, \{ `component`: {} = ContentSearchOrUrlPlaybackComponent; `flags`: \{ `urlPlayback`: ``true`` = true }  }] ; `features`: \{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``1290`` = 0x50a; `name`: ``"ContentLauncher"`` = "ContentLauncher"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.ContentLauncher.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:623](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L623)
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`string`[], `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `dash`: [`BitFlag`](schema_export.md#bitflag) ; `hls`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `commands`: \{ `launchContent`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `externalIdList`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Parameter`](../enums/cluster_export.ContentLauncher.Parameter.md)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\>  }\>\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `contentSearch`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `launchUrl`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `background`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `logo`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `progressBar`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `providerName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `splash`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `waterMark`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\>  }\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `features`: \{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: ``1290`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"ContentLauncher"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
-
-This cluster supports all ContentLauncher features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/cluster_export.ContentLauncher.Complete.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:594](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L594)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:677](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L677)
+
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:679](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L679)
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`string`[], `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `dash`: [`BitFlag`](schema_export.md#bitflag) ; `hls`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `commands`: \{ `launchContent`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<...\>  }\>\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `contentSearch`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `launchUrl`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `background`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `logo`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `progressBar`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `providerName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<...\> ; `splash`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `waterMark`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\>  }\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `features`: \{ `contentSearch`: [`BitFlag`](schema_export.md#bitflag) ; `urlPlayback`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: [`Branded`](util_export.md#branded)\<``1290``, ``"ClusterId"``\> = Cluster.id; `name`: ``"ContentLauncher"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
+
+**`See`**
+
+[Complete](cluster_export.ContentLauncher.md#complete)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:645](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L645)
 
 ___
 
 ### ContentSearchComponent
 
-• `Const` **ContentSearchComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `launchContent`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `externalIdList`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Parameter`](../enums/cluster_export.ContentLauncher.Parameter.md)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\>  }\>\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\>  }  }\>
+• `Const` **ContentSearchComponent**: `Object`
 
 A ContentLauncherCluster supports these elements if it supports feature ContentSearch.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `launchContent`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<...\>[]\>  }\>\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\>  } |
+| `commands.launchContent` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<...\>[]\>  }\>\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\> |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:519](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L519)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:546](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L546)
 
 ___
 
 ### ContentSearchOrUrlPlaybackComponent
 
-• `Const` **ContentSearchOrUrlPlaybackComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<{}\>
+• `Const` **ContentSearchOrUrlPlaybackComponent**: `Object`
 
 A ContentLauncherCluster supports these elements if it supports features ContentSearch or UrlPlayback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:534](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L534)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:561](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L561)
 
 ___
 
@@ -146,7 +176,7 @@ The value of the ContentLauncher supportedStreamingProtocols attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L25)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L28)
 
 ___
 
@@ -162,7 +192,7 @@ This object defines additional name=value pairs that can be used for identifying
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:343](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L343)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:388](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L388)
 
 ___
 
@@ -179,13 +209,13 @@ the Video Player during playback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:134](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L134)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L155)
 
 ___
 
 ### TlvContentSearchStruct
 
-• `Const` **TlvContentSearchStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `externalIdList`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Parameter`](../enums/cluster_export.ContentLauncher.Parameter.md)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\>  }\>
+• `Const` **TlvContentSearchStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `externalIdList`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<...\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<...\>  }\>[]\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Parameter`](../enums/cluster_export.ContentLauncher.Parameter.md)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\>  }\>
 
 This object defines inputs to a search for content for display or playback.
 
@@ -195,7 +225,7 @@ This object defines inputs to a search for content for display or playback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:392](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L392)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:451](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L451)
 
 ___
 
@@ -214,13 +244,13 @@ because we don’t have any other usecases which require this datatype.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L71)
 
 ___
 
 ### TlvLaunchContentRequest
 
-• `Const` **TlvLaunchContentRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `externalIdList`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Parameter`](../enums/cluster_export.ContentLauncher.Parameter.md)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\>  }\>\>  }\>
+• `Const` **TlvLaunchContentRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `autoPlay`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `search`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `parameterList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `externalIdList`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...[]\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Parameter`](../enums/cluster_export.ContentLauncher.Parameter.md)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[]\>  }\>\>  }\>
 
 Input to the ContentLauncher launchContent command
 
@@ -230,13 +260,13 @@ Input to the ContentLauncher launchContent command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:408](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L408)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:474](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L474)
 
 ___
 
 ### TlvLaunchUrlRequest
 
-• `Const` **TlvLaunchUrlRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `background`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `logo`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `progressBar`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `providerName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `splash`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `waterMark`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\>  }\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>
+• `Const` **TlvLaunchUrlRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `background`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: ... ; `metric`: ... ; `width`: ...  }\>\>  }\>\> ; `logo`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: ... ; `metric`: ... ; `width`: ...  }\>\>  }\>\> ; `progressBar`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: ... ; `metric`: ... ; `width`: ...  }\>\>  }\>\> ; `providerName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `splash`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: ... ; `metric`: ... ; `width`: ...  }\>\>  }\>\> ; `waterMark`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: ... ; `metric`: ... ; `width`: ...  }\>\>  }\>\>  }\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>
 
 Input to the ContentLauncher launchUrl command
 
@@ -246,7 +276,7 @@ Input to the ContentLauncher launchUrl command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:186](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:215](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L215)
 
 ___
 
@@ -264,7 +294,7 @@ WARNING TODO: Data in table above needs a max size
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:238](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L238)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:274](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L274)
 
 ___
 
@@ -280,7 +310,7 @@ This object defines inputs to a search for content for display or playback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:364](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L364)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:416](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L416)
 
 ___
 
@@ -297,16 +327,26 @@ related properties.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:97](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L110)
 
 ___
 
 ### UrlPlaybackComponent
 
-• `Const` **UrlPlaybackComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`string`[], `any`\> ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `dash`: [`BitFlag`](schema_export.md#bitflag) ; `hls`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\>  } ; `commands`: \{ `launchUrl`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `background`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `logo`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `progressBar`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `providerName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `splash`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\> ; `waterMark`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `imageUrl`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `size`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `height`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `metric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MetricType`](../enums/cluster_export.ContentLauncher.MetricType.md)\> ; `width`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>\>  }\>\>  }\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\>  }  }\>
+• `Const` **UrlPlaybackComponent**: `Object`
 
 A ContentLauncherCluster supports these elements if it supports feature UrlPlayback.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `acceptHeader`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`string`[], `any`\> ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `dash`: [`BitFlag`](schema_export.md#bitflag) ; `hls`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\>  } |
+| `attributes.acceptHeader` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`string`[], `any`\> |
+| `attributes.supportedStreamingProtocols` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `dash`: [`BitFlag`](schema_export.md#bitflag) ; `hls`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> |
+| `commands` | \{ `launchUrl`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `background`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\> ; `logo`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\> ; `progressBar`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\> ; `providerName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `splash`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\> ; `waterMark`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\>  }\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\>  } |
+| `commands.launchUrl` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `brandingInformation`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `background`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\> ; `logo`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\> ; `progressBar`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\> ; `providerName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `splash`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\> ; `waterMark`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `color`: ... ; `imageUrl`: ... ; `size`: ...  }\>\>  }\>\> ; `contentUrl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `displayString`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.ContentLauncher.Status.md)\>  }\>, `any`\> |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:481](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L481)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:508](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L508)

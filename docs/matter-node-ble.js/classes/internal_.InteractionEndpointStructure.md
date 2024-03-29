@@ -14,6 +14,7 @@
 
 - [attributePaths](internal_.InteractionEndpointStructure.md#attributepaths)
 - [attributes](internal_.InteractionEndpointStructure.md#attributes)
+- [change](internal_.InteractionEndpointStructure.md#change)
 - [commandPaths](internal_.InteractionEndpointStructure.md#commandpaths)
 - [commands](internal_.InteractionEndpointStructure.md#commands)
 - [endpoints](internal_.InteractionEndpointStructure.md#endpoints)
@@ -25,7 +26,7 @@
 ### Methods
 
 - [clear](internal_.InteractionEndpointStructure.md#clear)
-- [destroy](internal_.InteractionEndpointStructure.md#destroy)
+- [close](internal_.InteractionEndpointStructure.md#close)
 - [getAttribute](internal_.InteractionEndpointStructure.md#getattribute)
 - [getAttributes](internal_.InteractionEndpointStructure.md#getattributes)
 - [getClusterServer](internal_.InteractionEndpointStructure.md#getclusterserver)
@@ -67,7 +68,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:23
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:24
 
 ___
 
@@ -77,7 +78,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:22
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:23
+
+___
+
+### change
+
+• **change**: [`Observable`](../interfaces/internal_.Observable.md)\<`any`[], `void`\>
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:29
 
 ___
 
@@ -87,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:27
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:28
 
 ___
 
@@ -97,17 +108,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:26
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:27
 
 ___
 
 ### endpoints
 
-• **endpoints**: `Map`\<[`EndpointNumber`](../modules/internal_.md#endpointnumber), [`Endpoint`](internal_.Endpoint.md)\>
+• **endpoints**: `Map`\<[`EndpointNumber`](../modules/internal_.md#endpointnumber), [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md)\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:21
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:22
 
 ___
 
@@ -117,17 +128,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:25
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:26
 
 ___
 
 ### events
 
-• **events**: `Map`\<`string`, [`EventServer`](internal_.EventServer.md)\<`any`\>\>
+• **events**: `Map`\<`string`, [`EventServer`](internal_.EventServer.md)\<`any`, `any`\>\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:24
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:25
 
 ___
 
@@ -137,7 +148,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:31
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:33
 
 ___
 
@@ -147,7 +158,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:32
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:34
 
 ## Methods
 
@@ -161,13 +172,13 @@ matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:32
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:28
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:30
 
 ___
 
-### destroy
+### close
 
-▸ **destroy**(): `void`
+▸ **close**(): `void`
 
 #### Returns
 
@@ -175,7 +186,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:29
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:31
 
 ___
 
@@ -197,7 +208,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:42
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:44
 
 ___
 
@@ -209,7 +220,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 | `onlyWritable?` | `boolean` |
 
 #### Returns
@@ -218,7 +229,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:51
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:53
 
 ___
 
@@ -239,7 +250,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:40
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:42
 
 ___
 
@@ -261,7 +272,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:48
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:50
 
 ___
 
@@ -273,7 +284,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `commandId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\>[] |
 
 #### Returns
 
@@ -281,13 +292,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:53
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:55
 
 ___
 
 ### getEndpoint
 
-▸ **getEndpoint**(`endpointId`): `undefined` \| [`Endpoint`](internal_.Endpoint.md)
+▸ **getEndpoint**(`endpointId`): `undefined` \| [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md)
 
 #### Parameters
 
@@ -297,17 +308,17 @@ ___
 
 #### Returns
 
-`undefined` \| [`Endpoint`](internal_.Endpoint.md)
+`undefined` \| [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md)
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:38
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:40
 
 ___
 
 ### getEvent
 
-▸ **getEvent**(`endpointId`, `clusterId`, `eventId`): `undefined` \| [`EventServer`](internal_.EventServer.md)\<`any`\>
+▸ **getEvent**(`endpointId`, `clusterId`, `eventId`): `undefined` \| [`EventServer`](internal_.EventServer.md)\<`any`, `any`\>
 
 #### Parameters
 
@@ -319,11 +330,11 @@ ___
 
 #### Returns
 
-`undefined` \| [`EventServer`](internal_.EventServer.md)\<`any`\>
+`undefined` \| [`EventServer`](internal_.EventServer.md)\<`any`, `any`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:45
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:47
 
 ___
 
@@ -335,7 +346,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 
 #### Returns
 
@@ -343,7 +354,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:52
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:54
 
 ___
 
@@ -365,7 +376,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:43
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:45
 
 ___
 
@@ -386,7 +397,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:41
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:43
 
 ___
 
@@ -408,7 +419,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:49
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:51
 
 ___
 
@@ -428,7 +439,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:39
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:41
 
 ___
 
@@ -450,7 +461,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:46
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:48
 
 ___
 
@@ -462,7 +473,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](internal_.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/internal_.EndpointInterface.md) |
 
 #### Returns
 
@@ -470,7 +481,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:30
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:32
 
 ___
 
@@ -482,27 +493,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:35
-
-___
-
-### resolveCommandName
-
-▸ **resolveCommandName**(`«destructured»`): `string`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -514,6 +505,26 @@ matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:37
 
 ___
 
+### resolveCommandName
+
+▸ **resolveCommandName**(`«destructured»`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `commandId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\> |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:39
+
+___
+
 ### resolveEventName
 
 ▸ **resolveEventName**(`«destructured»`): `string`
@@ -522,7 +533,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -530,7 +541,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:36
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:38
 
 ___
 
@@ -554,7 +565,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:34
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:36
 
 ___
 
@@ -574,7 +585,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:33
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:35
 
 ___
 
@@ -596,7 +607,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:44
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:46
 
 ___
 
@@ -618,7 +629,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:50
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:52
 
 ___
 
@@ -640,4 +651,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:47
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:49

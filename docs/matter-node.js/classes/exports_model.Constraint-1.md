@@ -8,9 +8,8 @@ An operational view of constraints as defined by the Matter specification.
 
 A "constraint" limits possible data values.
 
-Formally a constraint is not considered a quality by the specification.
-It is handled similarly to qualities, though, so we keep it in the same
-section.
+Formally a constraint is not considered a quality by the specification. It is handled similarly to qualities, though,
+so we keep it in the same section.
 
 ## Hierarchy
 
@@ -59,8 +58,7 @@ section.
 
 • **new Constraint**(`definition`): [`Constraint`](exports_model.Constraint-1.md)
 
-Initialize from a Constraint.Definition or the constraint DSL defined
-by the Matter Specification.
+Initialize from a Constraint.Definition or the constraint DSL defined by the Matter Specification.
 
 #### Parameters
 
@@ -78,7 +76,7 @@ by the Matter Specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:28
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:26
 
 ## Properties
 
@@ -106,7 +104,7 @@ Constraint.Ast.desc
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:18
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:17
 
 ___
 
@@ -120,7 +118,7 @@ Constraint.Ast.entry
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:21
 
 ___
 
@@ -148,7 +146,7 @@ Constraint.Ast.max
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:20
 
 ___
 
@@ -162,7 +160,7 @@ Constraint.Ast.min
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:20
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:19
 
 ___
 
@@ -176,7 +174,7 @@ Constraint.Ast.parts
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:23
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:22
 
 ___
 
@@ -190,7 +188,7 @@ Constraint.Ast.value
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:19
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:18
 
 ## Accessors
 
@@ -283,17 +281,24 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Constraint.md#definition)\>
+▸ **extend**\<`This`\>(`this`, `other`): `This`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `This` | extends [`Aspect`](exports_model.Aspect.md)\<`any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `this` | `This` |
 | `other` | [`Definition`](../modules/exports_model.Constraint.md#definition) |
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Constraint.md#definition)\>
+`This`
 
 #### Inherited from
 
@@ -307,15 +312,16 @@ ___
 
 ### test
 
-▸ **test**(`value`): `boolean`
+▸ **test**(`value`, `properties?`): `boolean`
 
-Test a value against a constraint.
+Test a value against a constraint.  Does not recurse into arrays.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | [`FieldValue`](../modules/exports_model.md#fieldvalue) |
+| `properties?` | `Record`\<`string`, `any`\> |
 
 #### Returns
 
@@ -323,7 +329,7 @@ Test a value against a constraint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:32
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:30
 
 ___
 
@@ -341,7 +347,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:33
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:31
 
 ___
 

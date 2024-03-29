@@ -26,7 +26,7 @@ The Node detects the supplied voltage is above maximum supported value for this 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L58)
 
 ___
 
@@ -38,7 +38,7 @@ The Node detects the supplied voltage is below maximum supported value for this 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:85](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L63)
 
 ___
 
@@ -50,4 +50,4 @@ The Node detects an unspecified fault on this wired power source.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:75](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L53)

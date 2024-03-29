@@ -30,7 +30,7 @@ The reason for a state change is a request by the OTA Provider to wait.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:118
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:134
 
 ___
 
@@ -42,7 +42,7 @@ The reason for a state change is the failure of a prior operation.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:110
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:126
 
 ___
 
@@ -54,7 +54,7 @@ The reason for a state change is the success of a prior operation.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:106
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:122
 
 ___
 
@@ -66,7 +66,7 @@ The reason for a state change is a time-out.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:114
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:130
 
 ___
 
@@ -78,4 +78,4 @@ The reason for a state change is unknown.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:102
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:118

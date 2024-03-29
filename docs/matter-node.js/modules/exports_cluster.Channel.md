@@ -12,9 +12,16 @@
 - [LineupInfoType](../enums/exports_cluster.Channel.LineupInfoType.md)
 - [Status](../enums/exports_cluster.Channel.Status.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.Channel.md#extension)
+- [ChangeChannelByNumberRequest](../interfaces/exports_cluster.Channel.ChangeChannelByNumberRequest.md)
+- [ChangeChannelRequest](../interfaces/exports_cluster.Channel.ChangeChannelRequest.md)
+- [ChangeChannelResponse](../interfaces/exports_cluster.Channel.ChangeChannelResponse.md)
+- [ChannelInfoStruct](../interfaces/exports_cluster.Channel.ChannelInfoStruct.md)
+- [Cluster](../interfaces/exports_cluster.Channel.Cluster.md)
+- [Complete](../interfaces/exports_cluster.Channel.Complete.md)
+- [LineupInfoStruct](../interfaces/exports_cluster.Channel.LineupInfoStruct.md)
+- [SkipChannelRequest](../interfaces/exports_cluster.Channel.SkipChannelRequest.md)
 
 ### Variables
 
@@ -22,7 +29,9 @@
 - [ChannelListComponent](exports_cluster.Channel.md#channellistcomponent)
 - [ChannelListOrLineupInfoComponent](exports_cluster.Channel.md#channellistorlineupinfocomponent)
 - [Cluster](exports_cluster.Channel.md#cluster)
+- [ClusterInstance](exports_cluster.Channel.md#clusterinstance)
 - [Complete](exports_cluster.Channel.md#complete)
+- [CompleteInstance](exports_cluster.Channel.md#completeinstance)
 - [LineupInfoComponent](exports_cluster.Channel.md#lineupinfocomponent)
 - [TlvChangeChannelByNumberRequest](exports_cluster.Channel.md#tlvchangechannelbynumberrequest)
 - [TlvChangeChannelRequest](exports_cluster.Channel.md#tlvchangechannelrequest)
@@ -31,104 +40,143 @@
 - [TlvLineupInfoStruct](exports_cluster.Channel.md#tlvlineupinfostruct)
 - [TlvSkipChannelRequest](exports_cluster.Channel.md#tlvskipchannelrequest)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.Channel.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `channelList`: ``true``  } ? typeof [`ChannelListComponent`](exports_cluster.Channel.md#channellistcomponent) : {} & `SF` extends \{ `lineupInfo`: ``true``  } ? typeof [`LineupInfoComponent`](exports_cluster.Channel.md#lineupinfocomponent) : {} & `SF` extends \{ `channelList`: ``true``  } \| \{ `lineupInfo`: ``true``  } ? typeof [`ChannelListOrLineupInfoComponent`](exports_cluster.Channel.md#channellistorlineupinfocomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:677
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentChannel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  } ; `commands`: \{ `changeChannelByNumber`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `skipChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1284`` ; `name`: ``"Channel"`` ; `revision`: ``1``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all Channel clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `currentChannel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  } | - |
+| `attributes.currentChannel` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> | This optional field contains the current channel. When supported but a channel is not currently tuned to (if a content application is in foreground), the value of the field shall be null. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.6.3.3 |
+| `commands` | \{ `changeChannelByNumber`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `skipChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } | - |
+| `commands.changeChannelByNumber` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | Change the channel to the channel with the given Number in the ChannelList attribute. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.6.4.3 |
+| `commands.skipChannel` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command provides channel up and channel down functionality, but allows channel index jumps of size Count. When the value of the increase or decrease is larger than the number of channels remaining in the given direction, then the behavior shall be to return to the beginning (or end) of the channel list and continue. For example, if the current channel is at index 0 and count value of -1 is given, then the current channel should change to the last channel. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.6.4.4 |
+| `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `channelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  }  } ; `flags`: \{ `channelList`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `lineup`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  }  } ; `flags`: \{ `lineupInfo`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `channelList`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `lineupInfo`: ``true``  }  }] | This metadata controls which ChannelCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.channelList` | [`BitFlag`](exports_schema.md#bitflag) | ChannelList Provides list of available channels. |
+| `features.lineupInfo` | [`BitFlag`](exports_schema.md#bitflag) | LineupInfo Provides lineup info, which is a reference to an external source of lineup information. |
+| `id` | ``1284`` | - |
+| `name` | ``"Channel"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:191
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:356
 
 ___
 
 ### ChannelListComponent
 
-• `Const` **ChannelListComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `channelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  }  }\>
+• `Const` **ChannelListComponent**: `Object`
 
 A ChannelCluster supports these elements if it supports feature ChannelList.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `channelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } |
+| `attributes.channelList` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:299
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:220
 
 ___
 
 ### ChannelListOrLineupInfoComponent
 
-• `Const` **ChannelListOrLineupInfoComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
+• `Const` **ChannelListOrLineupInfoComponent**: `Object`
 
 A ChannelCluster supports these elements if it supports features ChannelList or LineupInfo.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } |
+| `commands.changeChannel` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:376
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:297
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `changeChannelByNumber`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `skipChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: {} ; `features`: \{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"Channel"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentChannel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  } ; `commands`: \{ `changeChannelByNumber`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `skipChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1284`` ; `name`: ``"Channel"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.Channel.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Channel
-
-This cluster provides an interface for controlling the current Channel on a device or endpoint.
-
-ChannelCluster supports optional features that you can enable with the ChannelCluster.with() factory method.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 6.6
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.Channel.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:422
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:908
+
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:910
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `currentChannel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  } ; `commands`: \{ `changeChannelByNumber`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `skipChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `channelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  }  } ; `flags`: \{ `channelList`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `lineup`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  }  } ; `flags`: \{ `lineupInfo`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `channelList`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `lineupInfo`: ``true``  }  }] ; `features`: \{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1284`` ; `name`: ``"Channel"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.Channel.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:629
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `channelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `channelList`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clusterRevision`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `never`\> ; `currentChannel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> ; `eventList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<\{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `lineup`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `lineupInfo`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `channelList`: `boolean`  }, \{ `lineupInfo`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `changeChannelByNumber`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `skipChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1284`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"Channel"`` ; `revision`: ``1``  }\>
-
-This cluster supports all Channel features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/exports_cluster.Channel.Complete.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:694
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1135
+
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1137
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `channelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `channelList`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clusterRevision`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `never`\> ; `currentChannel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> ; `eventList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `lineup`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `lineupInfo`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `channelList`: `boolean`  }, \{ `lineupInfo`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `changeChannelByNumber`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `skipChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"Channel"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Complete](exports_cluster.Channel.md#complete)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:914
 
 ___
 
 ### LineupInfoComponent
 
-• `Const` **LineupInfoComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `lineup`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  }  }\>
+• `Const` **LineupInfoComponent**: `Object`
 
 A ChannelCluster supports these elements if it supports feature LineupInfo.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `lineup`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  } |
+| `attributes.lineup` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:348
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:269
 
 ___
 
@@ -144,7 +192,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.6.4.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:61
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:175
 
 ___
 
@@ -160,7 +208,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.6.4.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:125
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:112
 
 ___
 
@@ -176,7 +224,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.6.4.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:155
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:149
 
 ___
 
@@ -195,7 +243,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.6.5.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:19
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:21
 
 ___
 
@@ -212,7 +260,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.6.5.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:104
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:83
 
 ___
 
@@ -228,4 +276,4 @@ MatterApplicationClusterSpecificationV1_1 § 6.6.4.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:80
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:201

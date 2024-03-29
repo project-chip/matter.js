@@ -21,7 +21,7 @@ Represents device pairing information.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:88](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L88)
+[packages/matter.js/src/CommissioningServer.ts:93](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/CommissioningServer.ts#L93)
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:89](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/CommissioningServer.ts#L89)
+[packages/matter.js/src/CommissioningServer.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/CommissioningServer.ts#L94)

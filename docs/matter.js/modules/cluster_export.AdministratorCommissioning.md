@@ -12,98 +12,124 @@
 - [Feature](../enums/cluster_export.AdministratorCommissioning.Feature.md)
 - [StatusCode](../enums/cluster_export.AdministratorCommissioning.StatusCode.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](cluster_export.AdministratorCommissioning.md#extension)
+- [Cluster](../interfaces/cluster_export.AdministratorCommissioning.Cluster.md)
+- [Complete](../interfaces/cluster_export.AdministratorCommissioning.Complete.md)
+- [OpenBasicCommissioningWindowRequest](../interfaces/cluster_export.AdministratorCommissioning.OpenBasicCommissioningWindowRequest.md)
+- [OpenCommissioningWindowRequest](../interfaces/cluster_export.AdministratorCommissioning.OpenCommissioningWindowRequest.md)
 
 ### Variables
 
 - [Base](cluster_export.AdministratorCommissioning.md#base)
 - [BasicComponent](cluster_export.AdministratorCommissioning.md#basiccomponent)
 - [Cluster](cluster_export.AdministratorCommissioning.md#cluster)
+- [ClusterInstance](cluster_export.AdministratorCommissioning.md#clusterinstance)
 - [Complete](cluster_export.AdministratorCommissioning.md#complete)
+- [CompleteInstance](cluster_export.AdministratorCommissioning.md#completeinstance)
 - [TlvOpenBasicCommissioningWindowRequest](cluster_export.AdministratorCommissioning.md#tlvopenbasiccommissioningwindowrequest)
 - [TlvOpenCommissioningWindowRequest](cluster_export.AdministratorCommissioning.md#tlvopencommissioningwindowrequest)
-
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](cluster_export.AdministratorCommissioning.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `basic`: ``true``  } ? typeof [`BasicComponent`](cluster_export.AdministratorCommissioning.md#basiccomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:359](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L359)
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `adminFabricIndex`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: \{ `openCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``60`` = 0x3c; `name`: ``"AdministratorCommissioning"`` = "AdministratorCommissioning"; `revision`: ``1`` = 1 }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all AdministratorCommissioning clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `adminFabricIndex`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } | - |
+| `attributes.adminFabricIndex` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> | When the WindowStatus attribute is not set to WindowNotOpen, this attribute shall indicate the FabricIndex associated with the Fabric scoping of the Administrator that opened the window. This may be used to cross-reference in the Fabrics attribute of the Node Operational Credentials cluster. If, during an open commissioning window, the fabric for the Administrator that opened the window is removed, then this attribute shall be set to null. When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.18.7.2 |
+| `attributes.adminVendorId` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> | When the WindowStatus attribute is not set to WindowNotOpen, this attribute shall indicate the Vendor ID associated with the Fabric scoping of the Administrator that opened the window. This field shall match the VendorID field of the Fabrics attribute list entry associated with the Administrator having opened the window, at the time of window opening. If the fabric for the Administrator that opened the window is removed from the node while the commissioning window is still open, this attribute shall NOT be updated. When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be set to null. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.18.7.3 |
+| `attributes.windowStatus` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\> | This attribute shall indicate whether a new Commissioning window has been opened by an Administrator, using either the OCW command or the OBCW command. This attribute shall revert to WindowNotOpen upon expiry of a commissioning window. Note that an initial commissioning window is not opened using either the OCW command or the OBCW command, and therefore this attribute shall be set to WindowNotOpen on initial commissioning. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.18.7.1 |
+| `commands` | \{ `openCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } | - |
+| `commands.openCommissioningWindow` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> | This command is used by a current Administrator to instruct a Node to go into commissioning mode. The Enhanced Commissioning Method specifies a window of time during which an already commissioned Node accepts PASE sessions. The current Administrator MUST specify a timeout value for the duration of OCW. When OCW expires or commissioning completes, the Node shall remove the Passcode by deleting the PAKE passcode verifier as well as stop publishing the DNS-SD record corresponding to this command as described in Section 4.3.1, “Commissionable Node Discovery”. The commissioning into a new Fabric completes when the Node successfully receives a CommissioningComplete command, see Section 5.5, “Commissioning Flows”. The parameters for OpenCommissioningWindow command are as follows: A current Administrator may invoke this command to put a node in commissioning mode for the next Administrator. On completion, the command shall return a cluster specific status code from the enumeration below reflecting success or reasons for failure of the operation. The new Administrator shall discover the Node on the IP network using DNS-based Service Discovery (DNS-SD) for commissioning. If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments arise, this command shall fail with a cluster specific status code of PAKEParameterError. If a commissioning window is already currently open, this command shall fail with a cluster specific status code of Busy. If the fail-safe timer is currently armed, this command shall fail with a cluster specific status code of Busy, since it is likely that concurrent commissioning operations from multiple separate Commissioners are about to take place. In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.1 |
+| `commands.revokeCommissioning` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | This command is used by a current Administrator to instruct a Node to revoke any active Open Commissioning Window or Open Basic Commissioning Window command. This is an idempotent command and the Node shall (for ECM) delete the temporary PAKEPasscodeVerifier and associated data, and stop publishing the DNS-SD record associated with the Open Commissioning Window or Open Basic Commissioning Window command, see Section 4.3.1, “Commissionable Node Discovery”. If no commissioning window was open at time of receipt, this command shall fail with a cluster specific status code of WindowNotOpen. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.3 |
+| `extensions` | readonly [\{ `component`: \{ `commands`: \{ `openBasicCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = BasicComponent; `flags`: \{ `basic`: ``true`` = true }  }] | This metadata controls which AdministratorCommissioningCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `basic`: [`BitFlag`](schema_export.md#bitflag)  } | - |
+| `features.basic` | [`BitFlag`](schema_export.md#bitflag) | Basic Node supports Basic Commissioning Method. |
+| `id` | ``60`` | - |
+| `name` | ``"AdministratorCommissioning"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:157](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:221](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L221)
 
 ___
 
 ### BasicComponent
 
-• `Const` **BasicComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `openBasicCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  }\>
+• `Const` **BasicComponent**: `Object`
 
 A AdministratorCommissioningCluster supports these elements if it supports feature Basic.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `openBasicCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } |
+| `commands.openBasicCommissioningWindow` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:279](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L279)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:160](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L160)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `adminFabricIndex`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag)  }\>\> ; `commands`: \{ `openCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `events`: {} ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: [`Branded`](util_export.md#branded)\<``60`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"AdministratorCommissioning"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `adminFabricIndex`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: \{ `openCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``60`` = 0x3c; `name`: ``"AdministratorCommissioning"`` = "AdministratorCommissioning"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.AdministratorCommissioning.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag)  }, `T`\>\> = extender }
-
-Administrator Commissioning
-
-This cluster is used to trigger a Node to allow a new Administrator to commission it. It defines Attributes,
-Commands and Responses needed for this purpose.
-
-For the management of Operational Credentials and Trusted Root Certificates, the Node Operational Credentials
-cluster is used.
-
-AdministratorCommissioningCluster supports optional features that you can enable with the
-AdministratorCommissioningCluster.with() factory method.
-
-**`See`**
-
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.18
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.AdministratorCommissioning.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:337](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L337)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:365](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L365)
+
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:367](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L367)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `adminFabricIndex`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: \{ `openCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `commands`: \{ `openBasicCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = BasicComponent; `flags`: \{ `basic`: ``true`` = true }  }] ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``60`` = 0x3c; `name`: ``"AdministratorCommissioning"`` = "AdministratorCommissioning"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.AdministratorCommissioning.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:349](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L349)
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `adminFabricIndex`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag)  }\>\> = Cluster.attributes; `commands`: \{ `openBasicCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `basic`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `openCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: ``60`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"AdministratorCommissioning"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
-
-This cluster supports all AdministratorCommissioning features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/cluster_export.AdministratorCommissioning.Complete.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:371](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:395](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L395)
+
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:397](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L397)
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: [`Merge`](util_export.md#merge)\<\{ `adminFabricIndex`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag)  }\>\> = Cluster.attributes; `commands`: \{ `openBasicCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `basic`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `openCommissioningWindow`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: [`Branded`](util_export.md#branded)\<``60``, ``"ClusterId"``\> = Cluster.id; `name`: ``"AdministratorCommissioning"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
+
+**`See`**
+
+[Complete](cluster_export.AdministratorCommissioning.md#complete)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:373](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L373)
 
 ___
 
@@ -119,7 +145,7 @@ Input to the AdministratorCommissioning openBasicCommissioningWindow command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:138](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L30)
 
 ___
 
@@ -135,4 +161,4 @@ Input to the AdministratorCommissioning openCommissioningWindow command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L64)

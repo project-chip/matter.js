@@ -48,7 +48,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.3.5.16
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:130
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:192
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:131
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:193
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:113
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:175
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:116
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:178
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:127
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:189
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:124
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:186
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:129
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:191
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:121
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:183
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:123
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:185
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:125
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:187
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:126
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:188
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:117
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:179
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:118
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:180
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:115
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:177
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:111
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:173
 
 ___
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:128
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:190
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:112
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:174
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:119
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:181
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:134
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:196
 
 ___
 
@@ -238,7 +238,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:133
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:195
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:120
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:182
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:132
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:194
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:135
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:197
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:122
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:184
 
 ___
 
@@ -288,4 +288,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:114
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:176

@@ -13,15 +13,27 @@
 - [Parameter](../enums/exports_cluster.ContentLauncher.Parameter.md)
 - [Status](../enums/exports_cluster.ContentLauncher.Status.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.ContentLauncher.md#extension)
+- [AdditionalInfoStruct](../interfaces/exports_cluster.ContentLauncher.AdditionalInfoStruct.md)
+- [BrandingInformationStruct](../interfaces/exports_cluster.ContentLauncher.BrandingInformationStruct.md)
+- [Cluster](../interfaces/exports_cluster.ContentLauncher.Cluster.md)
+- [Complete](../interfaces/exports_cluster.ContentLauncher.Complete.md)
+- [ContentSearchStruct](../interfaces/exports_cluster.ContentLauncher.ContentSearchStruct.md)
+- [DimensionStruct](../interfaces/exports_cluster.ContentLauncher.DimensionStruct.md)
+- [LaunchContentRequest](../interfaces/exports_cluster.ContentLauncher.LaunchContentRequest.md)
+- [LaunchUrlRequest](../interfaces/exports_cluster.ContentLauncher.LaunchUrlRequest.md)
+- [LauncherResponse](../interfaces/exports_cluster.ContentLauncher.LauncherResponse.md)
+- [ParameterStruct](../interfaces/exports_cluster.ContentLauncher.ParameterStruct.md)
+- [StyleInformationStruct](../interfaces/exports_cluster.ContentLauncher.StyleInformationStruct.md)
 
 ### Variables
 
 - [Base](exports_cluster.ContentLauncher.md#base)
 - [Cluster](exports_cluster.ContentLauncher.md#cluster)
+- [ClusterInstance](exports_cluster.ContentLauncher.md#clusterinstance)
 - [Complete](exports_cluster.ContentLauncher.md#complete)
+- [CompleteInstance](exports_cluster.ContentLauncher.md#completeinstance)
 - [ContentSearchComponent](exports_cluster.ContentLauncher.md#contentsearchcomponent)
 - [ContentSearchOrUrlPlaybackComponent](exports_cluster.ContentLauncher.md#contentsearchorurlplaybackcomponent)
 - [SupportedStreamingProtocols](exports_cluster.ContentLauncher.md#supportedstreamingprotocols)
@@ -36,94 +48,112 @@
 - [TlvStyleInformationStruct](exports_cluster.ContentLauncher.md#tlvstyleinformationstruct)
 - [UrlPlaybackComponent](exports_cluster.ContentLauncher.md#urlplaybackcomponent)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.ContentLauncher.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `urlPlayback`: ``true``  } ? typeof [`UrlPlaybackComponent`](exports_cluster.ContentLauncher.md#urlplaybackcomponent) : {} & `SF` extends \{ `contentSearch`: ``true``  } ? typeof [`ContentSearchComponent`](exports_cluster.ContentLauncher.md#contentsearchcomponent) : {} & `SF` extends \{ `contentSearch`: ``true``  } \| \{ `urlPlayback`: ``true``  } ? typeof [`ContentSearchOrUrlPlaybackComponent`](exports_cluster.ContentLauncher.md#contentsearchorurlplaybackcomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1539
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `features`: \{ `contentSearch`: [`BitFlag`](exports_schema.md#bitflag) ; `urlPlayback`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1290`` ; `name`: ``"ContentLauncher"`` ; `revision`: ``1``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all ContentLauncher clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`string`[], `any`\> ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } ; `commands`: \{ `launchUrl`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `urlPlayback`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `launchContent`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `contentSearch`: ``true``  }  }, \{ `component`: {} ; `flags`: \{ `contentSearch`: ``true``  }  }, \{ `component`: {} ; `flags`: \{ `urlPlayback`: ``true``  }  }] | This metadata controls which ContentLauncherCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `contentSearch`: [`BitFlag`](exports_schema.md#bitflag) ; `urlPlayback`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.contentSearch` | [`BitFlag`](exports_schema.md#bitflag) | ContentSearch Device supports content search (non-app specific) |
+| `features.urlPlayback` | [`BitFlag`](exports_schema.md#bitflag) | UrlPlayback Device supports basic URL-based file playback |
+| `id` | ``1290`` | - |
+| `name` | ``"ContentLauncher"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1003
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1511
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: {} ; `events`: {} ; `features`: \{ `contentSearch`: [`BitFlag`](exports_schema.md#bitflag) ; `urlPlayback`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"ContentLauncher"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `features`: \{ `contentSearch`: [`BitFlag`](exports_schema.md#bitflag) ; `urlPlayback`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1290`` ; `name`: ``"ContentLauncher"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.ContentLauncher.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `contentSearch`: [`BitFlag`](exports_schema.md#bitflag) ; `urlPlayback`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Content Launcher
-
-This cluster provides an interface for launching content on a Video Player device such as a Streaming Media
-Player, Smart TV or Smart Screen.
-
-ContentLauncherCluster supports optional features that you can enable with the ContentLauncherCluster.with()
-factory method.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 6.7
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.ContentLauncher.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1469
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:2461
+
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:2463
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`string`[], `any`\> ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } ; `commands`: \{ `launchUrl`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `urlPlayback`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `launchContent`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `contentSearch`: ``true``  }  }, \{ `component`: {} ; `flags`: \{ `contentSearch`: ``true``  }  }, \{ `component`: {} ; `flags`: \{ `urlPlayback`: ``true``  }  }] ; `features`: \{ `contentSearch`: [`BitFlag`](exports_schema.md#bitflag) ; `urlPlayback`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1290`` ; `name`: ``"ContentLauncher"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.ContentLauncher.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1982
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`string`[], `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: \{ `launchContent`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `contentSearch`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `launchUrl`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: \{ `contentSearch`: [`BitFlag`](exports_schema.md#bitflag) ; `urlPlayback`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``1290`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"ContentLauncher"`` ; `revision`: ``1``  }\>
-
-This cluster supports all ContentLauncher features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/exports_cluster.ContentLauncher.Complete.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1556
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:2915
+
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:2917
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`string`[], `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: \{ `launchContent`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `contentSearch`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `launchUrl`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `urlPlayback`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: \{ `contentSearch`: [`BitFlag`](exports_schema.md#bitflag) ; `urlPlayback`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"ContentLauncher"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Complete](exports_cluster.ContentLauncher.md#complete)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:2467
 
 ___
 
 ### ContentSearchComponent
 
-• `Const` **ContentSearchComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `launchContent`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
+• `Const` **ContentSearchComponent**: `Object`
 
 A ContentLauncherCluster supports these elements if it supports feature ContentSearch.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `launchContent`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } |
+| `commands.launchContent` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1369
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1400
 
 ___
 
 ### ContentSearchOrUrlPlaybackComponent
 
-• `Const` **ContentSearchOrUrlPlaybackComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<{}\>
+• `Const` **ContentSearchOrUrlPlaybackComponent**: `Object`
 
 A ContentLauncherCluster supports these elements if it supports features ContentSearch or UrlPlayback.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1457
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1488
 
 ___
 
@@ -146,7 +176,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.3.2.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:16
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:18
 
 ___
 
@@ -162,7 +192,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.5.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:815
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:859
 
 ___
 
@@ -179,7 +209,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.5.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:134
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:154
 
 ___
 
@@ -195,7 +225,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.5.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:872
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:930
 
 ___
 
@@ -214,7 +244,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.5.8
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:55
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:57
 
 ___
 
@@ -230,7 +260,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.4.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:919
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:984
 
 ___
 
@@ -246,7 +276,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.4.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:410
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:438
 
 ___
 
@@ -264,7 +294,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.4.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:726
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:761
 
 ___
 
@@ -280,7 +310,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.5.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:834
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:885
 
 ___
 
@@ -297,16 +327,26 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.5.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:81
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:93
 
 ___
 
 ### UrlPlaybackComponent
 
-• `Const` **UrlPlaybackComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `acceptHeader`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`string`[], `any`\> ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } ; `commands`: \{ `launchUrl`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
+• `Const` **UrlPlaybackComponent**: `Object`
 
 A ContentLauncherCluster supports these elements if it supports feature UrlPlayback.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `acceptHeader`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`string`[], `any`\> ; `supportedStreamingProtocols`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } |
+| `attributes.acceptHeader` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`string`[], `any`\> |
+| `attributes.supportedStreamingProtocols` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> |
+| `commands` | \{ `launchUrl`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } |
+| `commands.launchUrl` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1025
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1056

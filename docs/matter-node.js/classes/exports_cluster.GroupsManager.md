@@ -98,7 +98,7 @@ ___
 
 ### removeAllGroups
 
-▸ **removeAllGroups**(`fabric`, `endpointId`): `void`
+▸ **removeAllGroups**(`fabric`, `endpointId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -109,7 +109,7 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -119,7 +119,7 @@ ___
 
 ### removeGroup
 
-▸ **removeGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
+▸ **removeGroup**(`fabric`, `endpointId`, `groupId`): `Promise`\<`boolean`\>
 
 #### Parameters
 
@@ -131,7 +131,7 @@ ___
 
 #### Returns
 
-`boolean`
+`Promise`\<`boolean`\>
 
 #### Defined in
 
@@ -141,7 +141,7 @@ ___
 
 ### setGroup
 
-▸ **setGroup**(`fabric`, `endpointId`, `groupId`, `groupName`): `void`
+▸ **setGroup**(`fabric`, `endpointId`, `groupId`, `groupName`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -154,7 +154,7 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 

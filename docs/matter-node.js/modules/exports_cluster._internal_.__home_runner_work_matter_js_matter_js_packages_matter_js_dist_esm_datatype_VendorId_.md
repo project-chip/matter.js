@@ -21,4 +21,4 @@ ___
 
 ### VendorId
 
-Re-exports [VendorId](exports_datatype.md#vendorid)
+Re-exports [VendorId](exports_datatype.md#vendorid-1)

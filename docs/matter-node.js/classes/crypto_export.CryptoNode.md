@@ -26,7 +26,7 @@
 - [encrypt](crypto_export.CryptoNode.md#encrypt)
 - [get](crypto_export.CryptoNode.md#get)
 - [getRandom](crypto_export.CryptoNode.md#getrandom)
-- [getRandomBN](crypto_export.CryptoNode.md#getrandombn)
+- [getRandomBigInt](crypto_export.CryptoNode.md#getrandombigint)
 - [getRandomBigUInt64](crypto_export.CryptoNode.md#getrandombiguint64)
 - [getRandomData](crypto_export.CryptoNode.md#getrandomdata)
 - [getRandomUInt16](crypto_export.CryptoNode.md#getrandomuint16)
@@ -88,7 +88,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:64
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:168
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:25
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:129
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:37
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:141
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:45
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:149
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:50
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:154
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:23
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:127
 
 ___
 
@@ -261,7 +261,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:21
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:125
 
 ___
 
@@ -283,36 +283,36 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:28
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:132
 
 ___
 
-### getRandomBN
+### getRandomBigInt
 
-▪ `Static` `Readonly` **getRandomBN**: (`size`: `number`, `maxValue`: `BN`) => `BN`
+▪ `Static` `Readonly` **getRandomBigInt**: (`size`: `number`, `maxValue?`: `bigint`) => `bigint`
 
 #### Type declaration
 
-▸ (`size`, `maxValue`): `BN`
+▸ (`size`, `maxValue?`): `bigint`
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `size` | `number` |
-| `maxValue` | `BN` |
+| `maxValue?` | `bigint` |
 
 ##### Returns
 
-`BN`
+`bigint`
 
 #### Inherited from
 
-[Crypto](crypto_export.Crypto.md).[getRandomBN](crypto_export.Crypto.md#getrandombn)
+[Crypto](crypto_export.Crypto.md).[getRandomBigInt](crypto_export.Crypto.md#getrandombigint)
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:32
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:136
 
 ___
 
@@ -334,7 +334,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:31
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:135
 
 ___
 
@@ -362,7 +362,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:27
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:131
 
 ___
 
@@ -384,7 +384,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:29
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:133
 
 ___
 
@@ -406,7 +406,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:30
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:134
 
 ___
 
@@ -434,7 +434,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:52
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:156
 
 ___
 
@@ -465,7 +465,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:56
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:160
 
 ___
 
@@ -494,7 +494,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:58
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:162
 
 ___
 
@@ -525,7 +525,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:54
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:158
 
 ___
 
@@ -555,7 +555,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:60
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:164
 
 ___
 
@@ -586,7 +586,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:62
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:166
 
 ## Methods
 
@@ -604,7 +604,7 @@ packages/matter.js/dist/esm/crypto/Crypto.d.ts:62
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:152](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L152)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L152)
 
 ___
 
@@ -631,7 +631,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L35)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L35)
 
 ___
 
@@ -654,7 +654,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L53)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L53)
 
 ___
 
@@ -683,7 +683,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:59](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L59)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L59)
 
 ___
 
@@ -708,7 +708,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L68)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L68)
 
 ___
 
@@ -735,7 +735,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L23)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L23)
 
 ___
 
@@ -759,7 +759,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:49](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L49)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L49)
 
 ___
 
@@ -783,7 +783,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L72)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L72)
 
 ___
 
@@ -810,7 +810,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L91)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L91)
 
 ___
 
@@ -835,7 +835,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:105](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L105)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L105)
 
 ___
 
@@ -862,7 +862,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:82](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L82)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L82)
 
 ___
 
@@ -888,7 +888,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:111](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L111)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L111)
 
 ___
 
@@ -915,4 +915,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:132](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node.js/src/crypto/CryptoNode.ts#L132)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/crypto/CryptoNode.ts#L132)

@@ -23,11 +23,11 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`CommandElement`](model.md#commandelement)\>
+Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`CommandElement`](../interfaces/model.CommandElement-1.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/CommandElement.ts#L31)
+[packages/matter.js/src/model/elements/CommandElement.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/CommandElement.ts#L31)
 
 ___
 
@@ -37,9 +37,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/CommandElement.ts#L29)
+[packages/matter.js/src/model/elements/CommandElement.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/CommandElement.ts#L29)
 
-[packages/matter.js/src/model/elements/CommandElement.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/CommandElement.ts#L30)
+[packages/matter.js/src/model/elements/CommandElement.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/CommandElement.ts#L30)
 
 ## Variables
 
@@ -49,6 +49,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/CommandElement.ts#L29)
+[packages/matter.js/src/model/elements/CommandElement.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/CommandElement.ts#L29)
 
-[packages/matter.js/src/model/elements/CommandElement.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/CommandElement.ts#L30)
+[packages/matter.js/src/model/elements/CommandElement.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/CommandElement.ts#L30)

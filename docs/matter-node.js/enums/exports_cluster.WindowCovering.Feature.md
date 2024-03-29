@@ -32,7 +32,7 @@ Absolute positioning is supported.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:292
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:616
 
 ___
 
@@ -46,7 +46,7 @@ Lift Control and behavior for lifting/sliding window coverings
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:274
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:598
 
 ___
 
@@ -60,7 +60,7 @@ Position Aware lift control is supported.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:286
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:610
 
 ___
 
@@ -74,7 +74,7 @@ Position Aware tilt control is supported.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:298
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:622
 
 ___
 
@@ -88,4 +88,4 @@ Tilt Control and behavior for tilting window coverings
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:280
+packages/matter.js/dist/esm/cluster/definitions/WindowCoveringCluster.d.ts:604

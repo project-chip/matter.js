@@ -19,7 +19,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:30
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:32
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:31
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:33

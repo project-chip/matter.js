@@ -15,104 +15,125 @@
 - [Feature](../enums/cluster_export.Identify.Feature.md)
 - [IdentifyType](../enums/cluster_export.Identify.IdentifyType.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](cluster_export.Identify.md#extension)
+- [Cluster](../interfaces/cluster_export.Identify.Cluster.md)
+- [Complete](../interfaces/cluster_export.Identify.Complete.md)
+- [IdentifyQueryResponse](../interfaces/cluster_export.Identify.IdentifyQueryResponse.md)
+- [IdentifyRequest](../interfaces/cluster_export.Identify.IdentifyRequest.md)
+- [TriggerEffectRequest](../interfaces/cluster_export.Identify.TriggerEffectRequest.md)
 
 ### Variables
 
 - [Base](cluster_export.Identify.md#base)
 - [Cluster](cluster_export.Identify.md#cluster)
+- [ClusterInstance](cluster_export.Identify.md#clusterinstance)
 - [Complete](cluster_export.Identify.md#complete)
+- [CompleteInstance](cluster_export.Identify.md#completeinstance)
 - [QueryComponent](cluster_export.Identify.md#querycomponent)
 - [TlvIdentifyQueryResponse](cluster_export.Identify.md#tlvidentifyqueryresponse)
 - [TlvIdentifyRequest](cluster_export.Identify.md#tlvidentifyrequest)
 - [TlvTriggerEffectRequest](cluster_export.Identify.md#tlvtriggereffectrequest)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](cluster_export.Identify.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `query`: ``true``  } ? typeof [`QueryComponent`](cluster_export.Identify.md#querycomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:312](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L312)
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `identifyTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `identifyType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>  } ; `commands`: \{ `identify`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `triggerEffect`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EffectIdentifier`](../enums/cluster_export.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Default`](../enums/cluster_export.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\>  } ; `features`: \{ `query`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``3`` = 0x3; `name`: ``"Identify"`` = "Identify"; `revision`: ``4`` = 4 }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all Identify clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `identifyTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `identifyType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>  } | - |
+| `attributes.identifyTime` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> | This attribute specifies the remaining length of time, in seconds, that the endpoint will continue to identify itself. If this attribute is set to a value other than 0 then the device shall enter its identification state, in order to indicate to an observer which of several nodes and/or endpoints it is. It is RECOMMENDED that this state consists of flashing a light with a period of 0.5 seconds. The IdentifyTime attribute shall be decremented every second while in this state. If this attribute reaches or is set to the value 0 then the device shall terminate its identification state. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.5.1 |
+| `attributes.identifyType` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\> | This attribute specifies how the identification state is presented to the user. This field shall contain one of the values listed below: Table 2. Values of the IdentifyType attribute **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.5.2 |
+| `commands` | \{ `identify`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `triggerEffect`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EffectIdentifier`](../enums/cluster_export.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Default`](../enums/cluster_export.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\>  } | - |
+| `commands.identify` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command starts or stops the receiving device identifying itself. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.1 |
+| `commands.triggerEffect` | [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EffectIdentifier`](../enums/cluster_export.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Default`](../enums/cluster_export.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\> | This command allows the support of feedback to the user, such as a certain light effect. It is used to allow an implementation to provide visual feedback to the user under certain circumstances such as a color light turning green when it has successfully connected to a network. The use of this command and the effects themselves are entirely up to the implementer to use whenever a visual feedback is useful but it is not the same as and does not replace the identify mechanism used during commissioning. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.3 |
+| `extensions` | readonly [\{ `component`: \{ `commands`: \{ `identifyQuery`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `timeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  } = QueryComponent; `flags`: \{ `query`: ``true`` = true }  }] | This metadata controls which IdentifyCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `query`: [`BitFlag`](schema_export.md#bitflag)  } | - |
+| `features.query` | [`BitFlag`](schema_export.md#bitflag) | Query Multicast query for identification state |
+| `id` | ``3`` | - |
+| `name` | ``"Identify"`` | - |
+| `revision` | ``4`` | - |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:179](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L179)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:227](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L227)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `identifyTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `identifyType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `query`: [`BitFlag`](schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `query`: [`BitFlag`](schema_export.md#bitflag)  }\>\> ; `commands`: \{ `identify`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `triggerEffect`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EffectIdentifier`](../enums/cluster_export.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Default`](../enums/cluster_export.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\>  } ; `events`: {} ; `features`: \{ `query`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: [`Branded`](util_export.md#branded)\<``3`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"Identify"`` ; `revision`: ``4`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `identifyTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `identifyType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>  } ; `commands`: \{ `identify`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `triggerEffect`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EffectIdentifier`](../enums/cluster_export.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Default`](../enums/cluster_export.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\>  } ; `features`: \{ `query`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``3`` = 0x3; `name`: ``"Identify"`` = "Identify"; `revision`: ``4`` = 4 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.Identify.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `query`: [`BitFlag`](schema_export.md#bitflag)  }, `T`\>\> = extender }
-
-Identify
-
-This cluster supports an endpoint identification state (e.g., flashing a light), that indicates to an observer
-(e.g., an installer) which of several nodes and/or endpoints it is. It also supports a multicast request that
-any endpoint that is identifying itself to respond to the initiator.
-
-The state of this cluster may be shared on more than one endpoint on a node.
-
-For Example: Two endpoints on a single node, one a temperature sensor, and one a humidity sensor, may both share
-the same cluster instance and therefore identification state (e.g. single LED on the node).
-
-Zigbee: Note that this cluster cannot be disabled, and remains functional regardless of the setting of the
-DeviceEnable attribute in the Basic cluster.
-
-IdentifyCluster supports optional features that you can enable with the IdentifyCluster.with() factory method.
-
-**`See`**
-
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.Identify.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:290](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L290)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:325](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L325)
+
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:327](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L327)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `identifyTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `identifyType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>  } ; `commands`: \{ `identify`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `triggerEffect`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EffectIdentifier`](../enums/cluster_export.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Default`](../enums/cluster_export.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `commands`: \{ `identifyQuery`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `timeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  } = QueryComponent; `flags`: \{ `query`: ``true`` = true }  }] ; `features`: \{ `query`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``3`` = 0x3; `name`: ``"Identify"`` = "Identify"; `revision`: ``4`` = 4 }\>
+
+**`See`**
+
+[Cluster](cluster_export.Identify.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:304](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L304)
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `identifyTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `identifyType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `query`: [`BitFlag`](schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `query`: [`BitFlag`](schema_export.md#bitflag)  }\>\> = Cluster.attributes; `commands`: \{ `identify`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `identifyQuery`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `timeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `query`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `triggerEffect`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EffectIdentifier`](../enums/cluster_export.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Default`](../enums/cluster_export.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\>  } ; `features`: \{ `query`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: ``3`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"Identify"`` = Cluster.name; `revision`: ``4`` = Cluster.revision }\>
-
-This cluster supports all Identify features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/cluster_export.Identify.Complete.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:324](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L324)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:351](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L351)
+
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:353](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L353)
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: [`Merge`](util_export.md#merge)\<\{ `identifyTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `identifyType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`IdentifyType`](../enums/cluster_export.Identify.IdentifyType.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `query`: [`BitFlag`](schema_export.md#bitflag)  }\>\> = Cluster.attributes; `commands`: \{ `identify`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `identifyQuery`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `timeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `query`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `triggerEffect`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EffectIdentifier`](../enums/cluster_export.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Default`](../enums/cluster_export.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\>  } ; `features`: \{ `query`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: [`Branded`](util_export.md#branded)\<``3``, ``"ClusterId"``\> = Cluster.id; `name`: ``"Identify"`` = Cluster.name; `revision`: ``4`` = Cluster.revision }\>
+
+**`See`**
+
+[Complete](cluster_export.Identify.md#complete)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:333](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L333)
 
 ___
 
 ### QueryComponent
 
-• `Const` **QueryComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `identifyQuery`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `timeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  }\>
+• `Const` **QueryComponent**: `Object`
 
 A IdentifyCluster supports these elements if it supports feature Query.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `identifyQuery`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `timeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  } |
+| `commands.identifyQuery` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `timeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:251](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L251)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:190](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L190)
 
 ___
 
@@ -129,7 +150,7 @@ case that the device is currently identifying itself.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:152](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L34)
 
 ___
 
@@ -145,7 +166,7 @@ Input to the Identify identify command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L92)
 
 ___
 
@@ -161,4 +182,4 @@ Input to the Identify triggerEffect command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:120](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:154](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L154)

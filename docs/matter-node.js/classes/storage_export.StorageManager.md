@@ -1,8 +1,14 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [storage/export](../modules/storage_export.md) / StorageManager
 
-# Class: StorageManager
+# Class: StorageManager\<S\>
 
 [storage/export](../modules/storage_export.md).StorageManager
+
+## Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) = `any` |
 
 ## Table of contents
 
@@ -25,21 +31,27 @@
 
 ### constructor
 
-• **new StorageManager**(`storage`): [`StorageManager`](storage_export.StorageManager.md)
+• **new StorageManager**\<`S`\>(`storage`): [`StorageManager`](storage_export.StorageManager.md)\<`S`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) = `any` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storage` | [`Storage`](storage_export.Storage.md) |
+| `storage` | `S` |
 
 #### Returns
 
-[`StorageManager`](storage_export.StorageManager.md)
+[`StorageManager`](storage_export.StorageManager.md)\<`S`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageManager.d.ts:11
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:12
 
 ## Properties
 
@@ -49,7 +61,7 @@ packages/matter.js/dist/esm/storage/StorageManager.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageManager.d.ts:10
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:11
 
 ___
 
@@ -59,27 +71,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageManager.d.ts:9
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:10
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`\<`void`\>
+▸ **close**(): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Returns
 
-`Promise`\<`void`\>
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageManager.d.ts:13
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:14
 
 ___
 
 ### createContext
 
-▸ **createContext**(`context`): [`StorageContext`](storage_export.StorageContext.md)
+▸ **createContext**(`context`): [`StorageContext`](storage_export.StorageContext.md)\<`S`\>
 
 #### Parameters
 
@@ -89,22 +101,22 @@ ___
 
 #### Returns
 
-[`StorageContext`](storage_export.StorageContext.md)
+[`StorageContext`](storage_export.StorageContext.md)\<`S`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageManager.d.ts:14
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:15
 
 ___
 
 ### initialize
 
-▸ **initialize**(): `Promise`\<`void`\>
+▸ **initialize**(): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Returns
 
-`Promise`\<`void`\>
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/storage/StorageManager.d.ts:12
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:13

@@ -7,23 +7,33 @@
 ### Namespaces
 
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+- [AsyncConstruction](internal_.AsyncConstruction.md)
 - [CaseAuthenticatedTag](internal_.CaseAuthenticatedTag.md)
+- [ClusterDatasource](internal_.ClusterDatasource.md)
+- [ClusterId](internal_.ClusterId.md)
+- [ClusterType](internal_.ClusterType.md)
+- [Diagnostic](internal_.Diagnostic.md)
 - [FabricIndex](internal_.FabricIndex.md)
+- [FailsafeContext](internal_.FailsafeContext.md)
 - [NodeId](internal_.NodeId.md)
+- [SubscriptionOptions](internal_.SubscriptionOptions.md)
 
 ### Enumerations
 
 - [AccessLevel](../enums/internal_.AccessLevel.md)
 - [BitRangeType](../enums/internal_.BitRangeType.md)
+- [CommissioningFlowType](../enums/internal_.CommissioningFlowType.md)
 - [CommissioningWindowStatus](../enums/internal_.CommissioningWindowStatus.md)
 - [CurveType](../enums/internal_.CurveType.md)
 - [DeviceClasses](../enums/internal_.DeviceClasses.md)
 - [EventPriority](../enums/internal_.EventPriority.md)
+- [FabricAction](../enums/internal_.FabricAction.md)
 - [KeyType](../enums/internal_.KeyType.md)
 - [NodeStateInformation](../enums/internal_.NodeStateInformation.md)
 - [ProtocolStatusCode](../enums/internal_.ProtocolStatusCode.md)
 - [RegulatoryLocationType](../enums/internal_.RegulatoryLocationType.md)
 - [SessionType](../enums/internal_.SessionType.md)
+- [Status](../enums/internal_.Status.md)
 - [StatusCode](../enums/internal_.StatusCode.md)
 - [TlvLength](../enums/internal_.TlvLength.md)
 
@@ -57,7 +67,6 @@
 - [BtpSessionHandler](../classes/internal_.BtpSessionHandler.md)
 - [ChannelManager](../classes/internal_.ChannelManager.md)
 - [CommandServer](../classes/internal_.CommandServer.md)
-- [DiagnosticDictionary](../classes/internal_.DiagnosticDictionary.md)
 - [Endpoint](../classes/internal_.Endpoint.md)
 - [EventClient](../classes/internal_.EventClient.md)
 - [EventHandler](../classes/internal_.EventHandler.md)
@@ -65,10 +74,12 @@
 - [ExchangeManager](../classes/internal_.ExchangeManager.md)
 - [ExchangeProvider](../classes/internal_.ExchangeProvider.md)
 - [Fabric](../classes/internal_.Fabric.md)
-- [FabricBuilder](../classes/internal_.FabricBuilder.md)
+- [FabricManager](../classes/internal_.FabricManager.md)
 - [FabricScopedAttributeServer](../classes/internal_.FabricScopedAttributeServer.md)
-- [FailSafeManager](../classes/internal_.FailSafeManager.md)
+- [FailsafeContext](../classes/internal_.FailsafeContext-1.md)
+- [FailsafeTimer](../classes/internal_.FailsafeTimer.md)
 - [FixedAttributeServer](../classes/internal_.FixedAttributeServer.md)
+- [InsecureSession](../classes/internal_.InsecureSession.md)
 - [InteractionClient](../classes/internal_.InteractionClient.md)
 - [InteractionEndpointStructure](../classes/internal_.InteractionEndpointStructure.md)
 - [InteractionMessenger](../classes/internal_.InteractionMessenger.md)
@@ -80,6 +91,7 @@
 - [MessageCounter](../classes/internal_.MessageCounter.md)
 - [MessageExchange](../classes/internal_.MessageExchange.md)
 - [MessageReceptionState](../classes/internal_.MessageReceptionState.md)
+- [Network](../classes/internal_.Network.md)
 - [NobleBleClient](../classes/internal_.NobleBleClient.md)
 - [PaseServer](../classes/internal_.PaseServer.md)
 - [PaseServerMessenger](../classes/internal_.PaseServerMessenger.md)
@@ -89,15 +101,17 @@
 - [SecureSession](../classes/internal_.SecureSession.md)
 - [Session](../classes/internal_.Session.md)
 - [SessionManager](../classes/internal_.SessionManager.md)
-- [Storage](../classes/internal_.Storage.md)
 - [StorageContext](../classes/internal_.StorageContext.md)
 - [SubscriptionHandler](../classes/internal_.SubscriptionHandler.md)
+- [SyncStorage](../classes/internal_.SyncStorage.md)
 - [TlvSchema](../classes/internal_.TlvSchema.md)
 - [UdpMulticastServer](../classes/internal_.UdpMulticastServer.md)
-- [UnsecureSession](../classes/internal_.UnsecureSession.md)
 
 ### Interfaces
 
+- [AsyncConstructable](../interfaces/internal_.AsyncConstructable.md)
+- [AsyncConstruction](../interfaces/internal_.AsyncConstruction-1.md)
+- [AsyncObservable](../interfaces/internal_.AsyncObservable.md)
 - [Attribute](../interfaces/internal_.Attribute.md)
 - [AttributeOptions](../interfaces/internal_.AttributeOptions.md)
 - [AttributePath](../interfaces/internal_.AttributePath.md)
@@ -106,15 +120,23 @@
 - [Attributes](../interfaces/internal_.Attributes.md)
 - [Channel](../interfaces/internal_.Channel.md)
 - [Cluster](../interfaces/internal_.Cluster.md)
+- [ClusterDatasource](../interfaces/internal_.ClusterDatasource-1.md)
+- [ClusterType](../interfaces/internal_.ClusterType-1.md)
 - [Command](../interfaces/internal_.Command.md)
 - [CommandOptions](../interfaces/internal_.CommandOptions.md)
 - [CommandPath](../interfaces/internal_.CommandPath.md)
 - [CommandWithPath](../interfaces/internal_.CommandWithPath.md)
 - [Commands](../interfaces/internal_.Commands.md)
+- [CommissioningModeInstanceData](../interfaces/internal_.CommissioningModeInstanceData.md)
+- [Configuration](../interfaces/internal_.Configuration.md)
+- [Configuration](../interfaces/internal_.Configuration-1.md)
 - [DecodedMessage](../interfaces/internal_.DecodedMessage.md)
 - [DecodedPacket](../interfaces/internal_.DecodedPacket.md)
 - [DecodedPacketHeader](../interfaces/internal_.DecodedPacketHeader.md)
 - [DeviceTypeDefinition](../interfaces/internal_.DeviceTypeDefinition.md)
+- [Diagnostic](../interfaces/internal_.Diagnostic-1.md)
+- [Elapsed](../interfaces/internal_.Elapsed.md)
+- [EndpointInterface](../interfaces/internal_.EndpointInterface.md)
 - [EndpointOptions](../interfaces/internal_.EndpointOptions.md)
 - [Event](../interfaces/internal_.Event.md)
 - [EventData](../interfaces/internal_.EventData.md)
@@ -131,6 +153,7 @@
 - [Listener](../interfaces/internal_.Listener.md)
 - [Message](../interfaces/internal_.Message.md)
 - [NetInterface](../interfaces/internal_.NetInterface.md)
+- [Observable](../interfaces/internal_.Observable.md)
 - [OptionalAttribute](../interfaces/internal_.OptionalAttribute.md)
 - [OptionalCommand](../interfaces/internal_.OptionalCommand.md)
 - [OptionalEvent](../interfaces/internal_.OptionalEvent.md)
@@ -142,14 +165,19 @@
 - [PacketHeader](../interfaces/internal_.PacketHeader.md)
 - [PayloadHeader](../interfaces/internal_.PayloadHeader.md)
 - [PbkdfParameters](../interfaces/internal_.PbkdfParameters.md)
+- [ProductDescription](../interfaces/internal_.ProductDescription.md)
 - [ProtocolHandler](../interfaces/internal_.ProtocolHandler.md)
 - [ResumptionRecord](../interfaces/internal_.ResumptionRecord.md)
 - [Scanner](../interfaces/internal_.Scanner.md)
 - [SessionParameters](../interfaces/internal_.SessionParameters.md)
+- [Storage](../interfaces/internal_.Storage.md)
+- [SubscriptionOptions](../interfaces/internal_.SubscriptionOptions-1.md)
 - [Timer](../interfaces/internal_.Timer.md)
 - [TlvReader](../interfaces/internal_.TlvReader.md)
 - [TlvWriter](../interfaces/internal_.TlvWriter.md)
 - [TransportInterface](../interfaces/internal_.TransportInterface.md)
+- [UdpChannel](../interfaces/internal_.UdpChannel.md)
+- [UdpChannelOptions](../interfaces/internal_.UdpChannelOptions.md)
 - [UdpMulticastServerOptions](../interfaces/internal_.UdpMulticastServerOptions.md)
 - [WritableAttribute](../interfaces/internal_.WritableAttribute.md)
 - [WritableFabricScopedAttribute](../interfaces/internal_.WritableFabricScopedAttribute.md)
@@ -191,10 +219,10 @@
 - [CommissionableDeviceIdentifiers](internal_.md#commissionabledeviceidentifiers)
 - [CommissionerInstanceData](internal_.md#commissionerinstancedata)
 - [CommissioningControllerNodeOptions](internal_.md#commissioningcontrollernodeoptions)
-- [CommissioningModeInstanceData](internal_.md#commissioningmodeinstancedata)
 - [CommissioningOptions](internal_.md#commissioningoptions)
 - [ConditionalFeatureList](internal_.md#conditionalfeaturelist)
 - [DataReportPayload](internal_.md#datareportpayload)
+- [DataVersion](internal_.md#dataversion)
 - [DecodedAttributeReportValue](internal_.md#decodedattributereportvalue)
 - [DecodedEventData](internal_.md#decodedeventdata)
 - [DecodedEventReportValue](internal_.md#decodedeventreportvalue)
@@ -202,16 +230,20 @@
 - [DiscoverableDevice](internal_.md#discoverabledevice)
 - [DiscoveryData](internal_.md#discoverydata)
 - [EndpointNumber](internal_.md#endpointnumber)
+- [EntryIndex](internal_.md#entryindex)
 - [EventClients](internal_.md#eventclients)
 - [EventDataPayload](internal_.md#eventdatapayload)
 - [EventId](internal_.md#eventid)
+- [EventNumber](internal_.md#eventnumber)
 - [EventReportPayload](internal_.md#eventreportpayload)
 - [EventType](internal_.md#eventtype)
 - [ExchangeSendOptions](internal_.md#exchangesendoptions)
+- [ExposedFabricInformation](internal_.md#exposedfabricinformation)
 - [FabricId](internal_.md#fabricid)
 - [FabricIndex](internal_.md#fabricindex)
 - [FabricJsonObject](internal_.md#fabricjsonobject)
 - [FabricScopedAttributeNames](internal_.md#fabricscopedattributenames)
+- [FieldId](internal_.md#fieldid)
 - [GetterTypeFromSpec](internal_.md#gettertypefromspec)
 - [GetterTypeFromSpec](internal_.md#gettertypefromspec-1)
 - [GlobalAttributeNames](internal_.md#globalattributenames)
@@ -222,11 +254,15 @@
 - [MandatoryAttributeServers](internal_.md#mandatoryattributeservers)
 - [MandatoryEventNames](internal_.md#mandatoryeventnames)
 - [MandatoryFieldNames](internal_.md#mandatoryfieldnames)
+- [Map](internal_.md#map)
 - [MatterServerRecordWithExpire](internal_.md#matterserverrecordwithexpire)
+- [MaybePromise](internal_.md#maybepromise)
 - [Merge](internal_.md#merge)
 - [NodeCommissioningOptions](internal_.md#nodecommissioningoptions)
 - [NodeId](internal_.md#nodeid)
 - [NonFixedAttributeNames](internal_.md#nonfixedattributenames)
+- [Observer](internal_.md#observer)
+- [ObserverErrorHandler](internal_.md#observererrorhandler)
 - [OperationalDevice](internal_.md#operationaldevice)
 - [OptionalAttributeNames](internal_.md#optionalattributenames)
 - [OptionalAttributeServers](internal_.md#optionalattributeservers)
@@ -243,6 +279,7 @@
 - [ServerAttributeSubscribers](internal_.md#serverattributesubscribers)
 - [ServerEventTriggers](internal_.md#servereventtriggers)
 - [SignatureFromCommandSpec](internal_.md#signaturefromcommandspec)
+- [StorageOperationResult](internal_.md#storageoperationresult)
 - [SupportedComplexStorageTypes](internal_.md#supportedcomplexstoragetypes)
 - [SupportedStorageBaseTypes](internal_.md#supportedstoragebasetypes)
 - [SupportedStorageTypes](internal_.md#supportedstoragetypes)
@@ -264,9 +301,11 @@
 
 ### Variables
 
+- [AsyncObservable](internal_.md#asyncobservable)
 - [ByteArray](internal_.md#bytearray-1)
 - [DiscoveryCapabilitiesBitmap](internal_.md#discoverycapabilitiesbitmap)
-- [PairingHintBitmap](internal_.md#pairinghintbitmap)
+- [MaybePromise](internal_.md#maybepromise-1)
+- [Observable](internal_.md#observable)
 - [TlvAttributeReport](internal_.md#tlvattributereport)
 - [TlvAttributeReportData](internal_.md#tlvattributereportdata)
 - [TlvDataReport](internal_.md#tlvdatareport)
@@ -276,6 +315,7 @@
 
 ### Functions
 
+- [AsyncConstruction](internal_.md#asyncconstruction)
 - [Attribute](internal_.md#attribute)
 - [AttributeId](internal_.md#attributeid-1)
 - [BitField](internal_.md#bitfield-1)
@@ -285,16 +325,22 @@
 - [CaseAuthenticatedTag](internal_.md#caseauthenticatedtag-1)
 - [Cluster](internal_.md#cluster)
 - [ClusterId](internal_.md#clusterid-1)
+- [ClusterType](internal_.md#clustertype)
 - [Command](internal_.md#command)
 - [CommandId](internal_.md#commandid-1)
+- [DataVersion](internal_.md#dataversion-1)
 - [DeviceTypeDefinition](internal_.md#devicetypedefinition)
 - [DeviceTypeId](internal_.md#devicetypeid-1)
+- [Diagnostic](internal_.md#diagnostic)
 - [EndpointNumber](internal_.md#endpointnumber-1)
+- [EntryIndex](internal_.md#entryindex-1)
 - [Event](internal_.md#event)
 - [EventId](internal_.md#eventid-1)
+- [EventNumber](internal_.md#eventnumber-1)
 - [FabricId](internal_.md#fabricid-1)
 - [FabricIndex](internal_.md#fabricindex-1)
 - [FabricScopedAttribute](internal_.md#fabricscopedattribute)
+- [FieldId](internal_.md#fieldid-1)
 - [FixedAttribute](internal_.md#fixedattribute)
 - [GlobalAttributes](internal_.md#globalattributes-1)
 - [GroupId](internal_.md#groupid-1)
@@ -310,6 +356,7 @@
 - [VendorId](internal_.md#vendorid-1)
 - [WritableAttribute](internal_.md#writableattribute)
 - [WritableFabricScopedAttribute](internal_.md#writablefabricscopedattribute)
+- [configurationFor](internal_.md#configurationfor)
 
 ## Enumeration Members
 
@@ -485,7 +532,7 @@ matter.js/dist/esm/tlv/TlvCodec.d.ts:19
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/AttributeServer.d.ts:22
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:24
 
 ___
 
@@ -576,7 +623,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:33
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:34
 
 ___
 
@@ -911,7 +958,7 @@ ___
 
 ### ClusterId
 
-Ƭ **ClusterId**: [`Branded`](internal_.md#branded)\<`number`, ``"ClusterId"``\>
+Ƭ **ClusterId**\<`ID`\>: [`Branded`](internal_.md#branded)\<`ID`, ``"ClusterId"``\>
 
 A Cluster Identifier is a 32 bit number and SHALL reference a single cluster specification and
 SHALL define conformance to that specification.
@@ -920,17 +967,25 @@ SHALL define conformance to that specification.
 
 MatterCoreSpecificationV1_0 § 7.10
 
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ID` | extends `number` = `number` |
+
 #### Defined in
+
+matter.js/dist/esm/datatype/ClusterId.d.ts:16
 
 matter.js/dist/esm/datatype/ClusterId.d.ts:15
 
-matter.js/dist/esm/datatype/ClusterId.d.ts:14
+matter.js/dist/esm/datatype/ClusterId.d.ts:17
 
 ___
 
 ### ClusterServerObj
 
-Ƭ **ClusterServerObj**\<`A`, `E`\>: \{ `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](internal_.md#attributeservers)\<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](internal_.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](internal_.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](internal_.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `name`: `string`  } & [`ServerAttributeGetters`](internal_.md#serverattributegetters)\<`A`\> & [`ServerAttributeSetters`](internal_.md#serverattributesetters)\<`A`\> & [`ServerAttributeSubscribers`](internal_.md#serverattributesubscribers)\<`A`\> & [`ServerEventTriggers`](internal_.md#servereventtriggers)\<`E`\>
+Ƭ **ClusterServerObj**\<`A`, `E`\>: \{ `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](internal_.md#attributeservers)\<`A`\> ; `datasource?`: [`ClusterDatasource`](../interfaces/internal_.ClusterDatasource-1.md) ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](internal_.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](internal_.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](internal_.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `name`: `string`  } & [`ServerAttributeGetters`](internal_.md#serverattributegetters)\<`A`\> & [`ServerAttributeSetters`](internal_.md#serverattributesetters)\<`A`\> & [`ServerAttributeSubscribers`](internal_.md#serverattributesubscribers)\<`A`\> & [`ServerEventTriggers`](internal_.md#servereventtriggers)\<`E`\>
 
 #### Type parameters
 
@@ -941,7 +996,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:152
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:162
 
 ___
 
@@ -995,7 +1050,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
+[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
 
 ___
 
@@ -1030,7 +1085,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:231
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:224
 
 ___
 
@@ -1042,41 +1097,16 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedAttributeReportValue`](internal_.md#decodedattributereportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
+| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedAttributeReportValue`](internal_.md#decodedattributereportvalue)\<`any`\>) => `void` | - |
 | `autoSubscribe?` | `boolean` | Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient instances. With this reading attributes values is mostly looked up in the locally cached data. Additionally more features like reaction on shutdown event or endpoint structure changes (for bridges) are done internally automatically. |
-| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedEventReportValue`](internal_.md#decodedeventreportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
-| `stateInformationCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `state`: [`NodeStateInformation`](../enums/internal_.NodeStateInformation.md)) => `void` | Optional callback method which is called when the state of the node changes. This can be used to detect when the node goes offline or comes back online. |
-| `subscribeMaxIntervalCeilingSeconds?` | `number` | Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate that the device is still available. Default it is set to 30s. |
+| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedEventReportValue`](internal_.md#decodedeventreportvalue)\<`any`\>) => `void` | - |
+| `stateInformationCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `state`: [`NodeStateInformation`](../enums/internal_.NodeStateInformation.md)) => `void` | - |
+| `subscribeMaxIntervalCeilingSeconds?` | `number` | Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate that the device is still available. Default it is set to 60s. |
 | `subscribeMinIntervalFloorSeconds?` | `number` | Minimum subscription interval when values are changed. Default it is set to 0s. |
 
 #### Defined in
 
-matter.js/dist/esm/device/PairedNode.d.ts:43
-
-___
-
-### CommissioningModeInstanceData
-
-Ƭ **CommissioningModeInstanceData**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `deviceName` | `string` | Device name for commissionable announcements. |
-| `deviceType` | `number` | Device type for commissionable announcements. |
-| `discriminator` | `number` | Device discriminator for commissionable announcements. |
-| `pairingHint?` | [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<typeof [`PairingHintBitmap`](internal_.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
-| `pairingInstructions?` | `string` | Pairing Instruction of the device for commissionable announcements. |
-| `productId` | `number` | Product ID for commissionable announcements. |
-| `sessionActiveInterval?` | `number` | Session Active Interval of the device for commissionable announcements. |
-| `sessionActiveThreshold?` | `number` | Duration of time the node should stay Active after the last network activity. * |
-| `sessionIdleInterval?` | `number` | Session Idle Interval of the device for commissionable announcements. |
-| `vendorId` | [`VendorId`](internal_.md#vendorid) | Vendor ID for commissionable announcements. |
-
-#### Defined in
-
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:209
+matter.js/dist/esm/device/PairedNode.d.ts:44
 
 ___
 
@@ -1131,6 +1161,25 @@ Type for TlvDataReport where the real data are represented with the schema and t
 #### Defined in
 
 matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:26
+
+___
+
+### DataVersion
+
+Ƭ **DataVersion**: [`Branded`](internal_.md#branded)\<`number`, ``"DataVersion"``\>
+
+A "data version" is an unsigned 32-bit integer that identifies a specific
+version of cluster attribute data.
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.18.2.26
+
+#### Defined in
+
+matter.js/dist/esm/datatype/DataVersion.d.ts:15
+
+matter.js/dist/esm/datatype/DataVersion.d.ts:14
 
 ___
 
@@ -1223,13 +1272,19 @@ ___
 
 ### DeviceTypeId
 
-Ƭ **DeviceTypeId**: [`Branded`](internal_.md#branded)\<`number`, ``"DeviceTypeId"``\>
+Ƭ **DeviceTypeId**\<`ID`\>: [`Branded`](internal_.md#branded)\<`ID`, ``"DeviceTypeId"``\>
 
 A Device type ID is a 32-bit number that defines the type of the device.
 
 **`See`**
 
 MatterCoreSpecificationV1_0 § 7.15
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ID` | extends `number` = `number` |
 
 #### Defined in
 
@@ -1302,6 +1357,25 @@ matter.js/dist/esm/datatype/EndpointNumber.d.ts:13
 
 ___
 
+### EntryIndex
+
+Ƭ **EntryIndex**: [`Branded`](internal_.md#branded)\<`number`, ``"EntryIndex"``\>
+
+An "entry index" is a 16-bit unsigned integer that identifies a specific
+entry in a list.
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.18.2.23
+
+#### Defined in
+
+matter.js/dist/esm/datatype/EntryIndex.d.ts:15
+
+matter.js/dist/esm/datatype/EntryIndex.d.ts:14
+
+___
+
 ### EventClients
 
 Ƭ **EventClients**\<`E`\>: [`Merge`](internal_.md#merge)\<\{ [P in MandatoryEventNames\<E\>]: EventClient\<EventType\<E[P]\>\> }, \{ [P in OptionalEventNames\<E\>]: EventClient\<EventType\<E[P]\> \| undefined\> }\>
@@ -1345,6 +1419,25 @@ MatterCoreSpecificationV1_0 § 7.18.2.17
 matter.js/dist/esm/datatype/EventId.d.ts:14
 
 matter.js/dist/esm/datatype/EventId.d.ts:13
+
+___
+
+### EventNumber
+
+Ƭ **EventNumber**: [`Branded`](internal_.md#branded)\<`number` \| `bigint`, ``"EventNumber"``\>
+
+An "event number" is an increasing 64-bit unsigned integer assigned to
+cluster events.
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.14.2.1
+
+#### Defined in
+
+matter.js/dist/esm/datatype/EventNumber.d.ts:15
+
+matter.js/dist/esm/datatype/EventNumber.d.ts:14
 
 ___
 
@@ -1392,6 +1485,27 @@ ___
 #### Defined in
 
 matter.js/dist/esm/protocol/MessageExchange.d.ts:18
+
+___
+
+### ExposedFabricInformation
+
+Ƭ **ExposedFabricInformation**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `fabricId` | [`FabricId`](internal_.md#fabricid) |
+| `fabricIndex` | [`FabricIndex`](internal_.md#fabricindex) |
+| `label` | `string` |
+| `nodeId` | [`NodeId`](internal_.md#nodeid) |
+| `rootNodeId` | [`NodeId`](internal_.md#nodeid) |
+| `rootVendorId` | [`VendorId`](internal_.md#vendorid) |
+
+#### Defined in
+
+matter.js/dist/esm/fabric/Fabric.d.ts:35
 
 ___
 
@@ -1466,7 +1580,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:16
+matter.js/dist/esm/fabric/Fabric.d.ts:17
 
 ___
 
@@ -1482,7 +1596,26 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:112
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:113
+
+___
+
+### FieldId
+
+Ƭ **FieldId**: [`Branded`](internal_.md#branded)\<`number`, ``"FieldId"``\>
+
+A "field ID" is an unsigned 32-bit integer that identifies a specific field
+in a cluster struct type.
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.18.2.18
+
+#### Defined in
+
+matter.js/dist/esm/datatype/FieldId.d.ts:15
+
+matter.js/dist/esm/datatype/FieldId.d.ts:14
 
 ___
 
@@ -1498,7 +1631,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:118
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:119
 
 ___
 
@@ -1640,7 +1773,7 @@ Cluster attributes accessible on the cluster server
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:27
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:28
 
 ___
 
@@ -1676,13 +1809,53 @@ matter.js/dist/esm/tlv/TlvObject.d.ts:32
 
 ___
 
+### Map
+
+Ƭ **Map**\<`T`\>: `Record`\<`T`, [`Status`](../enums/internal_.Status.md)\>
+
+Lifecycle status for multiple items.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends keyof `any` |
+
+#### Defined in
+
+matter.js/dist/esm/common/Lifecycle.d.ts:24
+
+___
+
 ### MatterServerRecordWithExpire
 
 Ƭ **MatterServerRecordWithExpire**: [`ServerAddressIp`](internal_.md#serveraddressip) & \{ `expires`: `number`  }
 
 #### Defined in
 
-matter.js/dist/esm/mdns/MdnsScanner.d.ts:12
+matter.js/dist/esm/mdns/MdnsScanner.d.ts:13
+
+___
+
+### MaybePromise
+
+Ƭ **MaybePromise**\<`T`\>: `T` \| `PromiseLike`\<`T`\>
+
+Return type for functions that are optionally asynchronous.
+
+TODO - as currently defined MaybePromise of a Promise incorrectly wraps as a Promise of a Promise
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `void` |
+
+#### Defined in
+
+matter.js/dist/esm/util/Promises.d.ts:43
+
+matter.js/dist/esm/util/Promises.d.ts:48
 
 ___
 
@@ -1715,7 +1888,7 @@ Options needed to commission a new node
 
 #### Defined in
 
-matter.js/dist/esm/CommissioningController.d.ts:62
+matter.js/dist/esm/CommissioningController.d.ts:78
 
 ___
 
@@ -1752,7 +1925,74 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:115
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:116
+
+___
+
+### Observer
+
+Ƭ **Observer**\<`T`, `R`\>: (...`payload`: `T`) => [`MaybePromise`](internal_.md#maybepromise)\<`R` \| `undefined`\>
+
+A callback function for observables.
+
+The observer return value effects how an [Observable](internal_.md#observable) emits:
+
+  - If an observer returns undefined the [Observable](internal_.md#observable) invokes the next observer immediately.
+
+  - If an observer returns a Promise, the [Observable](internal_.md#observable) awaits the return value then continues as
+    described here.  The emitter must then await the Promise returned by [Observable.emit](../interfaces/internal_.Observable.md#emit).
+
+  - Any other return value is returned by [Observable.emit](../interfaces/internal_.Observable.md#emit) and subsequent observers do not see emission.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `any`[] = `any`[] |
+| `R` | `void` |
+
+#### Type declaration
+
+▸ (`...payload`): [`MaybePromise`](internal_.md#maybepromise)\<`R` \| `undefined`\>
+
+##### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `...payload` | `T` | a list of arguments to be emitted |
+
+##### Returns
+
+[`MaybePromise`](internal_.md#maybepromise)\<`R` \| `undefined`\>
+
+#### Defined in
+
+matter.js/dist/esm/util/Observable.d.ts:21
+
+___
+
+### ObserverErrorHandler
+
+Ƭ **ObserverErrorHandler**: (`error`: `Error`, `observer`: [`Observer`](internal_.md#observer)\<`any`[], `any`\>) => `void`
+
+#### Type declaration
+
+▸ (`error`, `observer`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `error` | `Error` |
+| `observer` | [`Observer`](internal_.md#observer)\<`any`[], `any`\> |
+
+##### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/util/Observable.d.ts:69
 
 ___
 
@@ -1794,7 +2034,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:30
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:31
 
 ___
 
@@ -1836,7 +2076,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Index signature
@@ -1914,7 +2154,7 @@ ___
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 #### Type declaration
@@ -1943,7 +2183,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:119
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:120
 
 ___
 
@@ -1959,7 +2199,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:126
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:127
 
 ___
 
@@ -1975,7 +2215,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:131
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:132
 
 ___
 
@@ -1991,7 +2231,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:141
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:142
 
 ___
 
@@ -2029,6 +2269,23 @@ matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:32
 
 ___
 
+### StorageOperationResult
+
+Ƭ **StorageOperationResult**\<`S`, `T`\>: `S` extends [`SyncStorage`](../classes/internal_.SyncStorage.md) ? `T` : `Promise`\<`T`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/internal_.Storage.md) |
+| `T` | `void` |
+
+#### Defined in
+
+matter.js/dist/esm/storage/Storage.d.ts:50
+
+___
+
 ### SupportedComplexStorageTypes
 
 Ƭ **SupportedComplexStorageTypes**: ([`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes))[] \| \{ `[key: string]`: [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`;  } \| [[`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`][] \| `Map`\<[`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes)\> \| ``null`` \| `undefined`
@@ -2037,19 +2294,19 @@ Supported combined types to stringify the data for the storage that can be used 
 
 #### Defined in
 
-matter.js/dist/esm/storage/StringifyTools.d.ts:20
+matter.js/dist/esm/storage/StringifyTools.d.ts:26
 
 ___
 
 ### SupportedStorageBaseTypes
 
-Ƭ **SupportedStorageBaseTypes**: `string` \| `number` \| `boolean` \| `bigint` \| [`ByteArray`](internal_.md#bytearray) \| [`AttributeId`](internal_.md#attributeid) \| [`ClusterId`](internal_.md#clusterid) \| [`CommandId`](internal_.md#commandid) \| [`EndpointNumber`](internal_.md#endpointnumber) \| [`EventId`](internal_.md#eventid) \| [`FabricId`](internal_.md#fabricid) \| [`FabricIndex`](internal_.md#fabricindex) \| [`GroupId`](internal_.md#groupid) \| [`NodeId`](internal_.md#nodeid) \| [`VendorId`](internal_.md#vendorid)
+Ƭ **SupportedStorageBaseTypes**: `string` \| `number` \| `boolean` \| `bigint` \| [`ByteArray`](internal_.md#bytearray) \| [`AttributeId`](internal_.md#attributeid) \| [`CaseAuthenticatedTag`](internal_.md#caseauthenticatedtag) \| [`ClusterId`](internal_.md#clusterid) \| [`CommandId`](internal_.md#commandid) \| [`DataVersion`](internal_.md#dataversion) \| [`DeviceTypeId`](internal_.md#devicetypeid) \| [`EndpointNumber`](internal_.md#endpointnumber) \| [`EntryIndex`](internal_.md#entryindex) \| [`EventId`](internal_.md#eventid) \| [`EventNumber`](internal_.md#eventnumber) \| [`FabricId`](internal_.md#fabricid) \| [`FabricIndex`](internal_.md#fabricindex) \| [`FieldId`](internal_.md#fieldid) \| [`GroupId`](internal_.md#groupid) \| [`NodeId`](internal_.md#nodeid) \| [`VendorId`](internal_.md#vendorid)
 
 Supported base types to stringify the data for the storage that can be used as keys and also values.
 
 #### Defined in
 
-matter.js/dist/esm/storage/StringifyTools.d.ts:18
+matter.js/dist/esm/storage/StringifyTools.d.ts:24
 
 ___
 
@@ -2059,18 +2316,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/storage/StringifyTools.d.ts:23
+matter.js/dist/esm/storage/StringifyTools.d.ts:29
 
 ___
 
 ### TimerCallback
 
 Ƭ **TimerCallback**: () => `any`
-
-**`License`**
-
-Copyright 2022-2023 Project CHIP Authors
-SPDX-License-Identifier: Apache-2.0
 
 #### Type declaration
 
@@ -2082,7 +2334,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-matter.js/dist/esm/time/Time.d.ts:6
+matter.js/dist/esm/time/Time.d.ts:7
 
 ___
 
@@ -2329,6 +2581,60 @@ matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:50
 
 ## Variables
 
+### AsyncObservable
+
+• **AsyncObservable**: \<T, R\>(`errorHandler?`: [`ObserverErrorHandler`](internal_.md#observererrorhandler)) => [`AsyncObservable`](../interfaces/internal_.AsyncObservable.md)\<`T`, `R`\>\<T_1, R_1\>(`errorHandler?`: [`ObserverErrorHandler`](internal_.md#observererrorhandler)) => [`AsyncObservable`](../interfaces/internal_.AsyncObservable.md)\<`T_1`, `R_1`\>
+
+An [Observable](internal_.md#observable) that explicitly supports asynchronous results
+
+#### Type declaration
+
+▸ \<`T`, `R`\>(`errorHandler?`): [`AsyncObservable`](../interfaces/internal_.AsyncObservable.md)\<`T`, `R`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `any`[] |
+| `R` | `void` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `errorHandler?` | [`ObserverErrorHandler`](internal_.md#observererrorhandler) |
+
+##### Returns
+
+[`AsyncObservable`](../interfaces/internal_.AsyncObservable.md)\<`T`, `R`\>
+
+• **new AsyncObservable**\<`T_1`, `R_1`\>(`errorHandler?`): [`AsyncObservable`](../interfaces/internal_.AsyncObservable.md)\<`T_1`, `R_1`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T_1` | extends `any`[] |
+| `R_1` | `void` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `errorHandler?` | [`ObserverErrorHandler`](internal_.md#observererrorhandler) |
+
+##### Returns
+
+[`AsyncObservable`](../interfaces/internal_.AsyncObservable.md)\<`T_1`, `R_1`\>
+
+#### Defined in
+
+matter.js/dist/esm/util/Observable.d.ts:66
+
+matter.js/dist/esm/util/Observable.d.ts:80
+
+___
+
 ### ByteArray
 
 • **ByteArray**: `Uint8ArrayConstructor`
@@ -2361,38 +2667,79 @@ matter.js/dist/esm/schema/PairingCodeSchema.d.ts:19
 
 ___
 
-### PairingHintBitmap
+### MaybePromise
 
-• `Const` **PairingHintBitmap**: `Object`
+• **MaybePromise**: `Object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `administrator` | [`BitFlag`](internal_.md#bitflag) | The Device has been commissioned. Any Administrator that commissioned the device provides a user interface that may be used to put the device into Commissioning Mode. |
-| `customInstruction` | [`BitFlag`](internal_.md#bitflag) | The PI key/value pair describes a custom way to put the Device into Commissioning Mode. This Custom Instruction option is NOT recommended for use by a Device that does not have knowledge of the user’s language preference. |
-| `deviceManual` | [`BitFlag`](internal_.md#bitflag) | The Device Manual provides special instructions to put the Device into Commissioning Mode (see Section 11.22.5.8, “UserManualUrl”). This is a catch-all option to capture user interactions that are not codified by other options in this table. |
-| `deviceManufacturerUrl` | [`BitFlag`](internal_.md#bitflag) | This SHALL be set to 1 for devices requiring Custom Commissioning Flow before they can be available for Commissioning by any Commissioner. For such a flow, the user SHOULD be sent to the URL specified in the CommissioningCustomFlowUrl of the DeviceModel schema entry indexed by the Vendor ID and Product ID (e.g., as found in the announcement) in the Distributed Compliance Ledger. |
-| `powerCycle` | [`BitFlag`](internal_.md#bitflag) | The Device will automatically enter Commissioning Mode upon power cycle (unplug/re- plug, remove/re-insert batteries). This bit SHALL be set to 1 for devices using Standard Commissioning Flow, and set to 0 otherwise. |
-| `pressResetButton` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed. |
-| `pressResetButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
-| `pressResetButtonNumberOfTimes` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
-| `pressResetButtonUntilLightBlinks` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressResetButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressResetButtonWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed when applying power to it. |
-| `pressRestButtonForNumberOfSeconds` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when reset button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButton` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed. |
-| `pressSetupButtonForNumberOfSeconds` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed for N seconds. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonForNumberOfSecondsWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed for N seconds when applying power to it. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonNumberOfTimes` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed N times with maximum 1 second between each press. The exact value of N SHALL be made available via PI key. |
-| `pressSetupButtonUntilLightBlinks` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressSetupButtonUntilLightBlinksWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed until associated light blinks when applying power to the Device. Information on color of light MAY be made available via PI key (see Note 1). |
-| `pressSetupButtonWithApplicationOfPower` | [`BitFlag`](internal_.md#bitflag) | The Device will enter Commissioning Mode when setup button is pressed when applying power to it. |
-| `settingsMenuOnNode` | [`BitFlag`](internal_.md#bitflag) | The settings menu on the Device provides instructions to put it into Commissioning Mode. |
+| Name | Type |
+| :------ | :------ |
+| `[toStringTag]` | `string` |
+| `catch` | \<T_1, TResult\>(`producer`: [`MaybePromise`](internal_.md#maybepromise)\<`T_1`\> \| () => [`MaybePromise`](internal_.md#maybepromise)\<`T_1`\>, `onrejected?`: ``null`` \| (`reason`: `any`) => [`MaybePromise`](internal_.md#maybepromise)\<`TResult`\>) => [`MaybePromise`](internal_.md#maybepromise)\<`TResult`\> |
+| `finally` | \<T_2\>(`producer`: [`MaybePromise`](internal_.md#maybepromise)\<`T_2`\> \| () => [`MaybePromise`](internal_.md#maybepromise)\<`T_2`\>, `onfinally?`: ``null`` \| () => [`MaybePromise`](internal_.md#maybepromise)\<`void`\>) => [`MaybePromise`](internal_.md#maybepromise)\<`T_2`\> |
+| `is` | \<T\>(`value`: [`MaybePromise`](internal_.md#maybepromise)\<`T`\>) => value is PromiseLike\<T\> |
+| `then` | \<I, O1, O2\>(`producer`: [`MaybePromise`](internal_.md#maybepromise)\<`I`\> \| () => [`MaybePromise`](internal_.md#maybepromise)\<`I`\>, `resolve?`: ``null`` \| (`input`: `I`) => [`MaybePromise`](internal_.md#maybepromise)\<`O1`\>, `reject?`: ``null`` \| (`error`: `any`) => [`MaybePromise`](internal_.md#maybepromise)\<`O2`\>) => [`MaybePromise`](internal_.md#maybepromise)\<`O1` \| `O2`\> |
 
 #### Defined in
 
-matter.js/dist/esm/common/InstanceBroadcaster.d.ts:9
+matter.js/dist/esm/util/Promises.d.ts:43
+
+matter.js/dist/esm/util/Promises.d.ts:48
+
+___
+
+### Observable
+
+• **Observable**: \<T, R\>(`errorHandler?`: [`ObserverErrorHandler`](internal_.md#observererrorhandler)) => [`Observable`](../interfaces/internal_.Observable.md)\<`T`, `R`\>\<T_1, R_1\>(`errorHandler?`: [`ObserverErrorHandler`](internal_.md#observererrorhandler)) => [`Observable`](../interfaces/internal_.Observable.md)\<`T_1`, `R_1`\>
+
+A general implementation of [Observable](internal_.md#observable).
+
+#### Type declaration
+
+▸ \<`T`, `R`\>(`errorHandler?`): [`Observable`](../interfaces/internal_.Observable.md)\<`T`, `R`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `any`[] |
+| `R` | `void` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `errorHandler?` | [`ObserverErrorHandler`](internal_.md#observererrorhandler) |
+
+##### Returns
+
+[`Observable`](../interfaces/internal_.Observable.md)\<`T`, `R`\>
+
+• **new Observable**\<`T_1`, `R_1`\>(`errorHandler?`): [`Observable`](../interfaces/internal_.Observable.md)\<`T_1`, `R_1`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T_1` | extends `any`[] |
+| `R_1` | `void` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `errorHandler?` | [`ObserverErrorHandler`](internal_.md#observererrorhandler) |
+
+##### Returns
+
+[`Observable`](../interfaces/internal_.Observable.md)\<`T_1`, `R_1`\>
+
+#### Defined in
+
+matter.js/dist/esm/util/Observable.d.ts:28
+
+matter.js/dist/esm/util/Observable.d.ts:73
 
 ___
 
@@ -2475,6 +2822,34 @@ MatterCoreSpecificationV1_0, section 10.5.10
 matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:151
 
 ## Functions
+
+### AsyncConstruction
+
+▸ **AsyncConstruction**\<`T`\>(`subject`, `initializer?`, `options?`): [`AsyncConstruction`](../interfaces/internal_.AsyncConstruction-1.md)\<`T`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`AsyncConstructable`](../interfaces/internal_.AsyncConstructable.md)\<`any`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `subject` | `T` |
+| `initializer?` | () => [`MaybePromise`](internal_.md#maybepromise) |
+| `options?` | [`Options`](../interfaces/internal_.AsyncConstruction.Options.md) |
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/internal_.AsyncConstruction-1.md)\<`T`\>
+
+#### Defined in
+
+matter.js/dist/esm/util/AsyncConstruction.d.ts:115
+
+___
 
 ### Attribute
 
@@ -2684,21 +3059,55 @@ ___
 
 ### ClusterId
 
-▸ **ClusterId**(`v`): [`ClusterId`](internal_.md#clusterid)
+▸ **ClusterId**\<`ID`\>(`id`): [`ClusterId`](internal_.md#clusterid)\<`ID`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ID` | extends `number` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `id` | `ID` |
 
 #### Returns
 
-[`ClusterId`](internal_.md#clusterid)
+[`ClusterId`](internal_.md#clusterid)\<`ID`\>
 
 #### Defined in
 
-matter.js/dist/esm/datatype/ClusterId.d.ts:15
+matter.js/dist/esm/datatype/ClusterId.d.ts:16
+
+___
+
+### ClusterType
+
+▸ **ClusterType**\<`T`\>(`options`): [`Of`](../interfaces/internal_.ClusterType.Of.md)\<`T`\>
+
+Define a cluster.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`Options`](internal_.ClusterType.md#options)\<{}\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `options` | `T` |
+
+#### Returns
+
+[`Of`](../interfaces/internal_.ClusterType.Of.md)\<`T`\>
+
+#### Defined in
+
+matter.js/dist/esm/cluster/ClusterType.d.ts:21
 
 ___
 
@@ -2754,6 +3163,26 @@ matter.js/dist/esm/datatype/CommandId.d.ts:14
 
 ___
 
+### DataVersion
+
+▸ **DataVersion**(`id`): [`DataVersion`](internal_.md#dataversion)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`DataVersion`](internal_.md#dataversion)
+
+#### Defined in
+
+matter.js/dist/esm/datatype/DataVersion.d.ts:15
+
+___
+
 ### DeviceTypeDefinition
 
 ▸ **DeviceTypeDefinition**(`«destructured»`): [`DeviceTypeDefinition`](../interfaces/internal_.DeviceTypeDefinition.md)
@@ -2780,27 +3209,56 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/DeviceTypes.d.ts:62
+matter.js/dist/esm/device/DeviceTypes.d.ts:67
 
 ___
 
 ### DeviceTypeId
 
-▸ **DeviceTypeId**(`v`): [`DeviceTypeId`](internal_.md#devicetypeid)
+▸ **DeviceTypeId**\<`ID`\>(`v`): [`DeviceTypeId`](internal_.md#devicetypeid)\<`ID`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ID` | extends `number` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `v` | `number` |
+| `v` | `ID` |
 
 #### Returns
 
-[`DeviceTypeId`](internal_.md#devicetypeid)
+[`DeviceTypeId`](internal_.md#devicetypeid)\<`ID`\>
 
 #### Defined in
 
 matter.js/dist/esm/datatype/DeviceTypeId.d.ts:14
+
+___
+
+### Diagnostic
+
+▸ **Diagnostic**(`presentation`, `value`): [`Diagnostic`](../interfaces/internal_.Diagnostic-1.md)
+
+Create a diagnostic giving a value a specific presentation.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `presentation` | [`Status`](../enums/internal_.Status.md) \| [`Presentation`](../enums/internal_.Diagnostic.Presentation.md) |
+| `value` | `unknown` |
+
+#### Returns
+
+[`Diagnostic`](../interfaces/internal_.Diagnostic-1.md)
+
+#### Defined in
+
+matter.js/dist/esm/log/Diagnostic.d.ts:20
 
 ___
 
@@ -2821,6 +3279,26 @@ ___
 #### Defined in
 
 matter.js/dist/esm/datatype/EndpointNumber.d.ts:14
+
+___
+
+### EntryIndex
+
+▸ **EntryIndex**(`id`): [`EntryIndex`](internal_.md#entryindex)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`EntryIndex`](internal_.md#entryindex)
+
+#### Defined in
+
+matter.js/dist/esm/datatype/EntryIndex.d.ts:15
 
 ___
 
@@ -2871,6 +3349,26 @@ ___
 #### Defined in
 
 matter.js/dist/esm/datatype/EventId.d.ts:14
+
+___
+
+### EventNumber
+
+▸ **EventNumber**(`id`): [`EventNumber`](internal_.md#eventnumber)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` \| `bigint` |
+
+#### Returns
+
+[`EventNumber`](internal_.md#eventnumber)
+
+#### Defined in
+
+matter.js/dist/esm/datatype/EventNumber.d.ts:15
 
 ___
 
@@ -2941,6 +3439,26 @@ ___
 #### Defined in
 
 matter.js/dist/esm/cluster/Cluster.d.ts:103
+
+___
+
+### FieldId
+
+▸ **FieldId**(`id`): [`FieldId`](internal_.md#fieldid)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`FieldId`](internal_.md#fieldid)
+
+#### Defined in
+
+matter.js/dist/esm/datatype/FieldId.d.ts:15
 
 ___
 
@@ -3349,3 +3867,33 @@ ___
 #### Defined in
 
 matter.js/dist/esm/cluster/Cluster.d.ts:104
+
+___
+
+### configurationFor
+
+▸ **configurationFor**(`options?`): `Object`
+
+Validate options and set defaults.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `options?` | [`SubscriptionOptions`](../interfaces/internal_.SubscriptionOptions-1.md) |
+
+#### Returns
+
+`Object`
+
+the resulting options
+
+| Name | Type |
+| :------ | :------ |
+| `maxIntervalSeconds` | `number` |
+| `minIntervalSeconds` | `number` |
+| `randomizationWindowSeconds` | `number` |
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/SubscriptionOptions.d.ts:34

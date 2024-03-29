@@ -41,7 +41,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:23
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:25
 
 ## Properties
 
@@ -51,7 +51,7 @@ packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:23
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:15
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:17
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:16
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:18
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:22
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:24
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:17
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:19
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:26
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:28
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:20
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:22
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:14
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:16
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:18
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:20
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:19
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:21
 
 ## Methods
 
@@ -145,7 +145,7 @@ packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:19
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:27
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:29
 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:24
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:26
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:25
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:27
 
 ___
 
@@ -207,4 +207,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:21
+packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:23

@@ -48,4 +48,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageReceptionState.ts#L19)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L19)

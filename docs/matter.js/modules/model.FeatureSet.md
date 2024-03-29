@@ -12,15 +12,19 @@
 - [Flag](model.FeatureSet.md#flag)
 - [Flags](model.FeatureSet.md#flags)
 
+### Functions
+
+- [normalize](model.FeatureSet.md#normalize)
+
 ## Type Aliases
 
 ### Definition
 
-Ƭ **Definition**: [`Flags`](model.FeatureSet.md#flags) \| \{ `[name: string]`: `boolean`;  }
+Ƭ **Definition**: [`Flags`](model.FeatureSet.md#flags) \| \{ `[name: string]`: `boolean` \| `undefined`;  }
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FeatureSet.ts#L47)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/FeatureSet.ts#L58)
 
 ___
 
@@ -30,7 +34,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FeatureSet.ts#L45)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/FeatureSet.ts#L56)
 
 ___
 
@@ -40,4 +44,36 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/definitions/FeatureSet.ts#L46)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/FeatureSet.ts#L57)
+
+## Functions
+
+### normalize
+
+▸ **normalize**(`featureMap`, `supportedFeatures?`): `Object`
+
+Normalize the feature map and list of supported feature names into sets of "all" and "supported" features by
+abbreviation.
+
+The input feature set may reference features by short name ("LT") or long name ("levelControlForLighting").  Name
+match is case insensitive.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `featureMap` | [`ValueModel`](../classes/model.ValueModel.md) |
+| `supportedFeatures?` | [`FeatureSet`](../classes/model.FeatureSet-1.md) |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `featuresAvailable` | [`FeatureSet`](../classes/model.FeatureSet-1.md) |
+| `featuresSupported` | [`FeatureSet`](../classes/model.FeatureSet-1.md) |
+
+#### Defined in
+
+[packages/matter.js/src/model/definitions/FeatureSet.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/FeatureSet.ts#L67)

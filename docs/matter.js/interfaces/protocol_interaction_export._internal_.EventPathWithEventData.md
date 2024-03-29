@@ -22,21 +22,21 @@
 
 ### event
 
-• **event**: [`EventStorageData`](protocol_interaction_export._internal_.EventStorageData.md)\<`T`\>
+• **event**: [`EventStorageData`](protocol_interaction_export.EventStorageData.md)\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:64](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L64)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L56)
 
 ___
 
 ### path
 
-• **path**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>
+• **path**: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:62](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L62)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L54)
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L63)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L55)

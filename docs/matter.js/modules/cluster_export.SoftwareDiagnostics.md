@@ -10,84 +10,104 @@
 
 - [Feature](../enums/cluster_export.SoftwareDiagnostics.Feature.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](cluster_export.SoftwareDiagnostics.md#extension)
+- [Cluster](../interfaces/cluster_export.SoftwareDiagnostics.Cluster.md)
+- [Complete](../interfaces/cluster_export.SoftwareDiagnostics.Complete.md)
+- [SoftwareFaultEvent](../interfaces/cluster_export.SoftwareDiagnostics.SoftwareFaultEvent.md)
+- [ThreadMetricsStruct](../interfaces/cluster_export.SoftwareDiagnostics.ThreadMetricsStruct.md)
 
 ### Variables
 
 - [Base](cluster_export.SoftwareDiagnostics.md#base)
 - [Cluster](cluster_export.SoftwareDiagnostics.md#cluster)
+- [ClusterInstance](cluster_export.SoftwareDiagnostics.md#clusterinstance)
 - [Complete](cluster_export.SoftwareDiagnostics.md#complete)
+- [CompleteInstance](cluster_export.SoftwareDiagnostics.md#completeinstance)
 - [TlvSoftwareFaultEvent](cluster_export.SoftwareDiagnostics.md#tlvsoftwarefaultevent)
 - [TlvThreadMetricsStruct](cluster_export.SoftwareDiagnostics.md#tlvthreadmetricsstruct)
 - [WatermarksComponent](cluster_export.SoftwareDiagnostics.md#watermarkscomponent)
-
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](cluster_export.SoftwareDiagnostics.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `watermarks`: ``true``  } ? typeof [`WatermarksComponent`](cluster_export.SoftwareDiagnostics.md#watermarkscomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:240](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L240)
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentHeapFree`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `stackFreeCurrent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackFreeMinimum`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackSize`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>[], `any`\>  } ; `events`: \{ `softwareFault`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, `any`\>  } ; `features`: \{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``52`` = 0x34; `name`: ``"SoftwareDiagnostics"`` = "SoftwareDiagnostics"; `revision`: ``1`` = 1 }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all SoftwareDiagnostics clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `currentHeapFree`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `stackFreeCurrent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackFreeMinimum`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackSize`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>[], `any`\>  } | - |
+| `attributes.currentHeapFree` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | The CurrentHeapFree attribute shall indicate the current amount of heap memory, in bytes, that are free for allocation. The effective amount may be smaller due to heap fragmentation or other reasons. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.12.6.2 |
+| `attributes.currentHeapUsed` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | The CurrentHeapUsed attribute shall indicate the current amount of heap memory, in bytes, that is being used. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.12.6.3 |
+| `attributes.threadMetrics` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `stackFreeCurrent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackFreeMinimum`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackSize`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>[], `any`\> | The ThreadMetrics attribute shall be a list of ThreadMetricsStruct structs. Each active thread on the Node shall be represented by a single entry within the ThreadMetrics attribute. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.12.6.1 |
+| `events` | \{ `softwareFault`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, `any`\>  } | - |
+| `events.softwareFault` | [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, `any`\> | The SoftwareFault Event shall be generated when a software fault takes place on the Node. The ID field shall be set to the ID of the software thread in which the last software fault occurred. The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which the last software fault occurred. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.12.8.1 |
+| `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `currentHeapHighWatermark`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\>  } ; `commands`: \{ `resetWatermarks`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  }  } = WatermarksComponent; `flags`: \{ `watermarks`: ``true`` = true }  }] | This metadata controls which SoftwareDiagnosticsCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  } | - |
+| `features.watermarks` | [`BitFlag`](schema_export.md#bitflag) | Watermarks Node makes available the metrics for high watermark related to memory consumption. |
+| `id` | ``52`` | - |
+| `name` | ``"SoftwareDiagnostics"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:112](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:166](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L166)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `currentHeapFree`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `stackFreeCurrent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackFreeMinimum`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackSize`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes)\<\{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  }\>\> ; `commands`: {} ; `events`: \{ `softwareFault`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, `any`\>  } ; `features`: \{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: [`Branded`](util_export.md#branded)\<``52`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"SoftwareDiagnostics"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentHeapFree`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `stackFreeCurrent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackFreeMinimum`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackSize`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>[], `any`\>  } ; `events`: \{ `softwareFault`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, `any`\>  } ; `features`: \{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``52`` = 0x34; `name`: ``"SoftwareDiagnostics"`` = "SoftwareDiagnostics"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.SoftwareDiagnostics.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  }, `T`\>\> = extender }
-
-Software Diagnostics
-
-The Software Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may be used
-by a Node to assist a user or Administrator in diagnosing potential problems. The Software Diagnostics Cluster
-attempts to centralize all metrics that are relevant to the software that may be running on a Node.
-
-SoftwareDiagnosticsCluster supports optional features that you can enable with the
-SoftwareDiagnosticsCluster.with() factory method.
-
-**`See`**
-
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.12
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.SoftwareDiagnostics.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:218](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L218)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:244](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L244)
+
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:246](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L246)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `currentHeapFree`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `stackFreeCurrent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackFreeMinimum`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackSize`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>[], `any`\>  } ; `events`: \{ `softwareFault`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `currentHeapHighWatermark`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\>  } ; `commands`: \{ `resetWatermarks`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  }  } = WatermarksComponent; `flags`: \{ `watermarks`: ``true`` = true }  }] ; `features`: \{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  } ; `id`: ``52`` = 0x34; `name`: ``"SoftwareDiagnostics"`` = "SoftwareDiagnostics"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.SoftwareDiagnostics.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:230](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L230)
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `never`\> ; `currentHeapFree`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `currentHeapHighWatermark`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `watermarks`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `currentHeapUsed`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `eventList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `threadMetrics`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `stackFreeCurrent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackFreeMinimum`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackSize`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>[], `any`\>  } ; `commands`: \{ `resetWatermarks`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `watermarks`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `events`: \{ `softwareFault`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, `any`\>  } = Cluster.events; `features`: \{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: ``52`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"SoftwareDiagnostics"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
-
-This cluster supports all SoftwareDiagnostics features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/cluster_export.SoftwareDiagnostics.Complete.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:252](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L252)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:282](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L282)
+
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:284](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L284)
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `never`\> ; `currentHeapFree`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `currentHeapHighWatermark`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `watermarks`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `currentHeapUsed`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `eventList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `threadMetrics`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `stackFreeCurrent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackFreeMinimum`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `stackSize`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>[], `any`\>  } ; `commands`: \{ `resetWatermarks`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `watermarks`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `events`: \{ `softwareFault`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `faultRecording`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `id`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\>  }\>, `any`\>  } = Cluster.events; `features`: \{ `watermarks`: [`BitFlag`](schema_export.md#bitflag)  } = Cluster.features; `id`: [`Branded`](util_export.md#branded)\<``52``, ``"ClusterId"``\> = Cluster.id; `name`: ``"SoftwareDiagnostics"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
+
+**`See`**
+
+[Complete](cluster_export.SoftwareDiagnostics.md#complete)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:252](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L252)
 
 ___
 
@@ -103,7 +123,7 @@ Body of the SoftwareDiagnostics softwareFault event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L81)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L89)
 
 ___
 
@@ -117,16 +137,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L34)
 
 ___
 
 ### WatermarksComponent
 
-• `Const` **WatermarksComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `currentHeapHighWatermark`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\>  } ; `commands`: \{ `resetWatermarks`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  }  }\>
+• `Const` **WatermarksComponent**: `Object`
 
 A SoftwareDiagnosticsCluster supports these elements if it supports feature Watermarks.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `currentHeapHighWatermark`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\>  } |
+| `attributes.currentHeapHighWatermark` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\> |
+| `commands` | \{ `resetWatermarks`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } |
+| `commands.resetWatermarks` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> |
+
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:170](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L113)

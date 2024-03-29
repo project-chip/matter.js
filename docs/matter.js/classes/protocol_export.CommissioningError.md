@@ -40,4 +40,25 @@ Error that throws when Commissioning fails and process can not be continued.
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082
+
+• **new CommissioningError**(`message?`, `options?`): [`CommissioningError`](protocol_export.CommissioningError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`CommissioningError`](protocol_export.CommissioningError.md)
+
+#### Inherited from
+
+[MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1082

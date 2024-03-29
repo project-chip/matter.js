@@ -14,9 +14,9 @@
 
 - **`Session`**
 
-  ↳ [`SecureSession`](exports_session.SecureSession.md)
+  ↳ [`InsecureSession`](exports_session.InsecureSession.md)
 
-  ↳ [`UnsecureSession`](exports_session.UnsecureSession.md)
+  ↳ [`SecureSession`](exports_session.SecureSession.md)
 
 ## Table of contents
 
@@ -29,10 +29,18 @@
 - [activeIntervalMs](exports_session.Session.md#activeintervalms)
 - [activeThresholdMs](exports_session.Session.md#activethresholdms)
 - [activeTimestamp](exports_session.Session.md#activetimestamp)
+- [associatedFabric](exports_session.Session.md#associatedfabric)
 - [closeCallback](exports_session.Session.md#closecallback)
+- [context](exports_session.Session.md#context)
+- [id](exports_session.Session.md#id)
 - [idleIntervalMs](exports_session.Session.md#idleintervalms)
+- [isPase](exports_session.Session.md#ispase)
+- [isSecure](exports_session.Session.md#issecure)
 - [messageCounter](exports_session.Session.md#messagecounter)
 - [messageReceptionState](exports_session.Session.md#messagereceptionstate)
+- [nodeId](exports_session.Session.md#nodeid)
+- [peerNodeId](exports_session.Session.md#peernodeid)
+- [peerSessionId](exports_session.Session.md#peersessionid)
 - [timestamp](exports_session.Session.md#timestamp)
 
 ### Accessors
@@ -46,17 +54,9 @@
 - [destroy](exports_session.Session.md#destroy)
 - [encode](exports_session.Session.md#encode)
 - [end](exports_session.Session.md#end)
-- [getAssociatedFabric](exports_session.Session.md#getassociatedfabric)
-- [getContext](exports_session.Session.md#getcontext)
-- [getId](exports_session.Session.md#getid)
 - [getIncrementedMessageCounter](exports_session.Session.md#getincrementedmessagecounter)
-- [getNodeId](exports_session.Session.md#getnodeid)
-- [getPeerNodeId](exports_session.Session.md#getpeernodeid)
-- [getPeerSessionId](exports_session.Session.md#getpeersessionid)
 - [getSessionParameters](exports_session.Session.md#getsessionparameters)
-- [isPase](exports_session.Session.md#ispase)
 - [isPeerActive](exports_session.Session.md#ispeeractive)
-- [isSecure](exports_session.Session.md#issecure)
 - [notifyActivity](exports_session.Session.md#notifyactivity)
 - [updateMessageCounter](exports_session.Session.md#updatemessagecounter)
 
@@ -123,6 +123,16 @@ packages/matter.js/dist/esm/session/Session.d.ts:33
 
 ___
 
+### associatedFabric
+
+• `Abstract` **associatedFabric**: [`Fabric`](exports_fabric.Fabric.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:59
+
+___
+
 ### closeCallback
 
 • `Protected` `Readonly` **closeCallback**: () => `Promise`\<`void`\>
@@ -141,6 +151,26 @@ packages/matter.js/dist/esm/session/Session.d.ts:37
 
 ___
 
+### context
+
+• `Abstract` **context**: `T`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:54
+
+___
+
+### id
+
+• `Abstract` **id**: `number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:55
+
+___
+
 ### idleIntervalMs
 
 • `Protected` `Readonly` **idleIntervalMs**: `number`
@@ -148,6 +178,26 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/session/Session.d.ts:34
+
+___
+
+### isPase
+
+• `Abstract` **isPase**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:53
+
+___
+
+### isSecure
+
+• `Abstract` **isSecure**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:52
 
 ___
 
@@ -168,6 +218,36 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/session/Session.d.ts:39
+
+___
+
+### nodeId
+
+• `Abstract` **nodeId**: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:57
+
+___
+
+### peerNodeId
+
+• `Abstract` **peerNodeId**: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:58
+
+___
+
+### peerSessionId
+
+• `Abstract` **peerSessionId**: `number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:56
 
 ___
 
@@ -226,7 +306,7 @@ packages/matter.js/dist/esm/session/Session.d.ts:30
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:54
+packages/matter.js/dist/esm/session/Session.d.ts:60
 
 ___
 
@@ -247,7 +327,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:62
+packages/matter.js/dist/esm/session/Session.d.ts:63
 
 ___
 
@@ -267,7 +347,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:55
+packages/matter.js/dist/esm/session/Session.d.ts:61
 
 ___
 
@@ -287,105 +367,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:61
-
-___
-
-### getAssociatedFabric
-
-▸ **getAssociatedFabric**(): [`Fabric`](exports_fabric.Fabric.md)
-
-#### Returns
-
-[`Fabric`](exports_fabric.Fabric.md)
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/Session.d.ts:63
-
-___
-
-### getContext
-
-▸ **getContext**(): `T`
-
-#### Returns
-
-`T`
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/Session.d.ts:56
-
-___
-
-### getId
-
-▸ **getId**(): `number`
-
-#### Returns
-
-`number`
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/Session.d.ts:57
+packages/matter.js/dist/esm/session/Session.d.ts:62
 
 ___
 
 ### getIncrementedMessageCounter
 
-▸ **getIncrementedMessageCounter**(): `number`
+▸ **getIncrementedMessageCounter**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Defined in
 
 packages/matter.js/dist/esm/session/Session.d.ts:49
-
-___
-
-### getNodeId
-
-▸ **getNodeId**(): `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
-
-#### Returns
-
-`undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/Session.d.ts:59
-
-___
-
-### getPeerNodeId
-
-▸ **getPeerNodeId**(): `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
-
-#### Returns
-
-`undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/Session.d.ts:60
-
-___
-
-### getPeerSessionId
-
-▸ **getPeerSessionId**(): `number`
-
-#### Returns
-
-`number`
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/Session.d.ts:58
 
 ___
 
@@ -403,20 +399,6 @@ packages/matter.js/dist/esm/session/Session.d.ts:51
 
 ___
 
-### isPase
-
-▸ **isPase**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/Session.d.ts:53
-
-___
-
 ### isPeerActive
 
 ▸ **isPeerActive**(): `boolean`
@@ -428,20 +410,6 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/session/Session.d.ts:48
-
-___
-
-### isSecure
-
-▸ **isSecure**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/Session.d.ts:52
 
 ___
 

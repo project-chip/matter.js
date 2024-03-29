@@ -6,25 +6,48 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/cluster_export.TemperatureMeasurement.Cluster.md)
+
 ### Variables
 
 - [Cluster](cluster_export.TemperatureMeasurement.md#cluster)
+- [ClusterInstance](cluster_export.TemperatureMeasurement.md#clusterinstance)
+- [Complete](cluster_export.TemperatureMeasurement.md#complete)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `maxMeasuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `measuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `minMeasuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `tolerance`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>  } ; `id`: ``1026`` = 0x402; `name`: ``"TemperatureMeasurement"`` = "TemperatureMeasurement"; `revision`: ``4`` = 4 }\>
-
-Temperature Measurement
-
-This cluster provides an interface to temperature measurement functionality, including configuration and
-provision of notifications of temperature measurements.
-
-**`See`**
-
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.3
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.TemperatureMeasurement.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L76)
+
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:78](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L78)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `maxMeasuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `measuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `minMeasuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `tolerance`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>  } ; `id`: ``1026`` = 0x402; `name`: ``"TemperatureMeasurement"`` = "TemperatureMeasurement"; `revision`: ``4`` = 4 }\>
+
+**`See`**
+
+[Cluster](cluster_export.TemperatureMeasurement.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L21)
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/cluster_export.TemperatureMeasurement.Cluster.md) = `Cluster`
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L80)

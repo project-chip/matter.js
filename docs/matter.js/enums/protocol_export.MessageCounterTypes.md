@@ -24,7 +24,7 @@ Lifetime: Operational Group Key, Rollover allowed, Persistence: Mandatory
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L34)
+[packages/matter.js/src/protocol/MessageCounter.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L35)
 
 ___
 
@@ -37,7 +37,7 @@ Lifetime: Operational Group Key, Rollover allowed, Persistence: Mandatory
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L28)
+[packages/matter.js/src/protocol/MessageCounter.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L29)
 
 ___
 
@@ -50,7 +50,7 @@ Rollover allowed, Persistence: Optional
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L22)
+[packages/matter.js/src/protocol/MessageCounter.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L23)
 
 ___
 
@@ -63,4 +63,4 @@ Lifetime: Session Key, Rollover expires, Persistence: Optional
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageCounter.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/MessageCounter.ts#L40)
+[packages/matter.js/src/protocol/MessageCounter.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageCounter.ts#L41)

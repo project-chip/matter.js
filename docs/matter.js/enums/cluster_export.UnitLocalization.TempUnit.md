@@ -26,7 +26,7 @@ Temperature conveyed in Celsius
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:29](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L31)
 
 ___
 
@@ -38,7 +38,7 @@ Temperature conveyed in Fahrenheit
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L26)
 
 ___
 
@@ -50,4 +50,4 @@ Temperature conveyed in Kelvin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L36)

@@ -26,7 +26,7 @@ The Node detects the temperature of this battery power source is above ideal ope
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:132
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:120
 
 ___
 
@@ -38,7 +38,7 @@ The Node detects the temperature of this battery power source is below ideal ope
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:136
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:124
 
 ___
 
@@ -50,4 +50,4 @@ The Node detects an unspecified fault on this battery power source.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:128
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:116

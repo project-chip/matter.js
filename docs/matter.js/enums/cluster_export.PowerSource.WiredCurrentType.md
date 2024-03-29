@@ -25,7 +25,7 @@ Indicates AC current
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L38)
 
 ___
 
@@ -37,4 +37,4 @@ Indicates DC current
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L43)

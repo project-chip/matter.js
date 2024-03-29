@@ -8,7 +8,7 @@ Cache computed values or resources for a specified duration to improve performan
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 ## Type parameters
@@ -46,7 +46,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new Cache**\<`T`\>(`generator`, `expirationMs`, `expireCallback?`): [`Cache`](util_export.Cache.md)\<`T`\>
+• **new Cache**\<`T`\>(`name`, `generator`, `expirationMs`, `expireCallback?`): [`Cache`](util_export.Cache.md)\<`T`\>
 
 #### Type parameters
 
@@ -58,6 +58,7 @@ SPDX-License-Identifier: Apache-2.0
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `generator` | (...`params`: `any`[]) => `T` |
 | `expirationMs` | `number` |
 | `expireCallback?` | (`key`: `string`, `value`: `T`) => `Promise`\<`void`\> |

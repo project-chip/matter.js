@@ -103,7 +103,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:70
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:72
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:68
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:48
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:45
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:47
 
 ___
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:43
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:45
 
 ___
 
@@ -153,7 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:23
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:25
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:97
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:99
 
 ___
 
@@ -173,7 +173,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:50
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:52
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:41
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:43
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:14
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:16
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:64
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:66
 
 ___
 
@@ -213,7 +213,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:73
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:75
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:42
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:44
 
 ___
 
@@ -233,7 +233,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:27
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:92
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:94
 
 ___
 
@@ -253,7 +253,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:93
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:95
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:94
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:96
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:95
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:97
 
 ___
 
@@ -283,7 +283,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:96
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:98
 
 ___
 
@@ -293,7 +293,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:63
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:65
 
 ___
 
@@ -303,7 +303,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:26
 
 ___
 
@@ -313,7 +313,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:65
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:67
 
 ___
 
@@ -323,7 +323,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:51
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:53
 
 ___
 
@@ -333,7 +333,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:75
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:77
 
 ___
 
@@ -343,7 +343,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:49
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:51
 
 ___
 
@@ -353,7 +353,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:17
 
 ___
 
@@ -363,7 +363,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:20
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:22
 
 ___
 
@@ -373,7 +373,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:19
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:21
 
 ___
 
@@ -383,7 +383,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:27
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:29
 
 ___
 
@@ -393,7 +393,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:26
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:28
 
 ___
 
@@ -403,7 +403,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:57
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:59
 
 ___
 
@@ -413,7 +413,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:83
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:85
 
 ___
 
@@ -423,7 +423,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:44
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:46
 
 ___
 
@@ -433,7 +433,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:31
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:33
 
 ___
 
@@ -443,7 +443,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:29
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:31
 
 ___
 
@@ -453,7 +453,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:30
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:32
 
 ___
 
@@ -463,7 +463,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:28
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:30
 
 ___
 
@@ -473,7 +473,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:32
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:34
 
 ___
 
@@ -483,7 +483,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:33
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:35
 
 ___
 
@@ -493,7 +493,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:36
 
 ___
 
@@ -503,7 +503,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:35
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:37
 
 ___
 
@@ -513,7 +513,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:36
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:38
 
 ___
 
@@ -523,7 +523,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:37
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:39
 
 ___
 
@@ -533,7 +533,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:38
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:40
 
 ___
 
@@ -543,7 +543,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:39
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:41
 
 ___
 
@@ -553,7 +553,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:40
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:42
 
 ___
 
@@ -563,7 +563,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:53
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:55
 
 ___
 
@@ -573,7 +573,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:52
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:54
 
 ___
 
@@ -583,7 +583,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:60
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:62
 
 ___
 
@@ -593,7 +593,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:79
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:81
 
 ___
 
@@ -603,7 +603,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:68
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:70
 
 ___
 
@@ -613,7 +613,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:81
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:83
 
 ___
 
@@ -623,7 +623,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:60
 
 ___
 
@@ -633,7 +633,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:78
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:80
 
 ___
 
@@ -643,7 +643,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:56
 
 ___
 
@@ -653,7 +653,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:90
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:92
 
 ___
 
@@ -663,7 +663,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:91
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:93
 
 ___
 
@@ -673,7 +673,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:89
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:91
 
 ___
 
@@ -683,7 +683,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:47
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:49
 
 ___
 
@@ -693,7 +693,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:61
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:63
 
 ___
 
@@ -703,7 +703,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:80
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:82
 
 ___
 
@@ -713,7 +713,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:69
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:71
 
 ___
 
@@ -723,7 +723,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:84
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:86
 
 ___
 
@@ -733,7 +733,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:62
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:64
 
 ___
 
@@ -743,7 +743,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:16
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:18
 
 ___
 
@@ -753,7 +753,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:18
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:20
 
 ___
 
@@ -763,7 +763,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:19
 
 ___
 
@@ -773,7 +773,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:23
 
 ___
 
@@ -783,7 +783,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:12
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:14
 
 ___
 
@@ -793,7 +793,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:88
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:90
 
 ___
 
@@ -803,7 +803,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:87
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:89
 
 ___
 
@@ -813,7 +813,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:76
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:78
 
 ___
 
@@ -823,7 +823,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:86
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:88
 
 ___
 
@@ -833,7 +833,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:77
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:79
 
 ___
 
@@ -843,7 +843,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:22
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:24
 
 ___
 
@@ -853,7 +853,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:48
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:50
 
 ___
 
@@ -863,7 +863,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:59
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:61
 
 ___
 
@@ -873,7 +873,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:82
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:84
 
 ___
 
@@ -883,7 +883,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:67
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:69
 
 ___
 
@@ -893,7 +893,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:71
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:73
 
 ___
 
@@ -903,7 +903,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:74
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:76
 
 ___
 
@@ -913,7 +913,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:85
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:87
 
 ___
 
@@ -923,7 +923,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:13
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:15
 
 ___
 
@@ -933,7 +933,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:72
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:74
 
 ___
 
@@ -943,7 +943,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:56
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:58
 
 ___
 
@@ -953,4 +953,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:55
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:57

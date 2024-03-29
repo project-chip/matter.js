@@ -6,7 +6,7 @@
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 ## Type parameters
@@ -67,7 +67,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:27
 
 ## Properties
 
@@ -77,7 +77,7 @@ matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:20
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:23
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:22
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:25
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:23
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:26
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:21
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
 
 ## Accessors
 
@@ -125,7 +125,7 @@ matter.js/dist/esm/protocol/ExchangeManager.d.ts:21
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:26
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:29
 
 ## Methods
 
@@ -143,7 +143,7 @@ matter.js/dist/esm/protocol/ExchangeManager.d.ts:26
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:27
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:30
 
 ___
 
@@ -167,4 +167,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:25
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:28

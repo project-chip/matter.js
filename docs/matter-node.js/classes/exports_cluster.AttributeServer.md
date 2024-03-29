@@ -28,12 +28,11 @@ Attribute server for normal attributes that can be read and written.
 
 ### Properties
 
+- [datasource](exports_cluster.AttributeServer.md#datasource)
 - [defaultValue](exports_cluster.AttributeServer.md#defaultvalue)
 - [endpoint](exports_cluster.AttributeServer.md#endpoint)
-- [getClusterDataVersion](exports_cluster.AttributeServer.md#getclusterdataversion)
 - [getter](exports_cluster.AttributeServer.md#getter)
 - [id](exports_cluster.AttributeServer.md#id)
-- [increaseClusterDataVersion](exports_cluster.AttributeServer.md#increaseclusterdataversion)
 - [isFixed](exports_cluster.AttributeServer.md#isfixed)
 - [isSubscribable](exports_cluster.AttributeServer.md#issubscribable)
 - [isWritable](exports_cluster.AttributeServer.md#iswritable)
@@ -71,7 +70,7 @@ Attribute server for normal attributes that can be read and written.
 
 ### constructor
 
-• **new AttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `getClusterDataVersion`, `increaseClusterDataVersion`, `getter?`, `setter?`, `validator?`): [`AttributeServer`](exports_cluster.AttributeServer.md)\<`T`\>
+• **new AttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `initValue`, `defaultValue`, `datasource`, `getter?`, `setter?`, `validator?`): [`AttributeServer`](exports_cluster.AttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -89,11 +88,11 @@ Attribute server for normal attributes that can be read and written.
 | `isWritable` | `boolean` | - |
 | `isSubscribable` | `boolean` | - |
 | `requiresTimedInteraction` | `boolean` | - |
-| `defaultValue` | `T` | - |
-| `getClusterDataVersion` | () => `number` | - |
-| `increaseClusterDataVersion` | () => `number` | - |
-| `getter?` | (`session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | - |
-| `setter?` | (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean` | Optional setter function to handle special requirements or the data are stored in different places. If a setter method is used for a writable attribute, the getter method must be implemented as well. The method needs to return if the stored value has changed or not. **`Param`** the value to be set. **`Param`** the session that is requesting the value (if any). **`Param`** the endpoint the cluster server of this attribute is assigned to. |
+| `initValue` | `T` | - |
+| `defaultValue` | `undefined` \| `T` | - |
+| `datasource` | [`ClusterDatasource`](../interfaces/exports_cluster.ClusterDatasource-1.md)\<`any`\> | - |
+| `getter?` | (`session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`, `message?`: [`Message`](../interfaces/exports_codec.Message.md)) => `T` | - |
+| `setter?` | (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `message?`: [`Message`](../interfaces/exports_codec.Message.md)) => `boolean` | Optional setter function to handle special requirements or the data are stored in different places. If a setter method is used for a writable attribute, the getter method must be implemented as well. The method needs to return if the stored value has changed or not. **`Param`** the value to be set. **`Param`** the session that is requesting the value (if any). **`Param`** the endpoint the cluster server of this attribute is assigned to. |
 | `validator?` | (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void` | Optional Validator function to handle special requirements for verification of stored data. The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is also returned to the client. If a setter is used then no validator should be used as the setter should handle the validation itself! **`Param`** the value to be set. **`Param`** the session that is requesting the value (if any). **`Param`** the endpoint the cluster server of this attribute is assigned to. |
 
 #### Returns
@@ -106,9 +105,23 @@ Attribute server for normal attributes that can be read and written.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:131
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:135
 
 ## Properties
+
+### datasource
+
+• `Protected` `Readonly` **datasource**: [`ClusterDatasource`](../interfaces/exports_cluster.ClusterDatasource-1.md)\<`any`\>
+
+#### Inherited from
+
+[FixedAttributeServer](exports_cluster.FixedAttributeServer.md).[datasource](exports_cluster.FixedAttributeServer.md#datasource)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+
+___
 
 ### defaultValue
 
@@ -120,7 +133,7 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:131
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
 
 ___
 
@@ -134,39 +147,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
-
-___
-
-### getClusterDataVersion
-
-• `Protected` `Readonly` **getClusterDataVersion**: () => `number`
-
-#### Type declaration
-
-▸ (): `number`
-
-##### Returns
-
-`number`
-
-#### Inherited from
-
-[FixedAttributeServer](exports_cluster.FixedAttributeServer.md).[getClusterDataVersion](exports_cluster.FixedAttributeServer.md#getclusterdataversion)
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:57
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
 
 ___
 
 ### getter
 
-• `Protected` `Readonly` **getter**: (`session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
+• `Protected` `Readonly` **getter**: (`session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`, `message?`: [`Message`](../interfaces/exports_codec.Message.md)) => `T`
 
 #### Type declaration
 
-▸ (`session?`, `endpoint?`, `isFabricFiltered?`): `T`
+▸ (`session?`, `endpoint?`, `isFabricFiltered?`, `message?`): `T`
 
 ##### Parameters
 
@@ -175,6 +166,7 @@ ___
 | `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 | `isFabricFiltered?` | `boolean` |
+| `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 ##### Returns
 
@@ -186,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:61
 
 ___
 
@@ -200,25 +192,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:31
-
-___
-
-### increaseClusterDataVersion
-
-• `Protected` `Readonly` **increaseClusterDataVersion**: () => `number`
-
-#### Type declaration
-
-▸ (): `number`
-
-##### Returns
-
-`number`
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:125
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
 
 ___
 
@@ -232,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:126
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:130
 
 ___
 
@@ -246,7 +220,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
 
 ___
 
@@ -260,7 +234,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
 
 ___
 
@@ -274,7 +248,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:32
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
 
 ___
 
@@ -288,7 +262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:38
 
 ___
 
@@ -302,17 +276,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
 
 ___
 
 ### setter
 
-• `Protected` `Readonly` **setter**: (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean`
+• `Protected` `Readonly` **setter**: (`value`: `T`, `session?`: [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `message?`: [`Message`](../interfaces/exports_codec.Message.md)) => `boolean`
 
 #### Type declaration
 
-▸ (`value`, `session?`, `endpoint?`): `boolean`
+▸ (`value`, `session?`, `endpoint?`, `message?`): `boolean`
 
 ##### Parameters
 
@@ -321,6 +295,7 @@ ___
 | `value` | `T` |
 | `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
+| `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 ##### Returns
 
@@ -328,7 +303,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:129
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:133
 
 ___
 
@@ -354,7 +329,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:130
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:134
 
 ___
 
@@ -370,7 +345,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -380,7 +355,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:127
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:131
 
 ___
 
@@ -390,7 +365,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:128
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:132
 
 ## Methods
 
@@ -417,7 +392,7 @@ new value and the version number.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:205
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:217
 
 ___
 
@@ -444,7 +419,7 @@ new value and the old value.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:214
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:226
 
 ___
 
@@ -468,16 +443,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:45
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:47
 
 ___
 
 ### get
 
-▸ **get**(`session`, `isFabricFiltered`): `T`
+▸ **get**(`session`, `isFabricFiltered`, `message?`): `T`
 
 Get the value of the attribute. This method is used by the Interaction model to read the value of the attribute
 and includes the ACL check. It should not be used locally in the code!
+
 If a getter is defined the value is determined by that getter method.
 
 #### Parameters
@@ -486,6 +462,7 @@ If a getter is defined the value is determined by that getter method.
 | :------ | :------ |
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
+| `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
@@ -497,7 +474,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:74
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:78
 
 ___
 
@@ -519,16 +496,17 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:90
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:95
 
 ___
 
 ### getWithVersion
 
-▸ **getWithVersion**(`session`, `isFabricFiltered`): `Object`
+▸ **getWithVersion**(`session`, `isFabricFiltered`, `message?`): `Object`
 
 Get the value of the attribute including the version number. This method is used by the Interaction model to read
 the value of the attribute and includes the ACL check. It should not be used locally in the code!
+
 If a getter is defined the value is determined by that getter method. The version number is always 0 for fixed
 attributes.
 
@@ -538,6 +516,7 @@ attributes.
 | :------ | :------ |
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
+| `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
@@ -554,7 +533,7 @@ attributes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:81
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:86
 
 ___
 
@@ -579,7 +558,7 @@ internally.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:186
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:196
 
 ___
 
@@ -606,13 +585,13 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:158
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:163
 
 ___
 
 ### processSet
 
-▸ **processSet**(`value`, `session?`): `void`
+▸ **processSet**(`value`, `session?`, `message?`): `void`
 
 Helper Method to process the set of a value in a generic way. This method is used internally.
 
@@ -622,6 +601,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 | :------ | :------ |
 | `value` | `T` |
 | `session?` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
+| `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
@@ -629,7 +609,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:181
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:191
 
 ___
 
@@ -655,7 +635,7 @@ Remove an internal listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:209
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:221
 
 ___
 
@@ -681,17 +661,19 @@ Remove an external listener.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:223
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:235
 
 ___
 
 ### set
 
-▸ **set**(`value`, `session`): `void`
+▸ **set**(`value`, `session`, `message?`): `void`
 
 Set the value of the attribute. This method is used by the Interaction model to write the value of the attribute
 and includes the ACL check. It should not be used locally in the code!
+
 If a setter is defined this setter method is called to store the value.
+
 Listeners are called when the value changes (internal listeners) or in any case (external listeners).
 
 #### Parameters
@@ -700,6 +682,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 | :------ | :------ |
 | `value` | `T` |
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
+| `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
@@ -707,7 +690,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:165
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:172
 
 ___
 
@@ -717,8 +700,11 @@ ___
 
 Set the value of the attribute locally. This method should be used locally in the code and does not include the
 ACL check.
+
 If a setter is defined this setter method is called to validate and store the value.
+
 Else if a validator is defined the value is validated before it is stored.
+
 Listeners are called when the value changes (internal listeners) or in any case (external listeners).
 
 #### Parameters
@@ -733,13 +719,13 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:177
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:187
 
 ___
 
 ### setRemote
 
-▸ **setRemote**(`value`, `session`): `void`
+▸ **setRemote**(`value`, `session`, `message?`): `void`
 
 Method that contains the logic to set a value "from remote" (e.g. from a client).
 
@@ -749,6 +735,7 @@ Method that contains the logic to set a value "from remote" (e.g. from a client)
 | :------ | :------ |
 | `value` | `T` |
 | `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
+| `message?` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
@@ -756,7 +743,7 @@ Method that contains the logic to set a value "from remote" (e.g. from a client)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:169
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:176
 
 ___
 
@@ -783,7 +770,7 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:219
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:231
 
 ___
 
@@ -794,6 +781,7 @@ ___
 When the value is handled by getter or setter methods and is changed by other processes this method can be used
 to notify the attribute server that the value has changed. This will increase the version number and trigger the
 listeners.
+
 ACL checks needs to be performed before calling this method.
 
 #### Parameters
@@ -808,7 +796,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:193
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:204
 
 ___
 
@@ -819,6 +807,7 @@ ___
 When the value is handled by getter or setter methods and is changed by other processes and no session from the
 originating process is known this method can be used to notify the attribute server that the value has changed.
 This will increase the version number and trigger the listeners.
+
 ACL checks needs to be performed before calling this method.
 
 #### Returns
@@ -827,7 +816,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:200
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:212
 
 ___
 
@@ -851,4 +840,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44
+packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:46

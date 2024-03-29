@@ -23,9 +23,9 @@ Device class for an OnOffPluginUnit Device
 - [commandHandler](device_export.OnOffLightDevice.md#commandhandler)
 - [deviceType](device_export.OnOffLightDevice.md#devicetype)
 - [deviceTypes](device_export.OnOffLightDevice.md#devicetypes)
-- [id](device_export.OnOffLightDevice.md#id)
 - [isLighting](device_export.OnOffLightDevice.md#islighting)
 - [name](device_export.OnOffLightDevice.md#name)
+- [number](device_export.OnOffLightDevice.md#number)
 - [uniqueStorageKey](device_export.OnOffLightDevice.md#uniquestoragekey)
 
 ### Methods
@@ -39,9 +39,9 @@ Device class for an OnOffPluginUnit Device
 - [addFixedLabel](device_export.OnOffLightDevice.md#addfixedlabel)
 - [addOnOffListener](device_export.OnOffLightDevice.md#addonofflistener)
 - [addUserLabel](device_export.OnOffLightDevice.md#adduserlabel)
+- [close](device_export.OnOffLightDevice.md#close)
 - [createOptionalClusterClient](device_export.OnOffLightDevice.md#createoptionalclusterclient)
 - [createOptionalClusterServer](device_export.OnOffLightDevice.md#createoptionalclusterserver)
-- [destroy](device_export.OnOffLightDevice.md#destroy)
 - [determineUniqueID](device_export.OnOffLightDevice.md#determineuniqueid)
 - [getAllClusterClients](device_export.OnOffLightDevice.md#getallclusterclients)
 - [getAllClusterServers](device_export.OnOffLightDevice.md#getallclusterservers)
@@ -52,7 +52,7 @@ Device class for an OnOffPluginUnit Device
 - [getClusterServer](device_export.OnOffLightDevice.md#getclusterserver)
 - [getClusterServerById](device_export.OnOffLightDevice.md#getclusterserverbyid)
 - [getDeviceTypes](device_export.OnOffLightDevice.md#getdevicetypes)
-- [getId](device_export.OnOffLightDevice.md#getid)
+- [getNumber](device_export.OnOffLightDevice.md#getnumber)
 - [getOnOff](device_export.OnOffLightDevice.md#getonoff)
 - [hasClusterClient](device_export.OnOffLightDevice.md#hasclusterclient)
 - [hasClusterServer](device_export.OnOffLightDevice.md#hasclusterserver)
@@ -77,7 +77,7 @@ Device class for an OnOffPluginUnit Device
 
 | Name | Type |
 | :------ | :------ |
-| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>\>, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>\>\> |
+| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/schema_export.md#bitflag)  }\>\>\> |
 | `options` | [`EndpointOptions`](../interfaces/device_export.EndpointOptions.md) |
 
 #### Returns
@@ -90,7 +90,7 @@ Device class for an OnOffPluginUnit Device
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:164](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L164)
+[packages/matter.js/src/device/OnOffDevices.ts:164](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L164)
 
 ## Properties
 
@@ -104,7 +104,7 @@ Device class for an OnOffPluginUnit Device
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:168](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L168)
+[packages/matter.js/src/device/Device.ts:168](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L168)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:167](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L167)
+[packages/matter.js/src/device/Device.ts:167](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L167)
 
 ___
 
@@ -134,21 +134,7 @@ One or multiple DeviceTypeDefinitions of the endpoint
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L53)
-
-___
-
-### id
-
-• **id**: `undefined` \| [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
-
-#### Inherited from
-
-[OnOffBaseDevice](device_export.OnOffBaseDevice.md).[id](device_export.OnOffBaseDevice.md#id)
-
-#### Defined in
-
-[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L37)
+[packages/matter.js/src/device/Endpoint.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L54)
 
 ___
 
@@ -164,7 +150,7 @@ Define if Lighting feature is set
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L65)
+[packages/matter.js/src/device/OnOffDevices.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L65)
 
 ___
 
@@ -178,7 +164,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L39)
+[packages/matter.js/src/device/Endpoint.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L40)
+
+___
+
+### number
+
+• **number**: `undefined` \| [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
+
+#### Inherited from
+
+[OnOffBaseDevice](device_export.OnOffBaseDevice.md).[number](device_export.OnOffBaseDevice.md#number)
+
+#### Defined in
+
+[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L38)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L38)
+[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L39)
 
 ## Methods
 
@@ -220,7 +220,7 @@ because needed public for derived classes.
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:225](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L225)
+[packages/matter.js/src/device/Device.ts:225](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L225)
 
 ▸ **_executeHandler**\<`K`\>(`action`, `...args`): `Promise`\<`void`\>
 
@@ -250,7 +250,7 @@ because needed public for derived classes.
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L42)
+[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/NamedHandler.ts#L42)
 
 ___
 
@@ -262,7 +262,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](device_export.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md) |
 
 #### Returns
 
@@ -274,7 +274,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:256](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L256)
+[packages/matter.js/src/device/Endpoint.ts:257](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L257)
 
 ___
 
@@ -307,7 +307,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:173](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L173)
+[packages/matter.js/src/device/Endpoint.ts:174](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L174)
 
 ___
 
@@ -338,7 +338,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:146](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L146)
+[packages/matter.js/src/device/Endpoint.ts:147](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L147)
 
 ___
 
@@ -366,7 +366,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:202](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L202)
+[packages/matter.js/src/device/Device.ts:202](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L202)
 
 ▸ **addCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
@@ -396,7 +396,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L40)
+[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/NamedHandler.ts#L40)
 
 ___
 
@@ -423,7 +423,7 @@ Adds mandatory clusters to the device
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:175](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L175)
+[packages/matter.js/src/device/OnOffDevices.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L175)
 
 ___
 
@@ -448,7 +448,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L106)
+[packages/matter.js/src/device/Endpoint.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L107)
 
 ___
 
@@ -475,7 +475,7 @@ This is an example of a convenient device class API to control the device withou
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:139](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L139)
+[packages/matter.js/src/device/OnOffDevices.ts:139](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L139)
 
 ___
 
@@ -500,7 +500,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:126](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L126)
+[packages/matter.js/src/device/Endpoint.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L127)
+
+___
+
+### close
+
+▸ **close**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[OnOffBaseDevice](device_export.OnOffBaseDevice.md).[close](device_export.OnOffBaseDevice.md#close)
+
+#### Defined in
+
+[packages/matter.js/src/device/Endpoint.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L94)
 
 ___
 
@@ -534,7 +552,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:240](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L240)
+[packages/matter.js/src/device/Device.ts:240](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L240)
 
 ___
 
@@ -568,25 +586,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:229](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L229)
-
-___
-
-### destroy
-
-▸ **destroy**(): `void`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-[OnOffBaseDevice](device_export.OnOffBaseDevice.md).[destroy](device_export.OnOffBaseDevice.md#destroy)
-
-#### Defined in
-
-[packages/matter.js/src/device/Endpoint.ts:93](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L93)
+[packages/matter.js/src/device/Device.ts:229](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L229)
 
 ___
 
@@ -604,7 +604,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:283](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L283)
+[packages/matter.js/src/device/Endpoint.ts:291](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L291)
 
 ___
 
@@ -622,7 +622,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:343](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L343)
+[packages/matter.js/src/device/Endpoint.ts:351](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L351)
 
 ___
 
@@ -640,7 +640,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:339](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L339)
+[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L347)
 
 ___
 
@@ -664,7 +664,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:265](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L265)
+[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L273)
 
 ___
 
@@ -682,7 +682,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:269](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L269)
+[packages/matter.js/src/device/Endpoint.ts:277](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L277)
 
 ___
 
@@ -716,7 +716,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:271](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L271)
+[packages/matter.js/src/device/Device.ts:271](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L271)
 
 ___
 
@@ -740,7 +740,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:212](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L212)
+[packages/matter.js/src/device/Endpoint.ts:213](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L213)
 
 ___
 
@@ -774,7 +774,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:251](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L251)
+[packages/matter.js/src/device/Device.ts:251](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L251)
 
 ___
 
@@ -798,7 +798,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:208](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L208)
+[packages/matter.js/src/device/Endpoint.ts:209](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L209)
 
 ___
 
@@ -816,13 +816,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L236)
+[packages/matter.js/src/device/Endpoint.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L237)
 
 ___
 
-### getId
+### getNumber
 
-▸ **getId**(): [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
+▸ **getNumber**(): [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)
 
 #### Returns
 
@@ -830,11 +830,11 @@ ___
 
 #### Inherited from
 
-[OnOffBaseDevice](device_export.OnOffBaseDevice.md).[getId](device_export.OnOffBaseDevice.md#getid)
+[OnOffBaseDevice](device_export.OnOffBaseDevice.md).[getNumber](device_export.OnOffBaseDevice.md#getnumber)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L99)
+[packages/matter.js/src/device/Endpoint.ts:100](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L100)
 
 ___
 
@@ -852,7 +852,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:119](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L119)
+[packages/matter.js/src/device/OnOffDevices.ts:119](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L119)
 
 ___
 
@@ -886,7 +886,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:226](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L226)
+[packages/matter.js/src/device/Endpoint.ts:227](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L227)
 
 ___
 
@@ -920,7 +920,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:216](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L216)
+[packages/matter.js/src/device/Endpoint.ts:217](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L217)
 
 ___
 
@@ -944,7 +944,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L273)
+[packages/matter.js/src/device/Endpoint.ts:281](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L281)
 
 ___
 
@@ -972,7 +972,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:213](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L213)
+[packages/matter.js/src/device/Device.ts:213](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L213)
 
 ▸ **removeCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
@@ -1002,7 +1002,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/util/NamedHandler.ts#L41)
+[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/NamedHandler.ts#L41)
 
 ___
 
@@ -1020,7 +1020,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L85)
+[packages/matter.js/src/device/Endpoint.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L86)
 
 ___
 
@@ -1047,7 +1047,7 @@ reachability needs to be set there.
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:296](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Device.ts#L296)
+[packages/matter.js/src/device/Device.ts:296](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Device.ts#L296)
 
 ___
 
@@ -1071,7 +1071,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L240)
+[packages/matter.js/src/device/Endpoint.ts:241](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L241)
 
 ___
 
@@ -1098,7 +1098,7 @@ This is an example f a convenient device class API to control the device without
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L115)
+[packages/matter.js/src/device/OnOffDevices.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L115)
 
 ___
 
@@ -1122,7 +1122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L80)
+[packages/matter.js/src/device/Endpoint.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L81)
 
 ___
 
@@ -1143,7 +1143,7 @@ This is an example f a convenient device class API to control the device without
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:127](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L127)
+[packages/matter.js/src/device/OnOffDevices.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L127)
 
 ___
 
@@ -1161,7 +1161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L347)
+[packages/matter.js/src/device/Endpoint.ts:355](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L355)
 
 ___
 
@@ -1179,4 +1179,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:305](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/Endpoint.ts#L305)
+[packages/matter.js/src/device/Endpoint.ts:313](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/Endpoint.ts#L313)

@@ -6,7 +6,7 @@
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 ## Type parameters
@@ -39,7 +39,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:8](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Channel.ts#L8)
+[packages/matter.js/src/common/Channel.ts:8](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Channel.ts#L8)
 
 ## Methods
 
@@ -53,7 +53,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:10](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Channel.ts#L10)
+[packages/matter.js/src/common/Channel.ts:10](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Channel.ts#L10)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:9](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/common/Channel.ts#L9)
+[packages/matter.js/src/common/Channel.ts:9](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Channel.ts#L9)

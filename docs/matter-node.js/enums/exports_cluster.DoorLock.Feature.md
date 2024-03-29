@@ -39,7 +39,7 @@ PIN codes over- the-air supported for lock/unlock operations
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1218
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2213
 
 ___
 
@@ -53,7 +53,7 @@ Lock supports a door position sensor that indicates door’s state
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1206
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2201
 
 ___
 
@@ -67,7 +67,7 @@ Lock supports face related credentials (face, iris, retina)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1212
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2207
 
 ___
 
@@ -81,7 +81,7 @@ Lock supports finger related credentials (fingerprint, finger vein)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1188
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2183
 
 ___
 
@@ -95,7 +95,7 @@ Lock supports holiday schedules
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1242
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2237
 
 ___
 
@@ -109,7 +109,7 @@ Lock supports local/on-lock logging when Events are not supported
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1194
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2189
 
 ___
 
@@ -123,7 +123,7 @@ Operation and Programming Notifications
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1230
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2225
 
 ___
 
@@ -137,7 +137,7 @@ Lock supports PIN credentials (via keypad, or over- the-air)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1176
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2171
 
 ___
 
@@ -151,7 +151,7 @@ Lock supports RFID credentials
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1182
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2177
 
 ___
 
@@ -165,7 +165,7 @@ Lock supports the user commands and database
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1224
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2219
 
 ___
 
@@ -179,7 +179,7 @@ Lock supports week day user access schedules
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1200
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2195
 
 ___
 
@@ -193,4 +193,4 @@ Lock supports year day user access schedules
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1236
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2231

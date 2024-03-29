@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:90](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/ScenesServer.ts#L90)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L90)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:43](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/ScenesServer.ts#L43)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L43)
 
 ___
 
@@ -95,13 +95,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:81](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/ScenesServer.ts#L81)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L81)
 
 ___
 
 ### removeAllNonGlobalScenesForEndpoint
 
-▸ **removeAllNonGlobalScenesForEndpoint**(`fabric`, `endpointId`): `void`
+▸ **removeAllNonGlobalScenesForEndpoint**(`fabric`, `endpointId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -112,17 +112,17 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:119](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/ScenesServer.ts#L119)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:119](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L119)
 
 ___
 
 ### removeAllScenesForGroup
 
-▸ **removeAllScenesForGroup**(`fabric`, `endpointId`, `groupId`): `void`
+▸ **removeAllScenesForGroup**(`fabric`, `endpointId`, `groupId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -134,17 +134,17 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:110](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/ScenesServer.ts#L110)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L110)
 
 ___
 
 ### removeScene
 
-▸ **removeScene**(`fabric`, `endpointId`, `groupId`, `sceneId`): `boolean`
+▸ **removeScene**(`fabric`, `endpointId`, `groupId`, `sceneId`): `Promise`\<`boolean`\>
 
 #### Parameters
 
@@ -157,17 +157,17 @@ ___
 
 #### Returns
 
-`boolean`
+`Promise`\<`boolean`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:96](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/ScenesServer.ts#L96)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L96)
 
 ___
 
 ### setEndpointScenes
 
-▸ **setEndpointScenes**(`fabric`, `endpointId`, `endpointScenes`): `void`
+▸ **setEndpointScenes**(`fabric`, `endpointId`, `endpointScenes`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -179,17 +179,17 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/ScenesServer.ts#L53)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L53)
 
 ___
 
 ### setScenes
 
-▸ **setScenes**(`fabric`, `endpointId`, `sceneEntries`): `void`
+▸ **setScenes**(`fabric`, `endpointId`, `sceneEntries`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -201,8 +201,8 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/server/ScenesServer.ts#L61)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L61)

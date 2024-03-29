@@ -28,7 +28,7 @@ Indicates a Cellular interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L54)
 
 ___
 
@@ -40,7 +40,7 @@ Indicates a Ethernet interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L49)
 
 ___
 
@@ -52,7 +52,7 @@ Indicates a Thread interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L59)
 
 ___
 
@@ -64,7 +64,7 @@ Indicates an interface of an unspecified type.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L39)
 
 ___
 
@@ -76,4 +76,4 @@ Indicates a Wi-Fi interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L44)

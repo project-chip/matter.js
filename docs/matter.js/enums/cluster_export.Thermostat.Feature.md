@@ -34,7 +34,7 @@ Supports a System Mode of Auto
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:566](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L566)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1082](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1082)
 
 ___
 
@@ -48,7 +48,7 @@ Thermostat is capable of managing a cooling device
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:538](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L538)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1054](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1054)
 
 ___
 
@@ -62,7 +62,7 @@ Thermostat is capable of managing a heating device
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:531](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L531)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1047](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1047)
 
 ___
 
@@ -76,7 +76,7 @@ Thermostat does not expose the LocalTemperature Value in the LocalTemperature at
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:573](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L573)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1089](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1089)
 
 ___
 
@@ -90,7 +90,7 @@ Supports Occupied and Unoccupied setpoints
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:545](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L545)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1061](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1061)
 
 ___
 
@@ -104,7 +104,7 @@ Supports remote configuration of a weekly schedule of setpoint transitions
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:552](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L552)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1068](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1068)
 
 ___
 
@@ -118,4 +118,4 @@ Supports configurable setback (or span)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:559](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L559)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1075](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1075)

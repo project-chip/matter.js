@@ -38,7 +38,7 @@ Parsed list structure.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:40
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:38
 
 ___
 
@@ -50,7 +50,7 @@ These are all ways to describe a constraint.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:70
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:67
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:36
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:34
 
 ## Functions
 
@@ -83,7 +83,7 @@ Parse constraint DSL.  Extremely lenient.
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:76
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:73
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:77
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:74

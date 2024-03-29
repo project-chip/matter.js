@@ -26,7 +26,7 @@ Entry or extension was added
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:243](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L243)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:261](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L261)
 
 ___
 
@@ -38,7 +38,7 @@ Entry or extension was changed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:238](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L238)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:256](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L256)
 
 ___
 
@@ -50,4 +50,4 @@ Entry or extension was removed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:248](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L248)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:266](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L266)

@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:17
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:121
 
 ## Variables
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:15
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:119
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:13
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:117
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:14
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:118
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:11
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:115
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:12
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:116
 
 ___
 
@@ -230,7 +230,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:10
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:114
 
 ___
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:16
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:120
 
 ___
 
@@ -270,11 +270,59 @@ ___
 
 ### ec
 
-• `Const` **ec**: typeof `elliptic.ec`
+• `Const` **ec**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `bitMask` | (`n`: `number`) => `bigint` |
+| `default` | `__module` |
+| `isNegativeLE` | (`num`: `bigint`, `modulo`: `bigint`) => `boolean` |
+| `p256` | `Readonly`\<\{ `CURVE`: `Readonly`\<\{ `Fp`: `mod.IField`\<`bigint`\> ; `Gx`: `bigint` ; `Gy`: `bigint` ; `a`: `bigint` ; `allowInfinityPoint?`: `boolean` ; `allowedPrivateKeyLengths?`: readonly `number`[] ; `b`: `bigint` ; `bits2int?`: (`bytes`: `Uint8Array`) => `bigint` ; `bits2int_modN?`: (`bytes`: `Uint8Array`) => `bigint` ; `clearCofactor?`: (`c`: `ProjConstructor`, `point`: `ProjPointType`) => `ProjPointType` ; `endo?`: \{ `beta`: `bigint` ; `splitScalar`: (`k`: `bigint`) => \{ `k1`: `bigint` ; `k1neg`: `boolean` ; `k2`: `bigint` ; `k2neg`: `boolean`  }  } ; `h`: `bigint` ; `hEff?`: `bigint` ; `hash`: `utils.CHash` ; `hmac`: (`key`: `Uint8Array`, ...`messages`: `Uint8Array`[]) => `Uint8Array` ; `isTorsionFree?`: (`c`: `ProjConstructor`, `point`: `ProjPointType`) => `boolean` ; `lowS`: `boolean` ; `n`: `bigint` ; `nBitLength`: `number` ; `nByteLength`: `number` ; `p`: `bigint` ; `randomBytes`: (`bytesLength?`: `number`) => `Uint8Array` ; `wrapPrivateKey?`: `boolean`  }\> ; `ProjectivePoint`: `ProjConstructor` ; `Signature`: `SignatureConstructor` ; `create`: (`hash`: `utils.CHash`) => `CurveFn` ; `getPublicKey`: (`privateKey`: `utils.PrivKey`, `isCompressed?`: `boolean`) => `Uint8Array` ; `getSharedSecret`: (`privateA`: `utils.PrivKey`, `publicB`: `utils.Hex`, `isCompressed?`: `boolean`) => `Uint8Array` ; `sign`: (`msgHash`: `utils.Hex`, `privKey`: `utils.PrivKey`, `opts?`: `SignOpts`) => `RecoveredSignatureType` ; `utils`: \{ `normPrivateKeyToScalar`: (`key`: `utils.PrivKey`) => `bigint` ; `precompute`: (`windowSize?`: `number`, `point?`: `ProjPointType`) => `ProjPointType` ; `randomPrivateKey`: () => `Uint8Array` ; `isValidPrivateKey`: (`privateKey`: `PrivKey`) => `boolean`  } ; `verify`: (`signature`: `utils.Hex` \| \{ `r`: `bigint` ; `s`: `bigint`  }, `msgHash`: `utils.Hex`, `publicKey`: `utils.Hex`, `opts?`: `VerOpts`) => `boolean`  }\> |
+| `Field` | (`ORDER`: `bigint`, `bitLen?`: `number`, `isLE?`: `boolean`, `redef?`: `Partial`\<`IField`\<`bigint`\>\>) => `Readonly`\<`IField`\<`bigint`\> & `Required`\<`Pick`\<`IField`\<`bigint`\>, ``"isOdd"``\>\>\> |
+| `FpDiv` | \<T_5\>(`f`: `IField`\<`T_5`\>, `lhs`: `T_5`, `rhs`: `bigint` \| `T_5`) => `T_5` |
+| `FpInvertBatch` | \<T_4\>(`f`: `IField`\<`T_4`\>, `nums`: `T_4`[]) => `T_4`[] |
+| `FpIsSquare` | \<T_6\>(`f`: `IField`\<`T_6`\>) => (`x`: `T_6`) => `boolean` |
+| `FpPow` | \<T_3\>(`f`: `IField`\<`T_3`\>, `num`: `T_3`, `power`: `bigint`) => `T_3` |
+| `FpSqrt` | (`P`: `bigint`) => \<T_1\>(`Fp`: `IField`\<`T_1`\>, `n`: `T_1`) => `T_1` |
+| `FpSqrtEven` | \<T_8\>(`Fp`: `IField`\<`T_8`\>, `elm`: `T_8`) => `T_8` |
+| `FpSqrtOdd` | \<T_7\>(`Fp`: `IField`\<`T_7`\>, `elm`: `T_7`) => `T_7` |
+| `abytes` | (`item`: `unknown`) => `void` |
+| `bitGet` | (`n`: `bigint`, `pos`: `number`) => `bigint` |
+| `bitLen` | (`n`: `bigint`) => `number` |
+| `bitSet` | (`n`: `bigint`, `pos`: `number`, `value`: `boolean`) => `bigint` |
+| `bytesToHex` | (`bytes`: `Uint8Array`) => `string` |
+| `bytesToNumberBE` | (`bytes`: `Uint8Array`) => `bigint` |
+| `bytesToNumberLE` | (`bytes`: `Uint8Array`) => `bigint` |
+| `concatBytes` | (...`arrays`: `Uint8Array`[]) => `Uint8Array` |
+| `createHmacDrbg` | \<T_9\>(`hashLen`: `number`, `qByteLen`: `number`, `hmacFn`: (`key`: `Uint8Array`, ...`messages`: `Uint8Array`[]) => `Uint8Array`) => (`seed`: `Uint8Array`, `predicate`: (`v`: `Uint8Array`) => `undefined` \| `T_9`) => `T_9` |
+| `ensureBytes` | (`title`: `string`, `hex`: `Hex`, `expectedLength?`: `number`) => `Uint8Array` |
+| `equalBytes` | (`a`: `Uint8Array`, `b`: `Uint8Array`) => `boolean` |
+| `getFieldBytesLength` | (`fieldOrder`: `bigint`) => `number` |
+| `getMinHashLength` | (`fieldOrder`: `bigint`) => `number` |
+| `hashToPrivateScalar` | (`hash`: `string` \| `Uint8Array`, `groupOrder`: `bigint`, `isLE?`: `boolean`) => `bigint` |
+| `hexToBytes` | (`hex`: `string`) => `Uint8Array` |
+| `hexToNumber` | (`hex`: `string`) => `bigint` |
+| `invert` | (`number`: `bigint`, `modulo`: `bigint`) => `bigint` |
+| `isBytes` | (`a`: `unknown`) => a is Uint8Array |
+| `mapHashToField` | (`key`: `Uint8Array`, `fieldOrder`: `bigint`, `isLE?`: `boolean`) => `Uint8Array` |
+| `mod` | (`a`: `bigint`, `b`: `bigint`) => `bigint` |
+| `nLength` | (`n`: `bigint`, `nBitLength?`: `number`) => \{ `nBitLength`: `number` ; `nByteLength`: `number`  } |
+| `numberToBytesBE` | (`n`: `number` \| `bigint`, `len`: `number`) => `Uint8Array` |
+| `numberToBytesLE` | (`n`: `number` \| `bigint`, `len`: `number`) => `Uint8Array` |
+| `numberToHexUnpadded` | (`num`: `number` \| `bigint`) => `string` |
+| `numberToVarBytesBE` | (`n`: `number` \| `bigint`) => `Uint8Array` |
+| `pow` | (`num`: `bigint`, `power`: `bigint`, `modulo`: `bigint`) => `bigint` |
+| `pow2` | (`x`: `bigint`, `power`: `bigint`, `modulo`: `bigint`) => `bigint` |
+| `tonelliShanks` | (`P`: `bigint`) => \<T\>(`Fp`: `IField`\<`T`\>, `n`: `T`) => `T` |
+| `utf8ToBytes` | (`str`: `string`) => `Uint8Array` |
+| `validateField` | \<T_2\>(`field`: `IField`\<`T_2`\>) => `IField`\<`T_2`\> |
+| `validateObject` | \<T_10\>(`object`: `T_10`, `validators`: \{ [K in string \| number \| symbol]?: "string" \| "bigint" \| "boolean" \| "function" \| "field" \| "stringOrUint8Array" \| "isSafeInteger" \| "array" \| "hash" }, `optValidators?`: \{ [K in string \| number \| symbol]?: "string" \| "bigint" \| "boolean" \| "function" \| "field" \| "stringOrUint8Array" \| "isSafeInteger" \| "array" \| "hash" }) => `T_10` |
 
 #### Defined in
 
-packages/matter.js/dist/esm/crypto/Crypto.d.ts:67
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:11
 
 ## Functions
 

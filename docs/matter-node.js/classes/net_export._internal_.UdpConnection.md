@@ -6,7 +6,7 @@
 
 **`License`**
 
-Copyright 2022-2023 Project CHIP Authors
+Copyright 2022-2024 Matter.js Authors
 SPDX-License-Identifier: Apache-2.0
 
 ## Implements
@@ -54,7 +54,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:24
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:26
 
 ## Properties
 
@@ -64,7 +64,7 @@ packages/matter.js/dist/esm/net/UdpInterface.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:22
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:24
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:23
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:25
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:21
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:23
 
 ## Accessors
 
@@ -102,7 +102,7 @@ packages/matter.js/dist/esm/net/UdpInterface.d.ts:21
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:26
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:28
 
 ## Methods
 
@@ -120,7 +120,7 @@ packages/matter.js/dist/esm/net/UdpInterface.d.ts:26
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:27
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:29
 
 ___
 
@@ -144,4 +144,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpInterface.d.ts:25
+packages/matter.js/dist/esm/net/UdpInterface.d.ts:27

@@ -40,4 +40,25 @@ Error base class for all errors thrown by this library.
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082
+
+• **new BtpProtocolError**(`message?`, `options?`): [`BtpProtocolError`](ble_export.BtpProtocolError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`BtpProtocolError`](ble_export.BtpProtocolError.md)
+
+#### Inherited from
+
+[BtpMatterError](ble_export.BtpMatterError.md).[constructor](ble_export.BtpMatterError.md#constructor)
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1082

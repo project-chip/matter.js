@@ -6,29 +6,53 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/cluster_export.ValidProxies.Cluster.md)
+- [ValidProxyStruct](../interfaces/cluster_export.ValidProxies.ValidProxyStruct.md)
+
 ### Variables
 
 - [Cluster](cluster_export.ValidProxies.md#cluster)
+- [ClusterInstance](cluster_export.ValidProxies.md#clusterinstance)
+- [Complete](cluster_export.ValidProxies.md#complete)
 - [TlvValidProxyStruct](cluster_export.ValidProxies.md#tlvvalidproxystruct)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `validProxyList`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `commands`: \{ `getValidProxiesRequest`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``68`` = 0x44; `name`: ``"ValidProxies"`` = "ValidProxies"; `revision`: ``1`` = 1 }\>
-
-Proxy Valid
-
-This cluster provides a means for a device to be told of the valid set of possible proxies that can proxy
-subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignment Flow”.
-
-**`See`**
-
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.15.15
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.ValidProxies.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L68)
+
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L70)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `validProxyList`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `commands`: \{ `getValidProxiesRequest`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } ; `id`: ``68`` = 0x44; `name`: ``"ValidProxies"`` = "ValidProxies"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.ValidProxies.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L38)
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/cluster_export.ValidProxies.Cluster.md) = `Cluster`
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L71)
 
 ___
 
@@ -44,4 +68,4 @@ Encapsulates the Node ID of a Valid Proxy.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L26)

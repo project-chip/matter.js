@@ -1,8 +1,14 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [storage/export](../modules/storage_export.md) / StorageContext
 
-# Class: StorageContext
+# Class: StorageContext\<S\>
 
 [storage/export](../modules/storage_export.md).StorageContext
+
+## Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) = `any` |
 
 ## Table of contents
 
@@ -12,98 +18,120 @@
 
 ### Properties
 
-- [contexts](storage_export.StorageContext.md#contexts)
 - [storage](storage_export.StorageContext.md#storage)
+- [thisContexts](storage_export.StorageContext.md#thiscontexts)
 
 ### Methods
 
 - [clear](storage_export.StorageContext.md#clear)
 - [clearAll](storage_export.StorageContext.md#clearall)
+- [contexts](storage_export.StorageContext.md#contexts)
 - [createContext](storage_export.StorageContext.md#createcontext)
 - [delete](storage_export.StorageContext.md#delete)
 - [get](storage_export.StorageContext.md#get)
 - [has](storage_export.StorageContext.md#has)
 - [keys](storage_export.StorageContext.md#keys)
 - [set](storage_export.StorageContext.md#set)
+- [values](storage_export.StorageContext.md#values)
 
 ## Constructors
 
 ### constructor
 
-• **new StorageContext**(`storage`, `contexts`): [`StorageContext`](storage_export.StorageContext.md)
+• **new StorageContext**\<`S`\>(`storage`, `thisContexts`): [`StorageContext`](storage_export.StorageContext.md)\<`S`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `S` | extends [`Storage`](../interfaces/storage_export.Storage.md) = `any` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `storage` | [`Storage`](storage_export.Storage.md) |
-| `contexts` | `string`[] |
+| `storage` | `S` |
+| `thisContexts` | `string`[] |
 
 #### Returns
 
-[`StorageContext`](storage_export.StorageContext.md)
+[`StorageContext`](storage_export.StorageContext.md)\<`S`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L11)
+[packages/matter.js/src/storage/StorageContext.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L12)
 
 ## Properties
 
-### contexts
+### storage
 
-• `Private` `Readonly` **contexts**: `string`[]
+• `Private` `Readonly` **storage**: `S`
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L13)
+[packages/matter.js/src/storage/StorageContext.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L13)
 
 ___
 
-### storage
+### thisContexts
 
-• `Private` `Readonly` **storage**: [`Storage`](storage_export.Storage.md)
+• `Readonly` **thisContexts**: `string`[]
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:12](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L12)
+[packages/matter.js/src/storage/StorageContext.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L14)
 
 ## Methods
 
 ### clear
 
-▸ **clear**(): `void`
+▸ **clear**(): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 Clears all keys in this context
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L50)
+[packages/matter.js/src/storage/StorageContext.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L87)
 
 ___
 
 ### clearAll
 
-▸ **clearAll**(): `void`
+▸ **clearAll**(): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 Clears all keys in this context and all created sub-contexts.
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:57](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L57)
+[packages/matter.js/src/storage/StorageContext.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L108)
+
+___
+
+### contexts
+
+▸ **contexts**(): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `string`[]\>
+
+#### Returns
+
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `string`[]\>
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageContext.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L82)
 
 ___
 
 ### createContext
 
-▸ **createContext**(`context`): [`StorageContext`](storage_export.StorageContext.md)
+▸ **createContext**(`context`): [`StorageContext`](storage_export.StorageContext.md)\<`S`\>
 
 #### Parameters
 
@@ -113,17 +141,17 @@ ___
 
 #### Returns
 
-[`StorageContext`](storage_export.StorageContext.md)
+[`StorageContext`](storage_export.StorageContext.md)\<`S`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:39](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L39)
+[packages/matter.js/src/storage/StorageContext.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L65)
 
 ___
 
 ### delete
 
-▸ **delete**(`key`): `void`
+▸ **delete**(`key`): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Parameters
 
@@ -133,17 +161,17 @@ ___
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:35](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L35)
+[packages/matter.js/src/storage/StorageContext.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L61)
 
 ___
 
 ### get
 
-▸ **get**\<`T`\>(`key`, `defaultValue?`): `T`
+▸ **get**\<`T`\>(`key`, `defaultValue?`): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `T`\>
 
 #### Type parameters
 
@@ -160,17 +188,17 @@ ___
 
 #### Returns
 
-`T`
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `T`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:16](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L16)
+[packages/matter.js/src/storage/StorageContext.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L17)
 
 ___
 
 ### has
 
-▸ **has**(`key`): `boolean`
+▸ **has**(`key`): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `boolean`\>
 
 #### Parameters
 
@@ -180,49 +208,73 @@ ___
 
 #### Returns
 
-`boolean`
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `boolean`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L27)
+[packages/matter.js/src/storage/StorageContext.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L41)
 
 ___
 
 ### keys
 
-▸ **keys**(): `string`[]
+▸ **keys**(): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `string`[]\>
 
 #### Returns
 
-`string`[]
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `string`[]\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L45)
+[packages/matter.js/src/storage/StorageContext.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L71)
 
 ___
 
 ### set
 
-▸ **set**\<`T`\>(`key`, `value`): `void`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
+▸ **set**(`key`, `value`): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `key` | `string` |
-| `value` | `T` |
+| `value` | [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
 
 #### Returns
 
-`void`
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageContext.ts#L31)
+[packages/matter.js/src/storage/StorageContext.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L52)
+
+▸ **set**(`values`): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `values` | `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> |
+
+#### Returns
+
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `void`\>
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageContext.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L53)
+
+___
+
+### values
+
+▸ **values**(): [`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>\>
+
+#### Returns
+
+[`StorageOperationResult`](../modules/storage_export.md#storageoperationresult)\<`S`, `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>\>
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageContext.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageContext.ts#L75)

@@ -32,6 +32,10 @@
 - [scopedClusterData](exports_fabric.Fabric.md#scopedclusterdata)
 - [sessions](exports_fabric.Fabric.md#sessions)
 
+### Accessors
+
+- [externalInformation](exports_fabric.Fabric.md#externalinformation)
+
 ### Methods
 
 - [addRemoveCallback](exports_fabric.Fabric.md#addremovecallback)
@@ -40,7 +44,6 @@
 - [deleteScopedClusterData](exports_fabric.Fabric.md#deletescopedclusterdata)
 - [deleteScopedClusterDataValue](exports_fabric.Fabric.md#deletescopedclusterdatavalue)
 - [getDestinationId](exports_fabric.Fabric.md#getdestinationid)
-- [getExternalInformation](exports_fabric.Fabric.md#getexternalinformation)
 - [getPublicKey](exports_fabric.Fabric.md#getpublickey)
 - [getScopedClusterDataKeys](exports_fabric.Fabric.md#getscopedclusterdatakeys)
 - [getScopedClusterDataValue](exports_fabric.Fabric.md#getscopedclusterdatavalue)
@@ -90,7 +93,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:63
 
 ## Properties
 
@@ -100,7 +103,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:49
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:58
 
 ___
 
@@ -110,7 +113,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:36
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:45
 
 ___
 
@@ -120,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:35
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:44
 
 ___
 
@@ -130,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:44
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:53
 
 ___
 
@@ -140,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:46
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:55
 
 ___
 
@@ -150,7 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:41
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 ___
 
@@ -160,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:48
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:57
 
 ___
 
@@ -170,7 +173,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:37
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:46
 
 ___
 
@@ -180,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:47
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:56
 
 ___
 
@@ -190,7 +193,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:39
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:48
 
 ___
 
@@ -200,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:45
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 ___
 
@@ -210,7 +213,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:53
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:62
 
 ___
 
@@ -220,7 +223,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:52
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:61
 
 ___
 
@@ -230,7 +233,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:43
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:52
 
 ___
 
@@ -240,7 +243,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:38
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:47
 
 ___
 
@@ -250,7 +253,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:40
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:49
 
 ___
 
@@ -260,7 +263,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:42
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:51
 
 ___
 
@@ -270,7 +273,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:51
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:60
 
 ___
 
@@ -280,7 +283,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:59
+
+## Accessors
+
+### externalInformation
+
+• `get` **externalInformation**(): [`ExposedFabricInformation`](../modules/exports_fabric.md#exposedfabricinformation)
+
+#### Returns
+
+[`ExposedFabricInformation`](../modules/exports_fabric.md#exposedfabricinformation)
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:85
 
 ## Methods
 
@@ -292,7 +309,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 | Name | Type |
 | :------ | :------ |
-| `callback` | () => `void` |
+| `callback` | () => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
 
 #### Returns
 
@@ -300,7 +317,7 @@ packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:65
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:74
 
 ___
 
@@ -320,7 +337,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:63
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:72
 
 ___
 
@@ -332,7 +349,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `callback` | () => `void` |
+| `callback` | () => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
 
 #### Returns
 
@@ -340,13 +357,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:66
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:75
 
 ___
 
 ### deleteScopedClusterData
 
-▸ **deleteScopedClusterData**(`cluster`): `void`
+▸ **deleteScopedClusterData**(`cluster`): `undefined` \| [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Parameters
 
@@ -356,17 +373,17 @@ ___
 
 #### Returns
 
-`void`
+`undefined` \| [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:74
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:83
 
 ___
 
 ### deleteScopedClusterDataValue
 
-▸ **deleteScopedClusterDataValue**(`cluster`, `clusterDataKey`): `void`
+▸ **deleteScopedClusterDataValue**(`cluster`, `clusterDataKey`): [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Parameters
 
@@ -377,11 +394,11 @@ ___
 
 #### Returns
 
-`void`
+[`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:72
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:81
 
 ___
 
@@ -402,30 +419,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:62
-
-___
-
-### getExternalInformation
-
-▸ **getExternalInformation**(): `Object`
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `fabricId` | [`FabricId`](../modules/exports_datatype.md#fabricid) |
-| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
-| `label` | `string` |
-| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
-| `rootNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
-| `rootVendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
-
-#### Defined in
-
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:76
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:71
 
 ___
 
@@ -439,7 +433,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:58
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:67
 
 ___
 
@@ -459,7 +453,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:75
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:84
 
 ___
 
@@ -486,7 +480,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:70
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:79
 
 ___
 
@@ -507,7 +501,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:73
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:82
 
 ___
 
@@ -528,21 +522,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:61
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:70
 
 ___
 
 ### persist
 
-▸ **persist**(): `void`
+▸ **persist**(`isUpdate?`): `undefined` \| [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `isUpdate?` | `boolean` |
 
 #### Returns
 
-`void`
+`undefined` \| [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:69
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:78
 
 ___
 
@@ -562,7 +562,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:68
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:77
 
 ___
 
@@ -582,13 +582,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:64
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:73
 
 ___
 
 ### setLabel
 
-▸ **setLabel**(`label`): `void`
+▸ **setLabel**(`label`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -598,11 +598,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:57
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:66
 
 ___
 
@@ -614,7 +614,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `callback` | () => `void` |
+| `callback` | (`isUpdate?`: `boolean`) => [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\> |
 
 #### Returns
 
@@ -622,13 +622,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:67
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:76
 
 ___
 
 ### setScopedClusterDataValue
 
-▸ **setScopedClusterDataValue**\<`T`\>(`cluster`, `clusterDataKey`, `value`): `void`
+▸ **setScopedClusterDataValue**\<`T`\>(`cluster`, `clusterDataKey`, `value`): `undefined` \| [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Type parameters
 
@@ -646,11 +646,11 @@ ___
 
 #### Returns
 
-`void`
+`undefined` \| [`MaybePromise`](../modules/util_export.md#maybepromise)\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:71
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:80
 
 ___
 
@@ -670,7 +670,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:59
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:68
 
 ___
 
@@ -684,7 +684,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:55
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:64
 
 ___
 
@@ -705,7 +705,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:60
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:69
 
 ___
 
@@ -725,4 +725,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:56
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:65

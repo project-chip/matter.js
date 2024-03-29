@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:97](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L97)
+[packages/matter.js/src/codec/MessageCodec.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L96)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:149](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L149)
+[packages/matter.js/src/codec/MessageCodec.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L148)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L115)
+[packages/matter.js/src/codec/MessageCodec.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L114)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:193](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L193)
+[packages/matter.js/src/codec/MessageCodec.ts:192](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L192)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:142](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L142)
+[packages/matter.js/src/codec/MessageCodec.ts:141](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L141)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:218](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L218)
+[packages/matter.js/src/codec/MessageCodec.ts:217](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L217)
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:131](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L131)
+[packages/matter.js/src/codec/MessageCodec.ts:130](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L130)
 
 ___
 
@@ -190,13 +190,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:262](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L262)
+[packages/matter.js/src/codec/MessageCodec.ts:261](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L261)
 
 ___
 
 ### messageDiagnostics
 
-▸ **messageDiagnostics**(`«destructured»`, `isDuplicate?`): [`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)
+▸ **messageDiagnostics**(`«destructured»`, `isDuplicate?`): `Record`\<`string`, `unknown`\> & [`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)
 
 #### Parameters
 
@@ -207,8 +207,8 @@ ___
 
 #### Returns
 
-[`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)
+`Record`\<`string`, `unknown`\> & [`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:244](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/codec/MessageCodec.ts#L244)
+[packages/matter.js/src/codec/MessageCodec.ts:243](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/codec/MessageCodec.ts#L243)

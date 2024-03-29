@@ -37,7 +37,7 @@ Actor represents an actor credited in video media content; for example, “Gaby 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:261](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L261)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:306](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L306)
 
 ___
 
@@ -49,7 +49,7 @@ Channel represents the identifying data for a television channel; for example, "
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:266](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L266)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:311](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L311)
 
 ___
 
@@ -61,7 +61,7 @@ A character represented in video media content; for example, “Snow White”
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:271](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L271)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:316](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L316)
 
 ___
 
@@ -73,7 +73,7 @@ A director of the video media content; for example, “Spike Lee”
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:276](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L276)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:321](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L321)
 
 ___
 
@@ -87,7 +87,7 @@ entity.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:283](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L283)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:328](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L328)
 
 ___
 
@@ -103,7 +103,7 @@ of the MOVIE MediaType, rather than attempting to match to a single title.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:292](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L292)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:337](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L337)
 
 ___
 
@@ -115,7 +115,7 @@ Genre represents the genre of video media content such as action, drama or comed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:297](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L297)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:342](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L342)
 
 ___
 
@@ -127,7 +127,7 @@ League represents the categorical information for a sporting league; for example
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:302](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L302)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:347](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L347)
 
 ___
 
@@ -139,7 +139,7 @@ Popularity indicates whether the user asks for popular content.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:307](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L307)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:352](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L352)
 
 ___
 
@@ -151,7 +151,7 @@ The provider (MSP) the user wants this media to be played on; for example, "Netf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:312](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L312)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:357](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L357)
 
 ___
 
@@ -163,7 +163,7 @@ Sport represents the categorical information of a sport; for example, football
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:317](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L317)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:362](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L362)
 
 ___
 
@@ -176,7 +176,7 @@ Washington Huskies"
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:323](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L323)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:368](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L368)
 
 ___
 
@@ -189,7 +189,7 @@ The type of content requested. Supported types are "Movie", "MovieSeries", "TVSe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:329](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L329)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:374](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L374)
 
 ___
 
@@ -202,4 +202,4 @@ Sea".
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:335](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L335)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:380](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L380)

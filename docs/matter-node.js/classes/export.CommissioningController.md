@@ -24,6 +24,7 @@ Controller class to commission and connect multiple nodes into one fabric.
 - [controllerInstance](export.CommissioningController.md#controllerinstance)
 - [enhanceDeviceDetailsFromCache](export.CommissioningController.md#enhancedevicedetailsfromcache)
 - [enhanceDeviceDetailsFromRemote](export.CommissioningController.md#enhancedevicedetailsfromremote)
+- [environment](export.CommissioningController.md#environment)
 - [initializeController](export.CommissioningController.md#initializecontroller)
 - [ipv4Disabled](export.CommissioningController.md#ipv4disabled)
 - [listeningAddressIpv4](export.CommissioningController.md#listeningaddressipv4)
@@ -89,7 +90,7 @@ Creates a new CommissioningController instance
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:113
+packages/matter.js/dist/esm/CommissioningController.d.ts:130
 
 ## Properties
 
@@ -99,7 +100,7 @@ packages/matter.js/dist/esm/CommissioningController.d.ts:113
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:106
+packages/matter.js/dist/esm/CommissioningController.d.ts:123
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:105
+packages/matter.js/dist/esm/CommissioningController.d.ts:122
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:142
+packages/matter.js/dist/esm/CommissioningController.d.ts:160
 
 ___
 
@@ -129,7 +130,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:143
+packages/matter.js/dist/esm/CommissioningController.d.ts:161
+
+___
+
+### environment
+
+• `Private` `Optional` **environment**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:119
 
 ___
 
@@ -141,7 +152,7 @@ Internal method to initialize a MatterController instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:121
+packages/matter.js/dist/esm/CommissioningController.d.ts:139
 
 ___
 
@@ -151,7 +162,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:100
+packages/matter.js/dist/esm/CommissioningController.d.ts:116
 
 ___
 
@@ -161,7 +172,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:101
+packages/matter.js/dist/esm/CommissioningController.d.ts:117
 
 ___
 
@@ -171,7 +182,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:102
+packages/matter.js/dist/esm/CommissioningController.d.ts:118
 
 ___
 
@@ -181,7 +192,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:104
+packages/matter.js/dist/esm/CommissioningController.d.ts:121
 
 ___
 
@@ -191,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:98
+packages/matter.js/dist/esm/CommissioningController.d.ts:114
 
 ___
 
@@ -201,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:107
+packages/matter.js/dist/esm/CommissioningController.d.ts:124
 
 ___
 
@@ -211,7 +222,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:99
+packages/matter.js/dist/esm/CommissioningController.d.ts:115
 
 ___
 
@@ -221,7 +232,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:103
+packages/matter.js/dist/esm/CommissioningController.d.ts:120
 
 ## Accessors
 
@@ -235,7 +246,7 @@ packages/matter.js/dist/esm/CommissioningController.d.ts:103
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:114
+packages/matter.js/dist/esm/CommissioningController.d.ts:131
 
 ## Methods
 
@@ -255,7 +266,7 @@ packages/matter.js/dist/esm/CommissioningController.d.ts:114
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:119
+packages/matter.js/dist/esm/CommissioningController.d.ts:137
 
 ___
 
@@ -269,12 +280,13 @@ ___
 
 | Name | Type |
 | :------ | :------ |
+| `environment` | `undefined` \| [`Environment`](environment_export._internal_.Environment.md) |
 | `mdnsScanner` | [`MdnsScanner`](exports_mdns.MdnsScanner.md) |
-| `storage` | [`StorageContext`](storage_export.StorageContext.md) |
+| `storage` | `undefined` \| [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:115
+packages/matter.js/dist/esm/CommissioningController.d.ts:132
 
 ___
 
@@ -295,7 +307,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:191
+packages/matter.js/dist/esm/CommissioningController.d.ts:209
 
 ___
 
@@ -315,7 +327,7 @@ Disconnects all connected nodes and Closes the network connections and other res
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:186
+packages/matter.js/dist/esm/CommissioningController.d.ts:204
 
 ___
 
@@ -338,7 +350,7 @@ paired node on success.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:126
+packages/matter.js/dist/esm/CommissioningController.d.ts:144
 
 ___
 
@@ -361,7 +373,7 @@ After connection the endpoint data of the device is analyzed and an object struc
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:148
+packages/matter.js/dist/esm/CommissioningController.d.ts:166
 
 ___
 
@@ -385,7 +397,7 @@ After connection the endpoint data of the device is analyzed and an object struc
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:141
+packages/matter.js/dist/esm/CommissioningController.d.ts:159
 
 ___
 
@@ -408,7 +420,7 @@ not be used directly. See the PairedNode class for the public API.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:173
+packages/matter.js/dist/esm/CommissioningController.d.ts:191
 
 ___
 
@@ -428,7 +440,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:136
+packages/matter.js/dist/esm/CommissioningController.d.ts:154
 
 ___
 
@@ -451,23 +463,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:192
+packages/matter.js/dist/esm/CommissioningController.d.ts:210
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/exports_fabric.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 Returns active session information for all connected nodes.
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/exports_fabric.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:195
+packages/matter.js/dist/esm/CommissioningController.d.ts:213
 
 ___
 
@@ -483,7 +495,7 @@ Returns an array with the Node Ids for all commissioned nodes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:177
+packages/matter.js/dist/esm/CommissioningController.d.ts:195
 
 ___
 
@@ -497,7 +509,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:178
+packages/matter.js/dist/esm/CommissioningController.d.ts:196
 
 ___
 
@@ -519,7 +531,7 @@ Returns the PairedNode instance for a given node id, if this node is connected.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:175
+packages/matter.js/dist/esm/CommissioningController.d.ts:193
 
 ___
 
@@ -537,7 +549,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:187
+packages/matter.js/dist/esm/CommissioningController.d.ts:205
 
 ___
 
@@ -561,7 +573,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:188
+packages/matter.js/dist/esm/CommissioningController.d.ts:206
 
 ___
 
@@ -577,7 +589,7 @@ Returns true if t least one node is commissioned/paired with this controller ins
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:168
+packages/matter.js/dist/esm/CommissioningController.d.ts:186
 
 ___
 
@@ -599,7 +611,7 @@ Check if a given node id is commissioned on this controller.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:128
+packages/matter.js/dist/esm/CommissioningController.d.ts:146
 
 ___
 
@@ -625,21 +637,21 @@ use this in case of an error.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:135
+packages/matter.js/dist/esm/CommissioningController.d.ts:153
 
 ___
 
 ### resetStorage
 
-▸ **resetStorage**(): `void`
+▸ **resetStorage**(): `Promise`\<`void`\>
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:193
+packages/matter.js/dist/esm/CommissioningController.d.ts:211
 
 ___
 
@@ -665,7 +677,7 @@ Set the MDNS Broadcaster instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:160
+packages/matter.js/dist/esm/CommissioningController.d.ts:178
 
 ___
 
@@ -691,7 +703,7 @@ Set the MDNS Scanner instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:154
+packages/matter.js/dist/esm/CommissioningController.d.ts:172
 
 ___
 
@@ -705,7 +717,7 @@ Set the Storage instance. Should be only used internally
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `storage` | [`StorageContext`](storage_export.StorageContext.md) | storage context to use |
+| `storage` | [`StorageContext`](storage_export.StorageContext.md)\<[`SyncStorage`](storage_export.SyncStorage.md)\> | storage context to use |
 
 #### Returns
 
@@ -713,7 +725,7 @@ Set the Storage instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:166
+packages/matter.js/dist/esm/CommissioningController.d.ts:184
 
 ___
 
@@ -733,4 +745,4 @@ Initialize the controller and connect to all commissioned nodes if autoConnect i
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:190
+packages/matter.js/dist/esm/CommissioningController.d.ts:208

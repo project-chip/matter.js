@@ -79,7 +79,7 @@ the CommissioningController on commissioning or when connecting.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:89
+packages/matter.js/dist/esm/device/PairedNode.d.ts:90
 
 ## Properties
 
@@ -89,7 +89,7 @@ packages/matter.js/dist/esm/device/PairedNode.d.ts:89
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:80
+packages/matter.js/dist/esm/device/PairedNode.d.ts:81
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:87
+packages/matter.js/dist/esm/device/PairedNode.d.ts:88
 
 ___
 
@@ -123,7 +123,7 @@ InteractionClient to use for the device
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:137
+packages/matter.js/dist/esm/device/PairedNode.d.ts:138
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:83
+packages/matter.js/dist/esm/device/PairedNode.d.ts:84
 
 ___
 
@@ -145,7 +145,7 @@ Ensure that the node is connected by creating a new InteractionClient if needed.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:98
+packages/matter.js/dist/esm/device/PairedNode.d.ts:99
 
 ___
 
@@ -157,7 +157,7 @@ Handles a node shutDown event (if supported by the node and received).
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:123
+packages/matter.js/dist/esm/device/PairedNode.d.ts:124
 
 ___
 
@@ -169,7 +169,7 @@ Initialize the node after the InteractionClient was created and to subscribe att
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:102
+packages/matter.js/dist/esm/device/PairedNode.d.ts:103
 
 ___
 
@@ -181,7 +181,7 @@ Reads all data from the device and create a device object structure out of it.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:126
+packages/matter.js/dist/esm/device/PairedNode.d.ts:127
 
 ___
 
@@ -191,7 +191,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:84
+packages/matter.js/dist/esm/device/PairedNode.d.ts:85
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:79
+packages/matter.js/dist/esm/device/PairedNode.d.ts:80
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:81
+packages/matter.js/dist/esm/device/PairedNode.d.ts:82
 
 ___
 
@@ -221,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:85
+packages/matter.js/dist/esm/device/PairedNode.d.ts:86
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:82
+packages/matter.js/dist/esm/device/PairedNode.d.ts:83
 
 ___
 
@@ -241,7 +241,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:91
+packages/matter.js/dist/esm/device/PairedNode.d.ts:92
 
 ___
 
@@ -253,7 +253,7 @@ Bring the endpoints in a structure based on their partsList attribute.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:128
+packages/matter.js/dist/esm/device/PairedNode.d.ts:129
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:86
+packages/matter.js/dist/esm/device/PairedNode.d.ts:87
 
 ## Accessors
 
@@ -277,7 +277,7 @@ packages/matter.js/dist/esm/device/PairedNode.d.ts:86
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:90
+packages/matter.js/dist/esm/device/PairedNode.d.ts:91
 
 ## Methods
 
@@ -291,7 +291,7 @@ packages/matter.js/dist/esm/device/PairedNode.d.ts:90
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:153
+packages/matter.js/dist/esm/device/PairedNode.d.ts:154
 
 ___
 
@@ -307,7 +307,7 @@ De-Commission (unpair) the device from this controller by removing the fabric fr
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:144
+packages/matter.js/dist/esm/device/PairedNode.d.ts:145
 
 ___
 
@@ -321,7 +321,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:152
+packages/matter.js/dist/esm/device/PairedNode.d.ts:153
 
 ___
 
@@ -354,7 +354,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:179
+packages/matter.js/dist/esm/device/PairedNode.d.ts:180
 
 ___
 
@@ -387,7 +387,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:172
+packages/matter.js/dist/esm/device/PairedNode.d.ts:173
 
 ___
 
@@ -409,23 +409,23 @@ Returns the device/endpoint with the given endpoint ID.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:141
+packages/matter.js/dist/esm/device/PairedNode.d.ts:142
 
 ___
 
 ### getDevices
 
-▸ **getDevices**(): [`Endpoint`](exports_device.Endpoint.md)[]
+▸ **getDevices**(): [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)[]
 
 Returns the functional devices/endpoints (those below the Root Endpoint) known for this node.
 
 #### Returns
 
-[`Endpoint`](exports_device.Endpoint.md)[]
+[`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:139
+packages/matter.js/dist/esm/device/PairedNode.d.ts:140
 
 ___
 
@@ -442,7 +442,7 @@ ClusterClients of the Devices of the node should be used instead.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:107
+packages/matter.js/dist/esm/device/PairedNode.d.ts:108
 
 ___
 
@@ -474,7 +474,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:165
+packages/matter.js/dist/esm/device/PairedNode.d.ts:166
 
 ___
 
@@ -506,7 +506,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:159
+packages/matter.js/dist/esm/device/PairedNode.d.ts:160
 
 ___
 
@@ -520,7 +520,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:142
+packages/matter.js/dist/esm/device/PairedNode.d.ts:143
 
 ___
 
@@ -542,7 +542,7 @@ Method to log the structure of this node with all endpoint and clusters.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:109
+packages/matter.js/dist/esm/device/PairedNode.d.ts:110
 
 ___
 
@@ -564,7 +564,7 @@ Opens a Basic Commissioning Window (uses the original Passcode printed on the de
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:146
+packages/matter.js/dist/esm/device/PairedNode.d.ts:147
 
 ___
 
@@ -586,7 +586,7 @@ Opens an Enhanced Commissioning Window (uses a generated random Passcode) with t
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:148
+packages/matter.js/dist/esm/device/PairedNode.d.ts:149
 
 ___
 
@@ -603,7 +603,7 @@ was closed or the device wen offline and was detected as being online again.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:96
+packages/matter.js/dist/esm/device/PairedNode.d.ts:97
 
 ___
 
@@ -629,7 +629,7 @@ false this is executed automatically. Alternatively you can manually subscribe b
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:114
+packages/matter.js/dist/esm/device/PairedNode.d.ts:115
 
 ___
 
@@ -643,7 +643,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:124
+packages/matter.js/dist/esm/device/PairedNode.d.ts:125
 
 ___
 
@@ -667,4 +667,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:88
+packages/matter.js/dist/esm/device/PairedNode.d.ts:89

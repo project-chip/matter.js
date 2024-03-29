@@ -37,7 +37,7 @@ Trying to AddNOC instead of UpdateNOC against an existing Fabric.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:416](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L416)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:491](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L491)
 
 ___
 
@@ -49,7 +49,7 @@ Invalid CaseAdminSubject field for an AddNOC command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:411](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L411)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:486](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L486)
 
 ___
 
@@ -61,7 +61,7 @@ FabricIndex argument is invalid.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:426](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L426)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:501](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L501)
 
 ___
 
@@ -73,7 +73,7 @@ Any other validation error in NOC chain
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:396](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L396)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:471](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L471)
 
 ___
 
@@ -85,7 +85,7 @@ The Node Operational ID in the NOC is not formatted correctly.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:391](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L391)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:466](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L466)
 
 ___
 
@@ -97,7 +97,7 @@ Public Key in the NOC does not match the public key in the NOCSR
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:386](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L386)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:461](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L461)
 
 ___
 
@@ -109,7 +109,7 @@ Label already exists on another Fabric.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:421](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L421)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:496](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L496)
 
 ___
 
@@ -121,7 +121,7 @@ No record of prior CSR for which this NOC could match
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:401](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L401)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:476](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L476)
 
 ___
 
@@ -133,7 +133,7 @@ OK, no error
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:381](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L381)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:456](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L456)
 
 ___
 
@@ -145,4 +145,4 @@ NOCs table full, cannot add another one
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:406](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L406)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:481](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L481)

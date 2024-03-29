@@ -30,7 +30,7 @@ Cooling and Fixed Speed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:206
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:384
 
 ___
 
@@ -42,7 +42,7 @@ Cooling and Inverter
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:214
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:392
 
 ___
 
@@ -54,7 +54,7 @@ Heat Pump and Fixed Speed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:210
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:388
 
 ___
 
@@ -66,7 +66,7 @@ Heat Pump and Inverter
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:218
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:396
 
 ___
 
@@ -78,4 +78,4 @@ Unknown AC Type
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:202
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:380

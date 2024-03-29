@@ -26,7 +26,7 @@ Certificate authenticated session
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:90](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:93](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L93)
 
 ___
 
@@ -38,7 +38,7 @@ Group authenticated session
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:95](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L95)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:98](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L98)
 
 ___
 
@@ -50,4 +50,4 @@ Passcode authenticated session
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:85](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L88)

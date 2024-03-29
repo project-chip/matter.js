@@ -17,13 +17,18 @@
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/VendorId"](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_VendorId_.md)
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvVoid_.md)
 - ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md)
+- [AsyncConstruction](exports_cluster._internal_.AsyncConstruction.md)
+- [DeviceCertification](exports_cluster._internal_.DeviceCertification.md)
 
 ### Classes
 
+- [DeviceCertification](../classes/exports_cluster._internal_.DeviceCertification-1.md)
 - [MatterDevice](../classes/exports_cluster._internal_.MatterDevice.md)
 
 ### Interfaces
 
+- [AsyncConstructable](../interfaces/exports_cluster._internal_.AsyncConstructable.md)
+- [AsyncConstruction](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)
 - [AttributeOptions](../interfaces/exports_cluster._internal_.AttributeOptions.md)
 - [CachedAttributeInfo](../interfaces/exports_cluster._internal_.CachedAttributeInfo.md)
 - [CachedCommandInfo](../interfaces/exports_cluster._internal_.CachedCommandInfo.md)
@@ -32,7 +37,10 @@
 - [ConditionalAttributeOptions](../interfaces/exports_cluster._internal_.ConditionalAttributeOptions.md)
 - [ConditionalCommandOptions](../interfaces/exports_cluster._internal_.ConditionalCommandOptions.md)
 - [ConditionalEventOptions](../interfaces/exports_cluster._internal_.ConditionalEventOptions.md)
+- [Configuration](../interfaces/exports_cluster._internal_.Configuration.md)
+- [EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md)
 - [EventOptions](../interfaces/exports_cluster._internal_.EventOptions.md)
+- [ProductDescription](../interfaces/exports_cluster._internal_.ProductDescription.md)
 - [scenesTableEntry](../interfaces/exports_cluster._internal_.scenesTableEntry.md)
 
 ### Type Aliases
@@ -70,6 +78,7 @@
 
 ### Functions
 
+- [AsyncConstruction](exports_cluster._internal_.md#asyncconstruction)
 - [ClusterExtend](exports_cluster._internal_.md#clusterextend-1)
 - [MakeAttributesMandatory](exports_cluster._internal_.md#makeattributesmandatory-1)
 - [UseOptionalAttributes](exports_cluster._internal_.md#useoptionalattributes-1)
@@ -88,7 +97,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:51
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:52
 
 ___
 
@@ -106,7 +115,7 @@ Handlers to process cluster commands
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:87
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:88
 
 ___
 
@@ -122,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:59
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:60
 
 ___
 
@@ -138,7 +147,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:66
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:67
 
 ___
 
@@ -315,7 +324,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:81
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:82
 
 ___
 
@@ -363,7 +372,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:118
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:119
 
 ___
 
@@ -379,7 +388,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:104
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:105
 
 ___
 
@@ -396,9 +405,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:105
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:106
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:109
 
 ___
 
@@ -416,7 +425,7 @@ Cluster attributes accessible on the cluster server
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:27
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:28
 
 ___
 
@@ -432,7 +441,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:45
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:46
 
 ___
 
@@ -448,7 +457,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:101
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:102
 
 ___
 
@@ -464,7 +473,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:30
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:31
 
 ___
 
@@ -480,7 +489,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:48
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:49
 
 ___
 
@@ -496,7 +505,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:119
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:120
 
 ___
 
@@ -512,7 +521,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:126
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:127
 
 ___
 
@@ -528,7 +537,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:131
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:132
 
 ___
 
@@ -544,7 +553,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:141
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:142
 
 ___
 
@@ -561,9 +570,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:109
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:110
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:111
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:112
 
 ___
 
@@ -582,6 +591,34 @@ ___
 packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:50
 
 ## Functions
+
+### AsyncConstruction
+
+▸ **AsyncConstruction**\<`T`\>(`subject`, `initializer?`, `options?`): [`AsyncConstruction`](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)\<`T`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`AsyncConstructable`](../interfaces/exports_cluster._internal_.AsyncConstructable.md)\<`any`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `subject` | `T` |
+| `initializer?` | () => [`MaybePromise`](util_export.md#maybepromise) |
+| `options?` | [`Options`](../interfaces/exports_cluster._internal_.AsyncConstruction.Options.md) |
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)\<`T`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/AsyncConstruction.d.ts:115
+
+___
 
 ### ClusterExtend
 
@@ -642,7 +679,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:109
 
 ___
 
@@ -672,4 +709,4 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:111
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:112

@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [#private](internal_.MatterController.md##private)
 - [adminVendorId](internal_.MatterController.md#adminvendorid)
 - [bleScanner](internal_.MatterController.md#blescanner)
 - [caseClient](internal_.MatterController.md#caseclient)
@@ -20,27 +21,29 @@
 - [commissionDevice](internal_.MatterController.md#commissiondevice)
 - [commissionedNodes](internal_.MatterController.md#commissionednodes)
 - [connectOrDiscoverNode](internal_.MatterController.md#connectordiscovernode)
-- [controllerStorage](internal_.MatterController.md#controllerstorage)
 - [exchangeManager](internal_.MatterController.md#exchangemanager)
 - [fabric](internal_.MatterController.md#fabric)
+- [fabricStorage](internal_.MatterController.md#fabricstorage)
 - [getLastOperationalAddress](internal_.MatterController.md#getlastoperationaladdress)
 - [initializePaseSecureChannel](internal_.MatterController.md#initializepasesecurechannel)
 - [mdnsScanner](internal_.MatterController.md#mdnsscanner)
 - [netInterfaceBle](internal_.MatterController.md#netinterfaceble)
 - [netInterfaceIpv4](internal_.MatterController.md#netinterfaceipv4)
 - [netInterfaceIpv6](internal_.MatterController.md#netinterfaceipv6)
+- [nodesStore](internal_.MatterController.md#nodesstore)
 - [pair](internal_.MatterController.md#pair)
 - [paseClient](internal_.MatterController.md#paseclient)
 - [reconnectLastKnownAddress](internal_.MatterController.md#reconnectlastknownaddress)
 - [resume](internal_.MatterController.md#resume)
 - [sessionClosedCallback](internal_.MatterController.md#sessionclosedcallback)
 - [sessionManager](internal_.MatterController.md#sessionmanager)
+- [sessionStorage](internal_.MatterController.md#sessionstorage)
 - [setOperationalDeviceData](internal_.MatterController.md#setoperationaldevicedata)
-- [storage](internal_.MatterController.md#storage)
 - [storeCommissionedNodes](internal_.MatterController.md#storecommissionednodes)
 
 ### Accessors
 
+- [construction](internal_.MatterController.md#construction)
 - [nodeId](internal_.MatterController.md#nodeid)
 
 ### Methods
@@ -51,7 +54,6 @@
 - [collectScanners](internal_.MatterController.md#collectscanners)
 - [commission](internal_.MatterController.md#commission)
 - [connect](internal_.MatterController.md#connect)
-- [createSecureSession](internal_.MatterController.md#createsecuresession)
 - [disconnect](internal_.MatterController.md#disconnect)
 - [enhanceCommissionedNodeDetails](internal_.MatterController.md#enhancecommissionednodedetails)
 - [findResumptionRecordByNodeId](internal_.MatterController.md#findresumptionrecordbynodeid)
@@ -69,18 +71,20 @@
 
 ### constructor
 
-• **new MatterController**(`mdnsScanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `certificateManager`, `fabric`, `storage`, `adminVendorId`, `sessionClosedCallback?`): [`MatterController`](internal_.MatterController.md)
+• **new MatterController**(`sessionStorage`, `fabricStorage`, `nodesStore`, `mdnsScanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `certificateManager`, `fabric`, `adminVendorId`, `sessionClosedCallback?`): [`MatterController`](internal_.MatterController.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `sessionStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `fabricStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `nodesStore` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
 | `mdnsScanner` | [`MdnsScanner`](internal_.MdnsScanner.md) |
 | `netInterfaceIpv4` | `undefined` \| [`NetInterface`](../interfaces/internal_.NetInterface.md) |
 | `netInterfaceIpv6` | [`NetInterface`](../interfaces/internal_.NetInterface.md) |
 | `certificateManager` | [`RootCertificateManager`](internal_.RootCertificateManager.md) |
 | `fabric` | [`Fabric`](internal_.Fabric.md) |
-| `storage` | [`StorageContext`](internal_.StorageContext.md) |
 | `adminVendorId` | [`VendorId`](../modules/internal_.md#vendorid) |
 | `sessionClosedCallback?` | (`peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid)) => `void` |
 
@@ -90,9 +94,19 @@
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:71
+matter.js/dist/esm/MatterController.d.ts:74
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:53
+
+___
 
 ### adminVendorId
 
@@ -100,7 +114,7 @@ matter.js/dist/esm/MatterController.d.ts:71
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:59
+matter.js/dist/esm/MatterController.d.ts:62
 
 ___
 
@@ -110,7 +124,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:69
+matter.js/dist/esm/MatterController.d.ts:71
 
 ___
 
@@ -120,7 +134,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:66
+matter.js/dist/esm/MatterController.d.ts:69
 
 ___
 
@@ -130,7 +144,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:56
+matter.js/dist/esm/MatterController.d.ts:60
 
 ___
 
@@ -140,7 +154,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:63
+matter.js/dist/esm/MatterController.d.ts:66
 
 ___
 
@@ -153,7 +167,7 @@ success.
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:95
+matter.js/dist/esm/MatterController.d.ts:98
 
 ___
 
@@ -163,7 +177,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:70
+matter.js/dist/esm/MatterController.d.ts:72
 
 ___
 
@@ -173,17 +187,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:97
-
-___
-
-### controllerStorage
-
-• `Private` `Readonly` **controllerStorage**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterController.d.ts:67
+matter.js/dist/esm/MatterController.d.ts:100
 
 ___
 
@@ -193,7 +197,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:64
+matter.js/dist/esm/MatterController.d.ts:67
 
 ___
 
@@ -203,7 +207,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:57
+matter.js/dist/esm/MatterController.d.ts:61
+
+___
+
+### fabricStorage
+
+• `Readonly` **fabricStorage**: [`StorageContext`](internal_.StorageContext.md)\<`any`\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:55
 
 ___
 
@@ -213,7 +227,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:120
+matter.js/dist/esm/MatterController.d.ts:123
 
 ___
 
@@ -227,7 +241,7 @@ is wrong.
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:90
+matter.js/dist/esm/MatterController.d.ts:93
 
 ___
 
@@ -237,7 +251,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:53
+matter.js/dist/esm/MatterController.d.ts:57
 
 ___
 
@@ -247,7 +261,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:68
+matter.js/dist/esm/MatterController.d.ts:70
 
 ___
 
@@ -257,7 +271,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:54
+matter.js/dist/esm/MatterController.d.ts:58
 
 ___
 
@@ -267,7 +281,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:55
+matter.js/dist/esm/MatterController.d.ts:59
+
+___
+
+### nodesStore
+
+• `Readonly` **nodesStore**: [`StorageContext`](internal_.StorageContext.md)\<`any`\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:56
 
 ___
 
@@ -279,7 +303,7 @@ Pair with an operational device (already commissioned) and establish a CASE sess
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:106
+matter.js/dist/esm/MatterController.d.ts:109
 
 ___
 
@@ -289,7 +313,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:65
+matter.js/dist/esm/MatterController.d.ts:68
 
 ___
 
@@ -299,7 +323,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:96
+matter.js/dist/esm/MatterController.d.ts:99
 
 ___
 
@@ -314,7 +338,7 @@ It returns the operational MessageChannel on success.
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:104
+matter.js/dist/esm/MatterController.d.ts:107
 
 ___
 
@@ -324,17 +348,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:60
+matter.js/dist/esm/MatterController.d.ts:63
 
 ___
 
 ### sessionManager
 
-• `Private` `Readonly` **sessionManager**: `any`
+• `Readonly` **sessionManager**: [`SessionManager`](internal_.SessionManager.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:62
+matter.js/dist/esm/MatterController.d.ts:65
+
+___
+
+### sessionStorage
+
+• `Readonly` **sessionStorage**: [`StorageContext`](internal_.StorageContext.md)\<`any`\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:54
 
 ___
 
@@ -344,17 +378,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:116
-
-___
-
-### storage
-
-• `Private` `Readonly` **storage**: `any`
-
-#### Defined in
-
-matter.js/dist/esm/MatterController.d.ts:58
+matter.js/dist/esm/MatterController.d.ts:119
 
 ___
 
@@ -364,9 +388,23 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:121
+matter.js/dist/esm/MatterController.d.ts:124
 
 ## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/internal_.AsyncConstruction-1.md)\<[`MatterController`](internal_.MatterController.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/internal_.AsyncConstruction-1.md)\<[`MatterController`](internal_.MatterController.md)\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:73
+
+___
 
 ### nodeId
 
@@ -378,7 +416,7 @@ matter.js/dist/esm/MatterController.d.ts:121
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:72
+matter.js/dist/esm/MatterController.d.ts:75
 
 ## Methods
 
@@ -398,7 +436,7 @@ matter.js/dist/esm/MatterController.d.ts:72
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:73
+matter.js/dist/esm/MatterController.d.ts:76
 
 ___
 
@@ -412,7 +450,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:142
+matter.js/dist/esm/MatterController.d.ts:134
 
 ___
 
@@ -426,7 +464,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:143
+matter.js/dist/esm/MatterController.d.ts:135
 
 ___
 
@@ -446,7 +484,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:74
+matter.js/dist/esm/MatterController.d.ts:77
 
 ___
 
@@ -472,7 +510,7 @@ request or the passode did not match to any discovered device/address.
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:82
+matter.js/dist/esm/MatterController.d.ts:85
 
 ___
 
@@ -497,36 +535,7 @@ Returns a InteractionClient on success.
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:126
-
-___
-
-### createSecureSession
-
-▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](internal_.SecureSession.md)\<[`MatterController`](internal_.MatterController.md)\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `args` | `Object` |
-| `args.fabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
-| `args.isInitiator` | `boolean` |
-| `args.isResumption` | `boolean` |
-| `args.peerNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
-| `args.peerSessionId` | `number` |
-| `args.salt` | `Uint8Array` |
-| `args.sessionId` | `number` |
-| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/internal_.SessionParameters.md)\> |
-| `args.sharedSecret` | `Uint8Array` |
-
-#### Returns
-
-`Promise`\<[`SecureSession`](internal_.SecureSession.md)\<[`MatterController`](internal_.MatterController.md)\>\>
-
-#### Defined in
-
-matter.js/dist/esm/MatterController.d.ts:128
+matter.js/dist/esm/MatterController.d.ts:129
 
 ___
 
@@ -546,13 +555,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:83
+matter.js/dist/esm/MatterController.d.ts:86
 
 ___
 
 ### enhanceCommissionedNodeDetails
 
-▸ **enhanceCommissionedNodeDetails**(`nodeId`, `data`): `void`
+▸ **enhanceCommissionedNodeDetails**(`nodeId`, `data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -564,11 +573,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:117
+matter.js/dist/esm/MatterController.d.ts:120
 
 ___
 
@@ -588,21 +597,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:140
+matter.js/dist/esm/MatterController.d.ts:132
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/internal_.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/internal_.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:144
+matter.js/dist/esm/MatterController.d.ts:136
 
 ___
 
@@ -616,7 +625,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:108
+matter.js/dist/esm/MatterController.d.ts:111
 
 ___
 
@@ -630,7 +639,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:109
+matter.js/dist/esm/MatterController.d.ts:112
 
 ___
 
@@ -644,7 +653,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:127
+matter.js/dist/esm/MatterController.d.ts:130
 
 ___
 
@@ -664,7 +673,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:139
+matter.js/dist/esm/MatterController.d.ts:131
 
 ___
 
@@ -678,7 +687,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:107
+matter.js/dist/esm/MatterController.d.ts:110
 
 ___
 
@@ -698,13 +707,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:84
+matter.js/dist/esm/MatterController.d.ts:87
 
 ___
 
 ### saveResumptionRecord
 
-▸ **saveResumptionRecord**(`resumptionRecord`): `void`
+▸ **saveResumptionRecord**(`resumptionRecord`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -714,26 +723,29 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:141
+matter.js/dist/esm/MatterController.d.ts:133
 
 ___
 
 ### create
 
-▸ **create**(`scanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `storage`, `sessionClosedCallback?`, `adminVendorId?`, `adminFabricId?`, `adminFabricIndex?`, `caseAuthenticatedTags?`): `Promise`\<[`MatterController`](internal_.MatterController.md)\>
+▸ **create**(`sessionStorage`, `rootCertificateStorage`, `fabricStorage`, `nodesStorage`, `scanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `sessionClosedCallback?`, `adminVendorId?`, `adminFabricId?`, `adminFabricIndex?`, `caseAuthenticatedTags?`): `Promise`\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `sessionStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `rootCertificateStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `fabricStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
+| `nodesStorage` | [`StorageContext`](internal_.StorageContext.md)\<`any`\> |
 | `scanner` | [`MdnsScanner`](internal_.MdnsScanner.md) |
 | `netInterfaceIpv4` | `undefined` \| [`NetInterface`](../interfaces/internal_.NetInterface.md) |
 | `netInterfaceIpv6` | [`NetInterface`](../interfaces/internal_.NetInterface.md) |
-| `storage` | [`StorageContext`](internal_.StorageContext.md) |
 | `sessionClosedCallback?` | (`peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid)) => `void` |
 | `adminVendorId?` | [`VendorId`](../modules/internal_.md#vendorid) |
 | `adminFabricId?` | [`FabricId`](../modules/internal_.md#fabricid) |
@@ -746,4 +758,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:61
+matter.js/dist/esm/MatterController.d.ts:64

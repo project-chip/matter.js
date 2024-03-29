@@ -6,25 +6,48 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/cluster_export.PowerSourceConfiguration.Cluster.md)
+
 ### Variables
 
 - [Cluster](cluster_export.PowerSourceConfiguration.md#cluster)
+- [ClusterInstance](cluster_export.PowerSourceConfiguration.md#clusterinstance)
+- [Complete](cluster_export.PowerSourceConfiguration.md#complete)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `sources`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[], `any`\>  } ; `id`: ``46`` = 0x2e; `name`: ``"PowerSourceConfiguration"`` = "PowerSourceConfiguration"; `revision`: ``1`` = 1 }\>
-
-Power Source Configuration
-
-This cluster is used to describe the configuration and capabilities of a Device’s power system. It provides an
-ordering overview as well as linking to the one or more endpoints each supporting a Power Source cluster.
-
-**`See`**
-
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.6
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.PowerSourceConfiguration.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L52)
+
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L54)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `sources`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[], `any`\>  } ; `id`: ``46`` = 0x2e; `name`: ``"PowerSourceConfiguration"`` = "PowerSourceConfiguration"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.PowerSourceConfiguration.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L21)
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/cluster_export.PowerSourceConfiguration.Cluster.md) = `Cluster`
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L56)

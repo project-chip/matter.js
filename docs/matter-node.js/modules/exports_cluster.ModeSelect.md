@@ -10,111 +10,127 @@
 
 - [Feature](../enums/exports_cluster.ModeSelect.Feature.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.ModeSelect.md#extension)
+- [ChangeToModeRequest](../interfaces/exports_cluster.ModeSelect.ChangeToModeRequest.md)
+- [Cluster](../interfaces/exports_cluster.ModeSelect.Cluster.md)
+- [Complete](../interfaces/exports_cluster.ModeSelect.Complete.md)
+- [ModeOptionStruct](../interfaces/exports_cluster.ModeSelect.ModeOptionStruct.md)
+- [SemanticTagStruct](../interfaces/exports_cluster.ModeSelect.SemanticTagStruct.md)
 
 ### Variables
 
 - [Base](exports_cluster.ModeSelect.md#base)
 - [Cluster](exports_cluster.ModeSelect.md#cluster)
+- [ClusterInstance](exports_cluster.ModeSelect.md#clusterinstance)
 - [Complete](exports_cluster.ModeSelect.md#complete)
+- [CompleteInstance](exports_cluster.ModeSelect.md#completeinstance)
 - [OnOffComponent](exports_cluster.ModeSelect.md#onoffcomponent)
 - [TlvChangeToModeRequest](exports_cluster.ModeSelect.md#tlvchangetomoderequest)
 - [TlvModeOptionStruct](exports_cluster.ModeSelect.md#tlvmodeoptionstruct)
 - [TlvSemanticTagStruct](exports_cluster.ModeSelect.md#tlvsemantictagstruct)
 
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.ModeSelect.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `onOff`: ``true``  } ? typeof [`OnOffComponent`](exports_cluster.ModeSelect.md#onoffcomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:596
-
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentMode`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `description`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number` \| ``null``, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `supportedModes`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `changeToMode`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``80`` ; `name`: ``"ModeSelect"`` ; `revision`: ``1``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all ModeSelect clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `currentMode`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `description`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number` \| ``null``, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `supportedModes`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } | - |
+| `attributes.currentMode` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> | This attribute represents the current mode of the server. The value of this field must match the Mode field of one of the entries in the SupportedModes attribute. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.8.5.4 |
+| `attributes.description` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> | This attribute describes the purpose of the server, in readable text. For example, a coffee machine may have a Mode Select cluster for the amount of milk to add, and another Mode Select cluster for the amount of sugar to add. In this case, the first instance can have the description Milk and the second instance can have the description Sugar. This allows the user to tell the purpose of each of the instances. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.8.5.1 |
+| `attributes.standardNamespace` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number` \| ``null``, `any`\> | This attribute, when not null, shall indicate a single standard namespace for any standard semantic tag value supported in this or any other cluster instance with the same value of this attribute. A null value indicates no standard namespace, and therefore, no standard semantic tags are provided in this cluster instance. Each standard namespace and corresponding values and value meanings shall be defined in another document. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.8.5.2 |
+| `attributes.startUpMode` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> | The StartUpMode attribute value indicates the desired startup mode for the server when it is supplied with power. If this attribute is not null, the CurrentMode attribute shall be set to the StartUpMode value, when the server is powered up, except in the case when the OnMode attribute overrides the StartUpMode attribute. This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentMode attribute shall return to its value prior to the restart. The value of this field shall match the Mode field of one of the entries in the SupportedModes attribute. If this attribute is not implemented, or is set to the null value, it shall have no effect. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.8.5.5 |
+| `attributes.supportedModes` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> | This attribute is the list of supported modes that may be selected for the CurrentMode attribute. Each item in this list represents a unique mode as indicated by the Mode field of the ModeOptionStruct. Each entry in this list shall have a unique value for the Mode field. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.8.5.3 |
+| `commands` | \{ `changeToMode`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } | - |
+| `commands.changeToMode` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | On receipt of this command, if the NewMode field indicates a valid mode transition within the supported list, the server shall set the CurrentMode attribute to the NewMode value, otherwise, the server shall respond with an INVALID_COMMAND status response. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.8.6.1 |
+| `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `onMode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\>  }  } ; `flags`: \{ `onOff`: ``true``  }  }] | This metadata controls which ModeSelectCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.onOff` | [`BitFlag`](exports_schema.md#bitflag) | OnOff Dependency with the On/Off cluster |
+| `id` | ``80`` | - |
+| `name` | ``"ModeSelect"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:117
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:157
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: \{ `changeToMode`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: {} ; `features`: \{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"ModeSelect"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentMode`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `description`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number` \| ``null``, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `supportedModes`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `changeToMode`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``80`` ; `name`: ``"ModeSelect"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.ModeSelect.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Mode Select
-
-This cluster provides an interface for controlling a characteristic of a device that can be set to one of
-several predefined values. For example, the light pattern of a disco ball, the mode of a massage chair, or the
-wash cycle of a laundry machine.
-
-The server allows the client to set a mode on the server. A mode is one of a list of options that may be
-presented by a client for a user choice, or understood by the client, via the semantic tags on the mode.
-
-A semantic tag is either a standard tag within a standard category namespace, or a manufacturer specific tag,
-within the namespace of the vendor ID of the manufacturer. If there is no semantic tag, the mode is anonymous,
-and the selection is made by the user solely based on the Label string.
-
-Each cluster ID that indicates this specification shall define a distinct purpose for the cluster instance. For
-example: A LightBlinking cluster ID supports blinking modes for a light (and is described that way).
-
-An anonymous mode shall support the derived cluster purpose. A manufacturer specific semantic tag shall support
-the derived cluster purpose. An anonymous mode shall NOT replace the meaning of a standard semantic tag, when
-one exists, for the cluster purpose.
-
-ModeSelectCluster supports optional features that you can enable with the ModeSelectCluster.with() factory
-method.
-
-**`See`**
-
-MatterApplicationClusterSpecificationV1_1 § 1.8
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.ModeSelect.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:297
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:506
+
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:508
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `currentMode`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `description`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number` \| ``null``, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `supportedModes`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `changeToMode`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `onMode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\>  }  } ; `flags`: \{ `onOff`: ``true``  }  }] ; `features`: \{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``80`` ; `name`: ``"ModeSelect"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.ModeSelect.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:320
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `clusterRevision`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `never`\> ; `currentMode`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `description`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `eventList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<\{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `onMode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `onOff`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `standardNamespace`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number` \| ``null``, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `supportedModes`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `changeToMode`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``80`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"ModeSelect"`` ; `revision`: ``1``  }\>
-
-This cluster supports all ModeSelect features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/exports_cluster.ModeSelect.Complete.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:607
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:623
+
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:625
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `clusterRevision`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `never`\> ; `currentMode`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `description`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`string`, `any`\> ; `eventList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `never`\> ; `generatedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `onMode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `onOff`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `standardNamespace`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number` \| ``null``, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number` \| ``null``, `any`\> ; `supportedModes`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: \{ `changeToMode`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: \{ `onOff`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"ModeSelect"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Complete](exports_cluster.ModeSelect.md#complete)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:512
 
 ___
 
 ### OnOffComponent
 
-• `Const` **OnOffComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `onMode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\>  }  }\>
+• `Const` **OnOffComponent**: `Object`
 
 A ModeSelectCluster supports these elements if it supports feature OnOff.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `onMode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\>  } |
+| `attributes.onMode` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:257
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:127
 
 ___
 
@@ -130,7 +146,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.8.6.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:98
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:114
 
 ___
 
@@ -146,7 +162,7 @@ MatterApplicationClusterSpecificationV1_1 § 1.8.8.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:41
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:50
 
 ___
 
@@ -162,4 +178,4 @@ MatterApplicationClusterSpecificationV1_1 § 1.8.8.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:16
+packages/matter.js/dist/esm/cluster/definitions/ModeSelectCluster.d.ts:18

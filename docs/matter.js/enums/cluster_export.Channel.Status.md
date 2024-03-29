@@ -26,7 +26,7 @@ More than one equal match for the ChannelInfoStruct passed in.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:167](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L159)
 
 ___
 
@@ -38,7 +38,7 @@ No matches for the ChannelInfoStruct passed in.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:172](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L172)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:164](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L164)
 
 ___
 
@@ -50,4 +50,4 @@ Command succeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:162](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L162)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:154](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L154)

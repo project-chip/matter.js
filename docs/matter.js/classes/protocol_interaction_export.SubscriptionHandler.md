@@ -65,7 +65,7 @@
 
 ### constructor
 
-• **new SubscriptionHandler**(`subscriptionId`, `session`, `endpointStructure`, `attributeRequests`, `dataVersionFilters`, `eventRequests`, `eventFilters`, `eventHandler`, `isFabricFiltered`, `minIntervalFloor`, `maxIntervalCeiling`, `subscriptionMaxIntervalSeconds`, `subscriptionMinIntervalSeconds`, `subscriptionRandomizationWindowSeconds`, `cancelCallback`): [`SubscriptionHandler`](protocol_interaction_export.SubscriptionHandler.md)
+• **new SubscriptionHandler**(`subscriptionId`, `session`, `endpointStructure`, `attributeRequests`, `dataVersionFilters`, `eventRequests`, `eventFilters`, `eventHandler`, `isFabricFiltered`, `minIntervalFloor`, `maxIntervalCeiling`, `cancelCallback`, `subscriptionOptions`): [`SubscriptionHandler`](protocol_interaction_export.SubscriptionHandler.md)
 
 #### Parameters
 
@@ -74,18 +74,16 @@
 | `subscriptionId` | `number` |
 | `session` | [`SecureSession`](session_export.SecureSession.md)\<`any`\> |
 | `endpointStructure` | [`InteractionEndpointStructure`](protocol_interaction_export.InteractionEndpointStructure.md) |
-| `attributeRequests` | `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
-| `dataVersionFilters` | `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>[] |
-| `eventRequests` | `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
+| `attributeRequests` | `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
+| `dataVersionFilters` | `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `endpointId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>[] |
+| `eventRequests` | `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
 | `eventFilters` | `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
-| `eventHandler` | [`EventHandler`](protocol_interaction_export._internal_.EventHandler.md) |
+| `eventHandler` | [`EventHandler`](protocol_interaction_export.EventHandler.md)\<`any`\> |
 | `isFabricFiltered` | `boolean` |
 | `minIntervalFloor` | `number` |
 | `maxIntervalCeiling` | `number` |
-| `subscriptionMaxIntervalSeconds` | `undefined` \| `number` |
-| `subscriptionMinIntervalSeconds` | `undefined` \| `number` |
-| `subscriptionRandomizationWindowSeconds` | `undefined` \| `number` |
 | `cancelCallback` | () => `void` |
+| `subscriptionOptions` | [`Configuration`](../interfaces/node_export._internal_.SubscriptionOptions.Configuration.md) |
 
 #### Returns
 
@@ -93,7 +91,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:100](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L100)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L92)
 
 ## Properties
 
@@ -103,17 +101,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:73](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L73)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L65)
 
 ___
 
 ### attributeRequests
 
-• `Private` `Readonly` **attributeRequests**: `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]
+• `Private` `Readonly` **attributeRequests**: `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:104](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L104)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L96)
 
 ___
 
@@ -131,17 +129,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:115](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L115)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L104)
 
 ___
 
 ### dataVersionFilters
 
-• `Private` `Readonly` **dataVersionFilters**: `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>[]
+• `Private` `Readonly` **dataVersionFilters**: `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `endpointId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>[]
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:105](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L105)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L97)
 
 ___
 
@@ -151,7 +149,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:103](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L103)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L95)
 
 ___
 
@@ -161,37 +159,37 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:107](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L107)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L99)
 
 ___
 
 ### eventHandler
 
-• `Private` `Readonly` **eventHandler**: [`EventHandler`](protocol_interaction_export._internal_.EventHandler.md)
+• `Private` `Readonly` **eventHandler**: [`EventHandler`](protocol_interaction_export.EventHandler.md)\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:108](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L108)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:100](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L100)
 
 ___
 
 ### eventListeners
 
-• `Private` `Readonly` **eventListeners**: `Map`\<`string`, \{ `event`: [`EventServer`](cluster_export.EventServer.md)\<`any`\> ; `listener?`: (`newEvent`: [`EventStorageData`](../interfaces/protocol_interaction_export._internal_.EventStorageData.md)\<`any`\>) => `void`  }\>
+• `Private` `Readonly` **eventListeners**: `Map`\<`string`, \{ `event`: [`EventServer`](cluster_export.EventServer.md)\<`any`, `any`\> ; `listener?`: (`newEvent`: [`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`any`\>) => `void`  }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L80)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L72)
 
 ___
 
 ### eventRequests
 
-• `Private` `Readonly` **eventRequests**: `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]
+• `Private` `Readonly` **eventRequests**: `undefined` \| [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[]
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:106](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L106)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:98](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L98)
 
 ___
 
@@ -201,7 +199,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:93](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L93)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L85)
 
 ___
 
@@ -211,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:109](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L109)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L101)
 
 ___
 
@@ -221,7 +219,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:68](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L68)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L60)
 
 ___
 
@@ -231,7 +229,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:88](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L88)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L80)
 
 ___
 
@@ -241,7 +239,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:91](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L91)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L83)
 
 ___
 
@@ -251,7 +249,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:90](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L90)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L82)
 
 ___
 
@@ -261,7 +259,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L71)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L63)
 
 ___
 
@@ -271,7 +269,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L72)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L64)
 
 ___
 
@@ -281,7 +279,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L94)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L86)
 
 ___
 
@@ -291,7 +289,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:70](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L70)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L62)
 
 ___
 
@@ -301,7 +299,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:89](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L89)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L81)
 
 ___
 
@@ -311,7 +309,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:97](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L97)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L89)
 
 ___
 
@@ -321,7 +319,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:98](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L98)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L90)
 
 ___
 
@@ -331,7 +329,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L87)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:79](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L79)
 
 ___
 
@@ -341,17 +339,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:96](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L96)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L88)
 
 ___
 
 ### server
 
-• `Private` `Readonly` **server**: [`MatterDevice`](cluster_export._internal_.MatterDevice.md)
+• `Private` `Readonly` **server**: [`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:92](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L92)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L84)
 
 ___
 
@@ -361,7 +359,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:102](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L102)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L94)
 
 ___
 
@@ -371,7 +369,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:101](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L101)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:93](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L93)
 
 ___
 
@@ -381,7 +379,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:69](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L69)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L61)
 
 ## Methods
 
@@ -395,7 +393,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:384](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L384)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:374](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L374)
 
 ___
 
@@ -413,7 +411,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `path` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\> |
+| `path` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\> |
 | `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\> |
 | `version` | `number` |
 | `value` | `T` |
@@ -424,7 +422,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:559](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L559)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:564](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L564)
 
 ___
 
@@ -445,7 +443,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:600](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L600)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:605](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L605)
 
 ___
 
@@ -472,7 +470,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:135](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L135)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:125](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L125)
 
 ___
 
@@ -490,9 +488,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `path` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\> |
+| `path` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\> |
 | `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\> |
-| `newEvent` | [`EventStorageData`](../interfaces/protocol_interaction_export._internal_.EventStorageData.md)\<`T`\> |
+| `newEvent` | [`EventStorageData`](../interfaces/protocol_interaction_export.EventStorageData.md)\<`T`\> |
 
 #### Returns
 
@@ -500,7 +498,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:579](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L579)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:584](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L584)
 
 ___
 
@@ -514,7 +512,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:590](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L590)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:595](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L595)
 
 ___
 
@@ -528,7 +526,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:376](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L376)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:366](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L366)
 
 ___
 
@@ -542,7 +540,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:380](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L380)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:370](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L370)
 
 ___
 
@@ -559,7 +557,7 @@ sending by 50ms in any case to mke sure to catch all updates.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:400](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L400)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:392](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L392)
 
 ___
 
@@ -573,12 +571,12 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `attributeErrors` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>[] |
+| `attributeErrors` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>[] |
 | `newAttributes` | [`AttributeWithPath`](../interfaces/protocol_interaction_export.AttributeWithPath.md)[] |
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:167](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L167)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L157)
 
 ___
 
@@ -592,24 +590,25 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `eventErrors` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>[] |
+| `eventErrors` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](../modules/datatype_export.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>[] |
 | `newEvents` | [`EventWithPath`](../interfaces/protocol_interaction_export.EventWithPath.md)[] |
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:269](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L269)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:259](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L259)
 
 ___
 
 ### sendInitialReport
 
-▸ **sendInitialReport**(`messenger`): `Promise`\<`void`\>
+▸ **sendInitialReport**(`messenger`, `readAttribute`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `messenger` | [`InteractionServerMessenger`](protocol_interaction_export.InteractionServerMessenger.md) |
+| `readAttribute` | (`attribute`: [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)\<`any`\>) => `Promise`\<`any`\> |
 
 #### Returns
 
@@ -617,7 +616,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:472](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L472)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:468](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L468)
 
 ___
 
@@ -633,7 +632,7 @@ Determine all attributes that have changed since the last update and send them t
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:428](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L428)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:424](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L424)
 
 ___
 
@@ -654,7 +653,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:616](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L616)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:621](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L621)
 
 ___
 
@@ -674,7 +673,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:256](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L256)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:246](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L246)
 
 ___
 
@@ -694,7 +693,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:340](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L340)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:330](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L330)
 
 ___
 
@@ -713,4 +712,4 @@ controller. The data of newly added events are not sent automatically.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:359](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L359)
+[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:349](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L349)

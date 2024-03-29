@@ -26,7 +26,7 @@ Certificate authenticated session
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:62
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:64
 
 ___
 
@@ -38,7 +38,7 @@ Group authenticated session
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:68
 
 ___
 
@@ -50,4 +50,4 @@ Passcode authenticated session
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:60

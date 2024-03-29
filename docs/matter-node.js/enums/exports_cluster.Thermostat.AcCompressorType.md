@@ -29,7 +29,7 @@ Max working ambient 43 °C
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:256
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:434
 
 ___
 
@@ -41,7 +41,7 @@ Max working ambient 35 °C
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:260
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:438
 
 ___
 
@@ -53,7 +53,7 @@ Max working ambient 52 °C
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:264
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:442
 
 ___
 
@@ -65,4 +65,4 @@ Unknown compressor type
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:252
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:430

@@ -29,7 +29,7 @@ protocol such as PTP, or has built-in GNSS. UTC time is accurate to ± 10 μs.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:66](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L66)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:153](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L153)
 
 ___
 
@@ -43,7 +43,7 @@ is accurate to ± 50ms.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:147](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L147)
 
 ___
 
@@ -56,7 +56,7 @@ occurred such that the clock error is now > 5 seconds.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:47](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:134](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L134)
 
 ___
 
@@ -69,7 +69,7 @@ on the Last Known Good UTC Time only.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:128](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L128)
 
 ___
 
@@ -82,4 +82,4 @@ accurate to ± 5 seconds.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:140](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L140)

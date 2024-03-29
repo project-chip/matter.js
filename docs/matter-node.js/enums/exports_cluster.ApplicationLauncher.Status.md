@@ -26,7 +26,7 @@ Requested app is not available.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:118
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:141
 
 ___
 
@@ -38,7 +38,7 @@ Command succeeded
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:114
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:137
 
 ___
 
@@ -50,4 +50,4 @@ Video platform unable to honor command.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:122
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:145

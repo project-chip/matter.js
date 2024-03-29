@@ -11,118 +11,159 @@
 - [Feature](../enums/exports_cluster.EthernetNetworkDiagnostics.Feature.md)
 - [PHYRate](../enums/exports_cluster.EthernetNetworkDiagnostics.PHYRate.md)
 
-### Type Aliases
+### Interfaces
 
-- [Extension](exports_cluster.EthernetNetworkDiagnostics.md#extension)
+- [Cluster](../interfaces/exports_cluster.EthernetNetworkDiagnostics.Cluster.md)
+- [Complete](../interfaces/exports_cluster.EthernetNetworkDiagnostics.Complete.md)
 
 ### Variables
 
 - [Base](exports_cluster.EthernetNetworkDiagnostics.md#base)
 - [Cluster](exports_cluster.EthernetNetworkDiagnostics.md#cluster)
+- [ClusterInstance](exports_cluster.EthernetNetworkDiagnostics.md#clusterinstance)
 - [Complete](exports_cluster.EthernetNetworkDiagnostics.md#complete)
+- [CompleteInstance](exports_cluster.EthernetNetworkDiagnostics.md#completeinstance)
 - [ErrorCountsComponent](exports_cluster.EthernetNetworkDiagnostics.md#errorcountscomponent)
 - [PacketCountsComponent](exports_cluster.EthernetNetworkDiagnostics.md#packetcountscomponent)
 - [PacketCountsOrErrorCountsComponent](exports_cluster.EthernetNetworkDiagnostics.md#packetcountsorerrorcountscomponent)
-
-## Type Aliases
-
-### Extension
-
-Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](exports_cluster.EthernetNetworkDiagnostics.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `packetCounts`: ``true``  } ? typeof [`PacketCountsComponent`](exports_cluster.EthernetNetworkDiagnostics.md#packetcountscomponent) : {} & `SF` extends \{ `errorCounts`: ``true``  } ? typeof [`ErrorCountsComponent`](exports_cluster.EthernetNetworkDiagnostics.md#errorcountscomponent) : {} & `SF` extends \{ `packetCounts`: ``true``  } \| \{ `errorCounts`: ``true``  } ? typeof [`PacketCountsOrErrorCountsComponent`](exports_cluster.EthernetNetworkDiagnostics.md#packetcountsorerrorcountscomponent) : {}
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof `Base.features`\> |
-
-#### Defined in
-
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:369
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `carrierDetect`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `fullDuplex`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `phyRate`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`PHYRate`](../enums/exports_cluster.EthernetNetworkDiagnostics.PHYRate.md) \| ``null``, `any`\> ; `timeSinceReset`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\>  } ; `features`: \{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``55`` ; `name`: ``"EthernetNetworkDiagnostics"`` ; `revision`: ``1``  }\>
+• `Const` **Base**: `Object`
 
 These elements and properties are present in all EthernetNetworkDiagnostics clusters.
 
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributes` | \{ `carrierDetect`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `fullDuplex`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `phyRate`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`PHYRate`](../enums/exports_cluster.EthernetNetworkDiagnostics.PHYRate.md) \| ``null``, `any`\> ; `timeSinceReset`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\>  } | - |
+| `attributes.carrierDetect` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> | The CarrierDetect attribute shall indicate the value of the Carrier Detect control signal present on the ethernet network interface. A value of null shall indicate that the interface is not currently configured or operational. **`See`** MatterCoreSpecificationV1_1 § 11.15.6.8 |
+| `attributes.fullDuplex` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> | The FullDuplex attribute shall indicate if the Node is currently utilizing the full-duplex operating mode. A value of null shall indicate that the interface is not currently configured or operational. **`See`** MatterCoreSpecificationV1_1 § 11.15.6.2 |
+| `attributes.phyRate` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`PHYRate`](../enums/exports_cluster.EthernetNetworkDiagnostics.PHYRate.md) \| ``null``, `any`\> | The PHYRate attribute shall indicate the current nominal, usable speed at the top of the physical layer of the Node. A value of null shall indicate that the interface is not currently configured or operational. **`See`** MatterCoreSpecificationV1_1 § 11.15.6.1 |
+| `attributes.timeSinceReset` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | **`See`** MatterCoreSpecificationV1_1 § 11.15.6 |
+| `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `packetRxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `packetTxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  }  } ; `flags`: \{ `packetCounts`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `collisionCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `overrunCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `txErrCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  }  } ; `flags`: \{ `errorCounts`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `resetCounts`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `packetCounts`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `resetCounts`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `errorCounts`: ``true``  }  }] | This metadata controls which EthernetNetworkDiagnosticsCluster elements matter.js activates for specific feature combinations. |
+| `features` | \{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
+| `features.errorCounts` | [`BitFlag`](exports_schema.md#bitflag) | ErrorCounts Node makes available the counts for the number of errors that have occurred during the reception and transmission of packets on the ethernet interface. |
+| `features.packetCounts` | [`BitFlag`](exports_schema.md#bitflag) | PacketCounts Node makes available the counts for the number of received and transmitted packets on the ethernet interface. |
+| `id` | ``55`` | - |
+| `name` | ``"EthernetNetworkDiagnostics"`` | - |
+| `revision` | ``1`` | - |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:79
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:157
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: \{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: {} ; `events`: {} ; `features`: \{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"EthernetNetworkDiagnostics"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `carrierDetect`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `fullDuplex`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `phyRate`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`PHYRate`](../enums/exports_cluster.EthernetNetworkDiagnostics.PHYRate.md) \| ``null``, `any`\> ; `timeSinceReset`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\>  } ; `features`: \{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``55`` ; `name`: ``"EthernetNetworkDiagnostics"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.EthernetNetworkDiagnostics.md#extension)\<[`BitFlags`](exports_schema.md#bitflags)\<\{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  }, `T`\>\>  }
-
-Ethernet Network Diagnostics
-
-The Ethernet Network Diagnostics Cluster provides a means to acquire standardized diagnostics metrics that may
-be used by a Node to assist a user or Administrator in diagnosing potential problems. The Ethernet Network
-Diagnostics Cluster attempts to centralize all metrics that are relevant to a potential Ethernet connection to a
-Node.
-
-EthernetNetworkDiagnosticsCluster supports optional features that you can enable with the
-EthernetNetworkDiagnosticsCluster.with() factory method.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 11.15
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.EthernetNetworkDiagnostics.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:219
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:495
+
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:497
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `carrierDetect`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `fullDuplex`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `phyRate`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`PHYRate`](../enums/exports_cluster.EthernetNetworkDiagnostics.PHYRate.md) \| ``null``, `any`\> ; `timeSinceReset`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\>  } ; `extensions`: readonly [\{ `component`: \{ `attributes`: \{ `packetRxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `packetTxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  }  } ; `flags`: \{ `packetCounts`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `collisionCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `overrunCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `txErrCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  }  } ; `flags`: \{ `errorCounts`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `resetCounts`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `packetCounts`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `resetCounts`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `errorCounts`: ``true``  }  }] ; `features`: \{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``55`` ; `name`: ``"EthernetNetworkDiagnostics"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.EthernetNetworkDiagnostics.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:321
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `carrierDetect`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `clusterRevision`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `never`\> ; `collisionCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `errorCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `eventList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<\{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  }\>, `never`\> ; `fullDuplex`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `generatedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `overrunCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `errorCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `packetRxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `packetCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `packetTxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `packetCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `phyRate`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`PHYRate`](../enums/exports_cluster.EthernetNetworkDiagnostics.PHYRate.md) \| ``null``, `any`\> ; `timeSinceReset`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `txErrCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `errorCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: \{ `resetCounts`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `packetCounts`: `boolean`  }, \{ `errorCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: \{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: ``55`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"EthernetNetworkDiagnostics"`` ; `revision`: ``1``  }\>
-
-This cluster supports all EthernetNetworkDiagnostics features. It may support illegal feature combinations.
-
-If you use this cluster you must manually specify which features are active and ensure the set of active
-features is legal per the Matter specification.
+• **Complete**: [`Complete`](../interfaces/exports_cluster.EthernetNetworkDiagnostics.Complete.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:386
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:607
+
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:609
+
+___
+
+### CompleteInstance
+
+• `Const` **CompleteInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `acceptedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `carrierDetect`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `clusterRevision`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `never`\> ; `collisionCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `errorCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `eventList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `never`\> ; `fullDuplex`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`boolean` \| ``null``, `any`\> ; `generatedCommandList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `overrunCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `errorCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `packetRxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `packetCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `packetTxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `packetCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `phyRate`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`PHYRate`](../enums/exports_cluster.EthernetNetworkDiagnostics.PHYRate.md) \| ``null``, `any`\> ; `timeSinceReset`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `txErrCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `errorCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: \{ `resetCounts`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `packetCounts`: `boolean`  }, \{ `errorCounts`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: \{ `errorCounts`: [`BitFlag`](exports_schema.md#bitflag) ; `packetCounts`: [`BitFlag`](exports_schema.md#bitflag)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"EthernetNetworkDiagnostics"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Complete](exports_cluster.EthernetNetworkDiagnostics.md#complete)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:501
 
 ___
 
 ### ErrorCountsComponent
 
-• `Const` **ErrorCountsComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `collisionCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `overrunCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `txErrCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  }  }\>
+• `Const` **ErrorCountsComponent**: `Object`
 
 A EthernetNetworkDiagnosticsCluster supports these elements if it supports feature ErrorCounts.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `collisionCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `overrunCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `txErrCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  } |
+| `attributes.collisionCount` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> |
+| `attributes.overrunCount` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> |
+| `attributes.txErrCount` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:154
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:82
 
 ___
 
 ### PacketCountsComponent
 
-• `Const` **PacketCountsComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `attributes`: \{ `packetRxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `packetTxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  }  }\>
+• `Const` **PacketCountsComponent**: `Object`
 
 A EthernetNetworkDiagnosticsCluster supports these elements if it supports feature PacketCounts.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `attributes` | \{ `packetRxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> ; `packetTxCount`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  } |
+| `attributes.packetRxCount` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> |
+| `attributes.packetTxCount` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:132
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:60
 
 ___
 
 ### PacketCountsOrErrorCountsComponent
 
-• `Const` **PacketCountsOrErrorCountsComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `resetCounts`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  }\>
+• `Const` **PacketCountsOrErrorCountsComponent**: `Object`
 
 A EthernetNetworkDiagnosticsCluster supports these elements if it supports features PacketCounts or ErrorCounts.
 
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `commands` | \{ `resetCounts`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } |
+| `commands.resetCounts` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> |
+
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:184
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:112

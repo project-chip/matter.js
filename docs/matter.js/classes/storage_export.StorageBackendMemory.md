@@ -4,9 +4,13 @@
 
 [storage/export](../modules/storage_export.md).StorageBackendMemory
 
-## Implements
+Matter.js uses this key/value API to manage persistent state.
 
-- [`Storage`](storage_export.Storage.md)
+## Hierarchy
+
+- [`SyncStorage`](storage_export.SyncStorage.md)
+
+  ↳ **`StorageBackendMemory`**
 
 ## Table of contents
 
@@ -16,19 +20,24 @@
 
 ### Properties
 
+- [initialized](storage_export.StorageBackendMemory.md#initialized)
 - [store](storage_export.StorageBackendMemory.md#store)
 
 ### Methods
 
+- [#setKey](storage_export.StorageBackendMemory.md##setkey)
 - [clear](storage_export.StorageBackendMemory.md#clear)
 - [clearAll](storage_export.StorageBackendMemory.md#clearall)
 - [close](storage_export.StorageBackendMemory.md#close)
+- [contexts](storage_export.StorageBackendMemory.md#contexts)
 - [createContextKey](storage_export.StorageBackendMemory.md#createcontextkey)
 - [delete](storage_export.StorageBackendMemory.md#delete)
 - [get](storage_export.StorageBackendMemory.md#get)
 - [initialize](storage_export.StorageBackendMemory.md#initialize)
 - [keys](storage_export.StorageBackendMemory.md#keys)
 - [set](storage_export.StorageBackendMemory.md#set)
+- [values](storage_export.StorageBackendMemory.md#values)
+- [create](storage_export.StorageBackendMemory.md#create)
 
 ## Constructors
 
@@ -46,11 +55,25 @@
 
 [`StorageBackendMemory`](storage_export.StorageBackendMemory.md)
 
+#### Overrides
+
+[SyncStorage](storage_export.SyncStorage.md).[constructor](storage_export.SyncStorage.md#constructor)
+
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
 
 ## Properties
+
+### initialized
+
+• `Protected` **initialized**: `boolean` = `false`
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
+
+___
 
 ### store
 
@@ -58,9 +81,31 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
 
 ## Methods
+
+### #setKey
+
+▸ **#setKey**(`contexts`, `key`, `value`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+| `key` | `string` |
+| `value` | [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageBackendMemory.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L51)
+
+___
 
 ### clear
 
@@ -72,7 +117,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L28)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L41)
 
 ___
 
@@ -90,31 +135,55 @@ ___
 
 `void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[clearAll](storage_export.Storage.md#clearall)
+[SyncStorage](storage_export.SyncStorage.md).[clearAll](storage_export.SyncStorage.md#clearall)
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L56)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L114)
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`\<`void`\>
+▸ **close**(): `void`
 
 #### Returns
 
-`Promise`\<`void`\>
+`void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[close](storage_export.Storage.md#close)
+[SyncStorage](storage_export.SyncStorage.md).[close](storage_export.SyncStorage.md#close)
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L24)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L36)
+
+___
+
+### contexts
+
+▸ **contexts**(`contexts`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Overrides
+
+[SyncStorage](storage_export.SyncStorage.md).[contexts](storage_export.SyncStorage.md#contexts)
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageBackendMemory.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L96)
 
 ___
 
@@ -134,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L23)
 
 ___
 
@@ -153,13 +222,13 @@ ___
 
 `void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[delete](storage_export.Storage.md#delete)
+[SyncStorage](storage_export.SyncStorage.md).[delete](storage_export.SyncStorage.md#delete)
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L46)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L75)
 
 ___
 
@@ -184,31 +253,31 @@ ___
 
 `undefined` \| `T`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[get](storage_export.Storage.md#get)
+[SyncStorage](storage_export.SyncStorage.md).[get](storage_export.SyncStorage.md#get)
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L32)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L45)
 
 ___
 
 ### initialize
 
-▸ **initialize**(): `Promise`\<`void`\>
+▸ **initialize**(): `void`
 
 #### Returns
 
-`Promise`\<`void`\>
+`void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[initialize](storage_export.Storage.md#initialize)
+[SyncStorage](storage_export.SyncStorage.md).[initialize](storage_export.SyncStorage.md#initialize)
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L20)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L30)
 
 ___
 
@@ -226,42 +295,80 @@ ___
 
 `string`[]
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[keys](storage_export.Storage.md#keys)
+[SyncStorage](storage_export.SyncStorage.md).[keys](storage_export.SyncStorage.md#keys)
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L51)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L81)
 
 ___
 
 ### set
 
-▸ **set**\<`T`\>(`contexts`, `key`, `value`): `void`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
+▸ **set**(`contexts`, `keyOrValues`, `value?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `contexts` | `string`[] |
-| `key` | `string` |
-| `value` | `T` |
+| `keyOrValues` | `string` \| `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\> |
+| `value?` | [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes) |
 
 #### Returns
 
 `void`
 
-#### Implementation of
+#### Overrides
 
-[Storage](storage_export.Storage.md).[set](storage_export.Storage.md#set)
+[SyncStorage](storage_export.SyncStorage.md).[set](storage_export.SyncStorage.md#set)
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/storage/StorageBackendMemory.ts#L37)
+[packages/matter.js/src/storage/StorageBackendMemory.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L60)
+
+___
+
+### values
+
+▸ **values**(`contexts`): `Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`Record`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>
+
+#### Overrides
+
+[SyncStorage](storage_export.SyncStorage.md).[values](storage_export.SyncStorage.md#values)
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageBackendMemory.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L87)
+
+___
+
+### create
+
+▸ **create**(`store?`): `Promise`\<[`StorageBackendMemory`](storage_export.StorageBackendMemory.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `store` | `any` |
+
+#### Returns
+
+`Promise`\<[`StorageBackendMemory`](storage_export.StorageBackendMemory.md)\>
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageBackendMemory.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/storage/StorageBackendMemory.ts#L17)

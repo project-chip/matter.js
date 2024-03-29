@@ -39,12 +39,13 @@
 
 ### constructor
 
-• **new MdnsServer**(`multicastServer`, `netInterface`): [`MdnsServer`](mdns_export.MdnsServer.md)
+• **new MdnsServer**(`network`, `multicastServer`, `netInterface`): [`MdnsServer`](mdns_export.MdnsServer.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `network` | [`Network`](net_export.Network.md) |
 | `multicastServer` | [`UdpMulticastServer`](net_export.UdpMulticastServer.md) |
 | `netInterface` | `undefined` \| `string` |
 
@@ -54,7 +55,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:63](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L63)
+[packages/matter.js/src/mdns/MdnsServer.ts:66](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L66)
 
 ## Properties
 
@@ -64,7 +65,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:64](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L64)
+[packages/matter.js/src/mdns/MdnsServer.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L68)
 
 ___
 
@@ -74,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L65)
+[packages/matter.js/src/mdns/MdnsServer.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L69)
 
 ___
 
@@ -84,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:49](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L49)
+[packages/matter.js/src/mdns/MdnsServer.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L67)
 
 ___
 
@@ -94,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L61)
+[packages/matter.js/src/mdns/MdnsServer.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L64)
 
 ___
 
@@ -104,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L51)
+[packages/matter.js/src/mdns/MdnsServer.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L53)
 
 ___
 
@@ -114,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:50](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L50)
+[packages/matter.js/src/mdns/MdnsServer.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L52)
 
 ## Methods
 
@@ -134,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:230](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L230)
+[packages/matter.js/src/mdns/MdnsServer.ts:234](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L234)
 
 ___
 
@@ -155,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:166](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L166)
+[packages/matter.js/src/mdns/MdnsServer.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L170)
 
 ___
 
@@ -176,7 +177,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:72](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L72)
+[packages/matter.js/src/mdns/MdnsServer.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L76)
 
 ___
 
@@ -197,7 +198,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:76](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L76)
+[packages/matter.js/src/mdns/MdnsServer.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L80)
 
 ___
 
@@ -211,7 +212,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:294](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L294)
+[packages/matter.js/src/mdns/MdnsServer.ts:298](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L298)
 
 ___
 
@@ -232,7 +233,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:245](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L245)
+[packages/matter.js/src/mdns/MdnsServer.ts:249](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L249)
 
 ___
 
@@ -246,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:300](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L300)
+[packages/matter.js/src/mdns/MdnsServer.ts:304](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L304)
 
 ___
 
@@ -268,7 +269,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:84](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L84)
+[packages/matter.js/src/mdns/MdnsServer.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L88)
 
 ___
 
@@ -289,7 +290,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:80](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L80)
+[packages/matter.js/src/mdns/MdnsServer.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L84)
 
 ___
 
@@ -312,7 +313,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:304](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L304)
+[packages/matter.js/src/mdns/MdnsServer.ts:308](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L308)
 
 ___
 
@@ -334,7 +335,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:180](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L180)
+[packages/matter.js/src/mdns/MdnsServer.ts:184](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L184)
 
 ___
 
@@ -356,18 +357,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:284](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L284)
+[packages/matter.js/src/mdns/MdnsServer.ts:288](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L288)
 
 ___
 
 ### create
 
-▸ **create**(`options?`): `Promise`\<[`MdnsServer`](mdns_export.MdnsServer.md)\>
+▸ **create**(`network`, `options?`): `Promise`\<[`MdnsServer`](mdns_export.MdnsServer.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `network` | [`Network`](net_export.Network.md) |
 | `options?` | `Object` |
 | `options.enableIpv4?` | `boolean` |
 | `options.netInterface?` | `string` |
@@ -378,4 +380,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/mdns/MdnsServer.ts#L36)
+[packages/matter.js/src/mdns/MdnsServer.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/mdns/MdnsServer.ts#L37)

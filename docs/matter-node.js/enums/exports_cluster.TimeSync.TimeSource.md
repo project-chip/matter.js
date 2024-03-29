@@ -40,7 +40,7 @@ Server received time from the Section 11.16.9.1, “SetUtcTime Command”.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:57
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:136
 
 ___
 
@@ -53,7 +53,7 @@ connection).
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:106
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:185
 
 ___
 
@@ -65,7 +65,7 @@ NTP from a servers within the Fabric. None of the servers used NTS.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:77
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:156
 
 ___
 
@@ -77,7 +77,7 @@ NTP from a server within the Fabric. NTS is used on at least one server.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:97
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:176
 
 ___
 
@@ -89,7 +89,7 @@ SNTP from a server within the Fabric. NTS is not used.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:73
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:152
 
 ___
 
@@ -101,7 +101,7 @@ SNTP from a server within the Fabric. NTS is used.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:93
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:172
 
 ___
 
@@ -113,7 +113,7 @@ Time synchronization comes from a GNSS source.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:114
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:193
 
 ___
 
@@ -125,7 +125,7 @@ NTP from multiple servers on Fabric and external. None of the servers used NTS.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:81
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:160
 
 ___
 
@@ -137,7 +137,7 @@ NTP from multiple servers on the Fabric and external. NTS is used on at least on
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:101
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:180
 
 ___
 
@@ -149,7 +149,7 @@ Synchronized time by querying the Time Cluster of another Node.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:61
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:140
 
 ___
 
@@ -161,7 +161,7 @@ NTP from servers not in the Fabric. None of the servers used NTS.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:69
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:148
 
 ___
 
@@ -173,7 +173,7 @@ NTP from servers not in the Fabric. NTS is used on at least one server.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:89
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:168
 
 ___
 
@@ -185,7 +185,7 @@ SNTP from a server not in the Fabric. NTS is not used.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:65
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:144
 
 ___
 
@@ -197,7 +197,7 @@ SNTP from a server not in the Fabric. NTS is used.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:85
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:164
 
 ___
 
@@ -209,7 +209,7 @@ Server is not currently synchronized with a UTC Time source.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:49
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:128
 
 ___
 
@@ -221,7 +221,7 @@ Time synchronization comes from PTP.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:110
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:189
 
 ___
 
@@ -233,4 +233,4 @@ Server uses an unlisted time source.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:53
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:132

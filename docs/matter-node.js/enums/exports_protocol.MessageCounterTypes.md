@@ -24,7 +24,7 @@ Lifetime: Operational Group Key, Rollover allowed, Persistence: Mandatory
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:24
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:25
 
 ___
 
@@ -37,7 +37,7 @@ Lifetime: Operational Group Key, Rollover allowed, Persistence: Mandatory
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:19
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:20
 
 ___
 
@@ -50,7 +50,7 @@ Rollover allowed, Persistence: Optional
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:14
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:15
 
 ___
 
@@ -63,4 +63,4 @@ Lifetime: Session Key, Rollover expires, Persistence: Optional
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:29
+packages/matter.js/dist/esm/protocol/MessageCounter.d.ts:30

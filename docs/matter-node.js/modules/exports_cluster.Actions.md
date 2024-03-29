@@ -13,10 +13,32 @@
 - [ActionType](../enums/exports_cluster.Actions.ActionType.md)
 - [EndpointListType](../enums/exports_cluster.Actions.EndpointListType.md)
 
+### Interfaces
+
+- [ActionFailedEvent](../interfaces/exports_cluster.Actions.ActionFailedEvent.md)
+- [ActionStruct](../interfaces/exports_cluster.Actions.ActionStruct.md)
+- [Cluster](../interfaces/exports_cluster.Actions.Cluster.md)
+- [DisableActionRequest](../interfaces/exports_cluster.Actions.DisableActionRequest.md)
+- [DisableActionWithDurationRequest](../interfaces/exports_cluster.Actions.DisableActionWithDurationRequest.md)
+- [EnableActionRequest](../interfaces/exports_cluster.Actions.EnableActionRequest.md)
+- [EnableActionWithDurationRequest](../interfaces/exports_cluster.Actions.EnableActionWithDurationRequest.md)
+- [EndpointListStruct](../interfaces/exports_cluster.Actions.EndpointListStruct.md)
+- [InstantActionRequest](../interfaces/exports_cluster.Actions.InstantActionRequest.md)
+- [InstantActionWithTransitionRequest](../interfaces/exports_cluster.Actions.InstantActionWithTransitionRequest.md)
+- [PauseActionRequest](../interfaces/exports_cluster.Actions.PauseActionRequest.md)
+- [PauseActionWithDurationRequest](../interfaces/exports_cluster.Actions.PauseActionWithDurationRequest.md)
+- [ResumeActionRequest](../interfaces/exports_cluster.Actions.ResumeActionRequest.md)
+- [StartActionRequest](../interfaces/exports_cluster.Actions.StartActionRequest.md)
+- [StartActionWithDurationRequest](../interfaces/exports_cluster.Actions.StartActionWithDurationRequest.md)
+- [StateChangedEvent](../interfaces/exports_cluster.Actions.StateChangedEvent.md)
+- [StopActionRequest](../interfaces/exports_cluster.Actions.StopActionRequest.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.Actions.md#cluster)
+- [ClusterInstance](exports_cluster.Actions.md#clusterinstance)
 - [CommandBits](exports_cluster.Actions.md#commandbits)
+- [Complete](exports_cluster.Actions.md#complete)
 - [TlvActionFailedEvent](exports_cluster.Actions.md#tlvactionfailedevent)
 - [TlvActionStruct](exports_cluster.Actions.md#tlvactionstruct)
 - [TlvDisableActionRequest](exports_cluster.Actions.md#tlvdisableactionrequest)
@@ -38,49 +60,27 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `actionList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `endpointLists`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `setupUrl`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`string`, `any`\>  } ; `commands`: \{ `disableAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `disableActionWithDuration`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `enableAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `enableActionWithDuration`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `instantAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `instantActionWithTransition`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `pauseAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `pauseActionWithDuration`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `resumeAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `startAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `startActionWithDuration`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `stopAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: \{ `actionFailed`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `stateChanged`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``37`` ; `name`: ``"Actions"`` ; `revision`: ``1``  }\>
-
-Actions
-
-This cluster provides a standardized way for a Node (typically a Bridge, but could be any Node) to expose
-
-  • Information about logical grouping of endpoints on the Node (example: lights in a room)
-
-  • Information about named actions that can be performed on such a group of endpoints (example: recall a scene
-    for a group of lights by its name)
-
-  • Commands to trigger such actions
-
-  • Events to receive feedback on the state of such actions.
-
-The information on grouping and available actions is typically provided by the user or Bridge manufacturer via
-some means not defined in Matter, and therefore provided as read-only to Nodes. For example: a
-manufacturer-provided app allows a user to set up logical grouping and create/assign scene for such groups.
-
-Using this cluster, a Node can learn about such logical grouping, provided actions, and trigger such actions.
-
-While the origin of this cluster stems from use cases with a Bridge, its server side may also be implemented on
-any Node which can expose certain grouping, actions or automations to other users.
-
-After defining the attributes, commands and events for this cluster, and the associated data types, several
-examples are provided to illustrate the capabilities of this cluster.
-
-Actions can be defined in a flexible manner to suit the needs of the various nodes implementing this cluster.
-For each action, the commands available for that particular action are defined.
-
-This cluster can be used to expose only the grouping of endpoints without any actions defined by populating the
-EndpointList attribute accordingly and providing an empty list for ActionList.
-
-The term 'action' in the description of this cluster should not be confused with the term 'action' as used in
-the Interaction Model.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 9.14
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.Actions.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:544
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1096
+
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1098
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `actionList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `endpointLists`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `setupUrl`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`string`, `any`\>  } ; `commands`: \{ `disableAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `disableActionWithDuration`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `enableAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `enableActionWithDuration`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `instantAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `instantActionWithTransition`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `pauseAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `pauseActionWithDuration`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `resumeAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `startAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `startActionWithDuration`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `stopAction`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: \{ `actionFailed`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `stateChanged`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``37`` ; `name`: ``"Actions"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.Actions.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:633
 
 ___
 
@@ -113,7 +113,17 @@ MatterCoreSpecificationV1_1 § 9.14.4.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:93
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:95
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.Actions.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:1099
 
 ___
 
@@ -129,7 +139,7 @@ MatterCoreSpecificationV1_1 § 9.14.7.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:496
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:612
 
 ___
 
@@ -145,7 +155,7 @@ MatterCoreSpecificationV1_1 § 9.14.4.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:171
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:173
 
 ___
 
@@ -161,7 +171,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.11
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:443
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:538
 
 ___
 
@@ -177,7 +187,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.12
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:452
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:554
 
 ___
 
@@ -193,7 +203,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.9
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:424
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:505
 
 ___
 
@@ -209,7 +219,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.10
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:433
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:521
 
 ___
 
@@ -234,7 +244,7 @@ MatterCoreSpecificationV1_1 § 9.14.4.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:323
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:332
 
 ___
 
@@ -250,7 +260,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:339
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:364
 
 ___
 
@@ -266,7 +276,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:348
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:380
 
 ___
 
@@ -282,7 +292,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:396
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:456
 
 ___
 
@@ -298,7 +308,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:405
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:472
 
 ___
 
@@ -314,7 +324,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.8
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:415
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:489
 
 ___
 
@@ -330,7 +340,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:363
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:402
 
 ___
 
@@ -346,7 +356,7 @@ MatterCoreSpecificationV1_1 § 9.14.6.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:372
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:418
 
 ___
 
@@ -362,7 +372,7 @@ MatterCoreSpecificationV1_1 § 9.14.7.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:462
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:571
 
 ___
 
@@ -378,4 +388,4 @@ MatterCoreSpecificationV1_1 § 9.14.6.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:387
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:440

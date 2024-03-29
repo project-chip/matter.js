@@ -29,7 +29,7 @@ R22 Refrigerant
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:233
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:411
 
 ___
 
@@ -41,7 +41,7 @@ R407c Refrigerant
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:241
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:419
 
 ___
 
@@ -53,7 +53,7 @@ R410a Refrigerant
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:237
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:415
 
 ___
 
@@ -65,4 +65,4 @@ Unknown Refrigerant Type
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:229
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:407

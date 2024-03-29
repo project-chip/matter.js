@@ -42,7 +42,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `w0` | `BN` |
+| `w0` | `bigint` |
 | `L` | `Uint8Array` |
 | `pbkdfParameters?` | [`PbkdfParameters`](../interfaces/crypto_export.PbkdfParameters.md) |
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:24
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:23
 
 ## Properties
 
@@ -62,7 +62,7 @@ packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:18
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:17
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:27
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:26
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:21
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:20
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:20
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:19
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:19
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:18
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:17
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:16
 
 ## Methods
 
@@ -133,7 +133,7 @@ packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:28
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:27
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:29
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:28
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:25
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:24
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:26
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:25
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:22
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:21
 
 ___
 
@@ -235,4 +235,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:23
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:22

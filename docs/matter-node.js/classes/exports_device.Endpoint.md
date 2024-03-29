@@ -4,6 +4,10 @@
 
 [exports/device](../modules/exports_device.md).Endpoint
 
+The primary interface for Matter.js endpoint implementations.
+
+TODO - this is a transitional interface that allows us to have multiple implementations of the legacy endpoint API
+
 ## Hierarchy
 
 - **`Endpoint`**
@@ -18,6 +22,10 @@
 
   ↳ [`Device`](exports_device.Device.md)
 
+## Implements
+
+- [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md)
+
 ## Table of contents
 
 ### Constructors
@@ -31,8 +39,8 @@
 - [clusterServers](exports_device.Endpoint.md#clusterservers)
 - [descriptorCluster](exports_device.Endpoint.md#descriptorcluster)
 - [deviceTypes](exports_device.Endpoint.md#devicetypes)
-- [id](exports_device.Endpoint.md#id)
 - [name](exports_device.Endpoint.md#name)
+- [number](exports_device.Endpoint.md#number)
 - [structureChangedCallback](exports_device.Endpoint.md#structurechangedcallback)
 - [uniqueStorageKey](exports_device.Endpoint.md#uniquestoragekey)
 
@@ -43,7 +51,7 @@
 - [addClusterServer](exports_device.Endpoint.md#addclusterserver)
 - [addFixedLabel](exports_device.Endpoint.md#addfixedlabel)
 - [addUserLabel](exports_device.Endpoint.md#adduserlabel)
-- [destroy](exports_device.Endpoint.md#destroy)
+- [close](exports_device.Endpoint.md#close)
 - [determineUniqueID](exports_device.Endpoint.md#determineuniqueid)
 - [getAllClusterClients](exports_device.Endpoint.md#getallclusterclients)
 - [getAllClusterServers](exports_device.Endpoint.md#getallclusterservers)
@@ -54,7 +62,7 @@
 - [getClusterServer](exports_device.Endpoint.md#getclusterserver)
 - [getClusterServerById](exports_device.Endpoint.md#getclusterserverbyid)
 - [getDeviceTypes](exports_device.Endpoint.md#getdevicetypes)
-- [getId](exports_device.Endpoint.md#getid)
+- [getNumber](exports_device.Endpoint.md#getnumber)
 - [hasClusterClient](exports_device.Endpoint.md#hasclusterclient)
 - [hasClusterServer](exports_device.Endpoint.md#hasclusterserver)
 - [removeChildEndpoint](exports_device.Endpoint.md#removechildendpoint)
@@ -85,7 +93,7 @@ Create a new Endpoint instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:34
+packages/matter.js/dist/esm/device/Endpoint.d.ts:35
 
 ## Properties
 
@@ -95,7 +103,7 @@ packages/matter.js/dist/esm/device/Endpoint.d.ts:34
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:22
+packages/matter.js/dist/esm/device/Endpoint.d.ts:23
 
 ___
 
@@ -105,7 +113,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:21
+packages/matter.js/dist/esm/device/Endpoint.d.ts:22
 
 ___
 
@@ -115,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:20
+packages/matter.js/dist/esm/device/Endpoint.d.ts:21
 
 ___
 
@@ -125,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:27
+packages/matter.js/dist/esm/device/Endpoint.d.ts:28
 
 ___
 
@@ -135,17 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:19
-
-___
-
-### id
-
-• **id**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:20
 
 ___
 
@@ -153,9 +151,27 @@ ___
 
 • **name**: `string`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[name](../interfaces/exports_cluster._internal_.EndpointInterface.md#name)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+
+___
+
+### number
+
+• **number**: `undefined` \| [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[number](../interfaces/exports_cluster._internal_.EndpointInterface.md#number)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ___
 
@@ -165,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:26
+packages/matter.js/dist/esm/device/Endpoint.d.ts:27
 
 ___
 
@@ -175,7 +191,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ## Methods
 
@@ -187,15 +203,19 @@ packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 | Name | Type |
 | :------ | :------ |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
+| `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
 
 #### Returns
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[addChildEndpoint](../interfaces/exports_cluster._internal_.EndpointInterface.md#addchildendpoint)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -222,9 +242,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[addClusterClient](../interfaces/exports_cluster._internal_.EndpointInterface.md#addclusterclient)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -249,9 +273,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[addClusterServer](../interfaces/exports_cluster._internal_.EndpointInterface.md#addclusterserver)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -272,7 +300,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -293,21 +321,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
-### destroy
+### close
 
-▸ **destroy**(): `void`
+▸ **close**(): `void`
 
 #### Returns
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[close](../interfaces/exports_cluster._internal_.EndpointInterface.md#close)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:37
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -319,9 +351,13 @@ ___
 
 `undefined` \| `string`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[determineUniqueID](../interfaces/exports_cluster._internal_.EndpointInterface.md#determineuniqueid)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56
 
 ___
 
@@ -333,9 +369,13 @@ ___
 
 [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[getAllClusterClients](../interfaces/exports_cluster._internal_.EndpointInterface.md#getallclusterclients)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -347,9 +387,13 @@ ___
 
 [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[getAllClusterServers](../interfaces/exports_cluster._internal_.EndpointInterface.md#getallclusterservers)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -367,9 +411,13 @@ ___
 
 `undefined` \| [`Endpoint`](exports_device.Endpoint.md)
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[getChildEndpoint](../interfaces/exports_cluster._internal_.EndpointInterface.md#getchildendpoint)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -381,9 +429,13 @@ ___
 
 [`Endpoint`](exports_device.Endpoint.md)[]
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[getChildEndpoints](../interfaces/exports_cluster._internal_.EndpointInterface.md#getchildendpoints)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -411,9 +463,13 @@ ___
 
 `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[getClusterClient](../interfaces/exports_cluster._internal_.EndpointInterface.md#getclusterclient)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:44
+packages/matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -433,7 +489,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -461,9 +517,13 @@ ___
 
 `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<`A`, `E`\>
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[getClusterServer](../interfaces/exports_cluster._internal_.EndpointInterface.md#getclusterserver)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:43
+packages/matter.js/dist/esm/device/Endpoint.d.ts:44
 
 ___
 
@@ -481,9 +541,13 @@ ___
 
 `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[getClusterServerById](../interfaces/exports_cluster._internal_.EndpointInterface.md#getclusterserverbyid)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -497,21 +561,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
-### getId
+### getNumber
 
-▸ **getId**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
+▸ **getNumber**(): [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
 #### Returns
 
 [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[getNumber](../interfaces/exports_cluster._internal_.EndpointInterface.md#getnumber)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -541,7 +609,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -569,9 +637,13 @@ ___
 
 `boolean`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[hasClusterServer](../interfaces/exports_cluster._internal_.EndpointInterface.md#hasclusterserver)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -591,7 +663,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -603,9 +675,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[removeFromStructure](../interfaces/exports_cluster._internal_.EndpointInterface.md#removefromstructure)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -625,7 +701,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -643,9 +719,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[setStructureChangedCallback](../interfaces/exports_cluster._internal_.EndpointInterface.md#setstructurechangedcallback)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -657,9 +737,13 @@ ___
 
 [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)[]
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[updatePartsList](../interfaces/exports_cluster._internal_.EndpointInterface.md#updatepartslist)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:59
+packages/matter.js/dist/esm/device/Endpoint.d.ts:60
 
 ___
 
@@ -671,6 +755,10 @@ ___
 
 `void`
 
+#### Implementation of
+
+[EndpointInterface](../interfaces/exports_cluster._internal_.EndpointInterface.md).[verifyRequiredClusters](../interfaces/exports_cluster._internal_.EndpointInterface.md#verifyrequiredclusters)
+
 #### Defined in
 
-packages/matter.js/dist/esm/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57

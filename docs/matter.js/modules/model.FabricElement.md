@@ -19,11 +19,11 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`FabricElement`](model.md#fabricelement)\>
+Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`FabricElement`](../interfaces/model.FabricElement-1.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/FabricElement.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/FabricElement.ts#L27)
+[packages/matter.js/src/model/elements/FabricElement.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/FabricElement.ts#L27)
 
 ___
 
@@ -33,9 +33,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/FabricElement.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/FabricElement.ts#L25)
+[packages/matter.js/src/model/elements/FabricElement.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/FabricElement.ts#L25)
 
-[packages/matter.js/src/model/elements/FabricElement.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/FabricElement.ts#L26)
+[packages/matter.js/src/model/elements/FabricElement.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/FabricElement.ts#L26)
 
 ## Variables
 
@@ -45,6 +45,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/FabricElement.ts:25](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/FabricElement.ts#L25)
+[packages/matter.js/src/model/elements/FabricElement.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/FabricElement.ts#L25)
 
-[packages/matter.js/src/model/elements/FabricElement.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/FabricElement.ts#L26)
+[packages/matter.js/src/model/elements/FabricElement.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/FabricElement.ts#L26)

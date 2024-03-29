@@ -38,7 +38,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:174
+packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:175
 
 ___
 
@@ -59,7 +59,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:152
+packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:153
 
 ___
 
@@ -80,7 +80,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:131
+packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:132
 
 ___
 
@@ -99,7 +99,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:120
+packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:121
 
 ___
 
@@ -120,7 +120,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:163
+packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:164
 
 ___
 
@@ -140,4 +140,4 @@ MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:141
+packages/matter.js/dist/esm/cluster/definitions/PumpConfigurationAndControlCluster.d.ts:142

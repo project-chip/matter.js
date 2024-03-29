@@ -28,4 +28,4 @@ The Node can be configured to use different calendar formats when conveying valu
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:88
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:113

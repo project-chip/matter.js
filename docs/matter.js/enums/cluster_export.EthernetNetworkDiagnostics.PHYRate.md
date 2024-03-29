@@ -33,7 +33,7 @@ PHY rate is 100Gbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:61](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L63)
 
 ___
 
@@ -45,7 +45,7 @@ PHY rate is 100Mbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L33)
 
 ___
 
@@ -57,7 +57,7 @@ PHY rate is 10Gbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:51](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L53)
 
 ___
 
@@ -69,7 +69,7 @@ PHY rate is 10Mbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L28)
 
 ___
 
@@ -81,7 +81,7 @@ PHY rate is 1Gbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:36](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L38)
 
 ___
 
@@ -93,7 +93,7 @@ PHY rate is 200Gbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:66](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L66)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L68)
 
 ___
 
@@ -105,7 +105,7 @@ PHY rate is 2.5Gbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:41](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L43)
 
 ___
 
@@ -117,7 +117,7 @@ PHY rate is 400Gbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:71](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L71)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L73)
 
 ___
 
@@ -129,7 +129,7 @@ PHY rate is 40Gbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:56](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L58)
 
 ___
 
@@ -141,4 +141,4 @@ PHY rate is 5Gbps
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:46](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L48)

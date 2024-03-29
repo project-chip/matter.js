@@ -31,7 +31,7 @@ associated with the current fail- safe context.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:93
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:109
 
 ___
 
@@ -43,7 +43,7 @@ Executed CommissioningComplete outside CASE session.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:84
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:100
 
 ___
 
@@ -55,7 +55,7 @@ Executed CommissioningComplete when there was no active Fail-Safe context.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:88
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:104
 
 ___
 
@@ -67,7 +67,7 @@ No error
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:75
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:91
 
 ___
 
@@ -80,4 +80,4 @@ have proper configuration.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:80
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:96

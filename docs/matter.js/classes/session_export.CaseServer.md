@@ -6,7 +6,7 @@
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\>
+- [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\>
 
 ## Table of contents
 
@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:246](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/case/CaseServer.ts#L246)
+[packages/matter.js/src/session/case/CaseServer.ts:246](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/case/CaseServer.ts#L246)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:58](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/case/CaseServer.ts#L58)
+[packages/matter.js/src/session/case/CaseServer.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/case/CaseServer.ts#L58)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `server` | [`MatterDevice`](cluster_export._internal_.MatterDevice.md) |
+| `server` | [`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md) |
 | `messenger` | [`CaseServerMessenger`](session_export.CaseServerMessenger.md) |
 
 #### Returns
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:62](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/case/CaseServer.ts#L62)
+[packages/matter.js/src/session/case/CaseServer.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/case/CaseServer.ts#L62)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](cluster_export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -110,4 +110,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:38](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/session/case/CaseServer.ts#L38)
+[packages/matter.js/src/session/case/CaseServer.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/session/case/CaseServer.ts#L38)

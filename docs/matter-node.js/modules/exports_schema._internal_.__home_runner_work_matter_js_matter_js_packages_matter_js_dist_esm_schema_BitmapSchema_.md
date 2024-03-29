@@ -45,7 +45,7 @@ ___
 
 ### BitFlags
 
-Re-exports [BitFlags](exports_schema.md#bitflags)
+Re-exports [BitFlags](exports_schema.md#bitflags-1)
 
 ___
 

@@ -27,7 +27,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:29
 
 ___
 
@@ -37,9 +37,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:26
-
 packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:27
+
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:28
 
 ## Variables
 
@@ -49,6 +49,6 @@ packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:27
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:26
-
 packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:27
+
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:28

@@ -10,9 +10,18 @@
 
 - [Status](../enums/cluster_export.TargetNavigator.Status.md)
 
+### Interfaces
+
+- [Cluster](../interfaces/cluster_export.TargetNavigator.Cluster.md)
+- [NavigateTargetRequest](../interfaces/cluster_export.TargetNavigator.NavigateTargetRequest.md)
+- [NavigateTargetResponse](../interfaces/cluster_export.TargetNavigator.NavigateTargetResponse.md)
+- [TargetInfoStruct](../interfaces/cluster_export.TargetNavigator.TargetInfoStruct.md)
+
 ### Variables
 
 - [Cluster](cluster_export.TargetNavigator.md#cluster)
+- [ClusterInstance](cluster_export.TargetNavigator.md#clusterinstance)
+- [Complete](cluster_export.TargetNavigator.md#complete)
 - [TlvNavigateTargetRequest](cluster_export.TargetNavigator.md#tlvnavigatetargetrequest)
 - [TlvNavigateTargetResponse](cluster_export.TargetNavigator.md#tlvnavigatetargetresponse)
 - [TlvTargetInfoStruct](cluster_export.TargetNavigator.md#tlvtargetinfostruct)
@@ -21,19 +30,37 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `currentTarget`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `targetList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[], `any`\>  } ; `commands`: \{ `navigateTarget`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `target`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.TargetNavigator.Status.md)\>  }\>, `any`\>  } ; `id`: ``1285`` = 0x505; `name`: ``"TargetNavigator"`` = "TargetNavigator"; `revision`: ``1`` = 1 }\>
-
-Target Navigator
-
-This cluster provides an interface for UX navigation within a set of targets on a device or endpoint.
-
-**`See`**
-
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.TargetNavigator.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:110](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L175)
+
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L177)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `currentTarget`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `targetList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `identifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[], `any`\>  } ; `commands`: \{ `navigateTarget`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `target`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.TargetNavigator.Status.md)\>  }\>, `any`\>  } ; `id`: ``1285`` = 0x505; `name`: ``"TargetNavigator"`` = "TargetNavigator"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.TargetNavigator.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:130](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L130)
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/cluster_export.TargetNavigator.Cluster.md) = `Cluster`
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:178](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L178)
 
 ___
 
@@ -49,7 +76,7 @@ Input to the TargetNavigator navigateTarget command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:45](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L55)
 
 ___
 
@@ -65,7 +92,7 @@ This command shall be generated in response to NavigateTarget command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:87](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L104)
 
 ___
 
@@ -81,4 +108,4 @@ This indicates an object describing the navigable target.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L27)

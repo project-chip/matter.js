@@ -4,20 +4,31 @@
 
 ## Table of contents
 
+### References
+
+- [Configuration](exports_interaction._internal_.md#configuration)
+
+### Namespaces
+
+- [SubscriptionOptions](exports_interaction._internal_.SubscriptionOptions.md)
+
 ### Classes
 
-- [EventHandler](../classes/exports_interaction._internal_.EventHandler.md)
 - [InteractionMessenger](../classes/exports_interaction._internal_.InteractionMessenger.md)
 
 ### Interfaces
 
-- [EventData](../interfaces/exports_interaction._internal_.EventData.md)
-- [EventStorageData](../interfaces/exports_interaction._internal_.EventStorageData.md)
+- [SubscriptionOptions](../interfaces/exports_interaction._internal_.SubscriptionOptions-1.md)
 
 ### Type Aliases
 
 - [AttributeDataPayload](exports_interaction._internal_.md#attributedatapayload)
-- [EventDataPayload](exports_interaction._internal_.md#eventdatapayload)
+
+## References
+
+### Configuration
+
+Re-exports [Configuration](../interfaces/exports_interaction._internal_.SubscriptionOptions.Configuration.md)
 
 ## Type Aliases
 
@@ -30,15 +41,3 @@ Type for TlvAttributeReportData where the real data are represented with the sch
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:12
-
-___
-
-### EventDataPayload
-
-Ƭ **EventDataPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>, ``"data"``\> & \{ `payload`: `any` ; `schema`: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`any`\>  }
-
-Type for TlvEventData where the real data are represented with the schema and the JS value.
-
-#### Defined in
-
-packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:21

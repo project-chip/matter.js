@@ -33,7 +33,7 @@
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleNode.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleNode.ts#L18)
+[matter-node-ble.js/src/ble/BleNode.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleNode.ts#L18)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleScanner.ts#L19)
+[matter-node-ble.js/src/ble/BleScanner.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L19)

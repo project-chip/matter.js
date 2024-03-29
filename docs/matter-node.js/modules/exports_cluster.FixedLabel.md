@@ -6,32 +6,48 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/exports_cluster.FixedLabel.Cluster.md)
+
 ### Variables
 
 - [Cluster](exports_cluster.FixedLabel.md#cluster)
+- [ClusterInstance](exports_cluster.FixedLabel.md#clusterinstance)
+- [Complete](exports_cluster.FixedLabel.md#complete)
 
 ## Variables
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `labelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `id`: ``64`` ; `name`: ``"FixedLabel"`` ; `revision`: ``1``  }\>
-
-Fixed Label
-
-This cluster provides a feature for the device to tag an endpoint with zero or more read only labels. Examples:
-
-  • A bridge can use this to indicate grouping of bridged devices. For example: All bridged devices whose
-    endpoints have an entry in their LabelList "room":"bedroom 2" are in the same (bed)room.
-
-  • A manufacturer can use this to identify a characteristic of an endpoint. For example to identify the
-    endpoints of a luminaire, one pointing up, the other pointing down, one of the endpoints would have a
-    LabelList entry "orientation":"up" while the other would have "orientation":"down". Using such indication,
-    the user interface of a Node controlling this luminaire knows which of the endpoints is which of the lights.
-
-**`See`**
-
-MatterCoreSpecificationV1_1 § 9.8
+• **Cluster**: [`Cluster`](../interfaces/exports_cluster.FixedLabel.Cluster.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FixedLabelCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/FixedLabelCluster.d.ts:43
+
+packages/matter.js/dist/esm/cluster/definitions/FixedLabelCluster.d.ts:45
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/exports_cluster.MutableCluster-1.md)\<\{ `attributes`: \{ `labelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `id`: ``64`` ; `name`: ``"FixedLabel"`` ; `revision`: ``1``  }\>
+
+**`See`**
+
+[Cluster](exports_cluster.FixedLabel.md#cluster)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/FixedLabelCluster.d.ts:14
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/exports_cluster.FixedLabel.Cluster.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/definitions/FixedLabelCluster.d.ts:46

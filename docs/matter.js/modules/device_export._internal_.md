@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:15](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/DimmableDevices.ts#L15)
+[packages/matter.js/src/device/DimmableDevices.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/DimmableDevices.ts#L15)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/device/OnOffDevices.ts#L22)
+[packages/matter.js/src/device/OnOffDevices.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/device/OnOffDevices.ts#L22)

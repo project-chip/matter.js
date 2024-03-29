@@ -40,4 +40,25 @@ Error base class for all errors thrown by this library.
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1081
+node_modules/typescript/lib/lib.es5.d.ts:1082
+
+• **new EventError**(`message?`, `options?`): [`EventError`](cluster_export.EventError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`EventError`](cluster_export.EventError.md)
+
+#### Inherited from
+
+[MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1082

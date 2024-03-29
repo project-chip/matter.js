@@ -60,9 +60,9 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:32
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:45
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:56
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:69
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:31
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:44
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:119
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:132
 
 ___
 
@@ -95,7 +95,7 @@ include Flag but that is covered by string).
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:125
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:138
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:117
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:130
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:118
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:131
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:120
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:133
 
 ## Variables
 
@@ -155,7 +155,7 @@ packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:120
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:111
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:124
 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:105
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:118
 
 ___
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:112
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:125
 
 ___
 
@@ -185,7 +185,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:107
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:120
 
 ___
 
@@ -195,7 +195,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:113
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:126
 
 ___
 
@@ -205,7 +205,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:115
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:128
 
 ___
 
@@ -215,7 +215,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:114
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:127
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:116
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:129
 
 ___
 
@@ -235,7 +235,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:102
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:115
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:108
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:121
 
 ___
 
@@ -255,7 +255,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:103
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:116
 
 ___
 
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:109
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:122
 
 ___
 
@@ -275,7 +275,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:104
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:117
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:106
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:119
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:110
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:123
 
 ## Functions
 
@@ -307,7 +307,7 @@ packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:110
 
 | Name | Type |
 | :------ | :------ |
-| `type` | [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Name`](../enums/exports_model.Conformance.Special.md#name) \| [`Value`](../enums/exports_model.Conformance.Special.md#value) \| [`Choice`](../enums/exports_model.Conformance.Special.md#choice) \| [`Group`](../enums/exports_model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif) \| [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Operator`](../enums/exports_model.Conformance.Operator.md) |
+| `type` | [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Name`](../enums/exports_model.Conformance.Special.md#name) \| [`Value`](../enums/exports_model.Conformance.Special.md#value) \| [`Choice`](../enums/exports_model.Conformance.Special.md#choice) \| [`Group`](../enums/exports_model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif) \| [`Operator`](../enums/exports_model.Conformance.Operator.md) |
 
 #### Returns
 
@@ -315,7 +315,7 @@ type is Operator
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:130
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:143
 
 ___
 
@@ -327,8 +327,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `operator` | [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Name`](../enums/exports_model.Conformance.Special.md#name) \| [`Value`](../enums/exports_model.Conformance.Special.md#value) \| [`Choice`](../enums/exports_model.Conformance.Special.md#choice) \| [`Group`](../enums/exports_model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif) \| [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Operator`](../enums/exports_model.Conformance.Operator.md) |
-| `other` | [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Name`](../enums/exports_model.Conformance.Special.md#name) \| [`Value`](../enums/exports_model.Conformance.Special.md#value) \| [`Choice`](../enums/exports_model.Conformance.Special.md#choice) \| [`Group`](../enums/exports_model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif) \| [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Operator`](../enums/exports_model.Conformance.Operator.md) |
+| `operator` | [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Name`](../enums/exports_model.Conformance.Special.md#name) \| [`Value`](../enums/exports_model.Conformance.Special.md#value) \| [`Choice`](../enums/exports_model.Conformance.Special.md#choice) \| [`Group`](../enums/exports_model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif) \| [`Operator`](../enums/exports_model.Conformance.Operator.md) |
+| `other` | [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Name`](../enums/exports_model.Conformance.Special.md#name) \| [`Value`](../enums/exports_model.Conformance.Special.md#value) \| [`Choice`](../enums/exports_model.Conformance.Special.md#choice) \| [`Group`](../enums/exports_model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif) \| [`Operator`](../enums/exports_model.Conformance.Operator.md) |
 
 #### Returns
 
@@ -336,7 +336,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:132
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:145
 
 ___
 
@@ -348,7 +348,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `operator` | [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Name`](../enums/exports_model.Conformance.Special.md#name) \| [`Value`](../enums/exports_model.Conformance.Special.md#value) \| [`Choice`](../enums/exports_model.Conformance.Special.md#choice) \| [`Group`](../enums/exports_model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif) \| [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Operator`](../enums/exports_model.Conformance.Operator.md) |
+| `operator` | [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Name`](../enums/exports_model.Conformance.Special.md#name) \| [`Value`](../enums/exports_model.Conformance.Special.md#value) \| [`Choice`](../enums/exports_model.Conformance.Special.md#choice) \| [`Group`](../enums/exports_model.Conformance.Special.md#group) \| [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif) \| [`Operator`](../enums/exports_model.Conformance.Operator.md) |
 
 #### Returns
 
@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:131
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:144
 
 ___
 
@@ -376,7 +376,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:129
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:142
 
 ___
 
@@ -398,4 +398,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:128
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:141

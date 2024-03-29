@@ -16,15 +16,17 @@ Interface for classes that allow to announce one Matter instance.
 
 ### Properties
 
-- [additionalAdvertisementData](BleBroadcaster.md#additionaladvertisementdata)
-- [advertise](BleBroadcaster.md#advertise)
-- [blenoServer](BleBroadcaster.md#blenoserver)
-- [discriminator](BleBroadcaster.md#discriminator)
-- [productId](BleBroadcaster.md#productid)
-- [vendorId](BleBroadcaster.md#vendorid)
+- [#additionalAdvertisementData](BleBroadcaster.md##additionaladvertisementdata)
+- [#advertise](BleBroadcaster.md##advertise)
+- [#blenoServer](BleBroadcaster.md##blenoserver)
+- [#discriminator](BleBroadcaster.md##discriminator)
+- [#isClosed](BleBroadcaster.md##isclosed)
+- [#productId](BleBroadcaster.md##productid)
+- [#vendorId](BleBroadcaster.md##vendorid)
 
 ### Methods
 
+- [#assertOpen](BleBroadcaster.md##assertopen)
 - [announce](BleBroadcaster.md#announce)
 - [close](BleBroadcaster.md#close)
 - [expireAllAnnouncements](BleBroadcaster.md#expireallannouncements)
@@ -53,69 +55,93 @@ Interface for classes that allow to announce one Matter instance.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L26)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L30)
 
 ## Properties
 
-### additionalAdvertisementData
+### #additionalAdvertisementData
 
-• `Private` `Optional` `Readonly` **additionalAdvertisementData**: `Uint8Array`
+• `Private` `Optional` **#additionalAdvertisementData**: `Uint8Array`
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:28](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L28)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L23)
 
 ___
 
-### advertise
+### #advertise
 
-• `Private` **advertise**: `boolean` = `false`
+• `Private` **#advertise**: `boolean` = `false`
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:24](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L24)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L27)
 
 ___
 
-### blenoServer
+### #blenoServer
 
-• `Private` `Readonly` **blenoServer**: [`BlenoBleServer`](internal_.BlenoBleServer.md)
+• `Private` **#blenoServer**: [`BlenoBleServer`](internal_.BlenoBleServer.md)
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L27)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L22)
 
 ___
 
-### discriminator
+### #discriminator
 
-• `Private` **discriminator**: `undefined` \| `number`
+• `Private` **#discriminator**: `undefined` \| `number`
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:23](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L23)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L26)
 
 ___
 
-### productId
+### #isClosed
 
-• `Private` **productId**: `undefined` \| `number`
+• `Private` **#isClosed**: `boolean` = `false`
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:22](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L22)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L28)
 
 ___
 
-### vendorId
+### #productId
 
-• `Private` **vendorId**: `undefined` \| [`VendorId`](../modules/internal_.md#vendorid)
+• `Private` **#productId**: `undefined` \| `number`
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:21](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L21)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L25)
+
+___
+
+### #vendorId
+
+• `Private` **#vendorId**: `undefined` \| [`VendorId`](../modules/internal_.md#vendorid)
+
+#### Defined in
+
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L24)
 
 ## Methods
+
+### #assertOpen
+
+▸ **#assertOpen**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:123](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L123)
+
+___
 
 ### announce
 
@@ -133,7 +159,7 @@ Send out announcements for this instance.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:65](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L65)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L72)
 
 ___
 
@@ -141,13 +167,19 @@ ___
 
 ▸ **close**(): `Promise`\<`void`\>
 
+Destroy the instance
+
 #### Returns
 
 `Promise`\<`void`\>
 
+#### Implementation of
+
+[InstanceBroadcaster](../interfaces/internal_.InstanceBroadcaster.md).[close](../interfaces/internal_.InstanceBroadcaster.md#close)
+
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:102](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L102)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L114)
 
 ___
 
@@ -167,7 +199,7 @@ Expire all announcements.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:98](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L98)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L108)
 
 ___
 
@@ -187,7 +219,7 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:90](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L90)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:98](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L98)
 
 ___
 
@@ -207,7 +239,7 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:94](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L94)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L104)
 
 ___
 
@@ -222,7 +254,7 @@ Set a commissionable mode and details to announce a commissionable device.
 | Name | Type |
 | :------ | :------ |
 | `mode` | `number` |
-| `«destructured»` | [`CommissioningModeInstanceData`](../modules/internal_.md#commissioningmodeinstancedata) |
+| `«destructured»` | [`CommissioningModeInstanceData`](../interfaces/internal_.CommissioningModeInstanceData.md) |
 
 #### Returns
 
@@ -234,7 +266,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L31)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L35)
 
 ___
 
@@ -260,7 +292,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:60](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L60)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:66](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L66)
 
 ___
 
@@ -281,4 +313,4 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:53](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L53)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L58)

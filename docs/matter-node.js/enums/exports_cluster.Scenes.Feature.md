@@ -28,4 +28,4 @@ The ability to store a name for a scene.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ScenesCluster.d.ts:358
+packages/matter.js/dist/esm/cluster/definitions/ScenesCluster.d.ts:493

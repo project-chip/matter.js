@@ -25,7 +25,7 @@
 
 ### ListValues
 
-Ƭ **ListValues**: [`DatatypeElement`](exports_model.md#datatypeelement)[]
+Ƭ **ListValues**: [`FieldElement`](../interfaces/exports_model.FieldElement-1.md)[]
 
 We express enum values as IntElements as this gives us conformance
 and other metadata.
@@ -40,7 +40,7 @@ ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`DatatypeElement`](exports_model.md#datatypeelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`DatatypeElement`](../interfaces/exports_model.DatatypeElement-1.md)\>
 
 #### Defined in
 
@@ -50,7 +50,7 @@ ___
 
 ### Tag
 
-Ƭ **Tag**: [`Datatype`](../enums/exports_model.ElementTag.md#datatype)
+Ƭ **Tag**: typeof [`Datatype`](../enums/exports_model.ElementTag.md#datatype)
 
 #### Defined in
 
@@ -81,7 +81,7 @@ packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:52
 
 ### Tag
 
-• **Tag**: [`Datatype`](../enums/exports_model.ElementTag.md#datatype)
+• `Const` **Tag**: [`Datatype`](../enums/exports_model.ElementTag.md#datatype) = `ElementTag.Datatype`
 
 #### Defined in
 

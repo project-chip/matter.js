@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [#private](exports_cluster._internal_.MatterDevice.md##private)
 - [activeCommissioningEndCallback](exports_cluster._internal_.MatterDevice.md#activecommissioningendcallback)
 - [activeCommissioningMode](exports_cluster._internal_.MatterDevice.md#activecommissioningmode)
 - [announceAsCommissionable](exports_cluster._internal_.MatterDevice.md#announceascommissionable)
@@ -20,38 +21,37 @@
 - [broadcasters](exports_cluster._internal_.MatterDevice.md#broadcasters)
 - [channelManager](exports_cluster._internal_.MatterDevice.md#channelmanager)
 - [commissioningChangedCallback](exports_cluster._internal_.MatterDevice.md#commissioningchangedcallback)
-- [deviceName](exports_cluster._internal_.MatterDevice.md#devicename)
-- [deviceType](exports_cluster._internal_.MatterDevice.md#devicetype)
-- [discriminator](exports_cluster._internal_.MatterDevice.md#discriminator)
-- [exchangeManager](exports_cluster._internal_.MatterDevice.md#exchangemanager)
-- [fabricManager](exports_cluster._internal_.MatterDevice.md#fabricmanager)
-- [failSafeContext](exports_cluster._internal_.MatterDevice.md#failsafecontext)
-- [failSafeExpired](exports_cluster._internal_.MatterDevice.md#failsafeexpired)
-- [initialPasscode](exports_cluster._internal_.MatterDevice.md#initialpasscode)
+- [fabricStorage](exports_cluster._internal_.MatterDevice.md#fabricstorage)
+- [getCommissioningConfig](exports_cluster._internal_.MatterDevice.md#getcommissioningconfig)
 - [isClosing](exports_cluster._internal_.MatterDevice.md#isclosing)
-- [productId](exports_cluster._internal_.MatterDevice.md#productid)
 - [scanners](exports_cluster._internal_.MatterDevice.md#scanners)
 - [secureChannelProtocol](exports_cluster._internal_.MatterDevice.md#securechannelprotocol)
 - [sessionChangedCallback](exports_cluster._internal_.MatterDevice.md#sessionchangedcallback)
-- [sessionManager](exports_cluster._internal_.MatterDevice.md#sessionmanager)
-- [storage](exports_cluster._internal_.MatterDevice.md#storage)
+- [sessionStorage](exports_cluster._internal_.MatterDevice.md#sessionstorage)
 - [transportInterfaces](exports_cluster._internal_.MatterDevice.md#transportinterfaces)
-- [vendorId](exports_cluster._internal_.MatterDevice.md#vendorid)
+
+### Accessors
+
+- [construction](exports_cluster._internal_.MatterDevice.md#construction)
+- [exchangeManager](exports_cluster._internal_.MatterDevice.md#exchangemanager)
+- [fabricManager](exports_cluster._internal_.MatterDevice.md#fabricmanager)
+- [failsafeContext](exports_cluster._internal_.MatterDevice.md#failsafecontext)
+- [sessionManager](exports_cluster._internal_.MatterDevice.md#sessionmanager)
 
 ### Methods
 
 - [addBroadcaster](exports_cluster._internal_.MatterDevice.md#addbroadcaster)
-- [addFabric](exports_cluster._internal_.MatterDevice.md#addfabric)
 - [addProtocolHandler](exports_cluster._internal_.MatterDevice.md#addprotocolhandler)
 - [addScanner](exports_cluster._internal_.MatterDevice.md#addscanner)
 - [addTransportInterface](exports_cluster._internal_.MatterDevice.md#addtransportinterface)
 - [allowBasicCommissioning](exports_cluster._internal_.MatterDevice.md#allowbasiccommissioning)
 - [allowEnhancedCommissioning](exports_cluster._internal_.MatterDevice.md#allowenhancedcommissioning)
 - [announce](exports_cluster._internal_.MatterDevice.md#announce)
-- [armFailSafe](exports_cluster._internal_.MatterDevice.md#armfailsafe)
 - [assertFailSafeArmed](exports_cluster._internal_.MatterDevice.md#assertfailsafearmed)
-- [completeCommission](exports_cluster._internal_.MatterDevice.md#completecommission)
-- [createSecureSession](exports_cluster._internal_.MatterDevice.md#createsecuresession)
+- [beginTimed](exports_cluster._internal_.MatterDevice.md#begintimed)
+- [close](exports_cluster._internal_.MatterDevice.md#close)
+- [deleteBroadcaster](exports_cluster._internal_.MatterDevice.md#deletebroadcaster)
+- [deleteTransportInterface](exports_cluster._internal_.MatterDevice.md#deletetransportinterface)
 - [endCommissioning](exports_cluster._internal_.MatterDevice.md#endcommissioning)
 - [existsOpenPaseSession](exports_cluster._internal_.MatterDevice.md#existsopenpasesession)
 - [findDevice](exports_cluster._internal_.MatterDevice.md#finddevice)
@@ -60,41 +60,33 @@
 - [getActiveSessionInformation](exports_cluster._internal_.MatterDevice.md#getactivesessioninformation)
 - [getFabricByIndex](exports_cluster._internal_.MatterDevice.md#getfabricbyindex)
 - [getFabrics](exports_cluster._internal_.MatterDevice.md#getfabrics)
-- [getFailSafeContext](exports_cluster._internal_.MatterDevice.md#getfailsafecontext)
 - [getNextAvailableSessionId](exports_cluster._internal_.MatterDevice.md#getnextavailablesessionid)
-- [getNextFabricIndex](exports_cluster._internal_.MatterDevice.md#getnextfabricindex)
 - [hasBroadcaster](exports_cluster._internal_.MatterDevice.md#hasbroadcaster)
 - [hasProtocolHandler](exports_cluster._internal_.MatterDevice.md#hasprotocolhandler)
 - [initiateExchange](exports_cluster._internal_.MatterDevice.md#initiateexchange)
 - [isCommissioned](exports_cluster._internal_.MatterDevice.md#iscommissioned)
 - [isFailsafeArmed](exports_cluster._internal_.MatterDevice.md#isfailsafearmed)
-- [removePaseSession](exports_cluster._internal_.MatterDevice.md#removepasesession)
 - [saveResumptionRecord](exports_cluster._internal_.MatterDevice.md#saveresumptionrecord)
 - [sendCommissionableAnnouncement](exports_cluster._internal_.MatterDevice.md#sendcommissionableannouncement)
 - [sendFabricAnnouncements](exports_cluster._internal_.MatterDevice.md#sendfabricannouncements)
 - [start](exports_cluster._internal_.MatterDevice.md#start)
 - [startAnnouncement](exports_cluster._internal_.MatterDevice.md#startannouncement)
-- [stop](exports_cluster._internal_.MatterDevice.md#stop)
-- [updateFabric](exports_cluster._internal_.MatterDevice.md#updatefabric)
+- [create](exports_cluster._internal_.MatterDevice.md#create)
 
 ## Constructors
 
 ### constructor
 
-• **new MatterDevice**(`deviceName`, `deviceType`, `vendorId`, `productId`, `discriminator`, `initialPasscode`, `storage`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](exports_cluster._internal_.MatterDevice.md)
+• **new MatterDevice**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](exports_cluster._internal_.MatterDevice.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `deviceName` | `string` |
-| `deviceType` | [`DeviceTypeId`](../modules/exports_datatype.md#devicetypeid) |
-| `vendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
-| `productId` | `number` |
-| `discriminator` | `number` |
-| `initialPasscode` | `number` |
-| `storage` | [`StorageContext`](storage_export.StorageContext.md) |
-| `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex)) => `void` |
+| `sessionStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `fabricStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `getCommissioningConfig` | () => [`Configuration`](../interfaces/exports_cluster._internal_.Configuration.md) |
+| `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/exports_fabric.FabricAction.md)) => `void` |
 | `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex)) => `void` |
 
 #### Returns
@@ -103,9 +95,19 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:54
+packages/matter.js/dist/esm/MatterDevice.d.ts:44
 
 ## Properties
+
+### #private
+
+• `Private` **#private**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:26
+
+___
 
 ### activeCommissioningEndCallback
 
@@ -113,7 +115,7 @@ packages/matter.js/dist/esm/MatterDevice.d.ts:54
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:49
+packages/matter.js/dist/esm/MatterDevice.d.ts:38
 
 ___
 
@@ -123,7 +125,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:48
+packages/matter.js/dist/esm/MatterDevice.d.ts:37
 
 ___
 
@@ -133,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:64
+packages/matter.js/dist/esm/MatterDevice.d.ts:63
 
 ___
 
@@ -143,7 +145,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:50
+packages/matter.js/dist/esm/MatterDevice.d.ts:39
 
 ___
 
@@ -153,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:51
+packages/matter.js/dist/esm/MatterDevice.d.ts:40
 
 ___
 
@@ -163,7 +165,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:41
+packages/matter.js/dist/esm/MatterDevice.d.ts:33
 
 ___
 
@@ -173,7 +175,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:45
+packages/matter.js/dist/esm/MatterDevice.d.ts:35
 
 ___
 
@@ -183,87 +185,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:38
+packages/matter.js/dist/esm/MatterDevice.d.ts:30
 
 ___
 
-### deviceName
+### fabricStorage
 
-• `Private` `Readonly` **deviceName**: `any`
+• `Readonly` **fabricStorage**: [`StorageContext`](storage_export.StorageContext.md)\<`any`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:31
+packages/matter.js/dist/esm/MatterDevice.d.ts:28
 
 ___
 
-### deviceType
+### getCommissioningConfig
 
-• `Private` `Readonly` **deviceType**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:32
-
-___
-
-### discriminator
-
-• `Private` `Readonly` **discriminator**: `any`
+• `Private` `Readonly` **getCommissioningConfig**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:35
-
-___
-
-### exchangeManager
-
-• `Private` `Readonly` **exchangeManager**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:46
-
-___
-
-### fabricManager
-
-• `Private` `Readonly` **fabricManager**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:43
-
-___
-
-### failSafeContext
-
-• `Private` `Optional` **failSafeContext**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:53
-
-___
-
-### failSafeExpired
-
-• `Private` **failSafeExpired**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:89
-
-___
-
-### initialPasscode
-
-• `Private` `Readonly` **initialPasscode**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:36
+packages/matter.js/dist/esm/MatterDevice.d.ts:29
 
 ___
 
@@ -273,17 +215,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:52
-
-___
-
-### productId
-
-• `Private` `Readonly` **productId**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:34
+packages/matter.js/dist/esm/MatterDevice.d.ts:41
 
 ___
 
@@ -293,7 +225,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:40
+packages/matter.js/dist/esm/MatterDevice.d.ts:32
 
 ___
 
@@ -303,7 +235,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:47
+packages/matter.js/dist/esm/MatterDevice.d.ts:36
 
 ___
 
@@ -313,27 +245,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:39
+packages/matter.js/dist/esm/MatterDevice.d.ts:31
 
 ___
 
-### sessionManager
+### sessionStorage
 
-• `Private` `Readonly` **sessionManager**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:44
-
-___
-
-### storage
-
-• `Private` `Readonly` **storage**: `any`
+• `Readonly` **sessionStorage**: [`StorageContext`](storage_export.StorageContext.md)\<`any`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:37
+packages/matter.js/dist/esm/MatterDevice.d.ts:27
 
 ___
 
@@ -343,17 +265,77 @@ ___
 
 #### Defined in
 
+packages/matter.js/dist/esm/MatterDevice.d.ts:34
+
+## Accessors
+
+### construction
+
+• `get` **construction**(): [`AsyncConstruction`](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
+
+#### Returns
+
+[`AsyncConstruction`](../interfaces/exports_cluster._internal_.AsyncConstruction-1.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
+
+#### Defined in
+
 packages/matter.js/dist/esm/MatterDevice.d.ts:42
 
 ___
 
-### vendorId
+### exchangeManager
 
-• `Private` `Readonly` **vendorId**: `any`
+• `get` **exchangeManager**(): [`ExchangeManager`](exports_protocol.ExchangeManager.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
+
+#### Returns
+
+[`ExchangeManager`](exports_protocol.ExchangeManager.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:33
+packages/matter.js/dist/esm/MatterDevice.d.ts:47
+
+___
+
+### fabricManager
+
+• `get` **fabricManager**(): [`FabricManager`](exports_fabric.FabricManager.md)
+
+#### Returns
+
+[`FabricManager`](exports_fabric.FabricManager.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:45
+
+___
+
+### failsafeContext
+
+• `get` **failsafeContext**(): [`FailsafeContext`](exports_common.FailsafeContext-1.md)
+
+#### Returns
+
+[`FailsafeContext`](exports_common.FailsafeContext-1.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:48
+
+___
+
+### sessionManager
+
+• `get` **sessionManager**(): [`SessionManager`](exports_session.SessionManager.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
+
+#### Returns
+
+[`SessionManager`](exports_session.SessionManager.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:46
 
 ## Methods
 
@@ -373,27 +355,7 @@ packages/matter.js/dist/esm/MatterDevice.d.ts:33
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:57
-
-___
-
-### addFabric
-
-▸ **addFabric**(`fabric`): `Promise`\<[`FabricIndex`](../modules/exports_datatype.md#fabricindex)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
-
-#### Returns
-
-`Promise`\<[`FabricIndex`](../modules/exports_datatype.md#fabricindex)\>
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:81
+packages/matter.js/dist/esm/MatterDevice.d.ts:54
 
 ___
 
@@ -413,7 +375,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:60
+packages/matter.js/dist/esm/MatterDevice.d.ts:59
 
 ___
 
@@ -433,19 +395,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:55
+packages/matter.js/dist/esm/MatterDevice.d.ts:52
 
 ___
 
 ### addTransportInterface
 
-▸ **addTransportInterface**(`netInterface`): `this`
+▸ **addTransportInterface**(`transport`): `this`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `netInterface` | [`TransportInterface`](../interfaces/exports_common.TransportInterface.md) |
+| `transport` | [`TransportInterface`](../interfaces/exports_common.TransportInterface.md) |
 
 #### Returns
 
@@ -453,7 +415,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:58
+packages/matter.js/dist/esm/MatterDevice.d.ts:56
 
 ___
 
@@ -473,7 +435,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:97
+packages/matter.js/dist/esm/MatterDevice.d.ts:75
 
 ___
 
@@ -495,7 +457,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:96
+packages/matter.js/dist/esm/MatterDevice.d.ts:74
 
 ___
 
@@ -515,30 +477,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:63
-
-___
-
-### armFailSafe
-
-▸ **armFailSafe**(`expiryLengthSeconds`, `maxCumulativeFailsafeSeconds`, `associatedFabric`, `endpoint`): `Promise`\<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `expiryLengthSeconds` | `number` |
-| `maxCumulativeFailsafeSeconds` | `number` |
-| `associatedFabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:90
+packages/matter.js/dist/esm/MatterDevice.d.ts:62
 
 ___
 
@@ -558,13 +497,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:88
+packages/matter.js/dist/esm/MatterDevice.d.ts:50
 
 ___
 
-### completeCommission
+### beginTimed
 
-▸ **completeCommission**(): `Promise`\<`void`\>
+▸ **beginTimed**(`failsafeContext`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `failsafeContext` | [`FailsafeContext`](exports_common.FailsafeContext-1.md) |
 
 #### Returns
 
@@ -572,36 +517,61 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:94
+packages/matter.js/dist/esm/MatterDevice.d.ts:49
 
 ___
 
-### createSecureSession
+### close
 
-▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>\>
+▸ **close**(): `Promise`\<`void`\>
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:82
+
+___
+
+### deleteBroadcaster
+
+▸ **deleteBroadcaster**(`broadcaster`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `args` | `Object` |
-| `args.fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
-| `args.isInitiator` | `boolean` |
-| `args.isResumption` | `boolean` |
-| `args.peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
-| `args.peerSessionId` | `number` |
-| `args.salt` | `Uint8Array` |
-| `args.sessionId` | `number` |
-| `args.sessionParameters?` | `Partial`\<[`SessionParameters`](../interfaces/exports_session.SessionParameters.md)\> |
-| `args.sharedSecret` | `Uint8Array` |
+| `broadcaster` | [`InstanceBroadcaster`](../interfaces/exports_common.InstanceBroadcaster.md) |
 
 #### Returns
 
-`Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:67
+packages/matter.js/dist/esm/MatterDevice.d.ts:55
+
+___
+
+### deleteTransportInterface
+
+▸ **deleteTransportInterface**(`transport`): `Promise`\<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `transport` | [`TransportInterface`](../interfaces/exports_common.TransportInterface.md) |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterDevice.d.ts:57
 
 ___
 
@@ -615,7 +585,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:98
+packages/matter.js/dist/esm/MatterDevice.d.ts:76
 
 ___
 
@@ -629,7 +599,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:99
+packages/matter.js/dist/esm/MatterDevice.d.ts:77
 
 ___
 
@@ -651,7 +621,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:100
+packages/matter.js/dist/esm/MatterDevice.d.ts:78
 
 ___
 
@@ -672,7 +642,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:78
+packages/matter.js/dist/esm/MatterDevice.d.ts:66
 
 ___
 
@@ -692,21 +662,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:85
+packages/matter.js/dist/esm/MatterDevice.d.ts:70
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/exports_fabric.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| [`ExposedFabricInformation`](../modules/exports_fabric.md#exposedfabricinformation) ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:105
+packages/matter.js/dist/esm/MatterDevice.d.ts:83
 
 ___
 
@@ -726,7 +696,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:83
+packages/matter.js/dist/esm/MatterDevice.d.ts:68
 
 ___
 
@@ -740,21 +710,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:93
-
-___
-
-### getFailSafeContext
-
-▸ **getFailSafeContext**(): [`FailSafeManager`](exports_common.FailSafeManager.md)
-
-#### Returns
-
-[`FailSafeManager`](exports_common.FailSafeManager.md)
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:92
+packages/matter.js/dist/esm/MatterDevice.d.ts:72
 
 ___
 
@@ -768,21 +724,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:66
-
-___
-
-### getNextFabricIndex
-
-▸ **getNextFabricIndex**(): [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
-
-#### Returns
-
-[`FabricIndex`](../modules/exports_datatype.md#fabricindex)
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:80
+packages/matter.js/dist/esm/MatterDevice.d.ts:65
 
 ___
 
@@ -802,7 +744,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:56
+packages/matter.js/dist/esm/MatterDevice.d.ts:53
 
 ___
 
@@ -822,7 +764,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:59
+packages/matter.js/dist/esm/MatterDevice.d.ts:58
 
 ___
 
@@ -844,7 +786,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:84
+packages/matter.js/dist/esm/MatterDevice.d.ts:69
 
 ___
 
@@ -858,7 +800,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:95
+packages/matter.js/dist/esm/MatterDevice.d.ts:73
 
 ___
 
@@ -872,27 +814,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:91
-
-___
-
-### removePaseSession
-
-▸ **removePaseSession**(): `Promise`\<`void`\>
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:87
+packages/matter.js/dist/esm/MatterDevice.d.ts:51
 
 ___
 
 ### saveResumptionRecord
 
-▸ **saveResumptionRecord**(`resumptionRecord`): `void`
+▸ **saveResumptionRecord**(`resumptionRecord`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -902,11 +830,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:86
+packages/matter.js/dist/esm/MatterDevice.d.ts:71
 
 ___
 
@@ -927,7 +855,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:65
+packages/matter.js/dist/esm/MatterDevice.d.ts:64
 
 ___
 
@@ -948,7 +876,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:82
+packages/matter.js/dist/esm/MatterDevice.d.ts:67
 
 ___
 
@@ -962,7 +890,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:61
+packages/matter.js/dist/esm/MatterDevice.d.ts:60
 
 ___
 
@@ -976,38 +904,28 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:62
+packages/matter.js/dist/esm/MatterDevice.d.ts:61
 
 ___
 
-### stop
+### create
 
-▸ **stop**(): `Promise`\<`void`\>
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterDevice.d.ts:104
-
-___
-
-### updateFabric
-
-▸ **updateFabric**(`fabric`): `void`
+▸ **create**(`sessionStorage`, `fabricStorage`, `getCommissioningConfig`, `commissioningChangedCallback`, `sessionChangedCallback`): `Promise`\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
+| `sessionStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `fabricStorage` | [`StorageContext`](storage_export.StorageContext.md)\<`any`\> |
+| `getCommissioningConfig` | () => [`Configuration`](../interfaces/exports_cluster._internal_.Configuration.md) |
+| `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex), `fabricAction`: [`FabricAction`](../enums/exports_fabric.FabricAction.md)) => `void` |
+| `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex)) => `void` |
 
 #### Returns
 
-`void`
+`Promise`\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:79
+packages/matter.js/dist/esm/MatterDevice.d.ts:43

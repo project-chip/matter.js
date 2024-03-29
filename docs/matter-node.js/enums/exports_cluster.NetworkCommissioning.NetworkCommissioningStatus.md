@@ -36,7 +36,7 @@ Cannot associate due to authentication failure
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:88
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:78
 
 ___
 
@@ -48,7 +48,7 @@ A collection would exceed its size limit
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:68
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:58
 
 ___
 
@@ -60,7 +60,7 @@ The NetworkID is already among the collection of added networks
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:76
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:66
 
 ___
 
@@ -72,7 +72,7 @@ Failure to bind Wi-Fi <-> IP interfaces
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:104
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:94
 
 ___
 
@@ -84,7 +84,7 @@ Failure to generate an IPv6 address
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:100
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:90
 
 ___
 
@@ -96,7 +96,7 @@ The NetworkID is not among the collection of added networks
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:72
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:62
 
 ___
 
@@ -108,7 +108,7 @@ Cannot find AP: SSID Not found
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:80
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:70
 
 ___
 
@@ -120,7 +120,7 @@ Other association failure
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:96
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:86
 
 ___
 
@@ -132,7 +132,7 @@ Value Outside Range
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:64
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:54
 
 ___
 
@@ -144,7 +144,7 @@ Cannot find AP: Mismatch on band/channels/regulatory domain / 2.4GHz vs 5GHz
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:84
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:74
 
 ___
 
@@ -156,7 +156,7 @@ OK, no error
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:60
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:50
 
 ___
 
@@ -168,7 +168,7 @@ Unknown error
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:108
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:98
 
 ___
 
@@ -180,4 +180,4 @@ Cannot associate due to unsupported security mode
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:92
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:82

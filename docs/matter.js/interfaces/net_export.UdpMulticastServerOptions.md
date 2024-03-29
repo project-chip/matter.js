@@ -12,6 +12,7 @@
 - [broadcastAddressIpv6](net_export.UdpMulticastServerOptions.md#broadcastaddressipv6)
 - [listeningPort](net_export.UdpMulticastServerOptions.md#listeningport)
 - [netInterface](net_export.UdpMulticastServerOptions.md#netinterface)
+- [network](net_export.UdpMulticastServerOptions.md#network)
 
 ## Properties
 
@@ -21,7 +22,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpMulticastServer.ts#L18)
+[packages/matter.js/src/net/UdpMulticastServer.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpMulticastServer.ts#L20)
 
 ___
 
@@ -31,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:19](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpMulticastServer.ts#L19)
+[packages/matter.js/src/net/UdpMulticastServer.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpMulticastServer.ts#L19)
 
 ___
 
@@ -41,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:17](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpMulticastServer.ts#L17)
+[packages/matter.js/src/net/UdpMulticastServer.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpMulticastServer.ts#L18)
 
 ___
 
@@ -51,4 +52,14 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:20](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/net/UdpMulticastServer.ts#L20)
+[packages/matter.js/src/net/UdpMulticastServer.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpMulticastServer.ts#L21)
+
+___
+
+### network
+
+• **network**: [`Network`](../classes/net_export.Network.md)
+
+#### Defined in
+
+[packages/matter.js/src/net/UdpMulticastServer.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/net/UdpMulticastServer.ts#L17)

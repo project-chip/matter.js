@@ -26,7 +26,7 @@ Target request is not allowed in current state.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:64
+packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:80
 
 ___
 
@@ -38,7 +38,7 @@ Command succeeded
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:56
+packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:72
 
 ___
 
@@ -50,4 +50,4 @@ Requested target was not found in the TargetList
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:60
+packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:76

@@ -31,7 +31,7 @@ control.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:209
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:337
 
 ___
 
@@ -45,7 +45,7 @@ Behavior that supports lighting applications
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:202
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:330
 
 ___
 
@@ -59,4 +59,4 @@ Dependency with the On/Off cluster
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:196
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:324

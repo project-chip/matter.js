@@ -6,9 +6,18 @@
 
 ## Table of contents
 
+### Interfaces
+
+- [Cluster](../interfaces/cluster_export.ClientMonitoring.Cluster.md)
+- [MonitoringRegistration](../interfaces/cluster_export.ClientMonitoring.MonitoringRegistration.md)
+- [RegisterClientMonitoringRequest](../interfaces/cluster_export.ClientMonitoring.RegisterClientMonitoringRequest.md)
+- [UnregisterClientMonitoringRequest](../interfaces/cluster_export.ClientMonitoring.UnregisterClientMonitoringRequest.md)
+
 ### Variables
 
 - [Cluster](cluster_export.ClientMonitoring.md#cluster)
+- [ClusterInstance](cluster_export.ClientMonitoring.md#clusterinstance)
+- [Complete](cluster_export.ClientMonitoring.md#complete)
 - [TlvMonitoringRegistration](cluster_export.ClientMonitoring.md#tlvmonitoringregistration)
 - [TlvRegisterClientMonitoringRequest](cluster_export.ClientMonitoring.md#tlvregisterclientmonitoringrequest)
 - [TlvUnregisterClientMonitoringRequest](cluster_export.ClientMonitoring.md#tlvunregisterclientmonitoringrequest)
@@ -17,15 +26,37 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `activeModeInterval`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `activeModeThreshold`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `expectedClients`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `clientNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\> ; `iCid`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>[], `any`\> ; `idleModeInterval`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `registerClientMonitoring`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `clientNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\> ; `iCid`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>, `void`, `any`\> ; `stayAwakeRequest`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<`void`, `void`, `any`\> ; `unregisterClientMonitoring`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `clientNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\> ; `iCid`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>, `void`, `any`\>  } ; `id`: ``4166`` = 0x1046; `name`: ``"ClientMonitoring"`` = "ClientMonitoring"; `revision`: ``1`` = 1 }\>
-
-Client Monitoring
-
-Client Monitoring allows for ensuring that listed clients meet the required monitoring conditions on the server.
+• **Cluster**: [`Cluster`](../interfaces/cluster_export.ClientMonitoring.Cluster.md)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:44](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L104)
+
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L106)
+
+___
+
+### ClusterInstance
+
+• `Const` **ClusterInstance**: [`MutableCluster`](../interfaces/cluster_export.MutableCluster-1.md)\<\{ `attributes`: \{ `activeModeInterval`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `activeModeThreshold`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `expectedClients`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `clientNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\> ; `iCid`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>[], `any`\> ; `idleModeInterval`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `registerClientMonitoring`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `clientNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\> ; `iCid`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>, `void`, `any`\> ; `stayAwakeRequest`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<`void`, `void`, `any`\> ; `unregisterClientMonitoring`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `clientNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\> ; `iCid`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>, `void`, `any`\>  } ; `id`: ``4166`` = 0x1046; `name`: ``"ClientMonitoring"`` = "ClientMonitoring"; `revision`: ``1`` = 1 }\>
+
+**`See`**
+
+[Cluster](cluster_export.ClientMonitoring.md#cluster)
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L56)
+
+___
+
+### Complete
+
+• `Const` **Complete**: [`Cluster`](../interfaces/cluster_export.ClientMonitoring.Cluster.md) = `Cluster`
+
+#### Defined in
+
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L107)
 
 ___
 
@@ -35,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:18](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L18)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L21)
 
 ___
 
@@ -47,7 +78,7 @@ Input to the ClientMonitoring registerClientMonitoring command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:26](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L30)
 
 ___
 
@@ -59,4 +90,4 @@ Input to the ClientMonitoring unregisterClientMonitoring command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:34](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L43)

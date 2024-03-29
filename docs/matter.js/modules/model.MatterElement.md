@@ -20,11 +20,11 @@
 
 ### Child
 
-Ƭ **Child**: [`ClusterElement`](model.md#clusterelement) \| [`DeviceTypeElement`](model.md#devicetypeelement) \| [`FabricElement`](model.md#fabricelement) \| [`NodeElement`](model.md#nodeelement) \| [`DatatypeElement`](model.md#datatypeelement) \| [`AttributeElement`](model.md#attributeelement)
+Ƭ **Child**: [`ClusterElement`](../interfaces/model.ClusterElement-1.md) \| [`DeviceTypeElement`](../interfaces/model.DeviceTypeElement-1.md) \| [`FabricElement`](../interfaces/model.FabricElement-1.md) \| [`NodeElement`](model.md#nodeelement) \| [`DatatypeElement`](../interfaces/model.DatatypeElement-1.md) \| [`FieldElement`](../interfaces/model.FieldElement-1.md) \| [`AttributeElement`](../interfaces/model.AttributeElement-1.md)
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/MatterElement.ts:33](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/MatterElement.ts#L33)
+[packages/matter.js/src/model/elements/MatterElement.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/MatterElement.ts#L34)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/MatterElement.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/MatterElement.ts#L32)
+[packages/matter.js/src/model/elements/MatterElement.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/MatterElement.ts#L33)
 
 ___
 
@@ -44,9 +44,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/MatterElement.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/MatterElement.ts#L30)
+[packages/matter.js/src/model/elements/MatterElement.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/MatterElement.ts#L31)
 
-[packages/matter.js/src/model/elements/MatterElement.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/MatterElement.ts#L31)
+[packages/matter.js/src/model/elements/MatterElement.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/MatterElement.ts#L32)
 
 ## Variables
 
@@ -56,6 +56,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/MatterElement.ts:30](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/MatterElement.ts#L30)
+[packages/matter.js/src/model/elements/MatterElement.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/MatterElement.ts#L31)
 
-[packages/matter.js/src/model/elements/MatterElement.ts:31](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/model/elements/MatterElement.ts#L31)
+[packages/matter.js/src/model/elements/MatterElement.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/elements/MatterElement.ts#L32)

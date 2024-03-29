@@ -24,4 +24,4 @@ Server rejected the attempt to set the UTC time
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:194](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L194)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:288](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L288)

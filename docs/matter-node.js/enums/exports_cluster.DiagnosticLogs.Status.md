@@ -35,7 +35,7 @@ MatterCoreSpecificationV1_1 § 11.10.4.2.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:162
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:171
 
 ___
 
@@ -53,7 +53,7 @@ MatterCoreSpecificationV1_1 § 11.10.4.2.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:170
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:179
 
 ___
 
@@ -73,7 +73,7 @@ MatterCoreSpecificationV1_1 § 11.10.4.2.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:144
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:153
 
 ___
 
@@ -92,7 +92,7 @@ MatterCoreSpecificationV1_1 § 11.10.4.2.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:153
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:162
 
 ___
 
@@ -110,4 +110,4 @@ MatterCoreSpecificationV1_1 § 11.10.4.2.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:134
+packages/matter.js/dist/esm/cluster/definitions/DiagnosticLogsCluster.d.ts:143

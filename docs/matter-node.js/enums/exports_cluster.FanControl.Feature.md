@@ -31,7 +31,7 @@ Automatic mode supported for fan speed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:147
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:254
 
 ___
 
@@ -45,7 +45,7 @@ MultiSpeed
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:141
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:248
 
 ___
 
@@ -59,7 +59,7 @@ Rocking movement supported
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:153
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:260
 
 ___
 
@@ -73,4 +73,4 @@ Wind emulation supported
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:159
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:266

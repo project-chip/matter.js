@@ -27,7 +27,7 @@ Media is not currently buffering and playback will start when buffer has been fi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:42](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:171](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L171)
 
 ___
 
@@ -39,7 +39,7 @@ Media is not currently playing
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:37](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:166](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L166)
 
 ___
 
@@ -51,7 +51,7 @@ Media is currently paused
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:32](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:161](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L161)
 
 ___
 
@@ -63,4 +63,4 @@ Media is currently playing (includes FF and REW)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:27](https://github.com/project-chip/matter.js/blob/c15b1068/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L27)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:156](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L156)
