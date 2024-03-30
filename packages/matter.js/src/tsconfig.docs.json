@@ -34,7 +34,6 @@
             "protocol/securechannel/export.ts",
             "schema/export.ts",
             "session/export.ts",
-            "spec/export.ts",
             "storage/export.ts",
             "time/export.ts",
             "tlv/export.ts",
