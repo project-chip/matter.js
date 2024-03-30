@@ -9,7 +9,7 @@ import { AttributePayload } from "../payloads/AttributePayload.js";
 /**
  * Informs invoker of result of attribute modification.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 8.7.3
+ * @see {@link MatterSpecification.v11.Core} § 8.7.3
  */
 export type WriteResponseAction = {
     responses: AttributePayload.Response;

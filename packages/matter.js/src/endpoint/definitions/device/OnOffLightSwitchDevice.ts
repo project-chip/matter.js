@@ -14,13 +14,12 @@ import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An On/Off Light Switch is a controller device that, when bound to a lighting device such as an On/Off Light, is
  * capable of being used to switch the device on or off.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.1
+ * @see {@link MatterSpecification.v11.Device} § 6.1
  */
 export interface OnOffLightSwitchDevice extends Identity<typeof OnOffLightSwitchDeviceDefinition> {}
 

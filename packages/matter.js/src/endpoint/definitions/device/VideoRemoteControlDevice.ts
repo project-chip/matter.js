@@ -40,7 +40,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Video Remote Control device type.
@@ -48,7 +47,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * A Video Remote Control is a client that can control a Video Player, for example, a traditional universal remote
  * control.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.7
+ * @see {@link MatterSpecification.v11.Device} § 10.7
  */
 export interface VideoRemoteControlDevice extends Identity<typeof VideoRemoteControlDeviceDefinition> {}
 

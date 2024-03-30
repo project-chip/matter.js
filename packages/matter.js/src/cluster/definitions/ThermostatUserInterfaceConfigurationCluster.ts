@@ -8,7 +8,6 @@
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel, OptionalWritableAttribute } from "../../cluster/Cluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
@@ -17,7 +16,7 @@ export namespace ThermostatUserInterfaceConfiguration {
     /**
      * The value of the ThermostatUserInterfaceConfiguration temperatureDisplayMode attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 4.5.5.1
      */
     export enum TemperatureDisplayMode {
         /**
@@ -34,7 +33,7 @@ export namespace ThermostatUserInterfaceConfiguration {
     /**
      * The value of the ThermostatUserInterfaceConfiguration keypadLockout attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 4.5.5.2
      */
     export enum KeypadLockout {
         /**
@@ -71,7 +70,7 @@ export namespace ThermostatUserInterfaceConfiguration {
     /**
      * The value of the ThermostatUserInterfaceConfiguration scheduleProgrammingVisibility attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.3
+     * @see {@link MatterSpecification.v11.Cluster} § 4.5.5.3
      */
     export enum ScheduleProgrammingVisibility {
         /**
@@ -100,7 +99,7 @@ export namespace ThermostatUserInterfaceConfiguration {
              *
              * Table 92. DisplayMode Attribute Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.1
+             * @see {@link MatterSpecification.v11.Cluster} § 4.5.5.1
              */
             temperatureDisplayMode: WritableAttribute(
                 0x0,
@@ -116,7 +115,7 @@ export namespace ThermostatUserInterfaceConfiguration {
              *
              * The interpretation of the various levels is device-dependent.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.2
+             * @see {@link MatterSpecification.v11.Cluster} § 4.5.5.2
              */
             keypadLockout: WritableAttribute(
                 0x1,
@@ -136,7 +135,7 @@ export namespace ThermostatUserInterfaceConfiguration {
              *
              * Table 94. ScheduleProgrammingVisibility Attribute Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.3
+             * @see {@link MatterSpecification.v11.Cluster} § 4.5.5.3
              */
             scheduleProgrammingVisibility: OptionalWritableAttribute(
                 0x2,
@@ -152,7 +151,7 @@ export namespace ThermostatUserInterfaceConfiguration {
      * This cluster provides an interface to allow configuration of the user interface for a thermostat, or a
      * thermostat controller device, that supports a keypad and LCD screen.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5
+     * @see {@link MatterSpecification.v11.Cluster} § 4.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

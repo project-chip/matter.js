@@ -15,12 +15,11 @@ import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Door Lock Controller is a device capable of controlling a door lock.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.2
+ * @see {@link MatterSpecification.v11.Device} § 8.2
  */
 export interface DoorLockControllerDevice extends Identity<typeof DoorLockControllerDeviceDefinition> {}
 

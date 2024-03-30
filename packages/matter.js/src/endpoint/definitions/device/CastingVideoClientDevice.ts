@@ -43,7 +43,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Casting Video Client device type.
@@ -51,7 +50,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * A Casting Video Client is a client that can launch content on a Casting Video Player, for example, a Smart Speaker
  * or a Content Provider phone app.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.6
+ * @see {@link MatterSpecification.v11.Device} § 10.6
  */
 export interface CastingVideoClientDevice extends Identity<typeof CastingVideoClientDeviceDefinition> {}
 

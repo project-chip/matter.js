@@ -16,12 +16,11 @@ import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An OTA Provider is a node that is capable of providing an OTA software update to other nodes on the same fabric.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.4
+ * @see {@link MatterSpecification.v11.Device} § 2.4
  */
 export interface OtaProviderEndpoint extends Identity<typeof OtaProviderEndpointDefinition> {}
 

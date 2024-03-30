@@ -13,14 +13,14 @@ export namespace EventPayload {
     /**
      * Event time in milliseconds as a POSIX or system timestamp.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.3.4
+     * @see {@link MatterSpecification.v11.Core} § 8.9.3.4
      */
     export type Time = { time: number } | { systime: number };
 
     /**
      * Description of an event instance.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.3.4
+     * @see {@link MatterSpecification.v11.Core} § 8.9.3.4
      */
     export type Report = BasePayload.DataOrStatus<
         EventPath.Concrete,

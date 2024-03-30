@@ -30,7 +30,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Thermostat device is capable of having either built-in or separate sensors for temperature, humidity or occupancy.
@@ -41,7 +40,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * ThermostatDevice requires Thermostat cluster but Thermostat is not added by default because you must select the
  * features your device supports. You can add manually using ThermostatDevice.with().
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.2
+ * @see {@link MatterSpecification.v11.Device} § 9.2
  */
 export interface ThermostatDevice extends Identity<typeof ThermostatDeviceDefinition> {}
 

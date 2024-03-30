@@ -10,7 +10,6 @@ import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { Label } from "../../cluster/definitions/LabelCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
@@ -28,7 +27,7 @@ export namespace UserLabel {
              * An implementation shall support at least 4 list entries per node for all User Label cluster instances on
              * the node.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.9.4.1
+             * @see {@link MatterSpecification.v11.Core} § 9.9.4.1
              */
             labelList: WritableAttribute(
                 0x0,
@@ -43,7 +42,7 @@ export namespace UserLabel {
      *
      * This cluster provides a feature to tag an endpoint with zero or more labels.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.9
+     * @see {@link MatterSpecification.v11.Core} § 9.9
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

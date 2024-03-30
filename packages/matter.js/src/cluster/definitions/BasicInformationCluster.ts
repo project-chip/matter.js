@@ -19,7 +19,6 @@ import {
     OptionalEvent
 } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -36,7 +35,7 @@ export namespace BasicInformation {
      * This structure provides constant values related to overall global capabilities of this Node, that are not
      * cluster-specific.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1.4.1
+     * @see {@link MatterSpecification.v11.Core} § 11.1.4.1
      */
     export const TlvCapabilityMinimaStruct = TlvObject({
         /**
@@ -46,7 +45,7 @@ export namespace BasicInformation {
          * This value shall NOT be smaller than the required minimum indicated in Section 4.13.2.8, “Minimal Number of
          * CASE Sessions”.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.1.4.1.1
+         * @see {@link MatterSpecification.v11.Core} § 11.1.4.1.1
          */
         caseSessionsPerFabric: TlvField(0, TlvUInt16.bound({ min: 3 })),
 
@@ -56,7 +55,7 @@ export namespace BasicInformation {
          * This value shall NOT be smaller than the required minimum indicated in Section 8.5.1, “Subscribe
          * Transaction”.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.1.4.1.2
+         * @see {@link MatterSpecification.v11.Core} § 11.1.4.1.2
          */
         subscriptionsPerFabric: TlvField(1, TlvUInt16.bound({ min: 3 }))
     });
@@ -65,7 +64,7 @@ export namespace BasicInformation {
      * This structure provides constant values related to overall global capabilities of this Node, that are not
      * cluster-specific.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1.4.1
+     * @see {@link MatterSpecification.v11.Core} § 11.1.4.1
      */
     export interface CapabilityMinimaStruct extends TypeFromSchema<typeof TlvCapabilityMinimaStruct> {}
 
@@ -111,14 +110,14 @@ export namespace BasicInformation {
     /**
      * Body of the BasicInformation startUp event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.1
+     * @see {@link MatterSpecification.v11.Core} § 11.1.6.1
      */
     export const TlvStartUpEvent = TlvObject({
         /**
          * This field shall be set to the same value as the one available in the Software Version attribute of the
          * Basic Information Cluster.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.1.1
+         * @see {@link MatterSpecification.v11.Core} § 11.1.6.1.1
          */
         softwareVersion: TlvField(0, TlvUInt32)
     });
@@ -126,20 +125,20 @@ export namespace BasicInformation {
     /**
      * Body of the BasicInformation startUp event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.1
+     * @see {@link MatterSpecification.v11.Core} § 11.1.6.1
      */
     export interface StartUpEvent extends TypeFromSchema<typeof TlvStartUpEvent> {}
 
     /**
      * Body of the BasicInformation leave event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.3
+     * @see {@link MatterSpecification.v11.Core} § 11.1.6.3
      */
     export const TlvLeaveEvent = TlvObject({
         /**
          * This field shall contain the local Fabric Index of the fabric which the node is about to leave.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.3.1
+         * @see {@link MatterSpecification.v11.Core} § 11.1.6.3.1
          */
         fabricIndex: TlvField(0, TlvFabricIndex)
     });
@@ -147,20 +146,20 @@ export namespace BasicInformation {
     /**
      * Body of the BasicInformation leave event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.3
+     * @see {@link MatterSpecification.v11.Core} § 11.1.6.3
      */
     export interface LeaveEvent extends TypeFromSchema<typeof TlvLeaveEvent> {}
 
     /**
      * Body of the BasicInformation reachableChanged event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.4
+     * @see {@link MatterSpecification.v11.Core} § 11.1.6.4
      */
     export const TlvReachableChangedEvent = TlvObject({
         /**
          * This field shall indicate the value of the Reachable attribute after it was changed.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.4.1
+         * @see {@link MatterSpecification.v11.Core} § 11.1.6.4.1
          */
         reachableNewValue: TlvField(0, TlvBoolean)
     });
@@ -168,7 +167,7 @@ export namespace BasicInformation {
     /**
      * Body of the BasicInformation reachableChanged event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.4
+     * @see {@link MatterSpecification.v11.Core} § 11.1.6.4
      */
     export interface ReachableChangedEvent extends TypeFromSchema<typeof TlvReachableChangedEvent> {}
 
@@ -184,21 +183,21 @@ export namespace BasicInformation {
             /**
              * This attribute shall be set to the revision number of the Data Model against which the Node is certified.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.1
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.1
              */
             dataModelRevision: FixedAttribute(0x0, TlvUInt16),
 
             /**
              * This attribute shall specify a human readable (displayable) name of the vendor for the Node.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.2
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.2
              */
             vendorName: FixedAttribute(0x1, TlvString.bound({ maxLength: 32 })),
 
             /**
              * This attribute shall specify the Vendor ID.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.3
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.3
              */
             vendorId: FixedAttribute(0x2, TlvVendorId),
 
@@ -206,7 +205,7 @@ export namespace BasicInformation {
              * This attribute shall specify a human readable (displayable) name of the model for the Node such as the
              * model number (or other identifier) assigned by the vendor.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.4
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.4
              */
             productName: FixedAttribute(0x3, TlvString.bound({ maxLength: 32 })),
 
@@ -214,7 +213,7 @@ export namespace BasicInformation {
              * This attribute shall specify the Product ID assigned by the vendor that is unique to the specific
              * product of the Node.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.5
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.5
              */
             productId: FixedAttribute(0x4, TlvUInt16),
 
@@ -222,7 +221,7 @@ export namespace BasicInformation {
              * This attribute shall represent a user defined name for the Node. This attribute SHOULD be set during
              * initial commissioning and may be updated by further reconfigurations.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.6
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.6
              */
             nodeLabel: WritableAttribute(
                 0x5,
@@ -242,7 +241,7 @@ export namespace BasicInformation {
              * avoiding region-specific assumptions as much as is practical. The special value XX shall indicate that
              * region-agnostic mode is used.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.7
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.7
              */
             location: WritableAttribute(
                 0x6,
@@ -254,7 +253,7 @@ export namespace BasicInformation {
              * This attribute shall specify the version number of the hardware of the Node. The meaning of its value,
              * and the versioning scheme, are vendor defined.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.8
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.8
              */
             hardwareVersion: FixedAttribute(0x7, TlvUInt16, { default: 0 }),
 
@@ -263,7 +262,7 @@ export namespace BasicInformation {
              * and the versioning scheme, are vendor defined. The HardwareVersionString attribute shall be used to
              * provide a more user-friendly value than that represented by the HardwareVersion attribute.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.9
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.9
              */
             hardwareVersionString: FixedAttribute(0x8, TlvString.bound({ minLength: 1, maxLength: 64 })),
 
@@ -274,7 +273,7 @@ export namespace BasicInformation {
              * software updates (see Section 11.19.3.3, “Availability of Software Images”). Nodes may query this field
              * to determine the currently running version of software on another given Node.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.10
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.10
              */
             softwareVersion: FixedAttribute(0x9, TlvUInt32, { default: 0 }),
 
@@ -286,7 +285,7 @@ export namespace BasicInformation {
              *
              * Examples of version strings include "1.0", "1.2.3456", "1.2-2", "1.0b123", "1.2_3".
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.11
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.11
              */
             softwareVersionString: FixedAttribute(0xa, TlvString.bound({ minLength: 1, maxLength: 64 })),
 
@@ -298,7 +297,7 @@ export namespace BasicInformation {
              *
              * defined.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.12
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.12
              */
             manufacturingDate: OptionalFixedAttribute(0xb, TlvString.bound({ minLength: 8, maxLength: 16 })),
 
@@ -310,7 +309,7 @@ export namespace BasicInformation {
              * packaging (with different PartNumbers) for different regions; also different colors of a product might
              * share the ProductID but may have a different PartNumber.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.13
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.13
              */
             partNumber: OptionalFixedAttribute(0xc, TlvString.bound({ maxLength: 32 })),
 
@@ -320,7 +319,7 @@ export namespace BasicInformation {
              * specified URL SHOULD resolve to a maintained web page available for the lifetime of the product. The
              * maximum length of the ProductUrl attribute is 256 ASCII characters.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.14
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.14
              */
             productUrl: OptionalFixedAttribute(0xd, TlvString.bound({ maxLength: 256 })),
 
@@ -330,14 +329,14 @@ export namespace BasicInformation {
              * ProductName attribute. The ProductLabel attribute SHOULD NOT include the name of the vendor as defined
              * within the VendorName attribute.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.15
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.15
              */
             productLabel: OptionalFixedAttribute(0xe, TlvString.bound({ maxLength: 64 })),
 
             /**
              * This attributes shall specify a human readable (displayable) serial number.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.16
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.16
              */
             serialNumber: OptionalFixedAttribute(0xf, TlvString.bound({ maxLength: 32 })),
 
@@ -347,7 +346,7 @@ export namespace BasicInformation {
              * the LocalConfigDisabled attribute shall NOT in any way modify, disable, or otherwise affect the user’s
              * ability to trigger a factory reset on the Node.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.17
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.17
              */
             localConfigDisabled: OptionalWritableAttribute(
                 0x10,
@@ -362,7 +361,7 @@ export namespace BasicInformation {
              * Its main use case is in the derived Bridged Device Basic Information cluster where it is used to
              * indicate whether the bridged device is reachable by the bridge over the non-native network.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.18
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.18
              */
             reachable: OptionalAttribute(0x11, TlvBoolean, { default: true }),
 
@@ -382,7 +381,7 @@ export namespace BasicInformation {
              *   • it shall not be printed on the product or delivered with the product The value does not need to be
              *     human readable.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.19
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.19
              */
             uniqueId: OptionalFixedAttribute(0x12, TlvString.bound({ maxLength: 32 })),
 
@@ -400,7 +399,7 @@ export namespace BasicInformation {
              * decreasing, as software versions change for a given Node, clients SHOULD take care not to assume forever
              * unchanging values and SHOULD NOT cache this value permanently at Commissioning time.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.5.20
+             * @see {@link MatterSpecification.v11.Core} § 11.1.5.20
              */
             capabilityMinima: FixedAttribute(
                 0x13,
@@ -417,7 +416,7 @@ export namespace BasicInformation {
              * process. The StartUp event SHOULD be the first Data Model event recorded by the Node after it completes
              * a boot or reboot process.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.1
+             * @see {@link MatterSpecification.v11.Core} § 11.1.6.1
              */
             startUp: Event(0x0, EventPriority.Critical, TlvStartUpEvent),
 
@@ -427,7 +426,7 @@ export namespace BasicInformation {
              * This event SHOULD be delivered urgently to current subscribers on a best- effort basis. Any subsequent
              * incoming interactions to the Node may be dropped until the completion of a future boot or reboot process.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.2
+             * @see {@link MatterSpecification.v11.Core} § 11.1.6.2
              */
             shutDown: OptionalEvent(0x1, EventPriority.Critical, TlvNoArguments),
 
@@ -441,7 +440,7 @@ export namespace BasicInformation {
              * Upon receipt of Leave Event on a subscription, the receiving Node may update other nodes in the fabric
              * by removing related bindings, access control list entries and other data referencing the leaving Node.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.3
+             * @see {@link MatterSpecification.v11.Core} § 11.1.6.3
              */
             leave: OptionalEvent(0x2, EventPriority.Info, TlvLeaveEvent),
 
@@ -452,7 +451,7 @@ export namespace BasicInformation {
              *
              * Its main use case is in the derived Bridged Device Basic Information cluster.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.1.6.4
+             * @see {@link MatterSpecification.v11.Core} § 11.1.6.4
              */
             reachableChanged: OptionalEvent(0x3, EventPriority.Info, TlvReachableChangedEvent)
         }
@@ -465,7 +464,7 @@ export namespace BasicInformation {
      * Commissioning and operational determination of Node characteristics, such as Vendor ID, Product ID and serial
      * number, which apply to the whole Node.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.1
+     * @see {@link MatterSpecification.v11.Core} § 11.1
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

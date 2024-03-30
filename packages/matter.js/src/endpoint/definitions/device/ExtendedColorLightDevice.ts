@@ -19,7 +19,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An Extended Color Light is a lighting device that is capable of being switched on or off, the intensity of its light
@@ -28,7 +27,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * coordinates, and color temperature. In addition, the extended color light is also capable of being switched by means
  * of a bound occupancy sensor.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.4
+ * @see {@link MatterSpecification.v11.Device} § 4.4
  */
 export interface ExtendedColorLightDevice extends Identity<typeof ExtendedColorLightDeviceDefinition> {}
 

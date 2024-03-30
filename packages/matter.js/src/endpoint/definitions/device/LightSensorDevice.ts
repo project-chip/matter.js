@@ -14,13 +14,12 @@ import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Light Sensor device is a measurement and sensing device that is capable of measuring and reporting the intensity
  * of light (illuminance) to which the sensor is being subjected.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.2
+ * @see {@link MatterSpecification.v11.Device} § 7.2
  */
 export interface LightSensorDevice extends Identity<typeof LightSensorDeviceDefinition> {}
 

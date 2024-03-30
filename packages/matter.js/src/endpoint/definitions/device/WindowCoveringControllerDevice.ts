@@ -16,12 +16,11 @@ import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Window Covering Controller is a device that controls an automatic window covering.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.4
+ * @see {@link MatterSpecification.v11.Device} § 8.4
  */
 export interface WindowCoveringControllerDevice extends Identity<typeof WindowCoveringControllerDeviceDefinition> {}
 

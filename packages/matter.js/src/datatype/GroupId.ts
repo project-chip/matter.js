@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -19,7 +18,7 @@ import { Branded } from "../util/Type.js";
  * 0x0001 - 0xFEFF: Application Group ID, assigned by fabric Administrator
  * 0xFF00 - 0xFFFF: Universal Group ID range reserved for static multicast and anycast identifiers
  *
- * @see {@link MatterCoreSpecificationV1_0} § 2.5.4
+ * @see {@link MatterSpecification.v10.Core} § 2.5.4
  */
 export type GroupId = Branded<number, "GroupId">;
 

@@ -11,7 +11,6 @@ import { FixedAttribute, Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvDeviceTypeId } from "../../datatype/DeviceTypeId.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvClusterId } from "../../datatype/ClusterId.js";
@@ -24,14 +23,14 @@ export namespace Descriptor {
      * The device type and revision define endpoint conformance to a release of a device type definition. See the Data
      * Model specification for more information.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.5.4.1
+     * @see {@link MatterSpecification.v11.Core} § 9.5.4.1
      */
     export const TlvDeviceTypeStruct = TlvObject({
         /**
          * This shall indicate the device type definition. The endpoint shall conform to the device type definition and
          * cluster specifications required by the device type.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.5.4.1.1
+         * @see {@link MatterSpecification.v11.Core} § 9.5.4.1.1
          */
         deviceType: TlvField(0, TlvDeviceTypeId),
 
@@ -39,7 +38,7 @@ export namespace Descriptor {
          * This is the implemented revision of the device type definition. The endpoint shall conform to this revision
          * of the device type.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.5.4.1.2
+         * @see {@link MatterSpecification.v11.Core} § 9.5.4.1.2
          */
         revision: TlvField(1, TlvUInt16.bound({ min: 1 }))
     });
@@ -48,7 +47,7 @@ export namespace Descriptor {
      * The device type and revision define endpoint conformance to a release of a device type definition. See the Data
      * Model specification for more information.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.5.4.1
+     * @see {@link MatterSpecification.v11.Core} § 9.5.4.1
      */
     export interface DeviceTypeStruct extends TypeFromSchema<typeof TlvDeviceTypeStruct> {}
 
@@ -69,21 +68,21 @@ export namespace Descriptor {
              * in common for more than one device type in the DeviceTypeList shall be supported as a shared cluster
              * instance on the endpoint.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.5.5.1
+             * @see {@link MatterSpecification.v11.Core} § 9.5.5.1
              */
             deviceTypeList: FixedAttribute(0x0, TlvArray(TlvDeviceTypeStruct, { minLength: 1 })),
 
             /**
              * This attribute shall list each cluster ID for the server clusters present on the endpoint instance.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.5.5.2
+             * @see {@link MatterSpecification.v11.Core} § 9.5.5.2
              */
             serverList: FixedAttribute(0x1, TlvArray(TlvClusterId), { default: [] }),
 
             /**
              * This attribute shall list each cluster ID for the client clusters present on the endpoint instance.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.5.5.3
+             * @see {@link MatterSpecification.v11.Core} § 9.5.5.3
              */
             clientList: FixedAttribute(0x2, TlvArray(TlvClusterId), { default: [] }),
 
@@ -92,7 +91,7 @@ export namespace Descriptor {
              * include the endpoints in this list. See Endpoint Composition for more information which endpoints to
              * include in this list.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.5.5.4
+             * @see {@link MatterSpecification.v11.Core} § 9.5.5.4
              */
             partsList: Attribute(0x3, TlvArray(TlvEndpointNumber), { default: [] })
         }
@@ -113,7 +112,7 @@ export namespace Descriptor {
      * The cluster supports a PartsList attribute that is a list of zero or more endpoints to support a composed device
      * type.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.5
+     * @see {@link MatterSpecification.v11.Core} § 9.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

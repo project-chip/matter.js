@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { AccountLogin } from "../../../cluster/definitions/AccountLoginCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * The purpose of this command is to determine if the active user account of the given Content App matches the active
@@ -52,7 +51,7 @@ import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifi
  * a brute force attack. A Content App that supports this command shall ensure that the Temporary Account Identifier
  * used by its clients is not valid for more than 10 minutes.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.1
+ * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.1
  */
 export type GetSetupPinRequest = TypeFromSchema<typeof AccountLogin.TlvGetSetupPinRequest>;
 
@@ -60,7 +59,7 @@ export type GetSetupPinRequest = TypeFromSchema<typeof AccountLogin.TlvGetSetupP
  * This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
  * account identified in the request does not match the active account of the running Content App.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.2
+ * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.2
  */
 export type GetSetupPinResponse = TypeFromSchema<typeof AccountLogin.TlvGetSetupPinResponse>;
 
@@ -101,7 +100,7 @@ export type GetSetupPinResponse = TypeFromSchema<typeof AccountLogin.TlvGetSetup
  * force attack. A Content App that supports this command shall ensure that the Temporary Account Identifier used by
  * its clients is not valid for more than 10 minutes.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3
+ * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.3
  */
 export type LoginRequest = TypeFromSchema<typeof AccountLogin.TlvLoginRequest>;
 
@@ -150,7 +149,7 @@ export namespace AccountLoginInterface {
          * obstacles to successfully mounting a brute force attack. A Content App that supports this command shall
          * ensure that the Temporary Account Identifier used by its clients is not valid for more than 10 minutes.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.1
          */
         getSetupPin(request: GetSetupPinRequest): MaybePromise<GetSetupPinResponse>;
 
@@ -191,7 +190,7 @@ export namespace AccountLoginInterface {
          * obstacles to successfully mounting a brute force attack. A Content App that supports this command shall
          * ensure that the Temporary Account Identifier used by its clients is not valid for more than 10 minutes.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3
+         * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.3
          */
         login(request: LoginRequest): MaybePromise;
 
@@ -199,7 +198,7 @@ export namespace AccountLoginInterface {
          * The purpose of this command is to instruct the Content App to clear the current user account. This command
          * SHOULD be used by clients of a Content App to indicate the end of a user session.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.4
+         * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.4
          */
         logout(): MaybePromise;
     }

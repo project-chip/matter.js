@@ -15,7 +15,6 @@ import {
     OptionalWritableAttribute
 } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvUInt24 } from "../../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -26,14 +25,14 @@ export namespace BallastConfiguration {
     /**
      * The value of the BallastConfiguration ballastStatus attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.6.3
+     * @see {@link MatterSpecification.v11.Cluster} § 3.3.6.3
      */
     export const BallastStatus = { ballastNonOperational: BitFlag(0), lampFailure: BitFlag(1) };
 
     /**
      * The value of the BallastConfiguration lampAlarmMode attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.9.5
+     * @see {@link MatterSpecification.v11.Cluster} § 3.3.9.5
      */
     export const LampAlarmMode = { lampBurnHours: BitFlag(0) };
 
@@ -50,7 +49,7 @@ export namespace BallastConfiguration {
              * The PhysicalMinLevel attribute specifies the minimum light output the ballast can achieve according to
              * the dimming light curve (see The Dimming Light Curve).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.6.1
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.6.1
              */
             physicalMinLevel: Attribute(0x0, TlvUInt8.bound({ min: 1, max: 254 }), { default: 1 }),
 
@@ -58,7 +57,7 @@ export namespace BallastConfiguration {
              * The PhysicalMaxLevel attribute specifies the maximum light output the ballast can achieve according to
              * the dimming light curve (see The Dimming Light Curve).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.6.2
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.6.2
              */
             physicalMaxLevel: Attribute(0x1, TlvUInt8.bound({ min: 1, max: 254 }), { default: 254 }),
 
@@ -68,7 +67,7 @@ export namespace BallastConfiguration {
              * corresponding bit shall be set to 1. Where a function is not active, the corresponding bit shall be set
              * to 0.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.6.3
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.6.3
              */
             ballastStatus: OptionalAttribute(0x2, TlvBitmap(TlvUInt8, BallastStatus)),
 
@@ -82,7 +81,7 @@ export namespace BallastConfiguration {
              * met, a response shall be returned with status code set to CONSTRAINT_ERROR, and the level shall not be
              * set.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.7.1
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.7.1
              */
             minLevel: WritableAttribute(0x10, TlvUInt8.bound({ min: 1, max: 254 }), { writeAcl: AccessLevel.Manage }),
 
@@ -96,7 +95,7 @@ export namespace BallastConfiguration {
              * met, a response shall be returned with status code set to CONSTRAINT_ERROR, and the level shall not be
              * set.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.7.2
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.7.2
              */
             maxLevel: WritableAttribute(0x11, TlvUInt8.bound({ min: 1, max: 254 }), { writeAcl: AccessLevel.Manage }),
 
@@ -106,7 +105,7 @@ export namespace BallastConfiguration {
              *
              * A value of null indicates in invalid value.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.7.3
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.7.3
              */
             intrinsicBallastFactor: OptionalWritableAttribute(
                 0x14,
@@ -127,7 +126,7 @@ export namespace BallastConfiguration {
              * level that cannot be supported, a response shall be returned with status code set to CONSTRAINT_ERROR,
              * and the level shall not be set. The value of null indicates that ballast factor scaling is not in use.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.7.4
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.7.4
              */
             ballastFactorAdjustment: OptionalWritableAttribute(
                 0x15,
@@ -140,14 +139,14 @@ export namespace BallastConfiguration {
              *
              * this number does not take into account whether lamps are actually in their sockets or not).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.8.1
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.8.1
              */
             lampQuantity: Attribute(0x20, TlvUInt8),
 
             /**
              * The LampType attribute specifies the type of lamps (including their wattage) connected to the ballast.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.9.1
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.9.1
              */
             lampType: OptionalWritableAttribute(
                 0x30,
@@ -158,7 +157,7 @@ export namespace BallastConfiguration {
             /**
              * The LampManufacturer attribute specifies the name of the manufacturer of the currently connected lamps.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.9.2
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.9.2
              */
             lampManufacturer: OptionalWritableAttribute(
                 0x31,
@@ -172,7 +171,7 @@ export namespace BallastConfiguration {
              *
              * A value of null indicates an invalid or unknown time.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.9.3
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.9.3
              */
             lampRatedHours: OptionalWritableAttribute(
                 0x32,
@@ -190,7 +189,7 @@ export namespace BallastConfiguration {
              *
              * A value of null indicates an invalid or unknown time.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.9.4
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.9.4
              */
             lampBurnHours: OptionalWritableAttribute(
                 0x33,
@@ -204,7 +203,7 @@ export namespace BallastConfiguration {
              * attribute to be able to generate an alarm. (Note: All alarms are also logged in the alarm table – see
              * Alarms cluster).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.9.5
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.9.5
              */
             lampAlarmMode: OptionalWritableAttribute(
                 0x34,
@@ -223,7 +222,7 @@ export namespace BallastConfiguration {
              *
              * If this attribute takes the value of null, then this alarm shall not be generated.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3.9.6
+             * @see {@link MatterSpecification.v11.Cluster} § 3.3.9.6
              */
             lampBurnHoursTripPoint: OptionalWritableAttribute(
                 0x35,
@@ -238,7 +237,7 @@ export namespace BallastConfiguration {
      *
      * Attributes and commands for configuring a lighting ballast.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.3
+     * @see {@link MatterSpecification.v11.Cluster} § 3.3
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

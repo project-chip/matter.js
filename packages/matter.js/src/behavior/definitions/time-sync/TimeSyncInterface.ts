@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { TimeSync } from "../../../cluster/definitions/TimeSyncCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This command may be issued by Administrator to set the time. If the Commissioner does not have a valid time source,
@@ -27,7 +26,7 @@ import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
  * If the server updates its UTCTime attribute, it shall accept the command with a status code of SUCCESS. If it opts
  * to not update its time, it shall fail the command with a cluster specific Status Code of TimeNotAccepted.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
+ * @see {@link MatterSpecification.v11.Core} § 11.16.9.1
  */
 export type SetUtcTimeRequest = TypeFromSchema<typeof TimeSync.TlvSetUtcTimeRequest>;
 
@@ -50,7 +49,7 @@ export namespace TimeSyncInterface {
          * it opts to not update its time, it shall fail the command with a cluster specific Status Code of
          * TimeNotAccepted.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
+         * @see {@link MatterSpecification.v11.Core} § 11.16.9.1
          */
         setUtcTime(request: SetUtcTimeRequest): MaybePromise;
     }

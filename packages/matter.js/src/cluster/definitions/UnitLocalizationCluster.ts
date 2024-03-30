@@ -8,7 +8,6 @@
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -17,7 +16,7 @@ import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace UnitLocalization {
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.5.5.1
+     * @see {@link MatterSpecification.v11.Core} § 11.5.5.1
      */
     export enum TempUnit {
         /**
@@ -46,7 +45,7 @@ export namespace UnitLocalization {
              * temperature in communication to the user. If provided, this value shall take priority over any unit
              * implied through the ActiveLocale Attribute.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.5.6.1
+             * @see {@link MatterSpecification.v11.Core} § 11.5.6.1
              */
             temperatureUnit: WritableAttribute(
                 0x0,
@@ -59,7 +58,7 @@ export namespace UnitLocalization {
     /**
      * These are optional features supported by UnitLocalizationCluster.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.5.4
+     * @see {@link MatterSpecification.v11.Core} § 11.5.4
      */
     export enum Feature {
         /**
@@ -113,7 +112,7 @@ export namespace UnitLocalization {
      * UnitLocalizationCluster supports optional features that you can enable with the UnitLocalizationCluster.with()
      * factory method.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.5
+     * @see {@link MatterSpecification.v11.Core} § 11.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

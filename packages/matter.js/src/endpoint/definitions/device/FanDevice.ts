@@ -12,14 +12,13 @@ import { FanControlServer as BaseFanControlServer } from "../../../behavior/defi
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Fan device type.
  *
  * NOTE Support for Fan device type is provisional.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.3
+ * @see {@link MatterSpecification.v11.Device} § 9.3
  */
 export interface FanDevice extends Identity<typeof FanDeviceDefinition> {}
 

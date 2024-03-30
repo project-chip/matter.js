@@ -8,7 +8,6 @@
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel, FixedAttribute } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
@@ -18,7 +17,7 @@ import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace TimeFormatLocalization {
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.4.5.2
+     * @see {@link MatterSpecification.v11.Core} § 11.4.5.2
      */
     export enum CalendarType {
         /**
@@ -83,7 +82,7 @@ export namespace TimeFormatLocalization {
     }
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.4.5.1
+     * @see {@link MatterSpecification.v11.Core} § 11.4.5.1
      */
     export enum HourFormat {
         /**
@@ -107,7 +106,7 @@ export namespace TimeFormatLocalization {
              * configured to use when conveying dates. If provided, this value shall take priority over any unit
              * implied through the ActiveLocale Attribute.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.4.6.2
+             * @see {@link MatterSpecification.v11.Core} § 11.4.6.2
              */
             activeCalendarType: WritableAttribute(
                 0x1,
@@ -121,7 +120,7 @@ export namespace TimeFormatLocalization {
              * the list SHOULD NOT express any meaning. The maximum length of the SupportedCalendarTypes list shall be
              * equivalent to the number of enumerations within CalendarTypeEnum.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.4.6.3
+             * @see {@link MatterSpecification.v11.Core} § 11.4.6.3
              */
             supportedCalendarTypes: FixedAttribute(0x2, TlvArray(TlvEnum<CalendarType>()), { default: [] })
         }
@@ -130,7 +129,7 @@ export namespace TimeFormatLocalization {
     /**
      * These are optional features supported by TimeFormatLocalizationCluster.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.4.4
+     * @see {@link MatterSpecification.v11.Core} § 11.4.4
      */
     export enum Feature {
         /**
@@ -165,7 +164,7 @@ export namespace TimeFormatLocalization {
              *
              * implied through the ActiveLocale Attribute.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.4.6.1
+             * @see {@link MatterSpecification.v11.Core} § 11.4.6.1
              */
             hourFormat: WritableAttribute(
                 0x0,
@@ -199,7 +198,7 @@ export namespace TimeFormatLocalization {
      * TimeFormatLocalizationCluster supports optional features that you can enable with the
      * TimeFormatLocalizationCluster.with() factory method.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.4
+     * @see {@link MatterSpecification.v11.Core} § 11.4
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

@@ -17,7 +17,6 @@ import {
 } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvSubjectId } from "../../datatype/SubjectId.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -37,7 +36,7 @@ export namespace AccessControl {
      *
      * This value implicitly grants View privileges
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.2
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.2
      */
     export enum AccessControlEntryPrivilege {
         /**
@@ -55,7 +54,7 @@ export namespace AccessControl {
          *
          * This value implicitly grants View privileges
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.2.1
+         * @see {@link MatterSpecification.v11.Core} § 9.10.4.2.1
          */
         Operate = 3,
 
@@ -64,7 +63,7 @@ export namespace AccessControl {
          *
          * This value implicitly grants Operate & View privileges
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.2.2
+         * @see {@link MatterSpecification.v11.Core} § 9.10.4.2.2
          */
         Manage = 4,
 
@@ -73,13 +72,13 @@ export namespace AccessControl {
          *
          * This value implicitly grants Manage, Operate, Proxy View & View privileges
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.2.3
+         * @see {@link MatterSpecification.v11.Core} § 9.10.4.2.3
          */
         Administer = 5
     }
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.3
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.3
      */
     export enum AccessControlEntryAuthMode {
         /**
@@ -99,7 +98,7 @@ export namespace AccessControl {
     }
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.4
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.4
      */
     export const TlvAccessControlTargetStruct = TlvObject({
         cluster: TlvField(0, TlvNullable(TlvClusterId)),
@@ -108,12 +107,12 @@ export namespace AccessControl {
     });
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.4
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.4
      */
     export interface AccessControlTargetStruct extends TypeFromSchema<typeof TlvAccessControlTargetStruct> {}
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.5
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.5
      */
     export const TlvAccessControlEntryStruct = TlvObject({
         /**
@@ -140,14 +139,14 @@ export namespace AccessControl {
          * Cluster itself. The Administer privilege shall NOT be used on Access Control Entries which use the Group
          * auth mode.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.5.1
+         * @see {@link MatterSpecification.v11.Core} § 9.10.4.5.1
          */
         privilege: TlvField(1, TlvEnum<AccessControlEntryPrivilege>()),
 
         /**
          * The AuthMode field shall specify the authentication mode required by this Access Control Entry.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.5.2
+         * @see {@link MatterSpecification.v11.Core} § 9.10.4.5.2
          */
         authMode: TlvField(2, TlvEnum<AccessControlEntryAuthMode>()),
 
@@ -184,7 +183,7 @@ export namespace AccessControl {
          * For Group authentication, the Group ID identifies the required group, as defined in the Group Key Management
          * Cluster.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.5.3
+         * @see {@link MatterSpecification.v11.Core} § 9.10.4.5.3
          */
         subjects: TlvField(3, TlvNullable(TlvArray(TlvSubjectId))),
 
@@ -207,7 +206,7 @@ export namespace AccessControl {
          * An empty targets list indicates a wildcard: that is, this entry shall grant access to all cluster instances
          * on all endpoints on this Node.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.5.4
+         * @see {@link MatterSpecification.v11.Core} § 9.10.4.5.4
          */
         targets: TlvField(4, TlvNullable(TlvArray(TlvAccessControlTargetStruct))),
 
@@ -215,12 +214,12 @@ export namespace AccessControl {
     });
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.5
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.5
      */
     export interface AccessControlEntryStruct extends TypeFromSchema<typeof TlvAccessControlEntryStruct> {}
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.6
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.6
      */
     export const TlvAccessControlExtensionStruct = TlvObject({
         /**
@@ -234,7 +233,7 @@ export namespace AccessControl {
          * Administrators may iterate over this list of elements, and interpret selected elements at their discretion.
          * The content of each element is not specified, but may be coordinated among manufacturers at their discretion.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.6.1
+         * @see {@link MatterSpecification.v11.Core} § 9.10.4.6.1
          */
         data: TlvField(1, TlvByteString.bound({ maxLength: 128 })),
 
@@ -242,12 +241,12 @@ export namespace AccessControl {
     });
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.6
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.6
      */
     export interface AccessControlExtensionStruct extends TypeFromSchema<typeof TlvAccessControlExtensionStruct> {}
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.1
+     * @see {@link MatterSpecification.v11.Core} § 9.10.4.1
      */
     export enum ChangeType {
         /**
@@ -269,7 +268,7 @@ export namespace AccessControl {
     /**
      * Body of the AccessControl accessControlEntryChanged event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1
+     * @see {@link MatterSpecification.v11.Core} § 9.10.7.1
      */
     export const TlvAccessControlEntryChangedEvent = TlvObject({
         /**
@@ -278,7 +277,7 @@ export namespace AccessControl {
          * Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred via a
          * CASE or PASE session; the other shall be null.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1.1
+         * @see {@link MatterSpecification.v11.Core} § 9.10.7.1.1
          */
         adminNodeId: TlvField(1, TlvNullable(TlvNodeId)),
 
@@ -289,14 +288,14 @@ export namespace AccessControl {
          * Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred via a
          * CASE or PASE session; the other shall be null.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1.2
+         * @see {@link MatterSpecification.v11.Core} § 9.10.7.1.2
          */
         adminPasscodeId: TlvField(2, TlvNullable(TlvUInt16)),
 
         /**
          * The type of change as appropriate.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1.3
+         * @see {@link MatterSpecification.v11.Core} § 9.10.7.1.3
          */
         changeType: TlvField(3, TlvEnum<ChangeType>()),
 
@@ -306,7 +305,7 @@ export namespace AccessControl {
          * This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if resources
          * are scarce.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1.4
+         * @see {@link MatterSpecification.v11.Core} § 9.10.7.1.4
          */
         latestValue: TlvField(4, TlvNullable(TlvAccessControlEntryStruct)),
 
@@ -316,14 +315,14 @@ export namespace AccessControl {
     /**
      * Body of the AccessControl accessControlEntryChanged event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1
+     * @see {@link MatterSpecification.v11.Core} § 9.10.7.1
      */
     export interface AccessControlEntryChangedEvent extends TypeFromSchema<typeof TlvAccessControlEntryChangedEvent> {}
 
     /**
      * Body of the AccessControl accessControlExtensionChanged event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.2
+     * @see {@link MatterSpecification.v11.Core} § 9.10.7.2
      */
     export const TlvAccessControlExtensionChangedEvent = TlvObject({
         adminNodeId: TlvField(1, TlvNullable(TlvNodeId)),
@@ -336,7 +335,7 @@ export namespace AccessControl {
     /**
      * Body of the AccessControl accessControlExtensionChanged event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.2
+     * @see {@link MatterSpecification.v11.Core} § 9.10.7.2
      */
     export interface AccessControlExtensionChangedEvent extends TypeFromSchema<typeof TlvAccessControlExtensionChangedEvent> {}
 
@@ -362,7 +361,7 @@ export namespace AccessControl {
              * Control Privilege Granting algorithm to determine if a subject has privilege to interact with targets on
              * the Node.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.10.5.3
+             * @see {@link MatterSpecification.v11.Core} § 9.10.5.3
              */
             acl: WritableFabricScopedAttribute(
                 0x0,
@@ -376,7 +375,7 @@ export namespace AccessControl {
              *
              * The Access Control Extension list shall support a single extension entry per supported fabric.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.10.5.4
+             * @see {@link MatterSpecification.v11.Core} § 9.10.5.4
              */
             extension: OptionalWritableFabricScopedAttribute(
                 0x1,
@@ -392,7 +391,7 @@ export namespace AccessControl {
              * given implementation, it is recommended to only use the minimum value required and avoid reporting a
              * higher value than the required minimum.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.10.5.5
+             * @see {@link MatterSpecification.v11.Core} § 9.10.5.5
              */
             subjectsPerAccessControlEntry: FixedAttribute(0x2, TlvUInt16.bound({ min: 4 }), { default: 4 }),
 
@@ -404,7 +403,7 @@ export namespace AccessControl {
              * given implementation, it is recommended to only use the minimum value required and avoid reporting a
              * higher value than the required minimum.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.10.5.6
+             * @see {@link MatterSpecification.v11.Core} § 9.10.5.6
              */
             targetsPerAccessControlEntry: FixedAttribute(0x3, TlvUInt16.bound({ min: 3 }), { default: 3 }),
 
@@ -417,7 +416,7 @@ export namespace AccessControl {
              * given implementation, it is recommended to only use the minimum value required and avoid reporting a
              * higher value than the required minimum.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.10.5.7
+             * @see {@link MatterSpecification.v11.Core} § 9.10.5.7
              */
             accessControlEntriesPerFabric: FixedAttribute(0x4, TlvUInt16.bound({ min: 4 }), { default: 4 })
         },
@@ -433,7 +432,7 @@ export namespace AccessControl {
              *
              *   • Each removed entry shall generate an event with ChangeType Removed.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.1
+             * @see {@link MatterSpecification.v11.Core} § 9.10.7.1
              */
             accessControlEntryChanged: Event(
                 0x0,
@@ -470,7 +469,7 @@ export namespace AccessControl {
              * This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if
              * resources are scarce.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.10.7.2
+             * @see {@link MatterSpecification.v11.Core} § 9.10.7.2
              */
             accessControlExtensionChanged: Event(
                 0x1,
@@ -492,7 +491,7 @@ export namespace AccessControl {
      * The Access Control Cluster shall be present on the root node endpoint of each Node, and shall NOT be present on
      * any other Endpoint of any Node.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.10
+     * @see {@link MatterSpecification.v11.Core} § 9.10
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

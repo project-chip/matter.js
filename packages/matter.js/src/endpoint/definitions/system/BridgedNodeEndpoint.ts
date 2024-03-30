@@ -20,14 +20,13 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance for a Bridged Node root endpoint. This endpoint is akin to a "read me first" endpoint that
  * describes itself and any other endpoints that make up the Bridged Node. A Bridged Node endpoint represents a device
  * on a foreign network, but is not the root endpoint of the bridge itself.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.6
+ * @see {@link MatterSpecification.v11.Device} § 2.6
  */
 export interface BridgedNodeEndpoint extends Identity<typeof BridgedNodeEndpointDefinition> {}
 

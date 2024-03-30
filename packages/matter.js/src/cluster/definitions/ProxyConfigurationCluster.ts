@@ -13,7 +13,6 @@ import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
@@ -29,7 +28,7 @@ export namespace ProxyConfiguration {
      * When ProxyAllNodes is 'false', this list contains the set of NodeIds of sources that this proxy shall
      * specifically proxy.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.15.14.4.1
+     * @see {@link MatterSpecification.v11.Core} § 9.15.14.4.1
      */
     export const TlvConfigurationStruct = TlvObject({
         proxyAllNodes: TlvField(1, TlvBoolean),
@@ -47,7 +46,7 @@ export namespace ProxyConfiguration {
      * When ProxyAllNodes is 'false', this list contains the set of NodeIds of sources that this proxy shall
      * specifically proxy.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.15.14.4.1
+     * @see {@link MatterSpecification.v11.Core} § 9.15.14.4.1
      */
     export interface ConfigurationStruct extends TypeFromSchema<typeof TlvConfigurationStruct> {}
 
@@ -63,7 +62,7 @@ export namespace ProxyConfiguration {
             /**
              * List of proxy configurations. There shall NOT be multiple entries in this list for the same fabric.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.15.14.5.1
+             * @see {@link MatterSpecification.v11.Core} § 9.15.14.5.1
              */
             configurationList: WritableAttribute(
                 0x0,
@@ -78,7 +77,7 @@ export namespace ProxyConfiguration {
      *
      * This cluster provides a means for a proxy-capable device to be told the set of Nodes it shall proxy.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.15.14
+     * @see {@link MatterSpecification.v11.Core} § 9.15.14
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

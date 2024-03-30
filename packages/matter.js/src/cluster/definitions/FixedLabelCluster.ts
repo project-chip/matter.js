@@ -10,7 +10,6 @@ import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { Label } from "../../cluster/definitions/LabelCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
@@ -25,7 +24,7 @@ export namespace FixedLabel {
 
         attributes: {
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.8.4
+             * @see {@link MatterSpecification.v11.Core} § 9.8.4
              */
             labelList: Attribute(0x0, TlvArray(Label.TlvLabelStruct), { persistent: true, default: [] })
         }
@@ -44,7 +43,7 @@ export namespace FixedLabel {
      *     LabelList entry "orientation":"up" while the other would have "orientation":"down". Using such indication,
      *     the user interface of a Node controlling this luminaire knows which of the endpoints is which of the lights.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.8
+     * @see {@link MatterSpecification.v11.Core} § 9.8
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

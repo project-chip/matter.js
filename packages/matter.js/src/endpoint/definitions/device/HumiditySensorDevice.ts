@@ -13,12 +13,11 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.7
+ * @see {@link MatterSpecification.v11.Device} § 7.7
  */
 export interface HumiditySensorDevice extends Identity<typeof HumiditySensorDeviceDefinition> {}
 

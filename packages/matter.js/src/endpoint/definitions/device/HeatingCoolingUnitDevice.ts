@@ -20,7 +20,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Heating/Cooling Unit is a device capable of heating or cooling a space in a house. It is not mandatory to provide
@@ -28,7 +27,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  *
  * NOTE Heating/Cooling Unit device type is provisional.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 9.1
+ * @see {@link MatterSpecification.v11.Device} § 9.1
  */
 export interface HeatingCoolingUnitDevice extends Identity<typeof HeatingCoolingUnitDeviceDefinition> {}
 

@@ -20,13 +20,12 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An On/Off Sensor is a measurement and sensing device that, when bound to a lighting device such as a Dimmable Light,
  * is capable of being used to switch the device on or off.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.8
+ * @see {@link MatterSpecification.v11.Device} § 7.8
  */
 export interface OnOffSensorDevice extends Identity<typeof OnOffSensorDeviceDefinition> {}
 

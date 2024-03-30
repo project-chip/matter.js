@@ -6,7 +6,6 @@
 
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt64 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Endian } from "../util/ByteArray.js";
@@ -19,7 +18,7 @@ import { CaseAuthenticatedTag } from "./CaseAuthenticatedTag.js";
  * A Node Identifier (Node ID) is a 64-bit number that uniquely identifies an individual Node or a
  * group of Nodes on a Fabric.
  *
- * @see {@link MatterCoreSpecificationV1_0} § 2.5.5
+ * @see {@link MatterSpecification.v10.Core} § 2.5.5
  */
 export type NodeId = Branded<bigint, "NodeId">;
 

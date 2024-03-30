@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt16 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -14,7 +13,7 @@ import { Branded } from "../util/Type.js";
  * product manufacturer, vendor, or group thereof. Each Vendor ID is statically allocated by the
  * Connectivity Standards Alliance (see [CSA Manufacturer Code Database]).
  *
- * @see {@link MatterCoreSpecificationV1_0} § 2.5.2
+ * @see {@link MatterSpecification.v10.Core} § 2.5.2
  */
 export type VendorId = Branded<number, "VendorId">;
 

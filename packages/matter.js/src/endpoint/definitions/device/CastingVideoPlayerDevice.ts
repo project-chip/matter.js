@@ -35,7 +35,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Casting Video Player device type.
@@ -52,7 +51,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * Please see Video Player Architecture for additional Casting Video Player requirements relating to Video Player
  * device endpoint composition, commissioning, feature representation in clusters, and UI context.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.3
+ * @see {@link MatterSpecification.v11.Device} § 10.3
  */
 export interface CastingVideoPlayerDevice extends Identity<typeof CastingVideoPlayerDeviceDefinition> {}
 

@@ -26,14 +26,13 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Control Bridge is a controller device that, when bound to a lighting device such as an Extended Color Light, is
  * capable of being used to switch the device on or off, adjust the intensity of the light being emitted and adjust the
  * color of the light being emitted. In addition, a Control Bridge device is capable of being used for setting scenes.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.4
+ * @see {@link MatterSpecification.v11.Device} § 6.4
  */
 export interface ControlBridgeDevice extends Identity<typeof ControlBridgeDeviceDefinition> {}
 

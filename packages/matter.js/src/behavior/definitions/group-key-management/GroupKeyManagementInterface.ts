@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { GroupKeyManagement } from "../../../cluster/definitions/GroupKeyManagementCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This command is used by Administrators to set the state of a given Group Key Set, including atomically updating the
@@ -47,7 +46,7 @@ import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
  *
  *   • Otherwise, this status code shall be set to FAILURE.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.1
+ * @see {@link MatterSpecification.v11.Core} § 11.2.8.1
  */
 export type KeySetWriteRequest = TypeFromSchema<typeof GroupKeyManagement.TlvKeySetWriteRequest>;
 
@@ -63,7 +62,7 @@ export type KeySetWriteRequest = TypeFromSchema<typeof GroupKeyManagement.TlvKey
  * Otherwise, if the GroupKeySetID does not refer to a Group Key Set associated with the accessing fabric, then this
  * command shall fail with a NOT_FOUND status code.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.2
+ * @see {@link MatterSpecification.v11.Core} § 11.2.8.2
  */
 export type KeySetReadRequest = TypeFromSchema<typeof GroupKeyManagement.TlvKeySetReadRequest>;
 
@@ -72,7 +71,7 @@ export type KeySetReadRequest = TypeFromSchema<typeof GroupKeyManagement.TlvKeyS
  * contain the configuration of the requested Group Key Set, with the EpochKey0, EpochKey1 and EpochKey2 key contents
  * replaced by null.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.3
+ * @see {@link MatterSpecification.v11.Core} § 11.2.8.3
  */
 export type KeySetReadResponse = TypeFromSchema<typeof GroupKeyManagement.TlvKeySetReadResponse>;
 
@@ -96,7 +95,7 @@ export type KeySetReadResponse = TypeFromSchema<typeof GroupKeyManagement.TlvKey
  * This command shall send a SUCCESS status code back to the initiator on success, or NOT_FOUND if the GroupKeySetID
  * requested did not exist.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.4
+ * @see {@link MatterSpecification.v11.Core} § 11.2.8.4
  */
 export type KeySetRemoveRequest = TypeFromSchema<typeof GroupKeyManagement.TlvKeySetRemoveRequest>;
 
@@ -110,7 +109,7 @@ export type KeySetRemoveRequest = TypeFromSchema<typeof GroupKeyManagement.TlvKe
  *
  * Each entry in GroupKeySetIDs is a GroupKeySetID field.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.6
+ * @see {@link MatterSpecification.v11.Core} § 11.2.8.6
  */
 export type KeySetReadAllIndicesResponse = TypeFromSchema<typeof GroupKeyManagement.TlvKeySetReadAllIndicesResponse>;
 
@@ -154,7 +153,7 @@ export namespace GroupKeyManagementInterface {
          *
          *   • Otherwise, this status code shall be set to FAILURE.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.1
+         * @see {@link MatterSpecification.v11.Core} § 11.2.8.1
          */
         keySetWrite(request: KeySetWriteRequest): MaybePromise;
 
@@ -170,7 +169,7 @@ export namespace GroupKeyManagementInterface {
          * Otherwise, if the GroupKeySetID does not refer to a Group Key Set associated with the accessing fabric, then
          * this command shall fail with a NOT_FOUND status code.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.2
+         * @see {@link MatterSpecification.v11.Core} § 11.2.8.2
          */
         keySetRead(request: KeySetReadRequest): MaybePromise<KeySetReadResponse>;
 
@@ -194,7 +193,7 @@ export namespace GroupKeyManagementInterface {
          * This command shall send a SUCCESS status code back to the initiator on success, or NOT_FOUND if the
          * GroupKeySetID requested did not exist.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.4
+         * @see {@link MatterSpecification.v11.Core} § 11.2.8.4
          */
         keySetRemove(request: KeySetRemoveRequest): MaybePromise;
 
@@ -208,7 +207,7 @@ export namespace GroupKeyManagementInterface {
          * and generate a KeySetReadAllIndicesResponse command containing the list of GroupKeySetID values from those
          * structs.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.5
+         * @see {@link MatterSpecification.v11.Core} § 11.2.8.5
          */
         keySetReadAllIndices(): MaybePromise<KeySetReadAllIndicesResponse>;
     }

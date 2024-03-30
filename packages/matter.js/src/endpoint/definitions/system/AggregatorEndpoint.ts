@@ -13,7 +13,6 @@ import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This device type aggregates endpoints as a collection. Clusters on the endpoint indicating this device type provide
@@ -26,7 +25,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * When using this device type as a collection of bridged nodes, please see the "Bridge" section in the System Model
  * specification.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.5
+ * @see {@link MatterSpecification.v11.Device} § 2.5
  */
 export interface AggregatorEndpoint extends Identity<typeof AggregatorEndpointDefinition> {}
 

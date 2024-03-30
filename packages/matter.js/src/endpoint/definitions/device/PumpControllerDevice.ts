@@ -30,12 +30,11 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Pump Controller device is capable of configuring and controlling a Pump device.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.5
+ * @see {@link MatterSpecification.v11.Device} § 6.5
  */
 export interface PumpControllerDevice extends Identity<typeof PumpControllerDeviceDefinition> {}
 

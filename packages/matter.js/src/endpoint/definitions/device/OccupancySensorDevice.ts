@@ -14,13 +14,12 @@ import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An Occupancy Sensor is a measurement and sensing device that is capable of measuring and reporting the occupancy
  * state in a designated area.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.3
+ * @see {@link MatterSpecification.v11.Device} § 7.3
  */
 export interface OccupancySensorDevice extends Identity<typeof OccupancySensorDeviceDefinition> {}
 

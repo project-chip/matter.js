@@ -13,12 +13,11 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Pressure Sensor device measures and reports the pressure of a fluid.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.5
+ * @see {@link MatterSpecification.v11.Device} § 7.5
  */
 export interface PressureSensorDevice extends Identity<typeof PressureSensorDeviceDefinition> {}
 

@@ -9,18 +9,17 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { OtaSoftwareUpdateProvider } from "../../../cluster/definitions/OtaSoftwareUpdateProviderCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA Provider to match
  * the OTA Requestor’s constraints provided in the payload fields.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.1
+ * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.1
  */
 export type QueryImageRequest = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvQueryImageRequest>;
 
 /**
- * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.10
+ * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.10
  */
 export type QueryImageResponse = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvQueryImageResponse>;
 
@@ -29,12 +28,12 @@ export type QueryImageResponse = TypeFromSchema<typeof OtaSoftwareUpdateProvider
  * used by the OTA Provider to track minimal lifecycle state to allow finer-grained scheduling of the application of
  * Software Images by OTA Requestors.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.18
+ * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.18
  */
 export type ApplyUpdateRequest = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvApplyUpdateRequest>;
 
 /**
- * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.20
+ * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.20
  */
 export type ApplyUpdateResponse = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvApplyUpdateResponse>;
 
@@ -70,7 +69,7 @@ export type ApplyUpdateResponse = TypeFromSchema<typeof OtaSoftwareUpdateProvide
  * On receiving this command, an OTA Provider may use the information to update its bookkeeping of cached Software
  * Images, or use it for other similar administrative purposes.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.22
+ * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.22
  */
 export type NotifyUpdateAppliedRequest = TypeFromSchema<typeof OtaSoftwareUpdateProvider.TlvNotifyUpdateAppliedRequest>;
 
@@ -80,7 +79,7 @@ export namespace OtaSoftwareUpdateProviderInterface {
          * Upon receipt, this command shall trigger an attempt to find an updated Software Image by the OTA Provider to
          * match the OTA Requestor’s constraints provided in the payload fields.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.1
+         * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.1
          */
         queryImage(request: QueryImageRequest): MaybePromise<QueryImageResponse>;
 
@@ -89,7 +88,7 @@ export namespace OtaSoftwareUpdateProviderInterface {
          * field may be used by the OTA Provider to track minimal lifecycle state to allow finer-grained scheduling of
          * the application of Software Images by OTA Requestors.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.18
+         * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.18
          */
         applyUpdateRequest(request: ApplyUpdateRequest): MaybePromise<ApplyUpdateResponse>;
 
@@ -125,7 +124,7 @@ export namespace OtaSoftwareUpdateProviderInterface {
          * On receiving this command, an OTA Provider may use the information to update its bookkeeping of cached
          * Software Images, or use it for other similar administrative purposes.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.5.22
+         * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.22
          */
         notifyUpdateApplied(request: NotifyUpdateAppliedRequest): MaybePromise;
     }

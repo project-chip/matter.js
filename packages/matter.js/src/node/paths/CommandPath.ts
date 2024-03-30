@@ -16,7 +16,7 @@ export namespace CommandPath {
     /**
      * Addresses a command for invocation.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.4.1
+     * @see {@link MatterSpecification.v11.Core} § 8.9.4.1
      */
     export type Invoke = BasePath.Write & {
         command: Address;

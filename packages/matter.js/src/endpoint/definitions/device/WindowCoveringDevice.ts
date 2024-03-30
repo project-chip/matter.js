@@ -15,7 +15,6 @@ import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Window Covering device type.
@@ -23,7 +22,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * WindowCoveringDevice requires WindowCovering cluster but WindowCovering is not added by default because you must
  * select the features your device supports. You can add manually using WindowCoveringDevice.with().
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.3
+ * @see {@link MatterSpecification.v11.Device} § 8.3
  */
 export interface WindowCoveringDevice extends Identity<typeof WindowCoveringDeviceDefinition> {}
 

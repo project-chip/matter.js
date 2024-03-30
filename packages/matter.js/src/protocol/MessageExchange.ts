@@ -16,7 +16,6 @@ import {
     SESSION_IDLE_INTERVAL_MS,
     Session,
 } from "../session/Session.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { createPromise } from "../util/Promises.js";
@@ -72,11 +71,11 @@ const MRP_BACKOFF_MARGIN = 1.1;
 /** The number of retransmissions before transitioning from linear to exponential backoff. */
 const MRP_BACKOFF_THRESHOLD = 1;
 
-/** @see {@link MatterCoreSpecificationV1_2}, section 4.11.2.1 */
+/** @see {@link MatterSpecification.v12.Core}, section 4.11.2.1 */
 // TODO this is calculated too static and only valid for the session timing defaults. Adjust to be dynamic or really counter based
 const MAXIMUM_TRANSMISSION_TIME_MS = 9495; // 413 + 825 + 1485 + 2541 + 4231 ms as per specs
 
-/** @see {@link MatterCoreSpecificationV1_2}, section 4.11.8 */
+/** @see {@link MatterSpecification.v12.Core}, section 4.11.8 */
 const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
 
 export class MessageExchange<ContextT> {
@@ -350,7 +349,7 @@ export class MessageExchange<ContextT> {
         return message;
     }
 
-    /** @see {@link MatterCoreSpecificationV1_0}, section 4.11.2.1 */
+    /** @see {@link MatterSpecification.v10.Core}, section 4.11.2.1 */
     private getResubmissionBackOffTime(retransmissionCount: number) {
         const baseInterval = this.session.isPeerActive() ? this.activeIntervalMs : this.idleIntervalMs;
         return Math.floor(

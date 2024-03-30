@@ -16,12 +16,11 @@ import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An OTA Requestor is a device that is capable of receiving an OTA software update.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.3
+ * @see {@link MatterSpecification.v11.Device} § 2.3
  */
 export interface OtaRequestorEndpoint extends Identity<typeof OtaRequestorEndpointDefinition> {}
 

@@ -19,14 +19,13 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Dimmable Light is a lighting device that is capable of being switched on or off and the intensity of its light
  * adjusted by means of a bound controller device such as a Dimmer Switch or a Color Dimmer Switch. In addition, a
  * Dimmable Light device is also capable of being switched by means of a bound occupancy sensor or other device(s).
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.2
+ * @see {@link MatterSpecification.v11.Device} § 4.2
  */
 export interface DimmableLightDevice extends Identity<typeof DimmableLightDeviceDefinition> {}
 

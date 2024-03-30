@@ -19,14 +19,13 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * The On/Off Light is a lighting device that is capable of being switched on or off by means of a bound controller
  * device such as an On/Off Light Switch or a Dimmer Switch. In addition, an on/off light is also capable of being
  * switched by means of a bound occupancy sensor.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.1
+ * @see {@link MatterSpecification.v11.Device} § 4.1
  */
 export interface OnOffLightDevice extends Identity<typeof OnOffLightDeviceDefinition> {}
 

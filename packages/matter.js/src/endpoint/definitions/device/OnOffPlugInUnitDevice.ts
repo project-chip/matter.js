@@ -16,7 +16,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An On/Off Plug-in Unit is a device that is capable of being switched on or off by means of a bound controller device
@@ -24,7 +23,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * conventional non-communicating light by switching its mains connection. Other appliances can be controlled this way
  * as well.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 5.1
+ * @see {@link MatterSpecification.v11.Device} § 5.1
  */
 export interface OnOffPlugInUnitDevice extends Identity<typeof OnOffPlugInUnitDeviceDefinition> {}
 

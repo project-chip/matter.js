@@ -64,7 +64,6 @@ import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance for a root node endpoint (see System Model specification). This endpoint is akin to a "read
@@ -76,7 +75,7 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  *
  *   • Other device types with Node scope may be supported on the same endpoint as this device type.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.1
+ * @see {@link MatterSpecification.v11.Device} § 2.1
  */
 export interface RootEndpoint extends Identity<typeof RootEndpointDefinition> {}
 

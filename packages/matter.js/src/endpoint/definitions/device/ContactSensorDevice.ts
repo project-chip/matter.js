@@ -13,12 +13,11 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Contact Sensor device type.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.1
+ * @see {@link MatterSpecification.v11.Device} § 7.1
  */
 export interface ContactSensorDevice extends Identity<typeof ContactSensorDeviceDefinition> {}
 

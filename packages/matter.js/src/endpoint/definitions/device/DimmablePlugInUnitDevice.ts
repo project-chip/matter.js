@@ -16,14 +16,13 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Dimmable Plug-In Unit is a device that is capable of being switched on or off and have its level adjusted by means
  * of a bound controller device such as a Dimmer Switch or a Color Dimmer Switch. The Dimmable Plug-in Unit is
  * typically used to control a conventional non-communicating light through its mains connection using phase cutting.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 5.2
+ * @see {@link MatterSpecification.v11.Device} § 5.2
  */
 export interface DimmablePlugInUnitDevice extends Identity<typeof DimmablePlugInUnitDeviceDefinition> {}
 
