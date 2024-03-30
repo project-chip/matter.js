@@ -360,15 +360,12 @@ server.events.sessions.subscriptionsChanged.on(session => {
 });
 
 // React on a change of identificationTime to do Identify stuff for the own device
-let isIdentifying = false;
-endpoint.events.identify.identifyTime$Change.on(value => {
-    if (value > 0 && !isIdentifying) {
-        isIdentifying = true;
-        console.log(`Run identify logic, ideally blink a light every 0.5s ...`);
-    } else if (value === 0) {
-        isIdentifying = false;
-        console.log(`Stop identify logic ...`);
-    }
+endpoint.events.identify.startIdentifying.on(() => {
+    console.log(`Run identify logic, ideally blink a light every 0.5s ...`);
+});
+
+endpoint.events.identify.stopIdentifying.on(() => {
+    console.log(`Stop identify logic ...`);
 });
 
 // Our device is now built and we can bring the node online.

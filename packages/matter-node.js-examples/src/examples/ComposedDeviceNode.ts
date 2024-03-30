@@ -97,16 +97,12 @@ for (let idx = 0; idx < isSocket.length; idx++) {
      * If the code in these change handlers fail then the change is also rolled back and not executed and an error is
      * reported back to the controller.
      */
-    let isIdentifying = false;
-    endpoint.events.identify.identifyTime$Change.on(value => {
-        // identifyTime is set when an identify command is called and then decreased every second while indentify logic runs.
-        if (value > 0 && !isIdentifying) {
-            isIdentifying = true;
-            console.log(`OnOff ${i}: Run identify logic, ideally blink a light every 0.5s ...`);
-        } else if (value === 0) {
-            isIdentifying = false;
-            console.log(`OnOff ${i}: Stop identify logic ...`);
-        }
+    endpoint.events.identify.startIdentifying.on(() => {
+        console.log(`Run identify logic for sub device ${i}, ideally blink a light every 0.5s ...`);
+    });
+
+    endpoint.events.identify.stopIdentifying.on(() => {
+        console.log(`Stop identify logic for sub device ${i}...`);
     });
 
     endpoint.events.onOff.onOff$Change.on(value => {
