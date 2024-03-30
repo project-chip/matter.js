@@ -13,8 +13,8 @@ import { IdentifyQueryResponse, IdentifyRequest } from "./IdentifyInterface.js";
  * This is the default server implementation of IdentifyBehavior.
  *
  * This implementation includes all features of Identify.Cluster and implements all mandatory commands. You should use
- * `IdentifyServer.with()` to specialize the class for the features your implementation supports. Alternatively you can
- * extend this class and override the methods you need to change or add mandatory commands.
+ * {@link IdentifyServer.with} to specialize the class for the features your implementation supports. Alternatively
+ * you can extend this class and override the methods you need to change or add mandatory commands.
  *
  * Beside the standard state values the following additional state values are available:
  * * `isIdentifying` - Indicates if the device is currently identifying.
