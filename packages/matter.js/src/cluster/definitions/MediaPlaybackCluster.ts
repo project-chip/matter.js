@@ -10,7 +10,6 @@ import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, Command, OptionalCommand } from "../../cluster/Cluster.js";
 import { TlvEpochUs, TlvUInt64, TlvFloat, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
@@ -23,13 +22,13 @@ export namespace MediaPlayback {
     /**
      * This structure defines a playback position within a media stream being played.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.5.3
      */
     export const TlvPlaybackPositionStruct = TlvObject({
         /**
          * This shall indicate the time when the position was last updated.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.5.3.1
          */
         updatedAt: TlvField(0, TlvEpochUs),
 
@@ -42,7 +41,7 @@ export namespace MediaPlayback {
          * A value of null shall indicate that playback position is not applicable for the current state of the media
          * playback (For example : Live media with no known duration and where seek is not supported).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.5.3.2
          */
         position: TlvField(1, TlvNullable(TlvUInt64))
     });
@@ -50,14 +49,14 @@ export namespace MediaPlayback {
     /**
      * This structure defines a playback position within a media stream being played.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.3
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.5.3
      */
     export interface PlaybackPositionStruct extends TypeFromSchema<typeof TlvPlaybackPositionStruct> {}
 
     /**
      * Input to the MediaPlayback seek command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.11
      */
     export const TlvSeekRequest = TlvObject({
         /**
@@ -68,7 +67,7 @@ export namespace MediaPlayback {
          * the status of SEEK_OUT_OF_RANGE shall be returned and no change shall be made to the position of the
          * playback.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.11.1
          */
         position: TlvField(0, TlvUInt64)
     });
@@ -76,12 +75,12 @@ export namespace MediaPlayback {
     /**
      * Input to the MediaPlayback seek command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.11
      */
     export interface SeekRequest extends TypeFromSchema<typeof TlvSeekRequest> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.5.2
      */
     export enum Status {
         /**
@@ -121,20 +120,20 @@ export namespace MediaPlayback {
     /**
      * This command shall be generated in response to various Playback Commands.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.12
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.12
      */
     export const TlvPlaybackResponse = TlvObject({
         /**
          * This shall indicate the status of the command which resulted in this response.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.12.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.12.1
          */
         status: TlvField(0, TlvEnum<Status>()),
 
         /**
          * This shall indicate Optional app-specific data.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.12.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.12.2
          */
         data: TlvOptionalField(1, TlvByteString)
     });
@@ -142,12 +141,12 @@ export namespace MediaPlayback {
     /**
      * This command shall be generated in response to various Playback Commands.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.12
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.12
      */
     export interface PlaybackResponse extends TypeFromSchema<typeof TlvPlaybackResponse> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.5.1
      */
     export enum PlaybackState {
         /**
@@ -174,7 +173,7 @@ export namespace MediaPlayback {
     /**
      * Input to the MediaPlayback skipForward command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.9
      */
     export const TlvSkipForwardRequest = TlvObject({
         /**
@@ -185,7 +184,7 @@ export namespace MediaPlayback {
          * to that furthest valid position. If the SampledPosition attribute is supported it shall be updated on the
          * cluster accordingly.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.9.1
          */
         deltaPositionMilliseconds: TlvField(0, TlvUInt64)
     });
@@ -193,14 +192,14 @@ export namespace MediaPlayback {
     /**
      * Input to the MediaPlayback skipForward command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.9
      */
     export interface SkipForwardRequest extends TypeFromSchema<typeof TlvSkipForwardRequest> {}
 
     /**
      * Input to the MediaPlayback skipBackward command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.10
      */
     export const TlvSkipBackwardRequest = TlvObject({
         /**
@@ -211,7 +210,7 @@ export namespace MediaPlayback {
          * earliest valid position. If the SampledPosition attribute is supported it shall be updated on the cluster
          * accordingly.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.10.1
          */
         deltaPositionMilliseconds: TlvField(0, TlvUInt64)
     });
@@ -219,7 +218,7 @@ export namespace MediaPlayback {
     /**
      * Input to the MediaPlayback skipBackward command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.10
      */
     export interface SkipBackwardRequest extends TypeFromSchema<typeof TlvSkipBackwardRequest> {}
 
@@ -235,7 +234,7 @@ export namespace MediaPlayback {
              * media (for example, video-on-demand). This time is a UTC time. The client needs to handle conversion to
              * local time, as required, taking in account time zone and possible local DST offset.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.2
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.3.2
              */
             startTime: Attribute(0x1, TlvNullable(TlvEpochUs), { default: null }),
 
@@ -244,7 +243,7 @@ export namespace MediaPlayback {
              * duration is not applicable (for example, in live streaming content with no known duration). This
              * attribute shall never be 0.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.3
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.3.3
              */
             duration: Attribute(0x2, TlvNullable(TlvUInt64), { default: null }),
 
@@ -266,7 +265,7 @@ export namespace MediaPlayback {
              *
              *   • Updating of playback speed as a result of explicit request, or as a result of buffering events
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.4
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.3.4
              */
             sampledPosition: Attribute(0x3, TlvNullable(TlvPlaybackPositionStruct), { default: null }),
 
@@ -303,7 +302,7 @@ export namespace MediaPlayback {
              *
              * Following examples illustrate the PlaybackSpeed attribute values in various conditions.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.5
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.3.5
              */
             playbackSpeed: Attribute(0x4, TlvFloat, { default: 0 }),
 
@@ -315,7 +314,7 @@ export namespace MediaPlayback {
              * from start of the media, truncating fractional milliseconds towards 0. A value of Nas when StartTime is
              * not specified shall indicate that seeking forward is not allowed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.7
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.3.7
              */
             seekRangeEnd: Attribute(0x5, TlvNullable(TlvUInt64), { default: null }),
 
@@ -323,7 +322,7 @@ export namespace MediaPlayback {
              * This shall indicate the earliest valid position to which a client may seek back, in milliseconds from
              * start of the media. A value of Nas shall indicate that seeking backwards is not allowed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.6
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.3.6
              */
             seekRangeStart: Attribute(0x6, TlvNullable(TlvUInt64), { default: null })
         },
@@ -332,7 +331,7 @@ export namespace MediaPlayback {
             /**
              * Upon receipt, this shall change the playback position in the media to the given position.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.11
              */
             seek: Command(0xb, TlvSeekRequest, 0xa, TlvPlaybackResponse)
         }
@@ -358,7 +357,7 @@ export namespace MediaPlayback {
              * shall be returned. If the playback speed has reached the maximum supported speed for media playing
              * backwards, the status of SPEED_OUT_OF_RANGE shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.7
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.7
              */
             rewind: Command(0x6, TlvNoArguments, 0xa, TlvPlaybackResponse),
 
@@ -375,7 +374,7 @@ export namespace MediaPlayback {
              * NOT_ALLOWED shall be returned. If the playback speed has reached the maximum supported speed for media
              * playing forward, the status of SPEED_OUT_OF_RANGE shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.8
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.8
              */
             fastForward: Command(0x7, TlvNoArguments, 0xa, TlvPlaybackResponse)
         }
@@ -384,7 +383,7 @@ export namespace MediaPlayback {
     /**
      * These are optional features supported by MediaPlaybackCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10.2
      */
     export enum Feature {
         /**
@@ -434,7 +433,7 @@ export namespace MediaPlayback {
              *
              * During fast-forward, rewind, and other seek operations; this attribute shall be set to PLAYING.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.3.1
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.3.1
              */
             currentState: Attribute(0x0, TlvEnum<PlaybackState>(), { default: PlaybackState.Playing })
         },
@@ -444,14 +443,14 @@ export namespace MediaPlayback {
              * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play
              * shall return media to normal playback speed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.1
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.1
              */
             play: Command(0x0, TlvNoArguments, 0xa, TlvPlaybackResponse),
 
             /**
              * Upon receipt, this shall pause playback of the media.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.2
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.2
              */
             pause: Command(0x1, TlvNoArguments, 0xa, TlvPlaybackResponse),
 
@@ -459,14 +458,14 @@ export namespace MediaPlayback {
              * Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may
              * navigate the user back to the location from where the media was originally launched.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.3
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.3
              */
             stop: Command(0x2, TlvNoArguments, 0xa, TlvPlaybackResponse),
 
             /**
              * Upon receipt, this shall Start Over with the current media playback item.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.4
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.4
              */
             startOver: OptionalCommand(0x3, TlvNoArguments, 0xa, TlvPlaybackResponse),
 
@@ -474,7 +473,7 @@ export namespace MediaPlayback {
              * Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is
              * context-specific. This will often Go back to the previous media playback item.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.5
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.5
              */
             previous: OptionalCommand(0x4, TlvNoArguments, 0xa, TlvPlaybackResponse),
 
@@ -482,21 +481,21 @@ export namespace MediaPlayback {
              * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context-
              * specific. This will often Go forward to the next media playback item.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.6
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.6
              */
             next: OptionalCommand(0x5, TlvNoArguments, 0xa, TlvPlaybackResponse),
 
             /**
              * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.9
              */
             skipForward: OptionalCommand(0x8, TlvSkipForwardRequest, 0xa, TlvPlaybackResponse),
 
             /**
              * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10
+             * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.10
              */
             skipBackward: OptionalCommand(0x9, TlvSkipBackwardRequest, 0xa, TlvPlaybackResponse)
         },
@@ -525,7 +524,7 @@ export namespace MediaPlayback {
      * MediaPlaybackCluster supports optional features that you can enable with the MediaPlaybackCluster.with() factory
      * method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10
+     * @see {@link MatterSpecification.v11.Cluster} § 6.10
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

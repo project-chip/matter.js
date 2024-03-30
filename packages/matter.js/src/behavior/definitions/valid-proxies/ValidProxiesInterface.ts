@@ -7,12 +7,11 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 export namespace ValidProxiesInterface {
     export interface Base {
         /**
-         * @see {@link MatterCoreSpecificationV1_1} § 9.15.15.6
+         * @see {@link MatterSpecification.v11.Core} § 9.15.15.6
          */
         getValidProxiesRequest(): MaybePromise;
     }

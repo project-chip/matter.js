@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This command shall be generated to request the Attestation Information, in the form of an AttestationResponse
@@ -18,7 +17,7 @@ import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
  * recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce field shall be used in
  * the computation of the Attestation Information.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.1
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.1
  */
 export type AttestationRequest = TypeFromSchema<typeof OperationalCredentials.TlvAttestationRequest>;
 
@@ -30,7 +29,7 @@ export type AttestationRequest = TypeFromSchema<typeof OperationalCredentials.Tl
  *
  * See Section F.2, “Device Attestation Response test vector” for an example computation of an AttestationResponse.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.2
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.2
  */
 export type AttestationResponse = TypeFromSchema<typeof OperationalCredentials.TlvAttestationResponse>;
 
@@ -38,14 +37,14 @@ export type AttestationResponse = TypeFromSchema<typeof OperationalCredentials.T
  * If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail with a Status
  * Code of INVALID_COMMAND.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.3
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.3
  */
 export type CertificateChainRequest = TypeFromSchema<typeof OperationalCredentials.TlvCertificateChainRequest>;
 
 /**
  * This command shall be generated in response to a CertificateChainRequest command.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.4
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.4
  */
 export type CertificateChainResponse = TypeFromSchema<typeof OperationalCredentials.TlvCertificateChainResponse>;
 
@@ -75,7 +74,7 @@ export type CertificateChainResponse = TypeFromSchema<typeof OperationalCredenti
  * collide with an existing key pair already previously generated and installed, and that check had been executed, then
  * this command shall fail with a FAILURE status code sent back to the initiator.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.5
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.5
  */
 export type CsrRequest = TypeFromSchema<typeof OperationalCredentials.TlvCsrRequest>;
 
@@ -87,7 +86,7 @@ export type CsrRequest = TypeFromSchema<typeof OperationalCredentials.TlvCsrRequ
  *
  * See Section F.3, “Node Operational CSR Response test vector” for an example computation of a CSRResponse.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.6
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.6
  */
 export type CsrResponse = TypeFromSchema<typeof OperationalCredentials.TlvCsrResponse>;
 
@@ -102,7 +101,7 @@ export type CsrResponse = TypeFromSchema<typeof OperationalCredentials.TlvCsrRes
  *
  * A Commissioner or Administrator SHOULD issue this command after performing the Attestation Procedure.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.8
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.8
  */
 export type AddNocRequest = TypeFromSchema<typeof OperationalCredentials.TlvAddNocRequest>;
 
@@ -119,7 +118,7 @@ export type AddNocRequest = TypeFromSchema<typeof OperationalCredentials.TlvAddN
  *
  * It provides status information about the success or failure of those commands.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.10
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.10
  */
 export type NocResponse = TypeFromSchema<typeof OperationalCredentials.TlvNocResponse>;
 
@@ -178,7 +177,7 @@ export type NocResponse = TypeFromSchema<typeof OperationalCredentials.TlvNocRes
  * Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex field matching the
  * FabricIndex under which the updated NOC is scoped.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.9
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.9
  */
 export type UpdateNocRequest = TypeFromSchema<typeof OperationalCredentials.TlvUpdateNocRequest>;
 
@@ -206,7 +205,7 @@ export type UpdateNocRequest = TypeFromSchema<typeof OperationalCredentials.TlvU
  * command. In other words, label updates apply to the state of the Fabrics Attribute as currently visible, even for an
  * existing fabric currently in process of being updated.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.11
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.11
  */
 export type UpdateFabricLabelRequest = TypeFromSchema<typeof OperationalCredentials.TlvUpdateFabricLabelRequest>;
 
@@ -262,7 +261,7 @@ export type UpdateFabricLabelRequest = TypeFromSchema<typeof OperationalCredenti
  * may underpin the current set of exchanges, the Node invoking the command SHOULD NOT expect a response before
  * terminating its secure session with the target.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.12
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.12
  */
 export type RemoveFabricRequest = TypeFromSchema<typeof OperationalCredentials.TlvRemoveFabricRequest>;
 
@@ -291,7 +290,7 @@ export type RemoveFabricRequest = TypeFromSchema<typeof OperationalCredentials.T
  * Note that the only method of removing a trusted root is by removing the Fabric that uses it as its root of trust
  * using the RemoveFabric command.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.13
+ * @see {@link MatterSpecification.v11.Core} § 11.17.6.13
  */
 export type AddTrustedRootCertificateRequest = TypeFromSchema<typeof OperationalCredentials.TlvAddTrustedRootCertificateRequest>;
 
@@ -304,7 +303,7 @@ export namespace OperationalCredentialsInterface {
          * recipient shall fail the command with a Status Code of INVALID_COMMAND. The AttestationNonce field shall be
          * used in the computation of the Attestation Information.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.1
+         * @see {@link MatterSpecification.v11.Core} § 11.17.6.1
          */
         attestationRequest(request: AttestationRequest): MaybePromise<AttestationResponse>;
 
@@ -312,7 +311,7 @@ export namespace OperationalCredentialsInterface {
          * If the CertificateType is not a valid value per CertificateChainTypeEnum then the command shall fail with a
          * Status Code of INVALID_COMMAND.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.3
+         * @see {@link MatterSpecification.v11.Core} § 11.17.6.3
          */
         certificateChainRequest(request: CertificateChainRequest): MaybePromise<CertificateChainResponse>;
 
@@ -342,7 +341,7 @@ export namespace OperationalCredentialsInterface {
          * to collide with an existing key pair already previously generated and installed, and that check had been
          * executed, then this command shall fail with a FAILURE status code sent back to the initiator.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.5
+         * @see {@link MatterSpecification.v11.Core} § 11.17.6.5
          */
         csrRequest(request: CsrRequest): MaybePromise<CsrResponse>;
 
@@ -357,7 +356,7 @@ export namespace OperationalCredentialsInterface {
          *
          * A Commissioner or Administrator SHOULD issue this command after performing the Attestation Procedure.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.8
+         * @see {@link MatterSpecification.v11.Core} § 11.17.6.8
          */
         addNoc(request: AddNocRequest): MaybePromise<NocResponse>;
 
@@ -416,7 +415,7 @@ export namespace OperationalCredentialsInterface {
          * Thereafter, the Node shall respond with an NOCResponse with a StatusCode of OK and a FabricIndex field
          * matching the FabricIndex under which the updated NOC is scoped.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.9
+         * @see {@link MatterSpecification.v11.Core} § 11.17.6.9
          */
         updateNoc(request: UpdateNocRequest): MaybePromise<NocResponse>;
 
@@ -444,7 +443,7 @@ export namespace OperationalCredentialsInterface {
          * CommissioningComplete command. In other words, label updates apply to the state of the Fabrics Attribute as
          * currently visible, even for an existing fabric currently in process of being updated.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.11
+         * @see {@link MatterSpecification.v11.Core} § 11.17.6.11
          */
         updateFabricLabel(request: UpdateFabricLabelRequest): MaybePromise<NocResponse>;
 
@@ -502,7 +501,7 @@ export namespace OperationalCredentialsInterface {
          * removal of the secure session data that may underpin the current set of exchanges, the Node invoking the
          * command SHOULD NOT expect a response before terminating its secure session with the target.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.12
+         * @see {@link MatterSpecification.v11.Core} § 11.17.6.12
          */
         removeFabric(request: RemoveFabricRequest): MaybePromise<NocResponse>;
 
@@ -531,7 +530,7 @@ export namespace OperationalCredentialsInterface {
          * Note that the only method of removing a trusted root is by removing the Fabric that uses it as its root of
          * trust using the RemoveFabric command.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.17.6.13
+         * @see {@link MatterSpecification.v11.Core} § 11.17.6.13
          */
         addTrustedRootCertificate(request: AddTrustedRootCertificateRequest): MaybePromise;
     }

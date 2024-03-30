@@ -19,34 +19,33 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Dimmable Light is a lighting device that is capable of being switched on or off and the intensity of its light
  * adjusted by means of a bound controller device such as a Dimmer Switch or a Color Dimmer Switch. In addition, a
  * Dimmable Light device is also capable of being switched by means of a bound occupancy sensor or other device(s).
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.2
+ * @see {@link MatterSpecification.v11.Device} § 4.2
  */
 export interface DimmableLightDevice extends Identity<typeof DimmableLightDeviceDefinition> {}
 
 export namespace DimmableLightRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
      * This version of {@link IdentifyServer} is specialized per the specification.
      */
     export const IdentifyServer = BaseIdentifyServer.alter({ commands: { triggerEffect: { optional: false } } });
 
     /**
-     * The {@link Groups} cluster is required by the Matter specification
+     * The Groups cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The {@link Scenes} cluster is required by the Matter specification
+     * The Scenes cluster is required by the Matter specification
      *
      * This version of {@link ScenesServer} is specialized per the specification.
      */
@@ -60,14 +59,14 @@ export namespace DimmableLightRequirements {
         });
 
     /**
-     * The {@link OnOff} cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("LevelControlForLighting");
 
     /**
-     * The {@link LevelControl} cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification
      *
      * This version of {@link LevelControlServer} is specialized per the specification.
      */
@@ -82,9 +81,9 @@ export namespace DimmableLightRequirements {
         });
 
     /**
-     * The {@link OccupancySensing} cluster is optional per the Matter specification
+     * The OccupancySensing cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
      */
     export const OccupancySensingBehavior = BaseOccupancySensingBehavior;
 

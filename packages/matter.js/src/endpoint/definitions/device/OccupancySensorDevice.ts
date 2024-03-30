@@ -14,35 +14,34 @@ import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An Occupancy Sensor is a measurement and sensing device that is capable of measuring and reporting the occupancy
  * state in a designated area.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.3
+ * @see {@link MatterSpecification.v11.Device} § 7.3
  */
 export interface OccupancySensorDevice extends Identity<typeof OccupancySensorDeviceDefinition> {}
 
 export namespace OccupancySensorRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link OccupancySensing} cluster is required by the Matter specification
+     * The OccupancySensing cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OccupancySensingServer} for convenience.
      */
     export const OccupancySensingServer = BaseOccupancySensingServer;
 
     /**
-     * The {@link Groups} cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 

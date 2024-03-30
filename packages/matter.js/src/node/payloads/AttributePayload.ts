@@ -12,7 +12,7 @@ export namespace AttributePayload {
     /**
      * Designates an operation to apply to a single entry of a list.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.2.5
+     * @see {@link MatterSpecification.v11.Core} § 8.9.2.5
      */
     export enum ListChange {
         replace = "replace",
@@ -35,21 +35,21 @@ export namespace AttributePayload {
     /**
      * Write data.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.2.5
+     * @see {@link MatterSpecification.v11.Core} § 8.9.2.5
      */
     export type Write = WildcardWrite | ConcreteWrite;
 
     /**
      * Write response.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.7.3.1
+     * @see {@link MatterSpecification.v11.Core} § 8.7.3.1
      */
     export type Response = BasePayload.Status<AttributePath.Concrete>;
 
     /**
      * Read result.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.2.6
+     * @see {@link MatterSpecification.v11.Core} § 8.9.2.6
      */
     export type Report = BasePayload.DataOrStatus<
         AttributePath.Concrete,

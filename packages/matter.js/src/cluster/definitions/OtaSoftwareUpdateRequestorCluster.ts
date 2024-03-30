@@ -22,7 +22,6 @@ import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvFabricIndex } from "../../datatype/FabricIndex.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvEnum, TlvUInt8, TlvUInt32, TlvUInt16, TlvUInt64, TlvInt64 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -35,7 +34,7 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * This structure encodes a fabric-scoped location of an OTA provider on a given fabric.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.20
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.20
      */
     export const TlvProviderLocationStruct = TlvObject({
         providerNodeId: TlvField(1, TlvNodeId),
@@ -46,12 +45,12 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * This structure encodes a fabric-scoped location of an OTA provider on a given fabric.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.20
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.20
      */
     export interface ProviderLocationStruct extends TypeFromSchema<typeof TlvProviderLocationStruct> {}
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.5
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.5
      */
     export enum UpdateState {
         /**
@@ -101,7 +100,7 @@ export namespace OtaSoftwareUpdateRequestor {
     }
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.1
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.1
      */
     export enum AnnouncementReason {
         /**
@@ -125,7 +124,7 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.6.1
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.6.1
      */
     export const TlvAnnounceOtaProviderRequest = TlvObject({
         providerNodeId: TlvField(0, TlvNodeId),
@@ -139,14 +138,14 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.6.1
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.6.1
      */
     export interface AnnounceOtaProviderRequest extends TypeFromSchema<typeof TlvAnnounceOtaProviderRequest> {}
 
     /**
      * This value shall indicate that the reason for a state change is unknown.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.15
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.15
      */
     export enum ChangeReason {
         /**
@@ -178,7 +177,7 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * Body of the OtaSoftwareUpdateRequestor stateTransition event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.1
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.1
      */
     export const TlvStateTransitionEvent = TlvObject({
         previousState: TlvField(0, TlvEnum<UpdateState>()),
@@ -190,14 +189,14 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * Body of the OtaSoftwareUpdateRequestor stateTransition event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.1
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.1
      */
     export interface StateTransitionEvent extends TypeFromSchema<typeof TlvStateTransitionEvent> {}
 
     /**
      * Body of the OtaSoftwareUpdateRequestor versionApplied event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.6
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.6
      */
     export const TlvVersionAppliedEvent = TlvObject({
         softwareVersion: TlvField(0, TlvUInt32),
@@ -207,14 +206,14 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * Body of the OtaSoftwareUpdateRequestor versionApplied event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.6
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.6
      */
     export interface VersionAppliedEvent extends TypeFromSchema<typeof TlvVersionAppliedEvent> {}
 
     /**
      * Body of the OtaSoftwareUpdateRequestor downloadError event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.9
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.9
      */
     export const TlvDownloadErrorEvent = TlvObject({
         softwareVersion: TlvField(0, TlvUInt32),
@@ -226,7 +225,7 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * Body of the OtaSoftwareUpdateRequestor downloadError event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.9
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.9
      */
     export interface DownloadErrorEvent extends TypeFromSchema<typeof TlvDownloadErrorEvent> {}
 
@@ -250,7 +249,7 @@ export namespace OtaSoftwareUpdateRequestor {
              * Provider Locations obtained using the AnnounceOTAProvider command shall NOT overwrite values set in the
              * DefaultOTAProviders attribute.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.5.1
+             * @see {@link MatterSpecification.v11.Core} § 11.19.7.5.1
              */
             defaultOtaProviders: WritableFabricScopedAttribute(
                 0x0,
@@ -264,7 +263,7 @@ export namespace OtaSoftwareUpdateRequestor {
              * capacity of an internal battery. This field is merely informational for diagnostics purposes and shall
              * NOT affect the responses provided by an OTA Provider to an OTA Requestor.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.5.2
+             * @see {@link MatterSpecification.v11.Core} § 11.19.7.5.2
              */
             updatePossible: Attribute(0x1, TlvBoolean, { default: true }),
 
@@ -274,7 +273,7 @@ export namespace OtaSoftwareUpdateRequestor {
              *
              * This field SHOULD be updated in a timely manner whenever OTA Requestor internal state updates.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.5.3
+             * @see {@link MatterSpecification.v11.Core} § 11.19.7.5.3
              */
             updateState: Attribute(0x2, TlvEnum<UpdateState>(), { default: UpdateState.Unknown }),
 
@@ -289,7 +288,7 @@ export namespace OtaSoftwareUpdateRequestor {
              * This field may be updated infrequently. Some care SHOULD be taken by Nodes to avoid over- reporting
              * progress when this attribute is part of a subscription.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.5.4
+             * @see {@link MatterSpecification.v11.Core} § 11.19.7.5.4
              */
             updateStateProgress: Attribute(0x3, TlvNullable(TlvUInt8.bound({ max: 100 })), { default: null })
         },
@@ -305,7 +304,7 @@ export namespace OtaSoftwareUpdateRequestor {
              * This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the
              * accessing fabric.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.6.1
+             * @see {@link MatterSpecification.v11.Core} § 11.19.7.6.1
              */
             announceOtaProvider: OptionalCommand(
                 0x0,
@@ -321,7 +320,7 @@ export namespace OtaSoftwareUpdateRequestor {
              * This event shall be generated when a change of the UpdateState attribute occurs due to an OTA Requestor
              * moving through the states necessary to query for updates.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.1
+             * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.1
              */
             stateTransition: Event(0x0, EventPriority.Info, TlvStateTransitionEvent),
 
@@ -330,7 +329,7 @@ export namespace OtaSoftwareUpdateRequestor {
              * software update. This event SHOULD be generated even if a software update was done using means outside
              * of this cluster.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.6
+             * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.6
              */
             versionApplied: Event(0x1, EventPriority.Critical, TlvVersionAppliedEvent),
 
@@ -340,7 +339,7 @@ export namespace OtaSoftwareUpdateRequestor {
              * This field shall be set to the value of the SoftwareVersion being downloaded, matching the
              * SoftwareVersion field of the QueryImageResponse that caused the failing download to take place.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.7.9
+             * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.9
              */
             downloadError: Event(0x2, EventPriority.Info, TlvDownloadErrorEvent)
         }
@@ -351,7 +350,7 @@ export namespace OtaSoftwareUpdateRequestor {
      *
      * Provides an interface for downloading and applying OTA software updates
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.19.7
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

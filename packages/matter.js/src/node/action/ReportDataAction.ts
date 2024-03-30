@@ -10,7 +10,7 @@ import { EventPayload } from "../payloads/EventPayload.js";
 /**
  * Read response for attribute/event data.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 8.4.3
+ * @see {@link MatterSpecification.v11.Core} § 8.4.3
  */
 export type ReportDataAction = {
     attributes: AttributePayload.Report[];
@@ -21,7 +21,7 @@ export type ReportDataAction = {
 /**
  * Subscription notification payload.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 8.4.3
+ * @see {@link MatterSpecification.v11.Core} § 8.4.3
  */
 export type SubscriptionReportDataAction = ReportDataAction & {
     subscription: number;

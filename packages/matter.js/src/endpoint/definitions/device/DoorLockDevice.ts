@@ -12,35 +12,34 @@ import { TimeSyncBehavior as BaseTimeSyncBehavior } from "../../../behavior/defi
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Door Lock is a device used to secure a door. It is possible to actuate a door lock either by means of a manual or
  * a remote method.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.1
+ * @see {@link MatterSpecification.v11.Device} § 8.1
  */
 export interface DoorLockDevice extends Identity<typeof DoorLockDeviceDefinition> {}
 
 export namespace DoorLockRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link DoorLock} cluster is required by the Matter specification
+     * The DoorLock cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link DoorLockServer} for convenience.
      */
     export const DoorLockServer = BaseDoorLockServer;
 
     /**
-     * The {@link TimeSync} cluster is optional per the Matter specification
+     * The TimeSync cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link TimeSyncBehavior} for convenience.
      */
     export const TimeSyncBehavior = BaseTimeSyncBehavior;
 

@@ -234,16 +234,6 @@
                 "default": "./dist/esm/exports/session.js"
             }
         },
-        "./spec": {
-            "require": {
-                "types": "./dist/cjs/exports/spec.d.ts",
-                "default": "./dist/cjs/exports/spec.js"
-            },
-            "import": {
-                "types": "./dist/esm/exports/spec.d.ts",
-                "default": "./dist/esm/exports/spec.js"
-            }
-        },
         "./tlv": {
             "require": {
                 "types": "./dist/cjs/exports/tlv.d.ts",

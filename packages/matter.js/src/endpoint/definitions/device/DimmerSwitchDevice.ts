@@ -17,56 +17,55 @@ import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Dimmer Switch is a controller device that, when bound to a lighting device such as a Dimmable Light, is capable of
  * being used to switch the device on or off and adjust the intensity of the light being emitted.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.2
+ * @see {@link MatterSpecification.v11.Device} § 6.2
  */
 export interface DimmerSwitchDevice extends Identity<typeof DimmerSwitchDeviceDefinition> {}
 
 export namespace DimmerSwitchRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyBehavior} for convenience.
      */
     export const IdentifyBehavior = BaseIdentifyBehavior;
 
     /**
-     * The {@link OnOff} cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OnOffBehavior} for convenience.
      */
     export const OnOffBehavior = BaseOnOffBehavior;
 
     /**
-     * The {@link LevelControl} cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link LevelControlBehavior} for convenience.
      */
     export const LevelControlBehavior = BaseLevelControlBehavior;
 
     /**
-     * The {@link Groups} cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The {@link Scenes} cluster is optional per the Matter specification
+     * The Scenes cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
      */
     export const ScenesBehavior = BaseScenesBehavior;
 

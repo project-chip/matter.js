@@ -8,7 +8,6 @@
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command, TlvNoResponse } from "../../cluster/Cluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
@@ -24,7 +23,7 @@ export namespace ProxyDiscovery {
 
         commands: {
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.15.13.5
+             * @see {@link MatterSpecification.v11.Core} § 9.15.13.5
              */
             proxyDiscoverRequest: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse)
         }
@@ -37,7 +36,7 @@ export namespace ProxyDiscovery {
      * Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the overall Section 9.15.7, “Proxy Discovery
      * & Assignment Flow”.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.15.13
+     * @see {@link MatterSpecification.v11.Core} § 9.15.13
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

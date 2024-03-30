@@ -11,7 +11,6 @@ import { Attribute, Command, OptionalAttribute, TlvNoResponse } from "../../clus
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum, TlvInt16 } from "../../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvString, TlvByteString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -26,14 +25,14 @@ export namespace Channel {
      * While the major and minor numbers in the ChannelInfoStruct support use of ATSC channel format, a lineup may use
      * other formats which can map into these numeric values.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.1
      */
     export const TlvChannelInfoStruct = TlvObject({
         /**
          * This shall indicate the channel major number value (for example, using ATSC format). When the channel number
          * is expressed as a string, such as "13.1" or "256", the major number would be 13 or 256, respectively.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.1.1
          */
         majorNumber: TlvField(0, TlvUInt16),
 
@@ -41,7 +40,7 @@ export namespace Channel {
          * This shall indicate the channel minor number value (for example, using ATSC format). When the channel number
          * is expressed as a string, such as "13.1" or "256", the minor number would be 1 or 0, respectively.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.1.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.1.2
          */
         minorNumber: TlvField(1, TlvUInt16),
 
@@ -49,7 +48,7 @@ export namespace Channel {
          * This shall indicate the marketing name for the channel, such as “The CW" or "Comedy Central". This field is
          * optional, but SHOULD be provided when known.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.1.3
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.1.3
          */
         name: TlvOptionalField(2, TlvString),
 
@@ -57,7 +56,7 @@ export namespace Channel {
          * This shall indicate the call sign of the channel, such as "PBS". This field is optional, but SHOULD be
          * provided when known.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.1.4
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.1.4
          */
         callSign: TlvOptionalField(3, TlvString),
 
@@ -65,7 +64,7 @@ export namespace Channel {
          * This shall indicate the local affiliate call sign, such as "KCTS". This field is optional, but SHOULD be
          * provided when known.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.1.5
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.1.5
          */
         affiliateCallSign: TlvOptionalField(4, TlvString)
     });
@@ -76,12 +75,12 @@ export namespace Channel {
      * While the major and minor numbers in the ChannelInfoStruct support use of ATSC channel format, a lineup may use
      * other formats which can map into these numeric values.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.1
      */
     export interface ChannelInfoStruct extends TypeFromSchema<typeof TlvChannelInfoStruct> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.3
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.3
      */
     export enum LineupInfoType {
         /**
@@ -94,13 +93,13 @@ export namespace Channel {
      * The Lineup Info allows references to external lineup sources like Gracenote. The combination of OperatorName,
      * LineupName, and PostalCode MUST uniquely identify a lineup.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.2
      */
     export const TlvLineupInfoStruct = TlvObject({
         /**
          * This shall indicate the name of the operator, for example “Comcast”.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.2.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.2.1
          */
         operatorName: TlvField(0, TlvString),
 
@@ -110,7 +109,7 @@ export namespace Channel {
         /**
          * This shall indicate the type of lineup. This field is optional, but SHOULD be provided when known.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.2.4
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.2.4
          */
         lineupInfoType: TlvField(3, TlvEnum<LineupInfoType>())
     });
@@ -119,20 +118,20 @@ export namespace Channel {
      * The Lineup Info allows references to external lineup sources like Gracenote. The combination of OperatorName,
      * LineupName, and PostalCode MUST uniquely identify a lineup.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.2
      */
     export interface LineupInfoStruct extends TypeFromSchema<typeof TlvLineupInfoStruct> {}
 
     /**
      * Input to the Channel changeChannel command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.1
      */
     export const TlvChangeChannelRequest = TlvObject({
         /**
          * This shall contain a user-input string to match in order to identify the target channel.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.1.1
          */
         match: TlvField(0, TlvString)
     });
@@ -140,12 +139,12 @@ export namespace Channel {
     /**
      * Input to the Channel changeChannel command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.1
      */
     export interface ChangeChannelRequest extends TypeFromSchema<typeof TlvChangeChannelRequest> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.4
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.5.4
      */
     export enum Status {
         /**
@@ -167,20 +166,20 @@ export namespace Channel {
     /**
      * This command shall be generated in response to a ChangeChannel command.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.2
      */
     export const TlvChangeChannelResponse = TlvObject({
         /**
          * This shall indicate the status of the command which resulted in this response.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.2.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.2.1
          */
         status: TlvField(0, TlvEnum<Status>()),
 
         /**
          * This shall indicate Optional app-specific data.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.2.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.2.2
          */
         data: TlvOptionalField(1, TlvByteString)
     });
@@ -188,27 +187,27 @@ export namespace Channel {
     /**
      * This command shall be generated in response to a ChangeChannel command.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.2
      */
     export interface ChangeChannelResponse extends TypeFromSchema<typeof TlvChangeChannelResponse> {}
 
     /**
      * Input to the Channel changeChannelByNumber command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.3
      */
     export const TlvChangeChannelByNumberRequest = TlvObject({
         /**
          * This shall indicate the channel major number value (ATSC format) to which the channel should change.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.3.1
          */
         majorNumber: TlvField(0, TlvUInt16),
 
         /**
          * This shall indicate the channel minor number value (ATSC format) to which the channel should change.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.3.2
          */
         minorNumber: TlvField(1, TlvUInt16)
     });
@@ -216,21 +215,21 @@ export namespace Channel {
     /**
      * Input to the Channel changeChannelByNumber command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.3
      */
     export interface ChangeChannelByNumberRequest extends TypeFromSchema<typeof TlvChangeChannelByNumberRequest> {}
 
     /**
      * Input to the Channel skipChannel command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.4
      */
     export const TlvSkipChannelRequest = TlvObject({
         /**
          * This shall indicate the number of steps to increase (Count is positive) or decrease (Count is negative) the
          * current channel.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.4.1
          */
         count: TlvField(0, TlvInt16)
     });
@@ -238,7 +237,7 @@ export namespace Channel {
     /**
      * Input to the Channel skipChannel command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.4
      */
     export interface SkipChannelRequest extends TypeFromSchema<typeof TlvSkipChannelRequest> {}
 
@@ -250,7 +249,7 @@ export namespace Channel {
             /**
              * This optional list provides the channels supported.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.3.1
+             * @see {@link MatterSpecification.v11.Cluster} § 6.6.3.1
              */
             channelList: Attribute(0x0, TlvArray(TlvChannelInfoStruct), { default: [] })
         }
@@ -264,7 +263,7 @@ export namespace Channel {
             /**
              * This optional field identifies the channel lineup using external data sources.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.3.2
+             * @see {@link MatterSpecification.v11.Cluster} § 6.6.3.2
              */
             lineup: Attribute(0x1, TlvNullable(TlvLineupInfoStruct), { default: null })
         }
@@ -285,7 +284,7 @@ export namespace Channel {
              *
              * Upon success, the CurrentChannel attribute, if supported, shall be updated to reflect the change.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
+             * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.1
              */
             changeChannel: Command(0x0, TlvChangeChannelRequest, 0x1, TlvChangeChannelResponse)
         }
@@ -294,7 +293,7 @@ export namespace Channel {
     /**
      * These are optional features supported by ChannelCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6.2
      */
     export enum Feature {
         /**
@@ -341,7 +340,7 @@ export namespace Channel {
              * This optional field contains the current channel. When supported but a channel is not currently tuned to
              * (if a content application is in foreground), the value of the field shall be null.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.3.3
+             * @see {@link MatterSpecification.v11.Cluster} § 6.6.3.3
              */
             currentChannel: OptionalAttribute(0x2, TlvNullable(TlvChannelInfoStruct), { default: null })
         },
@@ -350,7 +349,7 @@ export namespace Channel {
             /**
              * Change the channel to the channel with the given Number in the ChannelList attribute.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
+             * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.3
              */
             changeChannelByNumber: Command(0x2, TlvChangeChannelByNumberRequest, 0x2, TlvNoResponse),
 
@@ -363,7 +362,7 @@ export namespace Channel {
              * continue. For example, if the current channel is at index 0 and count value of -1 is given, then the
              * current channel should change to the last channel.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
+             * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.4
              */
             skipChannel: Command(0x3, TlvSkipChannelRequest, 0x3, TlvNoResponse)
         },
@@ -391,7 +390,7 @@ export namespace Channel {
      *
      * ChannelCluster supports optional features that you can enable with the ChannelCluster.with() factory method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 6.6
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

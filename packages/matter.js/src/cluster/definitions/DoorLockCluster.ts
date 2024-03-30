@@ -20,7 +20,6 @@ import {
     OptionalCommand,
     OptionalAttribute
 } from "../../cluster/Cluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvEnum, TlvUInt32, TlvUInt16, TlvUInt8, TlvBitmap, TlvEpochS } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -41,7 +40,7 @@ export namespace DoorLock {
      *
      * enum field is derived from enum8.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.7
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.7
      */
     export enum DoorState {
         /**
@@ -78,13 +77,13 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock doorStateChange event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.2
      */
     export const TlvDoorStateChangeEvent = TlvObject({
         /**
          * The new door state for this door event.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.2.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.2.1
          */
         doorState: TlvField(0, TlvEnum<DoorState>())
     });
@@ -92,21 +91,21 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock doorStateChange event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.2
      */
     export interface DoorStateChangeEvent extends TypeFromSchema<typeof TlvDoorStateChangeEvent> {}
 
     /**
      * The value of the DoorLock credentialRulesSupport attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.19
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.19
      */
     export const CredentialRulesSupport = { single: BitFlag(0), dual: BitFlag(1), tri: BitFlag(2) };
 
     /**
      * The DataOperationType enum shall indicate the data operation performed.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.5
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.5
      */
     export enum DataOperationType {
         /**
@@ -128,7 +127,7 @@ export namespace DoorLock {
     /**
      * The UserStatus enum used in various commands shall indicate what the status is for a specific user ID.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.15
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.15
      */
     export enum UserStatus {
         Available = 0,
@@ -139,20 +138,20 @@ export namespace DoorLock {
     /**
      * The UserType enum used in various commands shall indicate what the type is for a specific user ID.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16
      */
     export enum UserType {
         /**
          * User has access 24/7 provided proper PIN or RFID is supplied (e.g., owner).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.1
          */
         UnrestrictedUser = 0,
 
         /**
          * User has ability to open lock within a specific time period (e.g., guest).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.2
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.2
          */
         YearDayScheduleUser = 1,
 
@@ -160,7 +159,7 @@ export namespace DoorLock {
          * User has ability to open lock based on specific time period within a reoccurring weekly schedule (e.g.,
          * cleaning worker).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.3
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.3
          */
         WeekDayScheduleUser = 2,
 
@@ -169,7 +168,7 @@ export namespace DoorLock {
          * schedules. In all other respects this user matches the unrestricted (default) user. ProgrammingUser is the
          * only user that can disable the user interface (keypad, remote, etc…).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.4
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.4
          */
         ProgrammingUser = 3,
 
@@ -177,7 +176,7 @@ export namespace DoorLock {
          * User is recognized by the lock but does not have the ability to open the lock. This user will only cause the
          * lock to generate the appropriate event notification to any bound devices.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.5
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.5
          */
         NonAccessUser = 4,
 
@@ -185,7 +184,7 @@ export namespace DoorLock {
          * User has ability to open lock but a ForcedUser LockOperationType and ForcedUser silent alarm will be emitted
          * to allow a notified Node to alert emergency services or contacts on the user account when used.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.6
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.6
          */
         ForcedUser = 5,
 
@@ -193,7 +192,7 @@ export namespace DoorLock {
          * User has ability to open lock once after which the lock shall change the corresponding user record
          * UserStatus value to OccupiedDisabled automatically.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.7
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.7
          */
         DisposableUser = 6,
 
@@ -203,14 +202,14 @@ export namespace DoorLock {
          * UserStatus value shall be set to OccupiedDisabled automatically by the lock. The lock shall persist the
          * timeout across reboots such that the ExpiringUserTimeout is honored.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.8
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.8
          */
         ExpiringUser = 7,
 
         /**
          * User access is restricted by Week Day and/or Year Day schedule.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.9
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.9
          */
         ScheduleRestrictedUser = 8,
 
@@ -220,7 +219,7 @@ export namespace DoorLock {
          * credential created for them from being used at the keypad. The PIN code credential would only be provided
          * over-the-air for the lock/unlock commands.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16.10
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.16.10
          */
         RemoteOnlyUser = 9
     }
@@ -229,7 +228,7 @@ export namespace DoorLock {
      * The CredentialRule enum used in various commands shall indicate the credential rule that can be applied to a
      * particular user.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.2
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.2
      */
     export enum CredentialRule {
         Single = 0,
@@ -240,7 +239,7 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock setUser command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvSetUserRequest = TlvObject({
         operationType: TlvField(0, TlvEnum<DataOperationType>()),
@@ -255,28 +254,28 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock setUser command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface SetUserRequest extends TypeFromSchema<typeof TlvSetUserRequest> {}
 
     /**
      * Input to the DoorLock getUser command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetUserRequest = TlvObject({ userIndex: TlvField(0, TlvUInt16) });
 
     /**
      * Input to the DoorLock getUser command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetUserRequest extends TypeFromSchema<typeof TlvGetUserRequest> {}
 
     /**
      * The Credential Type enum shall indicate the credential type.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.4
      */
     export enum CredentialType {
         ProgrammingPin = 0,
@@ -291,13 +290,13 @@ export namespace DoorLock {
      * The CredentialStruct is used in LockOperation event and Get User Record Response command and shall indicate the
      * credential types and their corresponding indices (if any) for the event or user record.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.3
      */
     export const TlvCredentialStruct = TlvObject({
         /**
          * The credential type used to authorize the lock operation.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.3.1
          */
         credentialType: TlvField(0, TlvEnum<CredentialType>()),
 
@@ -306,7 +305,7 @@ export namespace DoorLock {
          * identified by CredentialType (e.g. schedule, PIN, RFID, etc.). This shall be set to 0 if CredentialType is
          * ProgrammingPIN or does not correspond to a list that can be indexed into.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3.2
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.3.2
          */
         credentialIndex: TlvField(1, TlvUInt16)
     });
@@ -315,12 +314,12 @@ export namespace DoorLock {
      * The CredentialStruct is used in LockOperation event and Get User Record Response command and shall indicate the
      * credential types and their corresponding indices (if any) for the event or user record.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.3
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.3
      */
     export interface CredentialStruct extends TypeFromSchema<typeof TlvCredentialStruct> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetUserResponse = TlvObject({
         userIndex: TlvField(0, TlvUInt16),
@@ -336,28 +335,28 @@ export namespace DoorLock {
     });
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetUserResponse extends TypeFromSchema<typeof TlvGetUserResponse> {}
 
     /**
      * Input to the DoorLock clearUser command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvClearUserRequest = TlvObject({ userIndex: TlvField(0, TlvUInt16) });
 
     /**
      * Input to the DoorLock clearUser command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface ClearUserRequest extends TypeFromSchema<typeof TlvClearUserRequest> {}
 
     /**
      * Input to the DoorLock setCredential command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvSetCredentialRequest = TlvObject({
         operationType: TlvField(0, TlvEnum<DataOperationType>()),
@@ -371,7 +370,7 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock setCredential command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface SetCredentialRequest extends TypeFromSchema<typeof TlvSetCredentialRequest> {}
 
@@ -386,7 +385,7 @@ export namespace DoorLock {
     }
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvSetCredentialResponse = TlvObject({
         status: TlvField(0, TlvEnum<DlStatus>()),
@@ -395,26 +394,26 @@ export namespace DoorLock {
     });
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface SetCredentialResponse extends TypeFromSchema<typeof TlvSetCredentialResponse> {}
 
     /**
      * Input to the DoorLock getCredentialStatus command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetCredentialStatusRequest = TlvObject({ credential: TlvField(0, TlvCredentialStruct) });
 
     /**
      * Input to the DoorLock getCredentialStatus command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetCredentialStatusRequest extends TypeFromSchema<typeof TlvGetCredentialStatusRequest> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetCredentialStatusResponse = TlvObject({
         credentialExists: TlvField(0, TlvBoolean),
@@ -425,28 +424,28 @@ export namespace DoorLock {
     });
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetCredentialStatusResponse extends TypeFromSchema<typeof TlvGetCredentialStatusResponse> {}
 
     /**
      * Input to the DoorLock clearCredential command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvClearCredentialRequest = TlvObject({ credential: TlvField(0, TlvNullable(TlvCredentialStruct)) });
 
     /**
      * Input to the DoorLock clearCredential command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface ClearCredentialRequest extends TypeFromSchema<typeof TlvClearCredentialRequest> {}
 
     /**
      * The LockDataType enum shall indicate the data type that is being or has changed.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.9
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.9
      */
     export enum LockDataType {
         /**
@@ -515,7 +514,7 @@ export namespace DoorLock {
      * All value in the PIN/RFID code shall be ASCII encoded regardless if the PIN/RFID codes are number or characters.
      * For example, code of “1, 2, 3, 4” shall be represented as 0x31, 0x32, 0x33, 0x34.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.13
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.13
      */
     export enum OperationSource {
         Unspecified = 0,
@@ -533,27 +532,27 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock lockUserChange event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5
      */
     export const TlvLockUserChangeEvent = TlvObject({
         /**
          * The lock data type that was changed.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5.1
          */
         lockDataType: TlvField(0, TlvEnum<LockDataType>()),
 
         /**
          * The data operation performed on the lock data type changed.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5.2
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5.2
          */
         dataOperationType: TlvField(1, TlvEnum<DataOperationType>()),
 
         /**
          * The source of the user data change.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5.3
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5.3
          */
         operationSource: TlvField(2, TlvEnum<OperationSource>()),
 
@@ -561,7 +560,7 @@ export namespace DoorLock {
          * The lock UserIndex associated with the change (if any). This shall be null if there is no specific user
          * associated with the data operation. This shall be 0xFFFE if all users are affected (e.g. Clear Users).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5.4
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5.4
          */
         userIndex: TlvField(3, TlvNullable(TlvUInt16)),
 
@@ -569,7 +568,7 @@ export namespace DoorLock {
          * The fabric index of the fabric that performed the change (if any). This shall be null if there is no fabric
          * that can be determined to have caused the change. This shall NOT be null if the operation source is "Remote".
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5.5
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5.5
          */
         fabricIndex: TlvField(4, TlvNullable(TlvFabricIndex)),
 
@@ -578,7 +577,7 @@ export namespace DoorLock {
          * shall be null if there was no Node involved in the change. This shall NOT be null if the operation source is
          * "Remote".
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5.6
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5.6
          */
         sourceNode: TlvField(5, TlvNullable(TlvNodeId)),
 
@@ -588,7 +587,7 @@ export namespace DoorLock {
          * can be indexed into (e.g. ProgrammingUser). This shall be 0xFFFE if all indices are affected (e.g. Clear PIN
          * Code, Clear RFID Code, Clear Week Day Schedule, Clear Year Day Schedule, etc.).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5.7
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5.7
          */
         dataIndex: TlvField(6, TlvNullable(TlvUInt16))
     });
@@ -596,7 +595,7 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock lockUserChange event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5
      */
     export interface LockUserChangeEvent extends TypeFromSchema<typeof TlvLockUserChangeEvent> {}
 
@@ -604,7 +603,7 @@ export namespace DoorLock {
      * The DaysMask field used in various commands and shall indicate the days of the week the Week Day schedule
      * applies for.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.6
      */
     export const DaysMaskMap = {
         sunday: BitFlag(0),
@@ -619,7 +618,7 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock setWeekDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvSetWeekDayScheduleRequest = TlvObject({
         weekDayIndex: TlvField(0, TlvUInt8),
@@ -634,14 +633,14 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock setWeekDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface SetWeekDayScheduleRequest extends TypeFromSchema<typeof TlvSetWeekDayScheduleRequest> {}
 
     /**
      * Input to the DoorLock getWeekDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetWeekDayScheduleRequest = TlvObject({
         weekDayIndex: TlvField(0, TlvUInt8),
@@ -651,12 +650,12 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock getWeekDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetWeekDayScheduleRequest extends TypeFromSchema<typeof TlvGetWeekDayScheduleRequest> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetWeekDayScheduleResponse = TlvObject({
         weekDayIndex: TlvField(0, TlvUInt8),
@@ -670,14 +669,14 @@ export namespace DoorLock {
     });
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetWeekDayScheduleResponse extends TypeFromSchema<typeof TlvGetWeekDayScheduleResponse> {}
 
     /**
      * Input to the DoorLock clearWeekDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvClearWeekDayScheduleRequest = TlvObject({
         weekDayIndex: TlvField(0, TlvUInt8),
@@ -687,14 +686,14 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock clearWeekDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface ClearWeekDayScheduleRequest extends TypeFromSchema<typeof TlvClearWeekDayScheduleRequest> {}
 
     /**
      * Input to the DoorLock setYearDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvSetYearDayScheduleRequest = TlvObject({
         yearDayIndex: TlvField(0, TlvUInt8),
@@ -706,14 +705,14 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock setYearDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface SetYearDayScheduleRequest extends TypeFromSchema<typeof TlvSetYearDayScheduleRequest> {}
 
     /**
      * Input to the DoorLock getYearDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetYearDayScheduleRequest = TlvObject({
         yearDayIndex: TlvField(0, TlvUInt8),
@@ -723,12 +722,12 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock getYearDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetYearDayScheduleRequest extends TypeFromSchema<typeof TlvGetYearDayScheduleRequest> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetYearDayScheduleResponse = TlvObject({
         yearDayIndex: TlvField(0, TlvUInt8),
@@ -739,14 +738,14 @@ export namespace DoorLock {
     });
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetYearDayScheduleResponse extends TypeFromSchema<typeof TlvGetYearDayScheduleResponse> {}
 
     /**
      * Input to the DoorLock clearYearDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvClearYearDayScheduleRequest = TlvObject({
         yearDayIndex: TlvField(0, TlvUInt8),
@@ -756,7 +755,7 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock clearYearDaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface ClearYearDayScheduleRequest extends TypeFromSchema<typeof TlvClearYearDayScheduleRequest> {}
 
@@ -770,20 +769,20 @@ export namespace DoorLock {
      * The door lock shall NOT disable the radio or otherwise unbind or leave the network. It shall still respond to
      * all other commands and requests.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.12
      */
     export enum OperatingMode {
         /**
          * The lock operates normally. All interfaces are enabled.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.12.1
          */
         Normal = 0,
 
         /**
          * Only remote interaction is enabled. The keypad shall only be operable by the master user.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.2
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.12.2
          */
         Vacation = 1,
 
@@ -792,7 +791,7 @@ export namespace DoorLock {
          * mode. All external interaction with the door lock is disabled. This mode is intended to be used so that
          * users, presumably inside the property, will have control over the entrance.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.3
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.12.3
          */
         Privacy = 2,
 
@@ -801,7 +800,7 @@ export namespace DoorLock {
          * means of communication. It specifically applies to the Lock, Unlock, Toggle, and Unlock with Timeout
          * Commands.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.4
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.12.4
          */
         NoRemoteLockUnlock = 3,
 
@@ -809,7 +808,7 @@ export namespace DoorLock {
          * The lock is open or can be opened or closed at will without the use of a Keypad or other means of user
          * validation (e.g. a lock for a business during work hours).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12.5
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.12.5
          */
         Passage = 4
     }
@@ -817,7 +816,7 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock setHolidaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvSetHolidayScheduleRequest = TlvObject({
         holidayIndex: TlvField(0, TlvUInt8),
@@ -829,26 +828,26 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock setHolidaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface SetHolidayScheduleRequest extends TypeFromSchema<typeof TlvSetHolidayScheduleRequest> {}
 
     /**
      * Input to the DoorLock getHolidaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetHolidayScheduleRequest = TlvObject({ holidayIndex: TlvField(0, TlvUInt8) });
 
     /**
      * Input to the DoorLock getHolidaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetHolidayScheduleRequest extends TypeFromSchema<typeof TlvGetHolidayScheduleRequest> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvGetHolidayScheduleResponse = TlvObject({
         holidayIndex: TlvField(0, TlvUInt8),
@@ -859,28 +858,28 @@ export namespace DoorLock {
     });
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface GetHolidayScheduleResponse extends TypeFromSchema<typeof TlvGetHolidayScheduleResponse> {}
 
     /**
      * Input to the DoorLock clearHolidaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvClearHolidayScheduleRequest = TlvObject({ holidayIndex: TlvField(0, TlvUInt8) });
 
     /**
      * Input to the DoorLock clearHolidaySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface ClearHolidayScheduleRequest extends TypeFromSchema<typeof TlvClearHolidayScheduleRequest> {}
 
     /**
      * The value of the DoorLock keypadOperationEventMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.40
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.40
      */
     export const KeypadOperationEventMask = {
         unknownOrManufacturerSpecificKeypadOperationEvent: BitFlag(0),
@@ -896,7 +895,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock keypadProgrammingEventMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.44
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.44
      */
     export const KeypadProgrammingEventMask = {
         unknown: BitFlag(0),
@@ -909,7 +908,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock remoteOperationEventMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.41
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.41
      */
     export const RemoteOperationEventMask = {
         unknownOrManufacturerSpecificRemoteOperationEvent: BitFlag(0),
@@ -924,7 +923,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock manualOperationEventMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.42
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.42
      */
     export const ManualOperationEventMask = {
         unknownOrManufacturerSpecificManualOperationEvent: BitFlag(0),
@@ -943,7 +942,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock remoteProgrammingEventMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.45
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.45
      */
     export const RemoteProgrammingEventMask = {
         unknown: BitFlag(0),
@@ -957,7 +956,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock rfidOperationEventMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.43
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.43
      */
     export const RfidOperationEventMask = {
         unknownOrManufacturerSpecificKeypadOperationEvent: BitFlag(0),
@@ -972,14 +971,14 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock rfidProgrammingEventMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.46
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.46
      */
     export const RfidProgrammingEventMask = { unknown: BitFlag(0), idAdded: BitFlag(5), idCleared: BitFlag(6) };
 
     /**
      * The value of the DoorLock lockState attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.1
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.1
      */
     export enum LockState {
         /**
@@ -1001,7 +1000,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock lockType attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.2
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.2
      */
     export enum LockType {
         /**
@@ -1063,7 +1062,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock supportedOperatingModes attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.24
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.24
      */
     export const SupportedOperatingModes = {
         normal: BitFlag(0),
@@ -1076,7 +1075,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock defaultConfigurationRegister attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.28
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.28
      */
     export const DefaultConfigurationRegister = {
         enableLocalProgrammingEnabled: BitFlag(0),
@@ -1090,7 +1089,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock localProgrammingFeatures attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.33
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.33
      */
     export const LocalProgrammingFeatures = {
         addUsersCredentialsSchedulesLocally: BitFlag(0),
@@ -1102,7 +1101,7 @@ export namespace DoorLock {
     /**
      * The value of the DoorLock alarmMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.39
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.39
      */
     export const AlarmMask = {
         lockingMechanismJammed: BitFlag(0),
@@ -1117,35 +1116,35 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock lockDoor command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvLockDoorRequest = TlvObject({ pinCode: TlvOptionalField(0, TlvByteString) });
 
     /**
      * Input to the DoorLock lockDoor command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface LockDoorRequest extends TypeFromSchema<typeof TlvLockDoorRequest> {}
 
     /**
      * Input to the DoorLock unlockDoor command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvUnlockDoorRequest = TlvObject({ pinCode: TlvOptionalField(0, TlvByteString) });
 
     /**
      * Input to the DoorLock unlockDoor command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface UnlockDoorRequest extends TypeFromSchema<typeof TlvUnlockDoorRequest> {}
 
     /**
      * Input to the DoorLock unlockWithTimeout command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export const TlvUnlockWithTimeoutRequest = TlvObject({
         timeout: TlvField(0, TlvUInt16),
@@ -1155,14 +1154,14 @@ export namespace DoorLock {
     /**
      * Input to the DoorLock unlockWithTimeout command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
      */
     export interface UnlockWithTimeoutRequest extends TypeFromSchema<typeof TlvUnlockWithTimeoutRequest> {}
 
     /**
      * The Alarm Code enum shall indicate the alarm type.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.1
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.1
      */
     export enum AlarmCode {
         /**
@@ -1209,13 +1208,13 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock doorLockAlarm event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.1
      */
     export const TlvDoorLockAlarmEvent = TlvObject({
         /**
          * The alarm code of the event that has happened.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.1.1
          */
         alarmCode: TlvField(0, TlvEnum<AlarmCode>())
     });
@@ -1223,14 +1222,14 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock doorLockAlarm event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.1
      */
     export interface DoorLockAlarmEvent extends TypeFromSchema<typeof TlvDoorLockAlarmEvent> {}
 
     /**
      * The LockOperationType enumeration shall indicate the type of Lock operation performed.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.10
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.10
      */
     export enum LockOperationType {
         Lock = 0,
@@ -1242,20 +1241,20 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock lockOperation event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3
      */
     export const TlvLockOperationEvent = TlvObject({
         /**
          * The type of the lock operation that was performed.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3.1
          */
         lockOperationType: TlvField(0, TlvEnum<LockOperationType>()),
 
         /**
          * The source of the lock operation that was performed.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.2
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3.2
          */
         operationSource: TlvField(1, TlvEnum<OperationSource>()),
 
@@ -1264,7 +1263,7 @@ export namespace DoorLock {
          * be determined for the given operation source. This shall NOT be null if a user index can be determined. In
          * particular, this shall NOT be null if the operation was associated with a valid credential.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.3
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3.3
          */
         userIndex: TlvField(2, TlvNullable(TlvUInt16)),
 
@@ -1273,7 +1272,7 @@ export namespace DoorLock {
          * that can be determined for the given operation source. This shall NOT be null if the operation source is
          * "Remote".
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.4
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3.4
          */
         fabricIndex: TlvField(3, TlvNullable(TlvFabricIndex)),
 
@@ -1281,7 +1280,7 @@ export namespace DoorLock {
          * The Node ID of the node that performed the lock operation. This shall be null if there is no Node associated
          * with the given operation source. This shall NOT be null if the operation source is "Remote".
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.5
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3.5
          */
         sourceNode: TlvField(4, TlvNullable(TlvNodeId)),
 
@@ -1289,7 +1288,7 @@ export namespace DoorLock {
          * The list of credentials used in performing the lock operation. This shall be null if no credentials were
          * involved.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3.6
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3.6
          */
         credentials: TlvOptionalField(5, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 1 })))
     });
@@ -1297,14 +1296,14 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock lockOperation event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3
      */
     export interface LockOperationEvent extends TypeFromSchema<typeof TlvLockOperationEvent> {}
 
     /**
      * The OperationError enumeration shall indicate the error cause of the Lock/Unlock operation performed.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.11
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.6.11
      */
     export enum OperationError {
         Unspecified = 0,
@@ -1317,27 +1316,27 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock lockOperationError event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4
      */
     export const TlvLockOperationErrorEvent = TlvObject({
         /**
          * The type of the lock operation that was performed.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4.1
          */
         lockOperationType: TlvField(0, TlvEnum<LockOperationType>()),
 
         /**
          * The source of the lock operation that was performed.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.2
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4.2
          */
         operationSource: TlvField(1, TlvEnum<OperationSource>()),
 
         /**
          * The lock operation error triggered when the operation was performed.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.3
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4.3
          */
         operationError: TlvField(2, TlvEnum<OperationError>()),
 
@@ -1345,7 +1344,7 @@ export namespace DoorLock {
          * The lock UserIndex who performed the lock operation. This shall be null if there is no user id that can be
          * determined for the given operation source.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.4
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4.4
          */
         userIndex: TlvField(3, TlvNullable(TlvUInt16)),
 
@@ -1354,7 +1353,7 @@ export namespace DoorLock {
          * that can be determined for the given operation source. This shall NOT be null if the operation source is
          * "Remote".
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.5
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4.5
          */
         fabricIndex: TlvField(4, TlvNullable(TlvFabricIndex)),
 
@@ -1364,7 +1363,7 @@ export namespace DoorLock {
          *
          * "Remote".
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.6
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4.6
          */
         sourceNode: TlvField(5, TlvNullable(TlvNodeId)),
 
@@ -1372,7 +1371,7 @@ export namespace DoorLock {
          * The list of credentials used in performing the lock operation. This shall be null if no credentials were
          * involved.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4.7
+         * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4.7
          */
         credentials: TlvOptionalField(6, TlvNullable(TlvArray(TlvCredentialStruct, { minLength: 1 })))
     });
@@ -1380,7 +1379,7 @@ export namespace DoorLock {
     /**
      * Body of the DoorLock lockOperationError event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4
      */
     export interface LockOperationErrorEvent extends TypeFromSchema<typeof TlvLockOperationErrorEvent> {}
 
@@ -1394,21 +1393,21 @@ export namespace DoorLock {
              *
              * This attribute shall be null only if an internal error prevents the retrieval of the current door state.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.4
              */
             doorState: Attribute(0x3, TlvNullable(TlvEnum<DoorState>())),
 
             /**
              * This attribute holds the number of door open events that have occurred since it was last zeroed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.5
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.5
              */
             doorOpenEvents: OptionalWritableAttribute(0x4, TlvUInt32, { writeAcl: AccessLevel.Manage }),
 
             /**
              * This attribute holds the number of door closed events that have occurred since it was last zeroed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.6
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.6
              */
             doorClosedEvents: OptionalWritableAttribute(0x5, TlvUInt32, { writeAcl: AccessLevel.Manage }),
 
@@ -1416,7 +1415,7 @@ export namespace DoorLock {
              * This attribute holds the number of minutes the door has been open since the last time it transitioned
              * from closed to open.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.7
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.7
              */
             openPeriod: OptionalWritableAttribute(0x6, TlvUInt16, { writeAcl: AccessLevel.Manage })
         },
@@ -1425,7 +1424,7 @@ export namespace DoorLock {
             /**
              * The door lock server sends out a DoorStateChange event when the door lock door state changes.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.2
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.2
              */
             doorStateChange: Event(0x1, EventPriority.Critical, TlvDoorStateChangeEvent)
         }
@@ -1439,7 +1438,7 @@ export namespace DoorLock {
             /**
              * The number of available log records.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.8
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.8
              */
             numberOfLogRecordsSupported: FixedAttribute(0x10, TlvUInt16, { default: 0 }),
 
@@ -1449,14 +1448,14 @@ export namespace DoorLock {
              * Code Added, User Code Cleared, Schedule Added, and Schedule Cleared. For a full detail of all the
              * possible alarms and events, please refer to the full list in the Alarm and Event Masks Attribute Set.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.21
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.21
              */
             enableLogging: WritableAttribute(0x20, TlvBoolean, { default: true, writeAcl: AccessLevel.Administer })
         },
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getLogRecord: Command(0x4, TlvNoArguments, 0x4, TlvNoArguments, { invokeAcl: AccessLevel.Manage })
         }
@@ -1470,14 +1469,14 @@ export namespace DoorLock {
             /**
              * Number of total users supported by the lock.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.9
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.9
              */
             numberOfTotalUsersSupported: FixedAttribute(0x11, TlvUInt16, { default: 0 }),
 
             /**
              * This bitmap contains a bit for every value of CredentialRuleEnum supported on this device.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.19
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.19
              */
             credentialRulesSupport: FixedAttribute(
                 0x1b,
@@ -1496,7 +1495,7 @@ export namespace DoorLock {
              * NumberOfRFIDUsersSupported is set to 3, it will not be possible to actually assign 10 credentials for a
              * user because maximum number of credentials in the database is 8.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.20
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.20
              */
             numberOfCredentialsSupportedPerUser: FixedAttribute(0x1c, TlvUInt8, { default: 0 }),
 
@@ -1505,7 +1504,7 @@ export namespace DoorLock {
              * ExpiringUser shall remain valid after its first use before expiring. When the credential expires the
              * UserStatus for the corresponding user record shall be set to OccupiedDisabled.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.38
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.38
              */
             expiringUserTimeout: OptionalWritableAttribute(
                 0x35,
@@ -1516,7 +1515,7 @@ export namespace DoorLock {
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setUser: Command(
                 0x1a,
@@ -1527,12 +1526,12 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getUser: Command(0x1b, TlvGetUserRequest, 0x1c, TlvGetUserResponse, { invokeAcl: AccessLevel.Administer }),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearUser: Command(
                 0x1d,
@@ -1543,7 +1542,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setCredential: Command(
                 0x22,
@@ -1554,7 +1553,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getCredentialStatus: Command(
                 0x24,
@@ -1565,7 +1564,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearCredential: Command(
                 0x26,
@@ -1581,7 +1580,7 @@ export namespace DoorLock {
              * The door lock server sends out a LockUserChange event when a lock user, schedule, or credential change
              * has occurred.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.5
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.5
              */
             lockUserChange: Event(0x4, EventPriority.Info, TlvLockUserChangeEvent)
         }
@@ -1595,21 +1594,21 @@ export namespace DoorLock {
             /**
              * The number of PIN users supported.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.10
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.10
              */
             numberOfPinUsersSupported: FixedAttribute(0x12, TlvUInt16, { default: 0 }),
 
             /**
              * An 8 bit value indicates the maximum length in bytes of a PIN Code on this device.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.15
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.15
              */
             maxPinCodeLength: FixedAttribute(0x17, TlvUInt8),
 
             /**
              * An 8 bit value indicates the minimum length in bytes of a PIN Code on this device.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.16
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.16
              */
             minPinCodeLength: FixedAttribute(0x18, TlvUInt8),
 
@@ -1625,7 +1624,7 @@ export namespace DoorLock {
              *
              * If the USR feature is supported by the device then this attribute shall NOT be supported.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.36
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.36
              */
             sendPinOverTheAir: OptionalWritableAttribute(
                 0x32,
@@ -1643,7 +1642,7 @@ export namespace DoorLock {
             /**
              * The number of RFID users supported.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.11
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.11
              */
             numberOfRfidUsersSupported: FixedAttribute(0x13, TlvUInt16, { default: 0 }),
 
@@ -1652,7 +1651,7 @@ export namespace DoorLock {
              * the RFID code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as
              * RFID code, a value of 20 (equals 10 Byte ISO 14443A UID) is recommended.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.17
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.17
              */
             maxRfidCodeLength: FixedAttribute(0x19, TlvUInt8),
 
@@ -1661,7 +1660,7 @@ export namespace DoorLock {
              * the RFID code range specified by the manufacturer, if media anti-collision identifiers (UID) are used as
              * RFID code, a value of 8 (equals 4 Byte ISO 14443A UID) is recommended.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.18
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.18
              */
             minRfidCodeLength: FixedAttribute(0x1a, TlvUInt8)
         }
@@ -1675,14 +1674,14 @@ export namespace DoorLock {
             /**
              * The number of configurable week day schedule supported per user.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.12
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.12
              */
             numberOfWeekDaySchedulesSupportedPerUser: FixedAttribute(0x14, TlvUInt8, { default: 0 })
         },
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setWeekDaySchedule: Command(
                 0xb,
@@ -1693,7 +1692,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getWeekDaySchedule: Command(
                 0xc,
@@ -1704,7 +1703,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearWeekDaySchedule: Command(
                 0xd,
@@ -1724,14 +1723,14 @@ export namespace DoorLock {
             /**
              * The number of configurable year day schedule supported per user.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.13
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.13
              */
             numberOfYearDaySchedulesSupportedPerUser: FixedAttribute(0x15, TlvUInt8, { default: 0 })
         },
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setYearDaySchedule: Command(
                 0xe,
@@ -1742,7 +1741,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getYearDaySchedule: Command(
                 0xf,
@@ -1753,7 +1752,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearYearDaySchedule: Command(
                 0x10,
@@ -1773,14 +1772,14 @@ export namespace DoorLock {
             /**
              * The number of holiday schedules supported for the entire door lock device.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.14
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.14
              */
             numberOfHolidaySchedulesSupported: FixedAttribute(0x16, TlvUInt8, { default: 0 })
         },
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setHolidaySchedule: Command(
                 0x11,
@@ -1791,7 +1790,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getHolidaySchedule: Command(
                 0x12,
@@ -1802,7 +1801,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearHolidaySchedule: Command(
                 0x13,
@@ -1831,7 +1830,7 @@ export namespace DoorLock {
              * logic, environmental events, or other reasons. The lock shall reset the counter if a valid credential is
              * presented.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.34
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.34
              */
             wrongCodeEntryLimit: WritableAttribute(
                 0x30,
@@ -1845,7 +1844,7 @@ export namespace DoorLock {
              * a PIN for the device.) If the attribute accepts writes and an attempt to write the attribute to 0 is
              * made, the device shall respond with CONSTRAINT_ERROR.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.35
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.35
              */
             userCodeTemporaryDisableTime: WritableAttribute(
                 0x31,
@@ -1864,7 +1863,7 @@ export namespace DoorLock {
              * Boolean set to True if the door lock server requires that an optional PINs be included in the payload of
              * remote lock operation events like Lock, Unlock, Unlock with Timeout and Toggle in order to function.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.37
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.37
              */
             requirePinForRemoteOperation: WritableAttribute(
                 0x33,
@@ -1886,7 +1885,7 @@ export namespace DoorLock {
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.40
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.40
              */
             keypadOperationEventMask: OptionalWritableAttribute(
                 0x41,
@@ -1903,7 +1902,7 @@ export namespace DoorLock {
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.44
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.44
              */
             keypadProgrammingEventMask: OptionalWritableAttribute(
                 0x45,
@@ -1929,7 +1928,7 @@ export namespace DoorLock {
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.41
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.41
              */
             remoteOperationEventMask: OptionalWritableAttribute(
                 0x42,
@@ -1946,7 +1945,7 @@ export namespace DoorLock {
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.42
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.42
              */
             manualOperationEventMask: OptionalWritableAttribute(
                 0x43,
@@ -1963,7 +1962,7 @@ export namespace DoorLock {
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.45
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.45
              */
             remoteProgrammingEventMask: OptionalWritableAttribute(
                 0x46,
@@ -1987,7 +1986,7 @@ export namespace DoorLock {
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.43
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.43
              */
             rfidOperationEventMask: OptionalWritableAttribute(
                 0x44,
@@ -2004,7 +2003,7 @@ export namespace DoorLock {
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.46
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.46
              */
             rfidProgrammingEventMask: OptionalWritableAttribute(
                 0x47,
@@ -2024,7 +2023,7 @@ export namespace DoorLock {
     export const PinCredentialNotUserComponent = MutableCluster.Component({
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setPinCode: Command(
                 0x5,
@@ -2035,12 +2034,12 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getPinCode: Command(0x6, TlvNoArguments, 0x6, TlvNoArguments, { invokeAcl: AccessLevel.Administer }),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearPinCode: Command(
                 0x7,
@@ -2051,7 +2050,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearAllPinCodes: Command(
                 0x8,
@@ -2070,7 +2069,7 @@ export namespace DoorLock {
     export const PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent = MutableCluster.Component({
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setUserStatus: OptionalCommand(
                 0x9,
@@ -2081,7 +2080,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getUserStatus: OptionalCommand(
                 0xa,
@@ -2092,7 +2091,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setUserType: OptionalCommand(
                 0x14,
@@ -2103,7 +2102,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getUserType: OptionalCommand(
                 0x15,
@@ -2127,7 +2126,7 @@ export namespace DoorLock {
     export const RfidCredentialNotUserComponent = MutableCluster.Component({
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             setRfidCode: Command(
                 0x16,
@@ -2138,12 +2137,12 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             getRfidCode: Command(0x17, TlvNoArguments, 0x17, TlvNoArguments, { invokeAcl: AccessLevel.Administer }),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearRfidCode: Command(
                 0x18,
@@ -2154,7 +2153,7 @@ export namespace DoorLock {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             clearAllRfidCodes: Command(
                 0x19,
@@ -2169,7 +2168,7 @@ export namespace DoorLock {
     /**
      * These are optional features supported by DoorLockCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.2
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2.2
      */
     export enum Feature {
         /**
@@ -2375,12 +2374,12 @@ export namespace DoorLock {
              *
              * Locks that do not have an actuation mechanism SHOULD not support the Scene table extension.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.1
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.1
              */
             lockState: Attribute(0x0, TlvNullable(TlvEnum<LockState>()), { scene: true }),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.2
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.2
              */
             lockType: Attribute(0x1, TlvEnum<LockType>()),
 
@@ -2388,7 +2387,7 @@ export namespace DoorLock {
              * The ActuatorEnabled attribute indicates if the lock is currently able to (Enabled) or not able to
              * (Disabled) process remote Lock, Unlock, or Unlock with Timeout commands.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.3
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.3
              */
             actuatorEnabled: Attribute(0x2, TlvBoolean),
 
@@ -2396,7 +2395,7 @@ export namespace DoorLock {
              * Modifies the language for the on-screen or audible user interface using a 2-byte language code from
              * ISO-639-1.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.22
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.22
              */
             language: OptionalWritableAttribute(
                 0x21,
@@ -2407,7 +2406,7 @@ export namespace DoorLock {
             /**
              * The settings for the LED support three different modes
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.25
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.25
              */
             ledSettings: OptionalWritableAttribute(
                 0x22,
@@ -2420,14 +2419,14 @@ export namespace DoorLock {
              * set, unlock operations from any source will be timed. For one time unlock with timeout use the specific
              * command.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.26
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.26
              */
             autoRelockTime: OptionalWritableAttribute(0x23, TlvUInt32, { writeAcl: AccessLevel.Manage }),
 
             /**
              * The sound volume on a door lock has four possible settings: silent, low, high and medium volumes
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.27
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.27
              */
             soundVolume: OptionalWritableAttribute(
                 0x24,
@@ -2438,7 +2437,7 @@ export namespace DoorLock {
             /**
              * The current operating mode of the lock (see OperatingModeEnum).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.23
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.23
              */
             operatingMode: WritableAttribute(
                 0x25,
@@ -2451,7 +2450,7 @@ export namespace DoorLock {
              * operating modes NOT supported by a lock shall be set to one. The value of the OperatingMode enumeration
              * defines the related bit to be set, as
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.24
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.24
              */
             supportedOperatingModes: FixedAttribute(
                 0x26,
@@ -2476,7 +2475,7 @@ export namespace DoorLock {
              * current Sound Volume is High Volume. Therefore, if the client wants to query/modify the current Sound
              * Volume setting on the server, the client SHOULD read/write to the Sound Volume attribute.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.28
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.28
              */
             defaultConfigurationRegister: OptionalAttribute(0x27, TlvBitmap(TlvUInt16, DefaultConfigurationRegister)),
 
@@ -2487,7 +2486,7 @@ export namespace DoorLock {
              * whose bit is set to 0 in the LocalProgrammingFeatures attribute. Local programming shall be enabled by
              * default.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.29
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.29
              */
             enableLocalProgramming: OptionalWritableAttribute(
                 0x28,
@@ -2498,7 +2497,7 @@ export namespace DoorLock {
             /**
              * Enable/disable the ability to lock the door lock with a single touch on the door lock.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.30
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.30
              */
             enableOneTouchLocking: OptionalWritableAttribute(
                 0x29,
@@ -2509,7 +2508,7 @@ export namespace DoorLock {
             /**
              * Enable/disable an inside LED that allows the user to see at a glance if the door is locked.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.31
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.31
              */
             enableInsideStatusLed: OptionalWritableAttribute(
                 0x2a,
@@ -2521,7 +2520,7 @@ export namespace DoorLock {
              * Enable/disable a button inside the door that is used to put the lock into privacy mode. When the lock is
              * in privacy mode it cannot be manipulated from the outside.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.32
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.32
              */
             enablePrivacyModeButton: OptionalWritableAttribute(
                 0x2b,
@@ -2538,7 +2537,7 @@ export namespace DoorLock {
              *
              * The features that can be disabled from local programming are defined in the following bitmap.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.33
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.33
              */
             localProgrammingFeatures: OptionalWritableAttribute(
                 0x2c,
@@ -2554,7 +2553,7 @@ export namespace DoorLock {
              *
              * This mask DOES NOT apply to the Events mechanism of this cluster.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.39
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.3.39
              */
             alarmMask: OptionalWritableAttribute(
                 0x40,
@@ -2568,17 +2567,17 @@ export namespace DoorLock {
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             lockDoor: Command(0x0, TlvLockDoorRequest, 0x0, TlvNoResponse, { timed: true }),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             unlockDoor: Command(0x1, TlvUnlockDoorRequest, 0x1, TlvNoResponse, { timed: true }),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.4
              */
             unlockWithTimeout: OptionalCommand(0x3, TlvUnlockWithTimeoutRequest, 0x3, TlvNoResponse, { timed: true })
         },
@@ -2588,7 +2587,7 @@ export namespace DoorLock {
              * The door lock cluster provides several alarms which can be sent when there is a critical state on the
              * door lock. The alarms available for the door lock cluster are listed in the AlarmCodeEnum section below.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.1
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.1
              */
             doorLockAlarm: Event(0x0, EventPriority.Critical, TlvDoorLockAlarmEvent),
 
@@ -2596,7 +2595,7 @@ export namespace DoorLock {
              * The door lock server sends out a LockOperation event when the event is triggered by the various lock
              * operation sources.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.3
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.3
              */
             lockOperation: Event(0x2, EventPriority.Critical, TlvLockOperationEvent),
 
@@ -2604,7 +2603,7 @@ export namespace DoorLock {
              * The door lock server sends out a LockOperationError event when a lock operation fails for various
              * reasons.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.5.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.2.5.4
              */
             lockOperationError: Event(0x3, EventPriority.Critical, TlvLockOperationErrorEvent)
         },
@@ -2664,7 +2663,7 @@ export namespace DoorLock {
      *
      * DoorLockCluster supports optional features that you can enable with the DoorLockCluster.with() factory method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 5.2
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

@@ -6,14 +6,13 @@
 
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { ValidationError } from "../common/ValidationError.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
 /**
  * Schema to encode a boolean in TLV.
  *
- * @see {@link MatterCoreSpecificationV1_0} § A.11.3
+ * @see {@link MatterSpecification.v10.Core} § A.11.3
  */
 export class BooleanSchema extends TlvSchema<boolean> {
     override encodeTlvInternal(writer: TlvWriter, value: boolean, tag?: TlvTag): void {

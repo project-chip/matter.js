@@ -7,14 +7,13 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
 
 /**
  * The OffWithEffect command allows devices to be turned off using enhanced ways of fading.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4
+ * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4
  */
 export type OffWithEffectRequest = TypeFromSchema<typeof OnOff.TlvOffWithEffectRequest>;
 
@@ -25,7 +24,7 @@ export type OffWithEffectRequest = TypeFromSchema<typeof OnOff.TlvOffWithEffectR
  *
  * OnWithTimedOff commands received while the server is turned on, will update the period that the device is turned on.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6
+ * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6
  */
 export type OnWithTimedOffRequest = TypeFromSchema<typeof OnOff.TlvOnWithTimedOffRequest>;
 
@@ -34,21 +33,21 @@ export namespace OnOffInterface {
         /**
          * This command does not have any data fields.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.1
          */
         off(): MaybePromise;
 
         /**
          * This command does not have any data fields.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.2
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.2
          */
         on(): MaybePromise;
 
         /**
          * This command does not have any data fields.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.3
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.3
          */
         toggle(): MaybePromise;
     }
@@ -57,7 +56,7 @@ export namespace OnOffInterface {
         /**
          * The OffWithEffect command allows devices to be turned off using enhanced ways of fading.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4
          */
         offWithEffect(request: OffWithEffectRequest): MaybePromise;
 
@@ -66,7 +65,7 @@ export namespace OnOffInterface {
          *
          * The OnWithRecallGlobalScene command shall have no parameters.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.5
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.5
          */
         onWithRecallGlobalScene(): MaybePromise;
 
@@ -78,7 +77,7 @@ export namespace OnOffInterface {
          * OnWithTimedOff commands received while the server is turned on, will update the period that the device is
          * turned on.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6
          */
         onWithTimedOff(request: OnWithTimedOffRequest): MaybePromise;
     }

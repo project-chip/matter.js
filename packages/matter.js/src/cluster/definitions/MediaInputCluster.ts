@@ -8,7 +8,6 @@
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command, TlvNoResponse, AccessLevel, Attribute } from "../../cluster/Cluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvUInt8, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvString } from "../../tlv/TlvString.js";
@@ -23,21 +22,21 @@ export namespace MediaInput {
     /**
      * Input to the MediaInput renameInput command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.4
      */
     export const TlvRenameInputRequest = TlvObject({ index: TlvField(0, TlvUInt8), name: TlvField(1, TlvString) });
 
     /**
      * Input to the MediaInput renameInput command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.4
      */
     export interface RenameInputRequest extends TypeFromSchema<typeof TlvRenameInputRequest> {}
 
     /**
      * The type of input, expressed as an enum, with the following values:
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9.5.2
      */
     export enum InputType {
         /**
@@ -61,20 +60,20 @@ export namespace MediaInput {
     /**
      * This contains information about an input.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9.5.1
      */
     export const TlvInputInfoStruct = TlvObject({
         /**
          * This shall indicate the unique index into the list of Inputs.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.9.5.1.1
          */
         index: TlvField(0, TlvUInt8),
 
         /**
          * This shall indicate the type of input
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.1.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.9.5.1.2
          */
         inputType: TlvField(1, TlvEnum<InputType>()),
 
@@ -82,7 +81,7 @@ export namespace MediaInput {
          * This shall indicate the input name, such as “HDMI 1”. This field may be blank, but SHOULD be provided when
          * known.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.1.3
+         * @see {@link MatterSpecification.v11.Cluster} § 6.9.5.1.3
          */
         name: TlvField(2, TlvString.bound({ maxLength: 32 })),
 
@@ -90,7 +89,7 @@ export namespace MediaInput {
          * This shall indicate the user editable input description, such as “Living room Playstation”. This field may
          * be blank, but SHOULD be provided when known.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.1.4
+         * @see {@link MatterSpecification.v11.Cluster} § 6.9.5.1.4
          */
         description: TlvField(3, TlvString.bound({ maxLength: 32 }))
     });
@@ -98,21 +97,21 @@ export namespace MediaInput {
     /**
      * This contains information about an input.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9.5.1
      */
     export interface InputInfoStruct extends TypeFromSchema<typeof TlvInputInfoStruct> {}
 
     /**
      * Input to the MediaInput selectInput command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.1
      */
     export const TlvSelectInputRequest = TlvObject({
         /**
          * This shall indicate the index field of the InputInfoStruct from the InputList attribute in which to change
          * to.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.1.1
          */
         index: TlvField(0, TlvUInt8)
     });
@@ -120,7 +119,7 @@ export namespace MediaInput {
     /**
      * Input to the MediaInput selectInput command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.1
      */
     export interface SelectInputRequest extends TypeFromSchema<typeof TlvSelectInputRequest> {}
 
@@ -133,7 +132,7 @@ export namespace MediaInput {
              * Upon receipt, this shall rename the input at a specific index in the Input List. Updates to the input
              * name shall appear in the device’s settings menus.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
+             * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.4
              */
             renameInput: Command(0x3, TlvRenameInputRequest, 0x3, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
@@ -142,7 +141,7 @@ export namespace MediaInput {
     /**
      * These are optional features supported by MediaInputCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9.2
      */
     export enum Feature {
         /**
@@ -174,14 +173,14 @@ export namespace MediaInput {
             /**
              * This list provides the media inputs supported by the device.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.3.1
+             * @see {@link MatterSpecification.v11.Cluster} § 6.9.3.1
              */
             inputList: Attribute(0x0, TlvArray(TlvInputInfoStruct, { maxLength: 254 }), { default: [] }),
 
             /**
              * This field contains the value of the index field of the currently selected InputInfoStruct.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.3.2
+             * @see {@link MatterSpecification.v11.Cluster} § 6.9.3.2
              */
             currentInput: Attribute(0x1, TlvUInt8, { default: 0 })
         },
@@ -191,21 +190,21 @@ export namespace MediaInput {
              * Upon receipt, this shall change the media input on the device to the input at a specific index in the
              * Input List.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.1
+             * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.1
              */
             selectInput: Command(0x0, TlvSelectInputRequest, 0x0, TlvNoResponse),
 
             /**
              * Upon receipt, this shall display the active status of the input list on screen.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.2
+             * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.2
              */
             showInputStatus: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse),
 
             /**
              * Upon receipt, this shall hide the input list from the screen.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.3
+             * @see {@link MatterSpecification.v11.Cluster} § 6.9.4.3
              */
             hideInputStatus: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
         },
@@ -230,7 +229,7 @@ export namespace MediaInput {
      * MediaInputCluster supports optional features that you can enable with the MediaInputCluster.with() factory
      * method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9
+     * @see {@link MatterSpecification.v11.Cluster} § 6.9
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

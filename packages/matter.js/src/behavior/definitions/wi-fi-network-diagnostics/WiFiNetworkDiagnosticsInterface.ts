@@ -7,7 +7,6 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 export namespace WiFiNetworkDiagnosticsInterface {
     export interface ErrorCounts {
@@ -28,7 +27,7 @@ export namespace WiFiNetworkDiagnosticsInterface {
          *
          * This command has no associated data.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.14.7.1
+         * @see {@link MatterSpecification.v11.Core} § 11.14.7.1
          */
         resetCounts(): MaybePromise;
     }

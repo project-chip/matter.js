@@ -9,7 +9,6 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { FixedAttribute, Command, AccessLevel, Attribute, WritableAttribute } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvUInt64, TlvEnum, TlvBitmap, TlvUInt16, TlvInt8, TlvInt32 } from "../../tlv/TlvNumber.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvOptionalField, TlvField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
@@ -24,7 +23,7 @@ export namespace NetworkCommissioning {
     /**
      * Input to the NetworkCommissioning scanNetworks command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.1
      */
     export const TlvScanNetworksRequest = TlvObject({
         /**
@@ -32,7 +31,7 @@ export namespace NetworkCommissioning {
          * if the field is absent, or it is null, this shall indicate scanning of all BSSID in range. This field shall
          * be ignored for ScanNetworks invocations on non-Wi-Fi server instances.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.1.1
          */
         ssid: TlvOptionalField(0, TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 32 }))),
 
@@ -41,7 +40,7 @@ export namespace NetworkCommissioning {
          * Commissioning cluster on success of the associated command. If the command fails, the Breadcrumb attribute
          * in the General Commissioning cluster shall be left unchanged.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1.2
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.1.2
          */
         breadcrumb: TlvOptionalField(1, TlvUInt64)
     });
@@ -49,12 +48,12 @@ export namespace NetworkCommissioning {
     /**
      * Input to the NetworkCommissioning scanNetworks command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.1
      */
     export interface ScanNetworksRequest extends TypeFromSchema<typeof TlvScanNetworksRequest> {}
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.3
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.3
      */
     export enum NetworkCommissioningStatus {
         /**
@@ -127,7 +126,7 @@ export namespace NetworkCommissioning {
      * WiFiSecurityBitmap encodes the supported Wi-Fi security types present in the Security field of the
      * WiFiInterfaceScanResultStruct.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.1
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.1
      */
     export const WiFiSecurityBitmap = {
         /**
@@ -160,7 +159,7 @@ export namespace NetworkCommissioning {
      * WiFiBandEnum encodes a supported Wi-Fi frequency band present in the WiFiBand field of the
      * WiFiInterfaceScanResultStruct.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.2
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.2
      */
     export enum WiFiBand {
         /**
@@ -192,7 +191,7 @@ export namespace NetworkCommissioning {
     /**
      * WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.5
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.5
      */
     export const TlvWiFiInterfaceScanResultStruct = TlvObject({
         security: TlvOptionalField(0, TlvBitmap(TlvUInt8, WiFiSecurityBitmap)),
@@ -204,14 +203,14 @@ export namespace NetworkCommissioning {
          * This field, if present, may be used to differentiate overlapping channel number values across different
          * Wi-Fi frequency bands.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.5.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.5.5.1
          */
         wiFiBand: TlvOptionalField(4, TlvEnum<WiFiBand>()),
 
         /**
          * This field, if present, shall denote the signal strength in dBm of the associated scan result.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.5.2
+         * @see {@link MatterSpecification.v11.Core} § 11.8.5.5.2
          */
         rssi: TlvOptionalField(5, TlvInt8)
     });
@@ -219,14 +218,14 @@ export namespace NetworkCommissioning {
     /**
      * WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.5
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.5
      */
     export interface WiFiInterfaceScanResultStruct extends TypeFromSchema<typeof TlvWiFiInterfaceScanResultStruct> {}
 
     /**
      * ThreadInterfaceScanResultStruct represents a single Thread network scan result.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.6
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.6
      */
     export const TlvThreadInterfaceScanResultStruct = TlvObject({
         panId: TlvOptionalField(0, TlvUInt16.bound({ max: 65534 })),
@@ -238,7 +237,7 @@ export namespace NetworkCommissioning {
         /**
          * ExtendedAddress stands for an IEEE 802.15.4 Extended Address.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.6.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.5.6.1
          */
         extendedAddress: TlvOptionalField(5, TlvByteString.bound({ minLength: 6, maxLength: 8 })),
 
@@ -249,7 +248,7 @@ export namespace NetworkCommissioning {
     /**
      * ThreadInterfaceScanResultStruct represents a single Thread network scan result.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.6
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.6
      */
     export interface ThreadInterfaceScanResultStruct extends TypeFromSchema<typeof TlvThreadInterfaceScanResultStruct> {}
 
@@ -262,7 +261,7 @@ export namespace NetworkCommissioning {
      * Before generating a ScanNetworksResponse, the server shall set the LastNetworkingStatus attribute value to the
      * NetworkingStatus matching the response.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.2
      */
     export const TlvScanNetworksResponse = TlvObject({
         /**
@@ -280,7 +279,7 @@ export namespace NetworkCommissioning {
          *
          *   • UnknownError: An internal error occurred during scanning.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.2.1
          */
         networkingStatus: TlvField(0, TlvEnum<NetworkCommissioningStatus>()),
 
@@ -289,7 +288,7 @@ export namespace NetworkCommissioning {
          * case the NetworkingStatus was not Success. Its purpose is to help developers in troubleshooting errors and
          * may go into logs or crash reports.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2.2
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.2.2
          */
         debugText: TlvOptionalField(1, TlvString.bound({ maxLength: 512 })),
 
@@ -306,7 +305,7 @@ export namespace NetworkCommissioning {
          * RSSI order, even if RSSI is not reported in the response, to maximize the likelihood that most likely to be
          * reachable elements are included within the size limits of the response.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2.3
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.2.3
          */
         wiFiScanResults: TlvOptionalField(2, TlvArray(TlvWiFiInterfaceScanResultStruct)),
 
@@ -322,7 +321,7 @@ export namespace NetworkCommissioning {
          * LQI order, to maximize the likelihood that most likely to be reachable elements are included within the size
          * limits of the response.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2.4
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.2.4
          */
         threadScanResults: TlvOptionalField(3, TlvArray(TlvThreadInterfaceScanResultStruct))
     });
@@ -336,14 +335,14 @@ export namespace NetworkCommissioning {
      * Before generating a ScanNetworksResponse, the server shall set the LastNetworkingStatus attribute value to the
      * NetworkingStatus matching the response.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.2
      */
     export interface ScanNetworksResponse extends TypeFromSchema<typeof TlvScanNetworksResponse> {}
 
     /**
      * Input to the NetworkCommissioning removeNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.7
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.7
      */
     export const TlvRemoveNetworkRequest = TlvObject({
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
@@ -353,7 +352,7 @@ export namespace NetworkCommissioning {
     /**
      * Input to the NetworkCommissioning removeNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.7
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.7
      */
     export interface RemoveNetworkRequest extends TypeFromSchema<typeof TlvRemoveNetworkRequest> {}
 
@@ -385,7 +384,7 @@ export namespace NetworkCommissioning {
      *
      * See Section 11.8.7.2.2, “DebugText Field” for usage.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.8
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.8
      */
     export const TlvNetworkConfigResponse = TlvObject({
         networkingStatus: TlvField(0, TlvEnum<NetworkCommissioningStatus>()),
@@ -396,7 +395,7 @@ export namespace NetworkCommissioning {
          * entry in the Networks attribute that was last added, updated or removed successfully by the associated
          * request command.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.8.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.8.1
          */
         networkIndex: TlvOptionalField(2, TlvUInt8)
     });
@@ -429,14 +428,14 @@ export namespace NetworkCommissioning {
      *
      * See Section 11.8.7.2.2, “DebugText Field” for usage.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.8
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.8
      */
     export interface NetworkConfigResponse extends TypeFromSchema<typeof TlvNetworkConfigResponse> {}
 
     /**
      * Input to the NetworkCommissioning connectNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.9
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.9
      */
     export const TlvConnectNetworkRequest = TlvObject({
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
@@ -446,7 +445,7 @@ export namespace NetworkCommissioning {
     /**
      * Input to the NetworkCommissioning connectNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.9
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.9
      */
     export interface ConnectNetworkRequest extends TypeFromSchema<typeof TlvConnectNetworkRequest> {}
 
@@ -482,7 +481,7 @@ export namespace NetworkCommissioning {
      *
      * See Section 11.8.7.2.2, “DebugText Field” for usage.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.10
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.10
      */
     export const TlvConnectNetworkResponse = TlvObject({
         networkingStatus: TlvField(0, TlvEnum<NetworkCommissioningStatus>()),
@@ -508,7 +507,7 @@ export namespace NetworkCommissioning {
          *   • Otherwise, the ErrorValue field shall contain an implementation-dependent value which may be used by a
          *     reader of the structure to record, report or diagnose the failure.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.10.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.10.1
          */
         errorValue: TlvField(2, TlvNullable(TlvInt32))
     });
@@ -545,14 +544,14 @@ export namespace NetworkCommissioning {
      *
      * See Section 11.8.7.2.2, “DebugText Field” for usage.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.10
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.10
      */
     export interface ConnectNetworkResponse extends TypeFromSchema<typeof TlvConnectNetworkResponse> {}
 
     /**
      * Input to the NetworkCommissioning reorderNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.11
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.11
      */
     export const TlvReorderNetworkRequest = TlvObject({
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
@@ -563,14 +562,14 @@ export namespace NetworkCommissioning {
     /**
      * Input to the NetworkCommissioning reorderNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.11
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.11
      */
     export interface ReorderNetworkRequest extends TypeFromSchema<typeof TlvReorderNetworkRequest> {}
 
     /**
      * Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.3
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.3
      */
     export const TlvAddOrUpdateWiFiNetworkRequest = TlvObject({
         ssid: TlvField(0, TlvByteString.bound({ maxLength: 32 })),
@@ -612,7 +611,7 @@ export namespace NetworkCommissioning {
          *
          * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.3.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.3.1
          */
         credentials: TlvField(1, TlvByteString.bound({ maxLength: 64 })),
 
@@ -622,14 +621,14 @@ export namespace NetworkCommissioning {
     /**
      * Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.3
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.3
      */
     export interface AddOrUpdateWiFiNetworkRequest extends TypeFromSchema<typeof TlvAddOrUpdateWiFiNetworkRequest> {}
 
     /**
      * Input to the NetworkCommissioning addOrUpdateThreadNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.4
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.4
      */
     export const TlvAddOrUpdateThreadNetworkRequest = TlvObject({
         /**
@@ -641,7 +640,7 @@ export namespace NetworkCommissioning {
          *
          * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.4.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.4.1
          */
         operationalDataset: TlvField(0, TlvByteString.bound({ maxLength: 254 })),
 
@@ -651,14 +650,14 @@ export namespace NetworkCommissioning {
     /**
      * Input to the NetworkCommissioning addOrUpdateThreadNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.4
+     * @see {@link MatterSpecification.v11.Core} § 11.8.7.4
      */
     export interface AddOrUpdateThreadNetworkRequest extends TypeFromSchema<typeof TlvAddOrUpdateThreadNetworkRequest> {}
 
     /**
      * NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks attribute.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.4
      */
     export const TlvNetworkInfoStruct = TlvObject({
         /**
@@ -685,7 +684,7 @@ export namespace NetworkCommissioning {
          *
          * XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octets of the octet string.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.5.4.1
          */
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
 
@@ -694,7 +693,7 @@ export namespace NetworkCommissioning {
          * linked to the network technology (e.g. Associated for a Wi-Fi network, media connected for an Ethernet
          * network).
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4.2
+         * @see {@link MatterSpecification.v11.Core} § 11.8.5.4.2
          */
         connected: TlvField(1, TlvBoolean)
     });
@@ -702,7 +701,7 @@ export namespace NetworkCommissioning {
     /**
      * NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks attribute.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4
+     * @see {@link MatterSpecification.v11.Core} § 11.8.5.4
      */
     export interface NetworkInfoStruct extends TypeFromSchema<typeof TlvNetworkInfoStruct> {}
 
@@ -718,7 +717,7 @@ export namespace NetworkCommissioning {
              *
              * See Section 11.8.7.1, “ScanNetworks Command” for usage.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.3
+             * @see {@link MatterSpecification.v11.Core} § 11.8.6.3
              */
             scanMaxTimeSeconds: FixedAttribute(0x2, TlvUInt8),
 
@@ -728,7 +727,7 @@ export namespace NetworkCommissioning {
              * time shall account for all operations needed until a successful network connection is deemed to have
              * occurred, including, for example, obtaining IP addresses, or the execution of necessary internal retries.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.4
+             * @see {@link MatterSpecification.v11.Core} § 11.8.6.4
              */
             connectMaxTimeSeconds: FixedAttribute(0x3, TlvUInt8)
         },
@@ -762,7 +761,7 @@ export namespace NetworkCommissioning {
              * Clients shall be resilient to a server that either does not support or cannot proceed with the
              * ScanNetworks command.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1
+             * @see {@link MatterSpecification.v11.Core} § 11.8.7.1
              */
             scanNetworks: Command(
                 0x0,
@@ -793,7 +792,7 @@ export namespace NetworkCommissioning {
              *
              * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.7
+             * @see {@link MatterSpecification.v11.Core} § 11.8.7.7
              */
             removeNetwork: Command(
                 0x4,
@@ -872,7 +871,7 @@ export namespace NetworkCommissioning {
              *
              * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.9
+             * @see {@link MatterSpecification.v11.Core} § 11.8.7.9
              */
             connectNetwork: Command(
                 0x6,
@@ -942,7 +941,7 @@ export namespace NetworkCommissioning {
              * In the above outcome, BlueDolphin, Home-Guest and WillowTree moved "up" and FancyCat became the lowest
              * priority network in the list.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.11
+             * @see {@link MatterSpecification.v11.Core} § 11.8.7.11
              */
             reorderNetwork: Command(
                 0x8,
@@ -974,7 +973,7 @@ export namespace NetworkCommissioning {
              * This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not
              * supported by this cluster.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.3
+             * @see {@link MatterSpecification.v11.Core} § 11.8.7.3
              */
             addOrUpdateWiFiNetwork: Command(
                 0x2,
@@ -1007,7 +1006,7 @@ export namespace NetworkCommissioning {
              * the OperationalDataset, the operation shall be considered an addition, otherwise, it shall be considered
              * an update.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.4
+             * @see {@link MatterSpecification.v11.Core} § 11.8.7.4
              */
             addOrUpdateThreadNetwork: Command(
                 0x3,
@@ -1022,7 +1021,7 @@ export namespace NetworkCommissioning {
     /**
      * These are optional features supported by NetworkCommissioningCluster.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.4
+     * @see {@link MatterSpecification.v11.Core} § 11.8.4
      */
     export enum Feature {
         /**
@@ -1084,7 +1083,7 @@ export namespace NetworkCommissioning {
              * available device resources. The length of the Networks attribute list shall be less than or equal to
              * this value.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.1
+             * @see {@link MatterSpecification.v11.Core} § 11.8.6.1
              */
             maxNetworks: FixedAttribute(
                 0x0,
@@ -1110,7 +1109,7 @@ export namespace NetworkCommissioning {
              * Networks attribute. There shall be no way to add, update or remove Ethernet network configurations to
              * those Cluster instances.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.2
+             * @see {@link MatterSpecification.v11.Core} § 11.8.6.2
              */
             networks: Attribute(
                 0x1,
@@ -1135,7 +1134,7 @@ export namespace NetworkCommissioning {
              * On Ethernet-only Nodes, there shall always be at least one of the Network Commissioning server cluster
              * instances with InterfaceEnabled set to true.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.5
+             * @see {@link MatterSpecification.v11.Core} § 11.8.6.5
              */
             interfaceEnabled: WritableAttribute(
                 0x4,
@@ -1152,7 +1151,7 @@ export namespace NetworkCommissioning {
              * This attribute is present to assist with error recovery during Network commissioning and to assist in
              * non-concurrent networking commissioning flows.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.6
+             * @see {@link MatterSpecification.v11.Core} § 11.8.6.6
              */
             lastNetworkingStatus: Attribute(
                 0x5,
@@ -1172,7 +1171,7 @@ export namespace NetworkCommissioning {
              * This attribute is present to assist with error recovery during Network commissioning and to assist in
              * non-concurrent networking commissioning flows.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.7
+             * @see {@link MatterSpecification.v11.Core} § 11.8.6.7
              */
             lastNetworkId: Attribute(
                 0x6,
@@ -1193,7 +1192,7 @@ export namespace NetworkCommissioning {
              * This attribute is present to assist with error recovery during Network commissioning and to assist in
              * non-concurrent networking commissioning flows.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.8
+             * @see {@link MatterSpecification.v11.Core} § 11.8.6.8
              */
             lastConnectErrorValue: Attribute(
                 0x7,
@@ -1249,7 +1248,7 @@ export namespace NetworkCommissioning {
      * Per the Matter specification you cannot use {@link NetworkCommissioningCluster} without enabling certain feature
      * combinations. You must use the NetworkCommissioningCluster.with() factory method to obtain a working cluster.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8
+     * @see {@link MatterSpecification.v11.Core} § 11.8
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

@@ -47,7 +47,7 @@ export class ServerNodeFailsafeContext extends FailsafeContext {
      * Persist endpoint credentials and network configurations for restoration if commissioning does not complete.
      *
      * The Matter 1.2 specification makes it pretty clear that Matter supports configuration of multiple network
-     * interfaces (e.g. @see {@link MatterCoreSpecificationV1_1} § 11.8.8 and § 2.3.2).
+     * interfaces (e.g. @see {@link MatterSpecification.v11.Core} § 11.8.8 and § 2.3.2).
      * {@link NetworkCommissioningCluster} of the primary interface is on the root endpoint.  However it's not clear
      * where {@link NetworkCommissioningCluster} instances for secondary interfaces reside.  To be on the safe side
      * we just assume any endpoint may support {@link NetworkCommissioningCluster}.

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvWrapper } from "../tlv/TlvWrapper.js";
 import { Branded } from "../util/Type.js";
@@ -17,7 +16,7 @@ import { Branded } from "../util/Type.js";
  * a fabric, such as fabric-scoped data model elements, then the fabric-index values SHALL NOT include 0
  * (zero) or null.
  *
- * @see {@link MatterCoreSpecificationV1_0} § 7.5.2
+ * @see {@link MatterSpecification.v10.Core} § 7.5.2
  */
 export type FabricIndex = Branded<number, "FabricIndex">;
 

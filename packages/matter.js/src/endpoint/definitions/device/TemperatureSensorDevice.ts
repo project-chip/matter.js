@@ -13,27 +13,26 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Temperature Sensor device reports measurements of temperature.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.4
+ * @see {@link MatterSpecification.v11.Device} § 7.4
  */
 export interface TemperatureSensorDevice extends Identity<typeof TemperatureSensorDeviceDefinition> {}
 
 export namespace TemperatureSensorRequirements {
     /**
-     * The {@link TemperatureMeasurement} cluster is required by the Matter specification
+     * The TemperatureMeasurement cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 

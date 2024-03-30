@@ -9,12 +9,11 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { Identify } from "../../../cluster/definitions/IdentifyCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This command starts or stops the receiving device identifying itself.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
+ * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.1
  */
 export type IdentifyRequest = TypeFromSchema<typeof Identify.TlvIdentifyRequest>;
 
@@ -25,7 +24,7 @@ export type IdentifyRequest = TypeFromSchema<typeof Identify.TlvIdentifyRequest>
  * entirely up to the implementer to use whenever a visual feedback is useful but it is not the same as and does not
  * replace the identify mechanism used during commissioning.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3
+ * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3
  */
 export type TriggerEffectRequest = TypeFromSchema<typeof Identify.TlvTriggerEffectRequest>;
 
@@ -33,7 +32,7 @@ export type TriggerEffectRequest = TypeFromSchema<typeof Identify.TlvTriggerEffe
  * This command is generated in response to receiving an IdentifyQuery command, see IdentifyQuery Command, in the case
  * that the device is currently identifying itself.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4
+ * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.4
  */
 export type IdentifyQueryResponse = TypeFromSchema<typeof Identify.TlvIdentifyQueryResponse>;
 
@@ -42,7 +41,7 @@ export namespace IdentifyInterface {
         /**
          * This command starts or stops the receiving device identifying itself.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.1
          */
         identify(request: IdentifyRequest): MaybePromise;
 
@@ -53,7 +52,7 @@ export namespace IdentifyInterface {
          * themselves are entirely up to the implementer to use whenever a visual feedback is useful but it is not the
          * same as and does not replace the identify mechanism used during commissioning.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3
+         * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3
          */
         triggerEffect(request: TriggerEffectRequest): MaybePromise;
     }
@@ -65,7 +64,7 @@ export namespace IdentifyInterface {
          *
          * This command has no data fields.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.2
+         * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.2
          */
         identifyQuery(): MaybePromise<IdentifyQueryResponse>;
     }

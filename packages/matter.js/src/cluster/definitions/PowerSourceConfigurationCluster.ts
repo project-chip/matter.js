@@ -10,7 +10,6 @@ import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute } from "../../cluster/Cluster.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
@@ -35,7 +34,7 @@ export namespace PowerSourceConfiguration {
              * with a lower order shall have a lower index than any entry with a higher order. Multiple entries may
              * have the same order, there are no restrictions on their relative sorting.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.6.4.1
+             * @see {@link MatterSpecification.v11.Core} § 11.6.4.1
              */
             sources: Attribute(0x0, TlvArray(TlvEndpointNumber, { maxLength: 6 }), { persistent: true, default: [] })
         }
@@ -47,7 +46,7 @@ export namespace PowerSourceConfiguration {
      * This cluster is used to describe the configuration and capabilities of a Device’s power system. It provides an
      * ordering overview as well as linking to the one or more endpoints each supporting a Power Source cluster.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.6
+     * @see {@link MatterSpecification.v11.Core} § 11.6
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

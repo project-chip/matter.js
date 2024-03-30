@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { ModeSelect } from "../../../cluster/definitions/ModeSelectCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * On receipt of this command, if the NewMode field indicates a valid mode transition within the supported list, the
@@ -17,7 +16,7 @@ import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifi
  *
  * server shall respond with an INVALID_COMMAND status response.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.6.1
+ * @see {@link MatterSpecification.v11.Cluster} § 1.8.6.1
  */
 export type ChangeToModeRequest = TypeFromSchema<typeof ModeSelect.TlvChangeToModeRequest>;
 
@@ -29,7 +28,7 @@ export namespace ModeSelectInterface {
          *
          * server shall respond with an INVALID_COMMAND status response.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.8.6.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.8.6.1
          */
         changeToMode(request: ChangeToModeRequest): MaybePromise;
     }

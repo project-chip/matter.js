@@ -16,48 +16,47 @@ import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Window Covering Controller is a device that controls an automatic window covering.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.4
+ * @see {@link MatterSpecification.v11.Device} § 8.4
  */
 export interface WindowCoveringControllerDevice extends Identity<typeof WindowCoveringControllerDeviceDefinition> {}
 
 export namespace WindowCoveringControllerRequirements {
     /**
-     * The {@link Identify} cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link WindowCovering} cluster is required by the Matter specification
+     * The WindowCovering cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link WindowCoveringBehavior} for convenience.
      */
     export const WindowCoveringBehavior = BaseWindowCoveringBehavior;
 
     /**
-     * The {@link Identify} cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyBehavior} for convenience.
      */
     export const IdentifyBehavior = BaseIdentifyBehavior;
 
     /**
-     * The {@link Groups} cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The {@link Scenes} cluster is optional per the Matter specification
+     * The Scenes cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
      */
     export const ScenesBehavior = BaseScenesBehavior;
 

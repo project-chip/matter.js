@@ -8,7 +8,6 @@
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Command, AccessLevel, TlvNoResponse } from "../../cluster/Cluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -21,14 +20,14 @@ export namespace AccountLogin {
     /**
      * Input to the AccountLogin getSetupPin command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.1
      */
     export const TlvGetSetupPinRequest = TlvObject({
         /**
          * This attribute shall specify the client’s Temporary Account Identifier. The length of this field shall be at
          * least 16 characters to protect the account holder against password guessing attacks.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.1.1
          */
         tempAccountIdentifier: TlvField(0, TlvString.bound({ maxLength: 100 }))
     });
@@ -36,7 +35,7 @@ export namespace AccountLogin {
     /**
      * Input to the AccountLogin getSetupPin command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.1
      */
     export interface GetSetupPinRequest extends TypeFromSchema<typeof TlvGetSetupPinRequest> {}
 
@@ -44,14 +43,14 @@ export namespace AccountLogin {
      * This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
      * account identified in the request does not match the active account of the running Content App.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.2
      */
     export const TlvGetSetupPinResponse = TlvObject({
         /**
          * This field shall provide the setup PIN code as a text string at least 11 characters in length or null to
          * indicate that the accounts do not match.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.2.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.2.1
          */
         setupPin: TlvField(0, TlvNullable(TlvString.bound({ minLength: 11 })))
     });
@@ -60,27 +59,27 @@ export namespace AccountLogin {
      * This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
      * account identified in the request does not match the active account of the running Content App.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.2
      */
     export interface GetSetupPinResponse extends TypeFromSchema<typeof TlvGetSetupPinResponse> {}
 
     /**
      * Input to the AccountLogin login command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3
+     * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.3
      */
     export const TlvLoginRequest = TlvObject({
         /**
          * This field shall specify the client’s temporary account identifier.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.3.1
          */
         tempAccountIdentifier: TlvField(0, TlvString.bound({ maxLength: 100 })),
 
         /**
          * This field shall provide the setup PIN code as a text string at least 11 characters in length.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.3.2
          */
         setupPin: TlvField(1, TlvString.bound({ minLength: 11 }))
     });
@@ -88,7 +87,7 @@ export namespace AccountLogin {
     /**
      * Input to the AccountLogin login command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3
+     * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.3
      */
     export interface LoginRequest extends TypeFromSchema<typeof TlvLoginRequest> {}
 
@@ -146,7 +145,7 @@ export namespace AccountLogin {
              * command shall ensure that the Temporary Account Identifier used by its clients is not valid for more
              * than 10 minutes.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.1
+             * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.1
              */
             getSetupPin: Command(
                 0x0,
@@ -194,7 +193,7 @@ export namespace AccountLogin {
              * obstacles to successfully mounting a brute force attack. A Content App that supports this command shall
              * ensure that the Temporary Account Identifier used by its clients is not valid for more than 10 minutes.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.3
+             * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.3
              */
             login: Command(
                 0x2,
@@ -208,7 +207,7 @@ export namespace AccountLogin {
              * The purpose of this command is to instruct the Content App to clear the current user account. This
              * command SHOULD be used by clients of a Content App to indicate the end of a user session.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2.4.4
+             * @see {@link MatterSpecification.v11.Cluster} § 6.2.4.4
              */
             logout: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse, { timed: true })
         }
@@ -222,7 +221,7 @@ export namespace AccountLogin {
      * document), can use this cluster to help make the user account on the Content App match the user account on the
      * Client.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.2
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

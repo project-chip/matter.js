@@ -12,7 +12,7 @@ import { Branded } from "../util/Type.js";
 /**
  * A CASE Authenticated Tag (CAT) is a special subject distinguished name within the Operational Certificate.
  *
- * @see {@link MatterCoreSpecificationV1_2} § 6.6.2.1.2.
+ * @see {@link MatterSpecification.v12.Core} § 6.6.2.1.2.
  */
 export type CaseAuthenticatedTag = Branded<number, "CaseAuthenticatedTag">;
 

@@ -18,7 +18,7 @@ export namespace BasePayload {
     /**
      * Generates payload type when no data is present.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.5.4
+     * @see {@link MatterSpecification.v11.Core} § 8.9.5.4
      */
     export type Status<P> = {
         path: P;

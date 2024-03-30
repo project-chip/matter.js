@@ -20,7 +20,6 @@ import {
 } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
 import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvInt32, TlvEpochUs, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -34,20 +33,20 @@ import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace TimeSync {
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3
+     * @see {@link MatterSpecification.v11.Core} § 11.16.6.3
      */
     export const TlvTimeZoneStruct = TlvObject({
         /**
          * The time zone offset from UTC in seconds.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.1
+         * @see {@link MatterSpecification.v11.Core} § 11.16.6.3.1
          */
         offset: TlvField(0, TlvInt32.bound({ min: -43200, max: 50400 })),
 
         /**
          * The UTC time when the offset shall be applied.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.2
+         * @see {@link MatterSpecification.v11.Core} § 11.16.6.3.2
          */
         validAt: TlvField(1, TlvEpochUs),
 
@@ -55,13 +54,13 @@ export namespace TimeSync {
          * The time zone name SHOULD provide a human-readable time zone name and it SHOULD use the country/city format
          * specified by the IANA time zone database [https://www.iana.org/time-zones].
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3.3
+         * @see {@link MatterSpecification.v11.Core} § 11.16.6.3.3
          */
         name: TlvOptionalField(2, TlvString.bound({ minLength: 0, maxLength: 64 }))
     });
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.3
+     * @see {@link MatterSpecification.v11.Core} § 11.16.6.3
      */
     export interface TimeZoneStruct extends TypeFromSchema<typeof TlvTimeZoneStruct> {}
 
@@ -70,7 +69,7 @@ export namespace TimeSync {
      * accept any values in the int32 range to accommodate potential future legislation that does not fit with these
      * assumptions.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4
+     * @see {@link MatterSpecification.v11.Core} § 11.16.6.4
      */
     export const TlvDSTOffsetStruct = TlvObject({
         offset: TlvField(0, TlvInt32),
@@ -78,7 +77,7 @@ export namespace TimeSync {
         /**
          * The UTC time when the offset shall be applied.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4.1
+         * @see {@link MatterSpecification.v11.Core} § 11.16.6.4.1
          */
         validStarting: TlvField(1, TlvEpochUs),
 
@@ -86,7 +85,7 @@ export namespace TimeSync {
          * The UTC time when the offset shall stop being applied. This value shall be larger than the ValidStarting
          * time.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4.2
+         * @see {@link MatterSpecification.v11.Core} § 11.16.6.4.2
          */
         validUntil: TlvField(2, TlvEpochUs)
     });
@@ -96,14 +95,14 @@ export namespace TimeSync {
      * accept any values in the int32 range to accommodate potential future legislation that does not fit with these
      * assumptions.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.4
+     * @see {@link MatterSpecification.v11.Core} § 11.16.6.4
      */
     export interface DSTOffsetStruct extends TypeFromSchema<typeof TlvDSTOffsetStruct> {}
 
     /**
      * Body of the TimeSync timeZoneStatus event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.10.3
+     * @see {@link MatterSpecification.v11.Core} § 11.16.10.3
      */
     export const TlvTimeZoneStatusEvent = TlvObject({
         offset: TlvField(0, TlvInt32.bound({ min: -43200, max: 50400 })),
@@ -113,12 +112,12 @@ export namespace TimeSync {
     /**
      * Body of the TimeSync timeZoneStatus event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.10.3
+     * @see {@link MatterSpecification.v11.Core} § 11.16.10.3
      */
     export interface TimeZoneStatusEvent extends TypeFromSchema<typeof TlvTimeZoneStatusEvent> {}
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.1
+     * @see {@link MatterSpecification.v11.Core} § 11.16.6.1
      */
     export enum Granularity {
         /**
@@ -154,7 +153,7 @@ export namespace TimeSync {
     }
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.2
+     * @see {@link MatterSpecification.v11.Core} § 11.16.6.2
      */
     export enum TimeSource {
         /**
@@ -247,27 +246,27 @@ export namespace TimeSync {
     /**
      * Input to the TimeSync setUtcTime command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
+     * @see {@link MatterSpecification.v11.Core} § 11.16.9.1
      */
     export const TlvSetUtcTimeRequest = TlvObject({
         /**
          * This shall give the Client’s UTC Time.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1.1
+         * @see {@link MatterSpecification.v11.Core} § 11.16.9.1.1
          */
         utcTime: TlvField(0, TlvEpochUs),
 
         /**
          * This shall give the Client’s Granularity, as described in Section 11.16.8.2, “Granularity Attribute”.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1.2
+         * @see {@link MatterSpecification.v11.Core} § 11.16.9.1.2
          */
         granularity: TlvField(1, TlvEnum<Granularity>()),
 
         /**
          * This shall give the Client’s TimeSource, as described in Section 11.16.8.3, “TimeSource Attribute”.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1.3
+         * @see {@link MatterSpecification.v11.Core} § 11.16.9.1.3
          */
         timeSource: TlvOptionalField(2, TlvEnum<TimeSource>())
     });
@@ -275,7 +274,7 @@ export namespace TimeSync {
     /**
      * Input to the TimeSync setUtcTime command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
+     * @see {@link MatterSpecification.v11.Core} § 11.16.9.1
      */
     export interface SetUtcTimeRequest extends TypeFromSchema<typeof TlvSetUtcTimeRequest> {}
 
@@ -283,7 +282,7 @@ export namespace TimeSync {
         /**
          * Server rejected the attempt to set the UTC time
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.16.7
+         * @see {@link MatterSpecification.v11.Core} § 11.16.7
          */
         TimeNotAccepted = 2
     }
@@ -300,7 +299,7 @@ export namespace TimeSync {
              * attribute is writeable only by an Administrator. It SHOULD be set by the Commissioner during
              * commissioning. If no default NTP is available, the Commissioner may set this value to null.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.4
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.4
              */
             defaultNtp: WritableAttribute(
                 0x4,
@@ -344,7 +343,7 @@ export namespace TimeSync {
              * When time passes, the server SHOULD remove any entries which are no longer active and change the ValidAt
              * time for the currently used TimeZoneStruct list item to zero.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.6
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.6
              */
             timeZone: WritableAttribute(
                 0x5,
@@ -370,7 +369,7 @@ export namespace TimeSync {
              * Over time, if the server supports a TimeZoneDatabase, it may update its own list to add additional
              * entries.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.7
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.7
              */
             dstOffset: WritableAttribute(
                 0x6,
@@ -385,7 +384,7 @@ export namespace TimeSync {
              *
              * If the server has not achieved time synchronization, this shall be null.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.8
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.8
              */
             localTime: Attribute(0x7, TlvNullable(TlvEpochUs), { omitChanges: true, default: 0 }),
 
@@ -394,7 +393,7 @@ export namespace TimeSync {
              * update their own DSTOffset attribute to add new entries and may push DSTOffset updates to other Nodes in
              * the same time zone as required.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.9
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.9
              */
             timeZoneDatabase: FixedAttribute(0x8, TlvBoolean, { default: true })
         },
@@ -406,7 +405,7 @@ export namespace TimeSync {
              *
              * There is no data for this event.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.10.1
+             * @see {@link MatterSpecification.v11.Core} § 11.16.10.1
              */
             dstTableEmpty: Event(0x0, EventPriority.Info, TlvNoArguments),
 
@@ -417,7 +416,7 @@ export namespace TimeSync {
              * When the value is "true", the current DST offset is being applied (i.e, daylight savings time is
              * applied, as opposed to standard time).
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.10.2
+             * @see {@link MatterSpecification.v11.Core} § 11.16.10.2
              */
             dstStatus: Event(0x1, EventPriority.Info, TlvNoArguments),
 
@@ -432,7 +431,7 @@ export namespace TimeSync {
              * Current time zone name. This name SHOULD use the country/city format specified by the IANA time zone
              * database [https://www.iana.org/time-zones].
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.10.3
+             * @see {@link MatterSpecification.v11.Core} § 11.16.10.3
              */
             timeZoneStatus: Event(0x2, EventPriority.Info, TlvTimeZoneStatusEvent)
         }
@@ -450,7 +449,7 @@ export namespace TimeSync {
              * This attribute shall be present if this server is capable of providing an NTP server instance. See
              * Section 11.16.15, “Acting as an NTP Server” for more information.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.10
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.10
              */
             ntpServerPort: Attribute(0x9, TlvNullable(TlvUInt16), { default: null })
         }
@@ -459,7 +458,7 @@ export namespace TimeSync {
     /**
      * These are optional features supported by TimeSyncCluster.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16.5
+     * @see {@link MatterSpecification.v11.Core} § 11.16.5
      */
     export enum Feature {
         /**
@@ -523,7 +522,7 @@ export namespace TimeSync {
              * If the server has not achieved time synchronization, this shall be null. This attribute may be set when
              * a Section 11.16.9.1, “SetUtcTime Command” is received.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.1
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.1
              */
             utcTime: Attribute(0x0, TlvNullable(TlvEpochUs), { omitChanges: true, default: null }),
 
@@ -531,7 +530,7 @@ export namespace TimeSync {
              * The granularity of the error that the server is willing to guarantee on the time synchronization. It is
              * of type GranularityEnum.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.2
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.2
              */
             granularity: Attribute(0x1, TlvEnum<Granularity>(), { default: Granularity.NoTimeGranularity }),
 
@@ -543,7 +542,7 @@ export namespace TimeSync {
              * If a server is unsure if the selected NTP server is within the Fabric, it SHOULD indicate the server is
              * NonFabric.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.3
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.3
              */
             timeSource: OptionalAttribute(0x2, TlvEnum<TimeSource>(), { default: TimeSource.None }),
 
@@ -554,7 +553,7 @@ export namespace TimeSync {
              * SHOULD be set by the Commissioner during commissioning. If no appropriate TrustedTimeNodeId is
              * available, the commissioner may set this value to null.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.8.5
+             * @see {@link MatterSpecification.v11.Core} § 11.16.8.5
              */
             trustedTimeNodeId: WritableAttribute(
                 0x3,
@@ -581,7 +580,7 @@ export namespace TimeSync {
              * If it opts to not update its time, it shall fail the command with a cluster specific Status Code of
              * TimeNotAccepted.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
+             * @see {@link MatterSpecification.v11.Core} § 11.16.9.1
              */
             setUtcTime: Command(0x0, TlvSetUtcTimeRequest, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Administer })
         },
@@ -616,7 +615,7 @@ export namespace TimeSync {
      *
      * TimeSyncCluster supports optional features that you can enable with the TimeSyncCluster.with() factory method.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.16
+     * @see {@link MatterSpecification.v11.Core} § 11.16
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

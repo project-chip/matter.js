@@ -9,12 +9,11 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { Channel } from "../../../cluster/definitions/ChannelCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * Change the channel to the channel with the given Number in the ChannelList attribute.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
+ * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.3
  */
 export type ChangeChannelByNumberRequest = TypeFromSchema<typeof Channel.TlvChangeChannelByNumberRequest>;
 
@@ -26,7 +25,7 @@ export type ChangeChannelByNumberRequest = TypeFromSchema<typeof Channel.TlvChan
  * current channel is at index 0 and count value of -1 is given, then the current channel should change to the last
  * channel.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
+ * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.4
  */
 export type SkipChannelRequest = TypeFromSchema<typeof Channel.TlvSkipChannelRequest>;
 
@@ -40,14 +39,14 @@ export type SkipChannelRequest = TypeFromSchema<typeof Channel.TlvSkipChannelReq
  *
  * Upon success, the CurrentChannel attribute, if supported, shall be updated to reflect the change.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
+ * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.1
  */
 export type ChangeChannelRequest = TypeFromSchema<typeof Channel.TlvChangeChannelRequest>;
 
 /**
  * This command shall be generated in response to a ChangeChannel command.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.2
+ * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.2
  */
 export type ChangeChannelResponse = TypeFromSchema<typeof Channel.TlvChangeChannelResponse>;
 
@@ -56,7 +55,7 @@ export namespace ChannelInterface {
         /**
          * Change the channel to the channel with the given Number in the ChannelList attribute.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.3
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.3
          */
         changeChannelByNumber(request: ChangeChannelByNumberRequest): MaybePromise;
 
@@ -69,7 +68,7 @@ export namespace ChannelInterface {
          * For example, if the current channel is at index 0 and count value of -1 is given, then the current channel
          * should change to the last channel.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.4
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.4
          */
         skipChannel(request: SkipChannelRequest): MaybePromise;
     }
@@ -85,7 +84,7 @@ export namespace ChannelInterface {
          *
          * Upon success, the CurrentChannel attribute, if supported, shall be updated to reflect the change.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.6.4.1
          */
         changeChannel(request: ChangeChannelRequest): MaybePromise<ChangeChannelResponse>;
     }

@@ -8,7 +8,7 @@
  * Informs the receiver that a transaction must complete time out if incomplete
  * when an interval elapses.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 8.7.4
+ * @see {@link MatterSpecification.v11.Core} § 8.7.4
  */
 export type TimedRequestAction = {
     timeoutMilliseconds: number;

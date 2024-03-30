@@ -12,7 +12,6 @@ import { FixedLabelServer as BaseFixedLabelServer } from "../../../behavior/defi
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance for the Generic Switch device type.
@@ -20,29 +19,29 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * GenericSwitchDevice requires Switch cluster but Switch is not added by default because you must select the features
  * your device supports. You can add manually using GenericSwitchDevice.with().
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 6.6
+ * @see {@link MatterSpecification.v11.Device} § 6.6
  */
 export interface GenericSwitchDevice extends Identity<typeof GenericSwitchDeviceDefinition> {}
 
 export namespace GenericSwitchRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link Switch} cluster is required by the Matter specification
+     * The Switch cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link SwitchServer} for convenience.
      */
     export const SwitchServer = BaseSwitchServer;
 
     /**
-     * The {@link FixedLabel} cluster is optional per the Matter specification
+     * The FixedLabel cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link FixedLabelServer} for convenience.
      */
     export const FixedLabelServer = BaseFixedLabelServer;
 

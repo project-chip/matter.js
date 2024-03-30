@@ -9,7 +9,6 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalWritableAttribute, AccessLevel } from "../../cluster/Cluster.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt8, TlvBitmap, TlvEnum, TlvUInt16 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { Identity } from "../../util/Type.js";
@@ -19,7 +18,7 @@ export namespace OccupancySensing {
     /**
      * All other bits are reserved.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 2.7.5.1
      */
     export const OccupancyBitmap = {
         /**
@@ -29,7 +28,7 @@ export namespace OccupancySensing {
     };
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 2.7.5.2
      */
     export enum OccupancySensorType {
         /**
@@ -54,7 +53,7 @@ export namespace OccupancySensing {
     }
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.5.3
+     * @see {@link MatterSpecification.v11.Cluster} § 2.7.5.3
      */
     export const OccupancySensorTypeBitmap = {
         /**
@@ -85,14 +84,14 @@ export namespace OccupancySensing {
             /**
              * The Occupancy attribute indicates the status of occupancy.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.6.1
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.6.1
              */
             occupancy: Attribute(0x0, TlvBitmap(TlvUInt8, OccupancyBitmap)),
 
             /**
              * The OccupancySensorType attribute specifies the type of the occupancy sensor.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.6.2
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.6.2
              */
             occupancySensorType: Attribute(0x1, TlvEnum<OccupancySensorType>()),
 
@@ -105,7 +104,7 @@ export namespace OccupancySensing {
              *
              * Table 32. Mapping between OccupancySensorTypeBitmap and OccupancySensorType Attributes
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.6.3
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.6.3
              */
             occupancySensorTypeBitmap: Attribute(0x2, TlvBitmap(TlvUInt8, OccupancySensorTypeBitmap)),
 
@@ -113,7 +112,7 @@ export namespace OccupancySensing {
              * The PIROccupiedToUnoccupiedDelay attribute specifies the time delay, in seconds, before the PIR sensor
              * changes to its unoccupied state after the last detection of movement in the sensed area.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.7.1
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.7.1
              */
             pirOccupiedToUnoccupiedDelay: OptionalWritableAttribute(
                 0x10,
@@ -126,7 +125,7 @@ export namespace OccupancySensing {
              * changes to its occupied state after the detection of movement in the sensed area. This attribute is
              * mandatory if the PIRUnoccupiedToOccupiedThreshold attribute is implemented.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.7.2
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.7.2
              */
             pirUnoccupiedToOccupiedDelay: OptionalWritableAttribute(
                 0x11,
@@ -139,7 +138,7 @@ export namespace OccupancySensing {
              * must occur in the period PIRUnoccupiedToOccupiedDelay, before the PIR sensor changes to its occupied
              * state. This attribute is mandatory if the PIRUnoccupiedToOccupiedDelay attribute is implemented.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.7.3
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.7.3
              */
             pirUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(
                 0x12,
@@ -152,7 +151,7 @@ export namespace OccupancySensing {
              * Ultrasonic sensor changes to its unoccupied state after the last detection of movement in the sensed
              * area.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.8.1
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.8.1
              */
             ultrasonicOccupiedToUnoccupiedDelay: OptionalWritableAttribute(
                 0x20,
@@ -165,7 +164,7 @@ export namespace OccupancySensing {
              * Ultrasonic sensor changes to its occupied state after the detection of movement in the sensed area. This
              * attribute is mandatory if the UltrasonicUnoccupiedToOccupiedThreshold attribute is implemented.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.8.2
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.8.2
              */
             ultrasonicUnoccupiedToOccupiedDelay: OptionalWritableAttribute(
                 0x21,
@@ -179,7 +178,7 @@ export namespace OccupancySensing {
              * to its occupied state. This attribute is mandatory if the UltrasonicUnoccupiedToOccupiedDelay attribute
              * is implemented.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.8.3
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.8.3
              */
             ultrasonicUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(
                 0x22,
@@ -192,7 +191,7 @@ export namespace OccupancySensing {
              * physical contact occupancy sensor changes to its unoccupied state after detecting the unoccupied event.
              * The null value indicates that the sensor does not report occupied to unoccupied transition.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.9.1
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.9.1
              */
             physicalContactOccupiedToUnoccupiedDelay: OptionalWritableAttribute(
                 0x30,
@@ -206,7 +205,7 @@ export namespace OccupancySensing {
              *
              * The null value indicates that the sensor does not report unoccupied to occupied transition.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.9.2
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.9.2
              */
             physicalContactUnoccupiedToOccupiedDelay: OptionalWritableAttribute(
                 0x31,
@@ -220,7 +219,7 @@ export namespace OccupancySensing {
              * changes to its occupied state. This attribute is mandatory if the
              * PhysicalContactUnoccupiedToOccupiedDelay attribute is implemented.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.9.3
+             * @see {@link MatterSpecification.v11.Cluster} § 2.7.9.3
              */
             physicalContactUnoccupiedToOccupiedThreshold: OptionalWritableAttribute(
                 0x32,
@@ -235,7 +234,7 @@ export namespace OccupancySensing {
      *
      * Attributes and commands for configuring occupancy sensing, and reporting occupancy status.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7
+     * @see {@link MatterSpecification.v11.Cluster} § 2.7
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 
