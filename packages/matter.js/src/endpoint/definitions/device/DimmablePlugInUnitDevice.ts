@@ -28,21 +28,21 @@ export interface DimmablePlugInUnitDevice extends Identity<typeof DimmablePlugIn
 
 export namespace DimmablePlugInUnitRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
      * This version of {@link IdentifyServer} is specialized per the specification.
      */
     export const IdentifyServer = BaseIdentifyServer.alter({ commands: { triggerEffect: { optional: false } } });
 
     /**
-     * The {@link Groups} cluster is required by the Matter specification
+     * The Groups cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The {@link Scenes} cluster is required by the Matter specification
+     * The Scenes cluster is required by the Matter specification
      *
      * This version of {@link ScenesServer} is specialized per the specification.
      */
@@ -56,14 +56,14 @@ export namespace DimmablePlugInUnitRequirements {
         });
 
     /**
-     * The {@link OnOff} cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("LevelControlForLighting");
 
     /**
-     * The {@link LevelControl} cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification
      *
      * This version of {@link LevelControlServer} is specialized per the specification.
      */

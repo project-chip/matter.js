@@ -32,23 +32,23 @@ export interface BridgedNodeEndpoint extends Identity<typeof BridgedNodeEndpoint
 
 export namespace BridgedNodeRequirements {
     /**
-     * The {@link BridgedDeviceBasicInformation} cluster is required by the Matter specification
+     * The BridgedDeviceBasicInformation cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link BridgedDeviceBasicInformationServer} for convenience.
      */
     export const BridgedDeviceBasicInformationServer = BaseBridgedDeviceBasicInformationServer;
 
     /**
-     * The {@link PowerSourceConfiguration} cluster is optional per the Matter specification
+     * The PowerSourceConfiguration cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link PowerSourceConfigurationServer} for convenience.
      */
     export const PowerSourceConfigurationServer = BasePowerSourceConfigurationServer;
 
     /**
-     * The {@link PowerSource} cluster is optional per the Matter specification
+     * The PowerSource cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link PowerSourceServer} for convenience.
      */
     export const PowerSourceServer = BasePowerSourceServer;
 

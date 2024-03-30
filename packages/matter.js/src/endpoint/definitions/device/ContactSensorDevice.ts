@@ -23,16 +23,16 @@ export interface ContactSensorDevice extends Identity<typeof ContactSensorDevice
 
 export namespace ContactSensorRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link BooleanState} cluster is required by the Matter specification
+     * The BooleanState cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link BooleanStateServer} for convenience.
      */
     export const BooleanStateServer = BaseBooleanStateServer;
 

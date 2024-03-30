@@ -23,16 +23,16 @@ export interface TemperatureSensorDevice extends Identity<typeof TemperatureSens
 
 export namespace TemperatureSensorRequirements {
     /**
-     * The {@link TemperatureMeasurement} cluster is required by the Matter specification
+     * The TemperatureMeasurement cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 

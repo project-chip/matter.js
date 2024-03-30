@@ -23,16 +23,16 @@ export interface HumiditySensorDevice extends Identity<typeof HumiditySensorDevi
 
 export namespace HumiditySensorRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link RelativeHumidityMeasurement} cluster is required by the Matter specification
+     * The RelativeHumidityMeasurement cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link RelativeHumidityMeasurementServer} for convenience.
      */
     export const RelativeHumidityMeasurementServer = BaseRelativeHumidityMeasurementServer;
 

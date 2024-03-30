@@ -29,37 +29,37 @@ export interface OnOffPlugInUnitDevice extends Identity<typeof OnOffPlugInUnitDe
 
 export namespace OnOffPlugInUnitRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link Groups} cluster is required by the Matter specification
+     * The Groups cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The {@link Scenes} cluster is required by the Matter specification
+     * The Scenes cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ScenesServer} for convenience.
      */
     export const ScenesServer = BaseScenesServer;
 
     /**
-     * The {@link OnOff} cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OnOffServer} for convenience.
      */
     export const OnOffServer = BaseOnOffServer;
 
     /**
-     * The {@link LevelControl} cluster is optional per the Matter specification
+     * The LevelControl cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link LevelControlServer} for convenience.
      */
     export const LevelControlServer = BaseLevelControlServer;
 

@@ -26,37 +26,37 @@ export interface WindowCoveringControllerDevice extends Identity<typeof WindowCo
 
 export namespace WindowCoveringControllerRequirements {
     /**
-     * The {@link Identify} cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link WindowCovering} cluster is required by the Matter specification
+     * The WindowCovering cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link WindowCoveringBehavior} for convenience.
      */
     export const WindowCoveringBehavior = BaseWindowCoveringBehavior;
 
     /**
-     * The {@link Identify} cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyBehavior} for convenience.
      */
     export const IdentifyBehavior = BaseIdentifyBehavior;
 
     /**
-     * The {@link Groups} cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The {@link Scenes} cluster is optional per the Matter specification
+     * The Scenes cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
      */
     export const ScenesBehavior = BaseScenesBehavior;
 

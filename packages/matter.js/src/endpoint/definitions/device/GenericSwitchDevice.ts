@@ -25,23 +25,23 @@ export interface GenericSwitchDevice extends Identity<typeof GenericSwitchDevice
 
 export namespace GenericSwitchRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link Switch} cluster is required by the Matter specification
+     * The Switch cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link SwitchServer} for convenience.
      */
     export const SwitchServer = BaseSwitchServer;
 
     /**
-     * The {@link FixedLabel} cluster is optional per the Matter specification
+     * The FixedLabel cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link FixedLabelServer} for convenience.
      */
     export const FixedLabelServer = BaseFixedLabelServer;
 

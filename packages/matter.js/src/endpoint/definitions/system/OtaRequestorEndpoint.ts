@@ -26,16 +26,16 @@ export interface OtaRequestorEndpoint extends Identity<typeof OtaRequestorEndpoi
 
 export namespace OtaRequestorRequirements {
     /**
-     * The {@link OtaSoftwareUpdateRequestor} cluster is required by the Matter specification
+     * The OtaSoftwareUpdateRequestor cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OtaSoftwareUpdateRequestorServer} for convenience.
      */
     export const OtaSoftwareUpdateRequestorServer = BaseOtaSoftwareUpdateRequestorServer;
 
     /**
-     * The {@link OtaSoftwareUpdateProvider} cluster is required by the Matter specification
+     * The OtaSoftwareUpdateProvider cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OtaSoftwareUpdateProviderBehavior} for convenience.
      */
     export const OtaSoftwareUpdateProviderBehavior = BaseOtaSoftwareUpdateProviderBehavior;
 
