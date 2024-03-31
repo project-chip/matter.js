@@ -9,7 +9,6 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { FixedAttribute, WritableAttribute, Attribute } from "../../cluster/Cluster.js";
 import { TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Identity } from "../../util/Type.js";
@@ -19,35 +18,35 @@ export namespace FanControl {
     /**
      * The value of the FanControl rockSupport attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.8
      */
     export const RockSupport = { rockLeftRight: BitFlag(0), rockUpDown: BitFlag(1), rockRound: BitFlag(2) };
 
     /**
      * The value of the FanControl rockSetting attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.9
+     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.9
      */
     export const RockSetting = { rockLeftRight: BitFlag(0), rockUpDown: BitFlag(1), rockRound: BitFlag(2) };
 
     /**
      * The value of the FanControl windSupport attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.10
+     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.10
      */
     export const WindSupport = { sleepWind: BitFlag(0), naturalWind: BitFlag(1) };
 
     /**
      * The value of the FanControl windSetting attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.11
+     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.11
      */
     export const WindSetting = { sleepWind: BitFlag(0), naturalWind: BitFlag(1) };
 
     /**
      * The value of the FanControl fanMode attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.1
+     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.1
      */
     export enum FanMode {
         /**
@@ -87,7 +86,7 @@ export namespace FanControl {
          *
          *   • SpeedCurrent (if present)
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.1.1
          */
         Off = 0,
 
@@ -109,7 +108,7 @@ export namespace FanControl {
          *
          *   • SpeedCurrent (if present)
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.1.3
+         * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.1.3
          */
         Auto = 5,
 
@@ -119,7 +118,7 @@ export namespace FanControl {
     /**
      * The value of the FanControl fanModeSequence attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.2
+     * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.2
      */
     export enum FanModeSequence {
         OffLowMedHigh = 0,
@@ -139,7 +138,7 @@ export namespace FanControl {
              * This attribute shall indicate that the fan has one speed (value of 1) or the maximum speed, if the fan
              * is capable of multiple speeds.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.5
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.5
              */
             speedMax: FixedAttribute(0x4, TlvUInt8.bound({ min: 1, max: 100 }), { default: 1 }),
 
@@ -149,7 +148,7 @@ export namespace FanControl {
              * change. If this is set to 0, the server shall set the FanMode attribute value to Off. Please see the
              * Section 4.4.6.6.1 for details on other values.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.6
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.6
              */
             speedSetting: WritableAttribute(0x5, TlvNullable(TlvUInt8), { default: 0 }),
 
@@ -157,7 +156,7 @@ export namespace FanControl {
              * This attribute shall indicate the actual currently operating fan speed, or zero to indicate that the fan
              * is off.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.7
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.7
              */
             speedCurrent: Attribute(0x6, TlvUInt8, { default: 0 })
         }
@@ -172,7 +171,7 @@ export namespace FanControl {
              * This attribute is a bitmap that indicates what rocking motions the server supports. The bitmap is shown
              * in the table below.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.8
              */
             rockSupport: FixedAttribute(0x7, TlvBitmap(TlvUInt8, RockSupport)),
 
@@ -190,7 +189,7 @@ export namespace FanControl {
              *
              * The bitmap is shown in the table below.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.9
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.9
              */
             rockSetting: WritableAttribute(0x8, TlvBitmap(TlvUInt8, RockSetting))
         }
@@ -205,7 +204,7 @@ export namespace FanControl {
              * This attribute is a bitmap that indicates what wind modes the server supports. At least one wind mode
              * bit shall be set. The bitmap is shown in the table below.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.10
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.10
              */
             windSupport: FixedAttribute(0x9, TlvBitmap(TlvUInt8, WindSupport)),
 
@@ -223,7 +222,7 @@ export namespace FanControl {
              *
              * The bitmap is shown in the table below.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.11
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.11
              */
             windSetting: WritableAttribute(0xa, TlvBitmap(TlvUInt8, WindSetting))
         }
@@ -232,7 +231,7 @@ export namespace FanControl {
     /**
      * These are optional features supported by FanControlCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.5
+     * @see {@link MatterSpecification.v11.Cluster} § 4.4.5
      */
     export enum Feature {
         /**
@@ -308,14 +307,14 @@ export namespace FanControl {
              * client to indicate a new speed mode of the fan. This attribute shall be set to one of the values in the
              * table below.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.1
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.1
              */
             fanMode: WritableAttribute(0x0, TlvEnum<FanMode>(), { persistent: true, default: FanMode.Off }),
 
             /**
              * This indicates the fan speed ranges that shall be supported.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.2
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.2
              */
             fanModeSequence: WritableAttribute(
                 0x1,
@@ -328,7 +327,7 @@ export namespace FanControl {
              * to indicate a new fan speed. If the client writes null to this attribute, the attribute value shall NOT
              * change. If this is set to 0, the server shall set the FanMode attribute value to Off.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.3
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.3
              */
             percentSetting: WritableAttribute(0x2, TlvNullable(TlvUInt8.bound({ max: 100 })), { default: 0 }),
 
@@ -336,7 +335,7 @@ export namespace FanControl {
              * This attribute shall indicate the actual currently operating fan speed, or zero to indicate that the fan
              * is off. See Section 4.4.6.3.1 for more details.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.4
+             * @see {@link MatterSpecification.v11.Cluster} § 4.4.6.4
              */
             percentCurrent: Attribute(0x3, TlvUInt8.bound({ max: 100 }), { default: 0 })
         },
@@ -365,7 +364,7 @@ export namespace FanControl {
      * FanControlCluster supports optional features that you can enable with the FanControlCluster.with() factory
      * method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4
+     * @see {@link MatterSpecification.v11.Cluster} § 4.4
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

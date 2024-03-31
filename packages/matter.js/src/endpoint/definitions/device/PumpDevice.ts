@@ -40,7 +40,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Pump device is a pump that may have variable speed. It may have optional built-in sensors and a regulation
@@ -49,99 +48,99 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * PumpDevice requires PumpConfigurationAndControl cluster but PumpConfigurationAndControl is not added by default
  * because you must select the features your device supports. You can add manually using PumpDevice.with().
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 5.3
+ * @see {@link MatterSpecification.v11.Device} § 5.3
  */
 export interface PumpDevice extends Identity<typeof PumpDeviceDefinition> {}
 
 export namespace PumpRequirements {
     /**
-     * The {@link OnOff} cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OnOffServer} for convenience.
      */
     export const OnOffServer = BaseOnOffServer;
 
     /**
-     * The {@link PumpConfigurationAndControl} cluster is required by the Matter specification
+     * The PumpConfigurationAndControl cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link PumpConfigurationAndControlServer} for convenience.
      */
     export const PumpConfigurationAndControlServer = BasePumpConfigurationAndControlServer;
 
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link LevelControl} cluster is optional per the Matter specification
+     * The LevelControl cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link LevelControlServer} for convenience.
      */
     export const LevelControlServer = BaseLevelControlServer;
 
     /**
-     * The {@link Scenes} cluster is optional per the Matter specification
+     * The Scenes cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ScenesServer} for convenience.
      */
     export const ScenesServer = BaseScenesServer;
 
     /**
-     * The {@link Groups} cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The {@link TemperatureMeasurement} cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link TemperatureMeasurementServer} for convenience.
      */
     export const TemperatureMeasurementServer = BaseTemperatureMeasurementServer;
 
     /**
-     * The {@link PressureMeasurement} cluster is optional per the Matter specification
+     * The PressureMeasurement cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link PressureMeasurementServer} for convenience.
      */
     export const PressureMeasurementServer = BasePressureMeasurementServer;
 
     /**
-     * The {@link FlowMeasurement} cluster is optional per the Matter specification
+     * The FlowMeasurement cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link FlowMeasurementServer} for convenience.
      */
     export const FlowMeasurementServer = BaseFlowMeasurementServer;
 
     /**
-     * The {@link TemperatureMeasurement} cluster is optional per the Matter specification
+     * The TemperatureMeasurement cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link TemperatureMeasurementBehavior} for convenience.
      */
     export const TemperatureMeasurementBehavior = BaseTemperatureMeasurementBehavior;
 
     /**
-     * The {@link PressureMeasurement} cluster is optional per the Matter specification
+     * The PressureMeasurement cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link PressureMeasurementBehavior} for convenience.
      */
     export const PressureMeasurementBehavior = BasePressureMeasurementBehavior;
 
     /**
-     * The {@link FlowMeasurement} cluster is optional per the Matter specification
+     * The FlowMeasurement cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link FlowMeasurementBehavior} for convenience.
      */
     export const FlowMeasurementBehavior = BaseFlowMeasurementBehavior;
 
     /**
-     * The {@link OccupancySensing} cluster is optional per the Matter specification
+     * The OccupancySensing cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OccupancySensingBehavior} for convenience.
      */
     export const OccupancySensingBehavior = BaseOccupancySensingBehavior;
 

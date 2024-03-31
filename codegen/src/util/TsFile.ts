@@ -32,13 +32,13 @@ export type Documentation = {
 function mapSpec(xref?: Specification.CrossReference) {
     switch (xref?.document) {
         case "core":
-            return "MatterCoreSpecificationV1_1";
+            return "MatterSpecification.v11.Core";
 
         case "cluster":
-            return "MatterApplicationClusterSpecificationV1_1";
+            return "MatterSpecification.v11.Cluster";
 
         case "device":
-            return "MatterDeviceLibrarySpecificationV1_1";
+            return "MatterSpecification.v11.Device";
     }
 }
 
@@ -66,10 +66,6 @@ export abstract class Entry {
             this.documentation = content;
         }
         this.docText = extra;
-        const spec = mapSpec(this.documentation.xref);
-        if (spec) {
-            this.parentBlock?.file.addImport("spec/Specifications.js", spec);
-        }
         return this;
     }
 

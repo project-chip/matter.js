@@ -20,7 +20,6 @@ import {
     OptionalCommand
 } from "../../cluster/Cluster.js";
 import { BitFlag, BitsFromPartial } from "../../schema/BitmapSchema.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt8, TlvBitmap, TlvInt16, TlvInt8, TlvEnum, TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
@@ -34,14 +33,14 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat occupancy attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.4
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.4
      */
     export const Occupancy = { occupied: BitFlag(0) };
 
     /**
      * The value of the Thermostat thermostatRunningMode attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7
      */
     export enum ThermostatRunningMode {
         Off = 0,
@@ -52,7 +51,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat startOfWeek attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.27
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.27
      */
     export enum StartOfWeek {
         Sunday = 0,
@@ -80,7 +79,7 @@ export namespace Thermostat {
     /**
      * This represents a single transition in a Thermostat schedule
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.9.5
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.9.5
      */
     export const TlvThermostatScheduleTransition = TlvObject({
         /**
@@ -88,7 +87,7 @@ export namespace Thermostat {
          * represented by a 16 bits unsigned integer to designate the minutes since midnight. For example, 6am will be
          * represented by 360 minutes since midnight and 11:30pm will be represented by 1410 minutes since midnight.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.9.5.1
+         * @see {@link MatterSpecification.v11.Cluster} § 4.3.9.5.1
          */
         transitionTime: TlvField(0, TlvUInt16.bound({ max: 1439 })),
 
@@ -99,14 +98,14 @@ export namespace Thermostat {
     /**
      * This represents a single transition in a Thermostat schedule
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.9.5
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.9.5
      */
     export interface ThermostatScheduleTransition extends TypeFromSchema<typeof TlvThermostatScheduleTransition> {}
 
     /**
      * Input to the Thermostat setWeeklySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
      */
     export const TlvSetWeeklyScheduleRequest = TlvObject({
         numberOfTransitionsForSequence: TlvField(0, TlvUInt8),
@@ -118,14 +117,14 @@ export namespace Thermostat {
     /**
      * Input to the Thermostat setWeeklySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
      */
     export interface SetWeeklyScheduleRequest extends TypeFromSchema<typeof TlvSetWeeklyScheduleRequest> {}
 
     /**
      * Input to the Thermostat getWeeklySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
      */
     export const TlvGetWeeklyScheduleRequest = TlvObject({
         daysToReturn: TlvField(0, TlvBitmap(TlvUInt8, DayOfWeek)),
@@ -135,12 +134,12 @@ export namespace Thermostat {
     /**
      * Input to the Thermostat getWeeklySchedule command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
      */
     export interface GetWeeklyScheduleRequest extends TypeFromSchema<typeof TlvGetWeeklyScheduleRequest> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
      */
     export const TlvGetWeeklyScheduleResponse = TlvObject({
         numberOfTransitionsForSequence: TlvField(0, TlvUInt8),
@@ -150,14 +149,14 @@ export namespace Thermostat {
     });
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
      */
     export interface GetWeeklyScheduleResponse extends TypeFromSchema<typeof TlvGetWeeklyScheduleResponse> {}
 
     /**
      * The value of the Thermostat remoteSensing attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.22
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.22
      */
     export const RemoteSensing = {
         /**
@@ -179,7 +178,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat controlSequenceOfOperation attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.23
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.23
      */
     export enum ControlSequenceOfOperation {
         /**
@@ -216,7 +215,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat systemMode attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.24
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.24
      */
     export enum SystemMode {
         /**
@@ -257,7 +256,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat alarmMask attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.25
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.25
      */
     export const AlarmMask = {
         initializationFailure: BitFlag(0),
@@ -268,7 +267,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat temperatureSetpointHold attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.30
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.30
      */
     export enum TemperatureSetpointHold {
         /**
@@ -285,7 +284,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat thermostatProgrammingOperationMode attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.32
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.32
      */
     export const ThermostatProgrammingOperationMode = {
         /**
@@ -307,7 +306,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat thermostatRunningState attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.33
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.33
      */
     export const ThermostatRunningState = {
         /**
@@ -349,7 +348,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat setpointChangeSource attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.34
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.34
      */
     export enum SetpointChangeSource {
         /**
@@ -371,7 +370,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat acType attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.44
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.44
      */
     export enum AcType {
         /**
@@ -403,7 +402,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat acRefrigerantType attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.46
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.46
      */
     export enum AcRefrigerantType {
         /**
@@ -430,7 +429,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat acCompressorType attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.47
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.47
      */
     export enum AcCompressorType {
         /**
@@ -457,7 +456,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat acErrorCode attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.48
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.48
      */
     export const AcErrorCode = {
         /**
@@ -489,7 +488,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat acLouverPosition attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.49
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.49
      */
     export enum AcLouverPosition {
         /**
@@ -521,7 +520,7 @@ export namespace Thermostat {
     /**
      * The value of the Thermostat acCapacityFormat attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.51
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.51
      */
     export enum AcCapacityFormat {
         /**
@@ -539,7 +538,7 @@ export namespace Thermostat {
     /**
      * Input to the Thermostat setpointRaiseLower command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
      */
     export const TlvSetpointRaiseLowerRequest = TlvObject({
         mode: TlvField(0, TlvEnum<SetpointAdjustMode>()),
@@ -549,7 +548,7 @@ export namespace Thermostat {
     /**
      * Input to the Thermostat setpointRaiseLower command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
      */
     export interface SetpointRaiseLowerRequest extends TypeFromSchema<typeof TlvSetpointRaiseLowerRequest> {}
 
@@ -563,7 +562,7 @@ export namespace Thermostat {
              * remotely (over the network). If bit 0 = 1, the space is occupied, else it is unoccupied. All other bits
              * are reserved.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.4
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.4
              */
             occupancy: Attribute(
                 0x2,
@@ -584,7 +583,7 @@ export namespace Thermostat {
              *
              * Refer to Setpoint Limits for constraints
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.5
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.5
              */
             absMinHeatSetpointLimit: OptionalFixedAttribute(0x3, TlvInt16.bound({ min: 0 }), { default: 700 }),
 
@@ -594,7 +593,7 @@ export namespace Thermostat {
              *
              * Refer to Setpoint Limits for constraints
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.6
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.6
              */
             absMaxHeatSetpointLimit: OptionalFixedAttribute(0x4, TlvInt16.bound({ min: 0 }), { default: 3000 }),
 
@@ -604,7 +603,7 @@ export namespace Thermostat {
              *
              * This attribute is reported regularly and may be used to control a heating device.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.10
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.10
              */
             piHeatingDemand: OptionalAttribute(0x8, TlvUInt8.bound({ max: 100 })),
 
@@ -617,7 +616,7 @@ export namespace Thermostat {
              * If the occupancy status of the room is unknown, this attribute shall be used as the heating mode
              * setpoint.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.14
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.14
              */
             occupiedHeatingSetpoint: WritableAttribute(
                 0x12,
@@ -638,7 +637,7 @@ export namespace Thermostat {
              * which is not consistent with the constraints and cannot be resolved by modifying setpoints then a
              * response with the status code CONSTRAINT_ERROR shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.17
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.17
              */
             minHeatSetpointLimit: OptionalWritableAttribute(
                 0x15,
@@ -655,7 +654,7 @@ export namespace Thermostat {
              * which is not consistent with the constraints and cannot be resolved by modifying setpoints then a
              * response with the status code CONSTRAINT_ERROR shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.18
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.18
              */
             maxHeatSetpointLimit: OptionalWritableAttribute(
                 0x16,
@@ -676,7 +675,7 @@ export namespace Thermostat {
              *
              * Refer to Setpoint Limits for constraints
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.7
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.7
              */
             absMinCoolSetpointLimit: OptionalFixedAttribute(0x5, TlvInt16.bound({ min: 0 }), { default: 1600 }),
 
@@ -686,7 +685,7 @@ export namespace Thermostat {
              *
              * Refer to Setpoint Limits for constraints
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.8
              */
             absMaxCoolSetpointLimit: OptionalFixedAttribute(0x6, TlvInt16.bound({ min: 0 }), { default: 3200 }),
 
@@ -697,7 +696,7 @@ export namespace Thermostat {
              *
              * This attribute is reported regularly and may be used to control a cooling device.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.9
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.9
              */
             piCoolingDemand: OptionalAttribute(0x7, TlvUInt8.bound({ max: 100 })),
 
@@ -710,7 +709,7 @@ export namespace Thermostat {
              * If the occupancy status of the room is unknown, this attribute shall be used as the cooling mode
              * setpoint.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.13
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.13
              */
             occupiedCoolingSetpoint: WritableAttribute(
                 0x11,
@@ -727,7 +726,7 @@ export namespace Thermostat {
              * which is not consistent with the constraints and cannot be resolved by modifying setpoints then a
              * response with the status code CONSTRAINT_ERROR shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.19
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.19
              */
             minCoolSetpointLimit: OptionalWritableAttribute(
                 0x17,
@@ -745,7 +744,7 @@ export namespace Thermostat {
              *
              * then a response with the status code CONSTRAINT_ERROR shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.20
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.20
              */
             maxCoolSetpointLimit: OptionalWritableAttribute(
                 0x18,
@@ -772,7 +771,7 @@ export namespace Thermostat {
              * (e.g., out of the range supported by the Thermostat server), the Thermostat server shall respond with a
              * status of SUCCESS and set the value of LocalTemperatureCalibration to the upper or lower limit reached.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.12
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.12
              */
             localTemperatureCalibration: OptionalWritableAttribute(
                 0x10,
@@ -795,7 +794,7 @@ export namespace Thermostat {
              *
              * If the occupancy status of the room is unknown, this attribute shall not be used.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.15
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.15
              */
             unoccupiedCoolingSetpoint: WritableAttribute(
                 0x13,
@@ -818,7 +817,7 @@ export namespace Thermostat {
              *
              * If the occupancy status of the room is unknown, this attribute shall not be used.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.16
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.16
              */
             unoccupiedHeatingSetpoint: WritableAttribute(
                 0x14,
@@ -843,7 +842,7 @@ export namespace Thermostat {
              * which is not consistent with the constraints and cannot be resolved by modifying setpoints then a
              * response with the status code CONSTRAINT_ERROR shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.21
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.21
              */
             minSetpointDeadBand: WritableAttribute(
                 0x19,
@@ -852,7 +851,7 @@ export namespace Thermostat {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7
              */
             thermostatRunningMode: OptionalAttribute(
                 0x1e,
@@ -876,28 +875,28 @@ export namespace Thermostat {
              * This attribute may be able to be used as the base to determine if the device supports weekly scheduling
              * by reading the attribute. Successful response means that the weekly scheduling is supported.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.27
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.27
              */
             startOfWeek: FixedAttribute(0x20, TlvEnum<StartOfWeek>()),
 
             /**
              * This attribute determines how many weekly schedule transitions the thermostat is capable of handling.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.28
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.28
              */
             numberOfWeeklyTransitions: FixedAttribute(0x21, TlvUInt8, { default: 0 }),
 
             /**
              * This attribute determines how many daily schedule transitions the thermostat is capable of handling.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.29
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.29
              */
             numberOfDailyTransitions: FixedAttribute(0x22, TlvUInt8, { default: 0 })
         },
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
              */
             setWeeklySchedule: Command(
                 0x1,
@@ -908,12 +907,12 @@ export namespace Thermostat {
             ),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
              */
             getWeeklySchedule: Command(0x2, TlvGetWeeklyScheduleRequest, 0x0, TlvGetWeeklyScheduleResponse),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
              */
             clearWeeklySchedule: Command(0x3, TlvNoArguments, 0x3, TlvNoResponse, { invokeAcl: AccessLevel.Manage })
         }
@@ -946,7 +945,7 @@ export namespace Thermostat {
              * Thermostat server shall set its OccupiedSetback value to OccupiedSetbackMin and shall send a Write
              * Attribute Response command with a Status Code field enumeration of SUCCESS response.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.37
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.37
              */
             occupiedSetback: WritableAttribute(
                 0x34,
@@ -960,7 +959,7 @@ export namespace Thermostat {
              *
              * The null value indicates the attribute is unused.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.38
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.38
              */
             occupiedSetbackMin: FixedAttribute(0x35, TlvNullable(TlvUInt8.bound({ min: 0 })), { default: null }),
 
@@ -970,7 +969,7 @@ export namespace Thermostat {
              *
              * The null value indicates the attribute is unused.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.39
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.39
              */
             occupiedSetbackMax: FixedAttribute(0x36, TlvNullable(TlvUInt8.bound({ max: 254 })), { default: null })
         }
@@ -1003,7 +1002,7 @@ export namespace Thermostat {
              * the Thermostat server shall set its UnoccupiedSetback value to UnoccupiedSetbackMin and shall send a
              * Write Attribute Response command with a Status Code field enumeration of SUCCESS response.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.40
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.40
              */
             unoccupiedSetback: WritableAttribute(
                 0x37,
@@ -1017,7 +1016,7 @@ export namespace Thermostat {
              *
              * The null value indicates the attribute is unused.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.41
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.41
              */
             unoccupiedSetbackMin: FixedAttribute(0x38, TlvNullable(TlvUInt8.bound({ min: 0 })), { default: null }),
 
@@ -1027,7 +1026,7 @@ export namespace Thermostat {
              *
              * The null value indicates the attribute is unused.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.42
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.42
              */
             unoccupiedSetbackMax: FixedAttribute(0x39, TlvNullable(TlvUInt8.bound({ max: 254 })), { default: null })
         }
@@ -1036,7 +1035,7 @@ export namespace Thermostat {
     /**
      * These are optional features supported by ThermostatCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.3.1
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3.3.1
      */
     export enum Feature {
         /**
@@ -1163,14 +1162,14 @@ export namespace Thermostat {
              *   • Otherwise, if the LTNE feature is supported, there is no feedback externally available for the
              *     LocalTemperature value. In that case, the LocalTemperature attribute shall always report null.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.2
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.2
              */
             localTemperature: Attribute(0x0, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
             /**
              * This attribute represents the outdoor temperature, as measured locally or remotely (over the network).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.3
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.3
              */
             outdoorTemperature: OptionalAttribute(0x1, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -1188,7 +1187,7 @@ export namespace Thermostat {
              * If the LocalTemperature RemoteSensing bit is written with a value of 1 when the LTNE feature is present,
              * the write shall fail and the server shall report a CONSTRAINT_ERROR.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.22
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.22
              */
             remoteSensing: OptionalWritableAttribute(
                 0x1a,
@@ -1213,7 +1212,7 @@ export namespace Thermostat {
              * whole building must be in the same mode, SHOULD report CoolingOnly or HeatingOnly based on the current
              * capability.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.23
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.23
              */
             controlSequenceOfOperation: WritableAttribute(
                 0x1b,
@@ -1233,7 +1232,7 @@ export namespace Thermostat {
              *
              * Table 75. Interpretation of Heat, Cool and Auto SystemMode Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.24
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.24
              */
             systemMode: WritableAttribute(
                 0x1c,
@@ -1251,7 +1250,7 @@ export namespace Thermostat {
              *
              * Table 76. Alarm Codes
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.25
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.25
              */
             alarmMask: OptionalAttribute(0x1d, TlvBitmap(TlvUInt8, AlarmMask)),
 
@@ -1264,7 +1263,7 @@ export namespace Thermostat {
              *
              * Table 78. TemperatureSetpointHold Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.30
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.30
              */
             temperatureSetpointHold: OptionalWritableAttribute(
                 0x23,
@@ -1277,7 +1276,7 @@ export namespace Thermostat {
              * hold for a specified duration SHOULD implement this attribute. The null value indicates the field is
              * unused. All other values are reserved.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.31
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.31
              */
             temperatureSetpointHoldDuration: OptionalWritableAttribute(
                 0x24,
@@ -1303,7 +1302,7 @@ export namespace Thermostat {
              * NOTE Modifying the ScheduleActive bit does not clear or delete previous weekly schedule programming
              * configurations.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.32
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.32
              */
             thermostatProgrammingOperationMode: OptionalWritableAttribute(
                 0x25,
@@ -1318,7 +1317,7 @@ export namespace Thermostat {
              *
              * Unimplemented outputs shall be treated as if they were Off.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.33
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.33
              */
             thermostatRunningState: OptionalAttribute(0x29, TlvBitmap(TlvUInt16, ThermostatRunningState)),
 
@@ -1333,7 +1332,7 @@ export namespace Thermostat {
              *
              * Table 81. SetpointChangeSource Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.34
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.34
              */
             setpointChangeSource: OptionalAttribute(
                 0x30,
@@ -1349,7 +1348,7 @@ export namespace Thermostat {
              *
              * The null value indicates that the previous setpoint was unknown.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.35
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.35
              */
             setpointChangeAmount: OptionalAttribute(0x31, TlvNullable(TlvInt16), { default: null }),
 
@@ -1357,7 +1356,7 @@ export namespace Thermostat {
              * This attribute specifies the time in UTC at which the SetpointChangeSourceAmount attribute change was
              * recorded.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.36
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.36
              */
             setpointChangeSourceTimestamp: OptionalAttribute(0x32, TlvUInt32, { default: 0 }),
 
@@ -1387,7 +1386,7 @@ export namespace Thermostat {
              * when a setpoint is of a specified amount greater than the measured temperature. This allows the heated
              * space to be quickly heated to the desired level set by the user.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.43
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.43
              */
             emergencyHeatDelta: OptionalWritableAttribute(
                 0x3a,
@@ -1401,7 +1400,7 @@ export namespace Thermostat {
              *
              * Table 82. ACType Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.44
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.44
              */
             acType: OptionalWritableAttribute(
                 0x40,
@@ -1413,7 +1412,7 @@ export namespace Thermostat {
              * This attribute indicates capacity of Mini Split AC in terms of the format defined by the
              * ACCapacityFormat attribute
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.45
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.45
              */
             acCapacity: OptionalWritableAttribute(
                 0x41,
@@ -1426,7 +1425,7 @@ export namespace Thermostat {
              *
              * Table 83. ACRefrigerantType Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.46
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.46
              */
             acRefrigerantType: OptionalWritableAttribute(
                 0x42,
@@ -1439,7 +1438,7 @@ export namespace Thermostat {
              *
              * Table 84. ACCompressorType Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.47
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.47
              */
             acCompressorType: OptionalWritableAttribute(
                 0x43,
@@ -1453,7 +1452,7 @@ export namespace Thermostat {
              *
              * Table 85. ACErrorCode Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.48
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.48
              */
             acErrorCode: OptionalWritableAttribute(
                 0x44,
@@ -1466,7 +1465,7 @@ export namespace Thermostat {
              *
              * Table 86. ACLouverPosition Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.49
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.49
              */
             acLouverPosition: OptionalWritableAttribute(
                 0x45,
@@ -1478,7 +1477,7 @@ export namespace Thermostat {
              * This attribute represents the temperature of the AC coil, as measured locally or remotely (over the
              * network).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.50
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.50
              */
             acCoilTemperature: OptionalAttribute(0x46, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null }),
 
@@ -1487,7 +1486,7 @@ export namespace Thermostat {
              *
              * Table 87. ACCapacity Values
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.51
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.7.51
              */
             acCapacityFormat: OptionalWritableAttribute(
                 0x47,
@@ -1498,12 +1497,12 @@ export namespace Thermostat {
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
              */
             setpointRaiseLower: Command(0x0, TlvSetpointRaiseLowerRequest, 0x0, TlvNoResponse),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.3.8
              */
             getRelayStatusLog: OptionalCommand(0x4, TlvNoArguments, 0x1, TlvNoArguments)
         },
@@ -1542,7 +1541,7 @@ export namespace Thermostat {
      * Per the Matter specification you cannot use {@link ThermostatCluster} without enabling certain feature
      * combinations. You must use the ThermostatCluster.with() factory method to obtain a working cluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3
+     * @see {@link MatterSpecification.v11.Cluster} § 4.3
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

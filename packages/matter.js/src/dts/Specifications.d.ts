@@ -1,0 +1,55 @@
+/**
+ * @license
+ * Copyright 2022-2024 Matter.js Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * References to Matter standards documents.
+ */
+declare namespace MatterSpecification {
+    /**
+     * Matter v1.0
+     */
+    export namespace v10 {
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Core Specification 1.0} */
+        export interface Core {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Application Cluster Specification 1.0} */
+        export interface Cluster {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Device Library Specification 1.0} */
+        export interface Device {}
+    }
+
+    /**
+     * Matter v1.1
+     */
+    export namespace v11 {
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Core Specification 1.1} */
+        export interface Core {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Application Cluster Specification 1.1} */
+        export interface Cluster {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Device Library Specification 1.1} */
+        export interface Device {}
+    }
+
+    /**
+     * Matter v1.2
+     */
+    export namespace v12 {
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Core Specification 1.2} */
+        export interface Core {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Application Cluster Specification 1.2} */
+        export interface Cluster {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Device Library Specification 1.2} */
+        export interface Device {}
+
+        /** {@link https://csa-iot.org/developer-resource/specifications-download-request/ Matter Standard namespace Specification 1.2} */
+        export interface Namespace {}
+    }
+}

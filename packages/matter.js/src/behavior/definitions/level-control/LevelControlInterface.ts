@@ -9,15 +9,14 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { LevelControl } from "../../../cluster/definitions/LevelControlCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.1
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1
  */
 export type MoveToLevelRequest = TypeFromSchema<typeof LevelControl.TlvMoveToLevelRequest>;
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2
  */
 export type MoveRequest = TypeFromSchema<typeof LevelControl.TlvMoveRequest>;
 
@@ -30,49 +29,49 @@ export type MoveRequest = TypeFromSchema<typeof LevelControl.TlvMoveRequest>;
  *
  * If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.3
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.3
  */
 export type StepRequest = TypeFromSchema<typeof LevelControl.TlvStepRequest>;
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.4
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.4
  */
 export type StopRequest = TypeFromSchema<typeof LevelControl.TlvStopRequest>;
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
  */
 export type MoveToLevelWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvMoveToLevelWithOnOffRequest>;
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
  */
 export type MoveWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvMoveWithOnOffRequest>;
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
  */
 export type StepWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvStepWithOnOffRequest>;
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
  */
 export type StopWithOnOffRequest = TypeFromSchema<typeof LevelControl.TlvStopWithOnOffRequest>;
 
 /**
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+ * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5
  */
 export type MoveToClosestFrequencyRequest = TypeFromSchema<typeof LevelControl.TlvMoveToClosestFrequencyRequest>;
 
 export namespace LevelControlInterface {
     export interface Base {
         /**
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1
          */
         moveToLevel(request: MoveToLevelRequest): MaybePromise;
 
         /**
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2
          */
         move(request: MoveRequest): MaybePromise;
 
@@ -86,39 +85,39 @@ export namespace LevelControlInterface {
          *
          * If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.3
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.3
          */
         step(request: StepRequest): MaybePromise;
 
         /**
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.4
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.4
          */
         stop(request: StopRequest): MaybePromise;
 
         /**
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
          */
         moveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): MaybePromise;
 
         /**
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
          */
         moveWithOnOff(request: MoveWithOnOffRequest): MaybePromise;
 
         /**
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
          */
         stepWithOnOff(request: StepWithOnOffRequest): MaybePromise;
 
         /**
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
          */
         stopWithOnOff(request: StopWithOnOffRequest): MaybePromise;
     }
 
     export interface Frequency {
         /**
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5
          */
         moveToClosestFrequency(request: MoveToClosestFrequencyRequest): MaybePromise;
     }

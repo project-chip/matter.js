@@ -9,7 +9,7 @@ import { ReadRequestAction } from "./ReadRequestAction.js";
 /**
  * Subscribes to attribute and event updates.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 8.5.2
+ * @see {@link MatterSpecification.v11.Core} § 8.5.2
  */
 export type SubscribeRequestAction = ReadRequestAction & {
     keepSubscriptions: boolean;

@@ -65,7 +65,6 @@ import {
     QrPairingCodeCodec,
 } from "./schema/PairingCodeSchema.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
-import { MatterCoreSpecificationV1_1 } from "./spec/Specifications.js";
 import { SyncStorage } from "./storage/Storage.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { SupportedStorageTypes } from "./storage/StringifyTools.js";
@@ -82,7 +81,7 @@ export const FORBIDDEN_PASSCODES = [
  * Data model revision used by this implementation
  * Value of 16 means "Matter 1.0/1.1"
  *
- * @see {@link MatterCoreSpecificationV1_1} § 7.1.1
+ * @see {@link MatterSpecification.v11.Core} § 7.1.1
  */
 export const MATTER_DATAMODEL_VERSION = 16;
 

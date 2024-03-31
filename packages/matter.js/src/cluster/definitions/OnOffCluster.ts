@@ -9,7 +9,6 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, WritableAttribute, AccessLevel, Command, TlvNoResponse } from "../../cluster/Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt16, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -21,7 +20,7 @@ import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace OnOff {
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.5.5.1
      */
     export enum StartUpOnOff {
         /**
@@ -49,7 +48,7 @@ export namespace OnOff {
     /**
      * Input to the OnOff offWithEffect command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4
      */
     export const TlvOffWithEffectRequest = TlvObject({
         /**
@@ -57,7 +56,7 @@ export namespace OnOff {
          * contain one of the non-reserved values listed in Values of the EffectIdentifier Field of the OffWithEffect
          * Command.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4.1
          */
         effectIdentifier: TlvField(0, TlvEnum<OnOffEffectIdentifier>()),
 
@@ -67,7 +66,7 @@ export namespace OnOff {
          * variant. This field is dependent on the value of the EffectIdentifier field and shall contain one of the
          * non-reserved values listed in Values of the EffectVariant Field of the OffWithEffect Command.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4.2
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4.2
          */
         effectVariant: TlvField(1, TlvUInt8)
     });
@@ -75,21 +74,21 @@ export namespace OnOff {
     /**
      * Input to the OnOff offWithEffect command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4
      */
     export interface OffWithEffectRequest extends TypeFromSchema<typeof TlvOffWithEffectRequest> {}
 
     /**
      * The value of OnOff.onOffControl
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6.1
      */
     export const OnOffControl = { acceptOnlyWhenOn: BitFlag(0), reserved: BitField(1, 7) };
 
     /**
      * Input to the OnOff onWithTimedOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6
      */
     export const TlvOnWithTimedOffRequest = TlvObject({
         /**
@@ -101,21 +100,21 @@ export namespace OnOff {
          * the OnWithTimedOff command shall only be accepted if the OnOff attribute is equal to TRUE. If this sub-field
          * is set to 0, the OnWithTimedOff command shall be processed unconditionally.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6.1
          */
         onOffControl: TlvField(0, TlvBitmap(TlvUInt8, OnOffControl)),
 
         /**
          * The OnTime field is used to adjust the value of the OnTime attribute.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6.2
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6.2
          */
         onTime: TlvField(1, TlvNullable(TlvUInt16)),
 
         /**
          * The OffWaitTime field is used to adjust the value of the OffWaitTime attribute.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6.3
+         * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6.3
          */
         offWaitTime: TlvField(2, TlvNullable(TlvUInt16))
     });
@@ -123,7 +122,7 @@ export namespace OnOff {
     /**
      * Input to the OnOff onWithTimedOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6
      */
     export interface OnWithTimedOffRequest extends TypeFromSchema<typeof TlvOnWithTimedOffRequest> {}
 
@@ -148,7 +147,7 @@ export namespace OnOff {
              *
              * The GlobalSceneControl attribute is set to FALSE after reception of a OffWithEffect command.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.6.2
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.2
              */
             globalSceneControl: Attribute(0x4000, TlvBoolean, { default: true }),
 
@@ -158,7 +157,7 @@ export namespace OnOff {
              * This attribute can be written at any time, but writing a value only has effect when in the ‘Timed On’
              * state. See OnWithTimedOff Command for more details.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.6.3
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.3
              */
             onTime: WritableAttribute(0x4001, TlvNullable(TlvUInt16), { default: 0 }),
 
@@ -170,7 +169,7 @@ export namespace OnOff {
              * only has an effect when in the ‘Timed On’ state followed by a transition to the ‘Delayed Off' state, or
              * in the ‘Delayed Off’ state. See OnWithTimedOff Command for more details.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.6.4
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.4
              */
             offWaitTime: WritableAttribute(0x4002, TlvNullable(TlvUInt16), { default: 0 }),
 
@@ -183,7 +182,7 @@ export namespace OnOff {
              * This behavior does not apply to reboots associated with OTA. After an OTA restart, the OnOff attribute
              * shall return to its value prior to the restart.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.6.5
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.5
              */
             startUpOnOff: WritableAttribute(
                 0x4003,
@@ -196,7 +195,7 @@ export namespace OnOff {
             /**
              * The OffWithEffect command allows devices to be turned off using enhanced ways of fading.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.4
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.4
              */
             offWithEffect: Command(0x40, TlvOffWithEffectRequest, 0x40, TlvNoResponse),
 
@@ -205,7 +204,7 @@ export namespace OnOff {
              *
              * The OnWithRecallGlobalScene command shall have no parameters.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.5
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.5
              */
             onWithRecallGlobalScene: Command(0x41, TlvNoArguments, 0x41, TlvNoResponse),
 
@@ -217,7 +216,7 @@ export namespace OnOff {
              * OnWithTimedOff commands received while the server is turned on, will update the period that the device
              * is turned on.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.6
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.6
              */
             onWithTimedOff: Command(0x42, TlvOnWithTimedOffRequest, 0x42, TlvNoResponse)
         }
@@ -226,7 +225,7 @@ export namespace OnOff {
     /**
      * These are optional features supported by OnOffCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.5.4
      */
     export enum Feature {
         /**
@@ -259,7 +258,7 @@ export namespace OnOff {
              * The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or
              * turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.6.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.6.1
              */
             onOff: Attribute(0x0, TlvBoolean, { scene: true, persistent: true, default: true })
         },
@@ -268,21 +267,21 @@ export namespace OnOff {
             /**
              * This command does not have any data fields.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.1
              */
             off: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse),
 
             /**
              * This command does not have any data fields.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.2
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.2
              */
             on: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse),
 
             /**
              * This command does not have any data fields.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.7.3
+             * @see {@link MatterSpecification.v11.Cluster} § 1.5.7.3
              */
             toggle: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
         },
@@ -307,7 +306,7 @@ export namespace OnOff {
      *
      * OnOffCluster supports optional features that you can enable with the OnOffCluster.with() factory method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5
+     * @see {@link MatterSpecification.v11.Cluster} § 1.5
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

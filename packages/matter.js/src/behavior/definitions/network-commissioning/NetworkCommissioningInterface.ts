@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { NetworkCommissioning } from "../../../cluster/definitions/NetworkCommissioningCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This command shall scan on the Cluster instance’s associated network interface for either of:
@@ -35,7 +34,7 @@ import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
  *
  * Clients shall be resilient to a server that either does not support or cannot proceed with the ScanNetworks command.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.1
  */
 export type ScanNetworksRequest = TypeFromSchema<typeof NetworkCommissioning.TlvScanNetworksRequest>;
 
@@ -48,7 +47,7 @@ export type ScanNetworksRequest = TypeFromSchema<typeof NetworkCommissioning.Tlv
  * Before generating a ScanNetworksResponse, the server shall set the LastNetworkingStatus attribute value to the
  * NetworkingStatus matching the response.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.2
  */
 export type ScanNetworksResponse = TypeFromSchema<typeof NetworkCommissioning.TlvScanNetworksResponse>;
 
@@ -72,7 +71,7 @@ export type ScanNetworksResponse = TypeFromSchema<typeof NetworkCommissioning.Tl
  *
  * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.7
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.7
  */
 export type RemoveNetworkRequest = TypeFromSchema<typeof NetworkCommissioning.TlvRemoveNetworkRequest>;
 
@@ -103,7 +102,7 @@ export type RemoveNetworkRequest = TypeFromSchema<typeof NetworkCommissioning.Tl
  *
  * See Section 11.8.7.2.2, “DebugText Field” for usage.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.8
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.8
  */
 export type NetworkConfigResponse = TypeFromSchema<typeof NetworkCommissioning.TlvNetworkConfigResponse>;
 
@@ -174,7 +173,7 @@ export type NetworkConfigResponse = TypeFromSchema<typeof NetworkCommissioning.T
  *
  * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.9
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.9
  */
 export type ConnectNetworkRequest = TypeFromSchema<typeof NetworkCommissioning.TlvConnectNetworkRequest>;
 
@@ -210,7 +209,7 @@ export type ConnectNetworkRequest = TypeFromSchema<typeof NetworkCommissioning.T
  *
  * See Section 11.8.7.2.2, “DebugText Field” for usage.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.10
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.10
  */
 export type ConnectNetworkResponse = TypeFromSchema<typeof NetworkCommissioning.TlvConnectNetworkResponse>;
 
@@ -272,7 +271,7 @@ export type ConnectNetworkResponse = TypeFromSchema<typeof NetworkCommissioning.
  * In the above outcome, BlueDolphin, Home-Guest and WillowTree moved "up" and FancyCat became the lowest priority
  * network in the list.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.11
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.11
  */
 export type ReorderNetworkRequest = TypeFromSchema<typeof NetworkCommissioning.TlvReorderNetworkRequest>;
 
@@ -291,7 +290,7 @@ export type ReorderNetworkRequest = TypeFromSchema<typeof NetworkCommissioning.T
  * This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not supported by this
  * cluster.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.3
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.3
  */
 export type AddOrUpdateWiFiNetworkRequest = TypeFromSchema<typeof NetworkCommissioning.TlvAddOrUpdateWiFiNetworkRequest>;
 
@@ -309,7 +308,7 @@ export type AddOrUpdateWiFiNetworkRequest = TypeFromSchema<typeof NetworkCommiss
  * If the Networks attribute list does not contain an entry with the same NetworkID as the one provided in the
  * OperationalDataset, the operation shall be considered an addition, otherwise, it shall be considered an update.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.4
+ * @see {@link MatterSpecification.v11.Core} § 11.8.7.4
  */
 export type AddOrUpdateThreadNetworkRequest = TypeFromSchema<typeof NetworkCommissioning.TlvAddOrUpdateThreadNetworkRequest>;
 
@@ -342,7 +341,7 @@ export namespace NetworkCommissioningInterface {
          * Clients shall be resilient to a server that either does not support or cannot proceed with the ScanNetworks
          * command.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.1
          */
         scanNetworks(request: ScanNetworksRequest): MaybePromise<ScanNetworksResponse>;
 
@@ -367,7 +366,7 @@ export namespace NetworkCommissioningInterface {
          *
          * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.7
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.7
          */
         removeNetwork(request: RemoveNetworkRequest): MaybePromise<NetworkConfigResponse>;
 
@@ -438,7 +437,7 @@ export namespace NetworkCommissioningInterface {
          *
          * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.9
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.9
          */
         connectNetwork(request: ConnectNetworkRequest): MaybePromise<ConnectNetworkResponse>;
 
@@ -501,7 +500,7 @@ export namespace NetworkCommissioningInterface {
          * In the above outcome, BlueDolphin, Home-Guest and WillowTree moved "up" and FancyCat became the lowest
          * priority network in the list.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.11
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.11
          */
         reorderNetwork(request: ReorderNetworkRequest): MaybePromise<NetworkConfigResponse>;
     }
@@ -522,7 +521,7 @@ export namespace NetworkCommissioningInterface {
          * This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not supported
          * by this cluster.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.3
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.3
          */
         addOrUpdateWiFiNetwork(request: AddOrUpdateWiFiNetworkRequest): MaybePromise<NetworkConfigResponse>;
     }
@@ -544,7 +543,7 @@ export namespace NetworkCommissioningInterface {
          * OperationalDataset, the operation shall be considered an addition, otherwise, it shall be considered an
          * update.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.4
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.4
          */
         addOrUpdateThreadNetwork(request: AddOrUpdateThreadNetworkRequest): MaybePromise<NetworkConfigResponse>;
     }

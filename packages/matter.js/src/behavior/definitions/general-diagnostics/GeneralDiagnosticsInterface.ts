@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { GeneralDiagnostics } from "../../../cluster/definitions/GeneralDiagnosticsCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This command shall be supported to provide a means for certification tests to trigger some test- plan-specific
@@ -18,7 +17,7 @@ import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
  *
  * The fields for the TestEventTrigger command are as follows:
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.11.7.1
+ * @see {@link MatterSpecification.v11.Core} § 11.11.7.1
  */
 export type TestEventTriggerRequest = TypeFromSchema<typeof GeneralDiagnostics.TlvTestEventTriggerRequest>;
 
@@ -32,7 +31,7 @@ export namespace GeneralDiagnosticsInterface {
          *
          * The fields for the TestEventTrigger command are as follows:
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.11.7.1
+         * @see {@link MatterSpecification.v11.Core} § 11.11.7.1
          */
         testEventTrigger(request: TestEventTriggerRequest): MaybePromise;
     }

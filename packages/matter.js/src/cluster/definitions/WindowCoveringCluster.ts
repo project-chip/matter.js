@@ -19,7 +19,6 @@ import {
     AccessLevel
 } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvPercent100ths, TlvPercent, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -32,63 +31,63 @@ export namespace WindowCovering {
     /**
      * Input to the WindowCovering goToLiftPercentage command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.5
      */
     export const TlvGoToLiftPercentageRequest = TlvObject({ liftPercent100thsValue: TlvField(0, TlvPercent100ths) });
 
     /**
      * Input to the WindowCovering goToLiftPercentage command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.5
      */
     export interface GoToLiftPercentageRequest extends TypeFromSchema<typeof TlvGoToLiftPercentageRequest> {}
 
     /**
      * Input to the WindowCovering goToTiltPercentage command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.7
      */
     export const TlvGoToTiltPercentageRequest = TlvObject({ tiltPercent100thsValue: TlvField(0, TlvPercent100ths) });
 
     /**
      * Input to the WindowCovering goToTiltPercentage command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.7
      */
     export interface GoToTiltPercentageRequest extends TypeFromSchema<typeof TlvGoToTiltPercentageRequest> {}
 
     /**
      * Input to the WindowCovering goToLiftValue command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.4
      */
     export const TlvGoToLiftValueRequest = TlvObject({ liftValue: TlvField(0, TlvUInt16) });
 
     /**
      * Input to the WindowCovering goToLiftValue command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.4
      */
     export interface GoToLiftValueRequest extends TypeFromSchema<typeof TlvGoToLiftValueRequest> {}
 
     /**
      * Input to the WindowCovering goToTiltValue command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.6
      */
     export const TlvGoToTiltValueRequest = TlvObject({ tiltValue: TlvField(0, TlvUInt16) });
 
     /**
      * Input to the WindowCovering goToTiltValue command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.6
      */
     export interface GoToTiltValueRequest extends TypeFromSchema<typeof TlvGoToTiltValueRequest> {}
 
     /**
      * The value of the WindowCovering type attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.1
      */
     export enum WindowCoveringType {
         Rollershade = 0,
@@ -107,7 +106,7 @@ export namespace WindowCovering {
     /**
      * The value of the WindowCovering configStatus attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.8
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.8
      */
     export const ConfigStatus = {
         /**
@@ -154,7 +153,7 @@ export namespace WindowCovering {
     /**
      * The value of the WindowCovering operationalStatus attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.15
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.15
      */
     export const OperationalStatus = {
         /**
@@ -196,7 +195,7 @@ export namespace WindowCovering {
     /**
      * The value of the WindowCovering endProductType attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.16
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.16
      */
     export enum EndProductType {
         RollerShade = 0,
@@ -229,7 +228,7 @@ export namespace WindowCovering {
     /**
      * The value of the WindowCovering mode attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.21
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.21
      */
     export const Mode = {
         /**
@@ -269,7 +268,7 @@ export namespace WindowCovering {
     /**
      * The value of the WindowCovering safetyStatus attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.22
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.22
      */
     export const SafetyStatus = {
         /**
@@ -346,7 +345,7 @@ export namespace WindowCovering {
              * The PhysicalClosedLimitLift attribute identifies the maximum possible encoder position possible (in
              * centimeters) to position the height of the window covering Lift.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.2
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.2
              */
             physicalClosedLimitLift: OptionalFixedAttribute(0x1, TlvUInt16, { default: 0 }),
 
@@ -354,7 +353,7 @@ export namespace WindowCovering {
              * The CurrentPositionLift attribute identifies the actual Lift position (in centimeters) of the window
              * covering from the fully-open position.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.4
              */
             currentPositionLift: OptionalAttribute(0x3, TlvNullable(TlvUInt16), { persistent: true, default: null }),
 
@@ -362,7 +361,7 @@ export namespace WindowCovering {
              * The InstalledOpenLimitLift attribute identifies the Open Limit for Lifting the Window Covering whether
              * position (in centimeters) is encoded or timed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.17
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.17
              */
             installedOpenLimitLift: Attribute(0x10, TlvUInt16.bound({ max: 65534 }), { persistent: true, default: 0 }),
 
@@ -370,7 +369,7 @@ export namespace WindowCovering {
              * The InstalledClosedLimitLift attribute identifies the Closed Limit for Lifting the Window Covering
              * whether position (in centimeters) is encoded or timed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.18
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.18
              */
             installedClosedLimitLift: Attribute(
                 0x11,
@@ -390,7 +389,7 @@ export namespace WindowCovering {
              * The PhysicalClosedLimitTilt attribute identifies the maximum possible encoder position possible (tenth
              * of a degrees) to position the angle of the window covering Tilt.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.3
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.3
              */
             physicalClosedLimitTilt: OptionalFixedAttribute(0x2, TlvUInt16, { default: 0 }),
 
@@ -398,7 +397,7 @@ export namespace WindowCovering {
              * The CurrentPositionTilt attribute identifies the actual Tilt position (in tenth of an degree) of the
              * window covering from the fully-open position.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.5
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.5
              */
             currentPositionTilt: OptionalAttribute(0x4, TlvNullable(TlvUInt16), { persistent: true, default: null }),
 
@@ -406,7 +405,7 @@ export namespace WindowCovering {
              * The InstalledOpenLimitTilt attribute identifies the Open Limit for Tilting the Window Covering whether
              * position (in tenth of a degree) is encoded or timed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.19
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.19
              */
             installedOpenLimitTilt: Attribute(0x12, TlvUInt16.bound({ max: 65534 }), { persistent: true, default: 0 }),
 
@@ -414,7 +413,7 @@ export namespace WindowCovering {
              * The InstalledClosedLimitTilt attribute identifies the Closed Limit for Tilting the Window Covering
              * whether position (in tenth of a degree) is encoded or timed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.20
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.20
              */
             installedClosedLimitTilt: Attribute(
                 0x13,
@@ -433,7 +432,7 @@ export namespace WindowCovering {
              * The NumberOfActuationsLift attribute identifies the total number of lift/slide actuations applied to the
              * Window Covering since the device was installed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.6
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.6
              */
             numberOfActuationsLift: OptionalAttribute(0x5, TlvUInt16, { persistent: true, default: 0 })
         },
@@ -456,7 +455,7 @@ export namespace WindowCovering {
              * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD
              * be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.5
              */
             goToLiftPercentage: OptionalCommand(0x5, TlvGoToLiftPercentageRequest, 0x5, TlvNoResponse)
         }
@@ -471,7 +470,7 @@ export namespace WindowCovering {
              * The NumberOfActuationsTilt attribute identifies the total number of tilt actuations applied to the
              * Window Covering since the device was installed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.7
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.7
              */
             numberOfActuationsTilt: OptionalAttribute(0x6, TlvUInt16, { persistent: true, default: 0 })
         },
@@ -495,7 +494,7 @@ export namespace WindowCovering {
              * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD
              * be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.7
              */
             goToTiltPercentage: OptionalCommand(0x8, TlvGoToTiltPercentageRequest, 0x8, TlvNoResponse)
         }
@@ -511,7 +510,7 @@ export namespace WindowCovering {
              * 100% with 1% default step. This attribute is equal to CurrentPositionLiftPercent100ths attribute divided
              * by 100.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.11
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.11
              */
             currentPositionLiftPercentage: OptionalAttribute(
                 0x8,
@@ -523,7 +522,7 @@ export namespace WindowCovering {
              * The TargetPositionLiftPercent100ths attribute identifies the position where the Window Covering Lift
              * will go or is moving to as a percentage.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.13
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.13
              */
             targetPositionLiftPercent100ths: Attribute(
                 0xb,
@@ -535,7 +534,7 @@ export namespace WindowCovering {
              * The CurrentPositionLiftPercent100ths attribute identifies the actual position as a percentage with a
              * minimal step of 0.01%. E.g Max 10000 equals 100.00%.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.9
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.9
              */
             currentPositionLiftPercent100ths: Attribute(
                 0xe,
@@ -562,7 +561,7 @@ export namespace WindowCovering {
              * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD
              * be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.5
              */
             goToLiftPercentage: Command(0x5, TlvGoToLiftPercentageRequest, 0x5, TlvNoResponse)
         }
@@ -578,7 +577,7 @@ export namespace WindowCovering {
              * 100% with 1% default step. This attribute is equal to CurrentPositionTiltPercent100ths attribute divided
              * by 100.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.12
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.12
              */
             currentPositionTiltPercentage: OptionalAttribute(
                 0x9,
@@ -590,7 +589,7 @@ export namespace WindowCovering {
              * The TargetPositionTiltPercent100ths attribute identifies the position where the Window Covering Tilt
              * will go or is moving to as a percentage.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.14
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.14
              */
             targetPositionTiltPercent100ths: Attribute(
                 0xc,
@@ -602,7 +601,7 @@ export namespace WindowCovering {
              * The CurrentPositionTiltPercent100ths attribute identifies the actual position as a percentage with a
              * minimal step of 0.01%. E.g Max 10000 equals 100.00%.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.10
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.10
              */
             currentPositionTiltPercent100ths: Attribute(
                 0xf,
@@ -630,7 +629,7 @@ export namespace WindowCovering {
              * only a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD
              * be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.7
              */
             goToTiltPercentage: Command(0x8, TlvGoToTiltPercentageRequest, 0x8, TlvNoResponse)
         }
@@ -648,7 +647,7 @@ export namespace WindowCovering {
              * command is received the TargetPositionLiftPercent100ths attribute will update its value accordingly. If
              * the value is out of bounds a response containing the status of CONSTRAINT_ERROR will be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.4
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.4
              */
             goToLiftValue: OptionalCommand(0x4, TlvGoToLiftValueRequest, 0x4, TlvNoResponse)
         }
@@ -666,7 +665,7 @@ export namespace WindowCovering {
              * command is received the TargetPositionTiltPercent100ths attribute will update its value accordingly. If
              * the tilt value is out of bounds a response containing the status of CONSTRAINT_ERROR will be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.6
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.6
              */
             goToTiltValue: OptionalCommand(0x7, TlvGoToTiltValueRequest, 0x7, TlvNoResponse)
         }
@@ -675,7 +674,7 @@ export namespace WindowCovering {
     /**
      * These are optional features supported by WindowCoveringCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.4
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3.4
      */
     export enum Feature {
         /**
@@ -764,7 +763,7 @@ export namespace WindowCovering {
              * The Type attribute identifies the type of window covering being controlled by this endpoint and shall be
              * set to one of the non-reserved values in the table below.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.1
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.1
              */
             type: FixedAttribute(0x0, TlvEnum<WindowCoveringType>(), { default: WindowCoveringType.Rollershade }),
 
@@ -773,7 +772,7 @@ export namespace WindowCovering {
              * devices shall write to the Mode attribute of the Window Covering Settings Attribute Set. The behavior
              * causing the setting or clearing of each bit is vendor specific. See table below for details on each bit.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.8
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.8
              */
             configStatus: Attribute(
                 0x7,
@@ -788,7 +787,7 @@ export namespace WindowCovering {
              * The OperationalStatus attribute keeps track of currently ongoing operations and applies to all type of
              * devices. See below for details about the meaning of individual bits.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.15
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.15
              */
             operationalStatus: Attribute(0xa, TlvBitmap(TlvUInt8, OperationalStatus)),
 
@@ -796,7 +795,7 @@ export namespace WindowCovering {
              * The EndProductType attribute identifies the product type in complement of the main category indicated by
              * the Type attribute. The window covering shall set this value to one of the values in the table below.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.16
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.16
              */
             endProductType: FixedAttribute(0xd, TlvEnum<EndProductType>(), { default: EndProductType.RollerShade }),
 
@@ -810,7 +809,7 @@ export namespace WindowCovering {
              * write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits set,
              * must be ignored and a response containing the status of CONSTRAINT_ERROR will be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.21
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.21
              */
             mode: WritableAttribute(
                 0x17,
@@ -824,7 +823,7 @@ export namespace WindowCovering {
              * or several bit flags from this attribute (all optional). See below for details about the meaning of
              * individual bits.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.22
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.5.22
              */
             safetyStatus: OptionalAttribute(0x1a, TlvBitmap(TlvUInt16, SafetyStatus))
         },
@@ -858,7 +857,7 @@ export namespace WindowCovering {
              *
              *   • CurrentPositionTilt attribute shall be equal to the InstalledOpenLimitTilt attribute.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.1
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.1
              */
             upOrOpen: Command(0x0, TlvNoArguments, 0x0, TlvNoResponse),
 
@@ -890,7 +889,7 @@ export namespace WindowCovering {
              *
              *   • CurrentPositionTilt attribute shall be equal to the InstalledClosedLimitTilt attribute.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.2
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.2
              */
             downOrClose: Command(0x1, TlvNoArguments, 0x1, TlvNoResponse),
 
@@ -904,7 +903,7 @@ export namespace WindowCovering {
              *   • TargetPositionTiltPercent100ths attribute will be set to CurrentPositionTiltPercent100ths attribute
              *     value.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.3
+             * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.3
              */
             stopMotion: Command(0x2, TlvNoArguments, 0x2, TlvNoResponse)
         },
@@ -948,7 +947,7 @@ export namespace WindowCovering {
      * Per the Matter specification you cannot use {@link WindowCoveringCluster} without enabling certain feature
      * combinations. You must use the WindowCoveringCluster.with() factory method to obtain a working cluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3
+     * @see {@link MatterSpecification.v11.Cluster} § 5.3
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

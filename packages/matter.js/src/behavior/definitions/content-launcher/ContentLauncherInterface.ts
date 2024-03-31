@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { ContentLauncher } from "../../../cluster/definitions/ContentLauncherCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * Upon receipt, this shall launch content from the specified URL.
@@ -18,7 +17,7 @@ import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifi
  *
  * A check shall be made to ensure the URL is secure (uses HTTPS). This command returns a Launch Response.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.2
+ * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.2
  */
 export type LaunchUrlRequest = TypeFromSchema<typeof ContentLauncher.TlvLaunchUrlRequest>;
 
@@ -27,7 +26,7 @@ export type LaunchUrlRequest = TypeFromSchema<typeof ContentLauncher.TlvLaunchUr
  *
  * WARNING TODO: Data in table above needs a max size
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.3
+ * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.3
  */
 export type LauncherResponse = TypeFromSchema<typeof ContentLauncher.TlvLauncherResponse>;
 
@@ -35,7 +34,7 @@ export type LauncherResponse = TypeFromSchema<typeof ContentLauncher.TlvLauncher
  * Upon receipt, this shall launch the specified content with optional search criteria. This command returns a Launch
  * Response.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.1
+ * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.1
  */
 export type LaunchContentRequest = TypeFromSchema<typeof ContentLauncher.TlvLaunchContentRequest>;
 
@@ -49,7 +48,7 @@ export namespace ContentLauncherInterface {
          *
          * A check shall be made to ensure the URL is secure (uses HTTPS). This command returns a Launch Response.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.2
          */
         launchUrl(request: LaunchUrlRequest): MaybePromise<LauncherResponse>;
     }
@@ -59,7 +58,7 @@ export namespace ContentLauncherInterface {
          * Upon receipt, this shall launch the specified content with optional search criteria. This command returns a
          * Launch Response.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.7.4.1
          */
         launchContent(request: LaunchContentRequest): MaybePromise<LauncherResponse>;
     }

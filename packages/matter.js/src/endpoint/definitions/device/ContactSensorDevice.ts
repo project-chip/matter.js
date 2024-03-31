@@ -13,27 +13,26 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Contact Sensor device type.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.1
+ * @see {@link MatterSpecification.v11.Device} § 7.1
  */
 export interface ContactSensorDevice extends Identity<typeof ContactSensorDeviceDefinition> {}
 
 export namespace ContactSensorRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link BooleanState} cluster is required by the Matter specification
+     * The BooleanState cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link BooleanStateServer} for convenience.
      */
     export const BooleanStateServer = BaseBooleanStateServer;
 

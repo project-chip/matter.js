@@ -19,7 +19,7 @@ export namespace BasePath {
      * Addresses clusters on a single node with optional endpoint and
      * cluster wildcards.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.1.1
+     * @see {@link MatterSpecification.v11.Core} § 8.9.1.1
      */
     export type Read = {
         node: NodeId;
@@ -30,7 +30,7 @@ export namespace BasePath {
     /**
      * Addresses clusters in a group of nodes.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.1.1
+     * @see {@link MatterSpecification.v11.Core} § 8.9.1.1
      */
     export type GroupWrite = {
         group: GroupId;
@@ -40,7 +40,7 @@ export namespace BasePath {
     /**
      * Addresses clusters on a single node with endpoint wildcards.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.1.1
+     * @see {@link MatterSpecification.v11.Core} § 8.9.1.1
      */
     export type NodeWrite = {
         node: NodeId;
@@ -60,7 +60,7 @@ export namespace BasePath {
     /**
      * Addresses clusters on a node or group of nodes.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.1.1
+     * @see {@link MatterSpecification.v11.Core} § 8.9.1.1
      */
     export type Write = GroupWrite | NodeWrite;
 }

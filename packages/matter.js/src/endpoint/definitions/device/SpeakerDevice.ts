@@ -13,7 +13,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Speaker device type. This feature controls the speaker volume of the device.
@@ -29,22 +28,22 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * in order to treat volume in a fashion consistent with lighting which also uses these clusters and has matching
  * functional requirements.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.4
+ * @see {@link MatterSpecification.v11.Device} § 10.4
  */
 export interface SpeakerDevice extends Identity<typeof SpeakerDeviceDefinition> {}
 
 export namespace SpeakerRequirements {
     /**
-     * The {@link OnOff} cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OnOffServer} for convenience.
      */
     export const OnOffServer = BaseOnOffServer;
 
     /**
-     * The {@link LevelControl} cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link LevelControlServer} for convenience.
      */
     export const LevelControlServer = BaseLevelControlServer;
 

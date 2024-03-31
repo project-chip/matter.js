@@ -9,33 +9,32 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { MediaPlayback } from "../../../cluster/definitions/MediaPlaybackCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This command shall be generated in response to various Playback Commands.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.12
+ * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.12
  */
 export type PlaybackResponse = TypeFromSchema<typeof MediaPlayback.TlvPlaybackResponse>;
 
 /**
  * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
+ * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.9
  */
 export type SkipForwardRequest = TypeFromSchema<typeof MediaPlayback.TlvSkipForwardRequest>;
 
 /**
  * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10
+ * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.10
  */
 export type SkipBackwardRequest = TypeFromSchema<typeof MediaPlayback.TlvSkipBackwardRequest>;
 
 /**
  * Upon receipt, this shall change the playback position in the media to the given position.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11
+ * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.11
  */
 export type SeekRequest = TypeFromSchema<typeof MediaPlayback.TlvSeekRequest>;
 
@@ -45,14 +44,14 @@ export namespace MediaPlaybackInterface {
          * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play shall
          * return media to normal playback speed.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.1
          */
         play(): MaybePromise<PlaybackResponse>;
 
         /**
          * Upon receipt, this shall pause playback of the media.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.2
          */
         pause(): MaybePromise<PlaybackResponse>;
 
@@ -60,14 +59,14 @@ export namespace MediaPlaybackInterface {
          * Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may
          * navigate the user back to the location from where the media was originally launched.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.3
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.3
          */
         stop(): MaybePromise<PlaybackResponse>;
 
         /**
          * Upon receipt, this shall Start Over with the current media playback item.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.4
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.4
          */
         startOver(): MaybePromise<PlaybackResponse>;
 
@@ -75,7 +74,7 @@ export namespace MediaPlaybackInterface {
          * Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is
          * context-specific. This will often Go back to the previous media playback item.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.5
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.5
          */
         previous(): MaybePromise<PlaybackResponse>;
 
@@ -83,21 +82,21 @@ export namespace MediaPlaybackInterface {
          * Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context- specific.
          * This will often Go forward to the next media playback item.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.6
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.6
          */
         next(): MaybePromise<PlaybackResponse>;
 
         /**
          * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.9
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.9
          */
         skipForward(request: SkipForwardRequest): MaybePromise<PlaybackResponse>;
 
         /**
          * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.10
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.10
          */
         skipBackward(request: SkipBackwardRequest): MaybePromise<PlaybackResponse>;
     }
@@ -106,7 +105,7 @@ export namespace MediaPlaybackInterface {
         /**
          * Upon receipt, this shall change the playback position in the media to the given position.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.11
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.11
          */
         seek(request: SeekRequest): MaybePromise<PlaybackResponse>;
     }
@@ -127,7 +126,7 @@ export namespace MediaPlaybackInterface {
          * playback speed has reached the maximum supported speed for media playing backwards, the status of
          * SPEED_OUT_OF_RANGE shall be returned.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.7
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.7
          */
         rewind(): MaybePromise<PlaybackResponse>;
 
@@ -144,7 +143,7 @@ export namespace MediaPlaybackInterface {
          * playback speed has reached the maximum supported speed for media playing forward, the status of
          * SPEED_OUT_OF_RANGE shall be returned.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.4.8
+         * @see {@link MatterSpecification.v11.Cluster} § 6.10.4.8
          */
         fastForward(): MaybePromise<PlaybackResponse>;
     }

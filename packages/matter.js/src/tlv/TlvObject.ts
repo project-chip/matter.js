@@ -8,7 +8,6 @@ import { UnexpectedDataError } from "../common/MatterError.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { ValidationError } from "../common/ValidationError.js";
 import { Globals } from "../model/index.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
 import { LengthConstraints } from "./TlvArray.js";
@@ -57,7 +56,7 @@ export type TypeFromFields<F extends TlvFields> = Merge<
 /**
  * Schema to encode an object in TLV.
  *
- * @see {@link MatterCoreSpecificationV1_0} § A.5.1 and § A.11.4
+ * @see {@link MatterSpecification.v10.Core} § A.5.1 and § A.11.4
  */
 export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<F>> {
     private readonly fieldById = new Array<{ name: string; field: FieldType<any> }>();

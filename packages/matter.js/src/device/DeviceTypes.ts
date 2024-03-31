@@ -7,11 +7,10 @@
 import * as MatterClusters from "../cluster/definitions/index.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
-import { MatterDeviceLibrarySpecificationV1_0 } from "../spec/Specifications.js";
 
 /**
  * This represents a Root Node for devices.
- * @see {@link MatterDeviceLibrarySpecificationV1_0} § 1.1.5
+ * @see {@link MatterSpecification.v10.Device} § 1.1.5
  */
 export enum DeviceClasses {
     /** Node device type. */
@@ -121,7 +120,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     // A Utility device type supports configuration and settings.
     /**
      * This represents a Root Node for devices.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.1
+     * @see {@link MatterSpecification.v10.Device} § 2.1
      */
     ROOT: DeviceTypeDefinition({
         name: "MA-rootdevice",
@@ -154,7 +153,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * This represents a Power Source Node for devices.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.2
+     * @see {@link MatterSpecification.v10.Device} § 2.2
      */
     POWER_SOURCE: DeviceTypeDefinition({
         name: "MA-powersource",
@@ -169,7 +168,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /**
      * An OTA Requestor is a device that is capable of receiving an OTA software
      * update.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.3
+     * @see {@link MatterSpecification.v10.Device} § 2.3
      */
     OTA_REQUESTOR: DeviceTypeDefinition({
         name: "MA-otarequestor",
@@ -187,7 +186,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /**
      * An OTA Provider is a node that is capable of providing an OTA software
      * update to other nodes on the same fabric.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.4
+     * @see {@link MatterSpecification.v10.Device} § 2.4
      */
     OTA_PROVIDER: DeviceTypeDefinition({
         name: "MA-otaprovider",
@@ -204,7 +203,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * This represents a Aggregator Node.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.5
+     * @see {@link MatterSpecification.v10.Device} § 2.5
      */
     AGGREGATOR: DeviceTypeDefinition({
         name: "MA-aggregator",
@@ -216,7 +215,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * This represents a Bridged Node to identify a bridged device without Power Source information.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.6
+     * @see {@link MatterSpecification.v10.Device} § 2.6
      */
     BRIDGED_NODE: DeviceTypeDefinition({
         name: "MA-bridgednode",
@@ -228,7 +227,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * This represents a Bridged Node to identify a bridged device with Power Source information.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 2.6
+     * @see {@link MatterSpecification.v10.Device} § 2.6
      */
     BRIDGED_DEVICE_WITH_POWERSOURCE_INFO: DeviceTypeDefinition({
         name: "MA-bridgeddevice",
@@ -250,7 +249,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * on or off by means of a bound controller device such as anOn/Off Light
      * Switch or a Dimmer Switch. In addition, an on/off light is also capable
      * of being switched by means of a bound occupancy sensor.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 4.1
+     * @see {@link MatterSpecification.v10.Device} § 4.1
      */
     ON_OFF_LIGHT: DeviceTypeDefinition({
         name: "MA-onofflight",
@@ -273,7 +272,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * controller device such as a Dimmer Switch or a Color Dimmer Switch.
      * In addition, a Dimmable Light device is also capable of being switched
      * by means of a bound occupancy sensor or other device(s).
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 4.2
+     * @see {@link MatterSpecification.v10.Device} § 4.2
      */
     DIMMABLE_LIGHT: DeviceTypeDefinition({
         name: "MA-dimmablelight",
@@ -296,7 +295,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * switched on or off, the intensity of its light adjusted, and its
      * color temperature adjusted by means of a bound controller device such
      * as a Color Dimmer Switch.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 4.3
+     * @see {@link MatterSpecification.v10.Device} § 4.3
      */
     COLOR_TEMPERATURE_LIGHT: DeviceTypeDefinition({
         name: "MA-colortemperaturelight",
@@ -322,7 +321,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * means of hue/saturation, enhanced hue, color looping, XY coordinates,
      * and color temperature. In addition, the extended color light is also
      * capable of being switched by means of a bound occupancy sensor.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 4.4
+     * @see {@link MatterSpecification.v10.Device} § 4.4
      */
     EXTENDED_COLOR_LIGHT: DeviceTypeDefinition({
         name: "MA-extendedcolorlight",
@@ -347,7 +346,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * Switch or a Dimmer Switch. The On/Off Plug-in Unit is typically used
      * to control a conventional non-communicating light by switching its mains
      * connection. Other appliances can be controlled this way as well.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 5.1
+     * @see {@link MatterSpecification.v10.Device} § 5.1
      */
     ON_OFF_PLUGIN_UNIT: DeviceTypeDefinition({
         name: "MA-onoffpluginunit",
@@ -369,7 +368,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * such as a Dimmer Switch or a Color Dimmer Switch. The Dimmable Plug-in
      * Unit is typically used to control a conventional non-communicating light
      * through its mains connection using phase cutting.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 5.2
+     * @see {@link MatterSpecification.v10.Device} § 5.2
      */
     DIMMABLE_PLUGIN_UNIT: DeviceTypeDefinition({
         name: "MA-dimmablepluginunit",
@@ -389,7 +388,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * A Pump device is a pump that may have variable speed. It may have
      * optional built-in sensors and a regulation mechanism. It is typically
      * used for pumping fluids like water.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 5.3
+     * @see {@link MatterSpecification.v10.Device} § 5.3
      */
     PUMP: DeviceTypeDefinition({
         name: "MA-pump",
@@ -422,7 +421,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * An On/Off Light Switch is a controller device that, when bound to a
      * lighting device such as an On/Off Light, is capable of being used to
      * switch the device on or off.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.1
+     * @see {@link MatterSpecification.v10.Device} § 6.1
      */
     ON_OFF_LIGHT_SWITCH: DeviceTypeDefinition({
         name: "MA-onofflightswitch",
@@ -441,7 +440,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * A Dimmer Switch is a controller device that, when bound to a lighting
      * device such as a Dimmable Light, is capable of being used to switch the
      * device on or off and adjust the intensity of the light being emitted.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.2
+     * @see {@link MatterSpecification.v10.Device} § 6.2
      */
     DIMMER_SWITCH: DeviceTypeDefinition({
         name: "MA-dimmerswitch",
@@ -465,7 +464,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * A Color Dimmer Switch is a controller device that, when bound to a
      * lighting device such as an Extended Color Light, is capable of being
      * used to adjust the color of the light being emitted.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.3
+     * @see {@link MatterSpecification.v10.Device} § 6.3
      */
     COLOR_DIMMER_SWITCH: DeviceTypeDefinition({
         name: "MA-colordimmerswitch",
@@ -492,7 +491,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * switch the device on or off, adjust the intensity of the light being
      * emitted and adjust the color of the light being emitted. In addition, a
      * Control Bridge device is capable of being used for setting scenes.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.4
+     * @see {@link MatterSpecification.v10.Device} § 6.4
      */
     CONTROL_BRIDGE: DeviceTypeDefinition({
         name: "MA-controlbridge",
@@ -517,7 +516,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /**
      * A Pump Controller device is capable of configuring and controlling a
      * Pump device.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.5
+     * @see {@link MatterSpecification.v10.Device} § 6.5
      */
     PUMP_CONTROLLER: DeviceTypeDefinition({
         name: "MA-pumpcontroller",
@@ -543,7 +542,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * This defines conformance for the Generic Switch device type.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 6.6
+     * @see {@link MatterSpecification.v10.Device} § 6.6
      */
     GENERIC_SWITCH: DeviceTypeDefinition({
         name: "MA-genericswitch",
@@ -557,7 +556,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /* ---------------------------- Sensors --------------------------- */
     /**
      * This defines conformance to the Contact Sensor device type.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.1
+     * @see {@link MatterSpecification.v10.Device} § 7.1
      */
     CONTACT_SENSOR: DeviceTypeDefinition({
         name: "MA-contactsensor",
@@ -571,7 +570,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * A Light Sensor device is a measurement and sensing device that is capable
      * of measuring and reporting the intensity of light (illuminance) to which
      * the sensor is being subjected.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.2
+     * @see {@link MatterSpecification.v10.Device} § 7.2
      */
     LIGHT_SENSOR: DeviceTypeDefinition({
         name: "MA-lightsensor",
@@ -585,7 +584,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /**
      * An Occupancy Sensor is a measurement and sensing device that is capable
      * of measuring and reporting the occupancy state in a designated area.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.3
+     * @see {@link MatterSpecification.v10.Device} § 7.3
      */
     OCCUPANCY_SENSOR: DeviceTypeDefinition({
         name: "MA-occupancysensor",
@@ -598,7 +597,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * A Temperature Sensor device reports measurements of temperature.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.4
+     * @see {@link MatterSpecification.v10.Device} § 7.4
      */
     TEMPERATURE_SENSOR: DeviceTypeDefinition({
         name: "MA-tempsensor",
@@ -610,7 +609,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * A Pressure Sensor device measures and reports the pressure of a fluid.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.5
+     * @see {@link MatterSpecification.v10.Device} § 7.5
      */
     PRESSURE_SENSOR: DeviceTypeDefinition({
         name: "MA-pressuresensor",
@@ -622,7 +621,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * A Flow Sensor device measures and reports the flow rate of a fluid.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.6
+     * @see {@link MatterSpecification.v10.Device} § 7.6
      */
     FLOW_SENSOR: DeviceTypeDefinition({
         name: "MA-flowsensor",
@@ -634,7 +633,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.7
+     * @see {@link MatterSpecification.v10.Device} § 7.7
      */
     HUMIDITY_SENSOR: DeviceTypeDefinition({
         name: "MA-humiditysensor",
@@ -651,7 +650,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * An On/Off Sensor is a measurement and sensing device that, when bound to
      * a lighting device such as a Dimmable Light, is capable of being used to
      * switch the device on or off.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 7.8
+     * @see {@link MatterSpecification.v10.Device} § 7.8
      */
     ON_OFF_SENSOR: DeviceTypeDefinition({
         name: "MA-onoffsensor",
@@ -672,7 +671,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /**
      * A Door Lock is a device used to secure a door. It is possible to actuate
      * a door lock either by means of a manual or a remote method.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 8.1
+     * @see {@link MatterSpecification.v10.Device} § 8.1
      */
     DOOR_LOCK: DeviceTypeDefinition({
         name: "MA-doorlock",
@@ -688,7 +687,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * A Door Lock Controller is a device capable of controlling a door lock.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 8.2
+     * @see {@link MatterSpecification.v10.Device} § 8.2
      */
     DOOR_LOCK_CONTROLLER: DeviceTypeDefinition({
         name: "MA-doorlockcontroller",
@@ -709,7 +708,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * This defines conformance to the Window Covering device type.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 8.3
+     * @see {@link MatterSpecification.v10.Device} § 8.3
      */
     WINDOW_COVERING: DeviceTypeDefinition({
         name: "MA-windowcovering",
@@ -726,7 +725,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /**
      * A Window Covering Controller is a device that controls an automatic
      * window covering.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 8.4
+     * @see {@link MatterSpecification.v10.Device} § 8.4
      */
     WINDOW_COVERING_CONTROLLER: DeviceTypeDefinition({
         name: "MA-windowcoveringcontroller",
@@ -748,7 +747,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * in a house. It is not mandatory to provide both functionalities (for
      * example, the device may just heat but not cool). It may be an indoor air
      * handler.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 9.1
+     * @see {@link MatterSpecification.v10.Device} § 9.1
      */
     HEATING_COOLING_UNIT: DeviceTypeDefinition({
         name: "MA-heatcool",
@@ -776,7 +775,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * heating/cooling unit (for example, an indoor air handler) or is
      * capable of including a mechanism to control a heating or cooling unit
      * directly.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 9.2
+     * @see {@link MatterSpecification.v10.Device} § 9.2
      */
     THERMOSTAT: DeviceTypeDefinition({
         name: "MA-thermostat",
@@ -801,7 +800,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * This defines conformance to the Fan device type.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 9.3
+     * @see {@link MatterSpecification.v10.Device} § 9.3
      */
     FAN: DeviceTypeDefinition({
         name: "MA-fan",
@@ -824,7 +823,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * remote controls (up, down, number input), but is not able to launch
      * content and is not a content app platform (the Casting Video Player
      * device type is used for these functions).
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.2
+     * @see {@link MatterSpecification.v10.Device} § 10.2
      */
     BASIC_VIDEO_PLAYER: DeviceTypeDefinition({
         name: "MA-basic-videoplayer",
@@ -850,7 +849,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * A Casting Video Player has basic controls for playback (play, pause,
      * etc.) and keypad input (up, down, number input), and is able to launch
      * content.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.3
+     * @see {@link MatterSpecification.v10.Device} § 10.3
      */
     CASTING_VIDEO_PLAYER: DeviceTypeDefinition({
         name: "MA-casting-videoplayer",
@@ -877,7 +876,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
 
     /**
      * This feature controls the speaker volume of the device.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.4
+     * @see {@link MatterSpecification.v10.Device} § 10.4
      */
     SPEAKER: DeviceTypeDefinition({
         name: "MA-speaker",
@@ -891,7 +890,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * A Content App is usually an application built by a Content Provider. A
      * Casting Video Player with a Content App Platform is able to launch
      * Content Apps and represent these apps as separate endpoints.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.5
+     * @see {@link MatterSpecification.v10.Device} § 10.5
      */
     CONTENT_APP: DeviceTypeDefinition({
         name: "MA-contentapp",
@@ -916,7 +915,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
      * A Casting Video Client is a client that can launch content on a Casting
      * Video Player, for example, a Smart Speaker or a Content Provider phone
      * app.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.6
+     * @see {@link MatterSpecification.v10.Device} § 10.6
      */
     CASTING_VIDEO_CLIENT: DeviceTypeDefinition({
         name: "MA-casting-videoclient",
@@ -946,7 +945,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /**
      * A Video Remote Control is a client that can control a Video Player, for
      * example, a traditional universal remote control.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 10.7
+     * @see {@link MatterSpecification.v10.Device} § 10.7
      */
     VIDEO_REMOTE_CONTROL: DeviceTypeDefinition({
         name: "MA-video-remotecontrol",
@@ -975,7 +974,7 @@ export const DeviceTypes: { [key: string]: DeviceTypeDefinition } = {
     /* ---------------------------- Generic --------------------------- */
     /**
      * This defines conformance to the Mode device type.
-     * @see {@link MatterDeviceLibrarySpecificationV1_0} § 11.1
+     * @see {@link MatterSpecification.v10.Device} § 11.1
      */
     MODE_SELECT: DeviceTypeDefinition({
         name: "MA-modeselect",

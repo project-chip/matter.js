@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { ArraySchema } from "./TlvArray.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
@@ -13,7 +12,7 @@ import { StringSchema } from "./TlvString.js";
 /**
  * Schema to encode a nullable value in TLV.
  *
- * @see {@link MatterCoreSpecificationV1_0} § A.11.6
+ * @see {@link MatterSpecification.v10.Core} § A.11.6
  */
 export class NullableSchema<T> extends TlvSchema<T | null> {
     constructor(private readonly schema: TlvSchema<T>) {

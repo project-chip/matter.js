@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterCoreSpecificationV1_1 } from "../spec/Specifications.js";
-
-/** @see {@link MatterCoreSpecificationV1_1} § 4.17.3.2 */
+/** @see {@link MatterSpecification.v11.Core} § 4.17.3.2 */
 export const BLE_MATTER_SERVICE_UUID = "fff6";
 export const BLE_MATTER_C1_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D11";
 export const BLE_MATTER_C2_CHARACTERISTIC_UUID = "18EE2EF5-263D-4559-959F-4F9C429F9D12";

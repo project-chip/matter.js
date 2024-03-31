@@ -19,7 +19,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * An Extended Color Light is a lighting device that is capable of being switched on or off, the intensity of its light
@@ -28,27 +27,27 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * coordinates, and color temperature. In addition, the extended color light is also capable of being switched by means
  * of a bound occupancy sensor.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 4.4
+ * @see {@link MatterSpecification.v11.Device} § 4.4
  */
 export interface ExtendedColorLightDevice extends Identity<typeof ExtendedColorLightDeviceDefinition> {}
 
 export namespace ExtendedColorLightRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
      * This version of {@link IdentifyServer} is specialized per the specification.
      */
     export const IdentifyServer = BaseIdentifyServer.alter({ commands: { triggerEffect: { optional: false } } });
 
     /**
-     * The {@link Groups} cluster is required by the Matter specification
+     * The Groups cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsServer} for convenience.
      */
     export const GroupsServer = BaseGroupsServer;
 
     /**
-     * The {@link Scenes} cluster is required by the Matter specification
+     * The Scenes cluster is required by the Matter specification
      *
      * This version of {@link ScenesServer} is specialized per the specification.
      */
@@ -62,14 +61,14 @@ export namespace ExtendedColorLightRequirements {
         });
 
     /**
-     * The {@link OnOff} cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification
      *
      * This version of {@link OnOffServer} is specialized per the specification.
      */
     export const OnOffServer = BaseOnOffServer.with("LevelControlForLighting");
 
     /**
-     * The {@link LevelControl} cluster is required by the Matter specification
+     * The LevelControl cluster is required by the Matter specification
      *
      * This version of {@link LevelControlServer} is specialized per the specification.
      */
@@ -84,7 +83,7 @@ export namespace ExtendedColorLightRequirements {
         });
 
     /**
-     * The {@link ColorControl} cluster is required by the Matter specification
+     * The ColorControl cluster is required by the Matter specification
      *
      * This version of {@link ColorControlServer} is specialized per the specification.
      */

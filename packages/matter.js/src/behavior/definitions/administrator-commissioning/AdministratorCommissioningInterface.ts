@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This command is used by a current Administrator to instruct a Node to go into commissioning mode. The Enhanced
@@ -40,7 +39,7 @@ import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
  *
  * In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.1
+ * @see {@link MatterSpecification.v11.Core} § 11.18.8.1
  */
 export type OpenCommissioningWindowRequest = TypeFromSchema<typeof AdministratorCommissioning.TlvOpenCommissioningWindowRequest>;
 
@@ -74,7 +73,7 @@ export type OpenCommissioningWindowRequest = TypeFromSchema<typeof Administrator
  *
  * TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
+ * @see {@link MatterSpecification.v11.Core} § 11.18.8.2
  */
 export type OpenBasicCommissioningWindowRequest = TypeFromSchema<typeof AdministratorCommissioning.TlvOpenBasicCommissioningWindowRequest>;
 
@@ -109,7 +108,7 @@ export namespace AdministratorCommissioningInterface {
          *
          * In case of any other parameter error, this command shall fail with a status code of COMMAND_INVALID.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.1
+         * @see {@link MatterSpecification.v11.Core} § 11.18.8.1
          */
         openCommissioningWindow(request: OpenCommissioningWindowRequest): MaybePromise;
 
@@ -123,7 +122,7 @@ export namespace AdministratorCommissioningInterface {
          * If no commissioning window was open at time of receipt, this command shall fail with a cluster specific
          * status code of WindowNotOpen.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.3
+         * @see {@link MatterSpecification.v11.Core} § 11.18.8.3
          */
         revokeCommissioning(): MaybePromise;
     }
@@ -159,7 +158,7 @@ export namespace AdministratorCommissioningInterface {
          *
          * TIVE_INTERVAL for at least the entire duration of the CommissioningTimeout.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
+         * @see {@link MatterSpecification.v11.Core} § 11.18.8.2
          */
         openBasicCommissioningWindow(request: OpenBasicCommissioningWindowRequest): MaybePromise;
     }

@@ -5,13 +5,12 @@
  */
 
 import { CRYPTO_HASH_LEN_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../../crypto/CryptoConstants.js";
-import { MatterCoreSpecificationV1_0 } from "../../spec/Specifications.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 
-/** @see {@link MatterCoreSpecificationV1_2} § 4.11.8 */
+/** @see {@link MatterSpecification.v12.Core} § 4.11.8 */
 export const TlvSessionParameters = TlvObject({
     /** Maximum sleep interval of node when in idle mode. */
     idleIntervalMs: TlvOptionalField(1, TlvUInt32) /* default: 500ms */,
@@ -23,7 +22,7 @@ export const TlvSessionParameters = TlvObject({
     activeThresholdMs: TlvOptionalField(3, TlvUInt16) /* default: 4000ms */,
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 4.13.1.2 */
+/** @see {@link MatterSpecification.v10.Core} § 4.13.1.2 */
 export const TlvPbkdfParamRequest = TlvObject({
     random: TlvField(1, TlvByteString.bound({ length: 32 })),
     sessionId: TlvField(2, TlvUInt16), // Specs: range: 16bits
@@ -32,7 +31,7 @@ export const TlvPbkdfParamRequest = TlvObject({
     sessionParams: TlvOptionalField(5, TlvSessionParameters),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 4.13.1.2 */
+/** @see {@link MatterSpecification.v10.Core} § 4.13.1.2 */
 export const TlvPbkdfParamResponse = TlvObject({
     peerRandom: TlvField(1, TlvByteString.bound({ length: 32 })),
     random: TlvField(2, TlvByteString.bound({ length: 32 })),
@@ -47,18 +46,18 @@ export const TlvPbkdfParamResponse = TlvObject({
     sessionParams: TlvOptionalField(5, TlvSessionParameters),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 4.13.1.2 */
+/** @see {@link MatterSpecification.v10.Core} § 4.13.1.2 */
 export const TlvPasePake1 = TlvObject({
     x: TlvField(1, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 4.13.1.2 */
+/** @see {@link MatterSpecification.v10.Core} § 4.13.1.2 */
 export const TlvPasePake2 = TlvObject({
     y: TlvField(1, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
     verifier: TlvField(2, TlvByteString.bound({ length: CRYPTO_HASH_LEN_BYTES })),
 });
 
-/** @see {@link MatterCoreSpecificationV1_0} § 4.13.1.2 */
+/** @see {@link MatterSpecification.v10.Core} § 4.13.1.2 */
 export const TlvPasePake3 = TlvObject({
     verifier: TlvField(1, TlvByteString.bound({ length: CRYPTO_HASH_LEN_BYTES })),
 });

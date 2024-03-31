@@ -6,7 +6,6 @@
 
 import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 import { BitField, BitFieldEnum, BitmapSchema } from "../schema/BitmapSchema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
@@ -25,7 +24,7 @@ import {
 /**
  * TLV element types.
  *
- * @see {@link MatterCoreSpecificationV1_0} § A.7.1
+ * @see {@link MatterSpecification.v10.Core} § A.7.1
  */
 export enum TlvType {
     SignedInt = 0x00,
@@ -81,7 +80,7 @@ export type TlvToPrimitive = {
 /**
  * TLV element tag control.
  *
- * @see {@link MatterCoreSpecificationV1_0} § A.7.2
+ * @see {@link MatterSpecification.v10.Core} § A.7.2
  */
 const enum TagControl {
     Anonymous = 0,
@@ -97,17 +96,17 @@ const enum TagControl {
 /**
  * Schema of the ControlByte.
  *
- * @see {@link MatterCoreSpecificationV1_0} § A.7.2
+ * @see {@link MatterSpecification.v10.Core} § A.7.2
  */
 const ControlByteSchema = BitmapSchema({
     typeLength: BitField(0, 5),
     tagControl: BitFieldEnum<TagControl>(5, 3),
 });
 
-/** {@link MatterCoreSpecificationV1_0} § 2.5.2 and § A.8.3 */
+/** {@link MatterSpecification.v10.Core} § 2.5.2 and § A.8.3 */
 const MATTER_COMMON_PROFILE = 0x00000000;
 
-/** {@link MatterCoreSpecificationV1_0} § A.2 */
+/** {@link MatterSpecification.v10.Core} § A.2 */
 export type TlvTag = {
     profile?: number;
     id?: number;
@@ -150,7 +149,7 @@ export class TlvCodec {
         }
     }
 
-    /** @see {@link MatterCoreSpecificationV1_0} § A.7 */
+    /** @see {@link MatterSpecification.v10.Core} § A.7 */
     public static readTagType(reader: DataReader<Endian.Little>): { tag?: TlvTag; typeLength: TlvTypeLength } {
         const { tagControl, typeLength } = ControlByteSchema.decode(reader.readUInt8());
         return { tag: this.readTag(reader, tagControl), typeLength: this.parseTypeLength(typeLength) };
@@ -288,7 +287,7 @@ export class TlvCodec {
         }
     }
 
-    /** @see {@link MatterCoreSpecificationV1_0} § A.7 & A.8 */
+    /** @see {@link MatterSpecification.v10.Core} § A.7 & A.8 */
     public static writeTag(writer: DataWriter<Endian.Little>, typeLengthValue: TlvTypeLength, tag?: TlvTag) {
         const { profile, id } = tag ?? {};
         let typeLength: number;

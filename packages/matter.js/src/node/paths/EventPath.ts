@@ -17,7 +17,7 @@ export namespace EventPath {
      * Addresses event data for reads.  Note that you can wildcard the
      * event but if you specify an event you must also specify the cluster.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.3.2
+     * @see {@link MatterSpecification.v11.Core} § 8.9.3.2
      */
     export type Read = BasePath.Read & {
         urgent?: boolean;

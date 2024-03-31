@@ -9,7 +9,6 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { WritableAttribute, AccessLevel, FixedAttribute, Attribute, Command } from "../../cluster/Cluster.js";
 import { TlvUInt64, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -22,7 +21,7 @@ export namespace GeneralCommissioning {
     /**
      * This structure provides some constant values that may be of use to all commissioners.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.3
+     * @see {@link MatterSpecification.v11.Core} § 11.9.4.3
      */
     export const TlvBasicCommissioningInfo = TlvObject({
         /**
@@ -31,7 +30,7 @@ export namespace GeneralCommissioning {
          * Commissionee. This value, if used in the ArmFailSafe command’s ExpiryLengthSeconds field SHOULD allow a
          * Commissioner to proceed with a nominal commissioning without having to-rearm the fail-safe, with some margin.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.3.1
+         * @see {@link MatterSpecification.v11.Core} § 11.9.4.3.1
          */
         failSafeExpiryLengthSeconds: TlvField(0, TlvUInt16),
 
@@ -43,7 +42,7 @@ export namespace GeneralCommissioning {
          * guidelines, it is RECOMMENDED that the value of this field be aligned with Section 5.4.2.3, “Announcement
          * Duration” and default to 900 seconds.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.3.2
+         * @see {@link MatterSpecification.v11.Core} § 11.9.4.3.2
          */
         maxCumulativeFailsafeSeconds: TlvField(1, TlvUInt16)
     });
@@ -51,7 +50,7 @@ export namespace GeneralCommissioning {
     /**
      * This structure provides some constant values that may be of use to all commissioners.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.3
+     * @see {@link MatterSpecification.v11.Core} § 11.9.4.3
      */
     export interface BasicCommissioningInfo extends TypeFromSchema<typeof TlvBasicCommissioningInfo> {}
 
@@ -59,7 +58,7 @@ export namespace GeneralCommissioning {
      * This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate possible radio
      * usage.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.2
+     * @see {@link MatterSpecification.v11.Core} § 11.9.4.2
      */
     export enum RegulatoryLocationType {
         /**
@@ -81,7 +80,7 @@ export namespace GeneralCommissioning {
     /**
      * Input to the GeneralCommissioning armFailSafe command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.2
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.2
      */
     export const TlvArmFailSafeRequest = TlvObject({
         expiryLengthSeconds: TlvField(0, TlvUInt16),
@@ -91,14 +90,14 @@ export namespace GeneralCommissioning {
     /**
      * Input to the GeneralCommissioning armFailSafe command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.2
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.2
      */
     export interface ArmFailSafeRequest extends TypeFromSchema<typeof TlvArmFailSafeRequest> {}
 
     /**
      * This enumeration is used by several response commands in this cluster to indicate particular errors.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.1
+     * @see {@link MatterSpecification.v11.Core} § 11.9.4.1
      */
     export enum CommissioningError {
         /**
@@ -130,34 +129,34 @@ export namespace GeneralCommissioning {
     }
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.3
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.3
      */
     export const TlvArmFailSafeResponse = TlvObject({
         /**
          * This field shall contain the result of the operation, based on the behavior specified in the functional
          * description of the ArmFailSafe command.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.3.1
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.3.1
          */
         errorCode: TlvField(0, TlvEnum<CommissioningError>()),
 
         /**
          * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.3.2
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.3.2
          */
         debugText: TlvField(1, TlvString.bound({ maxLength: 128 }))
     });
 
     /**
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.3
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.3
      */
     export interface ArmFailSafeResponse extends TypeFromSchema<typeof TlvArmFailSafeResponse> {}
 
     /**
      * Input to the GeneralCommissioning setRegulatoryConfig command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.4
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.4
      */
     export const TlvSetRegulatoryConfigRequest = TlvObject({
         newRegulatoryConfig: TlvField(0, TlvEnum<RegulatoryLocationType>()),
@@ -168,7 +167,7 @@ export namespace GeneralCommissioning {
     /**
      * Input to the GeneralCommissioning setRegulatoryConfig command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.4
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.4
      */
     export interface SetRegulatoryConfigRequest extends TypeFromSchema<typeof TlvSetRegulatoryConfigRequest> {}
 
@@ -178,7 +177,7 @@ export namespace GeneralCommissioning {
      *
      * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.5
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.5
      */
     export const TlvSetRegulatoryConfigResponse = TlvObject({
         errorCode: TlvField(0, TlvEnum<CommissioningError>()),
@@ -191,7 +190,7 @@ export namespace GeneralCommissioning {
      *
      * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.5
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.5
      */
     export interface SetRegulatoryConfigResponse extends TypeFromSchema<typeof TlvSetRegulatoryConfigResponse> {}
 
@@ -201,7 +200,7 @@ export namespace GeneralCommissioning {
      *
      * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.7
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.7
      */
     export const TlvCommissioningCompleteResponse = TlvObject({
         errorCode: TlvField(0, TlvEnum<CommissioningError>()),
@@ -214,7 +213,7 @@ export namespace GeneralCommissioning {
      *
      * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.7
+     * @see {@link MatterSpecification.v11.Core} § 11.9.6.7
      */
     export interface CommissioningCompleteResponse extends TypeFromSchema<typeof TlvCommissioningCompleteResponse> {}
 
@@ -243,7 +242,7 @@ export namespace GeneralCommissioning {
              * functioning of any cluster, other than being set as a side-effect of commands where this behavior is
              * described.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.9.5.1
+             * @see {@link MatterSpecification.v11.Core} § 11.9.5.1
              */
             breadcrumb: WritableAttribute(0x0, TlvUInt64, { default: 0, writeAcl: AccessLevel.Administer }),
 
@@ -251,7 +250,7 @@ export namespace GeneralCommissioning {
              * This attribute shall describe critical parameters needed at the beginning of commissioning flow. See
              * BasicCommissioningInfo for more information.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.9.5.2
+             * @see {@link MatterSpecification.v11.Core} § 11.9.5.2
              */
             basicCommissioningInfo: FixedAttribute(0x1, TlvBasicCommissioningInfo),
 
@@ -261,7 +260,7 @@ export namespace GeneralCommissioning {
              * Note that the country code is part of Basic Information Cluster and therefore NOT listed on the
              * RegulatoryConfig attribute.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.9.5.3
+             * @see {@link MatterSpecification.v11.Core} § 11.9.5.3
              */
             regulatoryConfig: Attribute(0x2, TlvEnum<RegulatoryLocationType>()),
 
@@ -279,7 +278,7 @@ export namespace GeneralCommissioning {
              * means devices always have a safe default value, and Commissioners which choose to implement smarter
              * handling can.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.9.5.4
+             * @see {@link MatterSpecification.v11.Core} § 11.9.5.4
              */
             locationCapability: FixedAttribute(
                 0x3,
@@ -292,7 +291,7 @@ export namespace GeneralCommissioning {
              * mode (see Section 5.5, “Commissioning Flows”). If false, the device only supports "non-concurrent
              * connection flow" mode.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.9.5.5
+             * @see {@link MatterSpecification.v11.Core} § 11.9.5.5
              */
             supportsConcurrentConnection: FixedAttribute(0x4, TlvBoolean, { default: true })
         },
@@ -417,7 +416,7 @@ export namespace GeneralCommissioning {
              *   9. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the Node
              *      rollback the state of all non fabric-scoped data present in the Fail-Safe context.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.2
+             * @see {@link MatterSpecification.v11.Core} § 11.9.6.2
              */
             armFailSafe: Command(
                 0x0,
@@ -460,7 +459,7 @@ export namespace GeneralCommissioning {
              * command, when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, the
              * Breadcrumb attribute shall be left unchanged.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.4
+             * @see {@link MatterSpecification.v11.Core} § 11.9.6.4
              */
             setRegulatoryConfig: Command(
                 0x2,
@@ -524,7 +523,7 @@ export namespace GeneralCommissioning {
              * any previously established PASE session to still be usable, due to the server having cleared such
              * sessions.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.6
+             * @see {@link MatterSpecification.v11.Core} § 11.9.6.6
              */
             commissioningComplete: Command(
                 0x4,
@@ -546,7 +545,7 @@ export namespace GeneralCommissioning {
      *
      * those other clusters may depend on.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.9
+     * @see {@link MatterSpecification.v11.Core} § 11.9
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

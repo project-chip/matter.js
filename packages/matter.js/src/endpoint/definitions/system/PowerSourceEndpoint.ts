@@ -13,18 +13,17 @@ import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 2.2
+ * @see {@link MatterSpecification.v11.Device} § 2.2
  */
 export interface PowerSourceEndpoint extends Identity<typeof PowerSourceEndpointDefinition> {}
 
 export namespace PowerSourceRequirements {
     /**
-     * The {@link PowerSource} cluster is required by the Matter specification
+     * The PowerSource cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link PowerSourceServer} for convenience.
      */
     export const PowerSourceServer = BasePowerSourceServer;
 
