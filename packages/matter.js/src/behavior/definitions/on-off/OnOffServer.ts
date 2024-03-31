@@ -14,8 +14,10 @@ const Base = OnOffBehavior.with(OnOff.Feature.LevelControlForLighting);
 /**
  * This is the default server implementation of OnOffBehavior.
  *
- * This implementation includes all features of OnOff.Cluster. You should use {@link OnOffServer.with} to specialize
- * the class for the features your implementation supports.
+ * This implementation includes all features of OnOff.Cluster and automatically enables the "Level Control for Lighting"
+ * Feature. You should use {@link OnOffServer.with} to specialize the class for the features your implementation
+ * supports. Alternatively you can extend this class and override the methods you need to change or add mandatory
+ * commands.
  */
 export class OnOffServer extends Base {
     protected declare internal: OnOffServer.Internal;
@@ -66,8 +68,9 @@ export class OnOffServer extends Base {
     }
 
     /**
-     * This method in the default implementation is implemented to use the on/off methods when timed actions should
-     * occur. This means that it is enough to override on() and off() with custom control logic.
+     * Default implementation notes:
+     * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
+     * on() and off() with custom control logic.
      */
     override toggle() {
         if (this.state.onOff) {
@@ -77,6 +80,11 @@ export class OnOffServer extends Base {
         }
     }
 
+    /**
+     * Default implementation notes:
+     * * This implementation ignores the effect and just calls off().
+     * * Global Scene Control is not supported yet.
+     */
     override offWithEffect() {
         if (this.state.globalSceneControl) {
             // TODO Store state in global scene
@@ -85,6 +93,10 @@ export class OnOffServer extends Base {
         return this.off();
     }
 
+    /**
+     * Default implementation notes:
+     * * Global Scene Control is not supported yet, so the device is just turned on.
+     */
     override onWithRecallGlobalScene() {
         if (this.state.globalSceneControl) {
             return;
@@ -94,11 +106,13 @@ export class OnOffServer extends Base {
         if (this.state.onTime === 0) {
             this.state.offWaitTime = 0;
         }
+        return this.on();
     }
 
     /**
-     * This method in the default implementation is implemented to use the on/off methods when timed actions should
-     * occur. This means that it is enough to override on() and off() with custom control logic.
+     * Default implementation notes:
+     * * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
+     * on() and off() with custom control logic.
      */
     override onWithTimedOff(request: OnWithTimedOffRequest) {
         if (request.onOffControl.acceptOnlyWhenOn && !this.state.onOff) {
