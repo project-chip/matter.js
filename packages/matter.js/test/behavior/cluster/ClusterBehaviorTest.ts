@@ -12,8 +12,15 @@ import { LevelControlServer } from "../../../src/behavior/definitions/level-cont
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
 import { OnOffServer } from "../../../src/behavior/definitions/on-off/OnOffServer.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
+import { Attribute } from "../../../src/cluster/Cluster.js";
+import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
-import { ClusterModel } from "../../../src/model/index.js";
+import { ClusterId } from "../../../src/datatype/ClusterId.js";
+import { AttributeElement, ClusterModel } from "../../../src/model/index.js";
+import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
+import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
+import { TlvInt32 } from "../../../src/tlv/TlvNumber.js";
+import { TlvString } from "../../../src/tlv/TlvString.js";
 import { EventEmitter, Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
@@ -123,6 +130,37 @@ describe("ClusterBehavior", () => {
                 }
             };
             Ignored;
+        });
+
+        it.only("assigns correct default values", () => {
+            const MyBehavior = ClusterBehavior.for(
+                ClusterType({
+                    name: "MyCluster",
+                    id: ClusterId(1),
+                    revision: 1,
+                    attributes: {
+                        attr1: Attribute(1, TlvNullable(TlvInt32)),
+                        attr2: Attribute(2, TlvInt32, { default: 123 }),
+                        attr3: Attribute(3, TlvString, { default: "abc" }),
+                        attr4: Attribute(4, TlvBoolean),
+                    },
+                }),
+                new ClusterModel({
+                    name: "MyCluster",
+                    id: 1,
+                    children: [
+                        AttributeElement({ id: 1, name: "Attr1", type: "int32", quality: "X" }),
+                        AttributeElement({ id: 2, name: "Attr2", type: "int32", default: 123 }),
+                        AttributeElement({ id: 3, name: "Attr3", type: "string", default: "abc" }),
+                        AttributeElement({ id: 4, name: "Attr4", type: "bool" }),
+                    ],
+                }),
+            );
+
+            expect(MyBehavior.defaults.attr1).equals(null);
+            expect(MyBehavior.defaults.attr2).equals(123);
+            expect(MyBehavior.defaults.attr3).equals("abc");
+            expect(MyBehavior.defaults.attr4).equals(undefined);
         });
     });
 
