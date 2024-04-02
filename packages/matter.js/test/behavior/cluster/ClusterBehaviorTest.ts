@@ -132,7 +132,7 @@ describe("ClusterBehavior", () => {
             Ignored;
         });
 
-        it.only("assigns correct default values", () => {
+        it("assigns correct default values", () => {
             const MyBehavior = ClusterBehavior.for(
                 ClusterType({
                     name: "MyCluster",
