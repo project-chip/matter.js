@@ -307,4 +307,8 @@ export class ServerNetworkRuntime extends NetworkRuntime {
             this.owner.eventsOf(CommissioningBehavior).commissioned.off(commissionedListener);
         }
     }
+
+    protected override blockNewActivity() {
+        this.#interactionServer?.blockNewActivity();
+    }
 }

@@ -205,17 +205,31 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
             cluster: behavior.cluster.id,
         });
 
-        let result = (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
+        let isAsync = false;
+        let activity: undefined | Disposable;
+        let result: unknown;
+        try {
+            activity = behavior.context?.activity?.frame(`invoke ${name}`);
 
-        if (trace) {
-            result = MaybePromise.then(
-                result,
+            result = (behavior as unknown as Record<string, (arg: unknown) => unknown>)[name](request);
 
-                output => {
-                    trace.output = result;
-                    return output;
-                },
-            );
+            if (MaybePromise.is(result)) {
+                isAsync = true;
+                result = Promise.resolve(result)
+                    .then(result => {
+                        if (trace) {
+                            trace.output = result;
+                        }
+                        return result;
+                    })
+                    .finally(() => activity?.[Symbol.dispose]());
+            } else if (trace) {
+                trace.output = result;
+            }
+        } finally {
+            if (!isAsync) {
+                activity?.[Symbol.dispose]();
+            }
         }
 
         return result;
@@ -239,6 +253,8 @@ function createAttributeAccessors(
             }
 
             const behavior = behaviorFor(backing, message);
+
+            behavior.context.activity?.frame(`read ${name}`);
 
             const trace = behavior.context.trace;
             if (trace) {
@@ -265,6 +281,8 @@ function createAttributeAccessors(
 
         set(value, { message }) {
             const behavior = behaviorFor(backing, message);
+
+            behavior.context.activity?.frame(`write ${name}`);
 
             logger.info(
                 "Write",

@@ -97,13 +97,9 @@ if (typeof MatterHooks !== "undefined") {
 }
 
 DiagnosticSource.add({
-    get name() {
-        return "Timers";
-    },
-
     get [Diagnostic.value]() {
-        return Diagnostic.list(
-            [...registry].map(timer => [
+        return Diagnostic.node("⏱", "Timers", {
+            children: [...registry].map(timer => [
                 timer.name,
                 Diagnostic.dict({
                     periodic: timer.isPeriodic,
@@ -112,6 +108,6 @@ DiagnosticSource.add({
                     elapsed: timer.elapsed,
                 }),
             ]),
-        );
+        });
     },
 });

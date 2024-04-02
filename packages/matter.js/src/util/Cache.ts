@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic } from "../log/Diagnostic.js";
 import { Time, Timer } from "../time/Time.js";
 
 export class Cache<T> {
@@ -20,8 +21,10 @@ export class Cache<T> {
         private readonly expirationMs: number,
         private readonly expireCallback?: (key: string, value: T) => Promise<void>,
     ) {
-        this.periodicTimer = Time.getPeriodicTimer(`${name} cache expiration`, expirationMs, () =>
-            this.expire(),
+        this.periodicTimer = Time.getPeriodicTimer(
+            Diagnostic.upgrade(`${name} cache expiration`, [Diagnostic.strong(name), "cache expiration"]),
+            expirationMs,
+            () => this.expire(),
         ).start();
         this.periodicTimer.utility = true;
     }

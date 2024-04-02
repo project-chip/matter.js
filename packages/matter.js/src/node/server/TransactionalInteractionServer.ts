@@ -6,7 +6,7 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { ActionTracer } from "../../behavior/context/ActionTracer.js";
-import { NodeActivity } from "../../behavior/context/server/NodeActivity.js";
+import { NodeActivity } from "../../behavior/context/NodeActivity.js";
 import { OnlineContext } from "../../behavior/context/server/OnlineContext.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
@@ -15,13 +15,18 @@ import { Endpoint } from "../../endpoint/Endpoint.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { EndpointServer } from "../../endpoint/EndpointServer.js";
 import { EndpointLifecycle } from "../../endpoint/properties/EndpointLifecycle.js";
+import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
+import { InteractionServerMessenger } from "../../protocol/interaction/InteractionMessenger.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
-import { StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { Session } from "../../session/Session.js";
-import { MaybePromise } from "../../util/Promises.js";
 import { ServerNode } from "../ServerNode.js";
 import { ServerStore } from "./storage/ServerStore.js";
+
+const activityKey = Symbol("activity");
+
+interface WithActivity {
+    [activityKey]?: NodeActivity.Activity;
+}
 
 /**
  * Wire up an InteractionServer that initializes an InvocationContext earlier than the cluster API supports.
@@ -41,6 +46,7 @@ export class TransactionalInteractionServer extends InteractionServer {
     #endpoint: Endpoint;
     #tracer?: ActionTracer;
     #activity: NodeActivity;
+    #newActivityBlocked = false;
 
     constructor(endpoint: Endpoint<ServerNode.RootEndpoint>) {
         const structure = new InteractionEndpointStructure();
@@ -82,103 +88,84 @@ export class TransactionalInteractionServer extends InteractionServer {
         this.#endpointStructure.close();
     }
 
+    blockNewActivity() {
+        this.#newActivityBlocked = true;
+    }
+
+    override async onNewExchange(exchange: MessageExchange<MatterDevice>) {
+        // When closing, ignore anything newly incoming
+        if (this.#newActivityBlocked || this.isClosing) {
+            return;
+        }
+
+        // Activity tracking.  This provides diagnostic information and prevents the server from shutting down whilst
+        // the exchange is active
+        using activity = this.#activity.begin(`session#${exchange.session.id.toString(16)}`);
+        (exchange as WithActivity)[activityKey] = activity;
+
+        // Delegate to InteractionServerMessenger
+        return new InteractionServerMessenger(exchange)
+            .handleRequest(this)
+            .finally(() => delete (exchange as WithActivity)[activityKey]);
+    }
+
     protected override async readAttribute(
         attribute: AnyAttributeServer<any>,
-        session: Session<MatterDevice>,
+        exchange: MessageExchange<MatterDevice>,
         fabricFiltered: boolean,
         message: Message,
     ) {
-        return this.#transact(
-            "Read",
-            {
-                activity: this.#activity,
-                fabricFiltered,
-                message,
-                session,
-            },
-            () => super.readAttribute(attribute, session, fabricFiltered, message),
-        );
+        const readAttribute = () => super.readAttribute(attribute, exchange, fabricFiltered, message);
+
+        return OnlineContext({
+            activity: (exchange as WithActivity)[activityKey],
+            fabricFiltered,
+            message,
+            session: exchange.session,
+            tracer: this.#tracer,
+            actionType: ActionTracer.ActionType.Read,
+        }).act(readAttribute);
     }
 
     protected override async writeAttribute(
         attribute: AttributeServer<any>,
         value: any,
-        session: Session<MatterDevice>,
+        exchange: MessageExchange<MatterDevice>,
         message: Message,
         timed = false,
     ) {
-        return this.#transact(
-            "Write",
-            {
-                activity: this.#activity,
-                timed,
-                message,
-                session,
-                fabricFiltered: true,
-            },
-            () => super.writeAttribute(attribute, value, session, message, timed),
-        );
+        const writeAttribute = () => super.writeAttribute(attribute, value, exchange, message, timed);
+
+        return OnlineContext({
+            activity: (exchange as WithActivity)[activityKey],
+            timed,
+            message,
+            session: exchange.session,
+            fabricFiltered: true,
+            tracer: this.#tracer,
+            actionType: ActionTracer.ActionType.Write,
+        }).act(writeAttribute);
     }
 
     protected override async invokeCommand(
         command: CommandServer<any, any>,
-        session: Session<MatterDevice>,
+        exchange: MessageExchange<MatterDevice>,
         commandFields: any,
         message: Message,
         endpoint: EndpointInterface,
         timed = false,
     ) {
-        const invoke = () => super.invokeCommand(command, session, commandFields, message, endpoint, timed);
+        const invokeCommand = () => super.invokeCommand(command, exchange, commandFields, message, endpoint, timed);
 
-        return this.#transact(
-            "Invoke",
-            {
-                activity: this.#activity,
-                command: true,
-                timed,
-                message,
-                session,
-            },
-            invoke,
-        );
-    }
-
-    /**
-     * Perform an action with transaction support.
-     *
-     * Note that we currently wrap individual reads/writes/invokes in transactions with no support for cross-action
-     * transactionality.  Matter does not address this so semantics are going to be highly implementation dependent if
-     * they make sense at all.
-     */
-    async #transact<T extends Promise<any>>(
-        why: "Read" | "Write" | "Invoke",
-        options: OnlineContext.Options,
-        actor: () => T,
-    ) {
-        if (!this.#tracer) {
-            return OnlineContext(options).act(actor);
-        }
-
-        const trace: ActionTracer.Action = {
-            type: why.toLowerCase() as ActionTracer.ActionType,
-        };
-        options.trace = trace;
-
-        return MaybePromise.then(
-            () => OnlineContext(options).act(actor),
-            result => {
-                this.#tracer?.record(trace);
-                return result;
-            },
-            error => {
-                const status = (error as StatusResponseError).code;
-                if (typeof status === "number") {
-                    trace.status = status;
-                }
-                this.#tracer?.record(trace);
-                throw error;
-            },
-        );
+        return OnlineContext({
+            activity: (exchange as WithActivity)[activityKey],
+            command: true,
+            timed,
+            message,
+            session: exchange.session,
+            tracer: this.#tracer,
+            actionType: ActionTracer.ActionType.Invoke,
+        }).act(invokeCommand);
     }
 
     #updateStructure() {

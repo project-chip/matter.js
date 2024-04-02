@@ -5,7 +5,7 @@
  */
 
 import { ActionContext } from "../../../../src/behavior/context/ActionContext.js";
-import { NodeActivity } from "../../../../src/behavior/context/server/NodeActivity.js";
+import { NodeActivity } from "../../../../src/behavior/context/NodeActivity.js";
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { StateType } from "../../../../src/behavior/state/StateType.js";
 import { Val } from "../../../../src/behavior/state/Val.js";

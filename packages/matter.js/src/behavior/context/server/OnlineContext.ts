@@ -14,6 +14,7 @@ import { Agent } from "../../../endpoint/Agent.js";
 import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
+import { StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { Session } from "../../../session/Session.js";
 import { MaybePromise } from "../../../util/Promises.js";
@@ -22,8 +23,8 @@ import { Transaction } from "../../state/transaction/Transaction.js";
 import { ActionContext } from "../ActionContext.js";
 import { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
+import { NodeActivity } from "../NodeActivity.js";
 import { ContextAgents } from "./ContextAgents.js";
-import { NodeActivity } from "./NodeActivity.js";
 
 /**
  * Operate in online context.  Public Matter API interactions happen in online context.
@@ -59,13 +60,24 @@ export function OnlineContext(options: OnlineContext.Options) {
             );
 
             let context: undefined | ActionContext;
+            let trace: undefined | ActionTracer.Action;
+            let activity: undefined | Disposable;
+
+            if (options.tracer && options.actionType) {
+                trace = {
+                    type: options.actionType,
+                };
+            }
 
             const close = () => {
+                if (trace) {
+                    options.tracer?.record(trace);
+                }
                 if (message) {
                     Contextual.setContextOf(message, undefined);
                 }
-                if (context) {
-                    options.activity.delete(via);
+                if (activity) {
+                    activity[Symbol.dispose]();
                 }
             };
 
@@ -76,6 +88,7 @@ export function OnlineContext(options: OnlineContext.Options) {
                     subject,
                     fabric,
                     transaction,
+                    trace,
 
                     accessLevelFor(_location?: AccessControl.Location) {
                         // TODO - use AccessControlServer on the RootNodeEndpoint
@@ -103,15 +116,30 @@ export function OnlineContext(options: OnlineContext.Options) {
                 return actor(context);
             };
 
+            const traceError = (e: unknown) => {
+                if (trace) {
+                    const status = (e as StatusResponseError).code;
+                    if (typeof status === "number") {
+                        trace.status = status;
+                    }
+                }
+                throw e;
+            };
+
             let isAsync = false;
             try {
-                options.activity.add(via);
+                activity = options.activity?.frame(via);
                 const result = Transaction.act(via, actOnline);
                 if (MaybePromise.is(result)) {
                     isAsync = true;
-                    return Promise.resolve(result).finally(close);
+                    return Promise.resolve(result).catch(traceError).finally(close);
                 }
                 return result;
+            } catch (e) {
+                traceError(e);
+
+                // traceError does this but TS isn't smart enough to notice.  This is never reached
+                throw e;
             } finally {
                 if (!isAsync && context) {
                     close();
@@ -125,12 +153,13 @@ export function OnlineContext(options: OnlineContext.Options) {
 
 export namespace OnlineContext {
     export type Options = {
-        activity: NodeActivity;
+        activity?: NodeActivity.Activity;
         command?: boolean;
         timed?: boolean;
         fabricFiltered?: boolean;
         message?: Message;
-        trace?: ActionTracer.Action;
+        tracer?: ActionTracer;
+        actionType?: ActionTracer.ActionType;
     } & (
         | { session: Session<MatterDevice>; fabric?: undefined; subject?: undefined }
         | { session?: undefined; fabric: FabricIndex; subject: SubjectId }

@@ -12,7 +12,7 @@ import type { NodeJsEnvironment } from "./NodeJsEnvironment.js";
 const logger = Logger.get("ProcessManager");
 
 /**
- * ProcessManager watches Node.js signals SIGINT and SIGUSR2 to interrupt the Matter.js runtime and trigger Matter.js
+ * ProcessManager watches Node.js signals SIGINT and SIGUSR2 to terminate the Matter.js runtime and trigger Matter.js
  * diagnostics respectively.  It sets the process exit code to 0 if the runtime completes without error and to 1 if the
  * runtime crashes.
  *
@@ -96,9 +96,6 @@ export class ProcessManager implements Destructable {
     };
 
     protected diagnosticHandler = () => {
-        if (this.hasSignalSupport) {
-            process.on("SIGUSR2", this.env.diagnose);
-        }
         this.env.diagnose();
     };
 

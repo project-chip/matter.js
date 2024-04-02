@@ -6,6 +6,7 @@
 
 import { Cancellable, Destructable, Lifecycle, Startable } from "../common/Lifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
+import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { Multiplex } from "../util/Multiplex.js";
@@ -29,6 +30,7 @@ export class RuntimeService implements Multiplex {
 
     constructor(environment: Environment) {
         environment.set(RuntimeService, this);
+        DiagnosticSource.add(this);
     }
 
     /**
@@ -164,6 +166,7 @@ export class RuntimeService implements Multiplex {
     async close() {
         this.cancel();
         await this.inactive;
+        DiagnosticSource.delete(this);
     }
 
     [Symbol.asyncDispose]() {
@@ -171,7 +174,21 @@ export class RuntimeService implements Multiplex {
     }
 
     get [Diagnostic.value]() {
-        return "Runtime";
+        return Diagnostic.node("🛠", "Workers", {
+            children: [...this.#workers].map(worker => {
+                let diagnostic: unknown = worker[RuntimeService.label];
+
+                if (diagnostic === undefined) {
+                    diagnostic = worker[Diagnostic.value];
+
+                    if (diagnostic === undefined) {
+                        diagnostic = worker.toString();
+                    }
+                }
+
+                return diagnostic;
+            }),
+        });
     }
 
     #cancelWorker(worker: RuntimeService.Worker) {
@@ -242,6 +259,8 @@ export class RuntimeService implements Multiplex {
 }
 
 export namespace RuntimeService {
+    export const label = Symbol("label");
+
     /**
      * The runtime tracks individual discrete tasks as "workers".
      *
@@ -294,5 +313,15 @@ export namespace RuntimeService {
          * Workers may implement {@link Symbol.dispose} to handle disposal.  Works the same as the async equivalent.
          */
         [Symbol.dispose]?: () => void;
+
+        /**
+         * If label is present, it will be presented in diagnostics.  This takes precedence over [Diagnostic.value].
+         */
+        [label]?: unknown;
+
+        /**
+         * In diagnostics workers render using toString() unless they provide explicit diagnostics.
+         */
+        [Diagnostic.value]?: unknown;
     }
 }

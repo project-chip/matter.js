@@ -12,6 +12,7 @@ import type { Endpoint } from "../../endpoint/Endpoint.js";
 import type { EndpointType } from "../../endpoint/type/EndpointType.js";
 import type { SecureSession } from "../../session/SecureSession.js";
 import type { ValueSupervisor } from "../supervision/ValueSupervisor.js";
+import { NodeActivity } from "./NodeActivity.js";
 import type { OfflineContext } from "./server/OfflineContext.js";
 import type { OnlineContext } from "./server/OnlineContext.js";
 
@@ -45,6 +46,12 @@ export interface ActionContext extends ValueSupervisor.Session {
      * The wire message that initiated invocation.
      */
     message?: Message;
+
+    /**
+     * Activity tracking information.  If present, activity frames are inserted at key points for diagnostic
+     * purposes.
+     */
+    activity?: NodeActivity.Activity;
 
     /**
      * Obtain an agent for interacting with an endpoint in this context.

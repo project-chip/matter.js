@@ -155,6 +155,9 @@ export class Project {
             format,
             sourcemap: true,
             absWorkingDir: this.pkg.path,
+
+            // This is necessary to downlevel "using"
+            target: "es2022",
         });
 
         for (const entry of await this.targets(indir, outdir, "cjs", "mjs", "d.cts", "d.mts")) {

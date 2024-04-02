@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeActivity } from "../behavior/context/server/NodeActivity.js";
+import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { EndpointType } from "../endpoint/type/EndpointType.js";
 import { Environment } from "../environment/Environment.js";
+import { RuntimeService } from "../environment/RuntimeService.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { NodeLifecycle } from "./NodeLifecycle.js";
@@ -100,6 +101,23 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Endpoint<T> {
         runtime.add(this);
 
         await runtime.inactive;
+    }
+
+    get [RuntimeService.label]() {
+        return ["Runtime for", Diagnostic.strong(this.toString())];
+    }
+
+    get [Diagnostic.value](): unknown {
+        const nodeActivity = this.#environment.get(NodeActivity);
+        using _activity = nodeActivity.begin("diagnostics");
+        return Diagnostic.node("🧩", this.id, {
+            children: [
+                Diagnostic.strong("Structure"),
+                Diagnostic.list([super[Diagnostic.value]]),
+                Diagnostic.strong("Activity"),
+                nodeActivity[Diagnostic.value],
+            ],
+        });
     }
 
     override get lifecycle(): NodeLifecycle {

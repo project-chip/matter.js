@@ -6,8 +6,9 @@
 
 import { Behavior } from "../../behavior/Behavior.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
+import { ValidatedElements } from "../../behavior/cluster/ValidatedElements.js";
 import { ActionContext } from "../../behavior/context/ActionContext.js";
-import { NodeActivity } from "../../behavior/context/server/NodeActivity.js";
+import { NodeActivity } from "../../behavior/context/NodeActivity.js";
 import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
@@ -17,6 +18,7 @@ import { Lifecycle, UninitializedDependencyError } from "../../common/Lifecycle.
 import { ImplementationError, InternalError, ReadOnlyError } from "../../common/MatterError.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
+import { FeatureSet } from "../../model/index.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
@@ -55,6 +57,43 @@ export class Behaviors {
 
     get [Diagnostic.value]() {
         return Diagnostic.lifecycleList(this.status);
+    }
+
+    get detailedDiagnostic() {
+        return Object.entries(this.#supported).map(([name, type]) => {
+            const backing = this.#backings[name];
+
+            const result = [Diagnostic(backing?.status ?? Lifecycle.Status.Inactive, name)];
+
+            if (!(type as ClusterBehavior.Type).cluster) {
+                return result;
+            }
+
+            const elementDiagnostic = Array<unknown>();
+
+            const elements = new ValidatedElements(type as ClusterBehavior.Type);
+
+            const features = new FeatureSet((type as ClusterBehavior.Type).cluster.supportedFeatures);
+            if (features.size) {
+                elementDiagnostic.push([Diagnostic.strong("features"), features]);
+            }
+
+            if (elements.attributes.size) {
+                elementDiagnostic.push([Diagnostic.strong("attributes"), elements.attributes]);
+            }
+            if (elements.commands.size) {
+                elementDiagnostic.push([Diagnostic.strong("commands"), elements.commands]);
+            }
+            if (elements.events.size) {
+                elementDiagnostic.push([Diagnostic.strong("events"), elements.events]);
+            }
+
+            if (elementDiagnostic.length) {
+                result.push(Diagnostic.list(elementDiagnostic));
+            }
+
+            return result;
+        });
     }
 
     constructor(endpoint: Endpoint, supported: SupportedBehaviors, options: Record<string, object | undefined>) {
