@@ -32,8 +32,11 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
         }
     }
 
-    override testEventTrigger({ eventTrigger }: TestEventTriggerRequest) {
-        throw new StatusResponseError(`Unsupported test event trigger ${eventTrigger}`, StatusCode.InvalidCommand);
+    override testEventTrigger({ eventTrigger, enableKey }: TestEventTriggerRequest) {
+        throw new StatusResponseError(
+            `Unsupported test event trigger ${enableKey.toHex()}/${eventTrigger}`,
+            StatusCode.InvalidCommand,
+        );
     }
 
     #online() {
