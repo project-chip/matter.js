@@ -17,7 +17,6 @@ import {
     Event
 } from "../../cluster/Cluster.js";
 import { TlvString } from "../../tlv/TlvString.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvVendorId } from "../../datatype/VendorId.js";
 import { TlvUInt16, TlvUInt32, TlvEnum } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
@@ -71,28 +70,28 @@ export namespace BridgedDeviceBasicInformation {
     /**
      * Body of the BridgedDeviceBasicInformation startUp event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.13.5
+     * @see {@link MatterSpecification.v11.Core} § 9.13.5
      */
     export const TlvStartUpEvent = TlvObject({ softwareVersion: TlvField(0, TlvUInt32) });
 
     /**
      * Body of the BridgedDeviceBasicInformation startUp event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.13.5
+     * @see {@link MatterSpecification.v11.Core} § 9.13.5
      */
     export interface StartUpEvent extends TypeFromSchema<typeof TlvStartUpEvent> {}
 
     /**
      * Body of the BridgedDeviceBasicInformation reachableChanged event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.13.5.1
+     * @see {@link MatterSpecification.v11.Core} § 9.13.5.1
      */
     export const TlvReachableChangedEvent = TlvObject({ reachableNewValue: TlvField(0, TlvBoolean) });
 
     /**
      * Body of the BridgedDeviceBasicInformation reachableChanged event
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.13.5.1
+     * @see {@link MatterSpecification.v11.Core} § 9.13.5.1
      */
     export interface ReachableChangedEvent extends TypeFromSchema<typeof TlvReachableChangedEvent> {}
 
@@ -106,22 +105,22 @@ export namespace BridgedDeviceBasicInformation {
 
         attributes: {
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             vendorName: OptionalFixedAttribute(0x1, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             vendorId: OptionalFixedAttribute(0x2, TlvVendorId),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             productName: OptionalFixedAttribute(0x3, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             nodeLabel: OptionalWritableAttribute(
                 0x5,
@@ -130,57 +129,57 @@ export namespace BridgedDeviceBasicInformation {
             ),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             hardwareVersion: OptionalFixedAttribute(0x7, TlvUInt16, { default: 0 }),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             hardwareVersionString: OptionalFixedAttribute(0x8, TlvString.bound({ minLength: 1, maxLength: 64 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             softwareVersion: OptionalFixedAttribute(0x9, TlvUInt32, { default: 0 }),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             softwareVersionString: OptionalFixedAttribute(0xa, TlvString.bound({ minLength: 1, maxLength: 64 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             manufacturingDate: OptionalFixedAttribute(0xb, TlvString.bound({ minLength: 8, maxLength: 16 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             partNumber: OptionalFixedAttribute(0xc, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             productUrl: OptionalFixedAttribute(0xd, TlvString.bound({ maxLength: 256 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             productLabel: OptionalFixedAttribute(0xe, TlvString.bound({ maxLength: 64 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             serialNumber: OptionalFixedAttribute(0xf, TlvString.bound({ maxLength: 32 })),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             reachable: Attribute(0x11, TlvBoolean, { default: true }),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.4
+             * @see {@link MatterSpecification.v11.Core} § 9.13.4
              */
             uniqueId: OptionalFixedAttribute(0x12, TlvString.bound({ maxLength: 32 })),
 
@@ -189,17 +188,17 @@ export namespace BridgedDeviceBasicInformation {
 
         events: {
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.5
+             * @see {@link MatterSpecification.v11.Core} § 9.13.5
              */
             startUp: OptionalEvent(0x0, EventPriority.Critical, TlvStartUpEvent),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.5
+             * @see {@link MatterSpecification.v11.Core} § 9.13.5
              */
             shutDown: OptionalEvent(0x1, EventPriority.Critical, TlvNoArguments),
 
             /**
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.5
+             * @see {@link MatterSpecification.v11.Core} § 9.13.5
              */
             leave: OptionalEvent(0x2, EventPriority.Info, TlvNoArguments),
 
@@ -210,7 +209,7 @@ export namespace BridgedDeviceBasicInformation {
              *
              * After (re)start of a bridge this event may be generated.
              *
-             * @see {@link MatterCoreSpecificationV1_1} § 9.13.5.1
+             * @see {@link MatterSpecification.v11.Core} § 9.13.5.1
              */
             reachableChanged: Event(0x3, EventPriority.Info, TlvReachableChangedEvent)
         }
@@ -242,7 +241,7 @@ export namespace BridgedDeviceBasicInformation {
      * particular attribute is not available, the Bridge SHOULD NOT include the attribute in the cluster for this
      * Bridged Device. See below for Conformance details.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 9.13
+     * @see {@link MatterSpecification.v11.Core} § 9.13
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

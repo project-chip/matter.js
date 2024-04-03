@@ -17,7 +17,6 @@ import {
     OptionalWritableAttribute
 } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -29,28 +28,28 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl moveToClosestFrequency command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5
      */
     export const TlvMoveToClosestFrequencyRequest = TlvObject({ frequency: TlvField(0, TlvUInt16) });
 
     /**
      * Input to the LevelControl moveToClosestFrequency command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5
      */
     export interface MoveToClosestFrequencyRequest extends TypeFromSchema<typeof TlvMoveToClosestFrequencyRequest> {}
 
     /**
      * The value of the LevelControl options attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.8
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.8
      */
     export const Options = { executeIfOff: BitFlag(0), coupleColorTempToLevel: BitFlag(1) };
 
     /**
      * Input to the LevelControl moveToLevel command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1
      */
     export const TlvMoveToLevelRequest = TlvObject({
         level: TlvField(0, TlvUInt8.bound({ max: 254 })),
@@ -62,7 +61,7 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl moveToLevel command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1
      */
     export interface MoveToLevelRequest extends TypeFromSchema<typeof TlvMoveToLevelRequest> {}
 
@@ -74,13 +73,13 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl move command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2
      */
     export const TlvMoveRequest = TlvObject({
         /**
          * The MoveMode field shall be one of the non-reserved values in Values of the MoveMode Field.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2.1
          */
         moveMode: TlvField(0, TlvEnum<MoveMode>()),
 
@@ -92,7 +91,7 @@ export namespace LevelControl {
          * attribute is equal to null, then the device SHOULD move as fast as it is able. If the device is not able to
          * move at a variable rate, this field may be disregarded.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2.2
+         * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2.2
          */
         rate: TlvField(1, TlvNullable(TlvUInt8)),
 
@@ -103,7 +102,7 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl move command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2
      */
     export interface MoveRequest extends TypeFromSchema<typeof TlvMoveRequest> {}
 
@@ -115,7 +114,7 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl step command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.3
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.3
      */
     export const TlvStepRequest = TlvObject({
         stepMode: TlvField(0, TlvEnum<StepMode>()),
@@ -128,14 +127,14 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl step command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.3
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.3
      */
     export interface StepRequest extends TypeFromSchema<typeof TlvStepRequest> {}
 
     /**
      * Input to the LevelControl stop command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.4
      */
     export const TlvStopRequest = TlvObject({
         optionsMask: TlvField(0, TlvBitmap(TlvUInt8, Options)),
@@ -145,14 +144,14 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl stop command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.4
      */
     export interface StopRequest extends TypeFromSchema<typeof TlvStopRequest> {}
 
     /**
      * Input to the LevelControl moveToLevelWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
      */
     export const TlvMoveToLevelWithOnOffRequest = TlvObject({
         level: TlvField(0, TlvUInt8),
@@ -164,14 +163,14 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl moveToLevelWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
      */
     export interface MoveToLevelWithOnOffRequest extends TypeFromSchema<typeof TlvMoveToLevelWithOnOffRequest> {}
 
     /**
      * Input to the LevelControl moveWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
      */
     export const TlvMoveWithOnOffRequest = TlvObject({
         moveMode: TlvField(0, TlvEnum<MoveMode>()),
@@ -183,14 +182,14 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl moveWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
      */
     export interface MoveWithOnOffRequest extends TypeFromSchema<typeof TlvMoveWithOnOffRequest> {}
 
     /**
      * Input to the LevelControl stepWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
      */
     export const TlvStepWithOnOffRequest = TlvObject({
         stepMode: TlvField(0, TlvEnum<StepMode>()),
@@ -203,14 +202,14 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl stepWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
      */
     export interface StepWithOnOffRequest extends TypeFromSchema<typeof TlvStepWithOnOffRequest> {}
 
     /**
      * Input to the LevelControl stopWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
      */
     export const TlvStopWithOnOffRequest = TlvObject({
         optionsMask: TlvField(0, TlvBitmap(TlvUInt8, Options)),
@@ -220,7 +219,7 @@ export namespace LevelControl {
     /**
      * Input to the LevelControl stopWithOnOff command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
      */
     export interface StopWithOnOffRequest extends TypeFromSchema<typeof TlvStopWithOnOffRequest> {}
 
@@ -233,7 +232,7 @@ export namespace LevelControl {
              * The RemainingTime attribute represents the time remaining until the current command is complete - it is
              * specified in 1/10ths of a second.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.2
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.2
              */
             remainingTime: Attribute(0x1, TlvUInt16, { default: 0 }),
 
@@ -247,7 +246,7 @@ export namespace LevelControl {
              * This behavior does not apply to reboots associated with OTA. After an OTA restart, the CurrentLevel
              * attribute shall return to its value prior to the restart.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.14
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.14
              */
             startUpCurrentLevel: WritableAttribute(
                 0x4000,
@@ -266,7 +265,7 @@ export namespace LevelControl {
              * The CurrentFrequency attribute represents the frequency at which the device is at CurrentLevel. A
              * CurrentFrequency of 0 is unknown.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.5
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.5
              */
             currentFrequency: Attribute(0x4, TlvUInt16, { scene: true, default: 0 }),
 
@@ -274,7 +273,7 @@ export namespace LevelControl {
              * The MinFrequency attribute indicates the minimum value of CurrentFrequency that is capable of being
              * assigned. MinFrequency shall be less than or equal to MaxFrequency. A value of 0 indicates undefined.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.6
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.6
              */
             minFrequency: Attribute(0x5, TlvUInt16, { default: 0 }),
 
@@ -282,14 +281,14 @@ export namespace LevelControl {
              * The MaxFrequency attribute indicates the maximum value of CurrentFrequency that is capable of being
              * assigned. MaxFrequency shall be greater than or equal to MinFrequency. A value of 0 indicates undefined.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.7
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.7
              */
             maxFrequency: Attribute(0x6, TlvUInt16, { default: 0 })
         },
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.5
              */
             moveToClosestFrequency: Command(0x8, TlvMoveToClosestFrequencyRequest, 0x8, TlvNoResponse)
         }
@@ -298,7 +297,7 @@ export namespace LevelControl {
     /**
      * These are optional features supported by LevelControlCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6.4
      */
     export enum Feature {
         /**
@@ -361,21 +360,21 @@ export namespace LevelControl {
              * The CurrentLevel attribute represents the current level of this device. The meaning of 'level' is device
              * dependent.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.1
              */
             currentLevel: Attribute(0x0, TlvNullable(TlvUInt8), { scene: true, persistent: true, default: null }),
 
             /**
              * The MinLevel attribute indicates the minimum value of CurrentLevel that is capable of being assigned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.3
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.3
              */
             minLevel: OptionalAttribute(0x2, TlvUInt8, { default: 0 }),
 
             /**
              * The MaxLevel attribute indicates the maximum value of CurrentLevel that is capable of being assigned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.4
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.4
              */
             maxLevel: OptionalAttribute(0x3, TlvUInt8.bound({ max: 254 }), { default: 254 }),
 
@@ -391,7 +390,7 @@ export namespace LevelControl {
              *
              * Table 19. Options Attribute
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.8
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.8
              */
             options: WritableAttribute(0xf, TlvBitmap(TlvUInt8, Options)),
 
@@ -404,7 +403,7 @@ export namespace LevelControl {
              * if the device is not able to move at a variable rate, the OnOffTransitionTime attribute SHOULD NOT be
              * implemented.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.9
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.9
              */
             onOffTransitionTime: OptionalWritableAttribute(0x10, TlvUInt16, { default: 0 }),
 
@@ -414,7 +413,7 @@ export namespace LevelControl {
              * cluster command. If the OnLevel attribute is not implemented, or is set to the null value, it has no
              * effect. For more details see Effect of On/Off Commands on the CurrentLevel Attribute.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.10
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.10
              */
             onLevel: WritableAttribute(0x11, TlvNullable(TlvUInt8), { default: null }),
 
@@ -424,7 +423,7 @@ export namespace LevelControl {
              * is specified in 10ths of a second. If this attribute is not implemented, or contains a null value, the
              * OnOffTransitionTime will be used instead.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.11
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.11
              */
             onTransitionTime: OptionalWritableAttribute(0x12, TlvNullable(TlvUInt16), { default: null }),
 
@@ -434,7 +433,7 @@ export namespace LevelControl {
              * is specified in 10ths of a second. If this attribute is not implemented, or contains a null value, the
              * OnOffTransitionTime will be used instead.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.12
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.12
              */
             offTransitionTime: OptionalWritableAttribute(0x13, TlvNullable(TlvUInt16), { default: null }),
 
@@ -442,19 +441,19 @@ export namespace LevelControl {
              * The DefaultMoveRate attribute determines the movement rate, in units per second, when a Move command is
              * received with a null value Rate parameter.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.5.13
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.5.13
              */
             defaultMoveRate: OptionalWritableAttribute(0x14, TlvNullable(TlvUInt8))
         },
 
         commands: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.1
              */
             moveToLevel: Command(0x0, TlvMoveToLevelRequest, 0x0, TlvNoResponse),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.2
              */
             move: Command(0x1, TlvMoveRequest, 0x1, TlvNoResponse),
 
@@ -468,32 +467,32 @@ export namespace LevelControl {
              *
              * If the device is not able to move at a variable rate, the TransitionTime field may be disregarded.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.3
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.3
              */
             step: Command(0x2, TlvStepRequest, 0x2, TlvNoResponse),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.4
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6.4
              */
             stop: Command(0x3, TlvStopRequest, 0x3, TlvNoResponse),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
              */
             moveToLevelWithOnOff: Command(0x4, TlvMoveToLevelWithOnOffRequest, 0x4, TlvNoResponse),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
              */
             moveWithOnOff: Command(0x5, TlvMoveWithOnOffRequest, 0x5, TlvNoResponse),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
              */
             stepWithOnOff: Command(0x6, TlvStepWithOnOffRequest, 0x6, TlvNoResponse),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
+             * @see {@link MatterSpecification.v11.Cluster} § 1.6.6
              */
             stopWithOnOff: Command(0x7, TlvStopWithOnOffRequest, 0x7, TlvNoResponse)
         },
@@ -522,7 +521,7 @@ export namespace LevelControl {
      * LevelControlCluster supports optional features that you can enable with the LevelControlCluster.with() factory
      * method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.6
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

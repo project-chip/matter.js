@@ -7,7 +7,6 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { Command } from "../../cluster/Cluster.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
@@ -109,13 +108,13 @@ export namespace KeypadInput {
     /**
      * Input to the KeypadInput sendKey command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.1
      */
     export const TlvSendKeyRequest = TlvObject({
         /**
          * This shall indicate the key code to process.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.1.1
          */
         keyCode: TlvField(0, TlvEnum<CecKeyCode>())
     });
@@ -123,12 +122,12 @@ export namespace KeypadInput {
     /**
      * Input to the KeypadInput sendKey command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.1
      */
     export interface SendKeyRequest extends TypeFromSchema<typeof TlvSendKeyRequest> {}
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.4.1
+     * @see {@link MatterSpecification.v11.Cluster} § 6.8.4.1
      */
     export enum Status {
         /**
@@ -150,13 +149,13 @@ export namespace KeypadInput {
     /**
      * This command shall be generated in response to a SendKey command.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.2
      */
     export const TlvSendKeyResponse = TlvObject({
         /**
          * This shall indicate the of the command.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.2.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.2.1
          */
         status: TlvField(0, TlvEnum<Status>())
     });
@@ -164,14 +163,14 @@ export namespace KeypadInput {
     /**
      * This command shall be generated in response to a SendKey command.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.2
      */
     export interface SendKeyResponse extends TypeFromSchema<typeof TlvSendKeyResponse> {}
 
     /**
      * These are optional features supported by KeypadInputCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.2
+     * @see {@link MatterSpecification.v11.Cluster} § 6.8.2
      */
     export enum Feature {
         /**
@@ -235,7 +234,7 @@ export namespace KeypadInput {
              * consider the first key press to be a press and hold. When such a repeat KeyCode value is not received
              * within 200ms, then the endpoint will consider the last key press to be a release.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.1
+             * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.1
              */
             sendKey: Command(0x0, TlvSendKeyRequest, 0x1, TlvSendKeyResponse)
         },
@@ -261,7 +260,7 @@ export namespace KeypadInput {
      * KeypadInputCluster supports optional features that you can enable with the KeypadInputCluster.with() factory
      * method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8
+     * @see {@link MatterSpecification.v11.Cluster} § 6.8
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

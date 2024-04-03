@@ -7,7 +7,7 @@
 /**
  * Notifies subscriber of successful subscription.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 8.5.3
+ * @see {@link MatterSpecification.v11.Core} § 8.5.3
  */
 export type SubscribeResponseAction = {
     subscription: number;

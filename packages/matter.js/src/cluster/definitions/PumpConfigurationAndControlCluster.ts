@@ -20,7 +20,6 @@ import {
 } from "../../cluster/Cluster.js";
 import { TlvInt16, TlvUInt16, TlvBitmap, TlvEnum, TlvUInt24, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { Identity } from "../../util/Type.js";
@@ -28,7 +27,7 @@ import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace PumpConfigurationAndControl {
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.1
+     * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.1
      */
     export const PumpStatusBitmap = {
         /**
@@ -36,7 +35,7 @@ export namespace PumpConfigurationAndControl {
          *
          * If this bit is set, it may correspond to an event in the range 2-16, see Events.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.1.1
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.1.1
          */
         deviceFault: BitFlag(0),
 
@@ -45,7 +44,7 @@ export namespace PumpConfigurationAndControl {
          *
          * If this bit is set, it may correspond to an event in the range 0-1 or 13, see Events.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.1.2
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.1.2
          */
         supplyFault: BitFlag(1),
 
@@ -66,7 +65,7 @@ export namespace PumpConfigurationAndControl {
          * shall generate a FAILURE error status until LocalOverride is cleared on the physical device. When
          * LocalOverride is cleared, the device shall return to the operation mode set in OperationMode.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.1.3
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.1.3
          */
         localOverride: BitFlag(4),
 
@@ -81,7 +80,7 @@ export namespace PumpConfigurationAndControl {
          * If this bit is set, EffectiveControlMode is ConstantPressure and the setpoint for the pump is interpreted as
          * a percentage of the range of the remote sensor ([MinMeasuredValue – MaxMeasuredValue]).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.1.4
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.1.4
          */
         remotePressure: BitFlag(6),
 
@@ -91,7 +90,7 @@ export namespace PumpConfigurationAndControl {
          * If this bit is set, EffectiveControlMode is ConstantFlow, and the setpoint for the pump is interpreted as a
          * percentage of the range of the remote sensor ([MinMeasuredValue – MaxMeasuredValue]).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.1.5
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.1.5
          */
         remoteFlow: BitFlag(7),
 
@@ -101,13 +100,13 @@ export namespace PumpConfigurationAndControl {
          * If this bit is set, EffectiveControlMode is ConstantTemperature, and the setpoint for the pump is
          * interpreted as a percentage of the range of the remote sensor ([MinMeasuredValue – MaxMeasuredValue])
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.1.6
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.1.6
          */
         remoteTemperature: BitFlag(8)
     };
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.2
+     * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.2
      */
     export enum OperationMode {
         /**
@@ -117,7 +116,7 @@ export namespace PumpConfigurationAndControl {
          * If the pump is running in this operation mode the setpoint is an internal variable which may be controlled
          * between 0% and 100%, e.g., by means of the Level Control cluster
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.2.1
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.2.1
          */
         Normal = 0,
 
@@ -138,7 +137,7 @@ export namespace PumpConfigurationAndControl {
     }
 
     /**
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.3
+     * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.3
      */
     export enum ControlMode {
         /**
@@ -147,7 +146,7 @@ export namespace PumpConfigurationAndControl {
          * The setpoint is interpreted as a percentage of the range derived from the [MinConstSpeed – MaxConstSpeed]
          * attributes.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.3.1
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.3.1
          */
         ConstantSpeed = 0,
 
@@ -159,7 +158,7 @@ export namespace PumpConfigurationAndControl {
          * MaxConstPressure] attributes. In case of a remote pressure sensor, this will be the range derived from the
          * [MinMeasuredValue – MaxMeasuredValue] attributes of the remote pressure sensor.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.3.2
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.3.2
          */
         ConstantPressure = 1,
 
@@ -170,7 +169,7 @@ export namespace PumpConfigurationAndControl {
          * attributes. The internal setpoint will be lowered (compensated) dependent on the flow in the pump (lower
          * flow ⇒ lower internal setpoint).
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.3.3
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.3.3
          */
         ProportionalPressure = 2,
 
@@ -182,7 +181,7 @@ export namespace PumpConfigurationAndControl {
          * attributes. In case of a remote flow sensor, this will be the range derived from the [MinMeasuredValue –
          * MaxMeasuredValue] attributes of the remote flow sensor.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.3.4
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.3.4
          */
         ConstantFlow = 3,
 
@@ -194,7 +193,7 @@ export namespace PumpConfigurationAndControl {
          * attributes. In case of a remote temperature sensor, this will be the range derived from the
          * [MinMeasuredValue – MaxMeasuredValue] attributes of the remote temperature sensor.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.3.5
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.3.5
          */
         ConstantTemperature = 5,
 
@@ -206,7 +205,7 @@ export namespace PumpConfigurationAndControl {
          * cluster to 0, or by using the On/Off cluster. If the pump is started (at any setpoint), the speed of the
          * pump is entirely determined by the pump.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.3.6
+         * @see {@link MatterSpecification.v11.Cluster} § 4.2.6.3.6
          */
         Automatic = 7
     }
@@ -223,7 +222,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.4
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.4
              */
             minConstPressure: FixedAttribute(0x3, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -234,7 +233,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.5
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.5
              */
             maxConstPressure: FixedAttribute(0x4, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null })
         }
@@ -252,7 +251,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.4
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.4
              */
             minConstPressure: OptionalFixedAttribute(0x3, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -263,7 +262,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.5
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.5
              */
             maxConstPressure: OptionalFixedAttribute(0x4, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -274,7 +273,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.6
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.6
              */
             minCompPressure: OptionalFixedAttribute(0x5, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -285,7 +284,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.7
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.7
              */
             maxCompPressure: OptionalFixedAttribute(0x6, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -295,7 +294,7 @@ export namespace PumpConfigurationAndControl {
              *
              * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.8
              */
             minConstSpeed: OptionalFixedAttribute(0x7, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -305,7 +304,7 @@ export namespace PumpConfigurationAndControl {
              *
              * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.9
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.9
              */
             maxConstSpeed: OptionalFixedAttribute(0x8, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -317,7 +316,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.10
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.10
              */
             minConstFlow: OptionalFixedAttribute(0x9, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -328,7 +327,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.11
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.11
              */
             maxConstFlow: OptionalFixedAttribute(0xa, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -339,7 +338,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.12
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.12
              */
             minConstTemp: OptionalFixedAttribute(0xb, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null }),
 
@@ -352,7 +351,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.13
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.13
              */
             maxConstTemp: OptionalFixedAttribute(0xc, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null })
         }
@@ -370,7 +369,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.6
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.6
              */
             minCompPressure: FixedAttribute(0x5, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -381,7 +380,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.7
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.7
              */
             maxCompPressure: FixedAttribute(0x6, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null })
         }
@@ -398,7 +397,7 @@ export namespace PumpConfigurationAndControl {
              *
              * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.8
              */
             minConstSpeed: FixedAttribute(0x7, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -408,7 +407,7 @@ export namespace PumpConfigurationAndControl {
              *
              * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.9
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.9
              */
             maxConstSpeed: FixedAttribute(0x8, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null })
         }
@@ -427,7 +426,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.10
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.10
              */
             minConstFlow: FixedAttribute(0x9, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -438,7 +437,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.11
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.11
              */
             maxConstFlow: FixedAttribute(0xa, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null })
         }
@@ -456,7 +455,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.12
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.12
              */
             minConstTemp: FixedAttribute(0xb, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null }),
 
@@ -469,7 +468,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is –273.15 °C to 327.67 °C (steps of 0.01 °C). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.13
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.13
              */
             maxConstTemp: FixedAttribute(0xc, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: null })
         }
@@ -478,7 +477,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * These are optional features supported by PumpConfigurationAndControlCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 4.2.4
      */
     export enum Feature {
         /**
@@ -598,7 +597,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is -3,276.7 kPa to 3,276.7 kPa (steps of 0.1 kPa). This attribute shall be null if the value
              * is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.1
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.1
              */
             maxPressure: FixedAttribute(0x0, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -608,7 +607,7 @@ export namespace PumpConfigurationAndControl {
              *
              * Valid range is 0 to 65,534 RPM (steps of 1 RPM). This attribute shall be null if the value is invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.2
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.2
              */
             maxSpeed: FixedAttribute(0x1, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -619,7 +618,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is 0 m/h to 6,553.4 m/h (steps of 0.1 m/h). This attribute shall be null if the value is
              * invalid.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.3
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.3
              */
             maxFlow: FixedAttribute(0x2, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -628,7 +627,7 @@ export namespace PumpConfigurationAndControl {
              * a pump controller function is active, the corresponding bit shall be set to 1. Where a pump controller
              * function is not active, the corresponding bit shall be set to 0.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.14
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.14
              */
             pumpStatus: OptionalAttribute(0x10, TlvBitmap(TlvUInt16, PumpStatusBitmap)),
 
@@ -645,7 +644,7 @@ export namespace PumpConfigurationAndControl {
              * See OperationMode and ControlMode attributes for a detailed description of the operation and control of
              * the pump.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.15
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.15
              */
             effectiveOperationMode: Attribute(0x11, TlvEnum<OperationMode>(), { persistent: true }),
 
@@ -669,7 +668,7 @@ export namespace PumpConfigurationAndControl {
              * See OperationMode and ControlMode attributes for detailed a description of the operation and control of
              * the pump.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.16
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.16
              */
             effectiveControlMode: Attribute(0x12, TlvEnum<ControlMode>(), { persistent: true }),
 
@@ -683,7 +682,7 @@ export namespace PumpConfigurationAndControl {
              * Valid range is 0 % to 163.835% (0.005 % granularity). Although this attribute is a signed value, values
              * of capacity less than zero have no physical meaning.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.17
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.17
              */
             capacity: Attribute(0x13, TlvNullable(TlvInt16.bound({ min: 0 })), { default: null }),
 
@@ -696,7 +695,7 @@ export namespace PumpConfigurationAndControl {
              *
              * Valid range is 0 to 65.534 RPM.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.18
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.18
              */
             speed: OptionalAttribute(0x14, TlvNullable(TlvUInt16.bound({ max: 65534 })), { default: null }),
 
@@ -710,7 +709,7 @@ export namespace PumpConfigurationAndControl {
              * the value is not available, this attribute will indicate the null value. Valid range is 0 to 16,777,214
              * hrs.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.19
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.19
              */
             lifetimeRunningHours: OptionalWritableAttribute(
                 0x15,
@@ -727,7 +726,7 @@ export namespace PumpConfigurationAndControl {
              *
              * Valid range is 0 to 16,777,214 Watts.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.20
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.20
              */
             power: OptionalAttribute(0x16, TlvNullable(TlvUInt24), { default: null }),
 
@@ -743,7 +742,7 @@ export namespace PumpConfigurationAndControl {
              *
              * This attribute shall be null if the value is unknown.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.21
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.21
              */
             lifetimeEnergyConsumed: OptionalWritableAttribute(
                 0x17,
@@ -778,7 +777,7 @@ export namespace PumpConfigurationAndControl {
              * with an unsupported operation mode value shall be ignored and a response containing the status of
              * CONSTRAINT_ERROR shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.22
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.22
              */
             operationMode: WritableAttribute(
                 0x20,
@@ -800,7 +799,7 @@ export namespace PumpConfigurationAndControl {
              * with an unsupported control mode value shall be ignored and a response containing the status of
              * CONSTRAINT_ERROR shall be returned.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.7.23
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.7.23
              */
             controlMode: OptionalWritableAttribute(
                 0x21,
@@ -811,87 +810,87 @@ export namespace PumpConfigurationAndControl {
 
         events: {
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             supplyVoltageLow: OptionalEvent(0x0, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             supplyVoltageHigh: OptionalEvent(0x1, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             powerMissingPhase: OptionalEvent(0x2, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             systemPressureLow: OptionalEvent(0x3, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             systemPressureHigh: OptionalEvent(0x4, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             dryRunning: OptionalEvent(0x5, EventPriority.Critical, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             motorTemperatureHigh: OptionalEvent(0x6, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             pumpMotorFatalFailure: OptionalEvent(0x7, EventPriority.Critical, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             electronicTemperatureHigh: OptionalEvent(0x8, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             pumpBlocked: OptionalEvent(0x9, EventPriority.Critical, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             sensorFailure: OptionalEvent(0xa, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             electronicNonFatalFailure: OptionalEvent(0xb, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             electronicFatalFailure: OptionalEvent(0xc, EventPriority.Critical, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             generalFault: OptionalEvent(0xd, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             leakage: OptionalEvent(0xe, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             airDetection: OptionalEvent(0xf, EventPriority.Info, TlvNoArguments),
 
             /**
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.8
+             * @see {@link MatterSpecification.v11.Cluster} § 4.2.8
              */
             turbineOperation: OptionalEvent(0x10, EventPriority.Info, TlvNoArguments)
         },
@@ -938,7 +937,7 @@ export namespace PumpConfigurationAndControl {
      * feature combinations. You must use the PumpConfigurationAndControlCluster.with() factory method to obtain a
      * working cluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2
+     * @see {@link MatterSpecification.v11.Cluster} § 4.2
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

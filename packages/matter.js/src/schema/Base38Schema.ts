@@ -5,13 +5,12 @@
  */
 
 import { UnexpectedDataError } from "../common/MatterError.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Schema } from "./Schema.js";
 
 const BASE38_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-.";
 
-/** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 */
+/** See {@link MatterSpecification.v10.Core} § 5.1.3.1 */
 class Base38Schema extends Schema<ByteArray, string> {
     protected encodeInternal(bytes: ByteArray): string {
         const length = bytes.length;

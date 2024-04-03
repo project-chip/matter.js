@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { KeypadInput } from "../../../cluster/definitions/KeypadInputCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * Upon receipt, this shall process a keycode as input to the media device.
@@ -18,14 +17,14 @@ import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifi
  * the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200ms, then the
  * endpoint will consider the last key press to be a release.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.1
+ * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.1
  */
 export type SendKeyRequest = TypeFromSchema<typeof KeypadInput.TlvSendKeyRequest>;
 
 /**
  * This command shall be generated in response to a SendKey command.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.2
+ * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.2
  */
 export type SendKeyResponse = TypeFromSchema<typeof KeypadInput.TlvSendKeyResponse>;
 
@@ -38,7 +37,7 @@ export namespace KeypadInputInterface {
          * consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within
          * 200ms, then the endpoint will consider the last key press to be a release.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.3.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.8.3.1
          */
         sendKey(request: SendKeyRequest): MaybePromise<SendKeyResponse>;
     }

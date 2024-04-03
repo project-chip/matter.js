@@ -9,7 +9,6 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalEvent, EventPriority } from "../../cluster/Cluster.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Identity } from "../../util/Type.js";
@@ -19,14 +18,14 @@ export namespace BooleanState {
     /**
      * Body of the BooleanState stateChange event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.7.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.7.5.1
      */
     export const TlvStateChangeEvent = TlvObject({ stateValue: TlvField(0, TlvBoolean) });
 
     /**
      * Body of the BooleanState stateChange event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.7.5.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.7.5.1
      */
     export interface StateChangeEvent extends TypeFromSchema<typeof TlvStateChangeEvent> {}
 
@@ -42,7 +41,7 @@ export namespace BooleanState {
             /**
              * This represents a Boolean state.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.7.4.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.7.4.1
              */
             stateValue: Attribute(0x0, TlvBoolean)
         },
@@ -53,7 +52,7 @@ export namespace BooleanState {
              *
              * The StateValue field shall indicate the new value of the StateValue attribute.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.7.5.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.7.5.1
              */
             stateChange: OptionalEvent(0x0, EventPriority.Info, TlvStateChangeEvent)
         }
@@ -64,7 +63,7 @@ export namespace BooleanState {
      *
      * This cluster provides an interface to a boolean state called StateValue.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.7
+     * @see {@link MatterSpecification.v11.Cluster} § 1.7
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

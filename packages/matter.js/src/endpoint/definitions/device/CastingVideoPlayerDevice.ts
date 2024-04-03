@@ -35,7 +35,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Casting Video Player device type.
@@ -52,92 +51,92 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * Please see Video Player Architecture for additional Casting Video Player requirements relating to Video Player
  * device endpoint composition, commissioning, feature representation in clusters, and UI context.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.3
+ * @see {@link MatterSpecification.v11.Device} § 10.3
  */
 export interface CastingVideoPlayerDevice extends Identity<typeof CastingVideoPlayerDeviceDefinition> {}
 
 export namespace CastingVideoPlayerRequirements {
     /**
-     * The {@link OnOff} cluster is required by the Matter specification
+     * The OnOff cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link OnOffServer} for convenience.
      */
     export const OnOffServer = BaseOnOffServer;
 
     /**
-     * The {@link MediaPlayback} cluster is required by the Matter specification
+     * The MediaPlayback cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link MediaPlaybackServer} for convenience.
      */
     export const MediaPlaybackServer = BaseMediaPlaybackServer;
 
     /**
-     * The {@link KeypadInput} cluster is required by the Matter specification
+     * The KeypadInput cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link KeypadInputServer} for convenience.
      */
     export const KeypadInputServer = BaseKeypadInputServer;
 
     /**
-     * The {@link ContentLauncher} cluster is required by the Matter specification
+     * The ContentLauncher cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ContentLauncherServer} for convenience.
      */
     export const ContentLauncherServer = BaseContentLauncherServer;
 
     /**
-     * The {@link WakeOnLan} cluster is optional per the Matter specification
+     * The WakeOnLan cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link WakeOnLanServer} for convenience.
      */
     export const WakeOnLanServer = BaseWakeOnLanServer;
 
     /**
-     * The {@link Channel} cluster is optional per the Matter specification
+     * The Channel cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ChannelServer} for convenience.
      */
     export const ChannelServer = BaseChannelServer;
 
     /**
-     * The {@link TargetNavigator} cluster is optional per the Matter specification
+     * The TargetNavigator cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link TargetNavigatorServer} for convenience.
      */
     export const TargetNavigatorServer = BaseTargetNavigatorServer;
 
     /**
-     * The {@link MediaInput} cluster is optional per the Matter specification
+     * The MediaInput cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link MediaInputServer} for convenience.
      */
     export const MediaInputServer = BaseMediaInputServer;
 
     /**
-     * The {@link LowPower} cluster is optional per the Matter specification
+     * The LowPower cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link LowPowerServer} for convenience.
      */
     export const LowPowerServer = BaseLowPowerServer;
 
     /**
-     * The {@link AudioOutput} cluster is optional per the Matter specification
+     * The AudioOutput cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link AudioOutputServer} for convenience.
      */
     export const AudioOutputServer = BaseAudioOutputServer;
 
     /**
-     * The {@link ApplicationLauncher} cluster is optional per the Matter specification
+     * The ApplicationLauncher cluster is optional per the Matter specification
      *
      * This version of {@link ApplicationLauncherServer} is specialized per the specification.
      */
     export const ApplicationLauncherServer = BaseApplicationLauncherServer.with("ApplicationPlatform");
 
     /**
-     * The {@link AccountLogin} cluster is optional per the Matter specification
+     * The AccountLogin cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link AccountLoginServer} for convenience.
      */
     export const AccountLoginServer = BaseAccountLoginServer;
 

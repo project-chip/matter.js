@@ -6,7 +6,7 @@
 
 import { MatterError } from "../../common/MatterError.js";
 
-/** @see {@link MatterCoreSpecificationV1_0}, section 8.10 */
+/** @see {@link MatterSpecification.v10.Core}, section 8.10 */
 export enum StatusCode {
     Success = 0x00,
     Failure = 0x01,

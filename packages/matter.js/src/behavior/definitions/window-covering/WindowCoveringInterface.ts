@@ -7,7 +7,6 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { WindowCovering } from "../../../cluster/definitions/WindowCoveringCluster.js";
 
@@ -27,7 +26,7 @@ import { WindowCovering } from "../../../cluster/definitions/WindowCoveringClust
  * command and a non-zero percentage shall be treated as an DownOrClose command. If the device is only a tilt control
  * device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be returned.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
+ * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.5
  */
 export type GoToLiftPercentageRequest = TypeFromSchema<typeof WindowCovering.TlvGoToLiftPercentageRequest>;
 
@@ -48,7 +47,7 @@ export type GoToLiftPercentageRequest = TypeFromSchema<typeof WindowCovering.Tlv
  * command and a non-zero percentage shall be treated as an DownOrClose command. If the device is only a tilt control
  * device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be returned.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
+ * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.7
  */
 export type GoToTiltPercentageRequest = TypeFromSchema<typeof WindowCovering.TlvGoToTiltPercentageRequest>;
 
@@ -59,7 +58,7 @@ export type GoToTiltPercentageRequest = TypeFromSchema<typeof WindowCovering.Tlv
  * TargetPositionLiftPercent100ths attribute will update its value accordingly. If the value is out of bounds a
  * response containing the status of CONSTRAINT_ERROR will be returned.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.4
+ * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.4
  */
 export type GoToLiftValueRequest = TypeFromSchema<typeof WindowCovering.TlvGoToLiftValueRequest>;
 
@@ -70,7 +69,7 @@ export type GoToLiftValueRequest = TypeFromSchema<typeof WindowCovering.TlvGoToL
  * TargetPositionTiltPercent100ths attribute will update its value accordingly. If the tilt value is out of bounds a
  * response containing the status of CONSTRAINT_ERROR will be returned.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.6
+ * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.6
  */
 export type GoToTiltValueRequest = TypeFromSchema<typeof WindowCovering.TlvGoToTiltValueRequest>;
 
@@ -104,7 +103,7 @@ export namespace WindowCoveringInterface {
          *
          *   • CurrentPositionTilt attribute shall be equal to the InstalledOpenLimitTilt attribute.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.1
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.1
          */
         upOrOpen(): MaybePromise;
 
@@ -136,7 +135,7 @@ export namespace WindowCoveringInterface {
          *
          *   • CurrentPositionTilt attribute shall be equal to the InstalledClosedLimitTilt attribute.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.2
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.2
          */
         downOrClose(): MaybePromise;
 
@@ -150,7 +149,7 @@ export namespace WindowCoveringInterface {
          *   • TargetPositionTiltPercent100ths attribute will be set to CurrentPositionTiltPercent100ths attribute
          *     value.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.3
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.3
          */
         stopMotion(): MaybePromise;
     }
@@ -173,7 +172,7 @@ export namespace WindowCoveringInterface {
          * a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
          * returned.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.5
          */
         goToLiftPercentage(request: GoToLiftPercentageRequest): MaybePromise;
     }
@@ -197,7 +196,7 @@ export namespace WindowCoveringInterface {
          * a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
          * returned.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.7
          */
         goToTiltPercentage(request: GoToTiltPercentageRequest): MaybePromise;
     }
@@ -220,7 +219,7 @@ export namespace WindowCoveringInterface {
          * a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
          * returned.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.5
          */
         goToLiftPercentage(request: GoToLiftPercentageRequest): MaybePromise;
     }
@@ -244,7 +243,7 @@ export namespace WindowCoveringInterface {
          * a tilt control device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOULD be
          * returned.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.7
          */
         goToTiltPercentage(request: GoToTiltPercentageRequest): MaybePromise;
     }
@@ -257,7 +256,7 @@ export namespace WindowCoveringInterface {
          * is received the TargetPositionLiftPercent100ths attribute will update its value accordingly. If the value is
          * out of bounds a response containing the status of CONSTRAINT_ERROR will be returned.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.4
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.4
          */
         goToLiftValue(request: GoToLiftValueRequest): MaybePromise;
     }
@@ -270,7 +269,7 @@ export namespace WindowCoveringInterface {
          * is received the TargetPositionTiltPercent100ths attribute will update its value accordingly. If the tilt
          * value is out of bounds a response containing the status of CONSTRAINT_ERROR will be returned.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.6
+         * @see {@link MatterSpecification.v11.Cluster} § 5.3.6.6
          */
         goToTiltValue(request: GoToTiltValueRequest): MaybePromise;
     }

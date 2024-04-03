@@ -7,7 +7,6 @@
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { tryCatch } from "../common/TryCatchHandler.js";
 import { ValidationError } from "../common/ValidationError.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
@@ -26,7 +25,7 @@ export type ArrayAsChunked = ArrayChunkData[];
 /**
  * Schema to encode an array or string in TLV.
  *
- * @see {@link MatterCoreSpecificationV1_0} § A.11.2 and A.11.4
+ * @see {@link MatterSpecification.v10.Core} § A.11.2 and A.11.4
  */
 export class ArraySchema<T> extends TlvSchema<T[]> {
     constructor(

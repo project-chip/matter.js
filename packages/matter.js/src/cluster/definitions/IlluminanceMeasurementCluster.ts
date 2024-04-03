@@ -10,7 +10,6 @@ import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { Attribute, OptionalAttribute } from "../../cluster/Cluster.js";
 import { TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { Identity } from "../../util/Type.js";
 import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
@@ -40,7 +39,7 @@ export namespace IlluminanceMeasurement {
              *
              * The MeasuredValue attribute is updated continuously as new measurements are made.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2.5.1
+             * @see {@link MatterSpecification.v11.Cluster} § 2.2.5.1
              */
             measuredValue: Attribute(0x0, TlvNullable(TlvUInt16), { default: 0 }),
 
@@ -48,7 +47,7 @@ export namespace IlluminanceMeasurement {
              * The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. A
              * value of null indicates that this attribute is not defined. See Measured Value for more details.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2.5.2
+             * @see {@link MatterSpecification.v11.Cluster} § 2.2.5.2
              */
             minMeasuredValue: Attribute(0x1, TlvNullable(TlvUInt16.bound({ min: 1 }))),
 
@@ -56,14 +55,14 @@ export namespace IlluminanceMeasurement {
              * The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that can be measured. A
              * value of null indicates that this attribute is not defined. See Measured Value for more details.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2.5.3
+             * @see {@link MatterSpecification.v11.Cluster} § 2.2.5.3
              */
             maxMeasuredValue: Attribute(0x2, TlvNullable(TlvUInt16.bound({ max: 65534 }))),
 
             /**
              * See Measured Value.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2.5.4
+             * @see {@link MatterSpecification.v11.Cluster} § 2.2.5.4
              */
             tolerance: OptionalAttribute(0x3, TlvUInt16.bound({ max: 2048 })),
 
@@ -71,7 +70,7 @@ export namespace IlluminanceMeasurement {
              * The LightSensorType attribute specifies the electronic type of the light sensor. This attribute shall be
              * set to one of the non-reserved values listed in Values of the LightSensorType Attribute.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2.5.5
+             * @see {@link MatterSpecification.v11.Cluster} § 2.2.5.5
              */
             lightSensorType: OptionalAttribute(0x4, TlvNullable(TlvUInt8), { default: null })
         }
@@ -82,7 +81,7 @@ export namespace IlluminanceMeasurement {
      *
      * Attributes and commands for configuring the measurement of illuminance, and reporting illuminance measurements.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.2
+     * @see {@link MatterSpecification.v11.Cluster} § 2.2
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

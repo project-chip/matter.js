@@ -9,7 +9,7 @@ import { AttributePayload } from "../payloads/AttributePayload.js";
 /**
  * Initiates attribute modification.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 8.7.2
+ * @see {@link MatterSpecification.v11.Core} § 8.7.2
  */
 export type WriteRequestAction = {
     attributes: AttributePayload.Write[];

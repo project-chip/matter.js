@@ -15,7 +15,6 @@ import {
     TlvNoResponse,
     OptionalCommand
 } from "../../cluster/Cluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
@@ -29,14 +28,14 @@ export namespace Identify {
      * This command is generated in response to receiving an IdentifyQuery command, see IdentifyQuery Command, in the
      * case that the device is currently identifying itself.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.4
      */
     export const TlvIdentifyQueryResponse = TlvObject({
         /**
          * This field contains the current value of the IdentifyTime attribute, and specifies the length of time, in
          * seconds, that the device will continue to identify itself.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.4.1
          */
         timeout: TlvField(0, TlvUInt16)
     });
@@ -45,14 +44,14 @@ export namespace Identify {
      * This command is generated in response to receiving an IdentifyQuery command, see IdentifyQuery Command, in the
      * case that the device is currently identifying itself.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.4
      */
     export interface IdentifyQueryResponse extends TypeFromSchema<typeof TlvIdentifyQueryResponse> {}
 
     /**
      * The value of the Identify identifyType attribute
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.5.2
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.5.2
      */
     export enum IdentifyType {
         /**
@@ -87,21 +86,21 @@ export namespace Identify {
     /**
      * Input to the Identify identify command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.1
      */
     export const TlvIdentifyRequest = TlvObject({ identifyTime: TlvField(0, TlvUInt16) });
 
     /**
      * Input to the Identify identify command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.1
      */
     export interface IdentifyRequest extends TypeFromSchema<typeof TlvIdentifyRequest> {}
 
     /**
      * The value of Identify.effectIdentifier
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3.1
      */
     export enum EffectIdentifier {
         /**
@@ -140,7 +139,7 @@ export namespace Identify {
     /**
      * The value of Identify.effectVariant
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3.2
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3.2
      */
     export enum EffectVariant {
         Default = 0
@@ -149,7 +148,7 @@ export namespace Identify {
     /**
      * Input to the Identify triggerEffect command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3
      */
     export const TlvTriggerEffectRequest = TlvObject({
         /**
@@ -161,7 +160,7 @@ export namespace Identify {
          *
          * Table 3. Values of the EffectIdentifier Field of the TriggerEffect Command
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3.1
+         * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3.1
          */
         effectIdentifier: TlvField(0, TlvEnum<EffectIdentifier>()),
 
@@ -172,7 +171,7 @@ export namespace Identify {
          *
          * Table 4. Values of the EffectVariant Field of the TriggerEffect Command
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3.2
+         * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3.2
          */
         effectVariant: TlvField(1, TlvEnum<EffectVariant>())
     });
@@ -180,7 +179,7 @@ export namespace Identify {
     /**
      * Input to the Identify triggerEffect command
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3
      */
     export interface TriggerEffectRequest extends TypeFromSchema<typeof TlvTriggerEffectRequest> {}
 
@@ -195,7 +194,7 @@ export namespace Identify {
              *
              * This command has no data fields.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.2
+             * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.2
              */
             identifyQuery: Command(
                 0x1,
@@ -210,7 +209,7 @@ export namespace Identify {
     /**
      * These are optional features supported by IdentifyCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2.4
      */
     export enum Feature {
         /**
@@ -251,7 +250,7 @@ export namespace Identify {
              * If this attribute reaches or is set to the value 0 then the device shall terminate its identification
              * state.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.5.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.2.5.1
              */
             identifyTime: WritableAttribute(0x0, TlvUInt16, { default: 0 }),
 
@@ -261,7 +260,7 @@ export namespace Identify {
              *
              * Table 2. Values of the IdentifyType attribute
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.5.2
+             * @see {@link MatterSpecification.v11.Cluster} § 1.2.5.2
              */
             identifyType: Attribute(0x1, TlvEnum<IdentifyType>(), { default: IdentifyType.None })
         },
@@ -270,7 +269,7 @@ export namespace Identify {
             /**
              * This command starts or stops the receiving device identifying itself.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.1
              */
             identify: Command(0x0, TlvIdentifyRequest, 0x0, TlvNoResponse, { invokeAcl: AccessLevel.Manage }),
 
@@ -281,7 +280,7 @@ export namespace Identify {
              * the effects themselves are entirely up to the implementer to use whenever a visual feedback is useful
              * but it is not the same as and does not replace the identify mechanism used during commissioning.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3
+             * @see {@link MatterSpecification.v11.Cluster} § 1.2.6.3
              */
             triggerEffect: OptionalCommand(
                 0x40,
@@ -320,7 +319,7 @@ export namespace Identify {
      *
      * IdentifyCluster supports optional features that you can enable with the IdentifyCluster.with() factory method.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2
+     * @see {@link MatterSpecification.v11.Cluster} § 1.2
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

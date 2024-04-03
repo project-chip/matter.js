@@ -7,12 +7,11 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 export namespace ProxyDiscoveryInterface {
     export interface Base {
         /**
-         * @see {@link MatterCoreSpecificationV1_1} § 9.15.13.5
+         * @see {@link MatterSpecification.v11.Core} § 9.15.13.5
          */
         proxyDiscoverRequest(): MaybePromise;
     }

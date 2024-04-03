@@ -11,14 +11,14 @@ export namespace CommandPayload {
     /**
      * Command request.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.4.3
+     * @see {@link MatterSpecification.v11.Core} § 8.9.4.3
      */
     export type Request = BasePayload.Data<CommandPath.Invoke>;
 
     /**
      * Response to an individual command.
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 8.9.4.4
+     * @see {@link MatterSpecification.v11.Core} § 8.9.4.4
      */
     export type Response = BasePayload.DataOrStatus<CommandPath.Concrete, {}>;
 }

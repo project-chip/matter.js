@@ -13,27 +13,26 @@ import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Pressure Sensor device measures and reports the pressure of a fluid.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.5
+ * @see {@link MatterSpecification.v11.Device} § 7.5
  */
 export interface PressureSensorDevice extends Identity<typeof PressureSensorDeviceDefinition> {}
 
 export namespace PressureSensorRequirements {
     /**
-     * The {@link PressureMeasurement} cluster is required by the Matter specification
+     * The PressureMeasurement cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link PressureMeasurementServer} for convenience.
      */
     export const PressureMeasurementServer = BasePressureMeasurementServer;
 
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 

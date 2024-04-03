@@ -7,7 +7,6 @@
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Verhoeff } from "../math/Verhoeff.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Base38 } from "./Base38Schema.js";
 import {
     BitField,
@@ -19,7 +18,7 @@ import {
 } from "./BitmapSchema.js";
 import { Schema } from "./Schema.js";
 
-/** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */
+/** See {@link MatterSpecification.v10.Core} § 5.1.3.1 Table 35 */
 export enum CommissioningFlowType {
     /** When not commissioned, the device always enters commissioning mode upon power-up. */
     Standard = 0,
@@ -31,7 +30,7 @@ export enum CommissioningFlowType {
     Custom = 2,
 }
 
-/** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 36 */
+/** See {@link MatterSpecification.v10.Core} § 5.1.3.1 Table 36 */
 export const DiscoveryCapabilitiesBitmap = {
     /** Device supports hosting a Soft-AP when not commissioned. */
     softAccessPoint: BitFlag(0),
@@ -44,7 +43,7 @@ export const DiscoveryCapabilitiesBitmap = {
 };
 export const DiscoveryCapabilitiesSchema = BitmapSchema(DiscoveryCapabilitiesBitmap);
 
-/** See {@link MatterCoreSpecificationV1_0} § 5.1.3.1 Table 35 */
+/** See {@link MatterSpecification.v10.Core} § 5.1.3.1 Table 35 */
 const QrCodeDataSchema = ByteArrayBitmapSchema({
     version: BitField(0, 3),
     vendorId: BitField(3, 16),
@@ -79,7 +78,7 @@ export type ManualPairingData = {
     productId?: number;
 };
 
-/** See {@link MatterCoreSpecificationV1_0} § 5.1.4.1 Table 38/39/40 */
+/** See {@link MatterSpecification.v10.Core} § 5.1.4.1 Table 38/39/40 */
 class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
     protected encodeInternal({ discriminator, passcode, vendorId, productId }: ManualPairingData): string {
         if (discriminator === undefined) throw new UnexpectedDataError("discriminator is required");

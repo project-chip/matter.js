@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommissioningCluster.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * Success or failure of this command shall be communicated by the ArmFailSafeResponse command, unless some data model
@@ -123,12 +122,12 @@ import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
  *   9. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the Node rollback the
  *      state of all non fabric-scoped data present in the Fail-Safe context.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.2
+ * @see {@link MatterSpecification.v11.Core} § 11.9.6.2
  */
 export type ArmFailSafeRequest = TypeFromSchema<typeof GeneralCommissioning.TlvArmFailSafeRequest>;
 
 /**
- * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.3
+ * @see {@link MatterSpecification.v11.Core} § 11.9.6.3
  */
 export type ArmFailSafeResponse = TypeFromSchema<typeof GeneralCommissioning.TlvArmFailSafeResponse>;
 
@@ -162,7 +161,7 @@ export type ArmFailSafeResponse = TypeFromSchema<typeof GeneralCommissioning.Tlv
  * SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, the Breadcrumb attribute shall
  * be left unchanged.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.4
+ * @see {@link MatterSpecification.v11.Core} § 11.9.6.4
  */
 export type SetRegulatoryConfigRequest = TypeFromSchema<typeof GeneralCommissioning.TlvSetRegulatoryConfigRequest>;
 
@@ -172,7 +171,7 @@ export type SetRegulatoryConfigRequest = TypeFromSchema<typeof GeneralCommission
  *
  * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.5
+ * @see {@link MatterSpecification.v11.Core} § 11.9.6.5
  */
 export type SetRegulatoryConfigResponse = TypeFromSchema<typeof GeneralCommissioning.TlvSetRegulatoryConfigResponse>;
 
@@ -182,7 +181,7 @@ export type SetRegulatoryConfigResponse = TypeFromSchema<typeof GeneralCommissio
  *
  * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
  *
- * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.7
+ * @see {@link MatterSpecification.v11.Core} § 11.9.6.7
  */
 export type CommissioningCompleteResponse = TypeFromSchema<typeof GeneralCommissioning.TlvCommissioningCompleteResponse>;
 
@@ -304,7 +303,7 @@ export namespace GeneralCommissioningInterface {
          *   9. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the Node
          *      rollback the state of all non fabric-scoped data present in the Fail-Safe context.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.2
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.2
          */
         armFailSafe(request: ArmFailSafeRequest): MaybePromise<ArmFailSafeResponse>;
 
@@ -339,7 +338,7 @@ export namespace GeneralCommissioningInterface {
          * when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, the Breadcrumb
          * attribute shall be left unchanged.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.4
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.4
          */
         setRegulatoryConfig(request: SetRegulatoryConfigRequest): MaybePromise<SetRegulatoryConfigResponse>;
 
@@ -396,7 +395,7 @@ export namespace GeneralCommissioningInterface {
          * After receipt of a CommissioningCompleteResponse with an ErrorCode value of OK, a client cannot expect any
          * previously established PASE session to still be usable, due to the server having cleared such sessions.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.9.6.6
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.6
          */
         commissioningComplete(): MaybePromise<CommissioningCompleteResponse>;
     }

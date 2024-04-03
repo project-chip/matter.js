@@ -15,55 +15,54 @@ import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definiti
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A Door Lock Controller is a device capable of controlling a door lock.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 8.2
+ * @see {@link MatterSpecification.v11.Device} § 8.2
  */
 export interface DoorLockControllerDevice extends Identity<typeof DoorLockControllerDeviceDefinition> {}
 
 export namespace DoorLockControllerRequirements {
     /**
-     * The {@link Identify} cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link TimeSync} cluster is optional per the Matter specification
+     * The TimeSync cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link TimeSyncServer} for convenience.
      */
     export const TimeSyncServer = BaseTimeSyncServer;
 
     /**
-     * The {@link DoorLock} cluster is required by the Matter specification
+     * The DoorLock cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link DoorLockBehavior} for convenience.
      */
     export const DoorLockBehavior = BaseDoorLockBehavior;
 
     /**
-     * The {@link Identify} cluster is optional per the Matter specification
+     * The Identify cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyBehavior} for convenience.
      */
     export const IdentifyBehavior = BaseIdentifyBehavior;
 
     /**
-     * The {@link Groups} cluster is optional per the Matter specification
+     * The Groups cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link GroupsBehavior} for convenience.
      */
     export const GroupsBehavior = BaseGroupsBehavior;
 
     /**
-     * The {@link Scenes} cluster is optional per the Matter specification
+     * The Scenes cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ScenesBehavior} for convenience.
      */
     export const ScenesBehavior = BaseScenesBehavior;
 

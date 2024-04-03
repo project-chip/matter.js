@@ -9,7 +9,6 @@
 import { MaybePromise } from "../../../util/Promises.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { ApplicationLauncher } from "../../../cluster/definitions/ApplicationLauncherCluster.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * Upon receipt of this command, the server shall launch the application with optional data. The application shall be
@@ -27,14 +26,14 @@ import { MatterApplicationClusterSpecificationV1_1 } from "../../../spec/Specifi
  *
  * This command returns a Launcher Response.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.1
+ * @see {@link MatterSpecification.v11.Cluster} § 6.4.4.1
  */
 export type LaunchAppRequest = TypeFromSchema<typeof ApplicationLauncher.TlvLaunchAppRequest>;
 
 /**
  * This command shall be generated in response to LaunchApp/StopApp/HideApp commands.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.4
+ * @see {@link MatterSpecification.v11.Cluster} § 6.4.4.4
  */
 export type LauncherResponse = TypeFromSchema<typeof ApplicationLauncher.TlvLauncherResponse>;
 
@@ -51,7 +50,7 @@ export type LauncherResponse = TypeFromSchema<typeof ApplicationLauncher.TlvLaun
  *
  * This command returns a Launcher Response.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.2
+ * @see {@link MatterSpecification.v11.Cluster} § 6.4.4.2
  */
 export type StopAppRequest = TypeFromSchema<typeof ApplicationLauncher.TlvStopAppRequest>;
 
@@ -69,7 +68,7 @@ export type StopAppRequest = TypeFromSchema<typeof ApplicationLauncher.TlvStopAp
  *
  * This command returns a Launcher Response.
  *
- * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.3
+ * @see {@link MatterSpecification.v11.Cluster} § 6.4.4.3
  */
 export type HideAppRequest = TypeFromSchema<typeof ApplicationLauncher.TlvHideAppRequest>;
 
@@ -91,7 +90,7 @@ export namespace ApplicationLauncherInterface {
          *
          * This command returns a Launcher Response.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.1
+         * @see {@link MatterSpecification.v11.Cluster} § 6.4.4.1
          */
         launchApp(request: LaunchAppRequest): MaybePromise<LauncherResponse>;
 
@@ -109,7 +108,7 @@ export namespace ApplicationLauncherInterface {
          *
          * This command returns a Launcher Response.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.2
+         * @see {@link MatterSpecification.v11.Cluster} § 6.4.4.2
          */
         stopApp(request: StopAppRequest): MaybePromise<LauncherResponse>;
 
@@ -128,7 +127,7 @@ export namespace ApplicationLauncherInterface {
          *
          * This command returns a Launcher Response.
          *
-         * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.4.3
+         * @see {@link MatterSpecification.v11.Cluster} § 6.4.4.3
          */
         hideApp(request: HideAppRequest): MaybePromise<LauncherResponse>;
     }

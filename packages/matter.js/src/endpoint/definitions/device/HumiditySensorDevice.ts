@@ -13,27 +13,26 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * A humidity sensor (in most cases a Relative humidity sensor) reports humidity measurements.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 7.7
+ * @see {@link MatterSpecification.v11.Device} § 7.7
  */
 export interface HumiditySensorDevice extends Identity<typeof HumiditySensorDeviceDefinition> {}
 
 export namespace HumiditySensorRequirements {
     /**
-     * The {@link Identify} cluster is required by the Matter specification
+     * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
      */
     export const IdentifyServer = BaseIdentifyServer;
 
     /**
-     * The {@link RelativeHumidityMeasurement} cluster is required by the Matter specification
+     * The RelativeHumidityMeasurement cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link RelativeHumidityMeasurementServer} for convenience.
      */
     export const RelativeHumidityMeasurementServer = BaseRelativeHumidityMeasurementServer;
 

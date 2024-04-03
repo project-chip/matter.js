@@ -7,7 +7,6 @@ import { UnexpectedDataError } from "../common/MatterError.js";
 import { ValidationError } from "../common/ValidationError.js";
 import { BitSchema, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { Schema } from "../schema/Schema.js";
-import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import {
     FLOAT32_MAX,
     FLOAT32_MIN,
@@ -34,7 +33,7 @@ import { TlvWrapper } from "./TlvWrapper.js";
 /**
  * Schema to encode an unsigned integer in TLV.
  *
- * @see {@link MatterCoreSpecificationV1_0} § A.11.1
+ * @see {@link MatterSpecification.v10.Core} § A.11.1
  */
 export class TlvNumericSchema<T extends bigint | number> extends TlvSchema<T> {
     constructor(

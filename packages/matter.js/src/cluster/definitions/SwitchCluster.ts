@@ -9,7 +9,6 @@
 import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
 import { FixedAttribute, Event, EventPriority, WritableAttribute } from "../../cluster/Cluster.js";
 import { TlvUInt8 } from "../../tlv/TlvNumber.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag } from "../../schema/BitmapSchema.js";
@@ -20,7 +19,7 @@ export namespace Switch {
     /**
      * Body of the Switch multiPressOngoing event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.6
      */
     export const TlvMultiPressOngoingEvent = TlvObject({
         newPosition: TlvField(0, TlvUInt8),
@@ -30,14 +29,14 @@ export namespace Switch {
     /**
      * Body of the Switch multiPressOngoing event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.6
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.6
      */
     export interface MultiPressOngoingEvent extends TypeFromSchema<typeof TlvMultiPressOngoingEvent> {}
 
     /**
      * Body of the Switch multiPressComplete event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.7
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.7
      */
     export const TlvMultiPressCompleteEvent = TlvObject({
         previousPosition: TlvField(0, TlvUInt8),
@@ -47,77 +46,77 @@ export namespace Switch {
     /**
      * Body of the Switch multiPressComplete event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.7
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.7
      */
     export interface MultiPressCompleteEvent extends TypeFromSchema<typeof TlvMultiPressCompleteEvent> {}
 
     /**
      * Body of the Switch switchLatched event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.1
      */
     export const TlvSwitchLatchedEvent = TlvObject({ newPosition: TlvField(0, TlvUInt8) });
 
     /**
      * Body of the Switch switchLatched event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.1
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.1
      */
     export interface SwitchLatchedEvent extends TypeFromSchema<typeof TlvSwitchLatchedEvent> {}
 
     /**
      * Body of the Switch initialPress event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.2
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.2
      */
     export const TlvInitialPressEvent = TlvObject({ newPosition: TlvField(0, TlvUInt8) });
 
     /**
      * Body of the Switch initialPress event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.2
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.2
      */
     export interface InitialPressEvent extends TypeFromSchema<typeof TlvInitialPressEvent> {}
 
     /**
      * Body of the Switch longPress event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.3
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.3
      */
     export const TlvLongPressEvent = TlvObject({ newPosition: TlvField(0, TlvUInt8) });
 
     /**
      * Body of the Switch longPress event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.3
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.3
      */
     export interface LongPressEvent extends TypeFromSchema<typeof TlvLongPressEvent> {}
 
     /**
      * Body of the Switch longRelease event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.5
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.5
      */
     export const TlvLongReleaseEvent = TlvObject({ previousPosition: TlvField(0, TlvUInt8) });
 
     /**
      * Body of the Switch longRelease event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.5
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.5
      */
     export interface LongReleaseEvent extends TypeFromSchema<typeof TlvLongReleaseEvent> {}
 
     /**
      * Body of the Switch shortRelease event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.4
      */
     export const TlvShortReleaseEvent = TlvObject({ previousPosition: TlvField(0, TlvUInt8) });
 
     /**
      * Body of the Switch shortRelease event
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.4
      */
     export interface ShortReleaseEvent extends TypeFromSchema<typeof TlvShortReleaseEvent> {}
 
@@ -131,7 +130,7 @@ export namespace Switch {
              * switch which supports multi-press (e.g. it will report the value 3 if it can detect single press, double
              * press and triple press, but not quad press and beyond).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.5.3
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.5.3
              */
             multiPressMax: FixedAttribute(0x2, TlvUInt8.bound({ min: 2 }), { default: 2 })
         },
@@ -152,7 +151,7 @@ export namespace Switch {
              *
              *   • a value of N when the Nth press of a multi-press sequence has been detected.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.6
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.6
              */
             multiPressOngoing: Event(0x5, EventPriority.Info, TlvMultiPressOngoingEvent),
 
@@ -179,7 +178,7 @@ export namespace Switch {
              *   • a value of N when there were exactly N presses in a multi-press sequence (and the sequence has
              *     ended).
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.7
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.7
              */
             multiPressComplete: Event(0x6, EventPriority.Info, TlvMultiPressCompleteEvent)
         }
@@ -196,7 +195,7 @@ export namespace Switch {
              *
              * The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. after the move.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.1
              */
             switchLatched: Event(0x0, EventPriority.Info, TlvSwitchLatchedEvent)
         }
@@ -212,7 +211,7 @@ export namespace Switch {
              *
              * The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.2
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.2
              */
             initialPress: Event(0x1, EventPriority.Info, TlvInitialPressEvent)
         }
@@ -229,7 +228,7 @@ export namespace Switch {
              *
              * The NewPosition field shall indicate the new value of the CurrentPosition attribute, i.e. while pressed.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.3
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.3
              */
             longPress: Event(0x2, EventPriority.Info, TlvLongPressEvent),
 
@@ -242,7 +241,7 @@ export namespace Switch {
              * The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. just
              * prior to release.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.5
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.5
              */
             longRelease: Event(0x4, EventPriority.Info, TlvLongReleaseEvent)
         }
@@ -268,7 +267,7 @@ export namespace Switch {
              * The PreviousPosition field shall indicate the previous value of the CurrentPosition attribute, i.e. just
              * prior to release.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.7.4
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.7.4
              */
             shortRelease: Event(0x3, EventPriority.Info, TlvShortReleaseEvent)
         }
@@ -277,7 +276,7 @@ export namespace Switch {
     /**
      * These are optional features supported by SwitchCluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.4
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11.4
      */
     export enum Feature {
         /**
@@ -347,7 +346,7 @@ export namespace Switch {
              * minimum of 2 positions. Also see Section 1.11.10, “NumberOfPositions > 2” for the case
              * NumberOfPositions>2.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.5.1
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.5.1
              */
             numberOfPositions: FixedAttribute(0x0, TlvUInt8.bound({ min: 2 }), { default: 2 }),
 
@@ -356,7 +355,7 @@ export namespace Switch {
              * NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the switch:
              * for example the "open" state of a rocker switch, or the "idle" state of a push button switch.
              *
-             * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11.5.2
+             * @see {@link MatterSpecification.v11.Cluster} § 1.11.5.2
              */
             currentPosition: WritableAttribute(0x1, TlvUInt8, { persistent: true, default: 0 })
         },
@@ -404,7 +403,7 @@ export namespace Switch {
      * Per the Matter specification you cannot use {@link SwitchCluster} without enabling certain feature combinations.
      * You must use the SwitchCluster.with() factory method to obtain a working cluster.
      *
-     * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.11
+     * @see {@link MatterSpecification.v11.Cluster} § 1.11
      */
     export interface Cluster extends Identity<typeof ClusterInstance> {}
 

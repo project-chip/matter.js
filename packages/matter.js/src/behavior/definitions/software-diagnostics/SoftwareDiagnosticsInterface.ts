@@ -7,7 +7,6 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { MaybePromise } from "../../../util/Promises.js";
-import { MatterCoreSpecificationV1_1 } from "../../../spec/Specifications.js";
 
 export namespace SoftwareDiagnosticsInterface {
     export interface Watermarks {
@@ -28,7 +27,7 @@ export namespace SoftwareDiagnosticsInterface {
          * If implemented, the server shall set the value of the StackFreeMinimum field for every thread to the value
          * of the corresponding thread’s StackFreeCurrent field.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.12.7.1
+         * @see {@link MatterSpecification.v11.Core} § 11.12.7.1
          */
         resetWatermarks(): MaybePromise;
     }

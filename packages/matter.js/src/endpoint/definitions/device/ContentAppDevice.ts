@@ -31,7 +31,6 @@ import {
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../properties/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
-import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
 /**
  * This defines conformance to the Content App device type.
@@ -39,64 +38,64 @@ import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specificatio
  * A Content App is usually an application built by a Content Provider. A Casting Video Player with a Content App
  * Platform is able to launch Content Apps and represent these apps as separate endpoints.
  *
- * @see {@link MatterDeviceLibrarySpecificationV1_1} § 10.5
+ * @see {@link MatterSpecification.v11.Device} § 10.5
  */
 export interface ContentAppDevice extends Identity<typeof ContentAppDeviceDefinition> {}
 
 export namespace ContentAppRequirements {
     /**
-     * The {@link KeypadInput} cluster is required by the Matter specification
+     * The KeypadInput cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link KeypadInputServer} for convenience.
      */
     export const KeypadInputServer = BaseKeypadInputServer;
 
     /**
-     * The {@link ApplicationLauncher} cluster is required by the Matter specification
+     * The ApplicationLauncher cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ApplicationLauncherServer} for convenience.
      */
     export const ApplicationLauncherServer = BaseApplicationLauncherServer;
 
     /**
-     * The {@link ApplicationBasic} cluster is required by the Matter specification
+     * The ApplicationBasic cluster is required by the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ApplicationBasicServer} for convenience.
      */
     export const ApplicationBasicServer = BaseApplicationBasicServer;
 
     /**
-     * The {@link Channel} cluster is optional per the Matter specification
+     * The Channel cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ChannelServer} for convenience.
      */
     export const ChannelServer = BaseChannelServer;
 
     /**
-     * The {@link TargetNavigator} cluster is optional per the Matter specification
+     * The TargetNavigator cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link TargetNavigatorServer} for convenience.
      */
     export const TargetNavigatorServer = BaseTargetNavigatorServer;
 
     /**
-     * The {@link MediaPlayback} cluster is optional per the Matter specification
+     * The MediaPlayback cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link MediaPlaybackServer} for convenience.
      */
     export const MediaPlaybackServer = BaseMediaPlaybackServer;
 
     /**
-     * The {@link ContentLauncher} cluster is optional per the Matter specification
+     * The ContentLauncher cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link ContentLauncherServer} for convenience.
      */
     export const ContentLauncherServer = BaseContentLauncherServer;
 
     /**
-     * The {@link AccountLogin} cluster is optional per the Matter specification
+     * The AccountLogin cluster is optional per the Matter specification
      *
-     * We provide this alias for convenience.
+     * We provide this alias to the default implementation {@link AccountLoginServer} for convenience.
      */
     export const AccountLoginServer = BaseAccountLoginServer;
 
