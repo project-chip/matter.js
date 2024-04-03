@@ -12,26 +12,29 @@ import { OnWithTimedOffRequest } from "./OnOffInterface.js";
 const Base = OnOffBehavior.with(OnOff.Feature.LevelControlForLighting);
 
 /**
- * This is the default server implementation of OnOffBehavior.
+ * This is the default server implementation of {@link OnOffBehavior}.
  *
- * This implementation includes all features of OnOff.Cluster and automatically enables the "Level Control for Lighting"
- * Feature. You should use {@link OnOffServer.with} to specialize the class for the features your implementation
- * supports. Alternatively you can extend this class and override the methods you need to change or add mandatory
- * commands.
+ * This implementation includes all features of {@link OnOff.Cluster} and automatically enables the "Level Control
+ * for Lighting" Feature. You should use {@link OnOffServer.with} to specialize the class for the features your
+ * implementation supports. Alternatively you can extend this class and override the methods you need to change or add
+ * mandatory commands.
  */
 export class OnOffServer extends Base {
     protected declare internal: OnOffServer.Internal;
 
     override initialize() {
-        const startUpOnOffValue = this.state.startUpOnOff ?? null;
-        const currentOnOffStatus = this.state.onOff;
-        if (startUpOnOffValue !== null) {
-            const targetOnOffValue =
-                startUpOnOffValue === OnOff.StartUpOnOff.Toggle
-                    ? !currentOnOffStatus
-                    : startUpOnOffValue === OnOff.StartUpOnOff.On;
-            if (targetOnOffValue !== currentOnOffStatus) {
-                this.state.onOff = targetOnOffValue;
+        if (this.features.levelControlForLighting) {
+            // TODO Only do this if it was not a "OTA upgrade reboot" case
+            const startUpOnOffValue = this.state.startUpOnOff ?? null;
+            const currentOnOffStatus = this.state.onOff;
+            if (startUpOnOffValue !== null) {
+                const targetOnOffValue =
+                    startUpOnOffValue === OnOff.StartUpOnOff.Toggle
+                        ? !currentOnOffStatus
+                        : startUpOnOffValue === OnOff.StartUpOnOff.On;
+                if (targetOnOffValue !== currentOnOffStatus) {
+                    this.state.onOff = targetOnOffValue;
+                }
             }
         }
     }
