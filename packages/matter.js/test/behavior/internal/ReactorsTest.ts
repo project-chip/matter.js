@@ -8,7 +8,7 @@ import { Behavior } from "../../../src/behavior/Behavior.js";
 import { Reactor } from "../../../src/behavior/Reactor.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
 import { Contextual } from "../../../src/behavior/context/Contextual.js";
-import { NodeActivity } from "../../../src/behavior/context/server/NodeActivity.js";
+import { NodeActivity } from "../../../src/behavior/context/NodeActivity.js";
 import { BehaviorBacking } from "../../../src/behavior/internal/BehaviorBacking.js";
 import { Reactors } from "../../../src/behavior/internal/Reactors.js";
 import { Environment } from "../../../src/environment/Environment.js";

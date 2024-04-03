@@ -12,7 +12,7 @@ import { MaybePromise } from "../../util/Promises.js";
 import { Reactor } from "../Reactor.js";
 import { ActionContext } from "../context/ActionContext.js";
 import { Contextual } from "../context/Contextual.js";
-import { NodeActivity } from "../context/server/NodeActivity.js";
+import { NodeActivity } from "../context/NodeActivity.js";
 import { OfflineContext } from "../context/server/OfflineContext.js";
 import { Resource } from "../state/transaction/Resource.js";
 import type { BehaviorBacking } from "./BehaviorBacking.js";
@@ -88,7 +88,8 @@ class ReactorBacking<T extends any[], R> {
     #deferred = Array<() => Promise<void>>();
     #trampoline?: Promise<void>;
     #resolveTrampoline?: () => void;
-    #activity?: NodeActivity;
+    #nodeActivity?: NodeActivity;
+    #activity?: NodeActivity.Activity;
 
     constructor(
         reactors: Reactors,
@@ -121,10 +122,12 @@ class ReactorBacking<T extends any[], R> {
                 if (!this.#trampoline) {
                     alreadyReacting = false;
 
-                    if (!this.#activity) {
-                        this.#activity = this.#endpoint.env.get(NodeActivity);
+                    if (!this.#nodeActivity) {
+                        this.#nodeActivity = this.#endpoint.env.get(NodeActivity);
                     }
-                    this.#activity.add(this);
+
+                    this.#activity = this.#nodeActivity.begin(this.toString());
+
                     this.#trampoline = new Promise<void>(resolve => {
                         this.#resolveTrampoline = () => {
                             resolve();
@@ -239,7 +242,8 @@ class ReactorBacking<T extends any[], R> {
         }
 
         this.#resolveTrampoline?.();
-        this.#activity?.delete(this);
+        this.#activity?.[Symbol.dispose]();
+        this.#activity = undefined;
     }
 
     /**

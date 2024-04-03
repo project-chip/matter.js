@@ -93,6 +93,21 @@ export namespace Diagnostic {
     }
 
     /**
+     * A node in a diagnostic tree.  Top-level diagnostic sources registered with DiagnosticSource should present as
+     * nodes.
+     */
+    export function node(icon: string, label: unknown, detail: { self?: unknown; children?: unknown[] }) {
+        const result = [icon, Diagnostic.strong(label)] as unknown[];
+        if (detail?.self !== undefined) {
+            result.push(detail.self);
+        }
+        if (detail?.children !== undefined) {
+            result.push(Diagnostic.list(detail.children));
+        }
+        return result;
+    }
+
+    /**
      * Create a value presenting as a list of separate lines.
      */
     export function list(value: Iterable<unknown>) {

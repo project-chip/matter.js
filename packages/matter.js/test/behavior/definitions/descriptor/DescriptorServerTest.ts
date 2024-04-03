@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeActivity } from "../../../../src/behavior/context/server/NodeActivity.js";
+import { NodeActivity } from "../../../../src/behavior/context/NodeActivity.js";
 import { DescriptorBehavior } from "../../../../src/behavior/definitions/descriptor/DescriptorBehavior.js";
 import { DescriptorServer } from "../../../../src/behavior/definitions/descriptor/DescriptorServer.js";
 import { OnOffServer } from "../../../../src/behavior/definitions/on-off/OnOffServer.js";

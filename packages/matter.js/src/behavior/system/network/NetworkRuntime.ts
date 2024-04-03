@@ -7,6 +7,7 @@
 import { ImplementationError } from "../../../common/MatterError.js";
 import type { Node } from "../../../node/Node.js";
 import { createPromise } from "../../../util/Promises.js";
+import { NodeActivity } from "../../context/NodeActivity.js";
 import { NetworkBehavior } from "./NetworkBehavior.js";
 
 /**
@@ -14,15 +15,21 @@ import { NetworkBehavior } from "./NetworkBehavior.js";
  */
 export abstract class NetworkRuntime {
     #owner: Node;
+    #closing: Promise<void>;
+    #resolveClosing: () => void;
     #closed: Promise<void>;
     #resolveClosed: () => void;
 
     constructor(owner: Node) {
         this.#owner = owner;
 
-        const { promise, resolver } = createPromise<void>();
-        this.#closed = promise;
-        this.#resolveClosed = resolver;
+        const { promise: closing, resolver: resolveClosing } = createPromise<void>();
+        this.#closing = closing;
+        this.#resolveClosing = resolveClosing;
+
+        const { promise: closed, resolver: resolveClosed } = createPromise<void>();
+        this.#closed = closed;
+        this.#resolveClosed = resolveClosed;
 
         const internals = owner.behaviors.internalsOf(NetworkBehavior);
         if (internals.runtime) {
@@ -41,17 +48,26 @@ export abstract class NetworkRuntime {
             throw e;
         }
 
-        await this.#closed;
+        await this.#closing;
+
+        this.blockNewActivity();
+        const activity = this.#owner.env.get(NodeActivity);
+        if (activity.isActive) {
+            await activity.inactive;
+        }
 
         try {
-            await this.stop();
+            await this.#stop();
         } finally {
             await this.#owner.act(agent => this.owner.lifecycle.offline.emit(agent.context));
         }
+
+        this.#resolveClosed();
     }
 
     async close() {
-        this.#resolveClosed();
+        this.#resolveClosing();
+        await this.#closed;
     }
 
     async #stop() {
@@ -67,6 +83,8 @@ export abstract class NetworkRuntime {
     protected abstract start(): Promise<void>;
 
     protected abstract stop(): Promise<void>;
+
+    protected abstract blockNewActivity(): void;
 
     protected get owner() {
         return this.#owner;

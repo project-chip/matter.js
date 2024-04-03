@@ -7,7 +7,7 @@
 import { Behavior } from "../behavior/Behavior.js";
 import { ActionContext } from "../behavior/context/ActionContext.js";
 import { ActionTracer } from "../behavior/context/ActionTracer.js";
-import { NodeActivity } from "../behavior/context/server/NodeActivity.js";
+import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
 import { CrashedDependencyError, Lifecycle, UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
@@ -676,14 +676,34 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
+     * Hierarchical diagnostics of endpoint and children.
+     */
+    get [Diagnostic.value](): unknown {
+        return [
+            Diagnostic.strong(this.id),
+            Diagnostic.dict({
+                ...this.#diagnosticProps,
+                class: this.constructor.name,
+            }),
+            Diagnostic.list([...this.behaviors.detailedDiagnostic, ...this.parts]),
+        ];
+    }
+
+    /**
      * Diagnostic information regarding endpoint state.
      */
     get diagnosticDict() {
         return Diagnostic.dict({
-            "endpoint#": this.number,
-            type: `${this.type.name} (0x${this.type.deviceType.toString(16)})`,
+            ...this.#diagnosticProps,
             behaviors: this.behaviors,
         });
+    }
+
+    get #diagnosticProps() {
+        return {
+            "endpoint#": this.number,
+            type: `${this.type.name} (0x${this.type.deviceType.toString(16)})`,
+        };
     }
 }
 

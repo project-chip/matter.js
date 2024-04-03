@@ -120,7 +120,7 @@ function plainLogFormatter(now: Date, level: Level, facility: string, prefix: st
         value: producer => creator.text(producer()),
         strong: producer => creator.text(`*${producer()}*`),
         weak: producer => creator.text(producer()),
-        status: (status, producer) => `${statusIcon(status)}${producer()}`,
+        status: (status, producer) => `${creator.text(statusIcon(status))}${producer()}`,
         via: text => creator.text(text),
     });
 
@@ -260,7 +260,7 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
 
         status: (status, producer) => {
             styles.push(status);
-            const result = `${style(status, statusIcon(status))}${producer()}`;
+            const result = `${creator.text(style(status, statusIcon(status)))}${producer()}`;
             styles.pop();
             return result;
         },

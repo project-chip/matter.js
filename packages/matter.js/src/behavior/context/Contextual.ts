@@ -16,7 +16,7 @@ export interface Contextual {
 export namespace Contextual {
     export const context = Symbol("association");
 
-    export function contextOf(subject: any) {
+    export function contextOf(subject: unknown) {
         if (subject === undefined || subject === null) {
             return;
         }

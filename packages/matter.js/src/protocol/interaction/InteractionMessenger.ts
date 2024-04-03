@@ -128,18 +128,33 @@ class InteractionMessenger<ContextT> {
     }
 }
 
+export interface InteractionRecipient {
+    handleReadRequest(
+        exchange: MessageExchange<MatterDevice>,
+        request: ReadRequest,
+        message: Message,
+    ): Promise<DataReport>;
+    handleWriteRequest(
+        exchange: MessageExchange<MatterDevice>,
+        request: WriteRequest,
+        message: Message,
+    ): Promise<WriteResponse>;
+    handleSubscribeRequest(
+        exchange: MessageExchange<MatterDevice>,
+        request: SubscribeRequest,
+        messenger: InteractionServerMessenger,
+        message: Message,
+    ): Promise<void>;
+    handleInvokeRequest(
+        exchange: MessageExchange<MatterDevice>,
+        request: InvokeRequest,
+        message: Message,
+    ): Promise<InvokeResponse>;
+    handleTimedRequest(exchange: MessageExchange<MatterDevice>, request: TimedRequest, message: Message): void;
+}
+
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
-    async handleRequest(
-        handleReadRequest: (request: ReadRequest, message: Message) => Promise<DataReport>,
-        handleWriteRequest: (request: WriteRequest, message: Message) => Promise<WriteResponse>,
-        handleSubscribeRequest: (
-            request: SubscribeRequest,
-            messenger: InteractionServerMessenger,
-            message: Message,
-        ) => Promise<void>,
-        handleInvokeRequest: (request: InvokeRequest, message: Message) => Promise<InvokeResponse>,
-        handleTimedRequest: (request: TimedRequest, message: Message) => void,
-    ) {
+    async handleRequest(recipient: InteractionRecipient) {
         let continueExchange = true; // are more messages expected in this "transaction"?
         try {
             while (continueExchange) {
@@ -149,13 +164,15 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 switch (message.payloadHeader.messageType) {
                     case MessageType.ReadRequest: {
                         const readRequest = TlvReadRequest.decode(message.payload);
-                        await this.sendDataReport(await handleReadRequest(readRequest, message));
+                        await this.sendDataReport(
+                            await recipient.handleReadRequest(this.exchange, readRequest, message),
+                        );
                         break;
                     }
                     case MessageType.WriteRequest: {
                         const writeRequest = TlvWriteRequest.decode(message.payload);
                         const { suppressResponse } = writeRequest;
-                        const writeResponse = await handleWriteRequest(writeRequest, message);
+                        const writeResponse = await recipient.handleWriteRequest(this.exchange, writeRequest, message);
                         if (!suppressResponse && !isGroupSession) {
                             await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
                         }
@@ -163,14 +180,18 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.SubscribeRequest: {
                         const subscribeRequest = TlvSubscribeRequest.decode(message.payload);
-                        await handleSubscribeRequest(subscribeRequest, this, message);
+                        await recipient.handleSubscribeRequest(this.exchange, subscribeRequest, this, message);
                         // response is sent by handler
                         break;
                     }
                     case MessageType.InvokeCommandRequest: {
                         const invokeRequest = TlvInvokeRequest.decode(message.payload);
                         const { suppressResponse } = invokeRequest;
-                        const invokeResponse = await handleInvokeRequest(invokeRequest, message);
+                        const invokeResponse = await recipient.handleInvokeRequest(
+                            this.exchange,
+                            invokeRequest,
+                            message,
+                        );
                         if (!suppressResponse && !isGroupSession) {
                             await this.send(
                                 MessageType.InvokeCommandResponse,
@@ -182,7 +203,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
-                        handleTimedRequest(timedRequest, message);
+                        recipient.handleTimedRequest(this.exchange, timedRequest, message);
                         await this.sendStatus(StatusCode.Success);
                         continueExchange = true;
                         break;

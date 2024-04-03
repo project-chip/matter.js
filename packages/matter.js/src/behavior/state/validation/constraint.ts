@@ -31,7 +31,7 @@ export function createConstraintValidator(
         case Metatype.float:
             return (value, _session, location) => {
                 assertNumeric(value, location);
-                if (!constraint.test(value)) {
+                if (!constraint.test(value, location.siblings)) {
                     throw new ConstraintError(
                         schema,
                         location,
@@ -44,7 +44,7 @@ export function createConstraintValidator(
         case Metatype.bytes:
             return (value: Val, _session, location) => {
                 assertSequence(value, location);
-                if (!constraint.test(value.length)) {
+                if (!constraint.test(value.length, location.siblings)) {
                     throw new ConstraintError(
                         schema,
                         location,

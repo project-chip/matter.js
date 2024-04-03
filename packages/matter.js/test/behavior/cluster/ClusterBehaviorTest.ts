@@ -254,6 +254,10 @@ describe("ClusterBehavior", () => {
 
             const Events2 = MyBi.Events;
             ({}) as InstanceType<typeof Events2> satisfies EventEmitter;
+
+            const eventsInstance = new Events2();
+            eventsInstance.startUp satisfies Observable;
+            expect(eventsInstance.startUp).not.undefined;
         });
 
         it("sets defaults for newly-enabled properties", () => {

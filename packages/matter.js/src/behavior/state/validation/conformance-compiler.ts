@@ -515,13 +515,17 @@ export function astToFunction(
 
     function requireValue(value: Val, _session: AccessControl.Session, location: ValidationLocation) {
         if (value === undefined) {
-            throw new ConformanceError(schema, location, "Field must be defined");
+            throw new ConformanceError(
+                schema,
+                location,
+                "Value is undefined but is mandatory per Matter specification",
+            );
         }
     }
 
     function disallowValue(value: Val, _session: AccessControl.Session, location: ValidationLocation) {
         if (value !== undefined) {
-            throw new ConformanceError(schema, location, "Field must not be defined");
+            throw new ConformanceError(schema, location, "Value is present but disallowed per Matter specification");
         }
     }
 }

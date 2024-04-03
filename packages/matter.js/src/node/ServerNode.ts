@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NodeActivity } from "../behavior/context/server/NodeActivity.js";
+import { NodeActivity } from "../behavior/context/NodeActivity.js";
 import { CommissioningBehavior } from "../behavior/system/commissioning/CommissioningBehavior.js";
 import { NetworkServer } from "../behavior/system/network/NetworkServer.js";
 import { ServerNetworkRuntime } from "../behavior/system/network/ServerNetworkRuntime.js";
@@ -17,6 +17,7 @@ import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system
 import { EndpointInitializer } from "../endpoint/properties/EndpointInitializer.js";
 import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
+import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
 import { Mutex } from "../util/Mutex.js";
 import { Identity } from "../util/Type.js";
@@ -58,6 +59,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
         super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));
         this.#mutex = new Mutex(this, this.construction);
+        DiagnosticSource.add(this);
     }
 
     /**
@@ -151,13 +153,15 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         });
 
         await this.#mutex;
+
+        DiagnosticSource.delete(this);
     }
 
     /**
      * Perform a factory reset of the node.
      */
     async factoryReset() {
-        // Do not reset whilst online, but note online state and restart after reset
+        // Go offline before performing reset
         const isOnline = this.lifecycle.isOnline;
         if (isOnline) {
             this.cancel();

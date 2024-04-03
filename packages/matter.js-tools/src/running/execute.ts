@@ -25,6 +25,11 @@ export async function execute(bin: string, argv: string[], env?: typeof process.
 
         const proc = spawn(bin, argv, options);
 
+        // Proxy SIGUSR2 to the child process
+        process.on("SIGUSR2", () => {
+            proc.kill("SIGUSR2");
+        });
+
         proc.on("error", e => {
             finished = true;
             reject(e);

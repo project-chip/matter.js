@@ -18,7 +18,8 @@ const AllTests = Tests({
                 requires: {
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "M": Field must be defined',
+                        message:
+                            'Validating Test.test: Conformance "M": Value is undefined but is mandatory per Matter specification',
                     },
                 },
             }),
@@ -43,7 +44,8 @@ const AllTests = Tests({
                     supports: ["foo"],
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "F": Field must be defined',
+                        message:
+                            'Validating Test.test: Conformance "F": Value is undefined but is mandatory per Matter specification',
                     },
                 },
 
@@ -51,7 +53,8 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "F": Field must not be defined',
+                        message:
+                            'Validating Test.test: Conformance "F": Value is present but disallowed per Matter specification',
                     },
                 },
 
@@ -72,7 +75,8 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "[F]": Field must not be defined',
+                        message:
+                            'Validating Test.test: Conformance "[F]": Value is present but disallowed per Matter specification',
                     },
                 },
 
@@ -87,7 +91,8 @@ const AllTests = Tests({
                 "requires if disabled": {
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "!F": Field must be defined',
+                        message:
+                            'Validating Test.test: Conformance "!F": Value is undefined but is mandatory per Matter specification',
                     },
                 },
 
@@ -96,7 +101,8 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "!F": Field must not be defined',
+                        message:
+                            'Validating Test.test: Conformance "!F": Value is present but disallowed per Matter specification',
                     },
                 },
 
@@ -117,7 +123,8 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "[!F]": Field must not be defined',
+                        message:
+                            'Validating Test.test: Conformance "[!F]": Value is present but disallowed per Matter specification',
                     },
                 },
 
@@ -144,7 +151,8 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "F | B": Field must not be defined',
+                            message:
+                                'Validating Test.test: Conformance "F | B": Value is present but disallowed per Matter specification',
                         },
                     },
 
@@ -174,7 +182,8 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "[F | B]": Field must not be defined',
+                            message:
+                                'Validating Test.test: Conformance "[F | B]": Value is present but disallowed per Matter specification',
                         },
                     },
 
@@ -193,7 +202,8 @@ const AllTests = Tests({
                         supports: ["foo", "bar"],
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "F & B": Field must be defined',
+                            message:
+                                'Validating Test.test: Conformance "F & B": Value is undefined but is mandatory per Matter specification',
                         },
                     },
 
@@ -201,7 +211,8 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "F & B": Field must not be defined',
+                            message:
+                                'Validating Test.test: Conformance "F & B": Value is present but disallowed per Matter specification',
                         },
                     },
 
@@ -210,7 +221,8 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "F & B": Field must not be defined',
+                            message:
+                                'Validating Test.test: Conformance "F & B": Value is present but disallowed per Matter specification',
                         },
                     },
 
@@ -219,7 +231,8 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "F & B": Field must not be defined',
+                            message:
+                                'Validating Test.test: Conformance "F & B": Value is present but disallowed per Matter specification',
                         },
                     },
 
@@ -248,7 +261,8 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "[F & B]": Field must not be defined',
+                            message:
+                                'Validating Test.test: Conformance "[F & B]": Value is present but disallowed per Matter specification',
                         },
                     },
 
@@ -257,7 +271,8 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "[F & B]": Field must not be defined',
+                            message:
+                                'Validating Test.test: Conformance "[F & B]": Value is present but disallowed per Matter specification',
                         },
                     },
 
@@ -266,7 +281,8 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.test: Conformance "[F & B]": Field must not be defined',
+                            message:
+                                'Validating Test.test: Conformance "[F & B]": Value is present but disallowed per Matter specification',
                         },
                     },
 
@@ -294,7 +310,8 @@ const AllTests = Tests({
                     supports: ["aye", "bee", "see"],
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "A & B & C": Field must be defined',
+                        message:
+                            'Validating Test.test: Conformance "A & B & C": Value is undefined but is mandatory per Matter specification',
                     },
                 },
 
@@ -303,7 +320,8 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "A & B & C": Field must not be defined',
+                        message:
+                            'Validating Test.test: Conformance "A & B & C": Value is present but disallowed per Matter specification',
                     },
                 },
 
@@ -327,7 +345,8 @@ const AllTests = Tests({
                     supports: ["aye", "bee"],
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "A & (B | C)": Field must be defined',
+                        message:
+                            'Validating Test.test: Conformance "A & (B | C)": Value is undefined but is mandatory per Matter specification',
                     },
                 },
 
@@ -335,7 +354,8 @@ const AllTests = Tests({
                     supports: ["aye", "see"],
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "A & (B | C)": Field must be defined',
+                        message:
+                            'Validating Test.test: Conformance "A & (B | C)": Value is undefined but is mandatory per Matter specification',
                     },
                 },
 
@@ -344,7 +364,8 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "A & (B | C)": Field must not be defined',
+                        message:
+                            'Validating Test.test: Conformance "A & (B | C)": Value is present but disallowed per Matter specification',
                     },
                 },
 
@@ -369,7 +390,8 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.test: Conformance "A | B & C": Field must not be defined',
+                        message:
+                            'Validating Test.test: Conformance "A | B & C": Value is present but disallowed per Matter specification',
                     },
                 },
             }),

@@ -6,25 +6,17 @@
 
 import { Diagnostic } from "./Diagnostic.js";
 
-const sources = new Set<DiagnosticSource>();
-
-/**
- * A source of diagnostic data.
- */
-export interface DiagnosticSource {
-    name: string;
-    readonly [Diagnostic.value]: {};
-}
+const sources = new Set<Diagnostic>();
 
 /**
  * Registry of diagnostic sources.
  */
 export const DiagnosticSource = {
-    add(source: DiagnosticSource) {
+    add(source: Diagnostic) {
         sources.add(source);
     },
 
-    delete(source: DiagnosticSource) {
+    delete(source: Diagnostic) {
         sources.delete(source);
     },
 
@@ -33,6 +25,6 @@ export const DiagnosticSource = {
     },
 
     get [Diagnostic.value]() {
-        return [...sources].map(source => [Diagnostic.strong(source.name), source]);
+        return sources;
     },
 };

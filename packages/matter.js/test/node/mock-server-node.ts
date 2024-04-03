@@ -5,7 +5,6 @@
  */
 
 import { MatterDevice } from "../../src/MatterDevice.js";
-import { NodeActivity } from "../../src/behavior/context/server/NodeActivity.js";
 import { OnlineContext } from "../../src/behavior/context/server/OnlineContext.js";
 import { Crypto } from "../../src/crypto/Crypto.js";
 import { Key, PrivateKey } from "../../src/crypto/Key.js";
@@ -75,9 +74,6 @@ export class MockServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootE
             if (!options.subject) {
                 options.subject = NodeId(0);
             }
-        }
-        if (!options.activity) {
-            options.activity = this.env.get(NodeActivity);
         }
         return OnlineContext(options as OnlineContext.Options).act(context => actor(context.agentFor(this)));
     }

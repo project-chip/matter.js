@@ -9,8 +9,8 @@ import { ReadOnlyTransaction } from "../../state/transaction/Tx.js";
 import { ActionContext } from "../ActionContext.js";
 import { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
+import { NodeActivity } from "../NodeActivity.js";
 import { ContextAgents } from "./ContextAgents.js";
-import { NodeActivity } from "./NodeActivity.js";
 
 export let nextInternalId = 1;
 
@@ -42,31 +42,30 @@ export const OfflineContext = {
         const via = Diagnostic.via(`${purpose}#${id.toString(16)}`);
 
         let context: ActionContext | undefined;
+        let frame: NodeActivity.Activity | undefined;
 
         const actOffline = (transaction: Transaction) => {
-            context = createOfflineContext(transaction, options);
+            context = createOfflineContext(transaction, frame, options);
             return actor(context);
         };
 
         let isAsync = false;
         try {
-            activity?.add(via);
+            frame = activity?.begin(via);
 
             const result = Transaction.act(via, actOffline);
 
             if (MaybePromise.is(result)) {
                 isAsync = true;
                 return Promise.resolve(result).finally(() => {
-                    if (context) {
-                        activity?.delete(via);
-                    }
+                    frame?.[Symbol.dispose]();
                 }) as T;
             }
 
             return result;
         } finally {
             if (!isAsync) {
-                activity?.delete(via);
+                frame?.[Symbol.dispose]();
             }
         }
     },
@@ -92,7 +91,11 @@ export namespace OfflineContext {
     }
 }
 
-function createOfflineContext(transaction: Transaction, options?: OfflineContext.Options) {
+function createOfflineContext(
+    transaction: Transaction,
+    activity?: NodeActivity.Activity,
+    options?: OfflineContext.Options,
+) {
     let agents: undefined | ContextAgents;
 
     const context = Object.freeze({
@@ -102,6 +105,7 @@ function createOfflineContext(transaction: Transaction, options?: OfflineContext
         offline: true,
 
         transaction,
+        activity,
 
         accessLevelFor() {
             // Be as restrictive as possible.  The offline flag should make this irrelevant
