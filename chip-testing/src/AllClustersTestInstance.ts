@@ -234,7 +234,7 @@ export class AllClustersTestInstance implements TestInstance {
                     lightSensorType: null,
                 },
                 levelControl: {
-                    currentLevel: 0,
+                    currentLevel: 1,
                     minLevel: 1,
                     maxLevel: 0xfe,
                     options: {},
