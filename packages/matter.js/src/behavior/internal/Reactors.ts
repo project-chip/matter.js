@@ -211,8 +211,8 @@ class ReactorBacking<T extends any[], R> {
         if (!(error instanceof Error)) {
             error = new Error(`${error}`);
         }
-        if (!this.#offline && error instanceof MatterError) {
-            logger.error("Unhandled online MatterError", this.#augmentError(error));
+        if (error instanceof MatterError) {
+            logger.error("Unhandled MatterError", this.#augmentError(error));
             throw error;
         }
         logger.error("Unhandled", this.#augmentError(error));
