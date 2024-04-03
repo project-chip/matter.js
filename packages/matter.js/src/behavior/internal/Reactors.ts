@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError } from "../../common/MatterError.js";
+import { ImplementationError, InternalError, MatterError } from "../../common/MatterError.js";
 import { Endpoint } from "../../endpoint/Endpoint.js";
 import { Logger } from "../../log/Logger.js";
 import type { Observable, Observer } from "../../util/Observable.js";
@@ -210,6 +210,10 @@ class ReactorBacking<T extends any[], R> {
     #unhandledError(error: unknown) {
         if (!(error instanceof Error)) {
             error = new Error(`${error}`);
+        }
+        if (!this.#offline && error instanceof MatterError) {
+            logger.error("Unhandled online MatterError", this.#augmentError(error));
+            throw error;
         }
         logger.error("Unhandled", this.#augmentError(error));
     }
