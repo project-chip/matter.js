@@ -12,6 +12,19 @@ The main work (all changes without a GitHub username in brackets in the below li
 ### __WORK IN PROGRESS__
 * Matter-Core functionality:
   * Enhanced Identify cluster default implementation by additional state `isIdentifying` and events `startIdentifying` and `stopIdentifying`
+  * Enhances diagnostic and logging information, also on SIGUSR2 signal for node.js
+  * Enhanced cluster default implementations for the following clusters:
+    * BooleanState: Automatically emit the StateChange event when enabled for the cluster and the stateValue changes
+    * LevelControl: Implemented all non Frequency-command handlers as defined by specification with an optional transition time simulation
+    * LocalizationConfiguration: Implemented activeLocale validation
+    * TimeFormatLocalization: Implemented activeTimeFormat validation
+* matter.js New API code flows: 
+  * Optimizes Node activity tracking and shutdown/startup handling
+  * Optimized constraint validations and conformance error messages
+  * Makes sure to rethrow MatterErrors on change handlers to allow using them for message validation
+  * Corrects the returned status error code when an Enum value is set to an invalid value
+* Chip testing:
+  * Adds automatic CI testing for all clusters listed in [matter.js Readme](./packages/matter.js/README.md)
 
 ## 0.8.0 (2024-03-29)
 * Packages
