@@ -5,10 +5,36 @@
  */
 
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
+import { BooleanStateServer } from "@project-chip/matter.js/behavior/definitions/boolean-state";
 import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/fixed-label";
+import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
+import { IlluminanceMeasurementServer } from "@project-chip/matter.js/behavior/definitions/illuminance-measurement";
+import { LevelControlServer } from "@project-chip/matter.js/behavior/definitions/level-control";
+import { LocalizationConfigurationServer } from "@project-chip/matter.js/behavior/definitions/localization-configuration";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
+import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
+import { PowerSourceServer } from "@project-chip/matter.js/behavior/definitions/power-source";
+import { PressureMeasurementServer } from "@project-chip/matter.js/behavior/definitions/pressure-measurement";
+import { PumpConfigurationAndControlServer } from "@project-chip/matter.js/behavior/definitions/pump-configuration-and-control";
+import { RelativeHumidityMeasurementServer } from "@project-chip/matter.js/behavior/definitions/relative-humidity-measurement";
+import { SwitchServer } from "@project-chip/matter.js/behavior/definitions/switch";
+import { TemperatureMeasurementServer } from "@project-chip/matter.js/behavior/definitions/temperature-measurement";
+import { ThermostatUserInterfaceConfigurationServer } from "@project-chip/matter.js/behavior/definitions/thermostat-user-interface-configuration";
+import { TimeFormatLocalizationServer } from "@project-chip/matter.js/behavior/definitions/time-format-localization";
+import { UnitLocalizationServer } from "@project-chip/matter.js/behavior/definitions/unit-localization";
 import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/user-label";
-import { AdministratorCommissioning, BasicInformation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
+import {
+    AdministratorCommissioning,
+    BasicInformation,
+    LevelControl,
+    NetworkCommissioning,
+    OccupancySensing,
+    PowerSource,
+    PumpConfigurationAndControl,
+    Switch,
+    ThermostatUserInterfaceConfiguration,
+    TimeFormatLocalization,
+} from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLightDevice";
 import { Endpoint } from "@project-chip/matter.js/endpoint";
@@ -17,6 +43,7 @@ import { ServerNode } from "@project-chip/matter.js/node";
 import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
+import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 
 export class AllClustersTestInstance implements TestInstance {
     serverNode: ServerNode | undefined;
@@ -54,10 +81,8 @@ export class AllClustersTestInstance implements TestInstance {
     async start() {
         if (!this.serverNode) throw new Error("serverNode not initialized on start");
 
-        /*
         const env = Environment.default;
         env.vars.set("mdns.networkInterface", "en0");
-         */
 
         try {
             await this.serverNode.bringOnline();
@@ -97,8 +122,11 @@ export class AllClustersTestInstance implements TestInstance {
                 //BasicInformationServer.enable({ events: { shutDown: true, leave: true } }),
                 // We upgrade the AdminCommissioningCluster to also allow Basic Commissioning, so we can use for more testcases
                 AdministratorCommissioningServer.with("Basic"),
-                // Set the correct Ethernet netwerk Commissioning cluster
-                NetworkCommissioningServer.with("EthernetNetworkInterface"),
+                LocalizationConfigurationServer,
+
+                NetworkCommissioningServer.with("EthernetNetworkInterface"), // Set the correct Ethernet network Commissioning cluster
+                TimeFormatLocalizationServer.with("CalendarFormat"),
+                UnitLocalizationServer.with("TemperatureUnit"),
                 UserLabelServer,
             ),
             {
@@ -114,6 +142,9 @@ export class AllClustersTestInstance implements TestInstance {
                 productDescription: {
                     name: this.appName,
                     deviceType: DeviceTypeId(0xffff),
+                },
+                administratorCommissioning: {
+                    windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
                 },
                 basicInformation: {
                     vendorName: "Binford",
@@ -133,8 +164,9 @@ export class AllClustersTestInstance implements TestInstance {
                         primaryColor: BasicInformation.Color.Purple,
                     },
                 },
-                administratorCommissioning: {
-                    windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
+                localizationConfiguration: {
+                    activeLocale: "en-US",
+                    supportedLocales: ["en-US", "de-DE", "es-ES"],
                 },
                 networkCommissioning: {
                     maxNetworks: 1,
@@ -144,26 +176,123 @@ export class AllClustersTestInstance implements TestInstance {
                     lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
                     networks: [{ networkId: networkId, connected: true }],
                 },
+                timeFormatLocalization: {
+                    hourFormat: TimeFormatLocalization.HourFormat["24Hr"],
+                    activeCalendarType: TimeFormatLocalization.CalendarType.Gregorian,
+                    supportedCalendarTypes: [TimeFormatLocalization.CalendarType.Gregorian],
+                },
                 userLabel: {
                     labelList: [{ label: "foo", value: "bar" }],
                 },
             },
         );
 
-        const endpoint1 = new Endpoint(DimmableLightDevice.with(FixedLabelServer, UserLabelServer), {
-            number: EndpointNumber(1),
-            id: "onoff1",
-            fixedLabel: {
-                labelList: [
-                    { label: "foo", value: "bar" },
-                    { label: "foo2", value: "bar2" },
-                ],
+        const endpoint1 = new Endpoint(
+            DimmableLightDevice.with(
+                BooleanStateServer.enable({ events: { stateChange: true } }),
+                FixedLabelServer,
+                FlowMeasurementServer,
+                TestIdentifyServer,
+                IlluminanceMeasurementServer,
+                LevelControlServer.with(
+                    LevelControl.Feature.OnOff,
+                    LevelControl.Feature.Lighting,
+                    LevelControl.Feature.Frequency,
+                ),
+                OccupancySensingServer,
+                PowerSourceServer.with(PowerSource.Feature.Battery),
+                PressureMeasurementServer,
+                PumpConfigurationAndControlServer.with(PumpConfigurationAndControl.Feature.ConstantPressure),
+                RelativeHumidityMeasurementServer,
+                SwitchServer.with(Switch.Feature.LatchingSwitch),
+                TemperatureMeasurementServer,
+                ThermostatUserInterfaceConfigurationServer,
+                UserLabelServer,
+            ),
+            {
+                number: EndpointNumber(1),
+                id: "onoff1",
+                booleanState: {
+                    stateValue: false,
+                },
+                fixedLabel: {
+                    labelList: [
+                        { label: "foo", value: "bar" },
+                        { label: "foo2", value: "bar2" },
+                    ],
+                },
+                flowMeasurement: {
+                    measuredValue: 1,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                    tolerance: 0,
+                },
+                illuminanceMeasurement: {
+                    tolerance: 0,
+                    lightSensorType: null,
+                },
+                levelControl: {
+                    currentLevel: 0,
+                    minLevel: 1,
+                    maxLevel: 0xfe,
+                    options: {},
+                    onOffTransitionTime: 1000,
+                    onLevel: 0x50,
+                    onTransitionTime: 500,
+                    offTransitionTime: 500,
+                    defaultMoveRate: 100,
+                    remainingTime: 0,
+                    startUpCurrentLevel: 100,
+                    currentFrequency: 50,
+                    minFrequency: 50,
+                    maxFrequency: 60,
+                    simulateTransitionTimeHandling: true, // enable transition simulation
+                },
+                occupancySensing: {
+                    occupancySensorType: OccupancySensing.OccupancySensorType.Pir,
+                    occupancySensorTypeBitmap: { pir: true },
+                    occupancy: { occupied: true },
+                },
+                powerSource: {
+                    status: PowerSource.PowerSourceStatus.Active,
+                    order: 1,
+                    description: "Battery",
+                    batChargeLevel: PowerSource.BatChargeLevel.Ok,
+                    batReplacementNeeded: false,
+                    batReplaceability: PowerSource.BatReplaceability.NotReplaceable,
+                },
+                pumpConfigurationAndControl: {
+                    effectiveOperationMode: PumpConfigurationAndControl.OperationMode.Normal,
+                    effectiveControlMode: PumpConfigurationAndControl.ControlMode.ConstantPressure,
+                    minConstPressure: 0,
+                    maxConstPressure: 100,
+                    pumpStatus: {
+                        deviceFault: true,
+                    },
+                    speed: 50,
+                    lifetimeEnergyConsumed: 0,
+                    lifetimeRunningHours: 0,
+                    power: 50,
+                    operationMode: PumpConfigurationAndControl.OperationMode.Normal,
+                    controlMode: PumpConfigurationAndControl.ControlMode.ConstantPressure,
+                },
+                relativeHumidityMeasurement: {
+                    tolerance: 0,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
+                },
+                temperatureMeasurement: {
+                    tolerance: 0,
+                },
+                thermostatUserInterfaceConfiguration: {
+                    scheduleProgrammingVisibility:
+                        ThermostatUserInterfaceConfiguration.ScheduleProgrammingVisibility.ScheduleProgrammingPermitted,
+                },
+                userLabel: {
+                    labelList: [{ label: "foo", value: "bar" }],
+                },
             },
-            userLabel: {
-                labelList: [{ label: "foo", value: "bar" }],
-            },
-        });
-
+        );
         await serverNode.add(endpoint1);
 
         return serverNode;
