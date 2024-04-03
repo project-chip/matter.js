@@ -6,6 +6,7 @@
 
 import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { ClusterModel, Metatype, ValueModel } from "../../../model/index.js";
+import { StatusCode } from "../../../protocol/interaction/StatusCode.js";
 import { camelize } from "../../../util/String.js";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
@@ -120,7 +121,7 @@ function createEnumValidator(schema: ValueModel): ValueSupervisor.Validate | und
     return (value, _session, location) => {
         assertNumber(value, location);
         if (!valid.has(value)) {
-            throw new DatatypeError(location, "defined in enum", value);
+            throw new DatatypeError(location, "defined in enum", value, StatusCode.ConstraintError);
         }
     };
 }
