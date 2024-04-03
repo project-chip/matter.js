@@ -285,6 +285,8 @@ export class AllClustersTestInstance implements TestInstance {
                 },
                 temperatureMeasurement: {
                     tolerance: 0,
+                    minMeasuredValue: 0,
+                    maxMeasuredValue: 100,
                 },
                 thermostatUserInterfaceConfiguration: {
                     scheduleProgrammingVisibility:
