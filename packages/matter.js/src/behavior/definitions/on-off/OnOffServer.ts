@@ -149,13 +149,13 @@ export class OnOffServer extends Base {
         return timer;
     }
 
-    #timedOnTick() {
+    async #timedOnTick() {
         let time = (this.state.onTime ?? 0) - 1;
         if (time <= 0) {
             time = 0;
             this.internal.timedOnTimer?.stop();
             this.state.offWaitTime = 0;
-            this.off();
+            await this.off();
         }
         this.state.onTime = time;
     }

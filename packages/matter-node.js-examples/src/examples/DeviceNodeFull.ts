@@ -147,7 +147,7 @@ class OnOffShellExecServer extends OnOffServer {
     // Intercept the "on" command to the Matter On/Off cluster to print a log message.
     override async on() {
         executeCommand("on");
-        super.on();
+        await super.on();
     }
 
     // This is the functional inverse of on() above.
