@@ -145,7 +145,7 @@ await deviceStorage.set({
 // cluster implementation to print status to the console.
 class OnOffShellExecServer extends OnOffServer {
     // Intercept the "on" command to the Matter On/Off cluster to print a log message.
-    override on() {
+    override async on() {
         executeCommand("on");
         super.on();
     }
@@ -154,7 +154,7 @@ class OnOffShellExecServer extends OnOffServer {
     //
     // For demonstration purposes we update state ourselves rather than deferring to matter.js's default "off" handler
     // via super.off().
-    override off() {
+    override async off() {
         executeCommand("off");
         this.state.onOff = false;
     }
