@@ -45,7 +45,7 @@ export class OnOffServer extends Base {
         await super[Symbol.asyncDispose]?.();
     }
 
-    override on() {
+    override async on() {
         this.state.onOff = true;
         if (this.features.levelControlForLighting) {
             if (!this.timedOnTimer.isRunning) {
@@ -57,7 +57,7 @@ export class OnOffServer extends Base {
         }
     }
 
-    override off() {
+    override async off() {
         this.state.onOff = false;
         if (this.features.levelControlForLighting) {
             if (this.timedOnTimer.isRunning) {
@@ -75,7 +75,7 @@ export class OnOffServer extends Base {
      * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
      * on() and off() with custom control logic.
      */
-    override toggle() {
+    override async toggle() {
         if (this.state.onOff) {
             return this.off();
         } else {
@@ -88,7 +88,7 @@ export class OnOffServer extends Base {
      * * This implementation ignores the effect and just calls off().
      * * Global Scene Control is not supported yet.
      */
-    override offWithEffect() {
+    override async offWithEffect() {
         if (this.state.globalSceneControl) {
             // TODO Store state in global scene
             this.state.globalSceneControl = false;
@@ -100,7 +100,7 @@ export class OnOffServer extends Base {
      * Default implementation notes:
      * * Global Scene Control is not supported yet, so the device is just turned on.
      */
-    override onWithRecallGlobalScene() {
+    override async onWithRecallGlobalScene() {
         if (this.state.globalSceneControl) {
             return;
         }
@@ -117,19 +117,19 @@ export class OnOffServer extends Base {
      * * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
      * on() and off() with custom control logic.
      */
-    override onWithTimedOff(request: OnWithTimedOffRequest) {
-        if (request.onOffControl.acceptOnlyWhenOn && !this.state.onOff) {
+    override async onWithTimedOff({ onOffControl, offWaitTime, onTime }: OnWithTimedOffRequest) {
+        if (onOffControl.acceptOnlyWhenOn && !this.state.onOff) {
             return;
         }
 
         if (this.delayedOffTimer.isRunning && !this.state.onOff) {
             // We are already in "delayed off state".  This means offWaitTime > 0 and the device is off now
-            this.state.offWaitTime = Math.min(request.offWaitTime ?? 0, this.state.offWaitTime ?? 0);
+            this.state.offWaitTime = Math.min(offWaitTime ?? 0, this.state.offWaitTime ?? 0);
             return;
         }
 
-        this.state.onTime = Math.max(request.onTime ?? 0, this.state.onTime ?? 0);
-        this.state.offWaitTime = request.offWaitTime;
+        this.state.onTime = Math.max(onTime ?? 0, this.state.onTime ?? 0);
+        this.state.offWaitTime = offWaitTime;
         if (this.state.onTime !== 0 && this.state.offWaitTime !== 0) {
             // Specs talk about 0xffff aka "uint16 overflow", we set to 0 if negative
             this.timedOnTimer.start();

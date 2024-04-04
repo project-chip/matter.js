@@ -76,8 +76,7 @@ export class IdentifyServer extends IdentifyBehavior {
         this.state.identifyTime = time;
     }
 
-    override identify(request: IdentifyRequest) {
-        const { identifyTime } = request;
+    override identify({ identifyTime }: IdentifyRequest) {
         this.state.identifyTime = identifyTime;
     }
 

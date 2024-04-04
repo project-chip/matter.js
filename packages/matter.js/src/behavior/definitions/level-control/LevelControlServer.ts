@@ -47,7 +47,7 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  * * {@link LevelControlServerLogic.moveToLevelLogic} Logic to move the value to a defined level with a transition time
  * * {@link LevelControlServerLogic.moveLogic} Logic to move the value up or down with a defined rate
  * * {@link LevelControlServerLogic.stepLogic} Logic to step the value up or down with a defined step size and transition
- * * {@link LevelControlServerLogic.stop} Logic to stop any currently running transitions
+ * * {@link LevelControlServerLogic.stopLogic} Logic to stop any currently running transitions
  *
  * If you add own implementation you can use:
  * * {@link LevelControlServerLogic.setLevel} to set the level attribute including automatic handling of the onoff dependency
@@ -109,16 +109,14 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * requested value. After the options and value checks it uses the {@link moveToLevelLogic} method to set the level.
      * If you want to implement own logic just override {@link moveToLevelLogic} with is also used for {@link moveToLevelWithOnOff}.
      */
-    override moveToLevel(request: MoveToLevelRequest) {
-        const { level, transitionTime, optionsMask, optionsOverride } = request;
-
+    override async moveToLevel({ level, transitionTime, optionsMask, optionsOverride }: MoveToLevelRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
 
         this.#assertLevelValue(level);
 
-        this.moveToLevelLogic(level, transitionTime, false);
+        await this.moveToLevelLogic(level, transitionTime, false);
     }
 
     /**
@@ -127,12 +125,10 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * requested value. After the options and value checks it uses the {@link moveToLevelLogic} method to set the level.
      * If you want to implement own logic just override {@link moveToLevelLogic} with is also used for {@link moveToLevel}.
      */
-    override moveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest) {
-        const { level, transitionTime } = request;
-
+    override async moveToLevelWithOnOff({ level, transitionTime }: MoveToLevelWithOnOffRequest) {
         this.#assertLevelValue(level);
 
-        this.moveToLevelLogic(level, transitionTime, true);
+        await this.moveToLevelLogic(level, transitionTime, true);
     }
 
     /**
@@ -146,20 +142,20 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * @param withOnOff true if the method is called by a *WithOnOff command
      * @protected
      */
-    protected moveToLevelLogic(level: number, transitionTime: number | null, withOnOff: boolean) {
+    protected async moveToLevelLogic(level: number, transitionTime: number | null, withOnOff: boolean) {
         // Determine effective transition time
         const transitionTimeValue = transitionTime ?? this.state.onOffTransitionTime ?? null;
 
         // If we should move to the new level as fast as possible ...
         if (!this.state.simulateTransitionTimeHandling || transitionTimeValue === null || transitionTimeValue === 0) {
-            this.setLevel(level, withOnOff);
+            await this.setLevel(level, withOnOff);
             this.setRemainingTime(0);
         } else {
             // ELse calculate a rate by second and simulate the transition
             const effectiveRate = Math.floor(
                 ((level - (this.state.currentLevel ?? this.internal.minLevel)) / transitionTimeValue) * 10,
             );
-            this.#initiateTransitionSimulation(
+            await this.#initiateTransitionSimulation(
                 Math.abs(effectiveRate),
                 effectiveRate < 0 ? LevelControl.StepMode.Down : LevelControl.StepMode.Up,
                 withOnOff,
@@ -176,14 +172,12 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * server will move as fast as possible, so we set to min/max directly. Else the step logic is applied and the
      * level is increased or decreased by the step size every second.
      */
-    override move(request: MoveRequest) {
-        const { moveMode, rate, optionsMask, optionsOverride } = request;
-
+    override async move({ moveMode, rate, optionsMask, optionsOverride }: MoveRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
 
-        this.moveLogic(moveMode, rate, false);
+        await this.moveLogic(moveMode, rate, false);
     }
 
     /**
@@ -194,10 +188,8 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * server will move as fast as possible, so we set to min/max directly. Else the step logic is applied and the
      * level is increased or decreased by the step size every second.
      */
-    override moveWithOnOff(request: MoveWithOnOffRequest) {
-        const { moveMode, rate } = request;
-
-        this.moveLogic(moveMode, rate, true);
+    override async moveWithOnOff({ moveMode, rate }: MoveWithOnOffRequest) {
+        await this.moveLogic(moveMode, rate, true);
     }
 
     /**
@@ -211,16 +203,20 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * @param withOnOff true if the method is called by a *WithOnOff command
      * @protected
      */
-    protected moveLogic(moveMode: LevelControl.MoveMode, rate: number | null, withOnOff: boolean) {
+    protected async moveLogic(moveMode: LevelControl.MoveMode, rate: number | null, withOnOff: boolean) {
         const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
         if (!this.state.simulateTransitionTimeHandling || effectiveRate === null) {
             // If no rate is requested and also no default rate is set, we should move as fast as possible, so we set
             // to min/max value directly
             const level = moveMode === LevelControl.MoveMode.Up ? this.internal.maxLevel : this.internal.minLevel;
-            this.setLevel(level, withOnOff);
+            await this.setLevel(level, withOnOff);
             this.setRemainingTime(0);
         } else {
-            this.#initiateTransitionSimulation(effectiveRate, moveMode as unknown as LevelControl.StepMode, withOnOff);
+            await this.#initiateTransitionSimulation(
+                effectiveRate,
+                moveMode as unknown as LevelControl.StepMode,
+                withOnOff,
+            );
         }
     }
 
@@ -232,13 +228,11 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * possible, so we set to min/max directly. Else the step logic is applied and the level is increased or decreased
      * by the step size every transition time interval.
      */
-    override step(request: StepRequest) {
-        const { stepMode, stepSize, transitionTime, optionsMask, optionsOverride } = request;
-
+    override async step({ stepMode, stepSize, transitionTime, optionsMask, optionsOverride }: StepRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
-        this.stepLogic(stepMode, stepSize, transitionTime, false);
+        await this.stepLogic(stepMode, stepSize, transitionTime, false);
     }
 
     /**
@@ -249,10 +243,8 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * possible, so we set to min/max directly. Else the step logic is applied and the level is increased or decreased
      * by the step size every transition time interval.
      */
-    override stepWithOnOff(request: StepWithOnOffRequest) {
-        const { stepMode, stepSize, transitionTime } = request;
-
-        this.stepLogic(stepMode, stepSize, transitionTime, true);
+    override async stepWithOnOff({ stepMode, stepSize, transitionTime }: StepWithOnOffRequest) {
+        await this.stepLogic(stepMode, stepSize, transitionTime, true);
     }
 
     /**
@@ -267,7 +259,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * @param withOnOff true if the method is called by a *WithOnOff command
      * @protected
      */
-    protected stepLogic(
+    protected async stepLogic(
         stepMode: LevelControl.StepMode,
         stepSize: number,
         transitionTime: number | null,
@@ -275,7 +267,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     ) {
         if (!this.state.simulateTransitionTimeHandling || transitionTime === null || transitionTime === 0) {
             // If no transitionTime is requested we should move as fast as possible, so we set to min/max value directly
-            this.setLevel(
+            await this.setLevel(
                 stepMode === LevelControl.StepMode.Up ? this.internal.maxLevel : this.internal.minLevel,
                 withOnOff,
             );
@@ -289,21 +281,29 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             } else if (targetLevel > this.internal.maxLevel) {
                 targetLevel = this.internal.maxLevel;
             }
-            this.#initiateTransitionSimulation(effectiveRate, stepMode, withOnOff, targetLevel);
+            await this.#initiateTransitionSimulation(effectiveRate, stepMode, withOnOff, targetLevel);
         }
     }
 
-    override stop(request: StopRequest) {
-        const { optionsMask, optionsOverride } = request;
-
+    override async stop({ optionsMask, optionsOverride }: StopRequest) {
         if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
             return;
         }
 
-        this.stopWithOnOff();
+        await this.stopLogic();
     }
 
-    override stopWithOnOff() {
+    override async stopWithOnOff() {
+        await this.stopLogic();
+    }
+
+    /**
+     * Default implementation of the stop logic. This stops any level transitions currently appening and sets the
+     * remaining time to 0.
+     *
+     * @protected
+     */
+    protected async stopLogic() {
         if (this.internal.transitionIntervalTimer?.isRunning) {
             this.internal.transitionIntervalTimer.stop();
         }
@@ -332,18 +332,18 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * @param withOnOff true if the method is called by a *WithOnOff command
      * @protected
      */
-    protected setLevel(level: number, withOnOff: boolean) {
+    protected async setLevel(level: number, withOnOff: boolean) {
         const onOffServer =
             this.features.onOff && withOnOff && this.agent.has(OnOffServer) ? this.agent.get(OnOffServer) : undefined;
 
         if (onOffServer !== undefined && level === this.internal.minLevel && onOffServer.state.onOff) {
-            onOffServer.off();
+            await onOffServer.off();
         }
 
         this.state.currentLevel = level;
 
         if (onOffServer !== undefined && level > this.internal.minLevel && !onOffServer.state.onOff) {
-            onOffServer.on();
+            await onOffServer.on();
         }
     }
 
@@ -405,7 +405,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         this.state.currentLevel = this.state.onLevel;
     }
 
-    #initiateTransitionSimulation(
+    async #initiateTransitionSimulation(
         stepSize: number,
         stepMode: LevelControl.StepMode,
         withOnOff: boolean,
@@ -427,10 +427,10 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             this.callback(this.#stepIntervalTick),
         ).start();
         // Re-Set the current level as start level for the step interval to handle OnOff state changes
-        this.setLevel(this.state.currentLevel ?? this.internal.minLevel, withOnOff);
+        await this.setLevel(this.state.currentLevel ?? this.internal.minLevel, withOnOff);
     }
 
-    #stepIntervalTick() {
+    async #stepIntervalTick() {
         if (!this.internal.currentTransitionData) {
             this.internal.transitionIntervalTimer?.stop();
             return;
@@ -439,12 +439,12 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         const newLevel = (this.state.currentLevel ?? this.internal.minLevel) + changeRate;
         if (newLevel <= this.internal.minLevel) {
             logger.debug(`Stopping transition interval at minLevel: ${this.internal.minLevel}.`);
-            this.setLevel(this.internal.minLevel, withOnOff);
+            await this.setLevel(this.internal.minLevel, withOnOff);
             this.internal.transitionIntervalTimer?.stop();
             this.setRemainingTime(0);
         } else if (newLevel >= this.internal.maxLevel) {
             logger.debug(`Stopping transition interval at maxLevel: ${this.internal.maxLevel}.`);
-            this.setLevel(this.internal.maxLevel, withOnOff);
+            await this.setLevel(this.internal.maxLevel, withOnOff);
             this.internal.transitionIntervalTimer?.stop();
             this.setRemainingTime(0);
         } else {
@@ -452,20 +452,20 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             if (targetLevel !== undefined) {
                 if (changeRate > 0 && newLevel >= targetLevel) {
                     logger.debug(`Stopping transition interval at targetLevel: ${targetLevel}.`);
-                    this.setLevel(targetLevel, withOnOff);
+                    await this.setLevel(targetLevel, withOnOff);
                     this.internal.transitionIntervalTimer?.stop();
                     this.setRemainingTime(0);
                     return;
                 } else if (changeRate < 0 && newLevel <= targetLevel) {
                     logger.debug(`Stopping transition interval at targetLevel: ${targetLevel}.`);
-                    this.setLevel(targetLevel, withOnOff);
+                    await this.setLevel(targetLevel, withOnOff);
                     this.internal.transitionIntervalTimer?.stop();
                     this.setRemainingTime(0);
                     return;
                 }
             }
             logger.debug(`Setting new level in transition interval: ${newLevel}.`);
-            this.setLevel(newLevel, withOnOff);
+            await this.setLevel(newLevel, withOnOff);
 
             // There is no definition on how often the remaining time should be updated, so we update it with every step
             if (this.internal.currentTransitionData.changeRate > 0) {
