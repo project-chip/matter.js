@@ -7,6 +7,7 @@
 import { UnsupportedDependencyError } from "../common/Lifecycle.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
+import "../polyfills/disposable.js";
 import { Time } from "../time/Time.js";
 import { Observable } from "../util/Observable.js";
 import { Environmental } from "./Environmental.js";

@@ -41,8 +41,15 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
 
     schema = syncFeatures(schema, cluster);
 
+    let name;
+    if (base.name.startsWith(cluster.name)) {
+        name = base.name;
+    } else {
+        name = `${cluster.name}Behavior`;
+    }
+
     return GeneratedClass({
-        name: `${cluster.name}Behavior`,
+        name,
         base,
 
         // These are really read-only but installing as getters on the prototype prevents us from overriding using
