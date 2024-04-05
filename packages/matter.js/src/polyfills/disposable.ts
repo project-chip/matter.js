@@ -17,7 +17,7 @@ if (typeof Symbol.dispose !== "symbol") {
 }
 
 if (typeof Symbol.asyncDispose !== "symbol") {
-    (Symbol as { asyncDispose: Symbol }).asyncDispose = Symbol("asyncDispose");
+    (Symbol as { asyncDispose: symbol }).asyncDispose = Symbol("asyncDispose");
     if (typeof Symbol.asyncDispose !== "symbol") {
         throw new Error("Symbol.asyncDispose is undefined and polyfill installation failed");
     }
