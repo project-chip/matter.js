@@ -5,7 +5,7 @@
  */
 
 import { DoorLockBehavior } from "./DoorLockBehavior.js";
-import {DoorLock} from "@project-chip/matter.js/cluster";
+import {DoorLock} from "../../../cluster/definitions/index.js";
 import LockState = DoorLock.LockState;
 
 /**
