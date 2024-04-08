@@ -4,11 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
 import { DoorLockBehavior } from "./DoorLockBehavior.js";
+import {DoorLock} from "@project-chip/matter.js/cluster";
+import LockState = DoorLock.LockState;
 
 /**
  * This is the default server implementation of {@link DoorLockBehavior}.
  */
-export class DoorLockServer extends DoorLockBehavior {}
+export class DoorLockServer extends DoorLockBehavior {
+    override lockDoor() {
+        this.state.lockState = LockState.Locked;
+    }
+
+    override unlockDoor() {
+        this.state.lockState = LockState.Unlocked;
+    }
+}
