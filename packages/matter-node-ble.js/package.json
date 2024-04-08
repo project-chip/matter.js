@@ -31,7 +31,7 @@
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.8.1-alpha.0-20240403-811441fb",
         "ts-node": "^10.9.2",
-        "typescript": "~5.4.3"
+        "typescript": "~5.4.4"
     },
     "dependencies": {
         "@project-chip/matter.js": "0.8.1-alpha.0-20240403-811441fb"
