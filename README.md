@@ -200,6 +200,9 @@ matter.js is used at the core of those two projects currently:
 - [node-red-matter](https://github.com/FezVrasta/node-red-matter): a Node-Red Node for devices and controllers
 - [zigbee-matter-bridge](https://github.com/antonio-gabriele/zigbee-matter-bridge): a Zigbee to Matter Bridge
 
+- [matterbridge](https://github.com/Luligu/matterbridge): a matter.js plugin manager with 7 example plugins
+- [matterbridge-zigbee2mqtt](https://github.com/Luligu/matterbridge-zigbee2mqtt): a matterbridge production-level plugin that expose all zigbee2mqtt devices and groups to Matter
+
 ## Device types tested on various Ecosystems
 
 This list is a compilation of published information and own community tests. Many updates in the ecosystems happen without big announcements, so the information here can be a bit outdated and more device types are supported. If you find errors or added device types please open a PR or issue to report them. *Please note: The content of this table is collected from various public sources, our own experiments, and community feedback which mean it might be outdated or not accurate.*
