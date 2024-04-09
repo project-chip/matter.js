@@ -14,15 +14,15 @@ import { Branded } from "../util/Type.js";
  *
  * @see {@link MatterSpecification.v11.Core} § 7.14.2.1
  */
-export type EventNumber = Branded<number | bigint, "EventNumber">;
+export type EventNumber = Branded<bigint, "EventNumber">;
 
 export function EventNumber(id: number | bigint): EventNumber {
-    return id as EventNumber;
+    return BigInt(id) as EventNumber;
 }
 
 /** TLV schema for a data version. */
 export const TlvEventNumber = new TlvWrapper<EventNumber, number | bigint>(
     TlvUInt64,
-    dataVersion => dataVersion,
+    eventNumber => eventNumber,
     value => EventNumber(value),
 );

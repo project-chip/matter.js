@@ -9,6 +9,7 @@ import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/s
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { InternalError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
@@ -375,8 +376,8 @@ export class SubscriptionHandler {
                 }));
             })
             .sort((a, b) => {
-                const eventNumberA = a.event?.eventNumber ?? 0;
-                const eventNumberB = b.event?.eventNumber ?? 0;
+                const eventNumberA = a.event?.eventNumber ?? EventNumber(0);
+                const eventNumberB = b.event?.eventNumber ?? EventNumber(0);
                 if (eventNumberA > eventNumberB) {
                     return 1;
                 } else if (eventNumberA < eventNumberB) {

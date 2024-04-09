@@ -462,7 +462,7 @@ export class PairedNode {
             }),
         );
 
-        logger.debug(`Node ${this.nodeId}: Endpoint usages`, JSON.stringify(endpointUsages));
+        logger.debug(`Node ${this.nodeId}: Endpoint usages`, Logger.toJSON(endpointUsages));
 
         while (true) {
             // get all endpoints with only one usage
@@ -473,7 +473,7 @@ export class PairedNode {
                 break;
             }
 
-            logger.debug(`Node ${this.nodeId}: Processing Endpoint ${JSON.stringify(singleUsageEndpoints)}`);
+            logger.debug(`Node ${this.nodeId}: Processing Endpoint ${Logger.toJSON(singleUsageEndpoints)}`);
 
             const idsToCleanup: { [key: EndpointNumber]: boolean } = {};
             singleUsageEndpoints.forEach(([childId, usages]) => {
@@ -495,7 +495,7 @@ export class PairedNode {
                 delete endpointUsages[EndpointNumber(parseInt(childId))];
                 idsToCleanup[usages[0]] = true;
             });
-            logger.debug(`Node ${this.nodeId}: Endpoint data Cleanup`, JSON.stringify(idsToCleanup));
+            logger.debug(`Node ${this.nodeId}: Endpoint data Cleanup`, Logger.toJSON(idsToCleanup));
             Object.keys(idsToCleanup).forEach(idToCleanup => {
                 Object.keys(endpointUsages).forEach(id => {
                     const usageId = EndpointNumber(parseInt(id));

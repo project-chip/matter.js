@@ -23,6 +23,7 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
+import { EventNumber } from "../../datatype/EventNumber.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
@@ -361,8 +362,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                 }
                 eventReportsPayload.push(
                     ...reportsForPath.sort((a, b) => {
-                        const eventNumberA = a.eventData?.eventNumber ?? 0;
-                        const eventNumberB = b.eventData?.eventNumber ?? 0;
+                        const eventNumberA = a.eventData?.eventNumber ?? EventNumber(0);
+                        const eventNumberB = b.eventData?.eventNumber ?? EventNumber(0);
                         if (eventNumberA > eventNumberB) {
                             return 1;
                         } else if (eventNumberA < eventNumberB) {
