@@ -21,6 +21,15 @@ const TimeFormatLocalizationServerBase = TimeFormatLocalizationBehavior.with(
 export class TimeFormatLocalizationServerLogic extends TimeFormatLocalizationServerBase {
     protected declare internal: TimeFormatLocalizationServerLogic.Internal;
     declare state: TimeFormatLocalizationServerLogic.State;
+
+    override initialize() {
+        // But this should be just the defaults, not the persisted values?
+        const defaults = this.endpoint.behaviors.defaultsFor(TimeFormatLocalizationServerBase);
+        if (defaults !== undefined) {
+            this.internal.activeCalendarType =
+                defaults.activeCalendarType as TimeFormatLocalization.CalendarType | null;
+        }
+    }
 }
 
 export namespace TimeFormatLocalizationServerLogic {
