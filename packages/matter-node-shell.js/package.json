@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node-shell.js",
-    "version": "0.8.1-alpha.0-20240403-811441fb",
+    "version": "0.8.1-alpha.0-20240410-343bac39",
     "description": "Shell app for Matter controller",
     "keywords": [
         "iot",
@@ -32,13 +32,13 @@
         "shell": "./dist/cjs/app.js"
     },
     "devDependencies": {
-        "typescript": "~5.4.3"
+        "typescript": "~5.4.4"
     },
     "dependencies": {
-        "@project-chip/matter-node-ble.js": "0.8.1-alpha.0-20240403-811441fb",
-        "@project-chip/matter-node.js": "0.8.1-alpha.0-20240403-811441fb",
-        "@project-chip/matter.js": "0.8.1-alpha.0-20240403-811441fb",
-        "@project-chip/matter.js-tools": "0.8.1-alpha.0-20240403-811441fb",
+        "@project-chip/matter-node-ble.js": "0.8.1-alpha.0-20240410-343bac39",
+        "@project-chip/matter-node.js": "0.8.1-alpha.0-20240410-343bac39",
+        "@project-chip/matter.js": "0.8.1-alpha.0-20240410-343bac39",
+        "@project-chip/matter.js-tools": "0.8.1-alpha.0-20240410-343bac39",
         "child_process": "^1.0.2",
         "readline": "^1.3.0",
         "yargs": "^17.7.2"

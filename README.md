@@ -199,6 +199,8 @@ matter.js is used at the core of those two projects currently:
 - [matter-node-shell.js](packages/matter-node-shell.js/README.md): a Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
 - [node-red-matter](https://github.com/FezVrasta/node-red-matter): a Node-Red Node for devices and controllers
 - [zigbee-matter-bridge](https://github.com/antonio-gabriele/zigbee-matter-bridge): a Zigbee to Matter Bridge
+- [matterbridge](https://github.com/Luligu/matterbridge): a matter.js plugin manager with 7 example plugins
+- [matterbridge-zigbee2mqtt](https://github.com/Luligu/matterbridge-zigbee2mqtt): a matterbridge production-level plugin that expose all zigbee2mqtt devices and groups to Matter
 
 ## Device types tested on various Ecosystems
 
