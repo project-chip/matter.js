@@ -6,6 +6,7 @@
 
 import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
 import { Time, Timer } from "../../../time/Time.js";
+import { MaybePromise } from "../../../util/Promises.js";
 import { OnOffBehavior } from "./OnOffBehavior.js";
 import { OnWithTimedOffRequest } from "./OnOffInterface.js";
 
@@ -45,7 +46,7 @@ export class OnOffServer extends Base {
         await super[Symbol.asyncDispose]?.();
     }
 
-    override async on() {
+    override on(): MaybePromise<void> {
         this.state.onOff = true;
         if (this.features.levelControlForLighting) {
             if (!this.timedOnTimer.isRunning) {
@@ -57,7 +58,7 @@ export class OnOffServer extends Base {
         }
     }
 
-    override async off() {
+    override off(): MaybePromise<void> {
         this.state.onOff = false;
         if (this.features.levelControlForLighting) {
             if (this.timedOnTimer.isRunning) {
@@ -75,7 +76,7 @@ export class OnOffServer extends Base {
      * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
      * on() and off() with custom control logic.
      */
-    override async toggle() {
+    override toggle(): MaybePromise<void> {
         if (this.state.onOff) {
             return this.off();
         } else {
@@ -88,7 +89,7 @@ export class OnOffServer extends Base {
      * * This implementation ignores the effect and just calls off().
      * * Global Scene Control is not supported yet.
      */
-    override async offWithEffect() {
+    override offWithEffect(): MaybePromise<void> {
         if (this.state.globalSceneControl) {
             // TODO Store state in global scene
             this.state.globalSceneControl = false;
@@ -100,7 +101,7 @@ export class OnOffServer extends Base {
      * Default implementation notes:
      * * Global Scene Control is not supported yet, so the device is just turned on.
      */
-    override async onWithRecallGlobalScene() {
+    override onWithRecallGlobalScene(): MaybePromise<void> {
         if (this.state.globalSceneControl) {
             return;
         }
@@ -117,7 +118,7 @@ export class OnOffServer extends Base {
      * * This method uses the on/off methods when timed actions should occur. This means that it is enough to override
      * on() and off() with custom control logic.
      */
-    override async onWithTimedOff({ onOffControl, offWaitTime, onTime }: OnWithTimedOffRequest) {
+    override onWithTimedOff({ onOffControl, offWaitTime, onTime }: OnWithTimedOffRequest): MaybePromise<void> {
         if (onOffControl.acceptOnlyWhenOn && !this.state.onOff) {
             return;
         }
