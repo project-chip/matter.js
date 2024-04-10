@@ -28,6 +28,7 @@ import {
     CommandId,
     EndpointNumber,
     EventId,
+    EventNumber,
     FabricId,
     FabricIndex,
     NodeId,
@@ -217,7 +218,7 @@ const READ_RESPONSE: DataReportPayload = {
                 payload: {
                     softwareVersion: 1,
                 },
-                eventNumber: 1,
+                eventNumber: EventNumber(1),
                 priority: 2,
                 epochTimestamp: 0,
             },
@@ -234,7 +235,7 @@ const READ_RESPONSE: DataReportPayload = {
                 payload: {
                     softwareVersion: 2,
                 },
-                eventNumber: 2,
+                eventNumber: EventNumber(2),
                 priority: 2,
                 epochTimestamp: 0,
             },
@@ -308,7 +309,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
                 payload: {
                     softwareVersion: 2,
                 },
-                eventNumber: 2,
+                eventNumber: EventNumber(2),
                 priority: 2,
                 epochTimestamp: 0,
             },

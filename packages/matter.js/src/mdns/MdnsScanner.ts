@@ -171,7 +171,7 @@ export class MdnsScanner implements Scanner {
                     if (dnsMessageDataToSend.answers.length === 0) {
                         // The first answer is already too big, log at least a warning
                         logger.warn(
-                            `MDNS Query with ${JSON.stringify(
+                            `MDNS Query with ${Logger.toJSON(
                                 queries,
                             )} is too big to fit into a single MDNS message. Send anyway, but please report!`,
                         );
@@ -220,7 +220,7 @@ export class MdnsScanner implements Scanner {
             answers = [...activeExistingQuery.answers, ...answers];
         }
         this.activeAnnounceQueries.set(queryId, { queries, answers });
-        logger.debug(`Set ${queries.length} query records for query ${queryId}: ${JSON.stringify(queries)}`);
+        logger.debug(`Set ${queries.length} query records for query ${queryId}: ${Logger.toJSON(queries)}`);
         this.queryTimer?.stop();
         this.nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS; // Reset query interval
         this.queryTimer = Time.getTimer("MDNS discovery", 0, () => this.sendQueries()).start();
@@ -450,7 +450,7 @@ export class MdnsScanner implements Scanner {
         } else if (Object.keys(identifier).length === 0) {
             return getCommissioningModeQname();
         }
-        throw new ImplementationError(`Invalid commissionable device identifier : ${JSON.stringify(identifier)}`); // Should neven happen
+        throw new ImplementationError(`Invalid commissionable device identifier : ${Logger.toJSON(identifier)}`); // Should neven happen
     }
 
     private extractInstanceId(instanceName: string) {

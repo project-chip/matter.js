@@ -26,6 +26,15 @@ import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
 
+class MyEventedBehavior extends MyBehavior {
+    declare events: MyEventedBehavior.Events;
+}
+namespace MyEventedBehavior {
+    export class Events extends MyBehavior.Events {
+        somethingHappened = new Observable<[]>();
+    }
+}
+
 describe("ClusterBehavior", () => {
     type Match<Input, Type> = Input extends Type ? true : false;
 
@@ -187,6 +196,15 @@ describe("ClusterBehavior", () => {
             const AlteredBehavior = MyBehavior.alter({});
             AlteredBehavior.id satisfies "myCluster";
             expect(AlteredBehavior.id).equals("myCluster");
+        });
+
+        it("extends correct event class", () => {
+            const base = new MyEventedBehavior.Events();
+            expect(typeof base.somethingHappened?.on).equals("function");
+
+            const Altered = MyEventedBehavior.alter({});
+            const altered = new Altered.Events();
+            expect(typeof altered.somethingHappened?.on).equals("function");
         });
     });
 

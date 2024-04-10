@@ -9,7 +9,7 @@ import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { AttributeModel, ClusterModel, ElementTag, FeatureSet, Matter, Metatype } from "../../model/index.js";
 import { GeneratedClass } from "../../util/GeneratedClass.js";
-import { EventEmitter, Observable } from "../../util/Observable.js";
+import { Observable } from "../../util/Observable.js";
 import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
@@ -41,8 +41,15 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
 
     schema = syncFeatures(schema, cluster);
 
+    let name;
+    if (base.name.startsWith(cluster.name)) {
+        name = base.name;
+    } else {
+        name = `${cluster.name}Behavior`;
+    }
+
     return GeneratedClass({
-        name: `${cluster.name}Behavior`,
+        name,
         base,
 
         // These are really read-only but installing as getters on the prototype prevents us from overriding using
@@ -51,7 +58,7 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
         staticProperties: {
             State: createDerivedState(cluster, schema, base, namesUsed),
 
-            Events: createBaseEvents(cluster, namesUsed),
+            Events: createDerivedEvents(cluster, base, namesUsed),
         },
 
         staticDescriptors: {
@@ -155,21 +162,33 @@ function isGlobal(attribute: ClusterType.Attribute) {
 /**
  * Extend events with additional implementations.
  */
-function createBaseEvents(cluster: ClusterType, stateNames: Set<string>) {
+function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNames: Set<string>) {
     const names = new Set<string>();
 
+    const baseInstance = new base.Events() as unknown as Record<string, unknown>;
+
+    // Add mandatory events that are not present in the base class
+    const applicableClusterEvents = new Set();
     for (const name in cluster.events) {
-        if (!cluster.events[name].optional) {
+        applicableClusterEvents.add(name);
+        if (!cluster.events[name].optional && baseInstance[name] === undefined) {
             names.add(name);
         }
     }
-    for (const name of stateNames) {
-        names.add(`${name}$Change`);
+
+    // Add events for mandatory attributes that are not present in the base class
+    for (const attrName of stateNames) {
+        const name = `${attrName}$Change`;
+        if (baseInstance[name] === undefined) {
+            names.add(name);
+        }
     }
+
+    // TODO - if necessary, mask out (set to undefined) events present in base cluster but not derived cluster
 
     return GeneratedClass({
         name: `${cluster.name}$Events`,
-        base: EventEmitter,
+        base: base.Events,
 
         initialize() {
             for (const name of names) {

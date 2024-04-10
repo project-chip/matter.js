@@ -10,6 +10,7 @@ import { TlvClusterId } from "../../datatype/ClusterId.js";
 import { TlvCommandId } from "../../datatype/CommandId.js";
 import { TlvEndpointNumber } from "../../datatype/EndpointNumber.js";
 import { TlvEventId } from "../../datatype/EventId.js";
+import { TlvEventNumber } from "../../datatype/EventNumber.js";
 import { TlvNodeId } from "../../datatype/NodeId.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
@@ -46,7 +47,7 @@ export const TlvEventPath = TlvTaggedList({
 export const TlvEventData = TlvObject({
     // EventDataIB
     path: TlvField(0, TlvEventPath),
-    eventNumber: TlvField(1, TlvUInt64),
+    eventNumber: TlvField(1, TlvEventNumber),
     priority: TlvField(2, TlvEnum<EventPriority>()),
     epochTimestamp: TlvOptionalField(3, TlvPosixMs),
     systemTimestamp: TlvOptionalField(4, TlvSysTimeMS),

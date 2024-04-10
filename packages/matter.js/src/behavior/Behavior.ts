@@ -7,6 +7,7 @@
 import type { ClusterType } from "../cluster/ClusterType.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
 import { Agent, INSTALL_BEHAVIOR } from "../endpoint/Agent.js";
+import "../polyfills/disposable.js";
 import { assertSecureSession } from "../session/SecureSession.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { EventEmitter, Observable } from "../util/Observable.js";
