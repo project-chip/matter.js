@@ -36,9 +36,9 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  * automatically.
  *
  * This implementation ignores by default all transition times and sets the level immediately. Alternatively, you can
- * set the `simulateTransitionTimeHandling` state attribute to true to simulate transition times by changing the level
- * value step wise every second. This might be an intermediate solution if you develop independently of defined
- * hardware.
+ * set the `managedTransitionTimeHandling` state attribute to true to have matter.js manage transition times by
+ * changing the level value step wise every second. This might be an intermediate solution if you develop
+ * independently of defined hardware.
  *
  * If you develop for a specific hardware you should extend the {@link LevelControlServerLogic} class and implement the
  * following methods to natively use device features to correctly support the transition times. For this the default
@@ -139,7 +139,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
 
     /**
      * Default implementation of the moveToLevel logic. When a transition time is specified the implementation uses the
-     * {@link stepLogic} to simulate the move. It also checks if the level is within the min and max level range and sets
+     * {@link stepLogic} to manage the move. It also checks if the level is within the min and max level range and sets
      * the level accordingly. The method uses {@link setLevel} to set the level and handle the on/off state if the method
      * is called by a *WithOnOff command.
      *
@@ -153,15 +153,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         const transitionTimeValue = transitionTime ?? this.state.onOffTransitionTime ?? null;
 
         // If we should move to the new level as fast as possible ...
-        if (!this.state.simulateTransitionTimeHandling || transitionTimeValue === null || transitionTimeValue === 0) {
+        if (!this.state.managedTransitionTimeHandling || transitionTimeValue === null || transitionTimeValue === 0) {
             this.setRemainingTime(0);
             return this.setLevel(level, withOnOff);
         }
-        // Else calculate a rate by second and simulate the transition
+        // Else calculate a rate by second and manage the transition
         const effectiveRate = Math.floor(
             ((level - (this.state.currentLevel ?? this.minLevel)) / transitionTimeValue) * 10,
         );
-        return this.#initiateTransitionSimulation(
+        return this.#initiateTransition(
             Math.abs(effectiveRate),
             effectiveRate < 0 ? LevelControl.StepMode.Down : LevelControl.StepMode.Up,
             withOnOff,
@@ -210,18 +210,14 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      */
     protected moveLogic(moveMode: LevelControl.MoveMode, rate: number | null, withOnOff: boolean) {
         const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
-        if (!this.state.simulateTransitionTimeHandling || effectiveRate === null) {
+        if (!this.state.managedTransitionTimeHandling || effectiveRate === null) {
             // If no rate is requested and also no default rate is set, we should move as fast as possible, so we set
             // to min/max value directly
             const level = moveMode === LevelControl.MoveMode.Up ? this.maxLevel : this.minLevel;
             this.setRemainingTime(0);
             return this.setLevel(level, withOnOff);
         }
-        return this.#initiateTransitionSimulation(
-            effectiveRate,
-            moveMode as unknown as LevelControl.StepMode,
-            withOnOff,
-        );
+        return this.#initiateTransition(effectiveRate, moveMode as unknown as LevelControl.StepMode, withOnOff);
     }
 
     /**
@@ -269,7 +265,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         transitionTime: number | null,
         withOnOff: boolean,
     ) {
-        if (!this.state.simulateTransitionTimeHandling || transitionTime === null || transitionTime === 0) {
+        if (!this.state.managedTransitionTimeHandling || transitionTime === null || transitionTime === 0) {
             // If no transitionTime is requested we should move as fast as possible, so we set to min/max value directly
             this.setRemainingTime(0);
             return this.setLevel(stepMode === LevelControl.StepMode.Up ? this.maxLevel : this.minLevel, withOnOff);
@@ -282,7 +278,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         } else if (targetLevel > this.maxLevel) {
             targetLevel = this.maxLevel;
         }
-        return this.#initiateTransitionSimulation(effectiveRate, stepMode, withOnOff, targetLevel);
+        return this.#initiateTransition(effectiveRate, stepMode, withOnOff, targetLevel);
     }
 
     override stop({ optionsMask, optionsOverride }: StopRequest) {
@@ -408,12 +404,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         this.state.currentLevel = this.state.onLevel;
     }
 
-    #initiateTransitionSimulation(
-        stepSize: number,
-        stepMode: LevelControl.StepMode,
-        withOnOff: boolean,
-        targetLevel?: number,
-    ) {
+    #initiateTransition(stepSize: number, stepMode: LevelControl.StepMode, withOnOff: boolean, targetLevel?: number) {
         if (this.internal.transitionIntervalTimer?.isRunning) {
             this.internal.transitionIntervalTimer.stop();
         }
@@ -489,10 +480,10 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
 
 export namespace LevelControlServerLogic {
     export class Internal {
-        /** Timer for the transition simulation. */
+        /** Timer for the managed transition */
         transitionIntervalTimer?: Timer;
 
-        /** Structure to store the data of the current transition simulation. */
+        /** Structure to store the data of the current managed transition */
         currentTransitionData?: {
             changeRate: number;
             withOnOff: boolean;
@@ -504,11 +495,11 @@ export namespace LevelControlServerLogic {
         /**
          * The default implementation always set the target level immediately and so ignores all transition times
          * requested or configured.
-         * Set this to true to simulate transition times by changing the level value step wise every second. This is in
+         * Set this to true to manage transition times by changing the level value step wise every second. This is in
          * most cases not the best way because hardware supporting levels usually have ways to specify the change rate
          * or target value and transition time.
          */
-        simulateTransitionTimeHandling = false;
+        managedTransitionTimeHandling = false;
     }
 }
 

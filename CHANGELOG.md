@@ -15,7 +15,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhances diagnostic and logging information, also on SIGUSR2 signal for node.js
   * Enhanced cluster default implementations for the following clusters:
     * BooleanState: Automatically emit the StateChange event when enabled for the cluster and the stateValue changes
-    * LevelControl: Implemented all non Frequency-command handlers as defined by specification with an optional transition time simulation
+    * LevelControl: Implemented all non Frequency-command handlers as defined by specification with an optional transition logic managed by matter.js
     * LocalizationConfiguration: Implemented activeLocale validation
     * TimeFormatLocalization: Implemented activeTimeFormat validation
 * matter.js New API code flows: 

@@ -248,7 +248,7 @@ export class AllClustersTestInstance implements TestInstance {
                     currentFrequency: 50,
                     minFrequency: 50,
                     maxFrequency: 60,
-                    simulateTransitionTimeHandling: true, // enable transition simulation
+                    managedTransitionTimeHandling: true, // enable transition management
                 },
                 occupancySensing: {
                     occupancySensorType: OccupancySensing.OccupancySensorType.Pir,
