@@ -17,8 +17,6 @@ import { TlvSessionParameters } from "../pase/PaseMessages.js";
 
 const CASE_SIGNATURE_LENGTH = CRYPTO_GROUP_SIZE_BYTES * 2;
 
-const CASE2_ENCRYPTED_LENGTH = 800 + CRYPTO_AEAD_MIC_LENGTH_BYTES + CASE_SIGNATURE_LENGTH; // NOC + ICAC + CASE-Sig + Mic
-
 export const KDFSR1_KEY_INFO = ByteArray.fromString("Sigma1_Resume");
 export const KDFSR2_KEY_INFO = ByteArray.fromString("Sigma2_Resume");
 export const RESUME1_MIC_NONCE = ByteArray.fromString("NCASE_SigmaS1");
