@@ -44,7 +44,7 @@ export const TlvCaseSigma2 = TlvObject({
     random: TlvField(1, TlvByteString.bound({ length: 32 })),
     sessionId: TlvField(2, TlvUInt16),
     ecdhPublicKey: TlvField(3, TlvByteString.bound({ length: CRYPTO_PUBLIC_KEY_SIZE_BYTES })),
-    encrypted: TlvField(4, TlvByteString.bound({ maxLength: CASE2_ENCRYPTED_LENGTH })),
+    encrypted: TlvField(4, TlvByteString),
     sessionParams: TlvOptionalField(5, TlvSessionParameters),
 });
 

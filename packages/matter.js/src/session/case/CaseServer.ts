@@ -155,19 +155,13 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 peerEcdhPublicKey,
             });
             const signature = fabric.sign(signatureData);
-            logger.info("nodeOpCert", nodeOpCert.length, nodeOpCert.toHex());
-            logger.info("intermediateCACert", intermediateCACert?.length, intermediateCACert?.toHex());
-            logger.info("signature", signature.length, signature.toHex());
-            logger.info("resumptionId", resumptionId.length, resumptionId.toHex());
             const encryptedData = TlvEncryptedDataSigma2.encode({
                 nodeOpCert,
                 intermediateCACert,
                 signature,
                 resumptionId,
             });
-            logger.info("encryptedData intermediate", encryptedData.length, encryptedData.toHex());
             const encrypted = Crypto.encrypt(sigma2Key, encryptedData, TBE_DATA2_NONCE);
-            logger.info("encrypted", encrypted.length, encrypted.toHex());
             const sessionId = await server.getNextAvailableSessionId();
             const sigma2Bytes = await messenger.sendSigma2({
                 random,
