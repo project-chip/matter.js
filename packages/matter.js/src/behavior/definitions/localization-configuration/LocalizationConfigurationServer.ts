@@ -16,6 +16,14 @@ import { LocalizationConfigurationBehavior } from "./LocalizationConfigurationBe
 export class LocalizationConfigurationServer extends LocalizationConfigurationBehavior {
     protected declare internal: LocalizationConfigurationServer.Internal;
     declare state: LocalizationConfigurationServer.State;
+
+    override initialize() {
+        // But this should be just the defaults, not the persisted values?
+        const defaults = this.endpoint.behaviors.defaultsFor(LocalizationConfigurationServer);
+        if (defaults !== undefined) {
+            this.internal.activeLocale = defaults.activeLocale as string;
+        }
+    }
 }
 
 export namespace LocalizationConfigurationServer {
