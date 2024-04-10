@@ -5,29 +5,53 @@
  */
 
 import { TimeFormatLocalization } from "../../../cluster/definitions/TimeFormatLocalizationCluster.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { Val } from "../../state/Val.js";
+import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { TimeFormatLocalizationBehavior } from "./TimeFormatLocalizationBehavior.js";
+
+const TimeFormatLocalizationServerBase = TimeFormatLocalizationBehavior.with(
+    TimeFormatLocalization.Feature.CalendarFormat,
+);
 
 /**
  * This is the default server implementation of {@link TimeFormatLocalizationBehavior}.
  */
-export class TimeFormatLocalizationServerLogic extends TimeFormatLocalizationBehavior.with(
-    TimeFormatLocalization.Feature.CalendarFormat,
-) {
-    override initialize() {
-        if (this.events.activeCalendarType$Change !== undefined) {
-            this.reactTo(this.events.activeCalendarType$Change, this.#validateActiveCalendarType, { offline: true });
-        }
+export class TimeFormatLocalizationServerLogic extends TimeFormatLocalizationServerBase {
+    protected declare internal: TimeFormatLocalizationServerLogic.Internal;
+    declare state: TimeFormatLocalizationServerLogic.State;
+}
+
+export namespace TimeFormatLocalizationServerLogic {
+    export class Internal {
+        activeCalendarType: TimeFormatLocalization.CalendarType | null = null; // TODO Does persistence work via server?
     }
 
-    #validateActiveCalendarType(calendarType: TimeFormatLocalization.CalendarType | null) {
-        if (calendarType === null) {
-            return;
-        }
-        if (!this.state.supportedCalendarTypes.includes(calendarType)) {
-            throw new StatusResponseError(`Unsupported calendarType: ${calendarType}`, StatusCode.ConstraintError);
+    export class State extends TimeFormatLocalizationServerBase.State {
+        [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
+            return {
+                set activeCalendarType(calendarType: TimeFormatLocalization.CalendarType | null) {
+                    if (calendarType !== null) {
+                        const serverState = endpoint.stateOf(TimeFormatLocalizationServerBase);
+                        if (!serverState.supportedCalendarTypes.includes(calendarType)) {
+                            throw new StatusResponseError(
+                                `Unsupported calendarType: ${calendarType}`,
+                                StatusCode.ConstraintError,
+                            );
+                        }
+                    }
+                    const serverInternal = endpoint.behaviors.internalsOf(TimeFormatLocalizationServerLogic);
+                    serverInternal.activeCalendarType = calendarType;
+                },
+
+                get activeCalendarType() {
+                    const serverInternal = endpoint.behaviors.internalsOf(TimeFormatLocalizationServerLogic);
+                    return serverInternal.activeCalendarType;
+                },
+            };
         }
     }
 }
 
-export const TimeFormatLocalizationServer = TimeFormatLocalizationServerLogic.with();
+export const TimeFormatLocalizationServer = TimeFormatLocalizationServerLogic.with(); // Disable features again

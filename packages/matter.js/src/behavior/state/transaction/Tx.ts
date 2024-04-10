@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, MatterError, ReadOnlyError } from "../../../common/MatterError.js";
+import { ImplementationError, ReadOnlyError } from "../../../common/MatterError.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { Observable } from "../../../util/Observable.js";
@@ -506,10 +506,6 @@ class Tx implements Transaction {
                 () => participant.postCommit?.(),
                 () => postCommitNextParticipant(),
                 error => {
-                    if (error instanceof MatterError) {
-                        logger.error(`MatterError post-commit of ${participant}:`, error);
-                        throw error;
-                    }
                     logger.error(`Error post-commit of ${participant}:`, error);
                 },
             );

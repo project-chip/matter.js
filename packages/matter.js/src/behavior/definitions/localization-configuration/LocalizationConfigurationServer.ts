@@ -4,20 +4,42 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { Val } from "../../state/Val.js";
+import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { LocalizationConfigurationBehavior } from "./LocalizationConfigurationBehavior.js";
 
 /**
  * This is the default server implementation of {@link LocalizationConfigurationBehavior}.
  */
 export class LocalizationConfigurationServer extends LocalizationConfigurationBehavior {
-    override initialize() {
-        this.reactTo(this.events.activeLocale$Change, this.#validateActiveLocale, { offline: true });
+    protected declare internal: LocalizationConfigurationServer.Internal;
+    declare state: LocalizationConfigurationServer.State;
+}
+
+export namespace LocalizationConfigurationServer {
+    export class Internal {
+        activeLocale: string = ""; // TODO Hacky because formally invalid value, Does persistence work via server?
     }
 
-    #validateActiveLocale(locale: string) {
-        if (!this.state.supportedLocales.includes(locale)) {
-            throw new StatusResponseError(`Unsupported locale: ${locale}`, StatusCode.ConstraintError);
+    export class State extends LocalizationConfigurationBehavior.State {
+        [Val.properties](endpoint: Endpoint, _session: ValueSupervisor.Session) {
+            return {
+                set activeLocale(locale: string) {
+                    const serverState = endpoint.stateOf(LocalizationConfigurationServer);
+                    if (!serverState.supportedLocales.includes(locale)) {
+                        throw new StatusResponseError(`Unsupported locale: ${locale}`, StatusCode.ConstraintError);
+                    }
+                    const serverInternal = endpoint.behaviors.internalsOf(LocalizationConfigurationServer);
+                    serverInternal.activeLocale = locale;
+                },
+
+                get activeLocale() {
+                    const serverInternal = endpoint.behaviors.internalsOf(LocalizationConfigurationServer);
+                    return serverInternal.activeLocale;
+                },
+            };
         }
     }
 }
