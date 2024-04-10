@@ -256,7 +256,7 @@ export function ClusterServer<
                     logger.warn(
                         `InitialAttributeValue for "${
                             clusterDef.name
-                        }/${attributeName}" is REQUIRED by supportedFeatures: ${JSON.stringify(
+                        }/${attributeName}" is REQUIRED by supportedFeatures: ${Logger.toJSON(
                             supportedFeatures,
                         )} but is not set!`,
                     );
@@ -270,7 +270,7 @@ export function ClusterServer<
                     logger.debug(
                         `InitialAttributeValue for "${
                             clusterDef.name
-                        }/${attributeName}" is optional by supportedFeatures: ${JSON.stringify(
+                        }/${attributeName}" is optional by supportedFeatures: ${Logger.toJSON(
                             supportedFeatures,
                         )} and is not set!`,
                     );
@@ -282,7 +282,7 @@ export function ClusterServer<
                 logger.warn(
                     `InitialAttributeValue for "${
                         clusterDef.name
-                    }/${attributeName}" is provided but it's neither optional or mandatory for supportedFeatures: ${JSON.stringify(
+                    }/${attributeName}" is provided but it's neither optional or mandatory for supportedFeatures: ${Logger.toJSON(
                         supportedFeatures,
                     )} but is set!`,
                 );
@@ -391,7 +391,7 @@ export function ClusterServer<
                 const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
                 if (conditionMatched && handler === undefined) {
                     logger.warn(
-                        `Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures: ${JSON.stringify(
+                        `Command "${clusterDef.name}/${name}" is REQUIRED by supportedFeatures: ${Logger.toJSON(
                             supportedFeatures,
                         )} but is not set!`,
                     );
@@ -403,7 +403,7 @@ export function ClusterServer<
                 const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
                 if (conditionMatched && handler === undefined) {
                     logger.debug(
-                        `Command "${clusterDef.name}/${name}" is optional by supportedFeatures: ${JSON.stringify(
+                        `Command "${clusterDef.name}/${name}" is optional by supportedFeatures: ${Logger.toJSON(
                             supportedFeatures,
                         )} and is not set!`,
                     );
@@ -415,7 +415,7 @@ export function ClusterServer<
                 logger.warn(
                     `Command "${
                         clusterDef.name
-                    }/${name}" is provided but it's neither optional nor mandatory for supportedFeatures: ${JSON.stringify(
+                    }/${name}" is provided but it's neither optional nor mandatory for supportedFeatures: ${Logger.toJSON(
                         supportedFeatures,
                     )} but is set!`,
                 );
@@ -467,7 +467,7 @@ export function ClusterServer<
                 const conditionMatched = isConditionMatching(mandatoryIf, supportedFeatures);
                 if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
                     logger.warn(
-                        `Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures: ${JSON.stringify(
+                        `Event "${clusterDef.name}/${eventName}" is REQUIRED by supportedFeatures: ${Logger.toJSON(
                             supportedFeatures,
                         )} but is not set!`,
                     );
@@ -479,7 +479,7 @@ export function ClusterServer<
                 const conditionMatched = isConditionMatching(optionalIf, supportedFeatures);
                 if (conditionMatched && (supportedEvents as any)[eventName] === undefined) {
                     logger.debug(
-                        `Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures: ${JSON.stringify(
+                        `Event "${clusterDef.name}/${eventName}" is optional by supportedFeatures: ${Logger.toJSON(
                             supportedFeatures,
                         )} and is not set!`,
                     );
@@ -491,7 +491,7 @@ export function ClusterServer<
                 logger.warn(
                     `Event "${
                         clusterDef.name
-                    }/${eventName}" is provided but it's neither optional or mandatory for supportedFeatures: ${JSON.stringify(
+                    }/${eventName}" is provided but it's neither optional or mandatory for supportedFeatures: ${Logger.toJSON(
                         supportedFeatures,
                     )} but is set!`,
                 );

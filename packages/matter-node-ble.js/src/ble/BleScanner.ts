@@ -106,7 +106,7 @@ export class BleScanner implements Scanner {
                 CM: 1, // Can be no other mode,
                 addresses: [{ type: "ble", peripheralAddress: peripheral.address }],
             };
-            logger.debug(`Discovered device ${peripheral.address} data: ${JSON.stringify(commissionableDevice)}`);
+            logger.debug(`Discovered device ${peripheral.address} data: ${Logger.toJSON(commissionableDevice)}`);
 
             const deviceExisting = this.discoveredMatterDevices.has(peripheral.address);
 

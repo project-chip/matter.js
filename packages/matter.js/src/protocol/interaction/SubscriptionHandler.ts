@@ -9,6 +9,7 @@ import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/s
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { InternalError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
@@ -349,9 +350,12 @@ export class SubscriptionHandler {
     updateSubscription() {
         const { newAttributes } = this.registerNewAttributes();
 
-        for (const attributeWithPath of newAttributes) {
-            const { path, attribute } = attributeWithPath;
+        for (const { path, attribute } of newAttributes) {
             const { version, value } = attribute.getWithVersion(this.session, true);
+
+            // We do not do any version filtering for attributes that are newly added to make sure controller gets
+            // most current state
+
             this.outstandingAttributeUpdates.set(attributePathToId(path), {
                 path,
                 schema: attribute.schema,
@@ -359,6 +363,30 @@ export class SubscriptionHandler {
                 value,
             });
         }
+
+        const { newEvents } = this.registerNewEvents();
+        newEvents
+            .flatMap(({ path, event: { schema } }): EventPathWithEventData<any>[] => {
+                // But we use eventFilters because we do not want to send all events to the controller
+                const matchingEvents = this.eventHandler.getEvents(path, this.eventFilters);
+                return matchingEvents.map(event => ({
+                    schema,
+                    path,
+                    event,
+                }));
+            })
+            .sort((a, b) => {
+                const eventNumberA = a.event?.eventNumber ?? EventNumber(0);
+                const eventNumberB = b.event?.eventNumber ?? EventNumber(0);
+                if (eventNumberA > eventNumberB) {
+                    return 1;
+                } else if (eventNumberA < eventNumberB) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            })
+            .forEach(event => this.outstandingEventUpdates.add(event));
 
         this.prepareDataUpdate();
     }

@@ -10,6 +10,7 @@ import { UnexpectedDataError } from "../../common/MatterError.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
+import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
@@ -20,7 +21,7 @@ import { TlvEventData, TlvEventReport } from "./InteractionProtocol.js";
 const logger = Logger.get("EventDataDecoder");
 
 export type DecodedEventData<T> = {
-    eventNumber: number | bigint;
+    eventNumber: EventNumber;
     priority: EventPriority;
     epochTimestamp?: number | bigint;
     systemTimestamp?: number | bigint;

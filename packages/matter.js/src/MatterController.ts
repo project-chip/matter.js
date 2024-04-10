@@ -296,7 +296,7 @@ export class MatterController {
         logger.info(
             `Commissioning device with identifier ${Logger.toJSON(identifierData)} and ${
                 scannersToUse.length
-            } scanners and knownAddress ${JSON.stringify(knownAddress)}`,
+            } scanners and knownAddress ${Logger.toJSON(knownAddress)}`,
         );
 
         // If we have a known address we try this first before we discover the device

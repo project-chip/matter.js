@@ -7,6 +7,7 @@
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
+import { EventNumber } from "../../datatype/EventNumber.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
 import { Event } from "../Cluster.js";
@@ -49,7 +50,7 @@ export class EventClient<T> {
     }
 
     async get(
-        minimumEventNumber?: number | bigint,
+        minimumEventNumber?: EventNumber,
         isFabricFiltered?: boolean,
     ): Promise<DecodedEventData<T>[] | undefined> {
         return await this.interactionClient.getEvent({
@@ -65,7 +66,7 @@ export class EventClient<T> {
         minIntervalFloorSeconds: number,
         maxIntervalCeilingSeconds: number,
         isUrgent = true,
-        minimumEventNumber?: number | bigint,
+        minimumEventNumber?: EventNumber,
         isFabricFiltered?: boolean,
     ) {
         return await this.interactionClient.subscribeEvent({
