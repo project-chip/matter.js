@@ -57,24 +57,29 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     protected declare internal: LevelControlServerLogic.Internal;
     declare state: LevelControlServerLogic.State;
 
+    get minLevel() {
+        return this.state.minLevel ?? (this.features.lighting ? 1 : 0);
+    }
+
+    get maxLevel() {
+        return this.state.maxLevel ?? 0xfe;
+    }
+
     override initialize() {
-        this.internal.minLevel = this.state.minLevel ?? 0;
-        this.internal.maxLevel = this.state.maxLevel ?? 0xfe;
         if (this.features.lighting) {
-            this.internal.minLevel = this.state.minLevel ?? 1;
             if (this.state.currentLevel === 0) {
                 logger.warn(
                     `The currentLevel value of ${this.state.currentLevel} is invalid according to Matter specification. The value must not be 0.`,
                 );
             }
-            if (this.internal.minLevel !== 1) {
+            if (this.minLevel !== 1) {
                 logger.warn(
-                    `The minLevel value of ${this.internal.minLevel} is invalid according to Matter specification. The value should be 1.`,
+                    `The minLevel value of ${this.minLevel} is invalid according to Matter specification. The value should be 1.`,
                 );
             }
-            if (this.internal.maxLevel !== 0xfe) {
+            if (this.maxLevel !== 0xfe) {
                 logger.warn(
-                    `The maxLevel value of ${this.internal.maxLevel} is invalid according to Matter specification. The value should be 254.`,
+                    `The maxLevel value of ${this.maxLevel} is invalid according to Matter specification. The value should be 254.`,
                 );
             }
 
@@ -84,7 +89,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             let targetLevelValue: number | null;
             switch (startUpLevelValue) {
                 case 0:
-                    targetLevelValue = this.internal.minLevel;
+                    targetLevelValue = this.minLevel;
                     break;
                 case null:
                     targetLevelValue = currentLevelValue;
@@ -153,7 +158,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         } else {
             // ELse calculate a rate by second and simulate the transition
             const effectiveRate = Math.floor(
-                ((level - (this.state.currentLevel ?? this.internal.minLevel)) / transitionTimeValue) * 10,
+                ((level - (this.state.currentLevel ?? this.minLevel)) / transitionTimeValue) * 10,
             );
             await this.#initiateTransitionSimulation(
                 Math.abs(effectiveRate),
@@ -208,7 +213,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         if (!this.state.simulateTransitionTimeHandling || effectiveRate === null) {
             // If no rate is requested and also no default rate is set, we should move as fast as possible, so we set
             // to min/max value directly
-            const level = moveMode === LevelControl.MoveMode.Up ? this.internal.maxLevel : this.internal.minLevel;
+            const level = moveMode === LevelControl.MoveMode.Up ? this.maxLevel : this.minLevel;
             await this.setLevel(level, withOnOff);
             this.setRemainingTime(0);
         } else {
@@ -267,19 +272,16 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     ) {
         if (!this.state.simulateTransitionTimeHandling || transitionTime === null || transitionTime === 0) {
             // If no transitionTime is requested we should move as fast as possible, so we set to min/max value directly
-            await this.setLevel(
-                stepMode === LevelControl.StepMode.Up ? this.internal.maxLevel : this.internal.minLevel,
-                withOnOff,
-            );
+            await this.setLevel(stepMode === LevelControl.StepMode.Up ? this.maxLevel : this.minLevel, withOnOff);
             this.setRemainingTime(0);
         } else {
             const effectiveRate = Math.floor((stepSize / transitionTime) * 10);
-            const currentLevel = this.state.currentLevel ?? this.internal.minLevel;
+            const currentLevel = this.state.currentLevel ?? this.minLevel;
             let targetLevel = stepMode === LevelControl.StepMode.Up ? currentLevel + stepSize : currentLevel - stepSize;
-            if (targetLevel < this.internal.minLevel) {
-                targetLevel = this.internal.minLevel;
-            } else if (targetLevel > this.internal.maxLevel) {
-                targetLevel = this.internal.maxLevel;
+            if (targetLevel < this.minLevel) {
+                targetLevel = this.minLevel;
+            } else if (targetLevel > this.maxLevel) {
+                targetLevel = this.maxLevel;
             }
             await this.#initiateTransitionSimulation(effectiveRate, stepMode, withOnOff, targetLevel);
         }
@@ -336,13 +338,13 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         const onOffServer =
             this.features.onOff && withOnOff && this.agent.has(OnOffServer) ? this.agent.get(OnOffServer) : undefined;
 
-        if (onOffServer !== undefined && level === this.internal.minLevel && onOffServer.state.onOff) {
+        if (onOffServer !== undefined && level === this.minLevel && onOffServer.state.onOff) {
             await onOffServer.off();
         }
 
         this.state.currentLevel = level;
 
-        if (onOffServer !== undefined && level > this.internal.minLevel && !onOffServer.state.onOff) {
+        if (onOffServer !== undefined && level > this.minLevel && !onOffServer.state.onOff) {
             await onOffServer.on();
         }
     }
@@ -374,15 +376,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     }
 
     #assertLevelValue(level: number) {
-        if (level < this.internal.minLevel) {
+        if (level < this.minLevel) {
             throw new StatusResponseError(
-                `The level value of ${level} is invalid. It must be greater or equal to ${this.internal.minLevel}.`,
+                `The level value of ${level} is invalid. It must be greater or equal to ${this.minLevel}.`,
                 StatusCode.ConstraintError,
             );
         }
-        if (level > this.internal.maxLevel) {
+        if (level > this.maxLevel) {
             throw new StatusResponseError(
-                `The level value of ${level} is invalid. It must be less or equal to ${this.internal.maxLevel}.`,
+                `The level value of ${level} is invalid. It must be less or equal to ${this.maxLevel}.`,
                 StatusCode.ConstraintError,
             );
         }
@@ -427,7 +429,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             this.callback(this.#stepIntervalTick),
         ).start();
         // Re-Set the current level as start level for the step interval to handle OnOff state changes
-        await this.setLevel(this.state.currentLevel ?? this.internal.minLevel, withOnOff);
+        await this.setLevel(this.state.currentLevel ?? this.minLevel, withOnOff);
     }
 
     async #stepIntervalTick() {
@@ -436,15 +438,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             return;
         }
         const { changeRate, withOnOff, targetLevel } = this.internal.currentTransitionData;
-        const newLevel = (this.state.currentLevel ?? this.internal.minLevel) + changeRate;
-        if (newLevel <= this.internal.minLevel) {
-            logger.debug(`Stopping transition interval at minLevel: ${this.internal.minLevel}.`);
-            await this.setLevel(this.internal.minLevel, withOnOff);
+        const newLevel = (this.state.currentLevel ?? this.minLevel) + changeRate;
+        if (newLevel <= this.minLevel) {
+            logger.debug(`Stopping transition interval at minLevel: ${this.minLevel}.`);
+            await this.setLevel(this.minLevel, withOnOff);
             this.internal.transitionIntervalTimer?.stop();
             this.setRemainingTime(0);
-        } else if (newLevel >= this.internal.maxLevel) {
-            logger.debug(`Stopping transition interval at maxLevel: ${this.internal.maxLevel}.`);
-            await this.setLevel(this.internal.maxLevel, withOnOff);
+        } else if (newLevel >= this.maxLevel) {
+            logger.debug(`Stopping transition interval at maxLevel: ${this.maxLevel}.`);
+            await this.setLevel(this.maxLevel, withOnOff);
             this.internal.transitionIntervalTimer?.stop();
             this.setRemainingTime(0);
         } else {
@@ -469,9 +471,9 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
 
             // There is no definition on how often the remaining time should be updated, so we update it with every step
             if (this.internal.currentTransitionData.changeRate > 0) {
-                this.setRemainingTime(Math.floor(Math.ceil((this.internal.maxLevel - newLevel) / changeRate) * 10));
+                this.setRemainingTime(Math.floor(Math.ceil((this.maxLevel - newLevel) / changeRate) * 10));
             } else {
-                this.setRemainingTime(Math.floor(Math.ceil((newLevel - this.internal.minLevel) / changeRate) * 10));
+                this.setRemainingTime(Math.floor(Math.ceil((newLevel - this.minLevel) / changeRate) * 10));
             }
         }
     }
@@ -486,12 +488,6 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
 
 export namespace LevelControlServerLogic {
     export class Internal {
-        /** Minimum Level value which always is defined. */
-        minLevel = 0;
-
-        /** Maximum Level value which always is defined. */
-        maxLevel = 0xff;
-
         /** Timer for the transition simulation. */
         transitionIntervalTimer?: Timer;
 
