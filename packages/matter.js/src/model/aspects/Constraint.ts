@@ -22,6 +22,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
     value?: FieldValue;
     min?: FieldValue;
     max?: FieldValue;
+    in?: FieldValue;
     entry?: Constraint;
     parts?: Constraint[];
 
@@ -65,6 +66,9 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
         if (ast.max !== undefined) {
             this.max = ast.max;
         }
+        if (ast.in !== undefined) {
+            this.in = ast.in;
+        }
         if (ast.entry !== undefined) {
             this.entry = new Constraint(ast.entry);
         }
@@ -78,14 +82,14 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
      */
     test(value: FieldValue, properties?: Record<string, any>) {
         // Helper that looks up "reference" field values in properties.  This is for constraints such as "min FieldName"
-        function valueOf(value: unknown) {
-            if (typeof value === "string" || Array.isArray(value)) {
+        function valueOf(value: unknown, raw = false) {
+            if (!raw && (typeof value === "string" || Array.isArray(value))) {
                 return value.length;
             }
             if (isObject(value)) {
                 const { type, name } = value;
                 if (type === FieldValue.reference && typeof name === "string") {
-                    value = valueOf(properties?.[camelize(name)]);
+                    value = valueOf(properties?.[camelize(name)], raw);
                 }
             }
 
@@ -94,6 +98,14 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 
         if (value === undefined) {
             return false;
+        }
+
+        if (this.in) {
+            let set = valueOf(this.in, true);
+            if (!Array.isArray(set)) {
+                set = [set];
+            }
+            return (set as unknown[]).indexOf(value) !== -1;
         }
 
         const v = valueOf(this.value);
@@ -153,6 +165,11 @@ export namespace Constraint {
          * Upper bound on value or sequence length.
          */
         max?: FieldValue;
+
+        /**
+         * Require set membership for the value.
+         */
+        in?: FieldValue;
 
         /**
          * Constraint on list child element.
@@ -224,6 +241,10 @@ export namespace Constraint {
                             return;
                         }
                         return { max: max };
+
+                    case "in":
+                        const ref = parseValue(words[1]);
+                        return { in: ref };
 
                     default:
                         constraint.error(
@@ -380,13 +401,21 @@ export namespace Constraint {
 
         if (ast.value !== undefined && ast.value !== null) {
             return `${FieldValue.serialize(ast.value)}`;
-        } else if (ast.min !== undefined && ast.min !== null) {
+        }
+
+        if (ast.min !== undefined && ast.min !== null) {
             if (ast.max === undefined || ast.max === null) {
                 return `min ${FieldValue.serialize(ast.min)}`;
             }
             return `${FieldValue.serialize(ast.min)} to ${FieldValue.serialize(ast.max)}`;
-        } else if (ast.max !== undefined && ast.max !== null) {
+        }
+
+        if (ast.max !== undefined && ast.max !== null) {
             return `max ${FieldValue.serialize(ast.max)}`;
+        }
+
+        if (ast.in !== undefined) {
+            return `in ${FieldValue.serialize(ast.in)}`;
         }
 
         return "all";

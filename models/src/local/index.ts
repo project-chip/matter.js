@@ -27,3 +27,5 @@ import "./ScenesOverrides.js";
 import "./TemperatureMeasurementOverrides.js";
 import "./UserLabelOverrides.js";
 import "./WindowCoveringOverrides.js";
+import "./TimeFormatLocalizationOverrides.js";
+
