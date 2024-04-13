@@ -29,7 +29,6 @@ export type HtmlReference = {
     table?: Table;
     prose?: HTMLElement[];
     detailSection?: string;
-    ignore?: boolean;
     details?: HtmlReference[];
 };
 

@@ -21,15 +21,15 @@ const LOAD_CLUSTERS = true;
 const LOAD_DEVICES = true;
 
 import { MatterElement } from "@project-chip/matter.js/model";
-import { scanIndex } from "./mom/spec/scan-index.js";
+import { identifyDocument } from "./mom/spec/doc-utils.js";
 import "./util/setup.js";
 
 import { Logger } from "@project-chip/matter.js/log";
 import { generateIntermediateModel } from "./mom/common/generate-intermediate.js";
-import { loadCluster } from "./mom/spec/load-cluster.js";
+import { loadClusters } from "./mom/spec/load-clusters.js";
 import { loadDevices } from "./mom/spec/load-devices.js";
 import { paths } from "./mom/spec/spec-input.js";
-import { ClusterReference, HtmlReference } from "./mom/spec/spec-types.js";
+import { HtmlReference } from "./mom/spec/spec-types.js";
 import { translateCluster } from "./mom/spec/translate-cluster.js";
 import { translateDevice } from "./mom/spec/translate-device.js";
 
@@ -37,17 +37,11 @@ export async function main() {
     const elements = Array<MatterElement.Child>();
     const logger = Logger.get("generate-spec");
 
-    function scanCluster(clusterRef: HtmlReference) {
-        logger.info(`cluster ${clusterRef.name} (${clusterRef.xref.document} § ${clusterRef.xref.section})`);
-
-        Logger.nest(() => {
-            logger.info("ingest");
-            let definition: ClusterReference;
-            Logger.nest(() => (definition = loadCluster(clusterRef)));
-
-            logger.info("translate");
-            Logger.nest(() => elements.push(...translateCluster(definition)));
-        });
+    function scanClusters(clusters: HtmlReference) {
+        for (const clusterRef of loadClusters(clusters)) {
+            logger.info(`translate ${clusterRef.name} (${clusterRef.xref.document} § ${clusterRef.xref.section})`);
+            Logger.nest(() => elements.push(...translateCluster(clusterRef)));
+        }
     }
 
     function scanDevices(devices: HtmlReference) {
@@ -60,14 +54,12 @@ export async function main() {
     paths.forEach(path => {
         logger.info(`load from spec ${path}`);
         Logger.nest(() => {
-            const index = scanIndex(path);
-            if (LOAD_CLUSTERS) {
-                index.clusters.forEach(scanCluster);
+            const index = identifyDocument(path);
+            if (LOAD_CLUSTERS && index.hasClusters) {
+                scanClusters(index.ref);
             }
-            if (LOAD_DEVICES) {
-                if (index.device) {
-                    scanDevices(index.device);
-                }
+            if (LOAD_DEVICES && index.hasDevices) {
+                scanDevices(index.ref);
             }
         });
     });
