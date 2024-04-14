@@ -153,11 +153,9 @@ export abstract class FailsafeContext {
      * validity checks.
      */
     createCertificateSigningRequest(isForUpdateNoc: boolean, sessionId: number) {
-        // TODO handle isForUpdateNoc and UpdateNoc correctly
-
-        // TODO If the Node Operational Key Pair generated during processing of the Node Operational CSR Procedure is
-        //  found to collide with an existing key pair already previously generated and installed, and that check had
-        //  been executed, then this command SHALL fail with a FAILURE status code sent back to the initiator.
+        if (this.#fabrics.findByKeypair(this.#fabricBuilder.keyPair)) {
+            throw new MatterFlowError("Key pair already exists."); // becomes Failure as StateResponse
+        }
 
         const result = this.#fabricBuilder.createCertificateSigningRequest();
         this.#csrSessionId = sessionId;
