@@ -59,12 +59,13 @@ export type ExposedFabricInformation = {
 };
 
 export class Fabric {
-    private readonly sessions = new Array<SecureSession<any>>();
+    readonly #sessions = new Array<SecureSession<any>>();
+    readonly #scopedClusterData: Map<number, any>;
 
-    private readonly scopedClusterData: Map<number, any>;
+    readonly #keyPair: Key;
 
-    private removeCallbacks = new Array<() => MaybePromise<void>>();
-    private persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
+    #removeCallbacks = new Array<() => MaybePromise<void>>();
+    #persistCallback: ((isUpdate?: boolean) => MaybePromise<void>) | undefined;
 
     constructor(
         readonly fabricIndex: FabricIndex,
@@ -73,7 +74,7 @@ export class Fabric {
         readonly rootNodeId: NodeId,
         readonly operationalId: ByteArray,
         readonly rootPublicKey: ByteArray,
-        private readonly keyPair: Key,
+        keyPair: Key,
         readonly rootVendorId: VendorId,
         readonly rootCert: ByteArray,
         readonly identityProtectionKey: ByteArray,
@@ -84,7 +85,8 @@ export class Fabric {
         readonly caseAuthenticatedTags = new Array<CaseAuthenticatedTag>(),
         scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>,
     ) {
-        this.scopedClusterData = scopedClusterData ?? new Map<number, Map<string, SupportedStorageTypes>>();
+        this.#keyPair = keyPair;
+        this.#scopedClusterData = scopedClusterData ?? new Map<number, Map<string, SupportedStorageTypes>>();
     }
 
     toStorageObject(): FabricJsonObject {
@@ -95,7 +97,7 @@ export class Fabric {
             rootNodeId: this.rootNodeId,
             operationalId: this.operationalId,
             rootPublicKey: this.rootPublicKey,
-            keyPair: this.keyPair.keyPair,
+            keyPair: this.#keyPair.keyPair,
             rootVendorId: this.rootVendorId,
             rootCert: this.rootCert,
             identityProtectionKey: this.identityProtectionKey,
@@ -104,7 +106,7 @@ export class Fabric {
             operationalCert: this.operationalCert,
             label: this.label,
             caseAuthenticatedTags: this.caseAuthenticatedTags,
-            scopedClusterData: this.scopedClusterData,
+            scopedClusterData: this.#scopedClusterData,
         };
     }
 
@@ -134,12 +136,12 @@ export class Fabric {
         await this.persist();
     }
 
-    getPublicKey() {
-        return this.keyPair.publicKey;
+    get publicKey() {
+        return this.#keyPair.publicKey;
     }
 
     sign(data: ByteArray) {
-        return Crypto.sign(this.keyPair, data);
+        return Crypto.sign(this.#keyPair, data);
     }
 
     verifyCredentials(_operationalCert: ByteArray, _intermediateCACert: ByteArray | undefined) {
@@ -161,47 +163,47 @@ export class Fabric {
     }
 
     addSession(session: SecureSession<any>) {
-        this.sessions.push(session);
+        this.#sessions.push(session);
     }
 
     removeSession(session: SecureSession<any>) {
-        const index = this.sessions.indexOf(session);
+        const index = this.#sessions.indexOf(session);
         if (index >= 0) {
-            this.sessions.splice(index, 1);
+            this.#sessions.splice(index, 1);
         }
     }
 
     addRemoveCallback(callback: () => MaybePromise<void>) {
-        this.removeCallbacks.push(callback);
+        this.#removeCallbacks.push(callback);
     }
 
     deleteRemoveCallback(callback: () => MaybePromise<void>) {
-        const index = this.removeCallbacks.indexOf(callback);
+        const index = this.#removeCallbacks.indexOf(callback);
         if (index >= 0) {
-            this.removeCallbacks.splice(index, 1);
+            this.#removeCallbacks.splice(index, 1);
         }
     }
 
-    setPersistCallback(callback: (isUpdate?: boolean) => MaybePromise<void>) {
+    set persistCallback(callback: (isUpdate?: boolean) => MaybePromise<void>) {
         // TODO Remove "isUpdate" parameter as soon as the fabric scoped data are removed from here/legacy API gets removed
-        this.persistCallback = callback;
+        this.#persistCallback = callback;
     }
 
     async remove(currentSessionId?: number) {
-        for (const callback of this.removeCallbacks) {
+        for (const callback of this.#removeCallbacks) {
             await callback();
         }
-        for (const session of [...this.sessions]) {
+        for (const session of [...this.#sessions]) {
             await session.destroy(false, session.id === currentSessionId); // Delay Close for current session only
         }
     }
 
     persist(isUpdate = true) {
-        return this.persistCallback?.(isUpdate);
+        return this.#persistCallback?.(isUpdate);
     }
 
     getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string): T | undefined {
-        const dataMap = this.scopedClusterData.get(cluster.id);
+        const dataMap = this.#scopedClusterData.get(cluster.id);
         if (dataMap === undefined) {
             return undefined;
         }
@@ -209,35 +211,35 @@ export class Fabric {
     }
 
     setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string, value: T) {
-        if (!this.scopedClusterData.has(cluster.id)) {
-            this.scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
+        if (!this.#scopedClusterData.has(cluster.id)) {
+            this.#scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
         }
-        this.scopedClusterData.get(cluster.id).set(clusterDataKey, value);
+        this.#scopedClusterData.get(cluster.id).set(clusterDataKey, value);
         return this.persist(false);
     }
 
     deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
-        if (!this.scopedClusterData.has(cluster.id)) {
+        if (!this.#scopedClusterData.has(cluster.id)) {
             return;
         }
-        this.scopedClusterData.get(cluster.id).delete(clusterDataKey);
+        this.#scopedClusterData.get(cluster.id).delete(clusterDataKey);
         return this.persist(false);
     }
 
     hasScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
-        return this.scopedClusterData.has(cluster.id) && this.scopedClusterData.get(cluster.id).has(clusterDataKey);
+        return this.#scopedClusterData.has(cluster.id) && this.#scopedClusterData.get(cluster.id).has(clusterDataKey);
     }
 
     deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
-        this.scopedClusterData.delete(cluster.id);
+        this.#scopedClusterData.delete(cluster.id);
         return this.persist(false);
     }
 
     getScopedClusterDataKeys(cluster: Cluster<any, any, any, any, any>): string[] {
-        if (!this.scopedClusterData.has(cluster.id)) {
+        if (!this.#scopedClusterData.has(cluster.id)) {
             return [];
         }
-        return Array.from(this.scopedClusterData.get(cluster.id).keys());
+        return Array.from(this.#scopedClusterData.get(cluster.id).keys());
     }
 
     get externalInformation(): ExposedFabricInformation {
@@ -253,30 +255,30 @@ export class Fabric {
 }
 
 export class FabricBuilder {
-    private keyPair = Crypto.createKeyPair();
-    private rootVendorId?: VendorId;
-    private rootCert?: ByteArray;
-    private intermediateCACert?: ByteArray;
-    private operationalCert?: ByteArray;
-    private fabricId?: FabricId;
-    private nodeId?: NodeId;
-    private rootNodeId?: NodeId;
-    private rootPublicKey?: ByteArray;
-    private identityProtectionKey?: ByteArray;
-    private fabricIndex?: FabricIndex;
-    private label = "";
-    private caseAuthenticatedTags = new Array<CaseAuthenticatedTag>();
+    #keyPair = Crypto.createKeyPair();
+    #rootVendorId?: VendorId;
+    #rootCert?: ByteArray;
+    #intermediateCACert?: ByteArray;
+    #operationalCert?: ByteArray;
+    #fabricId?: FabricId;
+    #nodeId?: NodeId;
+    #rootNodeId?: NodeId;
+    #rootPublicKey?: ByteArray;
+    #identityProtectionKey?: ByteArray;
+    #fabricIndex?: FabricIndex;
+    #label = "";
+    #caseAuthenticatedTags = new Array<CaseAuthenticatedTag>();
 
-    getPublicKey() {
-        return this.keyPair.publicKey;
+    get publicKey() {
+        return this.#keyPair.publicKey;
     }
 
-    getFabricIndex() {
-        return this.fabricIndex;
+    get fabricIndex() {
+        return this.#fabricIndex;
     }
 
     createCertificateSigningRequest() {
-        return CertificateManager.createCertificateSigningRequest(this.keyPair);
+        return CertificateManager.createCertificateSigningRequest(this.#keyPair);
     }
 
     setRootCert(rootCert: ByteArray) {
@@ -286,7 +288,7 @@ export class FabricBuilder {
     }
 
     hasRootCert() {
-        return this.rootCert !== undefined;
+        return this.#rootCert !== undefined;
     }
 
     setOperationalCert(operationalCert: ByteArray) {
@@ -299,91 +301,90 @@ export class FabricBuilder {
         this.nodeId = nodeId;
         if (caseAuthenticatedTags !== undefined) {
             CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
-            this.caseAuthenticatedTags = caseAuthenticatedTags;
+            this.#caseAuthenticatedTags = caseAuthenticatedTags;
         }
-        return this;
-    }
-
-    setIntermediateCACert(certificate: ByteArray) {
-        this.intermediateCACert = certificate;
         return this;
     }
 
     setRootVendorId(rootVendorId: VendorId) {
-        this.rootVendorId = rootVendorId;
+        this.#rootVendorId = rootVendorId;
         return this;
     }
 
     setRootNodeId(rootNodeId: NodeId) {
-        this.rootNodeId = rootNodeId;
+        this.#rootNodeId = rootNodeId;
         return this;
     }
 
     setIdentityProtectionKey(key: ByteArray) {
-        this.identityProtectionKey = key;
+        this.#identityProtectionKey = key;
         return this;
     }
 
     initializeFromFabricForUpdate(fabric: Fabric) {
-        this.rootVendorId = fabric.rootVendorId;
-        this.rootNodeId = fabric.rootNodeId;
-        this.identityProtectionKey = fabric.identityProtectionKey;
-        this.rootCert = fabric.rootCert;
-        this.rootPublicKey = fabric.rootPublicKey;
-        this.label = fabric.label;
+        this.#rootVendorId = fabric.rootVendorId;
+        this.#rootNodeId = fabric.rootNodeId;
+        this.#identityProtectionKey = fabric.identityProtectionKey;
+        this.#rootCert = fabric.rootCert;
+        this.#rootPublicKey = fabric.rootPublicKey;
+        this.#label = fabric.label;
     }
 
     matchesToFabric(fabric: Fabric) {
-        if (this.fabricId === undefined || this.rootPublicKey === undefined) {
+        if (this.#fabricId === undefined || this.#rootPublicKey === undefined) {
             throw new MatterFlowError("Node Operational Data needs to be set first.");
         }
-        return fabric.matchesFabricIdAndRootPublicKey(this.fabricId, this.rootPublicKey);
+        return fabric.matchesFabricIdAndRootPublicKey(this.#fabricId, this.#rootPublicKey);
     }
 
-    getNodeId() {
-        return this.nodeId;
+    get nodeId() {
+        return this.#nodeId;
     }
 
-    getFabricId() {
-        return this.fabricId;
+    get fabricId() {
+        return this.#fabricId;
+    }
+
+    get keyPair() {
+        return this.#keyPair;
     }
 
     async build(fabricIndex: FabricIndex) {
-        if (this.fabricIndex !== undefined) throw new InternalError("FabricBuilder can only be built once");
-        if (this.rootNodeId === undefined) throw new InternalError("rootNodeId needs to be set");
-        if (this.rootVendorId === undefined) throw new InternalError("vendorId needs to be set");
-        if (this.rootCert === undefined || this.rootPublicKey === undefined)
+        if (this.#fabricIndex !== undefined) throw new InternalError("FabricBuilder can only be built once");
+        if (this.#rootNodeId === undefined) throw new InternalError("rootNodeId needs to be set");
+        if (this.#rootVendorId === undefined) throw new InternalError("vendorId needs to be set");
+        if (this.#rootCert === undefined || this.#rootPublicKey === undefined)
             throw new InternalError("rootCert needs to be set");
-        if (this.identityProtectionKey === undefined) throw new InternalError("identityProtectionKey needs to be set");
-        if (this.operationalCert === undefined || this.fabricId === undefined || this.nodeId === undefined)
+        if (this.#identityProtectionKey === undefined) throw new InternalError("identityProtectionKey needs to be set");
+        if (this.#operationalCert === undefined || this.#fabricId === undefined || this.#nodeId === undefined)
             throw new InternalError("operationalCert needs to be set");
 
-        this.fabricIndex = fabricIndex;
+        this.#fabricIndex = fabricIndex;
         const saltWriter = new DataWriter(Endian.Big);
-        saltWriter.writeUInt64(this.fabricId);
+        saltWriter.writeUInt64(this.#fabricId);
         const operationalId = await Crypto.hkdf(
-            this.rootPublicKey.slice(1),
+            this.#rootPublicKey.slice(1),
             saltWriter.toByteArray(),
             COMPRESSED_FABRIC_ID_INFO,
             8,
         );
 
         return new Fabric(
-            this.fabricIndex,
-            this.fabricId,
-            this.nodeId,
-            this.rootNodeId,
+            this.#fabricIndex,
+            this.#fabricId,
+            this.#nodeId,
+            this.#rootNodeId,
             operationalId,
-            this.rootPublicKey,
-            this.keyPair,
-            this.rootVendorId,
-            this.rootCert,
-            this.identityProtectionKey,
-            await Crypto.hkdf(this.identityProtectionKey, operationalId, GROUP_SECURITY_INFO, 16),
-            this.intermediateCACert,
-            this.operationalCert,
-            this.label,
-            this.caseAuthenticatedTags,
+            this.#rootPublicKey,
+            this.#keyPair,
+            this.#rootVendorId,
+            this.#rootCert,
+            this.#identityProtectionKey,
+            await Crypto.hkdf(this.#identityProtectionKey, operationalId, GROUP_SECURITY_INFO, 16),
+            this.#intermediateCACert,
+            this.#operationalCert,
+            this.#label,
+            this.#caseAuthenticatedTags,
         );
     }
 }

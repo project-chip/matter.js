@@ -76,7 +76,7 @@ describe("Scenes Server test", () => {
             assert.ok(groupResult);
 
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -159,7 +159,7 @@ describe("Scenes Server test", () => {
 
         it("add another scene on group 1 and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -278,7 +278,7 @@ describe("Scenes Server test", () => {
             assert.ok(groupResult);
 
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -472,7 +472,7 @@ describe("Scenes Server test", () => {
 
         it("delete scene and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -573,7 +573,7 @@ describe("Scenes Server test", () => {
 
         it("delete all scenes on one group and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -642,7 +642,7 @@ describe("Scenes Server test", () => {
 
         it("delete one group and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -819,7 +819,7 @@ describe("Scenes Server test", () => {
             assert.ok(groupResult);
 
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -920,7 +920,7 @@ describe("Scenes Server test", () => {
 
         it("copy one Scene same group", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -1030,7 +1030,7 @@ describe("Scenes Server test", () => {
             assert.ok(groupResult);
 
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -1171,7 +1171,7 @@ describe("Scenes Server test", () => {
             assert.ok(groupResult);
 
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 scenesServer!,
@@ -1386,7 +1386,7 @@ describe("Scenes Server test", () => {
 
         it("delete all groups and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
