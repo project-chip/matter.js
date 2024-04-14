@@ -63,6 +63,9 @@ export const DatatypeOverride = (type: DerType, value: ByteArray) => ({
     [TYPE_OVERRIDE_KEY]: type,
     [BYTES_KEY]: value,
 });
+export const RawBytes = (bytes: ByteArray) => ({
+    [BYTES_KEY]: bytes,
+});
 
 export type DerNode = {
     [TAG_ID_KEY]: number;
@@ -82,45 +85,52 @@ export class DerCodec {
             return this.encodeOctetString(value);
         } else if (value instanceof Date) {
             return this.encodeDate(value);
-        } else if (isObject(value) && value[TAG_ID_KEY] !== undefined) {
-            const { [TAG_ID_KEY]: tagId, [BITS_PADDING]: bitsPadding, [BYTES_KEY]: bytes } = value;
-            if (typeof tagId !== "number") {
-                throw new UnexpectedDataError("Tag ID is non-numeric");
-            }
-            if (bitsPadding !== undefined && typeof bitsPadding !== "number") {
-                throw new UnexpectedDataError("Bits padding is not a numeric byte value");
-            }
-            if (bytes === undefined || !ArrayBuffer.isView(bytes)) {
-                throw new UnexpectedDataError("DER bytes is not a byte array");
-            }
-            return this.encodeAnsi1(
-                tagId,
-                bitsPadding === undefined
-                    ? (bytes as Uint8Array)
-                    : ByteArray.concat(ByteArray.of(bitsPadding), bytes as Uint8Array),
-            );
-        } else if (isObject(value) && value[TYPE_OVERRIDE_KEY] === undefined) {
-            return this.encodeObject(value);
         } else if (typeof value === "string") {
             return this.encodeString(value);
         } else if (typeof value === "number" || typeof value === "bigint") {
             return this.encodeInteger(value);
-        } else if (
-            isObject(value) &&
-            value[TYPE_OVERRIDE_KEY] === DerType.Integer &&
-            ArrayBuffer.isView(value[BYTES_KEY])
-        ) {
-            return this.encodeInteger(value[BYTES_KEY] as ByteArray);
-        } else if (
-            isObject(value) &&
-            value[TYPE_OVERRIDE_KEY] === DerType.BitString &&
-            ArrayBuffer.isView(value[BYTES_KEY])
-        ) {
-            return this.encodeBitString(value[BYTES_KEY] as ByteArray);
         } else if (typeof value === "boolean") {
             return this.encodeBoolean(value);
         } else if (value === undefined) {
             return new ByteArray(0);
+        } else if (isObject(value)) {
+            if (value[TAG_ID_KEY] !== undefined) {
+                const { [TAG_ID_KEY]: tagId, [BITS_PADDING]: bitsPadding, [BYTES_KEY]: bytes } = value;
+                if (typeof tagId !== "number") {
+                    throw new UnexpectedDataError("Tag ID is non-numeric");
+                }
+                if (bitsPadding !== undefined && typeof bitsPadding !== "number") {
+                    throw new UnexpectedDataError("Bits padding is not a numeric byte value");
+                }
+                if (bytes === undefined || !ArrayBuffer.isView(bytes)) {
+                    throw new UnexpectedDataError("DER bytes is not a byte array");
+                }
+                return this.encodeAnsi1(
+                    tagId,
+                    bitsPadding === undefined
+                        ? (bytes as Uint8Array)
+                        : ByteArray.concat(ByteArray.of(bitsPadding), bytes as Uint8Array),
+                );
+            } else if (value[TYPE_OVERRIDE_KEY] !== undefined && value[BYTES_KEY] instanceof ByteArray) {
+                if (value[TYPE_OVERRIDE_KEY] === DerType.Integer) {
+                    return this.encodeInteger(value[BYTES_KEY] as ByteArray);
+                } else if (value[TYPE_OVERRIDE_KEY] === DerType.BitString) {
+                    return this.encodeBitString(value[BYTES_KEY] as ByteArray);
+                } else {
+                    throw new UnexpectedDataError(`Unsupported override type ${value[TYPE_OVERRIDE_KEY]}`);
+                }
+            } else if (
+                value[BYTES_KEY] !== undefined &&
+                value[BYTES_KEY] instanceof ByteArray &&
+                Object.keys(value).length === 1
+            ) {
+                // Raw Data
+                return value[BYTES_KEY];
+            } else if (value[TYPE_OVERRIDE_KEY] === undefined && value[BYTES_KEY] === undefined) {
+                return this.encodeObject(value);
+            } else {
+                throw new UnexpectedDataError(`Unsupported object type ${typeof value}`);
+            }
         } else {
             throw new UnexpectedDataError(`Unsupported type ${typeof value}`);
         }

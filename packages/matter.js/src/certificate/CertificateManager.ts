@@ -232,7 +232,7 @@ const BaseMatterCertificate = (matterFields?: { subject?: TlvFields; issuer?: Tl
                 extendedKeyUsage: TlvOptionalField(3, TlvArray(TlvUInt8)),
                 subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
                 authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
-                futureExtension: TlvOptionalField(6, TlvByteString),
+                futureExtension: TlvOptionalRepeatedField(6, TlvByteString),
             }),
         ),
         signature: TlvField(11, TlvByteString),
@@ -281,7 +281,7 @@ interface AttestationCertificateBase {
         extendedKeyUsage?: number[];
         subjectKeyIdentifier: ByteArray;
         authorityKeyIdentifier: ByteArray;
-        futureExtension?: ByteArray;
+        futureExtension?: ByteArray[];
     };
     signature: ByteArray;
 }
@@ -497,125 +497,95 @@ function subjectOrIssuerToAsn1(data: { [field: string]: any }) {
 }
 
 export class CertificateManager {
-    static rootCertToAsn1({
+    static #genericBuildAsn1Structure({
         serialNumber,
         notBefore,
         notAfter,
-        issuer: { issuerRcacId },
-        subject: { rcacId },
+        issuer,
+        subject,
         ellipticCurvePublicKey,
-        extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-    }: Unsigned<RootCertificate>) {
-        return DerCodec.encode({
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
+        extensions: {
+            basicConstraints,
+            subjectKeyIdentifier,
+            authorityKeyIdentifier,
+            extendedKeyUsage,
+            keyUsage,
+            futureExtension,
+        },
+    }: Unsigned<BaseCertificate>) {
+        const { isCa, pathLen } = basicConstraints;
+        if (!isCa && pathLen !== undefined) {
+            throw new CertificateError("Path length must be undefined for non-CA certificates.");
+        }
+        return {
+            version: ContextTagged(0, 2), // v3
+            serialNumber: DatatypeOverride(DerType.Integer, serialNumber),
             signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                issuerRcacId: issuerRcacId === undefined ? undefined : RcacId_Matter(issuerRcacId),
-            },
+            issuer: subjectOrIssuerToAsn1(issuer),
             validity: {
                 notBefore: matterToJsDate(notBefore),
                 notAfter: matterToJsDate(notAfter),
             },
-            subject: {
-                rcacId: RcacId_Matter(rcacId),
-            },
+            subject: subjectOrIssuerToAsn1(subject),
             publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
             extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({ isCa: true }),
-                keyUsage: KeyUsage_Signature_ContentCommited_X509,
+                basicConstraints: BasicConstraints_X509(basicConstraints),
+                keyUsage: KeyUsage_X509(ExtensionKeyUsageSchema.encode(keyUsage)),
+                extendedKeyUsage: ExtendedKeyUsage_X509(extendedKeyUsage),
                 subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
                 authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
+                futureExtension: RawBytes(ByteArray.concat(...(futureExtension ?? []))),
             }),
-        });
+        };
     }
 
-    static nocCertToAsn1({
-        serialNumber,
-        notBefore,
-        notAfter,
-        issuer: { issuerRcacId },
-        subject: { fabricId, nodeId, caseAuthenticatedTags },
-        ellipticCurvePublicKey,
-        extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-    }: Unsigned<OperationalCertificate>) {
-        // If we ever get a second case of repeated elements, solve is more generic
-        if (caseAuthenticatedTags !== undefined) {
-            CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
+    static #genericCertToAsn1(cert: Unsigned<BaseCertificate>) {
+        return DerCodec.encode(this.#genericBuildAsn1Structure(cert));
+    }
+
+    static rootCertToAsn1(cert: Unsigned<RootCertificate>) {
+        const {
+            extensions: {
+                basicConstraints: { isCa },
+            },
+        } = cert;
+        if (!isCa) {
+            throw new CertificateError("Root certificate must be a CA.");
+        }
+        return this.#genericCertToAsn1(cert);
+    }
+
+    static intermediateCaCertToAsn1(cert: Unsigned<IntermediateCertificate>) {
+        const {
+            extensions: {
+                basicConstraints: { isCa },
+            },
+        } = cert;
+        if (!isCa) {
+            throw new CertificateError("Intermediate certificate must be a CA.");
+        }
+        return this.#genericCertToAsn1(cert);
+    }
+
+    static nodeOperationalCertToAsn1(cert: Unsigned<OperationalCertificate>) {
+        const {
+            issuer: { icacId, rcacId },
+            extensions: {
+                basicConstraints: { isCa },
+            },
+        } = cert;
+        if (icacId === undefined && rcacId === undefined) {
+            throw new CertificateError("Issuer RCAC or ICAC ID must be defined for an operational certificate.");
+        }
+        if (isCa) {
+            throw new CertificateError("Node operational certificate must not be a CA.");
         }
 
-        const cat0 = caseAuthenticatedTags?.[0];
-        const cat1 = caseAuthenticatedTags?.[1];
-        const cat2 = caseAuthenticatedTags?.[2];
-
-        return DerCodec.encode({
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                issuerRcacId: issuerRcacId === undefined ? undefined : RcacId_Matter(issuerRcacId),
-            },
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: {
-                fabricId: FabricId_Matter(fabricId),
-                nodeId: NodeId_Matter(NodeId(nodeId)),
-                cat0: cat0 !== undefined ? NocCat_Matter(cat0) : undefined,
-                cat1: cat1 !== undefined ? NocCat_Matter(cat1) : undefined,
-                cat2: cat2 !== undefined ? NocCat_Matter(cat2) : undefined,
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({}),
-                keyUsage: KeyUsage_Signature_X509,
-                extendedKeyUsage: ExtendedKeyUsage_X509({ serverAuth: true, clientAuth: true }),
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        });
+        return this.#genericCertToAsn1(cert);
     }
 
-    static daCertToAsn1(
-        {
-            serialNumber,
-            notBefore,
-            notAfter,
-            issuer: { commonName: issuerCommonName, vendorId: issuerVendorId },
-            subject: { commonName: subjectCommonName, vendorId: subjectVendorId, productId: subjectProductId },
-            ellipticCurvePublicKey,
-            extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-        }: Unsigned<DeviceAttestationCertificate>,
-        key: Key,
-    ) {
-        const certificate = {
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                commonName: CommonName_X520(issuerCommonName),
-                vendorId: VendorId_Matter(issuerVendorId),
-            },
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: {
-                commonName: CommonName_X520(subjectCommonName),
-                vendorId: VendorId_Matter(subjectVendorId),
-                productId: ProductId_Matter(subjectProductId),
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({
-                    isCa: false,
-                }),
-                keyUsage: KeyUsage_Signature_X509,
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        };
+    static deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
+        const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
             signAlgorithm: EcdsaWithSHA256_X962,
@@ -623,46 +593,11 @@ export class CertificateManager {
         });
     }
 
-    static paiCertToAsn1(
-        {
-            serialNumber,
-            notBefore,
-            notAfter,
-            issuer: { commonName: issuerCommonName, vendorId: issuerVendorId },
-            subject: { commonName, vendorId, productId },
-            ellipticCurvePublicKey,
-            extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-        }: Unsigned<ProductAttestationIntermediateCertificate>,
+    static productAttestationIntermediateCertToAsn1(
+        cert: Unsigned<ProductAttestationIntermediateCertificate>,
         key: Key,
     ) {
-        const certificate = {
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                commonName: CommonName_X520(issuerCommonName),
-                vendorId: issuerVendorId === undefined ? undefined : VendorId_Matter(issuerVendorId),
-            },
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: {
-                commonName: CommonName_X520(commonName),
-                vendorId: VendorId_Matter(vendorId),
-                productId: productId === undefined ? undefined : ProductId_Matter(productId),
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({
-                    isCa: true,
-                    pathLen: 0,
-                }),
-                keyUsage: KeyUsage_Signature_ContentCommited_X509,
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        };
+        const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
             signAlgorithm: EcdsaWithSHA256_X962,
@@ -670,47 +605,8 @@ export class CertificateManager {
         });
     }
 
-    static paaCertToAsn1(
-        {
-            serialNumber,
-            notBefore,
-            notAfter,
-            issuer: { commonName: issuerCommonName, vendorId: issuerVendorId },
-            subject: { commonName, vendorId },
-            ellipticCurvePublicKey,
-            extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-        }: Unsigned<ProductAttestationAuthorityCertificate>,
-        key: Key,
-    ) {
-        const certificate = {
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                commonName: CommonName_X520(issuerCommonName),
-                vendorId: issuerVendorId === undefined ? undefined : VendorId_Matter(issuerVendorId),
-            },
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: {
-                commonName: CommonName_X520(commonName),
-                vendorId: vendorId === undefined ? undefined : VendorId_Matter(vendorId),
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({
-                    isCa: false,
-                }),
-                keyUsage: KeyUsage_Signature_ContentCommited_X509,
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier:
-                    authorityKeyIdentifier === undefined
-                        ? undefined
-                        : AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        };
+    static productAttestationAuthorityCertToAsn1(cert: Unsigned<ProductAttestationAuthorityCertificate>, key: Key) {
+        const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
             signAlgorithm: EcdsaWithSHA256_X962,
