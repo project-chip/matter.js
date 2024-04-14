@@ -26,7 +26,6 @@ export const PublicKeyEcPrime256v1_X962 = (key: ByteArray) => ({
 });
 export const EcdsaWithSHA256_X962 = DerObject("2A8648CE3D040302");
 export const SHA256_CMS = DerObject("608648016503040201"); // 2.16.840.1.101.3.4.2.1
-export const OrganisationName_X520 = (name: string) => [DerObject("55040A", { name })];
 export const SubjectKeyIdentifier_X509 = (identifier: ByteArray) =>
     DerObject("551d0e", { value: DerCodec.encode(identifier) });
 export const AuthorityKeyIdentifier_X509 = (identifier: ByteArray) =>
@@ -82,3 +81,47 @@ export const KeyUsage_X509 = (value: number) => {
 };
 export const Pkcs7Data = (data: any) => DerObject("2A864886F70D010701", { value: ContextTagged(0, data) });
 export const Pkcs7SignedData = (data: any) => DerObject("2a864886f70d010702", { value: ContextTagged(0, data) });
+
+/**
+ * Generator function to create a specific ASN string field for a DN with the OID base 2.5.4.*.
+ * The returned function takes the value of the string and returns the ASN.1 DER object. Optionally the string
+ * can be encoded as a Printable String which adjusts the OID accordingly..
+ */
+const GenericString_X520 =
+    (id: number) =>
+    (value: string, asPrintedString = false) => [
+        DerObject(`5504${(asPrintedString ? id + 0x80 : id).toString(16).padStart(2, "0")}`, { value }),
+    ];
+
+/** commonName = ASN.1 OID 2.5.4.3 */
+export const CommonName_X520 = GenericString_X520(3);
+/** surName = ASN.1 OID 2.5.4.4 */
+export const SurName_X520 = GenericString_X520(4);
+/** serialNumber = ASN.1 OID 2.5.4.5 */
+export const SerialNumber_X520 = GenericString_X520(5);
+/** countryName = ASN.1 OID 2.5.4.6 */
+export const CountryName_X520 = GenericString_X520(6);
+/** localityName = ASN.1 OID 2.5.4.7 */
+export const LocalityName_X520 = GenericString_X520(7);
+/** stateOrProvinceName = ASN.1 OID 2.5.4.8 */
+export const StateOrProvinceName_X520 = GenericString_X520(8);
+/** organizationName = ASN.1 OID 2.5.4.10 */
+export const OrganisationName_X520 = GenericString_X520(10);
+/** organizationalUnitName = ASN.1 OID 2.5.4.11 */
+export const OrganizationalUnitName_X520 = GenericString_X520(11);
+/** title = ASN.1 OID 2.5.4.12 */
+export const Title_X520 = GenericString_X520(12);
+/** name = ASN.1 OID 2.5.4.41 */
+export const Name_X520 = GenericString_X520(41);
+/** givenName = ASN.1 OID 2.5.4.42 */
+export const GivenName_X520 = GenericString_X520(42);
+/** initials = ASN.1 OID 2.5.4.43 */
+export const Initials_X520 = GenericString_X520(43);
+/** generationQualifier = ASN.1 OID 2.5.4.44 */
+export const GenerationQualifier_X520 = GenericString_X520(44);
+/** dnQualifier = ASN.1 OID 2.5.4.46 */
+export const DnQualifier_X520 = GenericString_X520(46);
+/** pseudonym = ASN.1 OID 2.5.4.65 */
+export const Pseudonym_X520 = GenericString_X520(65);
+/** domain-component = ASN.1 OID 0.9.2342.19200300.100.1.25, IA5String */
+export const DomainComponent_X520 = (value: string) => [DerObject("06092A864886F70D010901", { value })];
