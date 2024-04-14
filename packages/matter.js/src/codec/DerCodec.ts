@@ -253,38 +253,3 @@ export class DerCodec {
         return { tag, bytes };
     }
 }
-
-export const PublicKeyEcPrime256v1_X962 = (key: ByteArray) => ({
-    type: {
-        algorithm: ObjectId("2A8648CE3D0201") /* EC Public Key */,
-        curve: ObjectId("2A8648CE3D030107") /* Curve P256_V1 */,
-    },
-    bytes: BitByteArray(key),
-});
-export const EcdsaWithSHA256_X962 = DerObject("2A8648CE3D040302");
-export const SHA256_CMS = DerObject("608648016503040201"); // 2.16.840.1.101.3.4.2.1
-export const OrganisationName_X520 = (name: string) => [DerObject("55040A", { name })];
-export const SubjectKeyIdentifier_X509 = (identifier: ByteArray) =>
-    DerObject("551d0e", { value: DerCodec.encode(identifier) });
-export const AuthorityKeyIdentifier_X509 = (identifier: ByteArray) =>
-    DerObject("551d23", { value: DerCodec.encode({ id: ContextTaggedBytes(0, identifier) }) });
-export const BasicConstraints_X509 = (constraints: any) =>
-    DerObject("551d13", { critical: true, value: DerCodec.encode(constraints) });
-export const ExtendedKeyUsage_X509 = ({ clientAuth, serverAuth }: { clientAuth: boolean; serverAuth: boolean }) =>
-    DerObject("551d25", {
-        critical: true,
-        value: DerCodec.encode({
-            client: clientAuth ? ObjectId("2b06010505070302") : undefined,
-            server: serverAuth ? ObjectId("2b06010505070301") : undefined,
-        }),
-    });
-export const KeyUsage_Signature_X509 = DerObject("551d0f", {
-    critical: true,
-    value: DerCodec.encode(BitByteArray(ByteArray.of(1 << 7), 7)),
-});
-export const KeyUsage_Signature_ContentCommited_X509 = DerObject("551d0f", {
-    critical: true,
-    value: DerCodec.encode(BitByteArray(ByteArray.of(0x03 << 1), 1)),
-});
-export const Pkcs7Data = (data: any) => DerObject("2A864886F70D010701", { value: ContextTagged(0, data) });
-export const Pkcs7SignedData = (data: any) => DerObject("2a864886f70d010702", { value: ContextTagged(0, data) });
