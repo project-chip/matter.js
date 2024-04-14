@@ -30,7 +30,7 @@ import {
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
-import { toHexString } from "../util/Number.js";
+import { toLogHexString } from "../util/Number.js";
 import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { PairedDevice, RootEndpoint } from "./Device.js";
@@ -315,7 +315,7 @@ export class PairedNode {
                 const cluster = device.getClusterClientById(clusterId);
                 if (cluster === undefined) {
                     logger.info(
-                        `Ignoring received attribute update for unknown cluster ${toHexString(
+                        `Ignoring received attribute update for unknown cluster ${toLogHexString(
                             clusterId,
                         )} on endpoint ${endpointId}!`,
                     );
@@ -345,7 +345,7 @@ export class PairedNode {
                 const cluster = device.getClusterClientById(clusterId);
                 if (cluster === undefined) {
                     logger.info(
-                        `Ignoring received event for unknown cluster ${toHexString(
+                        `Ignoring received event for unknown cluster ${toLogHexString(
                             clusterId,
                         )} on endpoint ${endpointId}!`,
                     );

@@ -32,7 +32,7 @@ import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { toHexString } from "../../util/Number.js";
+import { toLogHexString } from "../../util/Number.js";
 import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import {
     AttributeReportPayload,
@@ -965,8 +965,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             ),
                         StatusResponseError,
                         async error => {
-                            const errorLogText = `Error ${toHexString(error.code)}${
-                                error.clusterCode !== undefined ? `/${toHexString(error.clusterCode)}` : ""
+                            const errorLogText = `Error ${toLogHexString(error.code)}${
+                                error.clusterCode !== undefined ? `/${toLogHexString(error.clusterCode)}` : ""
                             } while invoking command: ${error.message}`;
                             if (error instanceof ValidationError) {
                                 logger.info(

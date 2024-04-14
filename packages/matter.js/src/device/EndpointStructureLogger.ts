@@ -12,7 +12,7 @@ import { AnyAttributeServer, FabricScopeError } from "../cluster/server/Attribut
 import { asClusterServerInternal, ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { Logger } from "../log/Logger.js";
-import { toHexString } from "../util/Number.js";
+import { toLogHexString } from "../util/Number.js";
 
 const logger = Logger.get("EndpointStructureLogger");
 
@@ -80,7 +80,7 @@ function logClusterServer(
         if ((featureMap as any)[featureName] === true) supportedFeatures.push(featureName);
     }
     logger.info(
-        `Cluster-Server "${clusterServer.name}" (${toHexString(clusterServer.id)}) ${
+        `Cluster-Server "${clusterServer.name}" (${toLogHexString(clusterServer.id)}) ${
             supportedFeatures.length ? `(Features: ${supportedFeatures.join(", ")})` : ""
         }`,
     );
@@ -94,7 +94,7 @@ function logClusterServer(
 
                     const value = getAttributeServerValue(attribute, options);
                     logger.info(
-                        `"${attribute.name}" (${toHexString(attribute.id)})${value !== "" ? `: value = ${value}` : ""}`,
+                        `"${attribute.name}" (${toLogHexString(attribute.id)})${value !== "" ? `: value = ${value}` : ""}`,
                     );
                 }
             });
@@ -111,7 +111,7 @@ function logClusterServer(
 
                     const value = getAttributeServerValue(attribute, options);
                     logger.info(
-                        `"${attribute.name}" (${toHexString(attribute.id)})${value !== "" ? `: value = ${value}` : ""}`,
+                        `"${attribute.name}" (${toLogHexString(attribute.id)})${value !== "" ? `: value = ${value}` : ""}`,
                     );
                 }
             });
@@ -126,7 +126,7 @@ function logClusterServer(
                     const command = commands[commandName];
                     if (command === undefined) continue;
                     logger.info(
-                        `"${command.name}" (${toHexString(command.invokeId)}/${toHexString(command.responseId)})`,
+                        `"${command.name}" (${toLogHexString(command.invokeId)}/${toLogHexString(command.responseId)})`,
                     );
                 }
             });
@@ -140,7 +140,7 @@ function logClusterServer(
                 for (const eventName in events) {
                     const event = events[eventName];
                     if (event === undefined) continue;
-                    logger.info(`"${event.name}" (${toHexString(event.id)})`);
+                    logger.info(`"${event.name}" (${toLogHexString(event.id)})`);
                 }
             });
         });
@@ -162,7 +162,7 @@ function logClusterClient(
     }
 
     logger.info(
-        `Cluster-Client "${clusterClient.name}" (${toHexString(clusterClient.id)}) ${
+        `Cluster-Client "${clusterClient.name}" (${toLogHexString(clusterClient.id)}) ${
             supportedFeatures.length ? `(Features: ${supportedFeatures.join(", ")})` : ""
         }`,
     );
@@ -174,7 +174,7 @@ function logClusterClient(
                     const attribute = clusterClient.attributes[attributeName];
                     if (attribute === undefined) continue;
 
-                    logger.info(`"${attribute.name}" (${toHexString(attribute.id)})`);
+                    logger.info(`"${attribute.name}" (${toLogHexString(attribute.id)})`);
                 }
             });
         });
@@ -195,7 +195,7 @@ function logClusterClient(
                     if (!supported) info += " (Not Supported)";
                     if (unknown) info += " (Unknown)";
 
-                    logger.info(`"${attribute.name}" (${toHexString(attribute.id)})${info}`);
+                    logger.info(`"${attribute.name}" (${toLogHexString(attribute.id)})${info}`);
                 }
             });
         });
@@ -227,7 +227,7 @@ function logClusterClient(
                     if (!supported) info += " (Not Supported)";
                     if (unknown) info += " (Unknown)";
 
-                    logger.info(`"${event.name}" (${toHexString(event.id)})${info}`);
+                    logger.info(`"${event.name}" (${toLogHexString(event.id)})${info}`);
                 }
             });
         });
