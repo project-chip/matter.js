@@ -13,6 +13,7 @@ import { StorageContext } from "../storage/StorageContext.js";
 import { Time } from "../time/Time.js";
 import { AsyncConstruction, asyncNew } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { toHex } from "../util/Number.js";
 import {
     CertificateManager,
     TlvOperationalCertificate,
@@ -25,7 +26,7 @@ export class RootCertificateManager {
     private rootKeyPair = Crypto.createKeyPair();
     private rootKeyIdentifier = Crypto.hash(this.rootKeyPair.publicKey).slice(0, 20);
     private rootCertBytes = this.generateRootCert();
-    private nextCertificateId = 1;
+    private nextCertificateId = BigInt(1);
     #construction: AsyncConstruction<RootCertificateManager>;
 
     get construction() {
@@ -70,8 +71,8 @@ export class RootCertificateManager {
 
     private generateRootCert() {
         const now = Time.get().now();
-        const unsignedCertificate = {
-            serialNumber: ByteArray.of(Number(this.rootCertId)),
+        const unsignedCertificate: Unsigned<RootCertificate> = {
+            serialNumber: ByteArray.fromHex(toHex(this.rootCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -99,8 +100,8 @@ export class RootCertificateManager {
     ) {
         const now = Time.get().now();
         const certId = this.nextCertificateId++;
-        const unsignedCertificate = {
-            serialNumber: ByteArray.of(certId), // TODO: figure out what should happen if certId > 255
+        const unsignedCertificate: Unsigned<OperationalCertificate> = {
+            serialNumber: ByteArray.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,

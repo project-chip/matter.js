@@ -16,6 +16,8 @@ import {
     TestCert_PAA_NoVID_SKID,
 } from "./ChipPAAuthorities.js";
 
+import { toHex } from "../util/Number.js";
+
 function getPaiCommonName(vendorId: VendorId, productId?: number) {
     return `node-matter Dev PAI 0x${vendorId.toString(16).toUpperCase()} ${
         productId === undefined ? "no PID" : `0x${productId.toString(16).toUpperCase()}`
@@ -68,7 +70,7 @@ export class AttestationCertificateManager {
     private generatePAACert(vendorId?: VendorId) {
         const now = Time.get().now();
         const unsignedCertificate = {
-            serialNumber: ByteArray.of(Number(this.paaCertId)),
+            serialNumber: ByteArray.fromHex(toHex(this.paaCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -99,7 +101,7 @@ export class AttestationCertificateManager {
     private generatePAICert(vendorId: VendorId, productId?: number) {
         const now = Time.get().now();
         const unsignedCertificate = {
-            serialNumber: ByteArray.of(Number(this.paiCertId)),
+            serialNumber: ByteArray.fromHex(toHex(this.paiCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -131,7 +133,7 @@ export class AttestationCertificateManager {
         const now = Time.get().now();
         const certId = this.nextCertificateId++;
         const unsignedCertificate = {
-            serialNumber: ByteArray.of(certId), // TODO: figure out what should happen if certId > 255
+            serialNumber: ByteArray.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
