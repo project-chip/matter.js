@@ -49,11 +49,13 @@ const EPOCH_OFFSET_S = 10957 * 24 * 60 * 60;
 // TODO replace usage of Date by abstraction
 
 export function matterToJsDate(date: number) {
-    return new Date((date + EPOCH_OFFSET_S) * 1000);
+    return date === 0 ? NON_WELL_DEFINED_DATE : new Date((date + EPOCH_OFFSET_S) * 1000);
 }
 
 export function jsToMatterDate(date: Date, addYears = 0) {
-    return Math.floor(date.getTime() / 1000) - EPOCH_OFFSET_S + addYears * YEAR_S;
+    return date.getTime() === NON_WELL_DEFINED_DATE.getTime()
+        ? 0
+        : Math.floor(date.getTime() / 1000) - EPOCH_OFFSET_S + addYears * YEAR_S;
 }
 
 function intTo16Chars(value: bigint | number) {
