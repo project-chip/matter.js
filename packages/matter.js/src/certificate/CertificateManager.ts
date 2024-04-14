@@ -5,26 +5,18 @@
  */
 
 import {
-    AuthorityKeyIdentifier_X509,
-    BasicConstraints_X509,
     BitByteArray,
     BYTES_KEY,
     ContextTagged,
     ContextTaggedBytes,
+    DatatypeOverride,
     DerCodec,
     DerObject,
-    EcdsaWithSHA256_X962,
+    DerType,
     ELEMENTS_KEY,
-    ExtendedKeyUsage_X509,
-    KeyUsage_Signature_ContentCommited_X509,
-    KeyUsage_Signature_X509,
+    NON_WELL_DEFINED_DATE,
     OBJECT_ID_KEY,
-    OrganisationName_X520,
-    Pkcs7Data,
-    Pkcs7SignedData,
-    PublicKeyEcPrime256v1_X962,
-    SHA256_CMS,
-    SubjectKeyIdentifier_X509,
+    RawBytes,
 } from "../codec/DerCodec.js";
 import { MatterError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
@@ -33,13 +25,52 @@ import { CaseAuthenticatedTag, TlvCaseAuthenticatedTag } from "../datatype/CaseA
 import { FabricId, TlvFabricId } from "../datatype/FabricId.js";
 import { NodeId, TlvNodeId } from "../datatype/NodeId.js";
 import { TlvVendorId, VendorId } from "../datatype/VendorId.js";
+import { Logger } from "../log/Logger.js";
+import { BitFlag, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { Time } from "../time/Time.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField, TlvOptionalRepeatedField, TlvTaggedList } from "../tlv/TlvObject.js";
+import { TlvBitmap, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
+import {
+    TlvField,
+    TlvFields,
+    TlvObject,
+    TlvOptionalField,
+    TlvOptionalRepeatedField,
+    TlvTaggedList,
+} from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { isObject } from "../util/Type.js";
+import {
+    AuthorityKeyIdentifier_X509,
+    BasicConstraints_X509,
+    CommonName_X520,
+    CountryName_X520,
+    DnQualifier_X520,
+    DomainComponent_X520,
+    EcdsaWithSHA256_X962,
+    ExtendedKeyUsage_X509,
+    GenerationQualifier_X520,
+    GivenName_X520,
+    Initials_X520,
+    KeyUsage_X509,
+    LocalityName_X520,
+    Name_X520,
+    OrganisationName_X520,
+    OrganizationalUnitName_X520,
+    Pkcs7Data,
+    Pkcs7SignedData,
+    Pseudonym_X520,
+    PublicKeyEcPrime256v1_X962,
+    SerialNumber_X520,
+    SHA256_CMS,
+    StateOrProvinceName_X520,
+    SubjectKeyIdentifier_X509,
+    SurName_X520,
+    Title_X520,
+} from "./CertificateDerTypes.js";
 
 export class CertificateError extends MatterError {}
 
