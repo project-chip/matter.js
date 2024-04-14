@@ -3,7 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { UnexpectedDataError } from "../common/MatterError.js";
+import { InternalError, UnexpectedDataError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { isObject } from "../util/Type.js";
@@ -13,17 +13,23 @@ export const TAG_ID_KEY = "_tag";
 export const BYTES_KEY = "_bytes";
 export const ELEMENTS_KEY = "_elements";
 export const BITS_PADDING = "_padding";
+export const TYPE_OVERRIDE_KEY = "_type";
 
 export enum DerType {
     Boolean = 0x01,
-    UnsignedInt = 0x02,
+    Integer = 0x02,
     BitString = 0x03,
     OctetString = 0x04,
+    Null = 0x05,
     ObjectIdentifier = 0x06,
     UTF8String = 0x0c,
     Sequence = 0x10,
     Set = 0x11,
+    PrintableString = 0x13,
+    T16String = 0x14,
+    IA5String = 0x16,
     UtcDate = 0x17,
+    GeneralizedTime = 0x18,
 }
 
 const CONSTRUCTED = 0x20;
@@ -52,6 +58,10 @@ export const ContextTaggedBytes = (tagId: number, value: ByteArray) => ({
     [TAG_ID_KEY]: tagId | DerClass.ContextSpecific,
     [BYTES_KEY]: value,
 });
+export const DatatypeOverride = (type: DerType, value: ByteArray) => ({
+    [TYPE_OVERRIDE_KEY]: type,
+    [BYTES_KEY]: value,
+});
 
 export type DerNode = {
     [TAG_ID_KEY]: number;
@@ -59,6 +69,9 @@ export type DerNode = {
     [ELEMENTS_KEY]?: DerNode[];
     [BITS_PADDING]?: number;
 };
+
+export const NON_WELL_DEFINED_DATE = new Date("9999-12-31 23:59:59Z");
+const NON_WELLDEFINED_DATE_ENCODED = ByteArray.fromHex("39393939313233313233353935395a"); // 9999-12-31 23:59:59Z encoded as GeneralizedTime
 
 export class DerCodec {
     static encode(value: any): ByteArray {
@@ -85,12 +98,24 @@ export class DerCodec {
                     ? (bytes as Uint8Array)
                     : ByteArray.concat(ByteArray.of(bitsPadding), bytes as Uint8Array),
             );
-        } else if (isObject(value)) {
+        } else if (isObject(value) && value[TYPE_OVERRIDE_KEY] === undefined) {
             return this.encodeObject(value);
         } else if (typeof value === "string") {
             return this.encodeString(value);
-        } else if (typeof value === "number") {
-            return this.encodeUnsignedInt(value);
+        } else if (typeof value === "number" || typeof value === "bigint") {
+            return this.encodeInteger(value);
+        } else if (
+            isObject(value) &&
+            value[TYPE_OVERRIDE_KEY] === DerType.Integer &&
+            ArrayBuffer.isView(value[BYTES_KEY])
+        ) {
+            return this.encodeInteger(value[BYTES_KEY] as ByteArray);
+        } else if (
+            isObject(value) &&
+            value[TYPE_OVERRIDE_KEY] === DerType.BitString &&
+            ArrayBuffer.isView(value[BYTES_KEY])
+        ) {
+            return this.encodeBitString(value[BYTES_KEY] as ByteArray);
         } else if (typeof value === "boolean") {
             return this.encodeBoolean(value);
         } else if (value === undefined) {
@@ -101,6 +126,9 @@ export class DerCodec {
     }
 
     private static encodeDate(date: Date) {
+        if (date.getTime() === NON_WELL_DEFINED_DATE.getTime()) {
+            return this.encodeAnsi1(DerType.GeneralizedTime, NON_WELLDEFINED_DATE_ENCODED);
+        }
         return this.encodeAnsi1(
             DerType.UtcDate,
             ByteArray.fromString(
@@ -148,9 +176,20 @@ export class DerCodec {
             if (dataView.getUint8(start) !== 0) break;
             if (dataView.getUint8(start + 1) >= 0x80) break;
             start++;
-            if (start === 4) break;
+            if (start === byteArray.length - 1) break;
         }
-        return this.encodeAnsi1(DerType.UnsignedInt, byteArray.slice(start));
+        return this.encodeAnsi1(DerType.Integer, byteArray.slice(start));
+    }
+
+    private static encodeBitString(value: ByteArray) {
+        if (value.length !== 1) {
+            // We only correctly decode 8 bit values because sufficient right now
+            throw new InternalError(`Bit string value ${value} needs to have a length of 1 byte.`);
+        }
+        const reversedBits = value[0].toString(2).padStart(8, "0");
+        const unusedBits = reversedBits.indexOf("1");
+        const bitByteArray = ByteArray.of(parseInt(reversedBits.split("").reverse().join(""), 2));
+        return this.encode(BitByteArray(bitByteArray, unusedBits === -1 ? 8 : unusedBits));
     }
 
     private static encodeLengthBytes(value: number) {

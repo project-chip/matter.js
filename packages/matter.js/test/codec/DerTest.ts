@@ -5,12 +5,17 @@
  */
 
 import {
-    BitByteArray,
-    ContextTagged,
-    DerCodec,
     EcdsaWithSHA256_X962,
     OrganisationName_X520,
     PublicKeyEcPrime256v1_X962,
+} from "../../src/certificate/CertificateDerTypes.js";
+import {
+    BitByteArray,
+    ContextTagged,
+    DatatypeOverride,
+    DerCodec,
+    DerType,
+    NON_WELL_DEFINED_DATE,
 } from "../../src/codec/DerCodec.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
@@ -43,6 +48,42 @@ describe("DerCodec", () => {
             const result = DerCodec.encode(DECODED);
 
             expect(result.toHex()).equal(ENCODED.toHex());
+        });
+    });
+
+    describe("DER encode datatypes", () => {
+        it("encodes Numbers correctly", () => {
+            expect(DerCodec.encode(100).toHex()).equal("020164");
+            expect(DerCodec.encode(10000000).toHex()).equal("020400989680");
+            expect(DerCodec.encode(BigInt("0x123456789")).toHex()).equal("02050123456789");
+            expect(DerCodec.encode(BigInt("0x1234567890")).toHex()).equal("02051234567890");
+            expect(DerCodec.encode(BigInt("0x1234567890")).toHex()).equal("02051234567890");
+            expect(DerCodec.encode(BigInt("0x1234567890abcdef")).toHex()).equal("02081234567890abcdef");
+            expect(DerCodec.encode(BigInt("0x1234567890abcdef01234567890")).toHex()).equal(
+                "020e01234567890abcdef01234567890",
+            );
+            expect(DerCodec.encode(BigInt("0x1234567890abcdef01234567890abcdef0123456")).toHex()).equal(
+                "02141234567890abcdef01234567890abcdef0123456",
+            );
+            expect(
+                DerCodec.encode(
+                    DatatypeOverride(DerType.Integer, ByteArray.fromHex("1234567890abcdef01234567890abcdef0123456")),
+                ).toHex(),
+            ).equal("02141234567890abcdef01234567890abcdef0123456");
+        });
+
+        it("encodes BitStrings correctly", () => {
+            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, ByteArray.of(0))).toHex()).equal("03020800");
+            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, ByteArray.of(1))).toHex()).equal("03020780");
+            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, ByteArray.of(0x60))).toHex()).equal("03020106");
+        });
+
+        it("encodes DateTime correctly", () => {
+            expect(DerCodec.encode(new Date("2024-04-04 15:30:45Z")).toHex()).equal("170d3234303430343135333034355a");
+        });
+
+        it("encodes special non-well defined GeneralizedDate correctly", () => {
+            expect(DerCodec.encode(NON_WELL_DEFINED_DATE).toHex()).equal("180f39393939313233313233353935395a");
         });
     });
 });
