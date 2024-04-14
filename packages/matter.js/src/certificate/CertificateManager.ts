@@ -637,12 +637,359 @@ export class CertificateManager {
         return DerCodec.encode(Pkcs7SignedData(certificate));
     }
 
-    static validateRootCertificate(rootCert: RootCertificate) {
-        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.rootCertToAsn1(rootCert), rootCert.signature);
+    /**
+     * Validate general requirements a Matter certificate fields must fulfill.
+     * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
+     */
+    static validateGeneralCertificateFields(cert: RootCertificate | OperationalCertificate | IntermediateCertificate) {
+        if (cert.serialNumber.length > 20)
+            throw new CertificateError(
+                `Serial number must not be longer then 20 octets. Current serial number has ${cert.serialNumber.length} octets.`,
+            );
+
+        if (cert.signatureAlgorithm !== 1) {
+            // ecdsa-with-sha256
+            throw new CertificateError(`Unsupported signature algorithm: ${cert.signatureAlgorithm}`);
+        }
+
+        if (cert.publicKeyAlgorithm !== 1) {
+            // ec-pub-key
+            throw new CertificateError(`Unsupported public key algorithm: ${cert.publicKeyAlgorithm}`);
+        }
+
+        if (cert.ellipticCurveIdentifier !== 1) {
+            // prime256v1
+            throw new CertificateError(`Unsupported elliptic curve identifier: ${cert.ellipticCurveIdentifier}`);
+        }
+
+        // All implementations SHALL reject Matter certificates with more than 5 RDNs in a single DN.
+        if (Object.keys(cert.subject).length > 5) {
+            throw new CertificateError(`Certificate subject must not contain more than 5 RDNs.`);
+        }
+
+        // notBefore date should be already reached, notAfter is not checked right now
+        if (cert.notBefore * 1000 > Time.nowMs()) {
+            throw new CertificateError(
+                `Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs()}`,
+            );
+        }
+
+        // All implementations SHALL reject Matter certificates with more than 5 RDNs in a single DN.
+        for (const [key, value] of Object.entries(cert)) {
+            if (isObject(value) && Object.keys(value).length > 5) {
+                throw new CertificateError(`Certificate field ${key} must not contain more than 5 RDNs.`);
+            }
+        }
     }
 
-    static validateNocCertificate(rootCert: RootCertificate, nocCert: OperationalCertificate) {
-        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.nocCertToAsn1(nocCert), nocCert.signature);
+    /**
+     * Verify requirements a Matter Root certificate must fulfill.
+     * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
+     */
+    static verifyRootCertificate(rootCert: RootCertificate) {
+        CertificateManager.validateGeneralCertificateFields(rootCert);
+
+        // The subject DN SHALL NOT encode any matter-node-id attribute.
+        if ("nodeId" in rootCert.subject) {
+            throw new CertificateError(`Root certificate must not contain a nodeId.`);
+        }
+
+        // The subject DN MAY encode at most one matter-fabric-id attribute.
+        if (rootCert.subject.fabricId !== undefined) {
+            if (Array.isArray(rootCert.subject.fabricId)) {
+                throw new CertificateError(
+                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(rootCert.subject.fabricId)}`,
+                );
+            }
+            // If present, the matter-fabric-id attribute’s value SHALL NOT be 0
+            if (rootCert.subject.fabricId === FabricId(0)) {
+                throw new CertificateError(
+                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(rootCert.subject.fabricId)}`,
+                );
+            }
+        }
+
+        // The subject DN SHALL NOT encode any matter-icac-id attribute.
+        if ("icacId" in rootCert.subject) {
+            throw new CertificateError(`Root certificate must not contain an icacId.`);
+        }
+
+        // The subject DN SHALL encode exactly one matter-rcac-id attribute.
+        if (rootCert.subject.rcacId === undefined || Array.isArray(rootCert.subject.rcacId)) {
+            throw new CertificateError(`Invalid rcacId in Root certificate: ${Logger.toJSON(rootCert.subject.rcacId)}`);
+        }
+
+        // The subject DN SHALL NOT encode any matter-noc-cat attribute.
+        if ("caseAuthenticatedTags" in rootCert.subject) {
+            throw new CertificateError(`Root certificate must not contain a caseAuthenticatedTags.`);
+        }
+
+        // The basic constraints extension SHALL be encoded with is-ca set to true.
+        if (rootCert.extensions.basicConstraints.isCa !== true) {
+            throw new CertificateError(`Root certificate must have isCa set to true.`);
+        }
+
+        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
+        if (ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060) {
+            throw new CertificateError(`Root certificate keyUsage must have keyCertSign and CRLSign set.`);
+        }
+
+        // The extended key usage extension SHALL NOT be present.
+        if (rootCert.extensions.extendedKeyUsage !== undefined) {
+            throw new CertificateError(`Root certificate must not have extendedKeyUsage set.`);
+        }
+
+        // The subject key identifier extension SHALL be present and 160 bit long.
+        if (rootCert.extensions.subjectKeyIdentifier === undefined) {
+            throw new CertificateError(`Root certificate must have subjectKeyIdentifier set.`);
+        }
+        if (rootCert.extensions.subjectKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Root certificate subjectKeyIdentifier must be 160 bit.`);
+        }
+
+        // The authority key identifier extension SHALL be present and 160 bit long.
+        if (rootCert.extensions.authorityKeyIdentifier === undefined) {
+            throw new CertificateError(`Root certificate must have authorityKeyIdentifier set.`);
+        }
+        if (rootCert.extensions.authorityKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Root certificate authorityKeyIdentifier must be 160 bit.`);
+        }
+
+        // The authority key identifier extension SHALL be equal to the subject key identifier extension.
+        if (!rootCert.extensions.authorityKeyIdentifier.equals(rootCert.extensions.subjectKeyIdentifier)) {
+            throw new CertificateError(
+                `Root certificate authorityKeyIdentifier must be equal to subjectKeyIdentifier.`,
+            );
+        }
+
+        // Root cert is self signed anyway, so we do not need to verify it with itself
+        //Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.rootCertToAsn1(rootCert), rootCert.signature);
+    }
+
+    /**
+     * Verify requirements a Matter Node Operational certificate must fulfill.
+     * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
+     */
+    static verifyNodeOperationalCertificate(
+        rootOrIcaCert: RootCertificate | IntermediateCertificate,
+        nocCert: OperationalCertificate,
+    ) {
+        CertificateManager.validateGeneralCertificateFields(nocCert);
+
+        // The subject DN SHALL encode exactly one matter-node-id attribute.
+        if (nocCert.subject.nodeId === undefined || Array.isArray(nocCert.subject.nodeId)) {
+            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Logger.toJSON(nocCert.subject.nodeId)}`);
+        }
+        // The matter-node-id attribute’s value SHALL be in the Operational Node ID
+        if (!NodeId.isOperationalNodeId(nocCert.subject.nodeId)) {
+            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Logger.toJSON(nocCert.subject.nodeId)}`);
+        }
+
+        // The subject DN SHALL encode exactly one matter-fabric-id attribute.
+        if (nocCert.subject.fabricId === undefined || Array.isArray(nocCert.subject.fabricId)) {
+            throw new CertificateError(
+                `Invalid fabricId in NoC certificate: ${Logger.toJSON(nocCert.subject.fabricId)}`,
+            );
+        }
+        // The matter-fabric-id attribute’s value SHALL NOT be 0
+        if (nocCert.subject.fabricId === FabricId(0)) {
+            throw new CertificateError(
+                `Invalid fabricId in NoC certificate: ${Logger.toJSON(nocCert.subject.fabricId)}`,
+            );
+        }
+
+        // The subject DN SHALL NOT encode any matter-icac-id attribute.
+        if ("icacId" in nocCert.subject) {
+            throw new CertificateError(`Noc certificate must not contain an icacId.`);
+        }
+
+        // The subject DN SHALL NOT encode any matter-rcac-id attribute.
+        if ("rcacId" in nocCert.subject) {
+            throw new CertificateError(`Noc certificate must not contain an rcacId.`);
+        }
+
+        // The subject DN MAY encode at most three matter-noc-cat attributes.
+        if (nocCert.subject.caseAuthenticatedTags !== undefined) {
+            CaseAuthenticatedTag.validateNocTagList(nocCert.subject.caseAuthenticatedTags); // throws ValidationError
+        }
+
+        // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
+        // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
+        // the same certificate chain.
+        if (
+            rootOrIcaCert.subject.fabricId !== undefined &&
+            rootOrIcaCert.subject.fabricId !== nocCert.subject.fabricId
+        ) {
+            throw new CertificateError(
+                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                    rootOrIcaCert.subject.fabricId,
+                )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
+            );
+        }
+
+        // The basic constraints extension SHALL be encoded with is-ca set to false.
+        if (nocCert.extensions.basicConstraints.isCa) {
+            throw new CertificateError(`Noc certificate must not have isCa set to true.`);
+        }
+
+        // The key usage extension SHALL be encoded with exactly one flag: digitalSignature (0x0001)
+        if (ExtensionKeyUsageSchema.encode(nocCert.extensions.keyUsage) !== 1) {
+            throw new CertificateError(`Noc certificate must have keyUsage set to digitalSignature.`);
+        }
+
+        // The extended key usage extension SHALL be encoded with exactly two key-purpose-id values: serverAuth and clientAuth.
+        if (
+            nocCert.extensions.extendedKeyUsage === undefined ||
+            (!nocCert.extensions.extendedKeyUsage.includes(1) && !nocCert.extensions.extendedKeyUsage.includes(2))
+        ) {
+            throw new CertificateError(
+                `Noc certificate must have extendedKeyUsage with serverAuth and clientAuth: ${Logger.toJSON(nocCert.extensions.extendedKeyUsage)}`,
+            );
+        }
+
+        // The subject key identifier extension SHALL be present and 160 bit long.
+        if (nocCert.extensions.subjectKeyIdentifier === undefined) {
+            throw new CertificateError(`Noc certificate must have subjectKeyIdentifier set.`);
+        }
+        if (nocCert.extensions.subjectKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Noc certificate subjectKeyIdentifier must be 160 bit.`);
+        }
+
+        // The authority key identifier extension SHALL be present and 160 bit long.
+        if (nocCert.extensions.authorityKeyIdentifier === undefined) {
+            throw new CertificateError(`Noc certificate must have authorityKeyIdentifier set.`);
+        }
+        if (nocCert.extensions.authorityKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Noc certificate authorityKeyIdentifier must be 160 bit.`);
+        }
+
+        // Validate authority key identifier against subject key identifier
+        if (!nocCert.extensions.authorityKeyIdentifier.equals(rootOrIcaCert.extensions.subjectKeyIdentifier)) {
+            throw new CertificateError(
+                `Noc certificate authorityKeyIdentifier must be equal to Root/Ica subjectKeyIdentifier.`,
+            );
+        }
+
+        Crypto.verify(
+            PublicKey(rootOrIcaCert.ellipticCurvePublicKey),
+            this.nodeOperationalCertToAsn1(nocCert),
+            nocCert.signature,
+        );
+    }
+
+    /**
+     * Verify requirements a Matter Intermediate CA certificate must fulfill.
+     * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
+     */
+    static verifyIntermediateCaCertificate(rootCert: RootCertificate, icaCert: IntermediateCertificate) {
+        CertificateManager.validateGeneralCertificateFields(icaCert);
+
+        // The subject DN SHALL NOT encode any matter-node-id attribute.
+        if ("nodeId" in icaCert.subject) {
+            throw new CertificateError(`Ica certificate must not contain a nodeId.`);
+        }
+
+        // The subject DN MAY encode at most one matter-fabric-id attribute.
+        if (icaCert.subject.fabricId !== undefined) {
+            if (Array.isArray(icaCert.subject.fabricId)) {
+                throw new CertificateError(
+                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                );
+            }
+            // If present, the matter-fabric-id attribute’s value SHALL NOT be 0
+            if (icaCert.subject.fabricId === FabricId(0)) {
+                throw new CertificateError(
+                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                );
+            }
+            // If present on root certificate fabric-id needs to match with Ica fabric Id
+            if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
+                throw new CertificateError(
+                    `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                        rootCert.subject.fabricId,
+                    )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                );
+            }
+        }
+
+        // The subject DN SHALL encode exactly one matter-icac-id attribute.
+        if (icaCert.subject.icacId === undefined || Array.isArray(icaCert.subject.icacId)) {
+            throw new CertificateError(`Invalid icacId in Ica certificate: ${Logger.toJSON(icaCert.subject.icacId)}`);
+        }
+
+        // The subject DN SHALL NOT encode any matter-rcac-id attribute.
+        if ("rcacId" in icaCert.subject) {
+            throw new CertificateError(`Ica certificate must not contain an rcacId.`);
+        }
+
+        // The subject DN SHALL NOT encode any matter-noc-cat attribute.
+        if ("caseAuthenticatedTags" in icaCert.subject) {
+            throw new CertificateError(`Ica certificate must not contain a caseAuthenticatedTags.`);
+        }
+
+        // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
+        // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
+        // the same certificate chain.
+        if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
+            throw new CertificateError(
+                `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                    rootCert.subject.fabricId,
+                )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
+            );
+        }
+
+        // Verify the certificate chain by checking rcac ids in subject and issuer
+        if (rootCert.subject.rcacId !== icaCert.issuer.rcacId) {
+            throw new CertificateError(
+                `RcacId in Ica certificate does not match the rcacId in the parent certificate. ${Logger.toJSON(
+                    rootCert.subject.rcacId,
+                )} !== ${Logger.toJSON(icaCert.issuer.rcacId)}`,
+            );
+        }
+
+        // The basic constraints extension SHALL be encoded with is-ca set to true.
+        if (!rootCert.extensions.basicConstraints.isCa) {
+            throw new CertificateError(`Root certificate must have isCa set to true.`);
+        }
+
+        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
+        if (ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060) {
+            throw new CertificateError(`Root certificate must have keyUsage set to keyCertSign and CRLSign.`);
+        }
+
+        // The extended key usage extension SHALL NOT be present.
+        if (rootCert.extensions.extendedKeyUsage !== undefined) {
+            throw new CertificateError(`Root certificate must not have extendedKeyUsage set.`);
+        }
+
+        // The subject key identifier extension SHALL be present and 160 bit long.
+        if (rootCert.extensions.subjectKeyIdentifier === undefined) {
+            throw new CertificateError(`Root certificate must have subjectKeyIdentifier set.`);
+        }
+        if (rootCert.extensions.subjectKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Root certificate subjectKeyIdentifier must be 160 bit.`);
+        }
+
+        // The authority key identifier extension SHALL be present and 160 bit long.
+        if (rootCert.extensions.authorityKeyIdentifier === undefined) {
+            throw new CertificateError(`Root certificate must have authorityKeyIdentifier set.`);
+        }
+        if (rootCert.extensions.authorityKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Root certificate authorityKeyIdentifier must be 160 bit.`);
+        }
+
+        // Validate authority key identifier against subject key identifier
+        if (!icaCert.extensions.authorityKeyIdentifier.equals(rootCert.extensions.subjectKeyIdentifier)) {
+            throw new CertificateError(
+                `Ica certificate authorityKeyIdentifier must be equal to root cert subjectKeyIdentifier.`,
+            );
+        }
+
+        Crypto.verify(
+            PublicKey(rootCert.ellipticCurvePublicKey),
+            this.intermediateCaCertToAsn1(icaCert),
+            icaCert.signature,
+        );
     }
 
     static createCertificateSigningRequest(key: Key) {
