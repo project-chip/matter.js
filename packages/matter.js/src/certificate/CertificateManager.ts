@@ -79,36 +79,58 @@ function uInt16To4Chars(value: number) {
     return byteArray.toHex().toUpperCase();
 }
 
-/** commonName = ASN.1 OID 2.5.4.3 */
-export const CommonName_X520 = (name: string) => [DerObject("550403", { value: name })];
+/**
+ * Matter specific ASN.1 OIDs
+ * @see {@link MatterSpecification.v12.Core} Appendix E
+ */
+
+/**
+ * Generator function to create a specific ASN field for a Matter OpCert DN with the OID base 1.3.6.1.4.1.37244.1.*.
+ * The returned function takes the value and returns the ASN.1 DER object.
+ */
+const GenericMatterOpCertObject =
+    <T>(id: number, valueConverter?: (value: T) => string) =>
+    (value: T) => [
+        DerObject(`2b0601040182a27c01${id.toString(16).padStart(2, "0")}`, {
+            value: (valueConverter ?? intTo16Chars)(value as any),
+        }),
+    ];
+
+/**
+ * Generator function to create a specific ASN field for a Matter AttCert DN with the OID base 1.3.6.1.4.1.37244.2.*.
+ * The returned function takes the value and returns the ASN.1 DER object.
+ */
+const GenericMatterAttCertObject =
+    <T>(id: number, valueConverter?: (value: T) => string) =>
+    (value: T) => [
+        DerObject(`2b0601040182a27c02${id.toString(16).padStart(2, "0")}`, {
+            value: (valueConverter ?? intTo16Chars)(value as any),
+        }),
+    ];
 
 /** matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1 */
-export const NodeId_Matter = (nodeId: NodeId) => [DerObject("2b0601040182a27c0101", { value: intTo16Chars(nodeId) })];
+export const NodeId_Matter = GenericMatterOpCertObject<NodeId>(1);
 
 /** matter-firmware-signing-id = ASN.1 OID 1.3.6.1.4.1.37244.1.2 */
-export const FirmwareSigningId_Matter = (signingId: number) => [
-    DerObject("2b0601040182a27c0102", { value: intTo16Chars(signingId) }),
-];
+export const FirmwareSigningId_Matter = GenericMatterOpCertObject<number>(2);
 
 /** matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3 */
-export const IcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0103", { value: intTo16Chars(id) })];
+export const IcacId_Matter = GenericMatterOpCertObject<bigint | number>(3);
 
 /** matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4 */
-export const RcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0104", { value: intTo16Chars(id) })];
+export const RcacId_Matter = GenericMatterOpCertObject<bigint | number>(4);
 
 /** matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5 */
-export const FabricId_Matter = (id: FabricId) => [DerObject("2b0601040182a27c0105", { value: intTo16Chars(id) })];
+export const FabricId_Matter = GenericMatterOpCertObject<FabricId>(5);
 
 /** matter-noc-cat = ASN.1 OID 1.3.6.1.4.1.37244.1.6 */
-export const NocCat_Matter = (cat: number) => [DerObject("2b0601040182a27c0106", { value: uInt16To8Chars(cat) })];
+export const NocCat_Matter = GenericMatterOpCertObject<number>(6, uInt16To8Chars);
 
 /** matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1 */
-export const VendorId_Matter = (vendorId: VendorId) => [
-    DerObject("2b0601040182a27c0201", { value: uInt16To4Chars(vendorId) }),
-];
+export const VendorId_Matter = GenericMatterAttCertObject<VendorId>(1, uInt16To4Chars);
 
 /** matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2 */
-export const ProductId_Matter = (id: number) => [DerObject("2b0601040182a27c0202", { value: uInt16To4Chars(id) })];
+export const ProductId_Matter = GenericMatterAttCertObject<number>(2, uInt16To4Chars);
 
 export const TlvRootCertificate = TlvObject({
     serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
