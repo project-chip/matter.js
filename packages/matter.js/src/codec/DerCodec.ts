@@ -6,6 +6,7 @@
 import { InternalError, UnexpectedDataError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
+import { toHex } from "../util/Number.js";
 import { isObject } from "../util/Type.js";
 
 export const OBJECT_ID_KEY = "_objectId";
@@ -167,10 +168,16 @@ export class DerCodec {
         return this.encodeAnsi1(DerType.UTF8String, ByteArray.fromString(value));
     }
 
-    private static encodeUnsignedInt(value: number) {
-        const byteArray = new ByteArray(5);
+    private static encodeInteger(value: number | bigint | ByteArray) {
+        const isByteArray = ArrayBuffer.isView(value);
+        let valueBytes: ByteArray;
+        if (isByteArray) {
+            valueBytes = value as ByteArray;
+        } else {
+            valueBytes = ByteArray.fromHex(toHex(value));
+        }
+        const byteArray = ByteArray.concat(new ByteArray(1), valueBytes);
         const dataView = byteArray.getDataView();
-        dataView.setUint32(1, value);
         let start = 0;
         while (true) {
             if (dataView.getUint8(start) !== 0) break;
