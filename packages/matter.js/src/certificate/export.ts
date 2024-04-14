@@ -5,6 +5,7 @@
  */
 
 export * from "./AttestationCertificateManager.js";
+export * from "./CertificateDerTypes.js";
 export * from "./CertificateManager.js";
 export * from "./CertificationDeclarationManager.js";
 export * from "./ChipPAAuthorities.js";
