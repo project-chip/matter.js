@@ -90,12 +90,15 @@ export class AttestationCertificateManager {
                     isCa: true,
                     pathLen: 1,
                 },
-                keyUsage: 96,
+                keyUsage: {
+                    keyCertSign: true,
+                    cRLSign: true,
+                },
                 subjectKeyIdentifier: this.paaKeyIdentifier,
                 authorityKeyIdentifier: this.paaKeyIdentifier,
             },
         };
-        return CertificateManager.paaCertToAsn1(unsignedCertificate, this.paaKeyPair);
+        return CertificateManager.productAttestationAuthorityCertToAsn1(unsignedCertificate, this.paaKeyPair);
     }
 
     private generatePAICert(vendorId: VendorId, productId?: number) {
@@ -121,12 +124,15 @@ export class AttestationCertificateManager {
                     isCa: true,
                     pathLen: 0,
                 },
-                keyUsage: 96,
+                keyUsage: {
+                    keyCertSign: true,
+                    cRLSign: true,
+                },
                 subjectKeyIdentifier: this.paiKeyIdentifier,
                 authorityKeyIdentifier: this.paaKeyIdentifier,
             },
         };
-        return CertificateManager.paiCertToAsn1(unsignedCertificate, this.paaKeyPair);
+        return CertificateManager.productAttestationIntermediateCertToAsn1(unsignedCertificate, this.paaKeyPair);
     }
 
     generateDaCert(publicKey: ByteArray, vendorId: VendorId, productId: number) {
@@ -153,11 +159,13 @@ export class AttestationCertificateManager {
                 basicConstraints: {
                     isCa: false,
                 },
-                keyUsage: 1,
+                keyUsage: {
+                    digitalSignature: true,
+                },
                 subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),
                 authorityKeyIdentifier: this.paiKeyIdentifier,
             },
         };
-        return CertificateManager.daCertToAsn1(unsignedCertificate, this.paiKeyPair);
+        return CertificateManager.deviceAttestationCertToAsn1(unsignedCertificate, this.paiKeyPair);
     }
 }

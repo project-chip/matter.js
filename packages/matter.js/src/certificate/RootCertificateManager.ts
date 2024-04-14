@@ -9,6 +9,7 @@ import { BinaryKeyPair, PrivateKey } from "../crypto/Key.js";
 import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { Logger } from "../log/Logger.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { Time } from "../time/Time.js";
 import { AsyncConstruction, asyncNew } from "../util/AsyncConstruction.js";
@@ -16,10 +17,15 @@ import { ByteArray } from "../util/ByteArray.js";
 import { toHex } from "../util/Number.js";
 import {
     CertificateManager,
+    OperationalCertificate,
+    RootCertificate,
     TlvOperationalCertificate,
     TlvRootCertificate,
+    Unsigned,
     jsToMatterDate,
 } from "./CertificateManager.js";
+
+const logger = Logger.get("RootCertificateManager");
 
 export class RootCertificateManager {
     private rootCertId = BigInt(0);
@@ -42,19 +48,21 @@ export class RootCertificateManager {
             // Read from storage if we have them stored, else store the just generated data
             const certValues = await storage.values();
             if (
-                certValues.rootCertId !== undefined &&
-                certValues.rootKeyPair !== undefined &&
-                certValues.rootKeyIdentifier !== undefined &&
-                certValues.rootCertBytes !== undefined &&
-                certValues.nextCertificateId !== undefined
+                typeof certValues.rootCertId === "bigint" &&
+                (ArrayBuffer.isView(certValues.rootKeyPair) || typeof certValues.rootKeyPair === "object") &&
+                ArrayBuffer.isView(certValues.rootKeyIdentifier) &&
+                ArrayBuffer.isView(certValues.rootCertBytes) &&
+                (typeof certValues.nextCertificateId === "number" || typeof certValues.nextCertificateId === "bigint")
             ) {
-                this.rootCertId = certValues.rootCertId as bigint;
+                this.rootCertId = BigInt(certValues.rootCertId);
                 this.rootKeyPair = PrivateKey(certValues.rootKeyPair as BinaryKeyPair);
                 this.rootKeyIdentifier = certValues.rootKeyIdentifier as ByteArray;
                 this.rootCertBytes = certValues.rootCertBytes as ByteArray;
-                this.nextCertificateId = certValues.nextCertificateId as number;
+                this.nextCertificateId = BigInt(certValues.nextCertificateId);
+                logger.debug(`Loaded root certificate with ID ${this.rootCertId} from storage`);
                 return;
             }
+            logger.debug(`Created new root certificate with ID ${this.rootCertId}`);
             await storage.set({
                 rootCertId: this.rootCertId,
                 rootKeyPair: this.rootKeyPair.keyPair,
@@ -76,14 +84,17 @@ export class RootCertificateManager {
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
-            issuer: { issuerRcacId: this.rootCertId },
+            issuer: { rcacId: this.rootCertId },
             notBefore: jsToMatterDate(now, -1),
             notAfter: jsToMatterDate(now, 10),
             subject: { rcacId: this.rootCertId },
             ellipticCurvePublicKey: this.rootKeyPair.publicKey,
             extensions: {
                 basicConstraints: { isCa: true },
-                keyUsage: 96,
+                keyUsage: {
+                    keyCertSign: true,
+                    cRLSign: true,
+                },
                 subjectKeyIdentifier: this.rootKeyIdentifier,
                 authorityKeyIdentifier: this.rootKeyIdentifier,
             },
@@ -105,20 +116,27 @@ export class RootCertificateManager {
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
-            issuer: { issuerRcacId: this.rootCertId },
+            issuer: { rcacId: this.rootCertId },
             notBefore: jsToMatterDate(now, -1),
             notAfter: jsToMatterDate(now, 10),
             subject: { fabricId, nodeId, caseAuthenticatedTags },
             ellipticCurvePublicKey: publicKey,
             extensions: {
                 basicConstraints: { isCa: false },
-                keyUsage: 1,
+                keyUsage: {
+                    digitalSignature: true,
+                },
                 extendedKeyUsage: [2, 1],
                 subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),
                 authorityKeyIdentifier: this.rootKeyIdentifier,
             },
         };
-        const signature = Crypto.sign(this.rootKeyPair, CertificateManager.nocCertToAsn1(unsignedCertificate));
+
+        const signature = Crypto.sign(
+            this.rootKeyPair,
+            CertificateManager.nodeOperationalCertToAsn1(unsignedCertificate),
+        );
+
         return TlvOperationalCertificate.encode({ ...unsignedCertificate, signature });
     }
 }
