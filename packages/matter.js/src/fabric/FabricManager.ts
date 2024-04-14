@@ -5,6 +5,7 @@
  */
 
 import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
+import { Key } from "../crypto/Key.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -113,6 +114,15 @@ export class FabricManager {
         }
 
         throw new InternalError("Fabric cannot be found from destinationId");
+    }
+
+    findByKeypair(keypair: Key) {
+        for (const fabric of this.#fabrics.values()) {
+            if (fabric.matchesKeyPair(keypair)) {
+                return fabric;
+            }
+        }
+        return undefined;
     }
 
     async updateFabric(fabric: Fabric) {

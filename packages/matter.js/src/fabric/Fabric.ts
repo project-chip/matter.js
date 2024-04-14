@@ -6,11 +6,12 @@
 
 import {
     CertificateManager,
+    TlvIntermediateCertificate,
     TlvOperationalCertificate,
     TlvRootCertificate,
 } from "../certificate/CertificateManager.js";
 import { Cluster } from "../cluster/Cluster.js";
-import { InternalError, MatterFlowError } from "../common/MatterError.js";
+import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { BinaryKeyPair, Key, PrivateKey } from "../crypto/Key.js";
 import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
@@ -29,6 +30,8 @@ const logger = Logger.get("Fabric");
 
 const COMPRESSED_FABRIC_ID_INFO = ByteArray.fromString("CompressedFabric");
 const GROUP_SECURITY_INFO = ByteArray.fromString("GroupKey v1.0");
+
+export class PublicKeyError extends MatterError {}
 
 export type FabricJsonObject = {
     fabricIndex: FabricIndex;
@@ -144,13 +147,35 @@ export class Fabric {
         return Crypto.sign(this.#keyPair, data);
     }
 
-    verifyCredentials(_operationalCert: ByteArray, _intermediateCACert: ByteArray | undefined) {
-        // TODO: implement verification
-        return;
+    verifyCredentials(operationalCert: ByteArray, intermediateCACert?: ByteArray) {
+        if (intermediateCACert === undefined) {
+            // Validate NOC Certificate against Root Certificate
+            CertificateManager.verifyNodeOperationalCertificate(
+                TlvRootCertificate.decode(this.rootCert),
+                TlvOperationalCertificate.decode(operationalCert),
+            );
+        } else {
+            const decodedIcaCert = TlvIntermediateCertificate.decode(intermediateCACert);
+            // Validate NOC Certificate against ICA Certificate
+            CertificateManager.verifyNodeOperationalCertificate(
+                decodedIcaCert,
+                TlvOperationalCertificate.decode(operationalCert),
+            );
+
+            // Validate ICACertificate against Root Certificate
+            CertificateManager.verifyIntermediateCaCertificate(
+                TlvRootCertificate.decode(this.rootCert),
+                decodedIcaCert,
+            );
+        }
     }
 
     matchesFabricIdAndRootPublicKey(fabricId: FabricId, rootPublicKey: ByteArray) {
         return this.fabricId === fabricId && this.rootPublicKey?.equals(rootPublicKey);
+    }
+
+    matchesKeyPair(keyPair: Key) {
+        return this.#keyPair.publicKey.equals(keyPair.publicKey) && this.#keyPair.privateKey.equals(keyPair.privateKey);
     }
 
     getDestinationId(nodeId: NodeId, random: ByteArray) {
@@ -282,8 +307,9 @@ export class FabricBuilder {
     }
 
     setRootCert(rootCert: ByteArray) {
-        this.rootCert = rootCert;
-        this.rootPublicKey = TlvRootCertificate.decode(rootCert).ellipticCurvePublicKey;
+        const decodedRootCertificate = TlvRootCertificate.decode(rootCert);
+        this.#rootCert = rootCert;
+        this.#rootPublicKey = decodedRootCertificate.ellipticCurvePublicKey;
         return this;
     }
 
@@ -291,14 +317,47 @@ export class FabricBuilder {
         return this.#rootCert !== undefined;
     }
 
-    setOperationalCert(operationalCert: ByteArray) {
-        this.operationalCert = operationalCert;
+    setOperationalCert(operationalCert: ByteArray, intermediateCACert?: ByteArray) {
+        if (intermediateCACert !== undefined && intermediateCACert.length === 0) {
+            intermediateCACert = undefined;
+        }
         const {
             subject: { nodeId, fabricId, caseAuthenticatedTags },
+            ellipticCurvePublicKey,
         } = TlvOperationalCertificate.decode(operationalCert);
-        logger.debug(`FabricBuilder setOperationalCert: nodeId=${nodeId}, fabricId=${fabricId}`);
-        this.fabricId = FabricId(fabricId);
-        this.nodeId = nodeId;
+        logger.debug(
+            `FabricBuilder setOperationalCert: nodeId=${nodeId}, fabricId=${fabricId}, caseAuthenticatedTags=${caseAuthenticatedTags}`,
+        );
+
+        if (!ellipticCurvePublicKey.equals(this.#keyPair.publicKey)) {
+            throw new PublicKeyError("Operational Certificate does not match public key.");
+        }
+
+        if (this.#rootCert === undefined) {
+            throw new MatterFlowError("Root Certificate needs to be set first.");
+        }
+
+        if (intermediateCACert !== undefined) {
+            const decodedIntermediateCACert = TlvIntermediateCertificate.decode(intermediateCACert);
+            CertificateManager.verifyIntermediateCaCertificate(
+                TlvRootCertificate.decode(this.#rootCert),
+                decodedIntermediateCACert,
+            );
+            CertificateManager.verifyNodeOperationalCertificate(
+                decodedIntermediateCACert,
+                TlvOperationalCertificate.decode(operationalCert),
+            );
+        } else {
+            CertificateManager.verifyNodeOperationalCertificate(
+                TlvRootCertificate.decode(this.#rootCert),
+                TlvOperationalCertificate.decode(operationalCert),
+            );
+        }
+
+        this.#operationalCert = operationalCert;
+        this.#intermediateCACert = intermediateCACert;
+        this.#fabricId = FabricId(fabricId);
+        this.#nodeId = nodeId;
         if (caseAuthenticatedTags !== undefined) {
             CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
             this.#caseAuthenticatedTags = caseAuthenticatedTags;
