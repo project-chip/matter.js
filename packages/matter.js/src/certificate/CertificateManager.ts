@@ -344,7 +344,157 @@ export type BaseCertificate = TypeFromSchema<typeof TlvBaseCertificate>;
 export type RootCertificate = TypeFromSchema<typeof TlvRootCertificate>;
 export type IntermediateCertificate = TypeFromSchema<typeof TlvIntermediateCertificate>;
 export type OperationalCertificate = TypeFromSchema<typeof TlvOperationalCertificate>;
-type Unsigned<Type> = { [Property in keyof Type as Exclude<Property, "signature">]: Type[Property] };
+export type Unsigned<Type> = { [Property in keyof Type as Exclude<Property, "signature">]: Type[Property] };
+
+/**
+ * Preserve order of keys from original subject and also copy potential custom elements
+ * @param data
+ */
+function subjectOrIssuerToAsn1(data: { [field: string]: any }) {
+    const asn = {} as { [field: string]: any[] };
+    Object.entries(data).forEach(([key, value]) => {
+        if (value === undefined) {
+            return;
+        }
+        switch (key) {
+            case "commonName":
+                asn.commonName = CommonName_X520(value as string);
+                break;
+            case "sureName":
+                asn.sureName = SurName_X520(value as string);
+                break;
+            case "serialNum":
+                asn.serialNum = SerialNumber_X520(value as string);
+                break;
+            case "countryName":
+                asn.countryName = CountryName_X520(value as string);
+                break;
+            case "localityName":
+                asn.localityName = LocalityName_X520(value as string);
+                break;
+            case "stateOrProvinceName":
+                asn.stateOrProvinceName = StateOrProvinceName_X520(value as string);
+                break;
+            case "orgName":
+                asn.orgName = OrganisationName_X520(value as string);
+                break;
+            case "orgUnitName":
+                asn.orgUnitName = OrganizationalUnitName_X520(value as string);
+                break;
+            case "title":
+                asn.title = Title_X520(value as string);
+                break;
+            case "name":
+                asn.name = Name_X520(value as string);
+                break;
+            case "givenName":
+                asn.givenName = GivenName_X520(value as string);
+                break;
+            case "initials":
+                asn.initials = Initials_X520(value as string);
+                break;
+            case "genQualifier":
+                asn.genQualifier = GenerationQualifier_X520(value as string);
+                break;
+            case "dnQualifier":
+                asn.dnQualifier = DnQualifier_X520(value as string);
+                break;
+            case "pseudonym":
+                asn.pseudonym = Pseudonym_X520(value as string);
+                break;
+            case "domainComponent":
+                asn.domainComponent = DomainComponent_X520(value as string);
+                break;
+            case "nodeId":
+                asn.nodeId = NodeId_Matter(value as NodeId);
+                break;
+            case "firmwareSigningId":
+                asn.firmwareSigningId = FirmwareSigningId_Matter(value as number);
+                break;
+            case "icacId":
+                asn.icacId = IcacId_Matter(value as number | bigint);
+                break;
+            case "rcacId":
+                asn.rcacId = RcacId_Matter(value as number | bigint);
+                break;
+            case "fabricId":
+                asn.fabricId = FabricId_Matter(value as FabricId);
+                break;
+            case "caseAuthenticatedTags":
+                // In theory if someone mixes multiple caseAuthenticatedTag fields with other fields we currently would
+                // code them in ASN.1 as fields at the first position from the original data which might fail
+                // certificate validation. CHanging this would require to change Tlv decoding, so lets try that way for now.
+                const caseAuthenticatedTags = value as CaseAuthenticatedTag[];
+                CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
+
+                const cat0 = caseAuthenticatedTags[0];
+                const cat1 = caseAuthenticatedTags[1];
+                const cat2 = caseAuthenticatedTags[2];
+                if (cat0 !== undefined) {
+                    asn.caseAuthenticatedTag0 = NocCat_Matter(cat0);
+                }
+                if (cat1 !== undefined) {
+                    asn.caseAuthenticatedTag1 = NocCat_Matter(cat1);
+                }
+                if (cat2 !== undefined) {
+                    asn.caseAuthenticatedTag2 = NocCat_Matter(cat2);
+                }
+                break;
+            case "vendorId": // Only relevant for ASN.1 encoding of DAC/PAA/PAI certificates
+                asn.vendorId = VendorId_Matter(value as VendorId);
+                break;
+            case "productId": // Only relevant for ASN.1 encoding of DAC/PAA/PAI certificates
+                asn.productId = ProductId_Matter(value as number);
+                break;
+            case "commonNamePs":
+                asn.commonNamePs = CommonName_X520(value as string, true);
+                break;
+            case "sureNamePs":
+                asn.sureNamePs = SurName_X520(value as string, true);
+                break;
+            case "serialNumPs":
+                asn.serialNumPs = SerialNumber_X520(value as string, true);
+                break;
+            case "countryNamePs":
+                asn.countryNamePs = CountryName_X520(value as string, true);
+                break;
+            case "localityNamePs":
+                asn.localityNamePs = LocalityName_X520(value as string, true);
+                break;
+            case "stateOrProvinceNamePs":
+                asn.stateOrProvinceNamePs = StateOrProvinceName_X520(value as string, true);
+                break;
+            case "orgNamePs":
+                asn.orgNamePs = OrganisationName_X520(value as string, true);
+                break;
+            case "orgUnitNamePs":
+                asn.orgUnitNamePs = OrganizationalUnitName_X520(value as string, true);
+                break;
+            case "titlePs":
+                asn.titlePs = Title_X520(value as string, true);
+                break;
+            case "namePs":
+                asn.namePs = Name_X520(value as string, true);
+                break;
+            case "givenNamePs":
+                asn.givenNamePs = GivenName_X520(value as string, true);
+                break;
+            case "initialsPs":
+                asn.initialsPs = Initials_X520(value as string, true);
+                break;
+            case "genQualifierPs":
+                asn.genQualifierPs = GenerationQualifier_X520(value as string, true);
+                break;
+            case "dnQualifierPs":
+                asn.dnQualifierPs = DnQualifier_X520(value as string, true);
+                break;
+            case "pseudonymPs":
+                asn.pseudonymPs = Pseudonym_X520(value as string, true);
+                break;
+        }
+    });
+    return asn;
+}
 
 export class CertificateManager {
     static rootCertToAsn1({
