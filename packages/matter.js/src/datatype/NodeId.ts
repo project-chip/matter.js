@@ -56,6 +56,13 @@ export namespace NodeId {
         }
     };
 
+    /**
+     * Returns whether the given Node ID is an Operational Node ID.
+     */
+    export const isOperationalNodeId = (nodeId: NodeId): boolean => {
+        return nodeId >= OPERATIONAL_NODE_MIN && nodeId <= OPERATIONAL_NODE_MAX;
+    };
+
     /** A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the lower half of the Node ID. */
     export const getFromGroupNodeId = (groupId: number): NodeId => {
         if (groupId < 0 || groupId > 0xffff) {
