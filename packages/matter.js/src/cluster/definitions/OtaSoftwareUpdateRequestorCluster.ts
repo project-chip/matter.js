@@ -34,7 +34,7 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * This structure encodes a fabric-scoped location of an OTA provider on a given fabric.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.20
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.21
      */
     export const TlvProviderLocationStruct = TlvObject({
         providerNodeId: TlvField(1, TlvNodeId),
@@ -45,7 +45,7 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * This structure encodes a fabric-scoped location of an OTA provider on a given fabric.
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.20
+     * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.21
      */
     export interface ProviderLocationStruct extends TypeFromSchema<typeof TlvProviderLocationStruct> {}
 
@@ -143,8 +143,6 @@ export namespace OtaSoftwareUpdateRequestor {
     export interface AnnounceOtaProviderRequest extends TypeFromSchema<typeof TlvAnnounceOtaProviderRequest> {}
 
     /**
-     * This value shall indicate that the reason for a state change is unknown.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.19.7.4.15
      */
     export enum ChangeReason {
@@ -301,9 +299,6 @@ export namespace OtaSoftwareUpdateRequestor {
              *
              * If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.
              *
-             * This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the
-             * accessing fabric.
-             *
              * @see {@link MatterSpecification.v11.Core} § 11.19.7.6.1
              */
             announceOtaProvider: OptionalCommand(
@@ -335,9 +330,6 @@ export namespace OtaSoftwareUpdateRequestor {
 
             /**
              * This event shall be generated whenever an error occurs during OTA Requestor download operation.
-             *
-             * This field shall be set to the value of the SoftwareVersion being downloaded, matching the
-             * SoftwareVersion field of the QueryImageResponse that caused the failing download to take place.
              *
              * @see {@link MatterSpecification.v11.Core} § 11.19.7.7.9
              */

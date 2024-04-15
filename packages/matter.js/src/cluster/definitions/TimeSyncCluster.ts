@@ -65,19 +65,22 @@ export namespace TimeSync {
     export interface TimeZoneStruct extends TypeFromSchema<typeof TlvTimeZoneStruct> {}
 
     /**
-     * The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
-     * accept any values in the int32 range to accommodate potential future legislation that does not fit with these
-     * assumptions.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.16.6.4
      */
     export const TlvDSTOffsetStruct = TlvObject({
+        /**
+         * The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
+         * accept any values in the int32 range to accommodate potential future legislation that does not fit with
+         * these assumptions.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.16.6.4.1
+         */
         offset: TlvField(0, TlvInt32),
 
         /**
          * The UTC time when the offset shall be applied.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.16.6.4.1
+         * @see {@link MatterSpecification.v11.Core} § 11.16.6.4.2
          */
         validStarting: TlvField(1, TlvEpochUs),
 
@@ -85,16 +88,12 @@ export namespace TimeSync {
          * The UTC time when the offset shall stop being applied. This value shall be larger than the ValidStarting
          * time.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.16.6.4.2
+         * @see {@link MatterSpecification.v11.Core} § 11.16.6.4.3
          */
         validUntil: TlvField(2, TlvEpochUs)
     });
 
     /**
-     * The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this field will
-     * accept any values in the int32 range to accommodate potential future legislation that does not fit with these
-     * assumptions.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.16.6.4
      */
     export interface DSTOffsetStruct extends TypeFromSchema<typeof TlvDSTOffsetStruct> {}
@@ -105,7 +104,19 @@ export namespace TimeSync {
      * @see {@link MatterSpecification.v11.Core} § 11.16.10.3
      */
     export const TlvTimeZoneStatusEvent = TlvObject({
+        /**
+         * Current time zone offset from UTC in seconds.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.16.10.3.1
+         */
         offset: TlvField(0, TlvInt32.bound({ min: -43200, max: 50400 })),
+
+        /**
+         * Current time zone name. This name SHOULD use the country/city format specified by the IANA time zone
+         * database [https://www.iana.org/time-zones].
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.16.10.3.2
+         */
         name: TlvOptionalField(1, TlvString.bound({ minLength: 0, maxLength: 64 }))
     });
 
@@ -425,11 +436,6 @@ export namespace TimeSync {
              * for DST changes that are not accompanied by a time zone change.
              *
              * This event returns a structure as follows:
-             *
-             * Current time zone offset from UTC in seconds.
-             *
-             * Current time zone name. This name SHOULD use the country/city format specified by the IANA time zone
-             * database [https://www.iana.org/time-zones].
              *
              * @see {@link MatterSpecification.v11.Core} § 11.16.10.3
              */
