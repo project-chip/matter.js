@@ -282,7 +282,7 @@ describe("Integration Test", () => {
 
             let commissionedCaseAuthenticatedTags: CaseAuthenticatedTag[] | undefined;
             // Catch the CASE Authenticated tags commissioned on the Fabric on the device
-            MockTime.interceptOnce(FabricBuilder.prototype, "setOperationalCert", data => {
+            MockTime.interceptOnce(FabricBuilder.prototype, "build", async data => {
                 assert.ok(data.resolve);
                 commissionedCaseAuthenticatedTags = (data.resolve as Fabric).caseAuthenticatedTags;
             });
