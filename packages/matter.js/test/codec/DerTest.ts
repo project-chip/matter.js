@@ -6,17 +6,12 @@
 
 import {
     EcdsaWithSHA256_X962,
+    NON_WELL_DEFINED_DATE,
     OrganisationName_X520,
     PublicKeyEcPrime256v1_X962,
 } from "../../src/certificate/CertificateDerTypes.js";
-import {
-    BitByteArray,
-    ContextTagged,
-    DatatypeOverride,
-    DerCodec,
-    DerType,
-    NON_WELL_DEFINED_DATE,
-} from "../../src/codec/DerCodec.js";
+import { BitByteArray, ContextTagged, DatatypeOverride, DerCodec, DerType } from "../../src/codec/DerCodec.js";
+
 import { ByteArray } from "../../src/util/ByteArray.js";
 
 const DECODED = {
@@ -73,9 +68,9 @@ describe("DerCodec", () => {
         });
 
         it("encodes BitStrings correctly", () => {
-            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, ByteArray.of(0))).toHex()).equal("03020800");
-            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, ByteArray.of(1))).toHex()).equal("03020780");
-            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, ByteArray.of(0x60))).toHex()).equal("03020106");
+            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, 0)).toHex()).equal("03020800");
+            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, 1)).toHex()).equal("03020780");
+            expect(DerCodec.encode(DatatypeOverride(DerType.BitString, 0x60)).toHex()).equal("03020106");
         });
 
         it("encodes DateTime correctly", () => {

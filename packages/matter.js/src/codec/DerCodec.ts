@@ -3,7 +3,7 @@
  * Copyright 2022-2024 Matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { InternalError, UnexpectedDataError } from "../common/MatterError.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { toHex } from "../util/Number.js";
@@ -15,6 +15,7 @@ export const BYTES_KEY = "_bytes";
 export const ELEMENTS_KEY = "_elements";
 export const BITS_PADDING = "_padding";
 export const TYPE_OVERRIDE_KEY = "_type";
+export const RAW_DATA_KEY = "_raw";
 
 export enum DerType {
     Boolean = 0x01,
@@ -59,9 +60,9 @@ export const ContextTaggedBytes = (tagId: number, value: ByteArray) => ({
     [TAG_ID_KEY]: tagId | DerClass.ContextSpecific,
     [BYTES_KEY]: value,
 });
-export const DatatypeOverride = (type: DerType, value: ByteArray) => ({
+export const DatatypeOverride = (type: DerType, value: any) => ({
     [TYPE_OVERRIDE_KEY]: type,
-    [BYTES_KEY]: value,
+    [RAW_DATA_KEY]: value,
 });
 export const RawBytes = (bytes: ByteArray) => ({
     [BYTES_KEY]: bytes,
@@ -108,11 +109,18 @@ export class DerCodec {
                         ? (bytes as Uint8Array)
                         : ByteArray.concat(ByteArray.of(bitsPadding), bytes as Uint8Array),
                 );
-            } else if (value[TYPE_OVERRIDE_KEY] !== undefined && value[BYTES_KEY] instanceof ByteArray) {
-                if (value[TYPE_OVERRIDE_KEY] === DerType.Integer) {
-                    return this.encodeInteger(value[BYTES_KEY] as ByteArray);
-                } else if (value[TYPE_OVERRIDE_KEY] === DerType.BitString) {
-                    return this.encodeBitString(value[BYTES_KEY] as ByteArray);
+            } else if (value[TYPE_OVERRIDE_KEY] !== undefined && value[RAW_DATA_KEY] !== undefined) {
+                if (value[TYPE_OVERRIDE_KEY] === DerType.Integer && value[RAW_DATA_KEY] instanceof ByteArray) {
+                    return this.encodeInteger(value[RAW_DATA_KEY]);
+                } else if (value[TYPE_OVERRIDE_KEY] === DerType.BitString && typeof value[RAW_DATA_KEY] === "number") {
+                    return this.encodeBitString(value[RAW_DATA_KEY]);
+                } else if (
+                    value[TYPE_OVERRIDE_KEY] === DerType.PrintableString &&
+                    typeof value[RAW_DATA_KEY] === "string"
+                ) {
+                    return this.encodePrintableString(value[RAW_DATA_KEY]);
+                } else if (value[TYPE_OVERRIDE_KEY] === DerType.IA5String && typeof value[RAW_DATA_KEY] === "string") {
+                    return this.encodeIA5String(value[RAW_DATA_KEY]);
                 } else {
                     throw new UnexpectedDataError(`Unsupported override type ${value[TYPE_OVERRIDE_KEY]}`);
                 }
@@ -184,11 +192,26 @@ export class DerCodec {
         return this.encodeAnsi1(DerType.UTF8String, ByteArray.fromString(value));
     }
 
+    private static encodePrintableString(value: string) {
+        if (!/^[A-Za-z0-9 '()+,-./:=?]*$/g.test(value)) {
+            throw new UnexpectedDataError(`String ${value} is not a printable string.`);
+        }
+        return this.encodeAnsi1(DerType.PrintableString, ByteArray.fromString(value));
+    }
+
+    private static encodeIA5String(value: string) {
+        /*eslint-disable-next-line no-control-regex */
+        if (!/^[\x00-\x7F]*$/.test(value)) {
+            throw new UnexpectedDataError(`String ${value} is not an IA5 string.`);
+        }
+        return this.encodeAnsi1(DerType.IA5String, ByteArray.fromString(value));
+    }
+
     private static encodeInteger(value: number | bigint | ByteArray) {
         const isByteArray = ArrayBuffer.isView(value);
         let valueBytes: ByteArray;
         if (isByteArray) {
-            valueBytes = value as ByteArray;
+            valueBytes = value;
         } else {
             valueBytes = ByteArray.fromHex(toHex(value));
         }
@@ -204,12 +227,8 @@ export class DerCodec {
         return this.encodeAnsi1(DerType.Integer, byteArray.slice(start));
     }
 
-    private static encodeBitString(value: ByteArray) {
-        if (value.length !== 1) {
-            // We only correctly decode 8 bit values because sufficient right now
-            throw new InternalError(`Bit string value ${value} needs to have a length of 1 byte.`);
-        }
-        const reversedBits = value[0].toString(2).padStart(8, "0");
+    private static encodeBitString(value: number) {
+        const reversedBits = value.toString(2).padStart(8, "0");
         const unusedBits = reversedBits.indexOf("1");
         const bitByteArray = ByteArray.of(parseInt(reversedBits.split("").reverse().join(""), 2));
         return this.encode(BitByteArray(bitByteArray, unusedBits === -1 ? 8 : unusedBits));
