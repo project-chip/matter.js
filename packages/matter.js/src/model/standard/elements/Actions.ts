@@ -118,27 +118,28 @@ Matter.children.push(Cluster({
                 "\n" +
                 "  • one when the transition starts (NewState=Active)" +
                 "\n" +
-                "  • one when the transition completed (NewState=Inactive) This event shall have the following data " +
-                "    fields:" +
-                "\n" +
-                "This field shall be set to the ActionID of the action which has changed state.",
+                "  • one when the transition completed (NewState=Inactive)",
 
             xref: { document: "core", section: "9.14.7.1" },
 
             children: [
-                Field({ name: "ActionId", id: 0x0, type: "uint16", conformance: "M" }),
+                Field({
+                    name: "ActionId", id: 0x0, type: "uint16", conformance: "M",
+                    details: "This field shall be set to the ActionID of the action which has changed state.",
+                    xref: { document: "core", section: "9.14.7.1.1" }
+                }),
 
                 Field({
                     name: "InvokeId", id: 0x1, type: "uint32", conformance: "M",
                     details: "This field shall be set to the InvokeID which was provided to the most recent command referencing " +
                         "this ActionID.",
-                    xref: { document: "core", section: "9.14.7.1.1" }
+                    xref: { document: "core", section: "9.14.7.1.2" }
                 }),
 
                 Field({
                     name: "NewState", id: 0x2, type: "ActionStateEnum", conformance: "M",
                     details: "This field shall be set to state that the action has changed to.",
-                    xref: { document: "core", section: "9.14.7.1.2" }
+                    xref: { document: "core", section: "9.14.7.1.3" }
                 })
             ]
         }),
@@ -170,27 +171,33 @@ Matter.children.push(Cluster({
                 "    interrupts the transition" +
                 "\n" +
                 "  • StateChanged (InvokeID=2, NewState=Inactive) upon the execution of the action for the second " +
-                "    command" +
-                "\n" +
-                "This event shall have the following data fields:" +
-                "\n" +
-                "This field shall be set to the ActionID of the action which encountered an error." +
-                "\n" +
-                "This field shall be set to the InvokeID which was provided to the most recent command referencing " +
-                "this ActionID." +
-                "\n" +
-                "This field shall be set to state that the action is in at the time of generating the event.",
+                "    command",
 
             xref: { document: "core", section: "9.14.7.2" },
 
             children: [
-                Field({ name: "ActionId", id: 0x0, type: "uint16", conformance: "M" }),
-                Field({ name: "InvokeId", id: 0x1, type: "uint32", conformance: "M" }),
-                Field({ name: "NewState", id: 0x2, type: "ActionStateEnum", conformance: "M" }),
+                Field({
+                    name: "ActionId", id: 0x0, type: "uint16", conformance: "M",
+                    details: "This field shall be set to the ActionID of the action which encountered an error.",
+                    xref: { document: "core", section: "9.14.7.2.1" }
+                }),
+
+                Field({
+                    name: "InvokeId", id: 0x1, type: "uint32", conformance: "M",
+                    details: "This field shall be set to the InvokeID which was provided to the most recent command referencing " +
+                        "this ActionID.",
+                    xref: { document: "core", section: "9.14.7.2.2" }
+                }),
+
+                Field({
+                    name: "NewState", id: 0x2, type: "ActionStateEnum", conformance: "M",
+                    details: "This field shall be set to state that the action is in at the time of generating the event.",
+                    xref: { document: "core", section: "9.14.7.2.3" }
+                }),
                 Field({
                     name: "Error", id: 0x3, type: "ActionErrorEnum", conformance: "M",
                     details: "This field shall be set to indicate the reason for non-successful progress of the action.",
-                    xref: { document: "core", section: "9.14.7.2.1" }
+                    xref: { document: "core", section: "9.14.7.2.4" }
                 })
             ]
         }),
@@ -323,15 +330,18 @@ Matter.children.push(Cluster({
                 "more of a transitionary nature while the latter is more permanent) and on the other hand these can " +
                 "be implemented slightly differently in the implementation of the action (e.g. a Pause would be " +
                 "automatically resumed after some hours or during a nightly reset, while an Disable would remain in " +
-                "effect until explicitly enabled again)." +
-                "\n" +
-                "This field shall indicate the requested duration in seconds.",
+                "effect until explicitly enabled again).",
 
             xref: { document: "core", section: "9.14.6.7" },
+
             children: [
                 Field({ name: "ActionId", id: 0x0, type: "uint16", conformance: "M" }),
                 Field({ name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }),
-                Field({ name: "Duration", id: 0x2, type: "uint32", conformance: "M" })
+                Field({
+                    name: "Duration", id: 0x2, type: "uint32", conformance: "M",
+                    details: "This field shall indicate the requested duration in seconds.",
+                    xref: { document: "core", section: "9.14.6.7.1" }
+                })
             ]
         }),
 
@@ -377,15 +387,18 @@ Matter.children.push(Cluster({
                 "\n" +
                 "Example: enable a \"presence mimicking\" behavior for the lights in your home during a vacation; the " +
                 "Duration field is used to indicated the length of your absence from home. After that period, the " +
-                "presence mimicking behavior will no longer control these lights." +
-                "\n" +
-                "This field shall indicate the requested duration in seconds.",
+                "presence mimicking behavior will no longer control these lights.",
 
             xref: { document: "core", section: "9.14.6.10" },
+
             children: [
                 Field({ name: "ActionId", id: 0x0, type: "uint16", conformance: "M" }),
                 Field({ name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }),
-                Field({ name: "Duration", id: 0x2, type: "uint32", conformance: "M" })
+                Field({
+                    name: "Duration", id: 0x2, type: "uint32", conformance: "M",
+                    details: "This field shall indicate the requested duration in seconds.",
+                    xref: { document: "core", section: "9.14.6.10.1" }
+                })
             ]
         }),
 
@@ -413,15 +426,18 @@ Matter.children.push(Cluster({
                 "\n" +
                 "Example: disable a \"wakeup\" experience for a period of 1 week when going on holiday (to prevent " +
                 "them from turning on in the morning while you’re not at home). After this period, the wakeup " +
-                "experience will control the lights as before." +
-                "\n" +
-                "This field shall indicate the requested duration in seconds.",
+                "experience will control the lights as before.",
 
             xref: { document: "core", section: "9.14.6.12" },
+
             children: [
                 Field({ name: "ActionId", id: 0x0, type: "uint16", conformance: "M" }),
                 Field({ name: "InvokeId", id: 0x1, type: "uint32", conformance: "O" }),
-                Field({ name: "Duration", id: 0x2, type: "uint32", conformance: "M" })
+                Field({
+                    name: "Duration", id: 0x2, type: "uint32", conformance: "M",
+                    details: "This field shall indicate the requested duration in seconds.",
+                    xref: { document: "core", section: "9.14.6.12.1" }
+                })
             ]
         }),
 
@@ -670,29 +686,35 @@ Matter.children.push(Cluster({
 
         Datatype({
             name: "EndpointListStruct", type: "struct", conformance: "M",
-
             details: "This data type holds the details of a single endpoint list, which relates to a set of endpoints " +
-                "that have some logical relation, and contains the data fields below." +
-                "\n" +
-                "This field shall provide an unique identifier used to identify the endpoint list." +
-                "\n" +
-                "This field shall indicate the name (as assigned by the user or automatically by the server) " +
-                "associated with the set of endpoints in this list. This can be used for identifying the action to " +
-                "the user by the client. Example: \"living room\"." +
-                "\n" +
-                "This field shall indicate the type of endpoint list, see EndpointListTypeEnum.",
-
+                "that have some logical relation, and contains the data fields below.",
             xref: { document: "core", section: "9.14.4.7" },
 
             children: [
-                Field({ name: "EndpointListId", id: 0x0, type: "uint16", conformance: "M" }),
-                Field({ name: "Name", id: 0x1, type: "string", conformance: "M", constraint: "max 32[128]" }),
-                Field({ name: "Type", id: 0x2, type: "EndpointListTypeEnum", conformance: "M" }),
+                Field({
+                    name: "EndpointListId", id: 0x0, type: "uint16", conformance: "M",
+                    details: "This field shall provide an unique identifier used to identify the endpoint list.",
+                    xref: { document: "core", section: "9.14.4.7.1" }
+                }),
+
+                Field({
+                    name: "Name", id: 0x1, type: "string", conformance: "M", constraint: "max 32[128]",
+                    details: "This field shall indicate the name (as assigned by the user or automatically by the server) " +
+                        "associated with the set of endpoints in this list. This can be used for identifying the action to " +
+                        "the user by the client. Example: \"living room\".",
+                    xref: { document: "core", section: "9.14.4.7.2" }
+                }),
+
+                Field({
+                    name: "Type", id: 0x2, type: "EndpointListTypeEnum", conformance: "M",
+                    details: "This field shall indicate the type of endpoint list, see EndpointListTypeEnum.",
+                    xref: { document: "core", section: "9.14.4.7.3" }
+                }),
 
                 Field({
                     name: "Endpoints", id: 0x3, type: "list", conformance: "M", constraint: "max 256",
                     details: "This field shall provide a list of endpoint numbers.",
-                    xref: { document: "core", section: "9.14.4.7.1" },
+                    xref: { document: "core", section: "9.14.4.7.4" },
                     children: [Field({ name: "entry", type: "endpoint-no" })]
                 })
             ]

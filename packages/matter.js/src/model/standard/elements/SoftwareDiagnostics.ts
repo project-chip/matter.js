@@ -69,27 +69,30 @@ Matter.children.push(Cluster({
 
         Event({
             name: "SoftwareFault", id: 0x0, access: "V", conformance: "O", priority: "info",
-
-            details: "The SoftwareFault Event shall be generated when a software fault takes place on the Node." +
-                "\n" +
-                "The ID field shall be set to the ID of the software thread in which the last software fault " +
-                "occurred." +
-                "\n" +
-                "The Name field shall be set to a manufacturer-specified name or prefix of the software thread in " +
-                "which the last software fault occurred.",
-
+            details: "The SoftwareFault Event shall be generated when a software fault takes place on the Node.",
             xref: { document: "core", section: "11.12.8.1" },
 
             children: [
-                Field({ name: "Id", id: 0x0, type: "uint64", conformance: "M", default: 0 }),
-                Field({ name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8", default: "" }),
+                Field({
+                    name: "Id", id: 0x0, type: "uint64", conformance: "M", default: 0,
+                    details: "The ID field shall be set to the ID of the software thread in which the last software fault " +
+                        "occurred.",
+                    xref: { document: "core", section: "11.12.8.1.1" }
+                }),
+
+                Field({
+                    name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "max 8", default: "",
+                    details: "The Name field shall be set to a manufacturer-specified name or prefix of the software thread in " +
+                        "which the last software fault occurred.",
+                    xref: { document: "core", section: "11.12.8.1.2" }
+                }),
 
                 Field({
                     name: "FaultRecording", id: 0x2, type: "octstr", conformance: "O", constraint: "max 1024",
                     details: "The FaultRecording field shall be a manufacturer-specified payload intended to convey information " +
                         "to assist in further diagnosing or debugging a software fault. The FaultRecording field may be used " +
                         "to convey information such as, but not limited to, thread backtraces or register contents.",
-                    xref: { document: "core", section: "11.12.8.1.1" }
+                    xref: { document: "core", section: "11.12.8.1.3" }
                 })
             ]
         }),

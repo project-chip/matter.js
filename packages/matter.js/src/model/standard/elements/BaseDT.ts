@@ -24,27 +24,41 @@ Matter.children.push(DeviceType({
             children: [
                 Field({
                     name: "Zha", description: "Zigbee Home Automation standard",
-                    xref: { document: "device", section: "1.1.3" }
+                    xref: { document: "device", section: "1.1.3.1" }
                 }),
                 Field({
                     name: "Zse", description: "Zigbee Smart Energy standard",
-                    xref: { document: "device", section: "1.1.3" }
+                    xref: { document: "device", section: "1.1.3.1" }
                 }),
                 Field({
                     name: "Gp", description: "Zigbee Green Power standard",
-                    xref: { document: "device", section: "1.1.3" }
+                    xref: { document: "device", section: "1.1.3.1" }
                 }),
                 Field({
                     name: "Zigbee", description: "Zigbee standard",
-                    xref: { document: "device", section: "1.1.3" }
+                    xref: { document: "device", section: "1.1.3.1" }
                 }),
                 Field({
                     name: "SuZi", description: "Zigbee PRO Sub-GHz standard",
-                    xref: { document: "device", section: "1.1.3" }
+                    xref: { document: "device", section: "1.1.3.1" }
                 }),
                 Field({
                     name: "Matter", description: "Matter standard",
-                    xref: { document: "device", section: "1.1.3" }
+                    xref: { document: "device", section: "1.1.3.1" }
+                }),
+                Field({
+                    name: "LanguageLocale",
+                    description: "The node supports localization for conveying text to the user",
+                    xref: { document: "device", section: "1.1.3.3" }
+                }),
+                Field({
+                    name: "TimeLocale", description: "The node supports localization for conveying time to the user",
+                    xref: { document: "device", section: "1.1.3.3" }
+                }),
+                Field({
+                    name: "UnitLocale",
+                    description: "The node supports localization for conveying units of measure to the user",
+                    xref: { document: "device", section: "1.1.3.3" }
                 }),
                 Field({
                     name: "Sleepy", description: "The node is normally asleep and wakes to perform function",
