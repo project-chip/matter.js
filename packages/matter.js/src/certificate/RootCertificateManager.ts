@@ -56,8 +56,8 @@ export class RootCertificateManager {
             ) {
                 this.rootCertId = BigInt(certValues.rootCertId);
                 this.rootKeyPair = PrivateKey(certValues.rootKeyPair as BinaryKeyPair);
-                this.rootKeyIdentifier = certValues.rootKeyIdentifier as ByteArray;
-                this.rootCertBytes = certValues.rootCertBytes as ByteArray;
+                this.rootKeyIdentifier = certValues.rootKeyIdentifier;
+                this.rootCertBytes = certValues.rootCertBytes;
                 this.nextCertificateId = BigInt(certValues.nextCertificateId);
                 logger.debug(`Loaded root certificate with ID ${this.rootCertId} from storage`);
                 return;
