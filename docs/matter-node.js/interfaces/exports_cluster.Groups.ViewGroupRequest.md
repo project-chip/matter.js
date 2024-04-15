@@ -8,7 +8,7 @@ Input to the Groups viewGroup command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.2
+MatterSpecification.v11.Cluster § 1.3.7.2
 
 ## Hierarchy
 

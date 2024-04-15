@@ -10,7 +10,7 @@ enum field is derived from enum8.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.7
+MatterSpecification.v11.Cluster § 5.2.6.7
 
 ## Table of contents
 

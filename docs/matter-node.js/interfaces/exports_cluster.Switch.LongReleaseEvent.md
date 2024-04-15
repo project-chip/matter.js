@@ -8,7 +8,7 @@ Body of the Switch longRelease event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.5
+MatterSpecification.v11.Cluster § 1.11.7.5
 
 ## Hierarchy
 

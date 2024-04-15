@@ -20,7 +20,7 @@ Provided EnableKey does not match the previously configured value.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.5
+MatterSpecification.v11.Core § 11.11.5
 
 #### Defined in
 

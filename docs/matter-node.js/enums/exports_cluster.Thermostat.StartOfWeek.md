@@ -8,7 +8,7 @@ The value of the Thermostat startOfWeek attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7.27
+MatterSpecification.v11.Cluster § 4.3.7.27
 
 ## Table of contents
 

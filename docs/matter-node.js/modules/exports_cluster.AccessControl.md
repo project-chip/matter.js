@@ -78,7 +78,7 @@ Body of the AccessControl accessControlEntryChanged event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.7.1
+MatterSpecification.v11.Core § 9.10.7.1
 
 #### Defined in
 
@@ -92,7 +92,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.5
+MatterSpecification.v11.Core § 9.10.4.5
 
 #### Defined in
 
@@ -108,7 +108,7 @@ Body of the AccessControl accessControlExtensionChanged event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.7.2
+MatterSpecification.v11.Core § 9.10.7.2
 
 #### Defined in
 
@@ -122,7 +122,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.6
+MatterSpecification.v11.Core § 9.10.4.6
 
 #### Defined in
 
@@ -136,7 +136,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.4
+MatterSpecification.v11.Core § 9.10.4.4
 
 #### Defined in
 

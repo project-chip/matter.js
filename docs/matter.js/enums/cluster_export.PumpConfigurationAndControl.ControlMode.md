@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.2.6.3
+MatterSpecification.v11.Cluster § 4.2.6.3
 
 ## Table of contents
 
@@ -34,11 +34,11 @@ pump is entirely determined by the pump.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.2.6.3.6
+MatterSpecification.v11.Cluster § 4.2.6.3.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:211](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L211)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L210)
 
 ___
 
@@ -55,11 +55,11 @@ MaxMeasuredValue] attributes of the remote flow sensor.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.2.6.3.4
+MatterSpecification.v11.Cluster § 4.2.6.3.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:187](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L186)
 
 ___
 
@@ -76,11 +76,11 @@ MaxConstPressure] attributes. In case of a remote pressure sensor, this will be 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.2.6.3.2
+MatterSpecification.v11.Cluster § 4.2.6.3.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:164](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L164)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:163](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L163)
 
 ___
 
@@ -95,11 +95,11 @@ attributes.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.2.6.3.1
+MatterSpecification.v11.Cluster § 4.2.6.3.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L151)
 
 ___
 
@@ -116,11 +116,11 @@ attributes. In case of a remote temperature sensor, this will be the range deriv
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.2.6.3.5
+MatterSpecification.v11.Cluster § 4.2.6.3.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:199](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L199)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L198)
 
 ___
 
@@ -136,8 +136,8 @@ flow ⇒ lower internal setpoint).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.2.6.3.3
+MatterSpecification.v11.Cluster § 4.2.6.3.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L175)
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:174](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L174)

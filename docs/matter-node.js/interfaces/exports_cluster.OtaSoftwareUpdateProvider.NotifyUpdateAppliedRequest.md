@@ -8,7 +8,7 @@ Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.5.22
+MatterSpecification.v11.Core § 11.19.6.5.22
 
 ## Hierarchy
 

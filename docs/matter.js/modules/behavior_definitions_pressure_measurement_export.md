@@ -37,8 +37,8 @@ features using PressureMeasurementBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts#L22)
+[packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts#L22)
 
-[packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/pressure-measurement/PressureMeasurementBehavior.ts#L24)

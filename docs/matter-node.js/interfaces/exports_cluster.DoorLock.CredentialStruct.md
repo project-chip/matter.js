@@ -9,7 +9,7 @@ credential types and their corresponding indices (if any) for the event or user 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.3
+MatterSpecification.v11.Cluster § 5.2.6.3
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ ProgrammingPIN or does not correspond to a list that can be indexed into.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.3.2
+MatterSpecification.v11.Cluster § 5.2.6.3.2
 
 #### Inherited from
 
@@ -56,7 +56,7 @@ The credential type used to authorize the lock operation.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.3.1
+MatterSpecification.v11.Cluster § 5.2.6.3.1
 
 #### Inherited from
 

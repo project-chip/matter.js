@@ -45,10 +45,10 @@ These elements and properties are present in all FanControl clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `fanMode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`FanMode`](../enums/exports_cluster.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`FanModeSequence`](../enums/exports_cluster.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\>  } | - |
-| `attributes.fanMode` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`FanMode`](../enums/exports_cluster.FanControl.FanMode.md), `any`\> | This attribute shall indicate the current speed mode of the fan. This attribute may be written by the client to indicate a new speed mode of the fan. This attribute shall be set to one of the values in the table below. **`See`** MatterApplicationClusterSpecificationV1_1 § 4.4.6.1 |
-| `attributes.fanModeSequence` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`FanModeSequence`](../enums/exports_cluster.FanControl.FanModeSequence.md), `any`\> | This indicates the fan speed ranges that shall be supported. **`See`** MatterApplicationClusterSpecificationV1_1 § 4.4.6.2 |
-| `attributes.percentCurrent` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> | This attribute shall indicate the actual currently operating fan speed, or zero to indicate that the fan is off. See Section 4.4.6.3.1 for more details. **`See`** MatterApplicationClusterSpecificationV1_1 § 4.4.6.4 |
-| `attributes.percentSetting` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\> | This attribute shall indicate the speed setting for the fan. This attribute may be written by the client to indicate a new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. If this is set to 0, the server shall set the FanMode attribute value to Off. **`See`** MatterApplicationClusterSpecificationV1_1 § 4.4.6.3 |
+| `attributes.fanMode` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`FanMode`](../enums/exports_cluster.FanControl.FanMode.md), `any`\> | This attribute shall indicate the current speed mode of the fan. This attribute may be written by the client to indicate a new speed mode of the fan. This attribute shall be set to one of the values in the table below. **`See`** MatterSpecification.v11.Cluster § 4.4.6.1 |
+| `attributes.fanModeSequence` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`FanModeSequence`](../enums/exports_cluster.FanControl.FanModeSequence.md), `any`\> | This indicates the fan speed ranges that shall be supported. **`See`** MatterSpecification.v11.Cluster § 4.4.6.2 |
+| `attributes.percentCurrent` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> | This attribute shall indicate the actual currently operating fan speed, or zero to indicate that the fan is off. See Section 4.4.6.3.1 for more details. **`See`** MatterSpecification.v11.Cluster § 4.4.6.4 |
+| `attributes.percentSetting` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\> | This attribute shall indicate the speed setting for the fan. This attribute may be written by the client to indicate a new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. If this is set to 0, the server shall set the FanMode attribute value to Off. **`See`** MatterSpecification.v11.Cluster § 4.4.6.3 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `speedCurrent`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `speedMax`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `speedSetting`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\>  }  } ; `flags`: \{ `multiSpeed`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `rockSetting`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `rockSupport`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  } ; `flags`: \{ `rocking`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `windSetting`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `windSupport`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  } ; `flags`: \{ `wind`: ``true``  }  }] | This metadata controls which FanControlCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `auto`: [`BitFlag`](exports_schema.md#bitflag) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag) ; `wind`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.auto` | [`BitFlag`](exports_schema.md#bitflag) | Auto Automatic mode supported for fan speed |
@@ -97,9 +97,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:821
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:786
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:823
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:788
 
 ___
 
@@ -146,7 +146,7 @@ The value of the FanControl rockSetting attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.6.9
+MatterSpecification.v11.Cluster § 4.4.6.9
 
 #### Type declaration
 
@@ -170,7 +170,7 @@ The value of the FanControl rockSupport attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.6.8
+MatterSpecification.v11.Cluster § 4.4.6.8
 
 #### Type declaration
 
@@ -234,7 +234,7 @@ The value of the FanControl windSetting attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.6.11
+MatterSpecification.v11.Cluster § 4.4.6.11
 
 #### Type declaration
 
@@ -257,7 +257,7 @@ The value of the FanControl windSupport attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.6.10
+MatterSpecification.v11.Cluster § 4.4.6.10
 
 #### Type declaration
 

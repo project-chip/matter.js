@@ -44,10 +44,10 @@ These elements and properties are present in all AudioOutput clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentOutput`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\>  } | - |
-| `attributes.currentOutput` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected OutputInfoStruct. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.3.2 |
-| `attributes.outputList` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\> | This list provides the outputs supported by the device. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.3.1 |
+| `attributes.currentOutput` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected OutputInfoStruct. **`See`** MatterSpecification.v11.Cluster § 6.5.3.2 |
+| `attributes.outputList` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `outputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OutputType`](../enums/cluster_export.AudioOutput.OutputType.md)\>  }\>[], `any`\> | This list provides the outputs supported by the device. **`See`** MatterSpecification.v11.Cluster § 6.5.3.1 |
 | `commands` | \{ `selectOutput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  } | - |
-| `commands.selectOutput` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.4 |
+| `commands.selectOutput` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 6.5.4 |
 | `extensions` | readonly [\{ `component`: \{ `commands`: \{ `renameOutput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\>  }  } = NameUpdatesComponent; `flags`: \{ `nameUpdates`: ``true`` = true }  }] | This metadata controls which AudioOutputCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.nameUpdates` | [`BitFlag`](schema_export.md#bitflag) | NameUpdates Supports updates to output names |
@@ -57,7 +57,7 @@ These elements and properties are present in all AudioOutput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L137)
 
 ___
 
@@ -67,9 +67,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:197](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L197)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L196)
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:199](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L199)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L198)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:185](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L185)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:184](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L184)
 
 ___
 
@@ -93,9 +93,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:227](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L227)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:226](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L226)
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:229](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L229)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:228](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L228)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:205](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L205)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:204](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L204)
 
 ___
 
@@ -128,7 +128,7 @@ A AudioOutputCluster supports these elements if it supports feature NameUpdates.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L107)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L106)
 
 ___
 
@@ -140,11 +140,11 @@ This contains information about an output.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.5.1
+MatterSpecification.v11.Cluster § 6.5.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L58)
 
 ___
 
@@ -156,11 +156,11 @@ Input to the AudioOutput renameOutput command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.4.2
+MatterSpecification.v11.Cluster § 6.5.4.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L27)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L26)
 
 ___
 
@@ -172,8 +172,8 @@ Input to the AudioOutput selectOutput command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.4
+MatterSpecification.v11.Cluster § 6.5.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L95)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L94)

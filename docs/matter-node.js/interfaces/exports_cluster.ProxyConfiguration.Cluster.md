@@ -10,7 +10,7 @@ This cluster provides a means for a proxy-capable device to be told the set of N
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.15.14
+MatterSpecification.v11.Core § 9.15.14
 
 ## Hierarchy
 

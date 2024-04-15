@@ -9,7 +9,7 @@ attribute.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6
+MatterSpecification.v11.Core § 11.11.4.6
 
 ## Hierarchy
 
@@ -42,7 +42,7 @@ in wire byte order. For addresses values less than 64 bits, the first two bytes 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6.5
+MatterSpecification.v11.Core § 11.11.4.6.5
 
 #### Inherited from
 
@@ -50,7 +50,7 @@ TypeFromSchema.hardwareAddress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L109)
 
 ___
 
@@ -62,7 +62,7 @@ This field shall provide a list of the IPv4 addresses that are currently assigne
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6.6
+MatterSpecification.v11.Core § 11.11.4.6.6
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ TypeFromSchema.iPv4Addresses
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L117)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L116)
 
 ___
 
@@ -84,7 +84,7 @@ addresses. This list shall NOT include any multicast group addresses to which th
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6.7
+MatterSpecification.v11.Core § 11.11.4.6.7
 
 #### Inherited from
 
@@ -92,7 +92,7 @@ TypeFromSchema.iPv6Addresses
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:126](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L126)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L125)
 
 ___
 
@@ -105,7 +105,7 @@ interface and is capable of successfully receiving incoming traffic from other N
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6.2
+MatterSpecification.v11.Core § 11.11.4.6.2
 
 #### Inherited from
 
@@ -113,7 +113,7 @@ TypeFromSchema.isOperational
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L83)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L82)
 
 ___
 
@@ -126,7 +126,7 @@ from all other interfaces.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6.1
+MatterSpecification.v11.Core § 11.11.4.6.1
 
 #### Inherited from
 
@@ -134,7 +134,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L74)
 
 ___
 
@@ -148,7 +148,7 @@ can reach them.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6.3
+MatterSpecification.v11.Core § 11.11.4.6.3
 
 #### Inherited from
 
@@ -156,7 +156,7 @@ TypeFromSchema.offPremiseServicesReachableIPv4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L92)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L91)
 
 ___
 
@@ -170,7 +170,7 @@ can reach them.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6.4
+MatterSpecification.v11.Core § 11.11.4.6.4
 
 #### Inherited from
 
@@ -178,7 +178,7 @@ TypeFromSchema.offPremiseServicesReachableIPv6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L101)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L100)
 
 ___
 
@@ -190,7 +190,7 @@ This field shall indicate the type of the interface using the InterfaceTypeEnum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.6.8
+MatterSpecification.v11.Core § 11.11.4.6.8
 
 #### Inherited from
 
@@ -198,4 +198,4 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L133)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L132)

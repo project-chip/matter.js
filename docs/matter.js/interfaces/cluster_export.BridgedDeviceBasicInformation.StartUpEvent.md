@@ -8,7 +8,7 @@ Body of the BridgedDeviceBasicInformation startUp event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.13.5
+MatterSpecification.v11.Core § 9.13.5
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.softwareVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L75)

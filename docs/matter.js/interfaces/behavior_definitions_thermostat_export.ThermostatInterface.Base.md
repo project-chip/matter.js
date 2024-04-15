@@ -23,11 +23,11 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.8
+MatterSpecification.v11.Cluster § 4.3.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L44)
+[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L43)
 
 ___
 
@@ -47,8 +47,8 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.8
+MatterSpecification.v11.Cluster § 4.3.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L39)
+[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L38)

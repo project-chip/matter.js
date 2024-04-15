@@ -8,7 +8,7 @@ These are optional features supported by WiFiNetworkDiagnosticsCluster.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.4
+MatterSpecification.v11.Core § 11.14.4
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ transmission of packets on the Wi-Fi interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:329](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L329)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:328](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L328)
 
 ___
 
@@ -44,4 +44,4 @@ Node makes available the counts for the number of received and transmitted packe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:321](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L321)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:320](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L320)

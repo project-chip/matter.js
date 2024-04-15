@@ -8,7 +8,7 @@ This value shall indicate that the reason for a state change is unknown.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.7.4.15
+MatterSpecification.v11.Core § 11.19.7.4.15
 
 ## Table of contents
 

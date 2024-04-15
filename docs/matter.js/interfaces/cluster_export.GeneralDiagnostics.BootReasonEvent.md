@@ -8,7 +8,7 @@ Body of the GeneralDiagnostics bootReason event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.8.4
+MatterSpecification.v11.Core § 11.11.8.4
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall contain the reason for this BootReason event.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.8.4.1
+MatterSpecification.v11.Core § 11.11.8.4.1
 
 #### Inherited from
 
@@ -40,4 +40,4 @@ TypeFromSchema.bootReason
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:445](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L445)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:444](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L444)

@@ -8,7 +8,7 @@ This contains information about an output.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.5.1
+MatterSpecification.v11.Cluster § 6.5.5.1
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ This shall indicate the unique index into the list of outputs.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.5.1.1
+MatterSpecification.v11.Cluster § 6.5.5.1.1
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ but SHOULD be provided when known.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.5.1.3
+MatterSpecification.v11.Cluster § 6.5.5.1.3
 
 #### Inherited from
 
@@ -75,7 +75,7 @@ This shall indicate the type of output
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.5.1.2
+MatterSpecification.v11.Cluster § 6.5.5.1.2
 
 #### Inherited from
 

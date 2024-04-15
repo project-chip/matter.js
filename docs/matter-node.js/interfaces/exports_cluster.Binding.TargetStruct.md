@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.6.5.1
+MatterSpecification.v11.Core § 9.6.5.1
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ present, the target shall be this cluster on the target endpoint(s).
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.6.5.1.4
+MatterSpecification.v11.Core § 9.6.5.1.4
 
 #### Inherited from
 
@@ -57,7 +57,7 @@ field shall NOT be present.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.6.5.1.3
+MatterSpecification.v11.Core § 9.6.5.1.3
 
 #### Inherited from
 
@@ -92,7 +92,7 @@ field shall NOT be present.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.6.5.1.2
+MatterSpecification.v11.Core § 9.6.5.1.2
 
 #### Inherited from
 
@@ -112,7 +112,7 @@ This field is the remote target node ID. If the Endpoint field is present, this 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.6.5.1.1
+MatterSpecification.v11.Core § 9.6.5.1.1
 
 #### Inherited from
 

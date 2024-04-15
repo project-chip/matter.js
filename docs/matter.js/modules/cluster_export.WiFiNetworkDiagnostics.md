@@ -48,16 +48,16 @@ These elements and properties are present in all WiFiNetworkDiagnostics clusters
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `bssid`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `Uint8Array`, `any`\> ; `channelNumber`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `currentMaxRate`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number` \| `bigint`, `any`\> ; `rssi`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `securityType`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`SecurityType`](../enums/cluster_export.WiFiNetworkDiagnostics.SecurityType.md), `any`\> ; `wiFiVersion`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`WiFiVersion`](../enums/cluster_export.WiFiNetworkDiagnostics.WiFiVersion.md), `any`\>  } | - |
-| `attributes.bssid` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `Uint8Array`, `any`\> | The BSSID attribute shall indicate the BSSID for which the Wi-Fi network the Node is currently connected. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.1 |
-| `attributes.channelNumber` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | The ChannelNumber attribute shall indicate the channel that Wi-Fi communication is currently operating on. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.4 |
-| `attributes.currentMaxRate` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number` \| `bigint`, `any`\> | The CurrentMaxRate attribute shall indicate the current maximum PHY rate of transfer of data in bits-per-second. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.12 |
-| `attributes.rssi` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | The RSSI attribute shall indicate the current RSSI of the Node’s Wi-Fi radio in dBm. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.5 |
-| `attributes.securityType` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`SecurityType`](../enums/cluster_export.WiFiNetworkDiagnostics.SecurityType.md), `any`\> | The SecurityType attribute shall indicate the current type of Wi-Fi security used. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.2 |
-| `attributes.wiFiVersion` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`WiFiVersion`](../enums/cluster_export.WiFiNetworkDiagnostics.WiFiVersion.md), `any`\> | The WiFiVersion attribute shall indicate the current 802.11 standard version in use by the Node, per the table below. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.3 |
+| `attributes.bssid` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `Uint8Array`, `any`\> | The BSSID attribute shall indicate the BSSID for which the Wi-Fi network the Node is currently connected. **`See`** MatterSpecification.v11.Core § 11.14.6.1 |
+| `attributes.channelNumber` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | The ChannelNumber attribute shall indicate the channel that Wi-Fi communication is currently operating on. **`See`** MatterSpecification.v11.Core § 11.14.6.4 |
+| `attributes.currentMaxRate` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number` \| `bigint`, `any`\> | The CurrentMaxRate attribute shall indicate the current maximum PHY rate of transfer of data in bits-per-second. **`See`** MatterSpecification.v11.Core § 11.14.6.12 |
+| `attributes.rssi` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | The RSSI attribute shall indicate the current RSSI of the Node’s Wi-Fi radio in dBm. **`See`** MatterSpecification.v11.Core § 11.14.6.5 |
+| `attributes.securityType` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`SecurityType`](../enums/cluster_export.WiFiNetworkDiagnostics.SecurityType.md), `any`\> | The SecurityType attribute shall indicate the current type of Wi-Fi security used. **`See`** MatterSpecification.v11.Core § 11.14.6.2 |
+| `attributes.wiFiVersion` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`WiFiVersion`](../enums/cluster_export.WiFiNetworkDiagnostics.WiFiVersion.md), `any`\> | The WiFiVersion attribute shall indicate the current 802.11 standard version in use by the Node, per the table below. **`See`** MatterSpecification.v11.Core § 11.14.6.3 |
 | `events` | \{ `associationFailure`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `associationFailureCause`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AssociationFailureCause`](../enums/cluster_export.WiFiNetworkDiagnostics.AssociationFailureCause.md)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `connectionStatus`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `connectionStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ConnectionStatus`](../enums/cluster_export.WiFiNetworkDiagnostics.ConnectionStatus.md)\>  }\>, `any`\> ; `disconnection`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `reasonCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  } | - |
-| `events.associationFailure` | [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `associationFailureCause`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AssociationFailureCause`](../enums/cluster_export.WiFiNetworkDiagnostics.AssociationFailureCause.md)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> | The AssociationFailure event shall indicate that a Node has attempted to connect, or reconnect, to a Wi-Fi access point, but is unable to successfully associate or authenticate, after exhausting all internal retries of its supplicant. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.2 |
-| `events.connectionStatus` | [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `connectionStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ConnectionStatus`](../enums/cluster_export.WiFiNetworkDiagnostics.ConnectionStatus.md)\>  }\>, `any`\> | The ConnectionStatus Event shall indicate that a Node’s connection status to a Wi-Fi network has changed. Connected, in this context, shall mean that a Node acting as a Wi-Fi station is successfully associated to a Wi-Fi Access Point. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.3 |
-| `events.disconnection` | [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `reasonCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> | The Disconnection Event shall indicate that a Node’s Wi-Fi connection has been disconnected as a result of de-authenticated or dis-association and indicates the reason. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.1 |
+| `events.associationFailure` | [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `associationFailureCause`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AssociationFailureCause`](../enums/cluster_export.WiFiNetworkDiagnostics.AssociationFailureCause.md)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> | The AssociationFailure event shall indicate that a Node has attempted to connect, or reconnect, to a Wi-Fi access point, but is unable to successfully associate or authenticate, after exhausting all internal retries of its supplicant. **`See`** MatterSpecification.v11.Core § 11.14.8.2 |
+| `events.connectionStatus` | [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `connectionStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ConnectionStatus`](../enums/cluster_export.WiFiNetworkDiagnostics.ConnectionStatus.md)\>  }\>, `any`\> | The ConnectionStatus Event shall indicate that a Node’s connection status to a Wi-Fi network has changed. Connected, in this context, shall mean that a Node acting as a Wi-Fi station is successfully associated to a Wi-Fi Access Point. **`See`** MatterSpecification.v11.Core § 11.14.8.3 |
+| `events.disconnection` | [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `reasonCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> | The Disconnection Event shall indicate that a Node’s Wi-Fi connection has been disconnected as a result of de-authenticated or dis-association and indicates the reason. **`See`** MatterSpecification.v11.Core § 11.14.8.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `beaconLostCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `overrunCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number` \| `bigint`, `any`\>  } ; `commands`: \{ `resetCounts`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  }  } = ErrorCountsComponent; `flags`: \{ `errorCounts`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `beaconRxCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `packetMulticastRxCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `packetMulticastTxCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `packetUnicastRxCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `packetUnicastTxCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\>  }  } = PacketCountsComponent; `flags`: \{ `packetCounts`: ``true`` = true }  }] | This metadata controls which WiFiNetworkDiagnosticsCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `errorCounts`: [`BitFlag`](schema_export.md#bitflag) ; `packetCounts`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.errorCounts` | [`BitFlag`](schema_export.md#bitflag) | ErrorCounts Node makes available the counts for the number of errors that have occurred during the reception and transmission of packets on the Wi-Fi interface. |
@@ -68,7 +68,7 @@ These elements and properties are present in all WiFiNetworkDiagnostics clusters
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:335](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L335)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:334](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L334)
 
 ___
 
@@ -78,9 +78,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:464](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L464)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:463](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L463)
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:466](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L466)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:465](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L465)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:450](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L450)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:449](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L449)
 
 ___
 
@@ -104,9 +104,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:527](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L527)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:526](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L526)
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:529](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L529)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:528](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L528)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:473](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L473)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:472](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L472)
 
 ___
 
@@ -142,7 +142,7 @@ A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature E
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:217](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L217)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:216](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L216)
 
 ___
 
@@ -165,7 +165,7 @@ A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature P
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:265](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L265)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:264](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L264)
 
 ___
 
@@ -177,11 +177,11 @@ Body of the WiFiNetworkDiagnostics associationFailure event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.2
+MatterSpecification.v11.Core § 11.14.8.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L151)
 
 ___
 
@@ -193,11 +193,11 @@ Body of the WiFiNetworkDiagnostics connectionStatus event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.3
+MatterSpecification.v11.Core § 11.14.8.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:205](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L205)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:204](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L204)
 
 ___
 
@@ -209,8 +209,8 @@ Body of the WiFiNetworkDiagnostics disconnection event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.1
+MatterSpecification.v11.Core § 11.14.8.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L104)

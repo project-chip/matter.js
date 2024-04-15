@@ -8,7 +8,7 @@ Input to the LevelControl move command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.6.6.2
+MatterSpecification.v11.Cluster § 1.6.6.2
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ The MoveMode field shall be one of the non-reserved values in Values of the Move
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.6.6.2.1
+MatterSpecification.v11.Cluster § 1.6.6.2.1
 
 #### Inherited from
 
@@ -88,7 +88,7 @@ move at a variable rate, this field may be disregarded.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.6.6.2.2
+MatterSpecification.v11.Cluster § 1.6.6.2.2
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ Input to the ColorControl moveColorTemperature command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.21
+MatterSpecification.v11.Cluster § 3.2.11.21
 
 ## Hierarchy
 
@@ -45,7 +45,7 @@ for the ColorTemperatureMireds attribute.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.21.4
+MatterSpecification.v11.Cluster § 3.2.11.21.4
 
 #### Inherited from
 
@@ -73,7 +73,7 @@ for the ColorTemperatureMireds attribute.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.21.3
+MatterSpecification.v11.Cluster § 3.2.11.21.3
 
 #### Inherited from
 
@@ -96,7 +96,7 @@ ignored.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.21.1
+MatterSpecification.v11.Cluster § 3.2.11.21.1
 
 #### Inherited from
 
@@ -147,7 +147,7 @@ status code set to INVALID_COMMAND. If the MoveMode field is set to 0 (stop) the
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.21.2
+MatterSpecification.v11.Cluster § 3.2.11.21.2
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ This command shall be generated in response to NavigateTarget command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.4.2
+MatterSpecification.v11.Cluster § 6.11.4.2
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.4.2.2
+MatterSpecification.v11.Cluster § 6.11.4.2.2
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ This shall indicate the of the command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.4.2.1
+MatterSpecification.v11.Cluster § 6.11.4.2.1
 
 #### Inherited from
 

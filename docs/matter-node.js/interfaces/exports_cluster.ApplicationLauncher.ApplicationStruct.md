@@ -8,7 +8,7 @@ This indicates a global identifier for an Application given a catalog.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.5.2
+MatterSpecification.v11.Cluster § 6.4.5.2
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ For the DIAL registry catalog, this value shall be the DIAL prefix (see [DIAL Re
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.5.2.2
+MatterSpecification.v11.Cluster § 6.4.5.2.2
 
 #### Inherited from
 
@@ -59,7 +59,7 @@ assign an ApplicationID to each Content App.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.5.2.1
+MatterSpecification.v11.Cluster § 6.4.5.2.1
 
 #### Inherited from
 

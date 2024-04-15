@@ -33,8 +33,8 @@ sent to the actual device to which the output connects.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.4.2
+MatterSpecification.v11.Cluster § 6.5.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L46)
+[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L45)

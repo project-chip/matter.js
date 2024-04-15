@@ -20,8 +20,8 @@ Server rejected the attempt to set the UTC time
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.7
+MatterSpecification.v11.Core § 11.16.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:288](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L288)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:287](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L287)

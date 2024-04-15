@@ -8,7 +8,7 @@ Input to the MediaInput renameInput command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.4
+MatterSpecification.v11.Cluster § 6.9.4.4
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ TypeFromSchema.index
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L28)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L27)
 
 ___
 
@@ -49,4 +49,4 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L28)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L27)

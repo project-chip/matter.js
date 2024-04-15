@@ -8,7 +8,7 @@ Input to the OperationalCredentials updateNoc command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.9
+MatterSpecification.v11.Core § 11.17.6.9
 
 ## Hierarchy
 

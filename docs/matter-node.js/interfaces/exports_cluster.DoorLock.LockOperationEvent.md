@@ -8,7 +8,7 @@ Body of the DoorLock lockOperation event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.3
+MatterSpecification.v11.Cluster § 5.2.5.3
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ involved.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.3.6
+MatterSpecification.v11.Cluster § 5.2.5.3.6
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ that can be determined for the given operation source. This shall NOT be null if
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.3.4
+MatterSpecification.v11.Cluster § 5.2.5.3.4
 
 #### Inherited from
 
@@ -80,7 +80,7 @@ The type of the lock operation that was performed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.3.1
+MatterSpecification.v11.Cluster § 5.2.5.3.1
 
 #### Inherited from
 
@@ -100,7 +100,7 @@ The source of the lock operation that was performed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.3.2
+MatterSpecification.v11.Cluster § 5.2.5.3.2
 
 #### Inherited from
 
@@ -121,7 +121,7 @@ with the given operation source. This shall NOT be null if the operation source 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.3.5
+MatterSpecification.v11.Cluster § 5.2.5.3.5
 
 #### Inherited from
 
@@ -143,7 +143,7 @@ particular, this shall NOT be null if the operation was associated with a valid 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.3.3
+MatterSpecification.v11.Cluster § 5.2.5.3.3
 
 #### Inherited from
 

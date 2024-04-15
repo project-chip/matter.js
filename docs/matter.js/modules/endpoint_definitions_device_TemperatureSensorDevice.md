@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L23)
+[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L22)
 
-[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L57)
+[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L56)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L46)
+[packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/TemperatureSensorDevice.ts#L45)

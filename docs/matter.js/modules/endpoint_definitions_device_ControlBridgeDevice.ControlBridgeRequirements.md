@@ -28,11 +28,11 @@
 
 The ColorControl cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ColorControlBehavior](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#colorcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L88)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L87)
 
 ___
 
@@ -42,11 +42,11 @@ ___
 
 The Groups cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L60)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L59)
 
 ___
 
@@ -56,11 +56,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyBehavior](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#identifybehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L53)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L52)
 
 ___
 
@@ -70,11 +70,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L46)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L45)
 
 ___
 
@@ -84,11 +84,11 @@ ___
 
 The IlluminanceMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IlluminanceMeasurementBehavior](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#illuminancemeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L95)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L94)
 
 ___
 
@@ -98,11 +98,11 @@ ___
 
 The LevelControl cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlBehavior](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#levelcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L81)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L80)
 
 ___
 
@@ -112,11 +112,11 @@ ___
 
 The OccupancySensing cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OccupancySensingBehavior](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#occupancysensingbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L102)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L101)
 
 ___
 
@@ -126,11 +126,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffBehavior](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#onoffbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L74)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L73)
 
 ___
 
@@ -140,11 +140,11 @@ ___
 
 The Scenes cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesBehavior](endpoint_definitions_device_ControlBridgeDevice.ControlBridgeRequirements.md#scenesbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L67)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L66)
 
 ___
 
@@ -171,7 +171,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:112](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L112)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L111)
 
 ___
 
@@ -190,4 +190,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L107)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L106)

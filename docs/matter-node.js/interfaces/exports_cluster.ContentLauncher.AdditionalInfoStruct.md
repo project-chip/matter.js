@@ -8,7 +8,7 @@ This object defines additional name=value pairs that can be used for identifying
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.5
+MatterSpecification.v11.Cluster § 6.7.5.5
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate the name of external id, ex. "musicbrainz".
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.5.1
+MatterSpecification.v11.Cluster § 6.7.5.5.1
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ This shall indicate the value for external id, ex. "ST0000000666661".
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.5.2
+MatterSpecification.v11.Cluster § 6.7.5.5.2
 
 #### Inherited from
 

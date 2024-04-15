@@ -8,7 +8,7 @@ Note that some of these states are applicable only for certain actions, as deter
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.3
+MatterSpecification.v11.Core § 9.14.4.3
 
 ## Table of contents
 

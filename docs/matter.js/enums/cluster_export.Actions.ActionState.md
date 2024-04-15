@@ -8,7 +8,7 @@ Note that some of these states are applicable only for certain actions, as deter
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.3
+MatterSpecification.v11.Core § 9.14.4.3
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ The action is active
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:195](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L195)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:194](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L194)
 
 ___
 
@@ -41,7 +41,7 @@ The action has been disabled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:205](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L205)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:204](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L204)
 
 ___
 
@@ -53,7 +53,7 @@ The action is not active
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:190](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L190)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:189](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L189)
 
 ___
 
@@ -65,4 +65,4 @@ The action has been paused
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:200](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L200)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:199](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L199)

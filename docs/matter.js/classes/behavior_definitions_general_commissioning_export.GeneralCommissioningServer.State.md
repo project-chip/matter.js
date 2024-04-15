@@ -42,7 +42,7 @@ GeneralCommissioningBehavior.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:196](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L196)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L196)
 
 ## Properties
 
@@ -54,7 +54,7 @@ Set to false to prevent the controller from changing the country code during com
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts:224](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts#L224)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts:224](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts#L224)
 
 ___
 
@@ -67,7 +67,7 @@ BasicCommissioningInfo for more information.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.9.5.2
+MatterSpecification.v11.Core § 11.9.5.2
 
 #### Inherited from
 
@@ -75,7 +75,7 @@ GeneralCommissioningBehavior.State.basicCommissioningInfo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:256](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L256)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L255)
 
 ___
 
@@ -100,7 +100,7 @@ described.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.9.5.1
+MatterSpecification.v11.Core § 11.9.5.1
 
 #### Inherited from
 
@@ -108,7 +108,7 @@ GeneralCommissioningBehavior.State.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:248](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L248)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:247](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L247)
 
 ___
 
@@ -120,7 +120,7 @@ Set to an array of two-letter country codes to limit the countries the controlle
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts:229](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts#L229)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts:229](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningServer.ts#L229)
 
 ___
 
@@ -143,7 +143,7 @@ handling can.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.9.5.4
+MatterSpecification.v11.Core § 11.9.5.4
 
 #### Inherited from
 
@@ -151,7 +151,7 @@ GeneralCommissioningBehavior.State.locationCapability
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:284](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L284)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:283](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L283)
 
 ___
 
@@ -166,7 +166,7 @@ RegulatoryConfig attribute.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.9.5.3
+MatterSpecification.v11.Core § 11.9.5.3
 
 #### Inherited from
 
@@ -174,7 +174,7 @@ GeneralCommissioningBehavior.State.regulatoryConfig
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:266](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L266)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L265)
 
 ___
 
@@ -188,7 +188,7 @@ connection flow" mode.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.9.5.5
+MatterSpecification.v11.Core § 11.9.5.5
 
 #### Inherited from
 
@@ -196,4 +196,4 @@ GeneralCommissioningBehavior.State.supportsConcurrentConnection
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:297](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L297)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:296](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L296)

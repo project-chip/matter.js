@@ -41,6 +41,7 @@
 - [EventPath](../interfaces/exports_interaction.EventPath.md)
 - [EventStorageData](../interfaces/exports_interaction.EventStorageData.md)
 - [EventWithPath](../interfaces/exports_interaction.EventWithPath.md)
+- [InteractionRecipient](../interfaces/exports_interaction.InteractionRecipient.md)
 
 ### Type Aliases
 
@@ -222,13 +223,13 @@ ___
 | `deltaEpochTimestamp?` | `number` \| `bigint` |
 | `deltaSystemTimestamp?` | `number` \| `bigint` |
 | `epochTimestamp?` | `number` \| `bigint` |
-| `eventNumber` | `number` \| `bigint` |
+| `eventNumber` | [`EventNumber`](exports_datatype.md#eventnumber) |
 | `priority` | [`EventPriority`](../enums/exports_cluster.EventPriority.md) |
 | `systemTimestamp?` | `number` \| `bigint` |
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:13
+packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:14
 
 ___
 
@@ -256,7 +257,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:22
+packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:23
 
 ___
 
@@ -370,7 +371,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:36
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:29
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:28
 
 ___
 
@@ -380,7 +381,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:27
 
 ___
 
@@ -390,7 +391,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.4
+MatterSpecification.v10.Core, section 10.5.4
 
 #### Defined in
 
@@ -404,7 +405,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.2
+MatterSpecification.v10.Core, section 10.5.2
 
 #### Defined in
 
@@ -418,7 +419,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.5
+MatterSpecification.v10.Core, section 10.5.5
 
 #### Defined in
 
@@ -442,7 +443,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.16
+MatterSpecification.v10.Core, section 10.5.16
 
 #### Defined in
 
@@ -456,7 +457,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.7
+MatterSpecification.v10.Core, section 10.5.7
 
 #### Defined in
 
@@ -470,7 +471,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.12
+MatterSpecification.v10.Core, section 10.5.12
 
 #### Defined in
 
@@ -484,7 +485,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.11
+MatterSpecification.v10.Core, section 10.5.11
 
 #### Defined in
 
@@ -498,7 +499,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.14
+MatterSpecification.v10.Core, section 10.5.14
 
 #### Defined in
 
@@ -512,7 +513,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.3
+MatterSpecification.v10.Core, section 10.6.3
 
 #### Defined in
 
@@ -538,7 +539,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.3
+MatterSpecification.v10.Core, section 10.5.3
 
 #### Defined in
 
@@ -552,7 +553,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.9
+MatterSpecification.v10.Core, section 10.5.9
 
 #### Defined in
 
@@ -566,7 +567,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.6
+MatterSpecification.v10.Core, section 10.5.6
 
 #### Defined in
 
@@ -580,7 +581,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.8
+MatterSpecification.v10.Core, section 10.5.8
 
 #### Defined in
 
@@ -594,7 +595,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.10
+MatterSpecification.v10.Core, section 10.5.10
 
 #### Defined in
 
@@ -608,7 +609,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.15
+MatterSpecification.v10.Core, section 10.5.15
 
 #### Defined in
 
@@ -622,7 +623,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.9
+MatterSpecification.v10.Core, section 10.6.9
 
 #### Defined in
 
@@ -636,7 +637,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.10
+MatterSpecification.v10.Core, section 10.6.10
 
 #### Defined in
 
@@ -650,7 +651,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.13
+MatterSpecification.v10.Core, section 10.5.13
 
 #### Defined in
 
@@ -664,7 +665,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.2
+MatterSpecification.v10.Core, section 10.6.2
 
 #### Defined in
 
@@ -678,7 +679,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.17
+MatterSpecification.v10.Core, section 10.5.17
 
 #### Defined in
 
@@ -692,7 +693,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.1
+MatterSpecification.v10.Core, section 10.6.1
 
 #### Defined in
 
@@ -706,7 +707,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.4
+MatterSpecification.v10.Core, section 10.6.4
 
 #### Defined in
 
@@ -720,7 +721,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.5
+MatterSpecification.v10.Core, section 10.6.5
 
 #### Defined in
 
@@ -734,7 +735,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.8
+MatterSpecification.v10.Core, section 10.6.8
 
 #### Defined in
 
@@ -748,7 +749,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.6
+MatterSpecification.v10.Core, section 10.6.6
 
 #### Defined in
 
@@ -762,7 +763,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.7
+MatterSpecification.v10.Core, section 10.6.7
 
 #### Defined in
 
@@ -786,7 +787,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:449
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:59
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:58
 
 ___
 
@@ -850,7 +851,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:61
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:60
 
 ___
 
@@ -870,7 +871,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:58
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:57
 
 ___
 
@@ -964,7 +965,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:35
+packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:36
 
 ___
 
@@ -1028,7 +1029,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:60
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:59
 
 ___
 
@@ -1050,7 +1051,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:57
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:56
 
 ___
 
@@ -1085,7 +1086,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventNumber`](exports_datatype.md#eventnumber)\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>[] |
 
 #### Returns
 
@@ -1093,7 +1094,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:34
+packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:35
 
 ___
 
@@ -1128,7 +1129,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `eventData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<...\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<...\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `eventData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventNumber`](exports_datatype.md#eventnumber)\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<...\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<...\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
 
 #### Returns
 
@@ -1136,7 +1137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:32
+packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:33
 
 ___
 
@@ -1172,7 +1173,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventNumber`](exports_datatype.md#eventnumber)\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\<`number`\>\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>[] |
 
 #### Returns
 
@@ -1180,7 +1181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:33
+packages/matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:34
 
 ___
 

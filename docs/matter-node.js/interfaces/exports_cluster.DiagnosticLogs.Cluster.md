@@ -16,7 +16,7 @@ NOTE Support for Diagnostic Logs cluster is provisional.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10
+MatterSpecification.v11.Core § 11.10
 
 ## Hierarchy
 
@@ -85,7 +85,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `retrieveLogsRequest` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `intent`: [`FieldType`](exports_tlv.FieldType.md)\<[`Intent`](../enums/exports_cluster.DiagnosticLogs.Intent.md)\> ; `requestedProtocol`: [`FieldType`](exports_tlv.FieldType.md)\<[`TransferProtocol`](../enums/exports_cluster.DiagnosticLogs.TransferProtocol.md)\> ; `transferFileDesignator`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `logContent`: [`FieldType`](exports_tlv.FieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](exports_tlv.FieldType.md)\<[`Status`](../enums/exports_cluster.DiagnosticLogs.Status.md)\> ; `timeSinceBoot`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `utcTimeStamp`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>, `any`\> | Reception of this command starts the process of retrieving diagnostic logs from a Node. **`See`** MatterCoreSpecificationV1_1 § 11.10.5.1 |
+| `retrieveLogsRequest` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `intent`: [`FieldType`](exports_tlv.FieldType.md)\<[`Intent`](../enums/exports_cluster.DiagnosticLogs.Intent.md)\> ; `requestedProtocol`: [`FieldType`](exports_tlv.FieldType.md)\<[`TransferProtocol`](../enums/exports_cluster.DiagnosticLogs.TransferProtocol.md)\> ; `transferFileDesignator`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`string`\>  }\>, [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `logContent`: [`FieldType`](exports_tlv.FieldType.md)\<`Uint8Array`\> ; `status`: [`FieldType`](exports_tlv.FieldType.md)\<[`Status`](../enums/exports_cluster.DiagnosticLogs.Status.md)\> ; `timeSinceBoot`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `utcTimeStamp`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>, `any`\> | Reception of this command starts the process of retrieving diagnostic logs from a Node. **`See`** MatterSpecification.v11.Core § 11.10.5.1 |
 
 #### Inherited from
 

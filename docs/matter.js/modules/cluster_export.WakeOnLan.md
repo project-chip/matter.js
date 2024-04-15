@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:57](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L57)
 
-[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L59)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L20)
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L19)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L61)

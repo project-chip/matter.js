@@ -44,12 +44,12 @@ These elements and properties are present in all MediaInput clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentInput`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `inputList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } | - |
-| `attributes.currentInput` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected InputInfoStruct. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.9.3.2 |
-| `attributes.inputList` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> | This list provides the media inputs supported by the device. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.9.3.1 |
+| `attributes.currentInput` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected InputInfoStruct. **`See`** MatterSpecification.v11.Cluster § 6.9.3.2 |
+| `attributes.inputList` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> | This list provides the media inputs supported by the device. **`See`** MatterSpecification.v11.Cluster § 6.9.3.1 |
 | `commands` | \{ `hideInputStatus`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `selectInput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `showInputStatus`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } | - |
-| `commands.hideInputStatus` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall hide the input list from the screen. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.9.4.3 |
-| `commands.selectInput` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | Upon receipt, this shall change the media input on the device to the input at a specific index in the Input List. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.9.4.1 |
-| `commands.showInputStatus` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall display the active status of the input list on screen. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.9.4.2 |
+| `commands.hideInputStatus` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall hide the input list from the screen. **`See`** MatterSpecification.v11.Cluster § 6.9.4.3 |
+| `commands.selectInput` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | Upon receipt, this shall change the media input on the device to the input at a specific index in the Input List. **`See`** MatterSpecification.v11.Cluster § 6.9.4.1 |
+| `commands.showInputStatus` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall display the active status of the input list on screen. **`See`** MatterSpecification.v11.Cluster § 6.9.4.2 |
 | `extensions` | readonly [\{ `component`: \{ `commands`: \{ `renameInput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `nameUpdates`: ``true``  }  }] | This metadata controls which MediaInputCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.nameUpdates` | [`BitFlag`](exports_schema.md#bitflag) | NameUpdates Supports updates to the input names |
@@ -95,9 +95,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:483
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:487
 
-packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:485
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:489
 
 ___
 
@@ -142,7 +142,7 @@ This contains information about an input.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.9.5.1
+MatterSpecification.v11.Cluster § 6.9.5.1
 
 #### Defined in
 
@@ -158,7 +158,7 @@ Input to the MediaInput renameInput command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.9.4.4
+MatterSpecification.v11.Cluster § 6.9.4.4
 
 #### Defined in
 
@@ -174,7 +174,7 @@ Input to the MediaInput selectInput command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.9.4.1
+MatterSpecification.v11.Cluster § 6.9.4.1
 
 #### Defined in
 

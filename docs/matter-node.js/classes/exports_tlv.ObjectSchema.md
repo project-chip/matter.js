@@ -8,7 +8,7 @@ Schema to encode an object in TLV.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § A.5.1 and § A.11.4
+MatterSpecification.v10.Core § A.5.1 and § A.11.4
 
 ## Type parameters
 

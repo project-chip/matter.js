@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7
+MatterSpecification.v11.Core § 11.13.5.7
 
 ## Hierarchy
 
@@ -41,7 +41,7 @@ This field shall be True if the Node has an active timestamp present, else False
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.1
+MatterSpecification.v11.Core § 11.13.5.7.1
 
 #### Inherited from
 
@@ -49,7 +49,7 @@ TypeFromSchema.activeTimestampPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:312](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L312)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:311](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L311)
 
 ___
 
@@ -61,7 +61,7 @@ This field shall be True if the Node has available a mask of available channels,
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.12
+MatterSpecification.v11.Core § 11.13.5.7.12
 
 #### Inherited from
 
@@ -69,7 +69,7 @@ TypeFromSchema.channelMaskPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:391](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L391)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:390](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L390)
 
 ___
 
@@ -82,7 +82,7 @@ False.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.9
+MatterSpecification.v11.Core § 11.13.5.7.9
 
 #### Inherited from
 
@@ -90,7 +90,7 @@ TypeFromSchema.channelPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:369](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L369)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:368](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L368)
 
 ___
 
@@ -102,7 +102,7 @@ This field shall be True if the Node has the Thread network delay set, else Fals
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.7
+MatterSpecification.v11.Core § 11.13.5.7.7
 
 #### Inherited from
 
@@ -110,7 +110,7 @@ TypeFromSchema.delayPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:354](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L354)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:353](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L353)
 
 ___
 
@@ -122,7 +122,7 @@ This field shall be True if the Node has an extended Pan ID, else False.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.5
+MatterSpecification.v11.Core § 11.13.5.7.5
 
 #### Inherited from
 
@@ -130,7 +130,7 @@ TypeFromSchema.extendedPanIdPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:340](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L340)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:339](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L339)
 
 ___
 
@@ -142,7 +142,7 @@ This field shall be True if the Node has the Thread master key, else False.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.3
+MatterSpecification.v11.Core § 11.13.5.7.3
 
 #### Inherited from
 
@@ -150,7 +150,7 @@ TypeFromSchema.masterKeyPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:326](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L326)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:325](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L325)
 
 ___
 
@@ -162,7 +162,7 @@ This field shall be True if the Node has the mesh local prefix, else False.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.6
+MatterSpecification.v11.Core § 11.13.5.7.6
 
 #### Inherited from
 
@@ -170,7 +170,7 @@ TypeFromSchema.meshLocalPrefixPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:347](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L347)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:346](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L346)
 
 ___
 
@@ -182,7 +182,7 @@ This field shall be True if the Node has the Thread network’s name, else False
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.4
+MatterSpecification.v11.Core § 11.13.5.7.4
 
 #### Inherited from
 
@@ -190,7 +190,7 @@ TypeFromSchema.networkNamePresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:333](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L333)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L332)
 
 ___
 
@@ -202,7 +202,7 @@ This field shall be True if the Node has a Pan ID, else False.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.8
+MatterSpecification.v11.Core § 11.13.5.7.8
 
 #### Inherited from
 
@@ -210,7 +210,7 @@ TypeFromSchema.panIdPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:361](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L361)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:360](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L360)
 
 ___
 
@@ -222,7 +222,7 @@ This field shall be True if the Node has a pending timestamp is present, else Fa
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.2
+MatterSpecification.v11.Core § 11.13.5.7.2
 
 #### Inherited from
 
@@ -230,7 +230,7 @@ TypeFromSchema.pendingTimestampPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:319](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L319)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:318](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L318)
 
 ___
 
@@ -242,7 +242,7 @@ This field shall be True if the Node has been configured with the Thread network
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.10
+MatterSpecification.v11.Core § 11.13.5.7.10
 
 #### Inherited from
 
@@ -250,7 +250,7 @@ TypeFromSchema.pskcPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:376](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L376)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:375](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L375)
 
 ___
 
@@ -263,7 +263,7 @@ False.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.7.11
+MatterSpecification.v11.Core § 11.13.5.7.11
 
 #### Inherited from
 
@@ -271,4 +271,4 @@ TypeFromSchema.securityPolicyPresent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:384](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L384)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:383](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L383)

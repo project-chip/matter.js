@@ -8,7 +8,7 @@ Input to the ColorControl stepHue command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.6
+MatterSpecification.v11.Cluster § 3.2.11.6
 
 ## Hierarchy
 
@@ -66,7 +66,7 @@ Table 50. Values of the StepMode Field
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.6.1
+MatterSpecification.v11.Cluster § 3.2.11.6.1
 
 #### Inherited from
 
@@ -86,7 +86,7 @@ The change to be added to (or subtracted from) the current value of the device�
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.6.2
+MatterSpecification.v11.Cluster § 3.2.11.6.2
 
 #### Inherited from
 
@@ -110,7 +110,7 @@ TransitionTime data fields in other clusters / commands.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.6.3
+MatterSpecification.v11.Cluster § 3.2.11.6.3
 
 #### Inherited from
 

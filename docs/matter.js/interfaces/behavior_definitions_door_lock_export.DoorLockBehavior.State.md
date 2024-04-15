@@ -42,7 +42,7 @@ The ActuatorEnabled attribute indicates if the lock is currently able to (Enable
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.3
+MatterSpecification.v11.Cluster § 5.2.3.3
 
 #### Inherited from
 
@@ -50,7 +50,7 @@ StateType.actuatorEnabled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2393](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2393)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2392](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2392)
 
 ___
 
@@ -67,7 +67,7 @@ This mask DOES NOT apply to the Events mechanism of this cluster.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.39
+MatterSpecification.v11.Cluster § 5.2.3.39
 
 #### Inherited from
 
@@ -75,7 +75,7 @@ StateType.alarmMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2559](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2559)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2558](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2558)
 
 ___
 
@@ -89,7 +89,7 @@ command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.26
+MatterSpecification.v11.Cluster § 5.2.3.26
 
 #### Inherited from
 
@@ -97,7 +97,7 @@ StateType.autoRelockTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2425](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2425)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2424](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2424)
 
 ___
 
@@ -123,7 +123,7 @@ Volume setting on the server, the client SHOULD read/write to the Sound Volume a
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.28
+MatterSpecification.v11.Cluster § 5.2.3.28
 
 #### Inherited from
 
@@ -131,7 +131,7 @@ StateType.defaultConfigurationRegister
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2481](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2481)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2480](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2480)
 
 ___
 
@@ -143,7 +143,7 @@ Enable/disable an inside LED that allows the user to see at a glance if the door
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.31
+MatterSpecification.v11.Cluster § 5.2.3.31
 
 #### Inherited from
 
@@ -151,7 +151,7 @@ StateType.enableInsideStatusLed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2514](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2514)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2513](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2513)
 
 ___
 
@@ -167,7 +167,7 @@ default.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.29
+MatterSpecification.v11.Cluster § 5.2.3.29
 
 #### Inherited from
 
@@ -175,7 +175,7 @@ StateType.enableLocalProgramming
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2492](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2492)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2491](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2491)
 
 ___
 
@@ -187,7 +187,7 @@ Enable/disable the ability to lock the door lock with a single touch on the door
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.30
+MatterSpecification.v11.Cluster § 5.2.3.30
 
 #### Inherited from
 
@@ -195,7 +195,7 @@ StateType.enableOneTouchLocking
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2503](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2503)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2502](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2502)
 
 ___
 
@@ -208,7 +208,7 @@ in privacy mode it cannot be manipulated from the outside.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.32
+MatterSpecification.v11.Cluster § 5.2.3.32
 
 #### Inherited from
 
@@ -216,7 +216,7 @@ StateType.enablePrivacyModeButton
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2526](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2526)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2525](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2525)
 
 ___
 
@@ -229,7 +229,7 @@ ISO-639-1.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.22
+MatterSpecification.v11.Cluster § 5.2.3.22
 
 #### Inherited from
 
@@ -237,7 +237,7 @@ StateType.language
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2401](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2401)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2400](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2400)
 
 ___
 
@@ -249,7 +249,7 @@ The settings for the LED support three different modes
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.25
+MatterSpecification.v11.Cluster § 5.2.3.25
 
 #### Inherited from
 
@@ -257,7 +257,7 @@ StateType.ledSettings
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2412](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2412)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2411](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2411)
 
 ___
 
@@ -275,7 +275,7 @@ The features that can be disabled from local programming are defined in the foll
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.33
+MatterSpecification.v11.Cluster § 5.2.3.33
 
 #### Inherited from
 
@@ -283,7 +283,7 @@ StateType.localProgrammingFeatures
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2543](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2543)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2542](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2542)
 
 ___
 
@@ -315,7 +315,7 @@ Locks that do not have an actuation mechanism SHOULD not support the Scene table
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.1
+MatterSpecification.v11.Cluster § 5.2.3.1
 
 #### Inherited from
 
@@ -323,7 +323,7 @@ StateType.lockState
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2380](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2380)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2379](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2379)
 
 ___
 
@@ -333,7 +333,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.2
+MatterSpecification.v11.Cluster § 5.2.3.2
 
 #### Inherited from
 
@@ -341,7 +341,7 @@ StateType.lockType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2385](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2385)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2384](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2384)
 
 ___
 
@@ -353,7 +353,7 @@ The current operating mode of the lock (see OperatingModeEnum).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.23
+MatterSpecification.v11.Cluster § 5.2.3.23
 
 #### Inherited from
 
@@ -361,7 +361,7 @@ StateType.operatingMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2443](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2443)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2442](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2442)
 
 ___
 
@@ -373,7 +373,7 @@ The sound volume on a door lock has four possible settings: silent, low, high an
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.27
+MatterSpecification.v11.Cluster § 5.2.3.27
 
 #### Inherited from
 
@@ -381,7 +381,7 @@ StateType.soundVolume
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2432](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2432)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2431](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2431)
 
 ___
 
@@ -395,7 +395,7 @@ defines the related bit to be set, as
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.3.24
+MatterSpecification.v11.Cluster § 5.2.3.24
 
 #### Inherited from
 
@@ -403,4 +403,4 @@ StateType.supportedOperatingModes
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2456](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2456)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2455](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2455)

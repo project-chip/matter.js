@@ -25,7 +25,6 @@
 ### Interfaces
 
 - [Diagnostic](../interfaces/log_export.Diagnostic-1.md)
-- [DiagnosticSource](../interfaces/log_export.DiagnosticSource.md)
 
 ### Type Aliases
 
@@ -65,7 +64,7 @@ packages/matter.js/dist/esm/log/Format.d.ts:26
 
 ### DiagnosticSource
 
-• **DiagnosticSource**: `Object`
+• `Const` **DiagnosticSource**: `Object`
 
 Registry of diagnostic sources.
 
@@ -74,15 +73,13 @@ Registry of diagnostic sources.
 | Name | Type |
 | :------ | :------ |
 | `[presentation]` | [`Presentation`](../enums/log_export.Diagnostic.Presentation.md) |
-| `[value]` | ([`Diagnostic`](../interfaces/log_export.Diagnostic-1.md) \| [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md))[][] |
-| `add` | (`source`: [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md)) => `void` |
-| `delete` | (`source`: [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md)) => `void` |
+| `[value]` | `Set`\<[`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)\> |
+| `add` | (`source`: [`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)) => `void` |
+| `delete` | (`source`: [`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)) => `void` |
 
 #### Defined in
 
 packages/matter.js/dist/esm/log/DiagnosticSource.d.ts:10
-
-packages/matter.js/dist/esm/log/DiagnosticSource.d.ts:17
 
 ## Functions
 
@@ -174,7 +171,7 @@ Errors are logged to the console.
 
 #### Defined in
 
-[packages/matter-node.js/src/log/FileLogger.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node.js/src/log/FileLogger.ts#L15)
+[packages/matter-node.js/src/log/FileLogger.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node.js/src/log/FileLogger.ts#L15)
 
 ___
 

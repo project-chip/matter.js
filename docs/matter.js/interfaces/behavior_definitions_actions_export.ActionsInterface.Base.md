@@ -43,11 +43,11 @@ Example: disable a motion sensor to no longer control the lights in an area.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.11
+MatterSpecification.v11.Core § 9.14.6.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:294](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L294)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:293](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L293)
 
 ___
 
@@ -77,11 +77,11 @@ This field shall indicate the requested duration in seconds.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.12
+MatterSpecification.v11.Core § 9.14.6.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:309](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L309)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:308](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L308)
 
 ___
 
@@ -105,11 +105,11 @@ Example: enable a motion sensor to control the lights in an area.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.9
+MatterSpecification.v11.Core § 9.14.6.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:271](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L271)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:270](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L270)
 
 ___
 
@@ -138,11 +138,11 @@ This field shall indicate the requested duration in seconds.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.10
+MatterSpecification.v11.Core § 9.14.6.10
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:285](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L285)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:284](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L284)
 
 ___
 
@@ -167,11 +167,11 @@ Example: recall a scene on a number of lights.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.1
+MatterSpecification.v11.Core § 9.14.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:169](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L169)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:168](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L168)
 
 ___
 
@@ -201,11 +201,11 @@ Example: recall a scene on a number of lights, with a specified transition time.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.2
+MatterSpecification.v11.Core § 9.14.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:184](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L184)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L183)
 
 ___
 
@@ -230,11 +230,11 @@ started with StartAction.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.6
+MatterSpecification.v11.Core § 9.14.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:230](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L230)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:229](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L229)
 
 ___
 
@@ -268,11 +268,11 @@ This field shall indicate the requested duration in seconds.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.7
+MatterSpecification.v11.Core § 9.14.6.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:249](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L249)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:248](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L248)
 
 ___
 
@@ -300,11 +300,11 @@ point they were paused).
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.8
+MatterSpecification.v11.Core § 9.14.6.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:262](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L262)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:261](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L261)
 
 ___
 
@@ -333,11 +333,11 @@ brightness/color combinations and the window covering gradually opening.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.3
+MatterSpecification.v11.Core § 9.14.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:198](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L198)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L197)
 
 ___
 
@@ -364,11 +364,11 @@ scene) on a set of lights for 1 hour (Duration=3600).
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.4
+MatterSpecification.v11.Core § 9.14.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:210](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L210)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:209](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L209)
 
 ___
 
@@ -393,8 +393,8 @@ Example: stop a dynamic lighting pattern which was previously started with Start
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.5
+MatterSpecification.v11.Core § 9.14.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:220](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L220)
+[packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts:219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/actions/ActionsInterface.ts#L219)

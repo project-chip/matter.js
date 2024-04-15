@@ -4,7 +4,7 @@
 
 [exports/schema](../modules/exports_schema.md).[\<internal\>](../modules/exports_schema._internal_.md).Base38Schema
 
-See MatterCoreSpecificationV1_0 § 5.1.3.1
+See MatterSpecification.v10.Core § 5.1.3.1
 
 ## Hierarchy
 

@@ -8,7 +8,7 @@ The OperationError enumeration shall indicate the error cause of the Lock/Unlock
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.11
+MatterSpecification.v11.Cluster § 5.2.6.11
 
 ## Table of contents
 

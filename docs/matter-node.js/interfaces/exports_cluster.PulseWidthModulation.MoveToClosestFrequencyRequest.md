@@ -8,7 +8,7 @@ Input to the PulseWidthModulation moveToClosestFrequency command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.6.6.5
+MatterSpecification.v11.Cluster § 1.6.6.5
 
 ## Hierarchy
 

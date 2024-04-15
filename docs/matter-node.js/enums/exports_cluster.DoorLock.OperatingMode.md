@@ -15,7 +15,7 @@ all other commands and requests.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.12
+MatterSpecification.v11.Cluster § 5.2.6.12
 
 ## Table of contents
 
@@ -39,7 +39,7 @@ Commands.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.12.4
+MatterSpecification.v11.Cluster § 5.2.6.12.4
 
 #### Defined in
 
@@ -55,7 +55,7 @@ The lock operates normally. All interfaces are enabled.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.12.1
+MatterSpecification.v11.Cluster § 5.2.6.12.1
 
 #### Defined in
 
@@ -72,7 +72,7 @@ validation (e.g. a lock for a business during work hours).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.12.5
+MatterSpecification.v11.Cluster § 5.2.6.12.5
 
 #### Defined in
 
@@ -90,7 +90,7 @@ users, presumably inside the property, will have control over the entrance.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.12.3
+MatterSpecification.v11.Cluster § 5.2.6.12.3
 
 #### Defined in
 
@@ -106,7 +106,7 @@ Only remote interaction is enabled. The keypad shall only be operable by the mas
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.12.2
+MatterSpecification.v11.Cluster § 5.2.6.12.2
 
 #### Defined in
 

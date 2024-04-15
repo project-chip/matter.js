@@ -47,9 +47,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L76)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L75)
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:137](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L137)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L136)
 
 ___
 
@@ -72,11 +72,11 @@ This command returns a Launcher Response.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.3
+MatterSpecification.v11.Cluster § 6.4.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L74)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L73)
 
 ___
 
@@ -101,11 +101,11 @@ This command returns a Launcher Response.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.1
+MatterSpecification.v11.Cluster § 6.4.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L32)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L31)
 
 ___
 
@@ -117,11 +117,11 @@ This command shall be generated in response to LaunchApp/StopApp/HideApp command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.4
+MatterSpecification.v11.Cluster § 6.4.4.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L39)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L38)
 
 ___
 
@@ -143,11 +143,11 @@ This command returns a Launcher Response.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.2
+MatterSpecification.v11.Cluster § 6.4.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L56)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherInterface.ts#L55)
 
 ## Variables
 
@@ -162,8 +162,8 @@ features using ApplicationLauncherBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts#L20)
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts#L25)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts#L25)
 
-[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts#L27)
+[packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/application-launcher/ApplicationLauncherBehavior.ts#L27)

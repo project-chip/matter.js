@@ -21,11 +21,11 @@
 
 The OtaSoftwareUpdateProvider cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OtaSoftwareUpdateProviderServer](endpoint_definitions_system_OtaProviderEndpoint.OtaProviderRequirements.md#otasoftwareupdateproviderserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L34)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L33)
 
 ___
 
@@ -35,11 +35,11 @@ ___
 
 The OtaSoftwareUpdateRequestor cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OtaSoftwareUpdateRequestorBehavior](endpoint_definitions_system_OtaProviderEndpoint.OtaProviderRequirements.md#otasoftwareupdaterequestorbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L41)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L40)
 
 ___
 
@@ -59,7 +59,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L51)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L50)
 
 ___
 
@@ -78,4 +78,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L46)
+[packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaProviderEndpoint.ts#L45)

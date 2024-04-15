@@ -39,7 +39,7 @@ These elements and properties are present in all TimeFormatLocalization clusters
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `hourFormat`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\>  } | - |
-| `attributes.hourFormat` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\> | The HourFormat attribute shall represent the format that the Node is currently configured to use when conveying the hour unit of time. If provided, this value shall take priority over any unit implied through the ActiveLocale Attribute. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.4.6.1 |
+| `attributes.hourFormat` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\> | The HourFormat attribute shall represent the format that the Node is currently configured to use when conveying the hour unit of time. If provided, this value shall take priority over any unit implied through the ActiveLocale Attribute. **`See`** MatterSpecification.v11.Core § 11.4.6.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `activeCalendarType`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| [`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md), `any`\> ; `supportedCalendarTypes`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md)[], `any`\>  }  } = CalendarFormatComponent; `flags`: \{ `calendarFormat`: ``true`` = true }  }] | This metadata controls which TimeFormatLocalizationCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.calendarFormat` | [`BitFlag`](schema_export.md#bitflag) | CalendarFormat The Node can be configured to use different calendar formats when conveying values to a user. |
@@ -49,7 +49,7 @@ These elements and properties are present in all TimeFormatLocalization clusters
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:147](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L147)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:146](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L146)
 
 ___
 
@@ -69,7 +69,7 @@ A TimeFormatLocalizationCluster supports these elements if it supports feature C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L103)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L102)
 
 ___
 
@@ -79,9 +79,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:204](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L204)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:203](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L203)
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:206](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L206)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:205](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L205)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:187](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L186)
 
 ___
 
@@ -105,9 +105,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L237)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:236](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L236)
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:239](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L239)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:238](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L238)
 
 ___
 
@@ -121,4 +121,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:212](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L212)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:211](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L211)

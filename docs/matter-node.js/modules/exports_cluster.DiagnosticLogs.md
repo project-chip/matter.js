@@ -72,7 +72,7 @@ Input to the DiagnosticLogs retrieveLogsRequest command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.1
+MatterSpecification.v11.Core § 11.10.5.1
 
 #### Defined in
 
@@ -89,7 +89,7 @@ following.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.2
+MatterSpecification.v11.Core § 11.10.5.2
 
 #### Defined in
 

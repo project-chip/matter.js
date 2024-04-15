@@ -8,7 +8,7 @@ Input to the ApplicationLauncher hideApp command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.3
+MatterSpecification.v11.Cluster § 6.4.4.3
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall specify the Application to hide.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.3.1
+MatterSpecification.v11.Cluster § 6.4.4.3.1
 
 #### Inherited from
 
@@ -40,4 +40,4 @@ TypeFromSchema.application
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:188](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L188)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:187](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L187)

@@ -47,6 +47,8 @@ Most often direct access to [Agent](endpoint_export.Agent-1.md) is transparent a
 
 ### Accessors
 
+- [#diagnosticProps](endpoint_export.Endpoint-1.md##diagnosticprops)
+- [[value]](endpoint_export.Endpoint-1.md#[value])
 - [agentType](endpoint_export.Endpoint-1.md#agenttype)
 - [behaviors](endpoint_export.Endpoint-1.md#behaviors)
 - [construction](endpoint_export.Endpoint-1.md#construction)
@@ -113,7 +115,7 @@ and initialize a [Endpoint](endpoint_export.Endpoint-1.md) in one step.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:257](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L257)
+[packages/matter.js/src/endpoint/Endpoint.ts:257](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L257)
 
 • **new Endpoint**\<`T`\>(`type`, `options?`): [`Endpoint`](endpoint_export.Endpoint-1.md)\<`T`\>
 
@@ -141,7 +143,7 @@ and initialize a [Endpoint](endpoint_export.Endpoint-1.md) in one step.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:267](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L267)
+[packages/matter.js/src/endpoint/Endpoint.ts:267](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L267)
 
 ## Properties
 
@@ -151,7 +153,7 @@ and initialize a [Endpoint](endpoint_export.Endpoint-1.md) in one step.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L56)
+[packages/matter.js/src/endpoint/Endpoint.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L56)
 
 ___
 
@@ -161,7 +163,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L49)
+[packages/matter.js/src/endpoint/Endpoint.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L49)
 
 ___
 
@@ -171,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L50)
+[packages/matter.js/src/endpoint/Endpoint.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L50)
 
 ___
 
@@ -181,7 +183,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L53)
+[packages/matter.js/src/endpoint/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L53)
 
 ___
 
@@ -191,7 +193,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L55)
+[packages/matter.js/src/endpoint/Endpoint.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L55)
 
 ___
 
@@ -201,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L46)
+[packages/matter.js/src/endpoint/Endpoint.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L46)
 
 ___
 
@@ -211,7 +213,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L51)
+[packages/matter.js/src/endpoint/Endpoint.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L51)
 
 ___
 
@@ -221,7 +223,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L47)
+[packages/matter.js/src/endpoint/Endpoint.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L47)
 
 ___
 
@@ -231,7 +233,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L48)
+[packages/matter.js/src/endpoint/Endpoint.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L48)
 
 ___
 
@@ -241,7 +243,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L52)
+[packages/matter.js/src/endpoint/Endpoint.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L52)
 
 ___
 
@@ -251,7 +253,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L54)
+[packages/matter.js/src/endpoint/Endpoint.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L54)
 
 ___
 
@@ -261,9 +263,44 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L45)
+[packages/matter.js/src/endpoint/Endpoint.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L45)
 
 ## Accessors
+
+### #diagnosticProps
+
+• `get` **#diagnosticProps**(): `Object`
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `endpoint#` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
+| `type` | `string` |
+
+#### Defined in
+
+[packages/matter.js/src/endpoint/Endpoint.ts:702](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L702)
+
+___
+
+### [value]
+
+• `get` **[value]**(): `unknown`
+
+Hierarchical diagnostics of endpoint and children.
+
+#### Returns
+
+`unknown`
+
+#### Defined in
+
+[packages/matter.js/src/endpoint/Endpoint.ts:681](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L681)
+
+___
 
 ### agentType
 
@@ -277,7 +314,7 @@ Create an [Agent.Type](../interfaces/endpoint_export.Agent.Type.md) for the endp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:488](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L488)
+[packages/matter.js/src/endpoint/Endpoint.ts:488](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L488)
 
 ___
 
@@ -293,7 +330,7 @@ Access the pool of behaviors supported by this endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L124)
+[packages/matter.js/src/endpoint/Endpoint.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L124)
 
 ___
 
@@ -307,7 +344,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:245](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L245)
+[packages/matter.js/src/endpoint/Endpoint.ts:245](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L245)
 
 ___
 
@@ -323,7 +360,7 @@ Diagnostic information regarding endpoint state.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:681](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L681)
+[packages/matter.js/src/endpoint/Endpoint.ts:695](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L695)
 
 ___
 
@@ -340,7 +377,7 @@ storage and network components.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L114)
+[packages/matter.js/src/endpoint/Endpoint.ts:114](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L114)
 
 ___
 
@@ -356,7 +393,7 @@ Events for all behaviors keyed by behavior ID.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:231](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L231)
+[packages/matter.js/src/endpoint/Endpoint.ts:231](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L231)
 
 ___
 
@@ -372,7 +409,7 @@ Is this a parent Endpoint?
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:470](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L470)
+[packages/matter.js/src/endpoint/Endpoint.ts:470](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L470)
 
 ___
 
@@ -390,7 +427,7 @@ This ID must be unique amongst all Parts with the same owner.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L63)
+[packages/matter.js/src/endpoint/Endpoint.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L63)
 
 • `set` **id**(`id`): `void`
 
@@ -406,7 +443,7 @@ This ID must be unique amongst all Parts with the same owner.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:326](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L326)
+[packages/matter.js/src/endpoint/Endpoint.ts:326](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L326)
 
 ___
 
@@ -422,7 +459,7 @@ Endpoint information that varies as the endpoint initializes.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:477](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L477)
+[packages/matter.js/src/endpoint/Endpoint.ts:477](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L477)
 
 ___
 
@@ -438,7 +475,7 @@ The endpoint ID or undefined if not yet assigned.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L76)
+[packages/matter.js/src/endpoint/Endpoint.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L76)
 
 ___
 
@@ -454,7 +491,7 @@ The endpoint number or undefined if not yet assigned.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L97)
+[packages/matter.js/src/endpoint/Endpoint.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L97)
 
 ___
 
@@ -471,7 +508,7 @@ Matter node.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L84)
+[packages/matter.js/src/endpoint/Endpoint.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L84)
 
 • `set` **number**(`number`): `void`
 
@@ -487,7 +524,7 @@ Matter node.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:351](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L351)
+[packages/matter.js/src/endpoint/Endpoint.ts:351](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L351)
 
 ___
 
@@ -505,7 +542,7 @@ Every endpoint but the root endpoint (the "node") is owned by another endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L106)
+[packages/matter.js/src/endpoint/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L106)
 
 • `set` **owner**(`owner`): `void`
 
@@ -521,7 +558,7 @@ Every endpoint but the root endpoint (the "node") is owned by another endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:392](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L392)
+[packages/matter.js/src/endpoint/Endpoint.ts:392](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L392)
 
 ___
 
@@ -537,7 +574,7 @@ Access child parts.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:460](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L460)
+[packages/matter.js/src/endpoint/Endpoint.ts:460](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L460)
 
 ___
 
@@ -553,7 +590,7 @@ Path identifying the endpoint in the Matter data model.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:593](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L593)
+[packages/matter.js/src/endpoint/Endpoint.ts:593](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L593)
 
 ___
 
@@ -569,7 +606,7 @@ Current state values for all behaviors, keyed by behavior ID.  This view is read
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:137](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L137)
+[packages/matter.js/src/endpoint/Endpoint.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L137)
 
 ___
 
@@ -585,7 +622,7 @@ The type of endpoint this endpoint implements.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:453](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L453)
+[packages/matter.js/src/endpoint/Endpoint.ts:453](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L453)
 
 ## Methods
 
@@ -599,7 +636,7 @@ The type of endpoint this endpoint implements.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:642](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L642)
+[packages/matter.js/src/endpoint/Endpoint.ts:642](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L642)
 
 ___
 
@@ -613,7 +650,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:674](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L674)
+[packages/matter.js/src/endpoint/Endpoint.ts:674](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L674)
 
 ___
 
@@ -627,7 +664,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:582](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L582)
+[packages/matter.js/src/endpoint/Endpoint.ts:582](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L582)
 
 ___
 
@@ -669,7 +706,7 @@ resolves.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:512](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L512)
+[packages/matter.js/src/endpoint/Endpoint.ts:512](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L512)
 
 ___
 
@@ -697,7 +734,7 @@ Add a child endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:418](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L418)
+[packages/matter.js/src/endpoint/Endpoint.ts:418](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L418)
 
 ▸ **add**\<`T`\>(`type`, `options?`): `Promise`\<[`Endpoint`](endpoint_export.Endpoint-1.md)\<`T`\>\>
 
@@ -722,7 +759,7 @@ Add a child endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:426](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L426)
+[packages/matter.js/src/endpoint/Endpoint.ts:426](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L426)
 
 ___
 
@@ -740,7 +777,7 @@ The default implementation crashes the endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:625](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L625)
+[packages/matter.js/src/endpoint/Endpoint.ts:625](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L625)
 
 ___
 
@@ -754,7 +791,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:573](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L573)
+[packages/matter.js/src/endpoint/Endpoint.ts:573](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L573)
 
 ___
 
@@ -768,7 +805,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:481](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L481)
+[packages/matter.js/src/endpoint/Endpoint.ts:481](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L481)
 
 ___
 
@@ -796,7 +833,7 @@ Events for a specific behavior.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:238](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L238)
+[packages/matter.js/src/endpoint/Endpoint.ts:238](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L238)
 
 ___
 
@@ -820,7 +857,7 @@ Derivatives may override to perform async construction prior to full initializat
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:615](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L615)
+[packages/matter.js/src/endpoint/Endpoint.ts:615](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L615)
 
 ___
 
@@ -836,7 +873,7 @@ Perform "soft" reset of the endpoint, reverting all in-memory structures to unin
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:527](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L527)
+[packages/matter.js/src/endpoint/Endpoint.ts:527](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L527)
 
 ___
 
@@ -866,7 +903,7 @@ before applying changes.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:164](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L164)
+[packages/matter.js/src/endpoint/Endpoint.ts:164](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L164)
 
 ___
 
@@ -897,7 +934,7 @@ The patch semantics used here are identical to [set](endpoint_export.Endpoint-1.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:207](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L207)
+[packages/matter.js/src/endpoint/Endpoint.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L207)
 
 ___
 
@@ -925,7 +962,7 @@ Current state for a specific behavior.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:144](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L144)
+[packages/matter.js/src/endpoint/Endpoint.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L144)
 
 ___
 
@@ -939,7 +976,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:586](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L586)
+[packages/matter.js/src/endpoint/Endpoint.ts:586](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L586)
 
 ___
 
@@ -967,4 +1004,4 @@ Apply a depth-first visitor function to myself and all descendents.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:552](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L552)
+[packages/matter.js/src/endpoint/Endpoint.ts:552](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L552)

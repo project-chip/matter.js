@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L41)
 
-[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L43)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L20)
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L19)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L45)

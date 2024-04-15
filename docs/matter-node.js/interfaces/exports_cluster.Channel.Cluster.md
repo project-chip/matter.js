@@ -12,7 +12,7 @@ ChannelCluster supports optional features that you can enable with the ChannelCl
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6
+MatterSpecification.v11.Cluster § 6.6
 
 ## Hierarchy
 
@@ -81,8 +81,8 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `changeChannelByNumber` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `majorNumber`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\> ; `minorNumber`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | Change the channel to the channel with the given Number in the ChannelList attribute. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.6.4.3 |
-| `skipChannel` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `count`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command provides channel up and channel down functionality, but allows channel index jumps of size Count. When the value of the increase or decrease is larger than the number of channels remaining in the given direction, then the behavior shall be to return to the beginning (or end) of the channel list and continue. For example, if the current channel is at index 0 and count value of -1 is given, then the current channel should change to the last channel. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.6.4.4 |
+| `changeChannelByNumber` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `majorNumber`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\> ; `minorNumber`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | Change the channel to the channel with the given Number in the ChannelList attribute. **`See`** MatterSpecification.v11.Cluster § 6.6.4.3 |
+| `skipChannel` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `count`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command provides channel up and channel down functionality, but allows channel index jumps of size Count. When the value of the increase or decrease is larger than the number of channels remaining in the given direction, then the behavior shall be to return to the beginning (or end) of the channel list and continue. For example, if the current channel is at index 0 and count value of -1 is given, then the current channel should change to the last channel. **`See`** MatterSpecification.v11.Cluster § 6.6.4.4 |
 
 #### Inherited from
 

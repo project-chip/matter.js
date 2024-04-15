@@ -28,7 +28,7 @@ This version of [ColorControlServer](endpoint_definitions_device_ExtendedColorLi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L91)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L90)
 
 ___
 
@@ -38,11 +38,11 @@ ___
 
 The Groups cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsServer](endpoint_definitions_device_ExtendedColorLightDevice.ExtendedColorLightRequirements.md#groupsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L48)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L47)
 
 ___
 
@@ -56,7 +56,7 @@ This version of [IdentifyServer](endpoint_definitions_device_ExtendedColorLightD
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L41)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L40)
 
 ___
 
@@ -70,7 +70,7 @@ This version of [LevelControlServer](endpoint_definitions_device_ExtendedColorLi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L76)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L75)
 
 ___
 
@@ -84,7 +84,7 @@ This version of [OnOffServer](endpoint_definitions_device_ExtendedColorLightDevi
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L69)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L68)
 
 ___
 
@@ -98,7 +98,7 @@ This version of [ScenesServer](endpoint_definitions_device_ExtendedColorLightDev
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L55)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L54)
 
 ___
 
@@ -122,4 +122,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:98](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L98)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L97)

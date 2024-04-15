@@ -68,7 +68,7 @@ This indicates a global identifier for an Application given a catalog.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.3.4.1
+MatterSpecification.v11.Cluster § 6.3.4.1
 
 #### Defined in
 

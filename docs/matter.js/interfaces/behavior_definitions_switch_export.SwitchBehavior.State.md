@@ -29,7 +29,7 @@ for example the "open" state of a rocker switch, or the "idle" state of a push b
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.5.2
+MatterSpecification.v11.Cluster § 1.11.5.2
 
 #### Inherited from
 
@@ -37,7 +37,7 @@ StateType.currentPosition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:361](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L361)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:360](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L360)
 
 ___
 
@@ -51,7 +51,7 @@ NumberOfPositions>2.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.5.1
+MatterSpecification.v11.Cluster § 1.11.5.1
 
 #### Inherited from
 
@@ -59,4 +59,4 @@ StateType.numberOfPositions
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:352](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L352)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:351](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L351)

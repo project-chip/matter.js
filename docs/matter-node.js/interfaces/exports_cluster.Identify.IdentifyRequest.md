@@ -8,7 +8,7 @@ Input to the Identify identify command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.6.1
+MatterSpecification.v11.Cluster § 1.2.6.1
 
 ## Hierarchy
 

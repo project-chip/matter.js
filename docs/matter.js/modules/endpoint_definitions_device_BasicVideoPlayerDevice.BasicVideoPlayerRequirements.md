@@ -27,11 +27,11 @@
 
 The AudioOutput cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [AudioOutputServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#audiooutputserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L113)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L112)
 
 ___
 
@@ -41,11 +41,11 @@ ___
 
 The Channel cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ChannelServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#channelserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L85)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L84)
 
 ___
 
@@ -55,11 +55,11 @@ ___
 
 The KeypadInput cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [KeypadInputServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#keypadinputserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L71)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L70)
 
 ___
 
@@ -69,11 +69,11 @@ ___
 
 The LowPower cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LowPowerServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#lowpowerserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L106)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L105)
 
 ___
 
@@ -83,11 +83,11 @@ ___
 
 The MediaInput cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [MediaInputServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#mediainputserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L99)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L98)
 
 ___
 
@@ -97,11 +97,11 @@ ___
 
 The MediaPlayback cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [MediaPlaybackServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#mediaplaybackserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L64)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L63)
 
 ___
 
@@ -111,11 +111,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#onoffserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L57)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L56)
 
 ___
 
@@ -125,11 +125,11 @@ ___
 
 The TargetNavigator cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TargetNavigatorServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#targetnavigatorserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L92)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L91)
 
 ___
 
@@ -139,11 +139,11 @@ ___
 
 The WakeOnLan cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [WakeOnLanServer](endpoint_definitions_device_BasicVideoPlayerDevice.BasicVideoPlayerRequirements.md#wakeonlanserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:78](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L78)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L77)
 
 ___
 
@@ -171,4 +171,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:118](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L118)
+[packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/BasicVideoPlayerDevice.ts#L117)

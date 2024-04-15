@@ -8,7 +8,7 @@ Input to the PulseWidthModulation move command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.2
+MatterSpecification.v11.Cluster § 1.6.6.2
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ The MoveMode field shall be one of the non-reserved values in Values of the Move
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.2.1
+MatterSpecification.v11.Cluster § 1.6.6.2.1
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.moveMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L91)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L90)
 
 ___
 
@@ -57,7 +57,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L104)
 
 ___
 
@@ -71,7 +71,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L105)
 
 ___
 
@@ -88,7 +88,7 @@ move at a variable rate, this field may be disregarded.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.2.2
+MatterSpecification.v11.Cluster § 1.6.6.2.2
 
 #### Inherited from
 
@@ -96,4 +96,4 @@ TypeFromSchema.rate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L103)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L102)

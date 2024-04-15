@@ -21,11 +21,11 @@
 
 The FixedLabel cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [FixedLabelServer](endpoint_definitions_device_GenericSwitchDevice.GenericSwitchRequirements.md#fixedlabelserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L47)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L46)
 
 ___
 
@@ -35,11 +35,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_GenericSwitchDevice.GenericSwitchRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L33)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L32)
 
 ___
 
@@ -49,11 +49,11 @@ ___
 
 The Switch cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [SwitchServer](endpoint_definitions_device_GenericSwitchDevice.GenericSwitchRequirements.md#switchserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L40)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L39)
 
 ___
 
@@ -75,4 +75,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L52)
+[packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/GenericSwitchDevice.ts#L51)

@@ -8,7 +8,7 @@ Input to the ContentLauncher launchUrl command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.2
+MatterSpecification.v11.Cluster § 6.7.4.2
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ given content.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.2.3
+MatterSpecification.v11.Cluster § 6.7.4.2.3
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ This shall indicate the URL of content to launch.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.2.1
+MatterSpecification.v11.Cluster § 6.7.4.2.1
 
 #### Inherited from
 
@@ -76,7 +76,7 @@ the given URL.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.2.2
+MatterSpecification.v11.Cluster § 6.7.4.2.2
 
 #### Inherited from
 

@@ -9,7 +9,7 @@ cluster-specific.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.4.1
+MatterSpecification.v11.Core § 11.1.4.1
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ CASE Sessions”.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.4.1.1
+MatterSpecification.v11.Core § 11.1.4.1.1
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ Transaction”.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.4.1.2
+MatterSpecification.v11.Core § 11.1.4.1.2
 
 #### Inherited from
 

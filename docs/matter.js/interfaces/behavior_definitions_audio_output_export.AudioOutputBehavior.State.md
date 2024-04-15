@@ -27,7 +27,7 @@ This field contains the value of the index field of the currently selected Outpu
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.3.2
+MatterSpecification.v11.Cluster § 6.5.3.2
 
 #### Inherited from
 
@@ -35,7 +35,7 @@ StateType.currentOutput
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:165](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L165)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:164](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L164)
 
 ___
 
@@ -47,7 +47,7 @@ This list provides the outputs supported by the device.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.3.1
+MatterSpecification.v11.Cluster § 6.5.3.1
 
 #### Inherited from
 
@@ -55,4 +55,4 @@ StateType.outputList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:158](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L157)

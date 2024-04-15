@@ -8,7 +8,7 @@ Body of the Switch longPress event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.3
+MatterSpecification.v11.Cluster § 1.11.7.3
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.newPosition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L86)

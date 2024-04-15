@@ -46,9 +46,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L108)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:107](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L107)
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:208](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L208)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L207)
 
 ___
 
@@ -98,11 +98,11 @@ used by its clients is not valid for more than 10 minutes.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.1
+MatterSpecification.v11.Cluster § 6.2.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L57)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L56)
 
 ___
 
@@ -115,11 +115,11 @@ account identified in the request does not match the active account of the runni
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.2
+MatterSpecification.v11.Cluster § 6.2.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L65)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L64)
 
 ___
 
@@ -165,11 +165,11 @@ its clients is not valid for more than 10 minutes.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.3
+MatterSpecification.v11.Cluster § 6.2.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L106)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L105)
 
 ## Variables
 
@@ -181,8 +181,8 @@ AccountLoginBehavior is the base class for objects that support interaction with
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginBehavior.ts#L23)

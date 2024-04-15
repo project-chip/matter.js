@@ -8,7 +8,7 @@ The LockDataType enum shall indicate the data type that is being or has changed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.9
+MatterSpecification.v11.Cluster § 5.2.6.9
 
 ## Table of contents
 

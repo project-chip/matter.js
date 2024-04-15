@@ -36,11 +36,11 @@
 
 The AccessControl cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [AccessControlServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#accesscontrolserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L96)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L95)
 
 ___
 
@@ -50,11 +50,11 @@ ___
 
 The AdministratorCommissioning cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [AdministratorCommissioningServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#administratorcommissioningserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L117)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L116)
 
 ___
 
@@ -64,11 +64,11 @@ ___
 
 The BasicInformation cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [BasicInformationServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#basicinformationserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L89)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L88)
 
 ___
 
@@ -78,11 +78,11 @@ ___
 
 The DiagnosticLogs cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [DiagnosticLogsServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#diagnosticlogsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:180](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L180)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:179](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L179)
 
 ___
 
@@ -92,11 +92,11 @@ ___
 
 The EthernetNetworkDiagnostics cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [EthernetNetworkDiagnosticsServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#ethernetnetworkdiagnosticsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:194](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L194)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:193](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L193)
 
 ___
 
@@ -106,11 +106,11 @@ ___
 
 The GeneralCommissioning cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GeneralCommissioningServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#generalcommissioningserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L110)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L109)
 
 ___
 
@@ -120,11 +120,11 @@ ___
 
 The GeneralDiagnostics cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GeneralDiagnosticsServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#generaldiagnosticsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:131](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L131)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L130)
 
 ___
 
@@ -134,11 +134,11 @@ ___
 
 The GroupKeyManagement cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupKeyManagementServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#groupkeymanagementserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L103)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L102)
 
 ___
 
@@ -148,11 +148,11 @@ ___
 
 The LocalizationConfiguration cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LocalizationConfigurationServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#localizationconfigurationserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L159)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L158)
 
 ___
 
@@ -162,11 +162,11 @@ ___
 
 The NetworkCommissioning cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [NetworkCommissioningServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#networkcommissioningserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L152)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L151)
 
 ___
 
@@ -176,11 +176,11 @@ ___
 
 The OperationalCredentials cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OperationalCredentialsServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#operationalcredentialsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L124)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L123)
 
 ___
 
@@ -190,11 +190,11 @@ ___
 
 The PowerSourceConfiguration cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [PowerSourceConfigurationServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#powersourceconfigurationserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L138)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L137)
 
 ___
 
@@ -204,11 +204,11 @@ ___
 
 The SoftwareDiagnostics cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [SoftwareDiagnosticsServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#softwarediagnosticsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:187](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L187)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L186)
 
 ___
 
@@ -218,11 +218,11 @@ ___
 
 The ThreadNetworkDiagnostics cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ThreadNetworkDiagnosticsServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#threadnetworkdiagnosticsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:208](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L208)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L207)
 
 ___
 
@@ -232,11 +232,11 @@ ___
 
 The TimeFormatLocalization cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TimeFormatLocalizationServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#timeformatlocalizationserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:166](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L166)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:165](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L165)
 
 ___
 
@@ -246,11 +246,11 @@ ___
 
 The TimeSync cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TimeSyncServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#timesyncserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:145](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L145)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L144)
 
 ___
 
@@ -260,11 +260,11 @@ ___
 
 The UnitLocalization cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [UnitLocalizationServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#unitlocalizationserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:173](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L173)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:172](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L172)
 
 ___
 
@@ -274,11 +274,11 @@ ___
 
 The WiFiNetworkDiagnostics cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [WiFiNetworkDiagnosticsServer](endpoint_definitions_system_RootEndpoint.RootRequirements.md#wifinetworkdiagnosticsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:201](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L201)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:200](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L200)
 
 ___
 
@@ -317,4 +317,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:213](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L213)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:212](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L212)

@@ -8,7 +8,7 @@ Body of the Switch multiPressComplete event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.7
+MatterSpecification.v11.Cluster § 1.11.7.7
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ TypeFromSchema.previousPosition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L42)
 
 ___
 
@@ -49,4 +49,4 @@ TypeFromSchema.totalNumberOfPressesCounted
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L43)

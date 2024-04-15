@@ -21,11 +21,11 @@
 
 The Binding cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [BindingServer](endpoint_definitions_system_BaseEndpoint.BaseRequirements.md#bindingserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L19)
+[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L19)
 
 ___
 
@@ -35,11 +35,11 @@ ___
 
 The FixedLabel cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [FixedLabelServer](endpoint_definitions_system_BaseEndpoint.BaseRequirements.md#fixedlabelserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L26)
+[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L26)
 
 ___
 
@@ -49,11 +49,11 @@ ___
 
 The UserLabel cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [UserLabelServer](endpoint_definitions_system_BaseEndpoint.BaseRequirements.md#userlabelserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L33)
+[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L33)
 
 ___
 
@@ -75,4 +75,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L38)
+[packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BaseEndpoint.ts#L38)

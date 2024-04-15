@@ -9,7 +9,7 @@ This field shall provide the fabric-unique index for the associated group key se
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4
+MatterSpecification.v11.Core § 11.2.6.4
 
 ## Hierarchy
 
@@ -42,7 +42,7 @@ epoch slot 0 of the given group key set. If EpochKey0 is not null, EpochStartTim
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4.2
+MatterSpecification.v11.Core § 11.2.6.4.2
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTim
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4.4
+MatterSpecification.v11.Core § 11.2.6.4.4
 
 #### Inherited from
 
@@ -84,7 +84,7 @@ epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTim
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4.6
+MatterSpecification.v11.Core § 11.2.6.4.6
 
 #### Inherited from
 
@@ -105,7 +105,7 @@ Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4.3
+MatterSpecification.v11.Core § 11.2.6.4.3
 
 #### Inherited from
 
@@ -126,7 +126,7 @@ Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4.5
+MatterSpecification.v11.Core § 11.2.6.4.5
 
 #### Inherited from
 
@@ -147,7 +147,7 @@ Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4.7
+MatterSpecification.v11.Core § 11.2.6.4.7
 
 #### Inherited from
 
@@ -176,7 +176,7 @@ PerGroupID.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4.8
+MatterSpecification.v11.Core § 11.2.6.4.8
 
 #### Inherited from
 
@@ -199,7 +199,7 @@ CacheAndSync in the GroupKeySecurityPolicy field shall fail with an INVALID_COMM
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.4.1
+MatterSpecification.v11.Core § 11.2.6.4.1
 
 #### Inherited from
 

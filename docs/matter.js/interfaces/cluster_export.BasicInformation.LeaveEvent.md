@@ -8,7 +8,7 @@ Body of the BasicInformation leave event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.6.3
+MatterSpecification.v11.Core § 11.1.6.3
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall contain the local Fabric Index of the fabric which the node is 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.6.3.1
+MatterSpecification.v11.Core § 11.1.6.3.1
 
 #### Inherited from
 
@@ -40,4 +40,4 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:144](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L144)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:143](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L143)

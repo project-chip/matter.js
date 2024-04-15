@@ -61,7 +61,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:62
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:69
 
 ## Properties
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:61
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:68
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:249
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:256
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:248
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:255
 
 ## Methods
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:58
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:65
 
 ___
 
@@ -211,7 +211,7 @@ Implements a send method with an automatic reconnection mechanism
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:64
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:71
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:202
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:209
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:65
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:72
 
 ___
 
@@ -296,7 +296,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:130
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:137
 
 ___
 
@@ -316,7 +316,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:244
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:251
 
 ___
 
@@ -336,7 +336,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:227
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:234
 
 ___
 

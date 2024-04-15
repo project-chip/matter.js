@@ -8,7 +8,7 @@ Input to the Scenes removeAllScenes command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.5
+MatterSpecification.v11.Cluster § 1.4.9.5
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.groupId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:203](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L203)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L202)

@@ -63,7 +63,7 @@ FeatureMap attribute. All other bits in ColorCapabilities shall be 0.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.18
+MatterSpecification.v11.Cluster § 3.2.7.18
 
 #### Inherited from
 
@@ -71,7 +71,7 @@ StateType.colorCapabilities
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1701](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1701)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1700](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1700)
 
 ___
 
@@ -88,7 +88,7 @@ Table 39. Values of the ColorMode Attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.9
+MatterSpecification.v11.Cluster § 3.2.7.9
 
 #### Inherited from
 
@@ -96,7 +96,7 @@ StateType.colorMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1396](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1396)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1395](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1395)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10
+MatterSpecification.v11.Cluster § 3.2.10
 
 #### Inherited from
 
@@ -114,7 +114,7 @@ StateType.colorPointBIntensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1672](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1672)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1671](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1671)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10
+MatterSpecification.v11.Cluster § 3.2.10
 
 #### Inherited from
 
@@ -132,7 +132,7 @@ StateType.colorPointBx
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1654](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1654)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1653](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1653)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10
+MatterSpecification.v11.Cluster § 3.2.10
 
 #### Inherited from
 
@@ -150,7 +150,7 @@ StateType.colorPointBy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1663](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1663)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1662](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1662)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10
+MatterSpecification.v11.Cluster § 3.2.10
 
 #### Inherited from
 
@@ -168,7 +168,7 @@ StateType.colorPointGIntensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1645](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1645)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1644](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1644)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10
+MatterSpecification.v11.Cluster § 3.2.10
 
 #### Inherited from
 
@@ -186,7 +186,7 @@ StateType.colorPointGx
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1627](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1627)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1626](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1626)
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10
+MatterSpecification.v11.Cluster § 3.2.10
 
 #### Inherited from
 
@@ -204,7 +204,7 @@ StateType.colorPointGy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1636](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1636)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1635](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1635)
 
 ___
 
@@ -221,7 +221,7 @@ A value of null shall indicate an invalid value.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.5
+MatterSpecification.v11.Cluster § 3.2.10.5
 
 #### Inherited from
 
@@ -229,7 +229,7 @@ StateType.colorPointRIntensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1618](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1618)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1617](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1617)
 
 ___
 
@@ -245,7 +245,7 @@ The value of x shall be related to the ColorPointRX attribute by the relationshi
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.3
+MatterSpecification.v11.Cluster § 3.2.10.3
 
 #### Inherited from
 
@@ -253,7 +253,7 @@ StateType.colorPointRx
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1587](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1587)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1586](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1586)
 
 ___
 
@@ -269,7 +269,7 @@ The value of y shall be related to the ColorPointRY attribute by the relationshi
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.4
+MatterSpecification.v11.Cluster § 3.2.10.4
 
 #### Inherited from
 
@@ -277,7 +277,7 @@ StateType.colorPointRy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1602](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1602)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1601](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1601)
 
 ___
 
@@ -291,7 +291,7 @@ compensate for color/intensity drift over time.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.7
+MatterSpecification.v11.Cluster § 3.2.7.7
 
 #### Inherited from
 
@@ -299,7 +299,7 @@ StateType.compensationText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1384](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1384)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1383](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1383)
 
 ___
 
@@ -313,7 +313,7 @@ DriftCompensation Attribute.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.6
+MatterSpecification.v11.Cluster § 3.2.7.6
 
 #### Inherited from
 
@@ -321,7 +321,7 @@ StateType.driftCompensation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1375](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1375)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1374](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1374)
 
 ___
 
@@ -339,7 +339,7 @@ value shall be copied to the EnhancedColorMode attribute.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.12
+MatterSpecification.v11.Cluster § 3.2.7.12
 
 #### Inherited from
 
@@ -347,7 +347,7 @@ StateType.enhancedColorMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1689](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1689)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1688](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1688)
 
 ___
 
@@ -365,7 +365,7 @@ optional.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8.1
+MatterSpecification.v11.Cluster § 3.2.8.1
 
 #### Inherited from
 
@@ -373,7 +373,7 @@ StateType.numberOfPrimaries
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1438](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1438)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1437](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1437)
 
 ___
 
@@ -403,7 +403,7 @@ these criteria are true:
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.10
+MatterSpecification.v11.Cluster § 3.2.7.10
 
 #### Inherited from
 
@@ -411,7 +411,7 @@ StateType.options
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1425](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1425)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1424](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1424)
 
 ___
 
@@ -427,7 +427,7 @@ A value of null shall indicate that this primary is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8.4
+MatterSpecification.v11.Cluster § 3.2.8.4
 
 #### Inherited from
 
@@ -435,7 +435,7 @@ StateType.primary1Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1471](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1471)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1470](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1470)
 
 ___
 
@@ -451,7 +451,7 @@ The value of x shall be related to the Primary1X attribute by the relationship x
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8.2
+MatterSpecification.v11.Cluster § 3.2.8.2
 
 #### Inherited from
 
@@ -459,7 +459,7 @@ StateType.primary1X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1449](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1449)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1448](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1448)
 
 ___
 
@@ -475,7 +475,7 @@ The value of y shall be related to the Primary1Y attribute by the relationship y
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8.3
+MatterSpecification.v11.Cluster § 3.2.8.3
 
 #### Inherited from
 
@@ -483,7 +483,7 @@ StateType.primary1Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1460](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1460)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1459](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1459)
 
 ___
 
@@ -493,7 +493,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8
+MatterSpecification.v11.Cluster § 3.2.8
 
 #### Inherited from
 
@@ -501,7 +501,7 @@ StateType.primary2Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1486](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1486)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1485](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1485)
 
 ___
 
@@ -511,7 +511,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8
+MatterSpecification.v11.Cluster § 3.2.8
 
 #### Inherited from
 
@@ -519,7 +519,7 @@ StateType.primary2X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1476](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1476)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1475](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1475)
 
 ___
 
@@ -529,7 +529,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8
+MatterSpecification.v11.Cluster § 3.2.8
 
 #### Inherited from
 
@@ -537,7 +537,7 @@ StateType.primary2Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1481](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1481)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1480](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1480)
 
 ___
 
@@ -547,7 +547,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8
+MatterSpecification.v11.Cluster § 3.2.8
 
 #### Inherited from
 
@@ -555,7 +555,7 @@ StateType.primary3Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1501](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1501)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1500](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1500)
 
 ___
 
@@ -565,7 +565,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8
+MatterSpecification.v11.Cluster § 3.2.8
 
 #### Inherited from
 
@@ -573,7 +573,7 @@ StateType.primary3X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1491](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1491)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1490](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1490)
 
 ___
 
@@ -583,7 +583,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8
+MatterSpecification.v11.Cluster § 3.2.8
 
 #### Inherited from
 
@@ -591,7 +591,7 @@ StateType.primary3Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1496](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1496)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1495](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1495)
 
 ___
 
@@ -601,7 +601,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -609,7 +609,7 @@ StateType.primary4Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1516](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1516)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1515](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1515)
 
 ___
 
@@ -619,7 +619,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -627,7 +627,7 @@ StateType.primary4X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1506](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1506)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1505](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1505)
 
 ___
 
@@ -637,7 +637,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -645,7 +645,7 @@ StateType.primary4Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1511](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1511)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1510](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1510)
 
 ___
 
@@ -655,7 +655,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -663,7 +663,7 @@ StateType.primary5Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1531](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1531)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1530](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1530)
 
 ___
 
@@ -673,7 +673,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -681,7 +681,7 @@ StateType.primary5X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1521](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1521)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1520](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1520)
 
 ___
 
@@ -691,7 +691,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -699,7 +699,7 @@ StateType.primary5Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1526](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1526)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1525](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1525)
 
 ___
 
@@ -709,7 +709,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -717,7 +717,7 @@ StateType.primary6Intensity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1546](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1546)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1545](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1545)
 
 ___
 
@@ -727,7 +727,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -735,7 +735,7 @@ StateType.primary6X
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1536](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1536)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1535](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1535)
 
 ___
 
@@ -745,7 +745,7 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9
+MatterSpecification.v11.Cluster § 3.2.9
 
 #### Inherited from
 
@@ -753,7 +753,7 @@ StateType.primary6Y
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1541](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1541)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1540](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1540)
 
 ___
 
@@ -766,7 +766,7 @@ command will be complete.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.3
+MatterSpecification.v11.Cluster § 3.2.7.3
 
 #### Inherited from
 
@@ -774,7 +774,7 @@ StateType.remainingTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1366](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1366)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1365](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1365)
 
 ___
 
@@ -790,7 +790,7 @@ The value of x shall be related to the WhitePointX attribute by the relationship
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.1
+MatterSpecification.v11.Cluster § 3.2.10.1
 
 #### Inherited from
 
@@ -798,7 +798,7 @@ StateType.whitePointX
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1557](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1557)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1556](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1556)
 
 ___
 
@@ -814,7 +814,7 @@ The value of y shall be related to the WhitePointY attribute by the relationship
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.2
+MatterSpecification.v11.Cluster § 3.2.10.2
 
 #### Inherited from
 
@@ -822,4 +822,4 @@ StateType.whitePointY
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1572](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1572)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1571](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1571)

@@ -8,7 +8,7 @@ These are optional features supported by KeypadInputCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.8.2
+MatterSpecification.v11.Cluster § 6.8.2
 
 ## Table of contents
 

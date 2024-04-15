@@ -8,7 +8,7 @@ Input to the Channel skipChannel command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.4
+MatterSpecification.v11.Cluster § 6.6.4.4
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ current channel.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.4.1
+MatterSpecification.v11.Cluster § 6.6.4.4.1
 
 #### Inherited from
 

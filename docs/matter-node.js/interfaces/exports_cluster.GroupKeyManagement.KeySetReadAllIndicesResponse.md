@@ -16,7 +16,7 @@ Each entry in GroupKeySetIDs is a GroupKeySetID field.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.8.6
+MatterSpecification.v11.Core § 11.2.8.6
 
 ## Hierarchy
 

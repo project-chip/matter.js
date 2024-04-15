@@ -41,7 +41,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:35
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:36
 
 ## Properties
 
@@ -51,7 +51,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:35
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:33
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:34
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:34
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:35
 
 ## Methods
 
@@ -79,7 +79,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:34
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:43
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:36
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:37
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:41
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:42
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:37
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:38
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:39
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:40
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:39
 
 ___
 
@@ -203,4 +203,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:40
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:41

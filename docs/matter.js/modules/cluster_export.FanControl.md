@@ -45,10 +45,10 @@ These elements and properties are present in all FanControl clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `fanMode`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>  } | - |
-| `attributes.fanMode` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> | This attribute shall indicate the current speed mode of the fan. This attribute may be written by the client to indicate a new speed mode of the fan. This attribute shall be set to one of the values in the table below. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.1 |
-| `attributes.fanModeSequence` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> | This indicates the fan speed ranges that shall be supported. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.2 |
-| `attributes.percentCurrent` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> | This attribute shall indicate the actual currently operating fan speed, or zero to indicate that the fan is off. See Section 4.4.6.3.1 for more details. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.4 |
-| `attributes.percentSetting` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\> | This attribute shall indicate the speed setting for the fan. This attribute may be written by the client to indicate a new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. If this is set to 0, the server shall set the FanMode attribute value to Off. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.3 |
+| `attributes.fanMode` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanMode`](../enums/cluster_export.FanControl.FanMode.md), `any`\> | This attribute shall indicate the current speed mode of the fan. This attribute may be written by the client to indicate a new speed mode of the fan. This attribute shall be set to one of the values in the table below. **`See`** MatterSpecification.v11.Cluster § 4.4.6.1 |
+| `attributes.fanModeSequence` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`FanModeSequence`](../enums/cluster_export.FanControl.FanModeSequence.md), `any`\> | This indicates the fan speed ranges that shall be supported. **`See`** MatterSpecification.v11.Cluster § 4.4.6.2 |
+| `attributes.percentCurrent` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> | This attribute shall indicate the actual currently operating fan speed, or zero to indicate that the fan is off. See Section 4.4.6.3.1 for more details. **`See`** MatterSpecification.v11.Cluster § 4.4.6.4 |
+| `attributes.percentSetting` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\> | This attribute shall indicate the speed setting for the fan. This attribute may be written by the client to indicate a new fan speed. If the client writes null to this attribute, the attribute value shall NOT change. If this is set to 0, the server shall set the FanMode attribute value to Off. **`See`** MatterSpecification.v11.Cluster § 4.4.6.3 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `speedCurrent`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `speedMax`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `speedSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\>  }  } = MultiSpeedComponent; `flags`: \{ `multiSpeed`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `rockSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `rockSupport`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `rockLeftRight`: [`BitFlag`](schema_export.md#bitflag) ; `rockRound`: [`BitFlag`](schema_export.md#bitflag) ; `rockUpDown`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\>  }  } = RockingComponent; `flags`: \{ `rocking`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `windSetting`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `windSupport`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `naturalWind`: [`BitFlag`](schema_export.md#bitflag) ; `sleepWind`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\>  }  } = WindComponent; `flags`: \{ `wind`: ``true`` = true }  }] | This metadata controls which FanControlCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `auto`: [`BitFlag`](schema_export.md#bitflag) ; `multiSpeed`: [`BitFlag`](schema_export.md#bitflag) ; `rocking`: [`BitFlag`](schema_export.md#bitflag) ; `wind`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.auto` | [`BitFlag`](schema_export.md#bitflag) | Auto Automatic mode supported for fan speed |
@@ -61,7 +61,7 @@ These elements and properties are present in all FanControl clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:270](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L270)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:269](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L269)
 
 ___
 
@@ -71,9 +71,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:370](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L370)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:369](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L369)
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:372](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L372)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:371](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L371)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:358](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L358)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:357](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L357)
 
 ___
 
@@ -97,9 +97,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:410](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L410)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:409](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L409)
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:412](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L412)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:411](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L411)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:380](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L380)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:379](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L379)
 
 ___
 
@@ -134,7 +134,7 @@ A FanControlCluster supports these elements if it supports feature MultiSpeed.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:136](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:135](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L135)
 
 ___
 
@@ -146,7 +146,7 @@ The value of the FanControl rockSetting attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.9
+MatterSpecification.v11.Cluster § 4.4.6.9
 
 #### Type declaration
 
@@ -158,7 +158,7 @@ The value of the FanControl rockSetting attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L30)
 
 ___
 
@@ -170,7 +170,7 @@ The value of the FanControl rockSupport attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.8
+MatterSpecification.v11.Cluster § 4.4.6.8
 
 #### Type declaration
 
@@ -182,7 +182,7 @@ The value of the FanControl rockSupport attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L23)
 
 ___
 
@@ -202,7 +202,7 @@ A FanControlCluster supports these elements if it supports feature Rocking.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:169](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:168](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L168)
 
 ___
 
@@ -222,7 +222,7 @@ A FanControlCluster supports these elements if it supports feature Wind.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:202](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:201](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L201)
 
 ___
 
@@ -234,7 +234,7 @@ The value of the FanControl windSetting attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.11
+MatterSpecification.v11.Cluster § 4.4.6.11
 
 #### Type declaration
 
@@ -245,7 +245,7 @@ The value of the FanControl windSetting attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L44)
 
 ___
 
@@ -257,7 +257,7 @@ The value of the FanControl windSupport attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.10
+MatterSpecification.v11.Cluster § 4.4.6.10
 
 #### Type declaration
 
@@ -268,4 +268,4 @@ The value of the FanControl windSupport attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L37)

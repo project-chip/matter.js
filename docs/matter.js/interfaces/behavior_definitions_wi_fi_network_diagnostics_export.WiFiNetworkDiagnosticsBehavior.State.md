@@ -31,7 +31,7 @@ The BSSID attribute shall indicate the BSSID for which the Wi-Fi network the Nod
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.1
+MatterSpecification.v11.Core § 11.14.6.1
 
 #### Inherited from
 
@@ -39,7 +39,7 @@ StateType.bssid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:364](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L364)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:363](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L363)
 
 ___
 
@@ -52,7 +52,7 @@ on.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.4
+MatterSpecification.v11.Core § 11.14.6.4
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ StateType.channelNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:387](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L387)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:386](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L386)
 
 ___
 
@@ -73,7 +73,7 @@ bits-per-second.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.12
+MatterSpecification.v11.Core § 11.14.6.12
 
 #### Inherited from
 
@@ -81,7 +81,7 @@ StateType.currentMaxRate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:406](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L406)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:405](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L405)
 
 ___
 
@@ -93,7 +93,7 @@ The RSSI attribute shall indicate the current RSSI of the Node’s Wi-Fi radio i
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.5
+MatterSpecification.v11.Core § 11.14.6.5
 
 #### Inherited from
 
@@ -101,7 +101,7 @@ StateType.rssi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:394](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L394)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:393](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L393)
 
 ___
 
@@ -113,7 +113,7 @@ The SecurityType attribute shall indicate the current type of Wi-Fi security use
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.2
+MatterSpecification.v11.Core § 11.14.6.2
 
 #### Inherited from
 
@@ -121,7 +121,7 @@ StateType.securityType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:371](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:370](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L370)
 
 ___
 
@@ -134,7 +134,7 @@ table below.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.6.3
+MatterSpecification.v11.Core § 11.14.6.3
 
 #### Inherited from
 
@@ -142,4 +142,4 @@ StateType.wiFiVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:379](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L379)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:378](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L378)

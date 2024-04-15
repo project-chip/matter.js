@@ -8,7 +8,7 @@ Input to the Channel changeChannelByNumber command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.4.3
+MatterSpecification.v11.Cluster § 6.6.4.3
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate the channel major number value (ATSC format) to which the ch
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.4.3.1
+MatterSpecification.v11.Cluster § 6.6.4.3.1
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.majorNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:206](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L206)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:205](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L205)
 
 ___
 
@@ -53,7 +53,7 @@ This shall indicate the channel minor number value (ATSC format) to which the ch
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.4.3.2
+MatterSpecification.v11.Cluster § 6.6.4.3.2
 
 #### Inherited from
 
@@ -61,4 +61,4 @@ TypeFromSchema.minorNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:213](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L213)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:212](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L212)

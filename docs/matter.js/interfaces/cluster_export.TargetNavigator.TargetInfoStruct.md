@@ -8,7 +8,7 @@ This indicates an object describing the navigable target.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.5.1
+MatterSpecification.v11.Cluster § 6.11.5.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ An unique id within the TargetList.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.5.1.1
+MatterSpecification.v11.Cluster § 6.11.5.1.1
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.identifier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L32)
 
 ___
 
@@ -53,7 +53,7 @@ A name string for the TargetInfoStruct.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.5.1.2
+MatterSpecification.v11.Cluster § 6.11.5.1.2
 
 #### Inherited from
 
@@ -61,4 +61,4 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L39)

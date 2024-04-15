@@ -28,6 +28,7 @@
 - [lifecycle](internal_.Diagnostic.md#lifecycle)
 - [lifecycleList](internal_.Diagnostic.md#lifecyclelist)
 - [list](internal_.Diagnostic.md#list)
+- [node](internal_.Diagnostic.md#node)
 - [prefixError](internal_.Diagnostic.md#prefixerror)
 - [squash](internal_.Diagnostic.md#squash)
 - [strong](internal_.Diagnostic.md#strong)
@@ -81,7 +82,7 @@ Create a K/V map that presents with formatted keys.
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:76
+matter.js/dist/esm/log/Diagnostic.d.ts:84
 
 ___
 
@@ -97,7 +98,7 @@ Create a diagnostic that renders as elapsed time since creation.
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:102
+matter.js/dist/esm/log/Diagnostic.d.ts:110
 
 ___
 
@@ -119,7 +120,7 @@ Create a Diagnostic for an error.
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:80
+matter.js/dist/esm/log/Diagnostic.d.ts:88
 
 ___
 
@@ -141,7 +142,7 @@ Convert an interval to text.
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:98
+matter.js/dist/esm/log/Diagnostic.d.ts:106
 
 ___
 
@@ -164,7 +165,7 @@ Create a diagnostic with a specific Lifecycle.
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:85
+matter.js/dist/esm/log/Diagnostic.d.ts:93
 
 ___
 
@@ -186,7 +187,7 @@ Create a diagnostic for a [Lifecycle.Map](internal_.md#map).
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:89
+matter.js/dist/esm/log/Diagnostic.d.ts:97
 
 ___
 
@@ -208,7 +209,34 @@ Create a value presenting as a list of separate lines.
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:68
+matter.js/dist/esm/log/Diagnostic.d.ts:76
+
+___
+
+### node
+
+▸ **node**(`icon`, `label`, `detail`): `unknown`[]
+
+A node in a diagnostic tree.  Top-level diagnostic sources registered with DiagnosticSource should present as
+nodes.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `icon` | `string` |
+| `label` | `unknown` |
+| `detail` | `Object` |
+| `detail.children?` | `unknown`[] |
+| `detail.self?` | `unknown` |
+
+#### Returns
+
+`unknown`[]
+
+#### Defined in
+
+matter.js/dist/esm/log/Diagnostic.d.ts:69
 
 ___
 
@@ -229,7 +257,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:81
+matter.js/dist/esm/log/Diagnostic.d.ts:89
 
 ___
 
@@ -251,7 +279,7 @@ Create a value presenting as segments of the same string without intervening spa
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:72
+matter.js/dist/esm/log/Diagnostic.d.ts:80
 
 ___
 
@@ -302,7 +330,7 @@ Upgrade a value to support specialized diagnostic rendering.
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:106
+matter.js/dist/esm/log/Diagnostic.d.ts:114
 
 ___
 

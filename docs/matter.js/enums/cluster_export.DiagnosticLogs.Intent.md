@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.10.4.1
+MatterSpecification.v11.Core § 11.10.4.1
 
 ## Table of contents
 
@@ -29,11 +29,11 @@ Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.10.4.1.3
+MatterSpecification.v11.Core § 11.10.4.1.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L52)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L51)
 
 ___
 
@@ -48,11 +48,11 @@ support to an end-user.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.10.4.1.1
+MatterSpecification.v11.Core § 11.10.4.1.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L31)
 
 ___
 
@@ -67,8 +67,8 @@ currently commissioned (and/or connected) or has previously been commissioned (a
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.10.4.1.2
+MatterSpecification.v11.Core § 11.10.4.1.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L41)

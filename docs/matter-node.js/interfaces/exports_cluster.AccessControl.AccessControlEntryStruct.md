@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.5
+MatterSpecification.v11.Core § 9.10.4.5
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ The AuthMode field shall specify the authentication mode required by this Access
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.5.2
+MatterSpecification.v11.Core § 9.10.4.5.2
 
 #### Inherited from
 
@@ -89,7 +89,7 @@ auth mode.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.5.1
+MatterSpecification.v11.Core § 9.10.4.5.1
 
 #### Inherited from
 
@@ -139,7 +139,7 @@ Cluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.5.3
+MatterSpecification.v11.Core § 9.10.4.5.3
 
 #### Inherited from
 
@@ -175,7 +175,7 @@ on all endpoints on this Node.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.5.4
+MatterSpecification.v11.Core § 9.10.4.5.4
 
 #### Inherited from
 

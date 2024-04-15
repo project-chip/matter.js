@@ -22,11 +22,11 @@
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_OccupancySensorDevice.OccupancySensorRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L47)
+[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L46)
 
 ___
 
@@ -36,11 +36,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_OccupancySensorDevice.OccupancySensorRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L33)
+[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L32)
 
 ___
 
@@ -50,11 +50,11 @@ ___
 
 The OccupancySensing cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OccupancySensingServer](endpoint_definitions_device_OccupancySensorDevice.OccupancySensorRequirements.md#occupancysensingserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L40)
+[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L39)
 
 ___
 
@@ -74,7 +74,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L57)
+[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L56)
 
 ___
 
@@ -94,4 +94,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L52)
+[packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OccupancySensorDevice.ts#L51)

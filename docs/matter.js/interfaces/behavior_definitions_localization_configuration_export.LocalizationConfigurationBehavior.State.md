@@ -33,7 +33,7 @@ CONSTRAINT_ERROR error.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.3.4.1
+MatterSpecification.v11.Core § 11.3.4.1
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ StateType.activeLocale
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L37)
 
 ___
 
@@ -55,7 +55,7 @@ the list SHOULD NOT express any meaning.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.3.4.2
+MatterSpecification.v11.Core § 11.3.4.2
 
 #### Inherited from
 
@@ -63,4 +63,4 @@ StateType.supportedLocales
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L50)

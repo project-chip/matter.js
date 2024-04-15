@@ -27,7 +27,7 @@ This optional field contains the current channel. When supported but a channel i
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.3.3
+MatterSpecification.v11.Cluster § 6.6.3.3
 
 #### Inherited from
 
@@ -35,4 +35,4 @@ StateType.currentChannel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:346](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L346)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:345](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L345)

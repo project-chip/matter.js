@@ -45,9 +45,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L29)
+[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L28)
 
-[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L50)
+[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L49)
 
 ___
 
@@ -62,11 +62,11 @@ the actual device to which the output connects.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.4.2
+MatterSpecification.v11.Cluster § 6.5.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L27)
+[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L26)
 
 ___
 
@@ -76,11 +76,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.4
+MatterSpecification.v11.Cluster § 6.5.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L17)
+[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputInterface.ts#L16)
 
 ## Variables
 
@@ -95,8 +95,8 @@ AudioOutputBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/audio-output/AudioOutputBehavior.ts#L26)

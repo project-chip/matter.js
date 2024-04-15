@@ -8,7 +8,7 @@ This object defines inputs to a search for content for display or playback.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.2
+MatterSpecification.v11.Cluster § 6.7.5.2
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ as [{Actor: 'Tom Cruise'}, {Type: 'Movie'}, {Genre: 'Action'}]
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.2.1
+MatterSpecification.v11.Cluster § 6.7.5.2.1
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ Input to the Scenes copyScene command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.11
+MatterSpecification.v11.Cluster § 1.4.9.11
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ Table.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.11.2
+MatterSpecification.v11.Cluster § 1.4.9.11.2
 
 #### Inherited from
 
@@ -46,7 +46,7 @@ TypeFromSchema.groupIdentifierFrom
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:380](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L380)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:379](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L379)
 
 ___
 
@@ -60,7 +60,7 @@ Table.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.11.4
+MatterSpecification.v11.Cluster § 1.4.9.11.4
 
 #### Inherited from
 
@@ -68,7 +68,7 @@ TypeFromSchema.groupIdentifierTo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:398](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L398)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:397](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L397)
 
 ___
 
@@ -85,7 +85,7 @@ shall be ignored. Otherwise this field is set to 0.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.11.1
+MatterSpecification.v11.Cluster § 1.4.9.11.1
 
 #### Inherited from
 
@@ -93,7 +93,7 @@ TypeFromSchema.mode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:371](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:370](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L370)
 
 ___
 
@@ -107,7 +107,7 @@ Table.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.11.3
+MatterSpecification.v11.Cluster § 1.4.9.11.3
 
 #### Inherited from
 
@@ -115,7 +115,7 @@ TypeFromSchema.sceneIdentifierFrom
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:389](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L389)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:388](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L388)
 
 ___
 
@@ -129,7 +129,7 @@ Table.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.11.5
+MatterSpecification.v11.Cluster § 1.4.9.11.5
 
 #### Inherited from
 
@@ -137,4 +137,4 @@ TypeFromSchema.sceneIdentifierTo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:407](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L407)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:406](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L406)

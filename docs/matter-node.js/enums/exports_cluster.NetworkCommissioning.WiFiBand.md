@@ -9,7 +9,7 @@ WiFiInterfaceScanResultStruct.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.2
+MatterSpecification.v11.Core § 11.8.5.2
 
 ## Table of contents
 

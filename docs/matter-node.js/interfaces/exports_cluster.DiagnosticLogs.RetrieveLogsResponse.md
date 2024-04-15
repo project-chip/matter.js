@@ -9,7 +9,7 @@ following.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.2
+MatterSpecification.v11.Core § 11.10.5.2
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ requested and the Status field has a value of Success.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.2.2
+MatterSpecification.v11.Core § 11.10.5.2.2
 
 #### Inherited from
 
@@ -58,7 +58,7 @@ This field shall indicate the result of an attempt to retrieve diagnostic logs.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.2.1
+MatterSpecification.v11.Core § 11.10.5.2.1
 
 #### Inherited from
 
@@ -80,7 +80,7 @@ transferred represented by the number of microseconds since the last time the No
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.2.4
+MatterSpecification.v11.Core § 11.10.5.2.4
 
 #### Inherited from
 
@@ -102,7 +102,7 @@ entry in the diagnostic logs that are being transferred.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.2.3
+MatterSpecification.v11.Core § 11.10.5.2.3
 
 #### Inherited from
 

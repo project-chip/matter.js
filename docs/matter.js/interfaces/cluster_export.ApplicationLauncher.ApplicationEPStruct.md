@@ -8,7 +8,7 @@ This specifies an app along with its corresponding endpoint.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.5.3
+MatterSpecification.v11.Cluster § 6.4.5.3
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ TypeFromSchema.application
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L64)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L63)
 
 ___
 
@@ -49,4 +49,4 @@ TypeFromSchema.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L64)

@@ -10,7 +10,7 @@ This value implicitly grants View privileges
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.2
+MatterSpecification.v11.Core § 9.10.4.2
 
 ## Table of contents
 
@@ -34,7 +34,7 @@ This value implicitly grants Manage, Operate, Proxy View & View privileges
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.2.3
+MatterSpecification.v11.Core § 9.10.4.2.3
 
 #### Defined in
 
@@ -52,7 +52,7 @@ This value implicitly grants Operate & View privileges
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.2.2
+MatterSpecification.v11.Core § 9.10.4.2.2
 
 #### Defined in
 
@@ -70,7 +70,7 @@ This value implicitly grants View privileges
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.2.1
+MatterSpecification.v11.Core § 9.10.4.2.1
 
 #### Defined in
 

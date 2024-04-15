@@ -10,7 +10,7 @@ assumptions.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.4
+MatterSpecification.v11.Core § 11.16.6.4
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ TypeFromSchema.offset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L75)
 
 ___
 
@@ -50,7 +50,7 @@ The UTC time when the offset shall be applied.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.4.1
+MatterSpecification.v11.Core § 11.16.6.4.1
 
 #### Inherited from
 
@@ -58,7 +58,7 @@ TypeFromSchema.validStarting
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L83)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L82)
 
 ___
 
@@ -71,7 +71,7 @@ time.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.4.2
+MatterSpecification.v11.Core § 11.16.6.4.2
 
 #### Inherited from
 
@@ -79,4 +79,4 @@ TypeFromSchema.validUntil
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L91)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L90)

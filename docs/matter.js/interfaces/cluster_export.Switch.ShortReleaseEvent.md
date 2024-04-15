@@ -8,7 +8,7 @@ Body of the Switch shortRelease event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.4
+MatterSpecification.v11.Cluster § 1.11.7.4
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.previousPosition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L115)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:114](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L114)

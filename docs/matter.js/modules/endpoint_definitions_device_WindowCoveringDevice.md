@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts#L28)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts#L27)
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts#L76)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts#L75)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts#L68)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringDevice.ts#L67)

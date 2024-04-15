@@ -8,7 +8,7 @@ The value of Identify.effectIdentifier
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.6.3.1
+MatterSpecification.v11.Cluster § 1.2.6.3.1
 
 ## Table of contents
 

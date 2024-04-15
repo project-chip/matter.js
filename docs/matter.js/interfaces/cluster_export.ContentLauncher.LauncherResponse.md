@@ -10,7 +10,7 @@ WARNING TODO: Data in table above needs a max size
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.3
+MatterSpecification.v11.Cluster § 6.7.4.3
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.3.2
+MatterSpecification.v11.Cluster § 6.7.4.3.2
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.data
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:287](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L287)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:286](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L286)
 
 ___
 
@@ -55,7 +55,7 @@ This shall indicate the status of the command which resulted in this response.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.3.1
+MatterSpecification.v11.Cluster § 6.7.4.3.1
 
 #### Inherited from
 
@@ -63,4 +63,4 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:280](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L280)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:279](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L279)

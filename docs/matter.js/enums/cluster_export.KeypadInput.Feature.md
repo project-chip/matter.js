@@ -8,7 +8,7 @@ These are optional features supported by KeypadInputCluster.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.2
+MatterSpecification.v11.Cluster § 6.8.2
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ Supports CEC keys 0x0A (Settings) and 0x09 (Home)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:189](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L189)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:188](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L188)
 
 ___
 
@@ -44,7 +44,7 @@ Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:182](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L182)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:181](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L181)
 
 ___
 
@@ -58,4 +58,4 @@ Supports numeric input 0..9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:196](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:195](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L195)

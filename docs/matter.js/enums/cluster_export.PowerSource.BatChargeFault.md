@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.5.3
+MatterSpecification.v11.Core § 11.7.5.3
 
 ## Table of contents
 
@@ -34,7 +34,7 @@ The Node detects the ambient temperature is below the nominal range for this bat
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:800](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L800)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:799](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L799)
 
 ___
 
@@ -46,7 +46,7 @@ The Node detects the ambient temperature is above the nominal range for this bat
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:795](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L795)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:794](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L794)
 
 ___
 
@@ -58,7 +58,7 @@ The Node detects this battery source is not present.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:815](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L815)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:814](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L814)
 
 ___
 
@@ -70,7 +70,7 @@ The Node detects this battery source is over voltage.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:820](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L820)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:819](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L819)
 
 ___
 
@@ -82,7 +82,7 @@ The Node detects the temperature of this battery source is below the nominal ran
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:810](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L810)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:809](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L809)
 
 ___
 
@@ -94,7 +94,7 @@ The Node detects the temperature of this battery source is above the nominal ran
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:805](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L805)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:804](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L804)
 
 ___
 
@@ -106,7 +106,7 @@ The Node detects this battery source is under voltage.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:825](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L825)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:824](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L824)
 
 ___
 
@@ -118,7 +118,7 @@ The Node detects the charger for this battery source is over voltage.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:830](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L830)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:829](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L829)
 
 ___
 
@@ -130,7 +130,7 @@ The Node detects the charger for this battery source is under voltage.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:835](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L835)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:834](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L834)
 
 ___
 
@@ -142,7 +142,7 @@ The Node detects a charging safety timeout for this battery source.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:840](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L840)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:839](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L839)
 
 ___
 
@@ -154,4 +154,4 @@ The Node detects an unspecified fault on this battery source.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:790](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L790)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:789](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L789)

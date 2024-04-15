@@ -8,7 +8,7 @@ Input to the NetworkCommissioning addOrUpdateThreadNetwork command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.4
+MatterSpecification.v11.Core § 11.8.7.4
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:648](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L648)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:647](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L647)
 
 ___
 
@@ -53,7 +53,7 @@ See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.4.1
+MatterSpecification.v11.Core § 11.8.7.4.1
 
 #### Inherited from
 
@@ -61,4 +61,4 @@ TypeFromSchema.operationalDataset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:646](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L646)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:645](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L645)

@@ -8,7 +8,7 @@ Input to the Groups removeGroup command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.4
+MatterSpecification.v11.Cluster § 1.3.7.4
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.groupId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:188](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L188)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:187](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L187)

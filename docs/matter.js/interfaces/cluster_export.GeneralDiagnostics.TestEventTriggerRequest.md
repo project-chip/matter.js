@@ -8,7 +8,7 @@ Input to the GeneralDiagnostics testEventTrigger command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.7.1
+MatterSpecification.v11.Core § 11.11.7.1
 
 ## Hierarchy
 
@@ -46,7 +46,7 @@ value configured on the device.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.7.1.1
+MatterSpecification.v11.Core § 11.11.7.1.1
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ TypeFromSchema.enableKey
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:333](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L333)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L332)
 
 ___
 
@@ -85,7 +85,7 @@ EventTrigger values.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.7.1.2
+MatterSpecification.v11.Core § 11.11.7.1.2
 
 #### Inherited from
 
@@ -93,4 +93,4 @@ TypeFromSchema.eventTrigger
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:359](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L359)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:358](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L358)

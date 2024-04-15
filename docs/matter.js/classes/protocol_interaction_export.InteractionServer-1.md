@@ -15,6 +15,7 @@ Translates interactions from the Matter protocol to Matter.js APIs.
 ## Implements
 
 - [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\>
+- [`InteractionRecipient`](../interfaces/protocol_interaction_export.InteractionRecipient.md)
 
 ## Table of contents
 
@@ -30,6 +31,10 @@ Translates interactions from the Matter protocol to Matter.js APIs.
 - [#nextSubscriptionId](protocol_interaction_export.InteractionServer-1.md##nextsubscriptionid)
 - [#subscriptionConfig](protocol_interaction_export.InteractionServer-1.md##subscriptionconfig)
 - [#subscriptionMap](protocol_interaction_export.InteractionServer-1.md##subscriptionmap)
+
+### Accessors
+
+- [isClosing](protocol_interaction_export.InteractionServer-1.md#isclosing)
 
 ### Methods
 
@@ -63,7 +68,7 @@ Translates interactions from the Matter protocol to Matter.js APIs.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:140](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L140)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:141](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L141)
 
 ## Properties
 
@@ -73,7 +78,7 @@ Translates interactions from the Matter protocol to Matter.js APIs.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L133)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:134](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L134)
 
 ___
 
@@ -83,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L138)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:139](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L139)
 
 ___
 
@@ -93,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:136](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L136)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L137)
 
 ___
 
@@ -103,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:134](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L134)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:135](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L135)
 
 ___
 
@@ -113,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:137](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L137)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:138](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L138)
 
 ___
 
@@ -123,7 +128,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:135](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L135)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L136)
+
+## Accessors
+
+### isClosing
+
+• `get` **isClosing**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L157)
 
 ## Methods
 
@@ -141,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1040](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1040)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1034](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1034)
 
 ___
 
@@ -159,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L152)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:153](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L153)
 
 ___
 
@@ -179,9 +198,13 @@ ___
 
 `Promise`\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeResponses`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `command`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `commandFields`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `commandPath`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<...\>  }\>\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `commandPath`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<...\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<...\>  }\>\>  }\>[]\> ; `suppressResponse`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\>  }\>\>
 
+#### Implementation of
+
+[InteractionRecipient](../interfaces/protocol_interaction_export.InteractionRecipient.md).[handleInvokeRequest](../interfaces/protocol_interaction_export.InteractionRecipient.md#handleinvokerequest)
+
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:828](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L828)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:822](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L822)
 
 ___
 
@@ -201,9 +224,13 @@ ___
 
 `Promise`\<[`DataReportPayload`](../modules/protocol_interaction_export.md#datareportpayload)\>
 
+#### Implementation of
+
+[InteractionRecipient](../interfaces/protocol_interaction_export.InteractionRecipient.md).[handleReadRequest](../interfaces/protocol_interaction_export.InteractionRecipient.md#handlereadrequest)
+
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:168](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L168)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:168](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L168)
 
 ___
 
@@ -224,9 +251,13 @@ ___
 
 `Promise`\<`void`\>
 
+#### Implementation of
+
+[InteractionRecipient](../interfaces/protocol_interaction_export.InteractionRecipient.md).[handleSubscribeRequest](../interfaces/protocol_interaction_export.InteractionRecipient.md#handlesubscriberequest)
+
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:676](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L676)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:670](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L670)
 
 ___
 
@@ -245,9 +276,13 @@ ___
 
 `void`
 
+#### Implementation of
+
+[InteractionRecipient](../interfaces/protocol_interaction_export.InteractionRecipient.md).[handleTimedRequest](../interfaces/protocol_interaction_export.InteractionRecipient.md#handletimedrequest)
+
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1028](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1028)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1022](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1022)
 
 ___
 
@@ -267,22 +302,26 @@ ___
 
 `Promise`\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `writeResponses`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<...\>  }\>\>  }\>[]\>  }\>\>
 
+#### Implementation of
+
+[InteractionRecipient](../interfaces/protocol_interaction_export.InteractionRecipient.md).[handleWriteRequest](../interfaces/protocol_interaction_export.InteractionRecipient.md#handlewriterequest)
+
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:397](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L397)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:397](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L397)
 
 ___
 
 ### invokeCommand
 
-▸ **invokeCommand**(`command`, `session`, `commandFields`, `message`, `endpoint`, `_receivedWithinTimedInteraction?`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
+▸ **invokeCommand**(`command`, `exchange`, `commandFields`, `message`, `endpoint`, `_receivedWithinTimedInteraction?`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
 
 #### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `command` | [`CommandServer`](cluster_export.CommandServer.md)\<`any`, `any`\> | `undefined` |
-| `session` | [`Session`](session_export.Session.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> | `undefined` |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> | `undefined` |
 | `commandFields` | `any` | `undefined` |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) | `undefined` |
 | `endpoint` | [`EndpointInterface`](../interfaces/endpoint_export.EndpointInterface.md) | `undefined` |
@@ -294,7 +333,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1017](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1017)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:1011](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L1011)
 
 ___
 
@@ -318,20 +357,20 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:156](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L156)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:161](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L161)
 
 ___
 
 ### readAttribute
 
-▸ **readAttribute**(`attribute`, `session`, `isFabricFiltered`, `message`): `Promise`\<\{ `value`: `any` ; `version`: `number`  }\>
+▸ **readAttribute**(`attribute`, `exchange`, `isFabricFiltered`, `message`): `Promise`\<\{ `value`: `any` ; `version`: `number`  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `attribute` | [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)\<`any`\> |
-| `session` | [`Session`](session_export.Session.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 
@@ -341,13 +380,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:388](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L388)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:388](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L388)
 
 ___
 
 ### writeAttribute
 
-▸ **writeAttribute**(`attribute`, `value`, `session`, `message`, `_receivedWithinTimedInteraction?`): `Promise`\<`void`\>
+▸ **writeAttribute**(`attribute`, `value`, `exchange`, `message`, `_receivedWithinTimedInteraction?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -355,7 +394,7 @@ ___
 | :------ | :------ |
 | `attribute` | [`AttributeServer`](cluster_export.AttributeServer.md)\<`any`\> |
 | `value` | `any` |
-| `session` | [`Session`](session_export.Session.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](behavior_cluster_export._internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 | `_receivedWithinTimedInteraction?` | `boolean` |
 
@@ -365,4 +404,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:666](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L666)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:660](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L660)

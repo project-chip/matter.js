@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L53)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L52)
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:176](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L176)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:175](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L175)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:168](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L168)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L167)

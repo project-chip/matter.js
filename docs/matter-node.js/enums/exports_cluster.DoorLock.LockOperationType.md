@@ -8,7 +8,7 @@ The LockOperationType enumeration shall indicate the type of Lock operation perf
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.10
+MatterSpecification.v11.Cluster § 5.2.6.10
 
 ## Table of contents
 

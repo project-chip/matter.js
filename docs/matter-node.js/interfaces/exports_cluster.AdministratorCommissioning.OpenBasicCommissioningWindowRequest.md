@@ -8,7 +8,7 @@ Input to the AdministratorCommissioning openBasicCommissioningWindow command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.18.8.2
+MatterSpecification.v11.Core § 11.18.8.2
 
 ## Hierarchy
 

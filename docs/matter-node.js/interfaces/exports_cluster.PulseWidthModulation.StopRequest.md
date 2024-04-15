@@ -8,7 +8,7 @@ Input to the PulseWidthModulation stop command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.6.6.4
+MatterSpecification.v11.Cluster § 1.6.6.4
 
 ## Hierarchy
 

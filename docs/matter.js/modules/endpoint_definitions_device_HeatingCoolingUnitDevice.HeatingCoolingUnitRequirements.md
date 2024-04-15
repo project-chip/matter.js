@@ -26,11 +26,11 @@
 
 The FanControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [FanControlServer](endpoint_definitions_device_HeatingCoolingUnitDevice.HeatingCoolingUnitRequirements.md#fancontrolserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L76)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L75)
 
 ___
 
@@ -40,11 +40,11 @@ ___
 
 The Groups cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsServer](endpoint_definitions_device_HeatingCoolingUnitDevice.HeatingCoolingUnitRequirements.md#groupsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L48)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L47)
 
 ___
 
@@ -54,11 +54,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_HeatingCoolingUnitDevice.HeatingCoolingUnitRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L41)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L40)
 
 ___
 
@@ -68,11 +68,11 @@ ___
 
 The LevelControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlServer](endpoint_definitions_device_HeatingCoolingUnitDevice.HeatingCoolingUnitRequirements.md#levelcontrolserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L69)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L68)
 
 ___
 
@@ -82,11 +82,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffServer](endpoint_definitions_device_HeatingCoolingUnitDevice.HeatingCoolingUnitRequirements.md#onoffserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L55)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L54)
 
 ___
 
@@ -96,11 +96,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesServer](endpoint_definitions_device_HeatingCoolingUnitDevice.HeatingCoolingUnitRequirements.md#scenesserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L62)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L61)
 
 ___
 
@@ -110,11 +110,11 @@ ___
 
 The Thermostat cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ThermostatBehavior](endpoint_definitions_device_HeatingCoolingUnitDevice.HeatingCoolingUnitRequirements.md#thermostatbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L83)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L82)
 
 ___
 
@@ -133,7 +133,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L96)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L95)
 
 ___
 
@@ -158,4 +158,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L88)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L87)

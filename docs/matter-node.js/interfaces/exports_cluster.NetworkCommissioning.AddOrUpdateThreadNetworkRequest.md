@@ -8,7 +8,7 @@ Input to the NetworkCommissioning addOrUpdateThreadNetwork command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.4
+MatterSpecification.v11.Core § 11.8.7.4
 
 ## Hierarchy
 
@@ -53,7 +53,7 @@ See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.4.1
+MatterSpecification.v11.Core § 11.8.7.4.1
 
 #### Inherited from
 

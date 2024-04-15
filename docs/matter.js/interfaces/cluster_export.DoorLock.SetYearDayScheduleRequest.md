@@ -8,7 +8,7 @@ Input to the DoorLock setYearDaySchedule command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ TypeFromSchema.localEndTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:703](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L703)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:702](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L702)
 
 ___
 
@@ -51,7 +51,7 @@ TypeFromSchema.localStartTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:702](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L702)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:701](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L701)
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.userIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:701](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L701)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:700](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L700)
 
 ___
 
@@ -79,4 +79,4 @@ TypeFromSchema.yearDayIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:700](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L700)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:699](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L699)

@@ -8,7 +8,7 @@ This specifies an app along with its corresponding endpoint.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.5.3
+MatterSpecification.v11.Cluster § 6.4.5.3
 
 ## Hierarchy
 

@@ -59,16 +59,16 @@ These elements and properties are present in all WindowCovering clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `configStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `liftEncoderControlled`: [`BitFlag`](schema_export.md#bitflag) ; `liftMovementReversed`: [`BitFlag`](schema_export.md#bitflag) ; `liftPositionAware`: [`BitFlag`](schema_export.md#bitflag) ; `onlineReserved`: [`BitFlag`](schema_export.md#bitflag) ; `operational`: [`BitFlag`](schema_export.md#bitflag) ; `tiltEncoderControlled`: [`BitFlag`](schema_export.md#bitflag) ; `tiltPositionAware`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `endProductType`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`EndProductType`](../enums/cluster_export.WindowCovering.EndProductType.md), `any`\> ; `mode`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `calibrationMode`: [`BitFlag`](schema_export.md#bitflag) ; `ledFeedback`: [`BitFlag`](schema_export.md#bitflag) ; `maintenanceMode`: [`BitFlag`](schema_export.md#bitflag) ; `motorDirectionReversed`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `operationalStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `global`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\> ; `lift`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\> ; `tilt`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\>  }\>, `any`\> ; `safetyStatus`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `failedCommunication`: [`BitFlag`](schema_export.md#bitflag) ; `hardwareFailure`: [`BitFlag`](schema_export.md#bitflag) ; `manualOperation`: [`BitFlag`](schema_export.md#bitflag) ; `motorJammed`: [`BitFlag`](schema_export.md#bitflag) ; `obstacleDetected`: [`BitFlag`](schema_export.md#bitflag) ; `positionFailure`: [`BitFlag`](schema_export.md#bitflag) ; `power`: [`BitFlag`](schema_export.md#bitflag) ; `protection`: [`BitFlag`](schema_export.md#bitflag) ; `remoteLockout`: [`BitFlag`](schema_export.md#bitflag) ; `stopInput`: [`BitFlag`](schema_export.md#bitflag) ; `tamperDetection`: [`BitFlag`](schema_export.md#bitflag) ; `thermalProtection`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `type`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`WindowCoveringType`](../enums/cluster_export.WindowCovering.WindowCoveringType.md), `any`\>  } | - |
-| `attributes.configStatus` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `liftEncoderControlled`: [`BitFlag`](schema_export.md#bitflag) ; `liftMovementReversed`: [`BitFlag`](schema_export.md#bitflag) ; `liftPositionAware`: [`BitFlag`](schema_export.md#bitflag) ; `onlineReserved`: [`BitFlag`](schema_export.md#bitflag) ; `operational`: [`BitFlag`](schema_export.md#bitflag) ; `tiltEncoderControlled`: [`BitFlag`](schema_export.md#bitflag) ; `tiltPositionAware`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | The ConfigStatus attribute makes configuration and status information available. To change settings, devices shall write to the Mode attribute of the Window Covering Settings Attribute Set. The behavior causing the setting or clearing of each bit is vendor specific. See table below for details on each bit. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.8 |
-| `attributes.endProductType` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`EndProductType`](../enums/cluster_export.WindowCovering.EndProductType.md), `any`\> | The EndProductType attribute identifies the product type in complement of the main category indicated by the Type attribute. The window covering shall set this value to one of the values in the table below. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.16 |
-| `attributes.mode` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `calibrationMode`: [`BitFlag`](schema_export.md#bitflag) ; `ledFeedback`: [`BitFlag`](schema_export.md#bitflag) ; `maintenanceMode`: [`BitFlag`](schema_export.md#bitflag) ; `motorDirectionReversed`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | The Mode attribute allows configuration of the Window Covering, such as: reversing the motor direction, placing the Window Covering into calibration mode, placing the motor into maintenance mode, disabling the network, and disabling status LEDs. See below for details. In the case a device does not support or implement a specific mode, e.g. the device has a specific installation method and reversal is not relevant or the device does not include a maintenance mode, any write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits set, must be ignored and a response containing the status of CONSTRAINT_ERROR will be returned. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.21 |
-| `attributes.operationalStatus` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `global`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\> ; `lift`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\> ; `tilt`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\>  }\>, `any`\> | The OperationalStatus attribute keeps track of currently ongoing operations and applies to all type of devices. See below for details about the meaning of individual bits. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.15 |
-| `attributes.safetyStatus` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `failedCommunication`: [`BitFlag`](schema_export.md#bitflag) ; `hardwareFailure`: [`BitFlag`](schema_export.md#bitflag) ; `manualOperation`: [`BitFlag`](schema_export.md#bitflag) ; `motorJammed`: [`BitFlag`](schema_export.md#bitflag) ; `obstacleDetected`: [`BitFlag`](schema_export.md#bitflag) ; `positionFailure`: [`BitFlag`](schema_export.md#bitflag) ; `power`: [`BitFlag`](schema_export.md#bitflag) ; `protection`: [`BitFlag`](schema_export.md#bitflag) ; `remoteLockout`: [`BitFlag`](schema_export.md#bitflag) ; `stopInput`: [`BitFlag`](schema_export.md#bitflag) ; `tamperDetection`: [`BitFlag`](schema_export.md#bitflag) ; `thermalProtection`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | The SafetyStatus attribute reflects the state of the safety sensors and the common issues preventing movements. By default for nominal operation all flags are cleared (0). A device might support none, one or several bit flags from this attribute (all optional). See below for details about the meaning of individual bits. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.22 |
-| `attributes.type` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`WindowCoveringType`](../enums/cluster_export.WindowCovering.WindowCoveringType.md), `any`\> | The Type attribute identifies the type of window covering being controlled by this endpoint and shall be set to one of the non-reserved values in the table below. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.1 |
+| `attributes.configStatus` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `liftEncoderControlled`: [`BitFlag`](schema_export.md#bitflag) ; `liftMovementReversed`: [`BitFlag`](schema_export.md#bitflag) ; `liftPositionAware`: [`BitFlag`](schema_export.md#bitflag) ; `onlineReserved`: [`BitFlag`](schema_export.md#bitflag) ; `operational`: [`BitFlag`](schema_export.md#bitflag) ; `tiltEncoderControlled`: [`BitFlag`](schema_export.md#bitflag) ; `tiltPositionAware`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | The ConfigStatus attribute makes configuration and status information available. To change settings, devices shall write to the Mode attribute of the Window Covering Settings Attribute Set. The behavior causing the setting or clearing of each bit is vendor specific. See table below for details on each bit. **`See`** MatterSpecification.v11.Cluster § 5.3.5.8 |
+| `attributes.endProductType` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`EndProductType`](../enums/cluster_export.WindowCovering.EndProductType.md), `any`\> | The EndProductType attribute identifies the product type in complement of the main category indicated by the Type attribute. The window covering shall set this value to one of the values in the table below. **`See`** MatterSpecification.v11.Cluster § 5.3.5.16 |
+| `attributes.mode` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `calibrationMode`: [`BitFlag`](schema_export.md#bitflag) ; `ledFeedback`: [`BitFlag`](schema_export.md#bitflag) ; `maintenanceMode`: [`BitFlag`](schema_export.md#bitflag) ; `motorDirectionReversed`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | The Mode attribute allows configuration of the Window Covering, such as: reversing the motor direction, placing the Window Covering into calibration mode, placing the motor into maintenance mode, disabling the network, and disabling status LEDs. See below for details. In the case a device does not support or implement a specific mode, e.g. the device has a specific installation method and reversal is not relevant or the device does not include a maintenance mode, any write interaction to the Mode attribute, with an unsupported mode bit or any out of bounds bits set, must be ignored and a response containing the status of CONSTRAINT_ERROR will be returned. **`See`** MatterSpecification.v11.Cluster § 5.3.5.21 |
+| `attributes.operationalStatus` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `global`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\> ; `lift`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\> ; `tilt`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`MovementStatus`](../enums/cluster_export.WindowCovering.MovementStatus.md)\>  }\>, `any`\> | The OperationalStatus attribute keeps track of currently ongoing operations and applies to all type of devices. See below for details about the meaning of individual bits. **`See`** MatterSpecification.v11.Cluster § 5.3.5.15 |
+| `attributes.safetyStatus` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `failedCommunication`: [`BitFlag`](schema_export.md#bitflag) ; `hardwareFailure`: [`BitFlag`](schema_export.md#bitflag) ; `manualOperation`: [`BitFlag`](schema_export.md#bitflag) ; `motorJammed`: [`BitFlag`](schema_export.md#bitflag) ; `obstacleDetected`: [`BitFlag`](schema_export.md#bitflag) ; `positionFailure`: [`BitFlag`](schema_export.md#bitflag) ; `power`: [`BitFlag`](schema_export.md#bitflag) ; `protection`: [`BitFlag`](schema_export.md#bitflag) ; `remoteLockout`: [`BitFlag`](schema_export.md#bitflag) ; `stopInput`: [`BitFlag`](schema_export.md#bitflag) ; `tamperDetection`: [`BitFlag`](schema_export.md#bitflag) ; `thermalProtection`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | The SafetyStatus attribute reflects the state of the safety sensors and the common issues preventing movements. By default for nominal operation all flags are cleared (0). A device might support none, one or several bit flags from this attribute (all optional). See below for details about the meaning of individual bits. **`See`** MatterSpecification.v11.Cluster § 5.3.5.22 |
+| `attributes.type` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`WindowCoveringType`](../enums/cluster_export.WindowCovering.WindowCoveringType.md), `any`\> | The Type attribute identifies the type of window covering being controlled by this endpoint and shall be set to one of the non-reserved values in the table below. **`See`** MatterSpecification.v11.Cluster § 5.3.5.1 |
 | `commands` | \{ `downOrClose`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> ; `stopMotion`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> ; `upOrOpen`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } | - |
-| `commands.downOrClose` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will adjust its position so the physical lift/slide and tilt is at the maximum closed/down position. This will happen as fast as possible. The server attributes supported shall be updated as follows: if Position Aware feature is supported: • TargetPositionLiftPercent100ths attribute shall be set to 100.00%. • TargetPositionTiltPercent100ths attribute shall be set to 100.00%. The server positioning attributes will follow the movements, once the movement has successfully finished, the server attributes shall be updated as follows: if Position Aware feature is supported: • CurrentPositionLiftPercent100ths attribute shall be 100.00%. • CurrentPositionLiftPercentage attribute shall be 100%. • CurrentPositionTiltPercent100ths attribute shall be 100.00%. • CurrentPositionTiltPercentage attribute shall be 100%. if Absolute Position feature is supported: • CurrentPositionLift attribute shall be equal to the InstalledClosedLimitLift attribute. • CurrentPositionTilt attribute shall be equal to the InstalledClosedLimitTilt attribute. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.2 |
-| `commands.stopMotion` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will stop any adjusting to the physical tilt and lift/slide that is currently occurring. The server attributes supported shall be updated as follows: • TargetPositionLiftPercent100ths attribute will be set to CurrentPositionLiftPercent100ths attribute value. • TargetPositionTiltPercent100ths attribute will be set to CurrentPositionTiltPercent100ths attribute value. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.3 |
-| `commands.upOrOpen` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will adjust its position so the physical lift/slide and tilt is at the maximum open/up position. This will happen as fast as possible. The server attributes shall be updated as follows: if Position Aware feature is supported: • TargetPositionLiftPercent100ths attribute shall be set to 0.00%. • TargetPositionTiltPercent100ths attribute shall be set to 0.00%. The server positioning attributes will follow the movements, once the movement has successfully finished, the server attributes shall be updated as follows: if Position Aware feature is supported: • CurrentPositionLiftPercent100ths attribute shall be 0.00%. • CurrentPositionLiftPercentage attribute shall be 0%. • CurrentPositionTiltPercent100ths attribute shall be 0.00%. • CurrentPositionTiltPercentage attribute shall be 0%. if Absolute Position feature is supported: • CurrentPositionLift attribute shall be equal to the InstalledOpenLimitLift attribute. • CurrentPositionTilt attribute shall be equal to the InstalledOpenLimitTilt attribute. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.1 |
+| `commands.downOrClose` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will adjust its position so the physical lift/slide and tilt is at the maximum closed/down position. This will happen as fast as possible. The server attributes supported shall be updated as follows: if Position Aware feature is supported: • TargetPositionLiftPercent100ths attribute shall be set to 100.00%. • TargetPositionTiltPercent100ths attribute shall be set to 100.00%. The server positioning attributes will follow the movements, once the movement has successfully finished, the server attributes shall be updated as follows: if Position Aware feature is supported: • CurrentPositionLiftPercent100ths attribute shall be 100.00%. • CurrentPositionLiftPercentage attribute shall be 100%. • CurrentPositionTiltPercent100ths attribute shall be 100.00%. • CurrentPositionTiltPercentage attribute shall be 100%. if Absolute Position feature is supported: • CurrentPositionLift attribute shall be equal to the InstalledClosedLimitLift attribute. • CurrentPositionTilt attribute shall be equal to the InstalledClosedLimitTilt attribute. **`See`** MatterSpecification.v11.Cluster § 5.3.6.2 |
+| `commands.stopMotion` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will stop any adjusting to the physical tilt and lift/slide that is currently occurring. The server attributes supported shall be updated as follows: • TargetPositionLiftPercent100ths attribute will be set to CurrentPositionLiftPercent100ths attribute value. • TargetPositionTiltPercent100ths attribute will be set to CurrentPositionTiltPercent100ths attribute value. **`See`** MatterSpecification.v11.Cluster § 5.3.6.3 |
+| `commands.upOrOpen` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt of this command, the Window Covering will adjust its position so the physical lift/slide and tilt is at the maximum open/up position. This will happen as fast as possible. The server attributes shall be updated as follows: if Position Aware feature is supported: • TargetPositionLiftPercent100ths attribute shall be set to 0.00%. • TargetPositionTiltPercent100ths attribute shall be set to 0.00%. The server positioning attributes will follow the movements, once the movement has successfully finished, the server attributes shall be updated as follows: if Position Aware feature is supported: • CurrentPositionLiftPercent100ths attribute shall be 0.00%. • CurrentPositionLiftPercentage attribute shall be 0%. • CurrentPositionTiltPercent100ths attribute shall be 0.00%. • CurrentPositionTiltPercentage attribute shall be 0%. if Absolute Position feature is supported: • CurrentPositionLift attribute shall be equal to the InstalledOpenLimitLift attribute. • CurrentPositionTilt attribute shall be equal to the InstalledOpenLimitTilt attribute. **`See`** MatterSpecification.v11.Cluster § 5.3.6.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `currentPositionLift`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `installedClosedLimitLift`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitLift`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitLift`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\>  }  } = LiftAndPositionAwareLiftAndAbsolutePositionComponent; `flags`: \{ `absolutePosition`: ``true`` = true; `lift`: ``true`` = true; `positionAwareLift`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentPositionTilt`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `installedClosedLimitTilt`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `installedOpenLimitTilt`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `physicalClosedLimitTilt`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\>  }  } = TiltAndPositionAwareTiltAndAbsolutePositionComponent; `flags`: \{ `absolutePosition`: ``true`` = true; `positionAwareTilt`: ``true`` = true; `tilt`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `numberOfActuationsLift`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `goToLiftPercentage`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `liftPercent100thsValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = LiftComponent; `flags`: \{ `lift`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `numberOfActuationsTilt`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `goToTiltPercentage`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `tiltPercent100thsValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = TiltComponent; `flags`: \{ `tilt`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentPositionLiftPercent100ths`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `currentPositionLiftPercentage`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `targetPositionLiftPercent100ths`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\>  } ; `commands`: \{ `goToLiftPercentage`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `liftPercent100thsValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = LiftAndPositionAwareLiftComponent; `flags`: \{ `lift`: ``true`` = true; `positionAwareLift`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentPositionTiltPercent100ths`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `currentPositionTiltPercentage`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `targetPositionTiltPercent100ths`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\>  } ; `commands`: \{ `goToTiltPercentage`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `tiltPercent100thsValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = TiltAndPositionAwareTiltComponent; `flags`: \{ `positionAwareTilt`: ``true`` = true; `tilt`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `goToLiftValue`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `liftValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = LiftAndAbsolutePositionComponent; `flags`: \{ `absolutePosition`: ``true`` = true; `lift`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `goToTiltValue`: [`OptionalCommand`](../interfaces/cluster_export.OptionalCommand.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `tiltValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = TiltAndAbsolutePositionComponent; `flags`: \{ `absolutePosition`: ``true`` = true; `tilt`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `lift`: ``false`` = false; `positionAwareLift`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `positionAwareTilt`: ``true`` = true; `tilt`: ``false`` = false }  }, \{ `component`: ``false`` = false; `flags`: \{ `lift`: ``false`` = false; `tilt`: ``false`` = false }  }] | This metadata controls which WindowCoveringCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `absolutePosition`: [`BitFlag`](schema_export.md#bitflag) ; `lift`: [`BitFlag`](schema_export.md#bitflag) ; `positionAwareLift`: [`BitFlag`](schema_export.md#bitflag) ; `positionAwareTilt`: [`BitFlag`](schema_export.md#bitflag) ; `tilt`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.absolutePosition` | [`BitFlag`](schema_export.md#bitflag) | AbsolutePosition Absolute positioning is supported. |
@@ -82,7 +82,7 @@ These elements and properties are present in all WindowCovering clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:720](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L720)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:719](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L719)
 
 ___
 
@@ -92,9 +92,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:953](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L953)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:952](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L952)
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:955](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L955)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:954](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L954)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:940](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L940)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:939](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L939)
 
 ___
 
@@ -118,9 +118,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1069](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L1069)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1068](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L1068)
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1071](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L1071)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1070](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L1070)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:968](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L968)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:967](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L967)
 
 ___
 
@@ -146,7 +146,7 @@ The value of the WindowCovering configStatus attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.8
+MatterSpecification.v11.Cluster § 5.3.5.8
 
 #### Type declaration
 
@@ -162,7 +162,7 @@ The value of the WindowCovering configStatus attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:112](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L111)
 
 ___
 
@@ -181,7 +181,7 @@ A WindowCoveringCluster supports these elements if it supports features Lift and
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:642](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L642)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:641](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L641)
 
 ___
 
@@ -204,7 +204,7 @@ AbsolutePosition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:343](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L343)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:342](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L342)
 
 ___
 
@@ -227,7 +227,7 @@ A WindowCoveringCluster supports these elements if it supports features Lift and
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:507](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L507)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:506](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L506)
 
 ___
 
@@ -248,7 +248,7 @@ A WindowCoveringCluster supports these elements if it supports feature Lift.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:430](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L430)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:429](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L429)
 
 ___
 
@@ -260,7 +260,7 @@ The value of the WindowCovering mode attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.21
+MatterSpecification.v11.Cluster § 5.3.5.21
 
 #### Type declaration
 
@@ -273,7 +273,7 @@ The value of the WindowCovering mode attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:234](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L234)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:233](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L233)
 
 ___
 
@@ -285,7 +285,7 @@ The value of the WindowCovering operationalStatus attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.15
+MatterSpecification.v11.Cluster § 5.3.5.15
 
 #### Type declaration
 
@@ -297,7 +297,7 @@ The value of the WindowCovering operationalStatus attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L158)
 
 ___
 
@@ -309,7 +309,7 @@ The value of the WindowCovering safetyStatus attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.5.22
+MatterSpecification.v11.Cluster § 5.3.5.22
 
 #### Type declaration
 
@@ -330,7 +330,7 @@ The value of the WindowCovering safetyStatus attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:274](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L274)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:273](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L273)
 
 ___
 
@@ -349,7 +349,7 @@ A WindowCoveringCluster supports these elements if it supports features Tilt and
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:660](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L660)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:659](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L659)
 
 ___
 
@@ -372,7 +372,7 @@ AbsolutePosition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:387](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L387)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:386](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L386)
 
 ___
 
@@ -395,7 +395,7 @@ A WindowCoveringCluster supports these elements if it supports features Tilt and
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:574](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L574)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:573](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L573)
 
 ___
 
@@ -416,7 +416,7 @@ A WindowCoveringCluster supports these elements if it supports feature Tilt.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:468](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L468)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:467](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L467)
 
 ___
 
@@ -428,11 +428,11 @@ Input to the WindowCovering goToLiftPercentage command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.5
+MatterSpecification.v11.Cluster § 5.3.6.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L36)
 
 ___
 
@@ -444,11 +444,11 @@ Input to the WindowCovering goToLiftValue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.4
+MatterSpecification.v11.Cluster § 5.3.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L64)
 
 ___
 
@@ -460,11 +460,11 @@ Input to the WindowCovering goToTiltPercentage command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.7
+MatterSpecification.v11.Cluster § 5.3.6.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L50)
 
 ___
 
@@ -476,8 +476,8 @@ Input to the WindowCovering goToTiltValue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.6
+MatterSpecification.v11.Cluster § 5.3.6.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:79](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:78](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L78)

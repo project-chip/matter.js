@@ -55,8 +55,8 @@ These elements and properties are present in all Switch clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentPosition`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\>  } | - |
-| `attributes.currentPosition` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> | This attribute shall indicate the position of the switch. The valid range is zero to NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the switch: for example the "open" state of a rocker switch, or the "idle" state of a push button switch. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.5.2 |
-| `attributes.numberOfPositions` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> | This attribute shall indicate the maximum number of positions the switch has. Any kind of switch has a minimum of 2 positions. Also see Section 1.11.10, “NumberOfPositions > 2” for the case NumberOfPositions>2. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.5.1 |
+| `attributes.currentPosition` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`number`, `any`\> | This attribute shall indicate the position of the switch. The valid range is zero to NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the switch: for example the "open" state of a rocker switch, or the "idle" state of a push button switch. **`See`** MatterSpecification.v11.Cluster § 1.11.5.2 |
+| `attributes.numberOfPositions` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> | This attribute shall indicate the maximum number of positions the switch has. Any kind of switch has a minimum of 2 positions. Also see Section 1.11.10, “NumberOfPositions > 2” for the case NumberOfPositions>2. **`See`** MatterSpecification.v11.Cluster § 1.11.5.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `multiPressMax`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `multiPressComplete`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `totalNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `multiPressOngoing`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `currentNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  } = MomentarySwitchMultiPressComponent; `flags`: \{ `momentarySwitchMultiPress`: ``true`` = true }  }, \{ `component`: \{ `events`: \{ `switchLatched`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  } = LatchingSwitchComponent; `flags`: \{ `latchingSwitch`: ``true`` = true }  }, \{ `component`: \{ `events`: \{ `initialPress`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  } = MomentarySwitchComponent; `flags`: \{ `momentarySwitch`: ``true`` = true }  }, \{ `component`: \{ `events`: \{ `longPress`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `longRelease`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  } = MomentarySwitchLongPressComponent; `flags`: \{ `momentarySwitchLongPress`: ``true`` = true }  }, \{ `component`: \{ `events`: \{ `shortRelease`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  } = MomentarySwitchReleaseComponent; `flags`: \{ `momentarySwitchRelease`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `momentarySwitch`: ``false`` = false; `momentarySwitchRelease`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `momentarySwitch`: ``false`` = false; `momentarySwitchLongPress`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `momentarySwitchLongPress`: ``true`` = true; `momentarySwitchRelease`: ``false`` = false }  }, \{ `component`: ``false`` = false; `flags`: \{ `momentarySwitch`: ``false`` = false; `momentarySwitchMultiPress`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `momentarySwitchMultiPress`: ``true`` = true; `momentarySwitchRelease`: ``false`` = false }  }, \{ `component`: ``false`` = false; `flags`: \{ `latchingSwitch`: ``true`` = true; `momentarySwitch`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `latchingSwitch`: ``false`` = false; `momentarySwitch`: ``false`` = false }  }] | This metadata controls which SwitchCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.latchingSwitch` | [`BitFlag`](schema_export.md#bitflag) | LatchingSwitch |
@@ -70,7 +70,7 @@ These elements and properties are present in all Switch clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:312](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L312)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:311](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L311)
 
 ___
 
@@ -80,9 +80,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:409](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L409)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:408](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L408)
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:411](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L411)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:410](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L410)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:386](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L386)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:385](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L385)
 
 ___
 
@@ -106,9 +106,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:473](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L473)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:472](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L472)
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:475](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L475)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:474](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L474)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:421](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L421)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:420](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L420)
 
 ___
 
@@ -141,7 +141,7 @@ A SwitchCluster supports these elements if it supports feature LatchingSwitch.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:191](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L191)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:190](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L190)
 
 ___
 
@@ -160,7 +160,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitch.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:208](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L208)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L207)
 
 ___
 
@@ -180,7 +180,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchLo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:224](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L224)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:223](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L223)
 
 ___
 
@@ -202,7 +202,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchMu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L127)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:126](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L126)
 
 ___
 
@@ -221,7 +221,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchRe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:254](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L254)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:253](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L253)
 
 ___
 
@@ -233,11 +233,11 @@ Body of the Switch initialPress event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.2
+MatterSpecification.v11.Cluster § 1.11.7.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L73)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L72)
 
 ___
 
@@ -249,11 +249,11 @@ Body of the Switch longPress event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.3
+MatterSpecification.v11.Cluster § 1.11.7.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L86)
 
 ___
 
@@ -265,11 +265,11 @@ Body of the Switch longRelease event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.5
+MatterSpecification.v11.Cluster § 1.11.7.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L101)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L100)
 
 ___
 
@@ -281,11 +281,11 @@ Body of the Switch multiPressComplete event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.7
+MatterSpecification.v11.Cluster § 1.11.7.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L41)
 
 ___
 
@@ -297,11 +297,11 @@ Body of the Switch multiPressOngoing event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.6
+MatterSpecification.v11.Cluster § 1.11.7.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L25)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L24)
 
 ___
 
@@ -313,11 +313,11 @@ Body of the Switch shortRelease event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.4
+MatterSpecification.v11.Cluster § 1.11.7.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L115)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:114](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L114)
 
 ___
 
@@ -329,8 +329,8 @@ Body of the Switch switchLatched event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.11.7.1
+MatterSpecification.v11.Cluster § 1.11.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L58)

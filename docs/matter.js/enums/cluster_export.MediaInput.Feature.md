@@ -8,7 +8,7 @@ These are optional features supported by MediaInputCluster.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.2
+MatterSpecification.v11.Cluster § 6.9.2
 
 ## Table of contents
 
@@ -28,4 +28,4 @@ Supports updates to the input names
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:153](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L153)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:152](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L152)

@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L33)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L32)
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L111)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L110)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L99)
+[packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HeatingCoolingUnitDevice.ts#L98)

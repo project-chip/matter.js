@@ -8,7 +8,7 @@ These are optional features supported by FanControlCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.5
+MatterSpecification.v11.Cluster § 4.4.5
 
 ## Table of contents
 

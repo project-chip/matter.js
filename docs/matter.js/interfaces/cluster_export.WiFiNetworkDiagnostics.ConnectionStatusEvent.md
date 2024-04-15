@@ -8,7 +8,7 @@ Body of the WiFiNetworkDiagnostics connectionStatus event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.3
+MatterSpecification.v11.Core § 11.14.8.3
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.connectionStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:205](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L205)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:204](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L204)

@@ -8,7 +8,7 @@ The value of PulseWidthModulation.moveMode
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.6.6.2.1
+MatterSpecification.v11.Cluster § 1.6.6.2.1
 
 ## Table of contents
 

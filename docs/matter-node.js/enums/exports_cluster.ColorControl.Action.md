@@ -8,7 +8,7 @@ The value of ColorControl.action
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.19.2
+MatterSpecification.v11.Cluster § 3.2.11.19.2
 
 ## Table of contents
 

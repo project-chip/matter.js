@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.6
+MatterSpecification.v11.Core § 9.10.4.6
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ The content of each element is not specified, but may be coordinated among manuf
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.6.1
+MatterSpecification.v11.Core § 9.10.4.6.1
 
 #### Inherited from
 

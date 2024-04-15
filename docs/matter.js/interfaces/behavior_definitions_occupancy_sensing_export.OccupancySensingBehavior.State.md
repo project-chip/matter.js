@@ -37,7 +37,7 @@ The Occupancy attribute indicates the status of occupancy.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.6.1
+MatterSpecification.v11.Cluster § 2.7.6.1
 
 #### Inherited from
 
@@ -45,7 +45,7 @@ StateType.occupancy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L89)
 
 ___
 
@@ -57,7 +57,7 @@ The OccupancySensorType attribute specifies the type of the occupancy sensor.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.6.2
+MatterSpecification.v11.Cluster § 2.7.6.2
 
 #### Inherited from
 
@@ -65,7 +65,7 @@ StateType.occupancySensorType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L96)
 
 ___
 
@@ -83,7 +83,7 @@ Table 32. Mapping between OccupancySensorTypeBitmap and OccupancySensorType Attr
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.6.3
+MatterSpecification.v11.Cluster § 2.7.6.3
 
 #### Inherited from
 
@@ -91,7 +91,7 @@ StateType.occupancySensorTypeBitmap
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L109)
 
 ___
 
@@ -105,7 +105,7 @@ The null value indicates that the sensor does not report occupied to unoccupied 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.9.1
+MatterSpecification.v11.Cluster § 2.7.9.1
 
 #### Inherited from
 
@@ -113,7 +113,7 @@ StateType.physicalContactOccupiedToUnoccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:197](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L197)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L196)
 
 ___
 
@@ -128,7 +128,7 @@ The null value indicates that the sensor does not report unoccupied to occupied 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.9.2
+MatterSpecification.v11.Cluster § 2.7.9.2
 
 #### Inherited from
 
@@ -136,7 +136,7 @@ StateType.physicalContactUnoccupiedToOccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:211](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L211)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L210)
 
 ___
 
@@ -151,7 +151,7 @@ PhysicalContactUnoccupiedToOccupiedDelay attribute is implemented.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.9.3
+MatterSpecification.v11.Cluster § 2.7.9.3
 
 #### Inherited from
 
@@ -159,7 +159,7 @@ StateType.physicalContactUnoccupiedToOccupiedThreshold
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:225](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L225)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:224](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L224)
 
 ___
 
@@ -172,7 +172,7 @@ changes to its unoccupied state after the last detection of movement in the sens
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.7.1
+MatterSpecification.v11.Cluster § 2.7.7.1
 
 #### Inherited from
 
@@ -180,7 +180,7 @@ StateType.pirOccupiedToUnoccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:118](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L118)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L117)
 
 ___
 
@@ -194,7 +194,7 @@ mandatory if the PIRUnoccupiedToOccupiedThreshold attribute is implemented.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.7.2
+MatterSpecification.v11.Cluster § 2.7.7.2
 
 #### Inherited from
 
@@ -202,7 +202,7 @@ StateType.pirUnoccupiedToOccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:131](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L131)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L130)
 
 ___
 
@@ -216,7 +216,7 @@ state. This attribute is mandatory if the PIRUnoccupiedToOccupiedDelay attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.7.3
+MatterSpecification.v11.Cluster § 2.7.7.3
 
 #### Inherited from
 
@@ -224,7 +224,7 @@ StateType.pirUnoccupiedToOccupiedThreshold
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:144](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L144)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:143](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L143)
 
 ___
 
@@ -238,7 +238,7 @@ area.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.8.1
+MatterSpecification.v11.Cluster § 2.7.8.1
 
 #### Inherited from
 
@@ -246,7 +246,7 @@ StateType.ultrasonicOccupiedToUnoccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L156)
 
 ___
 
@@ -260,7 +260,7 @@ attribute is mandatory if the UltrasonicUnoccupiedToOccupiedThreshold attribute 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.8.2
+MatterSpecification.v11.Cluster § 2.7.8.2
 
 #### Inherited from
 
@@ -268,7 +268,7 @@ StateType.ultrasonicUnoccupiedToOccupiedDelay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:169](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L169)
 
 ___
 
@@ -283,7 +283,7 @@ is implemented.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.8.3
+MatterSpecification.v11.Cluster § 2.7.8.3
 
 #### Inherited from
 
@@ -291,4 +291,4 @@ StateType.ultrasonicUnoccupiedToOccupiedThreshold
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:184](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L183)

@@ -8,7 +8,7 @@ This is a struct representing a possible mode of the server.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.8.8.1
+MatterSpecification.v11.Cluster § 1.8.8.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ user what this option means. This field is meant to be readable and understandab
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.8.8.1.1
+MatterSpecification.v11.Cluster § 1.8.8.1.1
 
 #### Inherited from
 
@@ -56,7 +56,7 @@ SupportedModes attribute.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.8.8.1.2
+MatterSpecification.v11.Cluster § 1.8.8.1.2
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ seeking the option for either HIGH or MAX will find the same option in this case
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.8.8.1.3
+MatterSpecification.v11.Cluster § 1.8.8.1.3
 
 #### Inherited from
 
