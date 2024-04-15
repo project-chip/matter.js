@@ -109,8 +109,13 @@ describe("Integration Test", () => {
         time: number;
     }>();
 
+    let originalCrypto: () => Crypto;
+
     before(async () => {
         MockTime.reset(TIME_START);
+
+        originalCrypto = Crypto.get;
+        Crypto.get = singleton(() => new CryptoNode());
 
         Network.get = () => clientNetwork;
 
@@ -2022,5 +2027,7 @@ describe("Integration Test", () => {
         fakeServerStorage.close();
 
         Time.get = () => mockTimeInstance;
+
+        Crypto.get = originalCrypto;
     });
 });
