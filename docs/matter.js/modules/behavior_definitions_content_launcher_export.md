@@ -46,9 +46,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L42)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L41)
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L68)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L67)
 
 ___
 
@@ -61,11 +61,11 @@ Response.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.1
+MatterSpecification.v11.Cluster § 6.7.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L40)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L39)
 
 ___
 
@@ -81,11 +81,11 @@ A check shall be made to ensure the URL is secure (uses HTTPS). This command ret
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.2
+MatterSpecification.v11.Cluster § 6.7.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L23)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L22)
 
 ___
 
@@ -99,11 +99,11 @@ WARNING TODO: Data in table above needs a max size
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.3
+MatterSpecification.v11.Cluster § 6.7.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L32)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherInterface.ts#L31)
 
 ## Variables
 
@@ -118,8 +118,8 @@ using ContentLauncherBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/content-launcher/ContentLauncherBehavior.ts#L26)

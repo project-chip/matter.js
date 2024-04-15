@@ -8,7 +8,7 @@ Input to the Thermostat getWeeklySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.8
+MatterSpecification.v11.Cluster § 4.3.8
 
 ## Hierarchy
 

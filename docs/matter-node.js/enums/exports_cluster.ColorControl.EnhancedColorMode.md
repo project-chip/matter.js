@@ -8,7 +8,7 @@ The value of the ColorControl enhancedColorMode attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.7.12
+MatterSpecification.v11.Cluster § 3.2.7.12
 
 ## Table of contents
 

@@ -26,7 +26,6 @@
 - [exports/schema](modules/exports_schema.md)
 - [exports/securechannel](modules/exports_securechannel.md)
 - [exports/session](modules/exports_session.md)
-- [exports/spec](modules/exports_spec.md)
 - [exports/tlv](modules/exports_tlv.md)
 - [log/export](modules/log_export.md)
 - [net/export](modules/net_export.md)

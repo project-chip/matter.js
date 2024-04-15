@@ -23,7 +23,7 @@ The device type for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L89)
+[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L89)
 
 ___
 
@@ -35,7 +35,7 @@ The device name for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L84)
+[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L84)
 
 ___
 
@@ -47,7 +47,7 @@ The product ID for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L99)
+[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L99)
 
 ___
 
@@ -59,4 +59,4 @@ The vendor ID for commissioning announcements.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L94)
+[packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/basic-information/BasicInformationServer.ts#L94)

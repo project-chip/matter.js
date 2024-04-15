@@ -11,7 +11,7 @@ ordering overview as well as linking to the one or more endpoints each supportin
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.6
+MatterSpecification.v11.Core § 11.6
 
 ## Hierarchy
 

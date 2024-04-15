@@ -162,7 +162,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 3.5.1
+MatterSpecification.v10.Core § 3.5.1
 
 #### Defined in
 
@@ -206,7 +206,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 3.3
+MatterSpecification.v10.Core § 3.3
 
 #### Defined in
 
@@ -250,7 +250,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 3.6
+MatterSpecification.v10.Core § 3.6
 
 #### Defined in
 

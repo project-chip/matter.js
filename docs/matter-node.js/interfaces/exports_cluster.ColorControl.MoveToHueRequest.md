@@ -8,7 +8,7 @@ Input to the ColorControl moveToHue command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.4
+MatterSpecification.v11.Cluster § 3.2.11.4
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ The Direction field shall be one of the non-reserved values in Values of the Dir
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.4.2
+MatterSpecification.v11.Cluster § 3.2.11.4.2
 
 #### Inherited from
 
@@ -56,7 +56,7 @@ The Hue field specifies the hue to be moved to.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.4.1
+MatterSpecification.v11.Cluster § 3.2.11.4.1
 
 #### Inherited from
 
@@ -105,7 +105,7 @@ hue.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.4.3
+MatterSpecification.v11.Cluster § 3.2.11.4.3
 
 #### Inherited from
 

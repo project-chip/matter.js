@@ -46,7 +46,7 @@ A read-only set.
 
 #### Defined in
 
-[packages/matter.js/src/util/Set.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Set.ts#L13)
+[packages/matter.js/src/util/Set.ts:13](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Set.ts#L13)
 
 ## Accessors
 
@@ -60,7 +60,7 @@ A read-only set.
 
 #### Defined in
 
-[packages/matter.js/src/util/Set.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Set.ts#L15)
+[packages/matter.js/src/util/Set.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Set.ts#L15)
 
 ## Methods
 
@@ -80,4 +80,4 @@ A read-only set.
 
 #### Defined in
 
-[packages/matter.js/src/util/Set.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Set.ts#L14)
+[packages/matter.js/src/util/Set.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Set.ts#L14)

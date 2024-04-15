@@ -8,7 +8,7 @@ Body of the DoorLock lockOperationError event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.4
+MatterSpecification.v11.Cluster § 5.2.5.4
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ involved.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.4.7
+MatterSpecification.v11.Cluster § 5.2.5.4.7
 
 #### Inherited from
 
@@ -47,7 +47,7 @@ TypeFromSchema.credentials
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1377](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1377)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1376](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1376)
 
 ___
 
@@ -61,7 +61,7 @@ that can be determined for the given operation source. This shall NOT be null if
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.4.5
+MatterSpecification.v11.Cluster § 5.2.5.4.5
 
 #### Inherited from
 
@@ -69,7 +69,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1359](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1359)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1358](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1358)
 
 ___
 
@@ -81,7 +81,7 @@ The type of the lock operation that was performed.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.4.1
+MatterSpecification.v11.Cluster § 5.2.5.4.1
 
 #### Inherited from
 
@@ -89,7 +89,7 @@ TypeFromSchema.lockOperationType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1328](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1328)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1327](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1327)
 
 ___
 
@@ -101,7 +101,7 @@ The lock operation error triggered when the operation was performed.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.4.3
+MatterSpecification.v11.Cluster § 5.2.5.4.3
 
 #### Inherited from
 
@@ -109,7 +109,7 @@ TypeFromSchema.operationError
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1342](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1342)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1341](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1341)
 
 ___
 
@@ -121,7 +121,7 @@ The source of the lock operation that was performed.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.4.2
+MatterSpecification.v11.Cluster § 5.2.5.4.2
 
 #### Inherited from
 
@@ -129,7 +129,7 @@ TypeFromSchema.operationSource
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1335](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1335)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1334](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1334)
 
 ___
 
@@ -144,7 +144,7 @@ with the given operation source. This shall NOT be null if the operation source 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.4.6
+MatterSpecification.v11.Cluster § 5.2.5.4.6
 
 #### Inherited from
 
@@ -152,7 +152,7 @@ TypeFromSchema.sourceNode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1369](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1369)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1368](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1368)
 
 ___
 
@@ -165,7 +165,7 @@ determined for the given operation source.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.4.4
+MatterSpecification.v11.Cluster § 5.2.5.4.4
 
 #### Inherited from
 
@@ -173,4 +173,4 @@ TypeFromSchema.userIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1350](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1350)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1349](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1349)

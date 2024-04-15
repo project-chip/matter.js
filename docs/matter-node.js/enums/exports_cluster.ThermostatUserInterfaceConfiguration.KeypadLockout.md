@@ -8,7 +8,7 @@ The value of the ThermostatUserInterfaceConfiguration keypadLockout attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.5.5.2
+MatterSpecification.v11.Cluster § 4.5.5.2
 
 ## Table of contents
 

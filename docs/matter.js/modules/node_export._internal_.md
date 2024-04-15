@@ -43,20 +43,9 @@
 
 ### Type Aliases
 
-- [Options](node_export._internal_.md#options)
 - [With](node_export._internal_.md#with)
 
 ## Type Aliases
-
-### Options
-
-Ƭ **Options**: \{ `activity`: [`NodeActivity`](../classes/behavior_cluster_export._internal_.NodeActivity-1.md) ; `command?`: `boolean` ; `fabricFiltered?`: `boolean` ; `message?`: [`Message`](../interfaces/codec_export.Message.md) ; `timed?`: `boolean` ; `trace?`: [`Action`](../interfaces/behavior_cluster_export._internal_.Action.md)  } & \{ `fabric?`: `undefined` ; `session`: [`Session`](../classes/session_export.Session.md)\<[`MatterDevice`](../classes/behavior_cluster_export._internal_.MatterDevice.md)\> ; `subject?`: `undefined`  } \| \{ `fabric`: [`FabricIndex`](datatype_export.md#fabricindex) ; `session?`: `undefined` ; `subject`: [`SubjectId`](datatype_export.md#subjectid)  }
-
-#### Defined in
-
-[packages/matter.js/src/behavior/context/server/OnlineContext.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/OnlineContext.ts#L127)
-
-___
 
 ### With
 
@@ -71,4 +60,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/type/MutableEndpoint.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/type/MutableEndpoint.ts#L80)
+[packages/matter.js/src/endpoint/type/MutableEndpoint.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/type/MutableEndpoint.ts#L80)

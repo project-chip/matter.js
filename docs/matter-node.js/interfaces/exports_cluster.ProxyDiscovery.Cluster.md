@@ -12,7 +12,7 @@ Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the ove
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.15.13
+MatterSpecification.v11.Core § 9.15.13
 
 ## Hierarchy
 
@@ -81,7 +81,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `proxyDiscoverRequest` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | **`See`** MatterCoreSpecificationV1_1 § 9.15.13.5 |
+| `proxyDiscoverRequest` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | **`See`** MatterSpecification.v11.Core § 9.15.13.5 |
 
 #### Inherited from
 

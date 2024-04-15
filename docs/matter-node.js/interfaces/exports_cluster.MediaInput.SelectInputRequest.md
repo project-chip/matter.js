@@ -8,7 +8,7 @@ Input to the MediaInput selectInput command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.9.4.1
+MatterSpecification.v11.Cluster § 6.9.4.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ to.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.9.4.1.1
+MatterSpecification.v11.Cluster § 6.9.4.1.1
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.5
+MatterSpecification.v11.Core § 11.8.5.5
 
 ## Hierarchy
 
@@ -65,7 +65,7 @@ This field, if present, shall denote the signal strength in dBm of the associate
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.5.2
+MatterSpecification.v11.Core § 11.8.5.5.2
 
 #### Inherited from
 
@@ -114,7 +114,7 @@ Wi-Fi frequency bands.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.5.1
+MatterSpecification.v11.Core § 11.8.5.5.1
 
 #### Inherited from
 

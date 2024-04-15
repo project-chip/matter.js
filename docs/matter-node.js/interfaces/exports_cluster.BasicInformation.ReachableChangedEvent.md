@@ -8,7 +8,7 @@ Body of the BasicInformation reachableChanged event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.4
+MatterSpecification.v11.Core § 11.1.6.4
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall indicate the value of the Reachable attribute after it was chan
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.4.1
+MatterSpecification.v11.Core § 11.1.6.4.1
 
 #### Inherited from
 

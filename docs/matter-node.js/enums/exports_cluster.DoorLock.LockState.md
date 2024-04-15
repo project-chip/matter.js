@@ -8,7 +8,7 @@ The value of the DoorLock lockState attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.1
+MatterSpecification.v11.Cluster § 5.2.3.1
 
 ## Table of contents
 

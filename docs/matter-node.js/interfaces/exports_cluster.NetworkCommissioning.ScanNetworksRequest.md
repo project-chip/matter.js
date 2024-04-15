@@ -8,7 +8,7 @@ Input to the NetworkCommissioning scanNetworks command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.1
+MatterSpecification.v11.Core § 11.8.7.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ in the General Commissioning cluster shall be left unchanged.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.1.2
+MatterSpecification.v11.Core § 11.8.7.1.2
 
 #### Inherited from
 
@@ -57,7 +57,7 @@ be ignored for ScanNetworks invocations on non-Wi-Fi server instances.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.1.1
+MatterSpecification.v11.Core § 11.8.7.1.1
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ The value of ColorControl.direction
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.19.3
+MatterSpecification.v11.Cluster § 3.2.11.19.3
 
 ## Table of contents
 

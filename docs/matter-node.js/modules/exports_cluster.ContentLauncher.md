@@ -165,7 +165,7 @@ The value of the ContentLauncher supportedStreamingProtocols attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.3.2.1
+MatterSpecification.v11.Cluster § 6.7.3.2.1
 
 #### Type declaration
 
@@ -188,7 +188,7 @@ This object defines additional name=value pairs that can be used for identifying
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.5
+MatterSpecification.v11.Cluster § 6.7.5.5
 
 #### Defined in
 
@@ -205,7 +205,7 @@ the Video Player during playback.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.6
+MatterSpecification.v11.Cluster § 6.7.5.6
 
 #### Defined in
 
@@ -221,7 +221,7 @@ This object defines inputs to a search for content for display or playback.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.2
+MatterSpecification.v11.Cluster § 6.7.5.2
 
 #### Defined in
 
@@ -240,7 +240,7 @@ because we don’t have any other usecases which require this datatype.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.8
+MatterSpecification.v11.Cluster § 6.7.5.8
 
 #### Defined in
 
@@ -256,7 +256,7 @@ Input to the ContentLauncher launchContent command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.1
+MatterSpecification.v11.Cluster § 6.7.4.1
 
 #### Defined in
 
@@ -272,7 +272,7 @@ Input to the ContentLauncher launchUrl command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.2
+MatterSpecification.v11.Cluster § 6.7.4.2
 
 #### Defined in
 
@@ -290,7 +290,7 @@ WARNING TODO: Data in table above needs a max size
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.3
+MatterSpecification.v11.Cluster § 6.7.4.3
 
 #### Defined in
 
@@ -306,7 +306,7 @@ This object defines inputs to a search for content for display or playback.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.3
+MatterSpecification.v11.Cluster § 6.7.5.3
 
 #### Defined in
 
@@ -323,7 +323,7 @@ related properties.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.7
+MatterSpecification.v11.Cluster § 6.7.5.7
 
 #### Defined in
 

@@ -44,11 +44,11 @@ These elements and properties are present in all OnOff clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `onOff`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\>  } | - |
-| `attributes.onOff` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\> | The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.6.1 |
+| `attributes.onOff` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\> | The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively. **`See`** MatterSpecification.v11.Cluster § 1.5.6.1 |
 | `commands` | \{ `off`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> ; `on`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> ; `toggle`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } | - |
-| `commands.off` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.1 |
-| `commands.on` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.2 |
-| `commands.toggle` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.3 |
+| `commands.off` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.1 |
+| `commands.on` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.2 |
+| `commands.toggle` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.3 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `globalSceneControl`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\> ; `offWaitTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\> ; `onTime`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `number`, `any`\> ; `startUpOnOff`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| [`StartUpOnOff`](../enums/cluster_export.OnOff.StartUpOnOff.md), `any`\>  } ; `commands`: \{ `offWithEffect`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`OnOffEffectIdentifier`](../enums/cluster_export.OnOff.OnOffEffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `onWithRecallGlobalScene`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> ; `onWithTimedOff`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `offWaitTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `onOffControl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `acceptOnlyWhenOn`: ... ; `reserved`: ...  }\>\> ; `onTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\>  }\>, `void`, `any`\>  }  } = LevelControlForLightingComponent; `flags`: \{ `levelControlForLighting`: ``true`` = true }  }] | This metadata controls which OnOffCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.levelControlForLighting` | [`BitFlag`](schema_export.md#bitflag) | LevelControlForLighting Behavior that supports lighting applications. |
@@ -58,7 +58,7 @@ These elements and properties are present in all OnOff clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:243](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L243)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:242](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L242)
 
 ___
 
@@ -68,9 +68,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:312](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L312)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:311](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L311)
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:314](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L314)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:313](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L313)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:301](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L301)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:300](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L300)
 
 ___
 
@@ -94,9 +94,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:369](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L369)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:368](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L368)
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:371](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:370](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L370)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:320](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L320)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:319](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L319)
 
 ___
 
@@ -136,7 +136,7 @@ A OnOffCluster supports these elements if it supports feature LevelControlForLig
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L133)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L132)
 
 ___
 
@@ -148,7 +148,7 @@ The value of OnOff.onOffControl
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.6.1
+MatterSpecification.v11.Cluster § 1.5.7.6.1
 
 #### Type declaration
 
@@ -159,7 +159,7 @@ The value of OnOff.onOffControl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L86)
 
 ___
 
@@ -171,11 +171,11 @@ Input to the OnOff offWithEffect command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.4
+MatterSpecification.v11.Cluster § 1.5.7.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L53)
 
 ___
 
@@ -187,8 +187,8 @@ Input to the OnOff onWithTimedOff command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.6
+MatterSpecification.v11.Cluster § 1.5.7.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:93](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L93)

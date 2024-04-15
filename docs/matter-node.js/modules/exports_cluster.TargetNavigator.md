@@ -72,7 +72,7 @@ Input to the TargetNavigator navigateTarget command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.4.1
+MatterSpecification.v11.Cluster § 6.11.4.1
 
 #### Defined in
 
@@ -88,7 +88,7 @@ This command shall be generated in response to NavigateTarget command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.4.2
+MatterSpecification.v11.Cluster § 6.11.4.2
 
 #### Defined in
 
@@ -104,7 +104,7 @@ This indicates an object describing the navigable target.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.5.1
+MatterSpecification.v11.Cluster § 6.11.5.1
 
 #### Defined in
 

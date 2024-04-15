@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L33)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L32)
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:126](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L126)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L125)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L110)
+[packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ExtendedColorLightDevice.ts#L109)

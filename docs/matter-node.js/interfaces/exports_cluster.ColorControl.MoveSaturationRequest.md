@@ -8,7 +8,7 @@ Input to the ColorControl moveSaturation command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.8
+MatterSpecification.v11.Cluster § 3.2.11.8
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ field is equal to 0 (Stop), the Rate field shall be ignored.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.8.1
+MatterSpecification.v11.Cluster § 3.2.11.8.1
 
 #### Inherited from
 
@@ -88,7 +88,7 @@ to INVALID_COMMAND. If the MoveMode field is set to 0 (stop) the Rate field shal
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.8.2
+MatterSpecification.v11.Cluster § 3.2.11.8.2
 
 #### Inherited from
 

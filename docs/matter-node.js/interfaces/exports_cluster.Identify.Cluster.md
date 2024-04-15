@@ -22,7 +22,7 @@ IdentifyCluster supports optional features that you can enable with the Identify
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2
+MatterSpecification.v11.Cluster § 1.2
 
 ## Hierarchy
 
@@ -91,8 +91,8 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `identify` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command starts or stops the receiving device identifying itself. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.2.6.1 |
-| `triggerEffect` | [`OptionalCommand`](exports_cluster.OptionalCommand.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](exports_tlv.FieldType.md)\<[`EffectIdentifier`](../enums/exports_cluster.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](exports_tlv.FieldType.md)\<[`Default`](../enums/exports_cluster.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\> | This command allows the support of feedback to the user, such as a certain light effect. It is used to allow an implementation to provide visual feedback to the user under certain circumstances such as a color light turning green when it has successfully connected to a network. The use of this command and the effects themselves are entirely up to the implementer to use whenever a visual feedback is useful but it is not the same as and does not replace the identify mechanism used during commissioning. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.2.6.3 |
+| `identify` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `identifyTime`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | This command starts or stops the receiving device identifying itself. **`See`** MatterSpecification.v11.Cluster § 1.2.6.1 |
+| `triggerEffect` | [`OptionalCommand`](exports_cluster.OptionalCommand.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](exports_tlv.FieldType.md)\<[`EffectIdentifier`](../enums/exports_cluster.Identify.EffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](exports_tlv.FieldType.md)\<[`Default`](../enums/exports_cluster.Identify.EffectVariant.md#default)\>  }\>, `void`, `any`\> | This command allows the support of feedback to the user, such as a certain light effect. It is used to allow an implementation to provide visual feedback to the user under certain circumstances such as a color light turning green when it has successfully connected to a network. The use of this command and the effects themselves are entirely up to the implementer to use whenever a visual feedback is useful but it is not the same as and does not replace the identify mechanism used during commissioning. **`See`** MatterSpecification.v11.Cluster § 1.2.6.3 |
 
 #### Inherited from
 

@@ -32,7 +32,7 @@ GroupList field shall contain only as many groups as will fit.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.9
+MatterSpecification.v11.Cluster § 1.3.7.9
 
 ## Hierarchy
 
@@ -59,7 +59,7 @@ TypeFromSchema.capacity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L148)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:147](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L147)
 
 ___
 
@@ -73,4 +73,4 @@ TypeFromSchema.groupList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:149](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L149)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:148](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L148)

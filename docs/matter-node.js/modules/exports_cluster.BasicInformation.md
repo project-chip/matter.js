@@ -78,7 +78,7 @@ cluster-specific.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.4.1
+MatterSpecification.v11.Core § 11.1.4.1
 
 #### Defined in
 
@@ -94,7 +94,7 @@ Body of the BasicInformation leave event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.3
+MatterSpecification.v11.Core § 11.1.6.3
 
 #### Defined in
 
@@ -120,7 +120,7 @@ Body of the BasicInformation reachableChanged event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.4
+MatterSpecification.v11.Core § 11.1.6.4
 
 #### Defined in
 
@@ -136,7 +136,7 @@ Body of the BasicInformation startUp event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.1
+MatterSpecification.v11.Core § 11.1.6.1
 
 #### Defined in
 

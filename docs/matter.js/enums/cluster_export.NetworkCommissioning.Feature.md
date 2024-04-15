@@ -8,7 +8,7 @@ These are optional features supported by NetworkCommissioningCluster.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.4
+MatterSpecification.v11.Core § 11.8.4
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ Ethernet related features
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1047](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1047)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1046](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1046)
 
 ___
 
@@ -44,7 +44,7 @@ Thread related features
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1040](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1040)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1039](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1039)
 
 ___
 
@@ -58,4 +58,4 @@ Wi-Fi related features
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1033](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1033)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1032](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1032)

@@ -56,11 +56,11 @@ sets at all.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.2
+MatterSpecification.v11.Cluster § 1.4.9.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L21)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L20)
 
 ___
 
@@ -70,11 +70,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.12
+MatterSpecification.v11.Cluster § 1.4.9.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L26)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L25)
 
 ___
 
@@ -87,11 +87,11 @@ group/scene identifier pair.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.11
+MatterSpecification.v11.Cluster § 1.4.9.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:116](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L116)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L115)
 
 ___
 
@@ -103,11 +103,11 @@ The CopySceneResponse command allows a server to respond to a CopyScene command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.20
+MatterSpecification.v11.Cluster § 1.4.9.20
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:123](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L123)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L122)
 
 ___
 
@@ -121,11 +121,11 @@ group, for the endpoint that implements this cluster.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.8
+MatterSpecification.v11.Cluster § 1.4.9.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L80)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L79)
 
 ___
 
@@ -158,11 +158,11 @@ to be exceeded, then the SceneList field shall contain only as many scenes as wi
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.17
+MatterSpecification.v11.Cluster § 1.4.9.17
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L108)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:107](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L107)
 
 ___
 
@@ -172,11 +172,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.7
+MatterSpecification.v11.Cluster § 1.4.9.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L71)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L70)
 
 ___
 
@@ -186,11 +186,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.5
+MatterSpecification.v11.Cluster § 1.4.9.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L51)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L50)
 
 ___
 
@@ -200,11 +200,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.15
+MatterSpecification.v11.Cluster § 1.4.9.15
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L56)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L55)
 
 ___
 
@@ -214,11 +214,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.4
+MatterSpecification.v11.Cluster § 1.4.9.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L41)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L40)
 
 ___
 
@@ -228,11 +228,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.14
+MatterSpecification.v11.Cluster § 1.4.9.14
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L46)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L45)
 
 ___
 
@@ -248,9 +248,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:125](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L125)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L124)
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:202](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L202)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:201](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L201)
 
 ___
 
@@ -260,11 +260,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.6
+MatterSpecification.v11.Cluster § 1.4.9.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L61)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L60)
 
 ___
 
@@ -274,11 +274,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.16
+MatterSpecification.v11.Cluster § 1.4.9.16
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:66](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L66)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L65)
 
 ___
 
@@ -288,11 +288,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.3
+MatterSpecification.v11.Cluster § 1.4.9.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L31)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L30)
 
 ___
 
@@ -302,11 +302,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.13
+MatterSpecification.v11.Cluster § 1.4.9.13
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L36)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesInterface.ts#L35)
 
 ## Variables
 
@@ -318,8 +318,8 @@ ScenesBehavior is the base class for objects that support interaction with [Scen
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/scenes/ScenesBehavior.ts#L23)

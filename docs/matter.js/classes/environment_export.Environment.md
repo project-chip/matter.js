@@ -69,7 +69,7 @@ TODO - could remove global singletons by moving here
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L38)
+[packages/matter.js/src/environment/Environment.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L39)
 
 ## Properties
 
@@ -79,7 +79,7 @@ TODO - could remove global singletons by moving here
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L34)
+[packages/matter.js/src/environment/Environment.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L35)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L35)
+[packages/matter.js/src/environment/Environment.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L36)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L32)
+[packages/matter.js/src/environment/Environment.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L33)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L33)
+[packages/matter.js/src/environment/Environment.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L34)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L36)
+[packages/matter.js/src/environment/Environment.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L37)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L31)
+[packages/matter.js/src/environment/Environment.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L32)
 
 ## Accessors
 
@@ -147,7 +147,7 @@ Currently only emits for services owned directly by this environment.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:125](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L125)
+[packages/matter.js/src/environment/Environment.ts:126](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L126)
 
 ___
 
@@ -165,7 +165,7 @@ Currently only emits for services owned directly by this environment.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:134](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L134)
+[packages/matter.js/src/environment/Environment.ts:135](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L135)
 
 ___
 
@@ -181,7 +181,7 @@ Name of the environment.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:116](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L116)
+[packages/matter.js/src/environment/Environment.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L117)
 
 ___
 
@@ -197,7 +197,7 @@ Shortcut for accessing [RuntimeService](environment_export.RuntimeService-1.md).
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:189](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L189)
+[packages/matter.js/src/environment/Environment.ts:190](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L190)
 
 ___
 
@@ -213,7 +213,7 @@ Shortcut for accessing [VariableService.vars](environment_export.VariableService
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:182](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L182)
+[packages/matter.js/src/environment/Environment.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L183)
 
 ___
 
@@ -231,7 +231,7 @@ Currently only emits for services owned directly by this environment.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:160](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L160)
+[packages/matter.js/src/environment/Environment.ts:161](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L161)
 
 • `set` **default**(`env`): `void`
 
@@ -249,7 +249,7 @@ Set the default environment.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:167](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L167)
+[packages/matter.js/src/environment/Environment.ts:168](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L168)
 
 ## Methods
 
@@ -272,7 +272,7 @@ Remove an environmental service.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L74)
+[packages/matter.js/src/environment/Environment.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L75)
 
 ___
 
@@ -288,7 +288,7 @@ Display tasks that supply diagnostics.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:196](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L196)
+[packages/matter.js/src/environment/Environment.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L197)
 
 ___
 
@@ -318,7 +318,7 @@ This is a more convenient way to observe a specific service than [added](environ
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:143](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L143)
+[packages/matter.js/src/environment/Environment.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L144)
 
 ___
 
@@ -346,7 +346,7 @@ Access an environmental service.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L53)
+[packages/matter.js/src/environment/Environment.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L54)
 
 ___
 
@@ -368,7 +368,7 @@ Determine if an environmental service is available.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L46)
+[packages/matter.js/src/environment/Environment.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L47)
 
 ___
 
@@ -396,7 +396,7 @@ Access an environmental service, waiting for any async initialization to complet
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L92)
+[packages/matter.js/src/environment/Environment.ts:93](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L93)
 
 ___
 
@@ -410,7 +410,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:206](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L206)
+[packages/matter.js/src/environment/Environment.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L207)
 
 ___
 
@@ -439,4 +439,4 @@ Install a preinitialized version of an environmental service.
 
 #### Defined in
 
-[packages/matter.js/src/environment/Environment.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/Environment.ts#L101)
+[packages/matter.js/src/environment/Environment.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/Environment.ts#L102)

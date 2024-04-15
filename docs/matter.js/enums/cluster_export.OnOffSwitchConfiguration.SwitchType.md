@@ -22,7 +22,7 @@ The value of the OnOffSwitchConfiguration switchType attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L21)
+[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L21)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L22)
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L20)
+[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L20)

@@ -16,7 +16,7 @@ EthernetNetworkDiagnosticsCluster.with() factory method.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.15
+MatterSpecification.v11.Core § 11.15
 
 ## Hierarchy
 

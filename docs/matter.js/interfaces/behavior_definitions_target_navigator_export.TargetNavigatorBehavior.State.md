@@ -32,7 +32,7 @@ TargetInfoStruct objects in the TargetList attribute list.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.3.2
+MatterSpecification.v11.Cluster § 6.11.3.2
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ StateType.currentTarget
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L154)
 
 ___
 
@@ -54,7 +54,7 @@ contain any entries with the same Identifier in the TargetInfoStruct object.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.3.1
+MatterSpecification.v11.Cluster § 6.11.3.1
 
 #### Inherited from
 
@@ -62,4 +62,4 @@ StateType.targetList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:143](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L143)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:142](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L142)

@@ -11,7 +11,7 @@ TrustedRootCertificates attribute of the Node Operational Credentials cluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.4
+MatterSpecification.v11.Core § 11.17.4.4
 
 ## Hierarchy
 
@@ -52,7 +52,7 @@ Encoding. If no ICAC is present in the chain, this field shall be set to null.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.4.2
+MatterSpecification.v11.Core § 11.17.4.4.2
 
 #### Inherited from
 
@@ -73,7 +73,7 @@ Encoding.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.4.1
+MatterSpecification.v11.Core § 11.17.4.4.1
 
 #### Inherited from
 

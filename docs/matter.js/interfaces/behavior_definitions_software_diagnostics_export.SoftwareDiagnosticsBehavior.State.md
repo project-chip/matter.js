@@ -29,7 +29,7 @@ for allocation. The effective amount may be smaller due to heap fragmentation or
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.6.2
+MatterSpecification.v11.Core § 11.12.6.2
 
 #### Inherited from
 
@@ -37,7 +37,7 @@ StateType.currentHeapFree
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:195](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L195)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:194](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L194)
 
 ___
 
@@ -50,7 +50,7 @@ used.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.6.3
+MatterSpecification.v11.Core § 11.12.6.3
 
 #### Inherited from
 
@@ -58,7 +58,7 @@ StateType.currentHeapUsed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:203](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L203)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L202)
 
 ___
 
@@ -71,7 +71,7 @@ Node shall be represented by a single entry within the ThreadMetrics attribute.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.6.1
+MatterSpecification.v11.Core § 11.12.6.1
 
 #### Inherited from
 
@@ -79,4 +79,4 @@ StateType.threadMetrics
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:187](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L186)

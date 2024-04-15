@@ -35,11 +35,11 @@ SPEED_OUT_OF_RANGE shall be returned.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.8
+MatterSpecification.v11.Cluster § 6.10.4.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:149](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L149)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:148](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L148)
 
 ___
 
@@ -67,8 +67,8 @@ SPEED_OUT_OF_RANGE shall be returned.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.7
+MatterSpecification.v11.Cluster § 6.10.4.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L132)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L131)

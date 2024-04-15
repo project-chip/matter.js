@@ -8,7 +8,7 @@ Input to the ColorControl enhancedMoveToHueAndSaturation command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.18
+MatterSpecification.v11.Cluster § 3.2.11.18
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ The EnhancedHue field specifies the target extended hue for the lamp.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.18.1
+MatterSpecification.v11.Cluster § 3.2.11.18.1
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.enhancedHue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:670](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L670)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:669](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L669)
 
 ___
 
@@ -58,7 +58,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:688](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L688)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:687](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L687)
 
 ___
 
@@ -72,7 +72,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:689](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L689)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:688](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L688)
 
 ___
 
@@ -85,7 +85,7 @@ cluster (see sub-clause MoveToHueAndSaturation Command).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.18.2
+MatterSpecification.v11.Cluster § 3.2.11.18.2
 
 #### Inherited from
 
@@ -93,7 +93,7 @@ TypeFromSchema.saturation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:678](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L678)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:677](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L677)
 
 ___
 
@@ -106,7 +106,7 @@ This field is identical to the TransitionTime field of the MoveToHue command of 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.18.3
+MatterSpecification.v11.Cluster § 3.2.11.18.3
 
 #### Inherited from
 
@@ -114,4 +114,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:686](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L686)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:685](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L685)

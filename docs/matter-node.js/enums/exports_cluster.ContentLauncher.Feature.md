@@ -8,7 +8,7 @@ These are optional features supported by ContentLauncherCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.2
+MatterSpecification.v11.Cluster § 6.7.2
 
 ## Table of contents
 

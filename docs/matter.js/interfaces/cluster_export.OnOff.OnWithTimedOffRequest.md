@@ -8,7 +8,7 @@ Input to the OnOff onWithTimedOff command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.6
+MatterSpecification.v11.Cluster § 1.5.7.6
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ The OffWaitTime field is used to adjust the value of the OffWaitTime attribute.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.6.3
+MatterSpecification.v11.Cluster § 1.5.7.6.3
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ TypeFromSchema.offWaitTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:120](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L119)
 
 ___
 
@@ -60,7 +60,7 @@ is set to 0, the OnWithTimedOff command shall be processed unconditionally.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.6.1
+MatterSpecification.v11.Cluster § 1.5.7.6.1
 
 #### Inherited from
 
@@ -68,7 +68,7 @@ TypeFromSchema.onOffControl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L105)
 
 ___
 
@@ -80,7 +80,7 @@ The OnTime field is used to adjust the value of the OnTime attribute.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.6.2
+MatterSpecification.v11.Cluster § 1.5.7.6.2
 
 #### Inherited from
 
@@ -88,4 +88,4 @@ TypeFromSchema.onTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L113)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L112)

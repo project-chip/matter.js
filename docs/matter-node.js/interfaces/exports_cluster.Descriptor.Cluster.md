@@ -20,7 +20,7 @@ type.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.5
+MatterSpecification.v11.Core § 9.5
 
 ## Hierarchy
 

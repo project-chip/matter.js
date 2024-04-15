@@ -8,7 +8,7 @@ Input to the Thermostat setWeeklySchedule command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.8
+MatterSpecification.v11.Cluster § 4.3.8
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ TypeFromSchema.dayOfWeekForSequence
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L113)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L112)
 
 ___
 
@@ -51,7 +51,7 @@ TypeFromSchema.modeForSequence
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L114)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L113)
 
 ___
 
@@ -65,7 +65,7 @@ TypeFromSchema.numberOfTransitionsForSequence
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:112](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L111)
 
 ___
 
@@ -79,4 +79,4 @@ TypeFromSchema.transitions
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L115)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:114](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L114)

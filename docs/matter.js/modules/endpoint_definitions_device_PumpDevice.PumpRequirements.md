@@ -32,11 +32,11 @@
 
 The FlowMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [FlowMeasurementBehavior](endpoint_definitions_device_PumpDevice.PumpRequirements.md#flowmeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:139](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L139)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:138](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L138)
 
 ___
 
@@ -46,11 +46,11 @@ ___
 
 The FlowMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [FlowMeasurementServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#flowmeasurementserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:118](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L118)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L117)
 
 ___
 
@@ -60,11 +60,11 @@ ___
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#groupsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L97)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L96)
 
 ___
 
@@ -74,11 +74,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L76)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L75)
 
 ___
 
@@ -88,11 +88,11 @@ ___
 
 The LevelControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#levelcontrolserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L83)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L82)
 
 ___
 
@@ -102,11 +102,11 @@ ___
 
 The OccupancySensing cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OccupancySensingBehavior](endpoint_definitions_device_PumpDevice.PumpRequirements.md#occupancysensingbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:146](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L146)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:145](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L145)
 
 ___
 
@@ -116,11 +116,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#onoffserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L62)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L61)
 
 ___
 
@@ -130,11 +130,11 @@ ___
 
 The PressureMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [PressureMeasurementBehavior](endpoint_definitions_device_PumpDevice.PumpRequirements.md#pressuremeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L132)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L131)
 
 ___
 
@@ -144,11 +144,11 @@ ___
 
 The PressureMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [PressureMeasurementServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#pressuremeasurementserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L111)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L110)
 
 ___
 
@@ -158,11 +158,11 @@ ___
 
 The PumpConfigurationAndControl cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [PumpConfigurationAndControlServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#pumpconfigurationandcontrolserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L69)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L68)
 
 ___
 
@@ -172,11 +172,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#scenesserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L90)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L89)
 
 ___
 
@@ -186,11 +186,11 @@ ___
 
 The TemperatureMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TemperatureMeasurementBehavior](endpoint_definitions_device_PumpDevice.PumpRequirements.md#temperaturemeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:125](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L125)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L124)
 
 ___
 
@@ -200,11 +200,11 @@ ___
 
 The TemperatureMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TemperatureMeasurementServer](endpoint_definitions_device_PumpDevice.PumpRequirements.md#temperaturemeasurementserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L104)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L103)
 
 ___
 
@@ -227,7 +227,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:171](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L171)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:170](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L170)
 
 ___
 
@@ -255,4 +255,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:151](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L151)
+[packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts:150](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpDevice.ts#L150)

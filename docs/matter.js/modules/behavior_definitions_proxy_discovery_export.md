@@ -43,9 +43,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryInterface.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryInterface.ts#L12)
+[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryInterface.ts:11](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryInterface.ts#L11)
 
-[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryInterface.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryInterface.ts#L21)
+[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryInterface.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryInterface.ts#L20)
 
 ## Variables
 
@@ -57,8 +57,8 @@ ProxyDiscoveryBehavior is the base class for objects that support interaction wi
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/proxy-discovery/ProxyDiscoveryBehavior.ts#L23)

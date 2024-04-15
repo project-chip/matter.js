@@ -56,11 +56,11 @@ device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOU
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.5
+MatterSpecification.v11.Cluster § 5.3.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L32)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L31)
 
 ___
 
@@ -76,11 +76,11 @@ response containing the status of CONSTRAINT_ERROR will be returned.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.4
+MatterSpecification.v11.Cluster § 5.3.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L64)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L63)
 
 ___
 
@@ -106,11 +106,11 @@ device, then the command SHOULD be ignored and a UNSUPPORTED_COMMAND status SHOU
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.7
+MatterSpecification.v11.Cluster § 5.3.6.7
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L53)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L52)
 
 ___
 
@@ -126,11 +126,11 @@ response containing the status of CONSTRAINT_ERROR will be returned.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.6
+MatterSpecification.v11.Cluster § 5.3.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L75)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L74)
 
 ___
 
@@ -146,9 +146,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L77)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L76)
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:279](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L279)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:278](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L278)
 
 ## Variables
 
@@ -162,8 +162,8 @@ WindowCovering.Cluster requires you to enable one or more optional features. You
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L20)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L20)
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L25)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L25)
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L27)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringBehavior.ts#L27)

@@ -8,7 +8,7 @@ The type of input, expressed as an enum, with the following values:
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.9.5.2
+MatterSpecification.v11.Cluster § 6.9.5.2
 
 ## Table of contents
 

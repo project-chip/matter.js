@@ -216,7 +216,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § A.7
+MatterSpecification.v10.Core § A.7
 
 #### Defined in
 
@@ -270,7 +270,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § A.7 & A.8
+MatterSpecification.v10.Core § A.7 & A.8
 
 #### Defined in
 

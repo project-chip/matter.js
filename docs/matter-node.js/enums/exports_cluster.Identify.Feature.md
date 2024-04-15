@@ -8,7 +8,7 @@ These are optional features supported by IdentifyCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.4
+MatterSpecification.v11.Cluster § 1.2.4
 
 ## Table of contents
 

@@ -30,7 +30,7 @@ of type GranularityEnum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.8.2
+MatterSpecification.v11.Core § 11.16.8.2
 
 #### Inherited from
 
@@ -38,7 +38,7 @@ StateType.granularity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:536](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L536)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:535](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L535)
 
 ___
 
@@ -55,7 +55,7 @@ NonFabric.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.8.3
+MatterSpecification.v11.Core § 11.16.8.3
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ StateType.timeSource
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:548](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L548)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:547](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L547)
 
 ___
 
@@ -79,7 +79,7 @@ available, the commissioner may set this value to null.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.8.5
+MatterSpecification.v11.Core § 11.16.8.5
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ StateType.trustedTimeNodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:559](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L559)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:558](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L558)
 
 ___
 
@@ -103,7 +103,7 @@ a Section 11.16.9.1, “SetUtcTime Command” is received.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.8.1
+MatterSpecification.v11.Core § 11.16.8.1
 
 #### Inherited from
 
@@ -111,4 +111,4 @@ StateType.utcTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:528](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L528)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:527](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L527)

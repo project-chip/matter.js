@@ -40,7 +40,7 @@ These elements and properties are present in all KeypadInput clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `commands` | \{ `sendKey`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\>  } | - |
-| `commands.sendKey` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\> | Upon receipt, this shall process a keycode as input to the media device. If a second SendKey request with the same KeyCode value is received within 200ms, then the endpoint will consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200ms, then the endpoint will consider the last key press to be a release. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.3.1 |
+| `commands.sendKey` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\> | Upon receipt, this shall process a keycode as input to the media device. If a second SendKey request with the same KeyCode value is received within 200ms, then the endpoint will consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200ms, then the endpoint will consider the last key press to be a release. **`See`** MatterSpecification.v11.Cluster § 6.8.3.1 |
 | `extensions` | readonly [] | This metadata controls which KeypadInputCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `locationKeys`: [`BitFlag`](schema_export.md#bitflag) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.locationKeys` | [`BitFlag`](schema_export.md#bitflag) | LocationKeys Supports CEC keys 0x0A (Settings) and 0x09 (Home) |
@@ -52,7 +52,7 @@ These elements and properties are present in all KeypadInput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:202](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:201](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L201)
 
 ___
 
@@ -62,9 +62,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:266](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L266)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L265)
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:268](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L268)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:267](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L267)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:253](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L253)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:252](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L252)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:269](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L269)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:268](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L268)
 
 ___
 
@@ -100,11 +100,11 @@ Input to the KeypadInput sendKey command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.3.1
+MatterSpecification.v11.Cluster § 6.8.3.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L114)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L113)
 
 ___
 
@@ -116,8 +116,8 @@ This command shall be generated in response to a SendKey command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.3.2
+MatterSpecification.v11.Cluster § 6.8.3.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L154)

@@ -11,7 +11,7 @@ other formats which can map into these numeric values.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.1
+MatterSpecification.v11.Cluster § 6.6.5.1
 
 ## Hierarchy
 
@@ -40,7 +40,7 @@ provided when known.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.1.5
+MatterSpecification.v11.Cluster § 6.6.5.1.5
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ provided when known.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.1.4
+MatterSpecification.v11.Cluster § 6.6.5.1.4
 
 #### Inherited from
 
@@ -82,7 +82,7 @@ is expressed as a string, such as "13.1" or "256", the major number would be 13 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.1.1
+MatterSpecification.v11.Cluster § 6.6.5.1.1
 
 #### Inherited from
 
@@ -103,7 +103,7 @@ is expressed as a string, such as "13.1" or "256", the minor number would be 1 o
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.1.2
+MatterSpecification.v11.Cluster § 6.6.5.1.2
 
 #### Inherited from
 
@@ -124,7 +124,7 @@ optional, but SHOULD be provided when known.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.1.3
+MatterSpecification.v11.Cluster § 6.6.5.1.3
 
 #### Inherited from
 

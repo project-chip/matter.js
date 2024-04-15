@@ -9,6 +9,7 @@ Translates interactions from the Matter protocol to Matter.js APIs.
 ## Implements
 
 - [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\>
+- [`InteractionRecipient`](../interfaces/exports_interaction.InteractionRecipient.md)
 
 ## Table of contents
 
@@ -19,6 +20,10 @@ Translates interactions from the Matter protocol to Matter.js APIs.
 ### Properties
 
 - [#private](exports_interaction.InteractionServer-1.md##private)
+
+### Accessors
+
+- [isClosing](exports_interaction.InteractionServer-1.md#isclosing)
 
 ### Methods
 
@@ -52,7 +57,7 @@ Translates interactions from the Matter protocol to Matter.js APIs.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:67
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:66
 
 ## Properties
 
@@ -62,7 +67,21 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:67
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:66
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:65
+
+## Accessors
+
+### isClosing
+
+• `get` **isClosing**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:68
 
 ## Methods
 
@@ -98,7 +117,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:68
+packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:67
 
 ___
 
@@ -117,6 +136,10 @@ ___
 #### Returns
 
 `Promise`\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `interactionModelRevision`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `invokeResponses`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `command`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `commandFields`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\> ; `commandPath`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<...\>  }\>\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `commandPath`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<...\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<...\>  }\>\>  }\>[]\> ; `suppressResponse`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`boolean`\>  }\>\>
+
+#### Implementation of
+
+[InteractionRecipient](../interfaces/exports_interaction.InteractionRecipient.md).[handleInvokeRequest](../interfaces/exports_interaction.InteractionRecipient.md#handleinvokerequest)
 
 #### Defined in
 
@@ -139,6 +162,10 @@ ___
 #### Returns
 
 `Promise`\<[`DataReportPayload`](../modules/exports_interaction.md#datareportpayload)\>
+
+#### Implementation of
+
+[InteractionRecipient](../interfaces/exports_interaction.InteractionRecipient.md).[handleReadRequest](../interfaces/exports_interaction.InteractionRecipient.md#handlereadrequest)
 
 #### Defined in
 
@@ -163,6 +190,10 @@ ___
 
 `Promise`\<`void`\>
 
+#### Implementation of
+
+[InteractionRecipient](../interfaces/exports_interaction.InteractionRecipient.md).[handleSubscribeRequest](../interfaces/exports_interaction.InteractionRecipient.md#handlesubscriberequest)
+
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:77
@@ -183,6 +214,10 @@ ___
 #### Returns
 
 `void`
+
+#### Implementation of
+
+[InteractionRecipient](../interfaces/exports_interaction.InteractionRecipient.md).[handleTimedRequest](../interfaces/exports_interaction.InteractionRecipient.md#handletimedrequest)
 
 #### Defined in
 
@@ -206,6 +241,10 @@ ___
 
 `Promise`\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `interactionModelRevision`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `writeResponses`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<...\>  }\>\>  }\>[]\>  }\>\>
 
+#### Implementation of
+
+[InteractionRecipient](../interfaces/exports_interaction.InteractionRecipient.md).[handleWriteRequest](../interfaces/exports_interaction.InteractionRecipient.md#handlewriterequest)
+
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:75
@@ -214,14 +253,14 @@ ___
 
 ### invokeCommand
 
-▸ **invokeCommand**(`command`, `session`, `commandFields`, `message`, `endpoint`, `_receivedWithinTimedInteraction?`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
+▸ **invokeCommand**(`command`, `exchange`, `commandFields`, `message`, `endpoint`, `_receivedWithinTimedInteraction?`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `command` | [`CommandServer`](exports_cluster.CommandServer.md)\<`any`, `any`\> |
-| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `commandFields` | `any` |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 | `endpoint` | [`EndpointInterface`](../interfaces/exports_cluster._internal_.EndpointInterface.md) |
@@ -263,14 +302,14 @@ ___
 
 ### readAttribute
 
-▸ **readAttribute**(`attribute`, `session`, `isFabricFiltered`, `message`): `Promise`\<\{ `value`: `any` ; `version`: `number`  }\>
+▸ **readAttribute**(`attribute`, `exchange`, `isFabricFiltered`, `message`): `Promise`\<\{ `value`: `any` ; `version`: `number`  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `attribute` | [`AnyAttributeServer`](../modules/exports_cluster.md#anyattributeserver)\<`any`\> |
-| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 
@@ -286,7 +325,7 @@ ___
 
 ### writeAttribute
 
-▸ **writeAttribute**(`attribute`, `value`, `session`, `message`, `_receivedWithinTimedInteraction?`): `Promise`\<`void`\>
+▸ **writeAttribute**(`attribute`, `value`, `exchange`, `message`, `_receivedWithinTimedInteraction?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -294,7 +333,7 @@ ___
 | :------ | :------ |
 | `attribute` | [`AttributeServer`](exports_cluster.AttributeServer.md)\<`any`\> |
 | `value` | `any` |
-| `session` | [`Session`](exports_session.Session.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](exports_cluster._internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 | `_receivedWithinTimedInteraction?` | `boolean` |
 

@@ -65,7 +65,7 @@ Inform [Transaction](../modules/behavior_export._internal_.md#transaction) this 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Resource.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Resource.ts#L27)
+[packages/matter.js/src/behavior/state/transaction/Resource.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Resource.ts#L27)
 
 ___
 
@@ -81,7 +81,7 @@ Locking transaction, maintained by [Transaction](../modules/behavior_export._int
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Resource.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Resource.ts#L22)
+[packages/matter.js/src/behavior/state/transaction/Resource.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Resource.ts#L22)
 
 ___
 
@@ -93,7 +93,7 @@ The data's version.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L43)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/managed/Datasource.ts#L43)
 
 ___
 
@@ -105,7 +105,7 @@ Obtain a read-only view of values.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L53)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/managed/Datasource.ts#L53)
 
 ## Methods
 
@@ -127,7 +127,7 @@ Create a managed version of the source data.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L38)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/managed/Datasource.ts#L38)
 
 ___
 
@@ -147,7 +147,7 @@ Textual description of the resource used in error messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Resource.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Resource.ts#L17)
+[packages/matter.js/src/behavior/state/transaction/Resource.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Resource.ts#L17)
 
 ___
 
@@ -170,4 +170,4 @@ Validate values against the schema.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L48)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/managed/Datasource.ts#L48)

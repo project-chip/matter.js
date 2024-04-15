@@ -8,7 +8,7 @@ This structure encodes a Fabric Reference for a fabric within which a given Node
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.5
+MatterSpecification.v11.Core § 11.17.4.5
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ operational identity under this Fabric.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.5.3
+MatterSpecification.v11.Core § 11.17.4.5.3
 
 #### Inherited from
 
@@ -74,7 +74,7 @@ set by the UpdateFabricLabel command.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.5.5
+MatterSpecification.v11.Core § 11.17.4.5.5
 
 #### Inherited from
 
@@ -96,7 +96,7 @@ operational identity.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.5.4
+MatterSpecification.v11.Core § 11.17.4.5.4
 
 #### Inherited from
 
@@ -119,7 +119,7 @@ Encoding for the root in the operational certificate chain.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.5.1
+MatterSpecification.v11.Core § 11.17.4.5.1
 
 #### Inherited from
 
@@ -144,7 +144,7 @@ on the Node.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.5.2
+MatterSpecification.v11.Core § 11.17.4.5.2
 
 #### Inherited from
 

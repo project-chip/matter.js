@@ -10,7 +10,7 @@ Attributes and commands for configuring occupancy sensing, and reporting occupan
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 2.7
+MatterSpecification.v11.Cluster § 2.7
 
 ## Hierarchy
 

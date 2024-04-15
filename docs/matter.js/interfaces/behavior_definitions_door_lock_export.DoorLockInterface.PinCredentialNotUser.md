@@ -25,11 +25,11 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:261](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L261)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:260](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L260)
 
 ___
 
@@ -43,11 +43,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:256](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L256)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L255)
 
 ___
 
@@ -61,11 +61,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:251](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L251)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:250](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L250)
 
 ___
 
@@ -79,8 +79,8 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:246](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L246)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:245](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L245)

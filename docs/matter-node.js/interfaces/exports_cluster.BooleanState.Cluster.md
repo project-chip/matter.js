@@ -10,7 +10,7 @@ This cluster provides an interface to a boolean state called StateValue.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.7
+MatterSpecification.v11.Cluster § 1.7
 
 ## Hierarchy
 
@@ -93,7 +93,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `stateChange` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `stateValue`: [`FieldType`](exports_tlv.FieldType.md)\<`boolean`\>  }\>, `any`\> | This event shall be generated when the StateValue attribute changes. The StateValue field shall indicate the new value of the StateValue attribute. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.7.5.1 |
+| `stateChange` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `stateValue`: [`FieldType`](exports_tlv.FieldType.md)\<`boolean`\>  }\>, `any`\> | This event shall be generated when the StateValue attribute changes. The StateValue field shall indicate the new value of the StateValue attribute. **`See`** MatterSpecification.v11.Cluster § 1.7.5.1 |
 
 #### Inherited from
 

@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L81)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L80)
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:262](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L262)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:261](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L261)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:242](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L242)
+[packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts:241](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/RootEndpoint.ts#L241)

@@ -9,7 +9,7 @@ credential types and their corresponding indices (if any) for the event or user 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.3
+MatterSpecification.v11.Cluster § 5.2.6.3
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ ProgrammingPIN or does not correspond to a list that can be indexed into.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.3.2
+MatterSpecification.v11.Cluster § 5.2.6.3.2
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.credentialIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:311](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L311)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:310](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L310)
 
 ___
 
@@ -56,7 +56,7 @@ The credential type used to authorize the lock operation.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.3.1
+MatterSpecification.v11.Cluster § 5.2.6.3.1
 
 #### Inherited from
 
@@ -64,4 +64,4 @@ TypeFromSchema.credentialType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:302](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L302)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:301](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L301)

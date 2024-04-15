@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/BitmapSchema.ts#L16)
+[packages/matter.js/src/schema/BitmapSchema.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/BitmapSchema.ts#L16)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/BitmapSchema.ts#L14)
+[packages/matter.js/src/schema/BitmapSchema.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/BitmapSchema.ts#L14)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/BitmapSchema.ts#L15)
+[packages/matter.js/src/schema/BitmapSchema.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/BitmapSchema.ts#L15)
 
 ## Type Aliases
 
@@ -88,9 +88,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/BitmapSchema.ts#L19)
+[packages/matter.js/src/schema/BitmapSchema.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/BitmapSchema.ts#L19)
 
-[packages/matter.js/src/schema/BitmapSchema.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/BitmapSchema.ts#L25)
+[packages/matter.js/src/schema/BitmapSchema.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/BitmapSchema.ts#L25)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/BitmapSchema.ts#L53)
+[packages/matter.js/src/schema/BitmapSchema.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/BitmapSchema.ts#L53)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/BitmapSchema.ts#L54)
+[packages/matter.js/src/schema/BitmapSchema.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/BitmapSchema.ts#L54)
 
 ## Variables
 
@@ -130,11 +130,11 @@ ___
 
 • `Const` **QrCodeDataSchema**: [`ByteArrayBitmapSchemaInternal`](../classes/schema_export.ByteArrayBitmapSchemaInternal.md)\<\{ `discoveryCapabilities`: [`BitField`](schema_export.md#bitfield) ; `discriminator`: [`BitField`](schema_export.md#bitfield) ; `flowType`: [`BitFieldEnum`](schema_export.md#bitfieldenum)\<[`CommissioningFlowType`](../enums/schema_export.CommissioningFlowType.md)\> ; `passcode`: [`BitField`](schema_export.md#bitfield) ; `productId`: [`BitField`](schema_export.md#bitfield) ; `vendorId`: [`BitField`](schema_export.md#bitfield) ; `version`: [`BitField`](schema_export.md#bitfield)  }\>
 
-See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificationV1_0.md) § 5.1.3.1 Table 35
+See MatterSpecification.v10.Core § 5.1.3.1 Table 35
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/PairingCodeSchema.ts#L48)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/PairingCodeSchema.ts#L47)
 
 ## Functions
 
@@ -163,4 +163,4 @@ See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificat
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/BitmapSchema.ts#L25)
+[packages/matter.js/src/schema/BitmapSchema.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/BitmapSchema.ts#L25)

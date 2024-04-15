@@ -9,7 +9,7 @@ LineupName, and PostalCode MUST uniquely identify a lineup.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.2
+MatterSpecification.v11.Cluster § 6.6.5.2
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ This shall indicate the type of lineup. This field is optional, but SHOULD be pr
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.2.4
+MatterSpecification.v11.Cluster § 6.6.5.2.4
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ This shall indicate the name of the operator, for example “Comcast”.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.2.1
+MatterSpecification.v11.Cluster § 6.6.5.2.1
 
 #### Inherited from
 

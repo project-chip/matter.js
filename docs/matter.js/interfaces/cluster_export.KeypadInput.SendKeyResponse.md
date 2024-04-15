@@ -8,7 +8,7 @@ This command shall be generated in response to a SendKey command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.3.2
+MatterSpecification.v11.Cluster § 6.8.3.2
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This shall indicate the of the command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.3.2.1
+MatterSpecification.v11.Cluster § 6.8.3.2.1
 
 #### Inherited from
 
@@ -40,4 +40,4 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:161](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L161)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:160](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L160)

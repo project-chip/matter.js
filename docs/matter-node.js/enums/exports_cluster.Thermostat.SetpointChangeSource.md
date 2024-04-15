@@ -8,7 +8,7 @@ The value of the Thermostat setpointChangeSource attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7.34
+MatterSpecification.v11.Cluster § 4.3.7.34
 
 ## Table of contents
 

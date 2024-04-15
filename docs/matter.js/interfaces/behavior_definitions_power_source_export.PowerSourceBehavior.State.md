@@ -30,7 +30,7 @@ to convey information such as battery form factor, or chemistry.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.7.6.3
+MatterSpecification.v11.Core § 11.7.6.3
 
 #### Inherited from
 
@@ -38,7 +38,7 @@ StateType.description
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1314](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1314)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1313](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1313)
 
 ___
 
@@ -54,7 +54,7 @@ Note, Order is read-only and therefore NOT intended to allow clients control ove
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.7.6.2
+MatterSpecification.v11.Core § 11.7.6.2
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ StateType.order
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1305](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1305)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1304](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1304)
 
 ___
 
@@ -75,7 +75,7 @@ specified in PowerSourceStatusEnum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.7.6.1
+MatterSpecification.v11.Core § 11.7.6.1
 
 #### Inherited from
 
@@ -83,4 +83,4 @@ StateType.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1294](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1294)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1293](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1293)

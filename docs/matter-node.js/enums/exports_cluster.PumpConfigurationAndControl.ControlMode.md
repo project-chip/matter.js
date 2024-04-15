@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.3
+MatterSpecification.v11.Cluster § 4.2.6.3
 
 ## Table of contents
 
@@ -34,7 +34,7 @@ pump is entirely determined by the pump.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.6
+MatterSpecification.v11.Cluster § 4.2.6.3.6
 
 #### Defined in
 
@@ -55,7 +55,7 @@ MaxMeasuredValue] attributes of the remote flow sensor.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.4
+MatterSpecification.v11.Cluster § 4.2.6.3.4
 
 #### Defined in
 
@@ -76,7 +76,7 @@ MaxConstPressure] attributes. In case of a remote pressure sensor, this will be 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.2
+MatterSpecification.v11.Cluster § 4.2.6.3.2
 
 #### Defined in
 
@@ -95,7 +95,7 @@ attributes.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.1
+MatterSpecification.v11.Cluster § 4.2.6.3.1
 
 #### Defined in
 
@@ -116,7 +116,7 @@ attributes. In case of a remote temperature sensor, this will be the range deriv
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.5
+MatterSpecification.v11.Cluster § 4.2.6.3.5
 
 #### Defined in
 
@@ -136,7 +136,7 @@ flow ⇒ lower internal setpoint).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.3.3
+MatterSpecification.v11.Cluster § 4.2.6.3.3
 
 #### Defined in
 

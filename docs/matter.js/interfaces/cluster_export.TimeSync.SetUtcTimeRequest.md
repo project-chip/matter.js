@@ -8,7 +8,7 @@ Input to the TimeSync setUtcTime command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.9.1
+MatterSpecification.v11.Core § 11.16.9.1
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ This shall give the Client’s Granularity, as described in Section 11.16.8.2, �
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.9.1.2
+MatterSpecification.v11.Core § 11.16.9.1.2
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ TypeFromSchema.granularity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:265](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L265)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:264](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L264)
 
 ___
 
@@ -54,7 +54,7 @@ This shall give the Client’s TimeSource, as described in Section 11.16.8.3, �
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.9.1.3
+MatterSpecification.v11.Core § 11.16.9.1.3
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ TypeFromSchema.timeSource
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:272](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L272)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:271](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L271)
 
 ___
 
@@ -74,7 +74,7 @@ This shall give the Client’s UTC Time.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.9.1.1
+MatterSpecification.v11.Core § 11.16.9.1.1
 
 #### Inherited from
 
@@ -82,4 +82,4 @@ TypeFromSchema.utcTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:258](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L258)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:257](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L257)

@@ -33,11 +33,11 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:188](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L188)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:187](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L187)
 
 ___
 
@@ -57,11 +57,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:173](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L173)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:172](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L172)
 
 ___
 
@@ -81,11 +81,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:183](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L183)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:182](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L182)
 
 ___
 
@@ -105,11 +105,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:168](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L168)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L167)
 
 ___
 
@@ -129,11 +129,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:178](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L178)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:177](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L177)
 
 ___
 
@@ -153,8 +153,8 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:163](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L163)
+[packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts:162](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/door-lock/DoorLockInterface.ts#L162)

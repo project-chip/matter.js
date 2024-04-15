@@ -70,7 +70,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L92)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L92)
 
 ___
 
@@ -88,7 +88,7 @@ Handlers to process cluster commands
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L133)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:133](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L133)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:100](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L100)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L100)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L106)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L106)
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L72)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L72)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L103)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L103)
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L89)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L89)
 
 ___
 
@@ -184,7 +184,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L94)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L94)
 
 ___
 
@@ -200,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L111)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L111)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L127)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L127)
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L117)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L117)
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L81)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L81)
 
 ___
 
@@ -277,9 +277,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:921](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/Cluster.ts#L921)
+[packages/matter.js/src/cluster/Cluster.ts:920](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/Cluster.ts#L920)
 
-[packages/matter.js/src/cluster/Cluster.ts:934](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/Cluster.ts#L934)
+[packages/matter.js/src/cluster/Cluster.ts:933](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/Cluster.ts#L933)
 
 ___
 
@@ -297,7 +297,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L127)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L127)
 
 ___
 
@@ -313,7 +313,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:109](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L109)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L109)
 
 ___
 
@@ -329,7 +329,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L70)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L70)
 
 ___
 
@@ -345,7 +345,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:217](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L217)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:217](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L217)
 
 ___
 
@@ -361,7 +361,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:158](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L158)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L158)
 
 ___
 
@@ -378,9 +378,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:166](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L166)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:166](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L166)
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L170)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:170](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L170)
 
 ___
 
@@ -398,7 +398,7 @@ Cluster attributes accessible on the cluster server
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L55)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L55)
 
 ___
 
@@ -414,7 +414,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L86)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L86)
 
 ___
 
@@ -430,7 +430,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L157)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L157)
 
 ___
 
@@ -446,7 +446,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L67)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L67)
 
 ___
 
@@ -462,7 +462,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L89)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L89)
 
 ___
 
@@ -478,7 +478,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:219](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L219)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L219)
 
 ___
 
@@ -494,7 +494,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:226](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L226)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:226](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L226)
 
 ___
 
@@ -510,7 +510,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:234](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L234)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:234](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L234)
 
 ___
 
@@ -526,7 +526,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:249](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L249)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:249](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L249)
 
 ___
 
@@ -543,9 +543,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:180](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L180)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:180](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L180)
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)
 
 ___
 
@@ -561,7 +561,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L86)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L86)
 
 ## Functions
 
@@ -596,7 +596,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:934](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/Cluster.ts#L934)
+[packages/matter.js/src/cluster/Cluster.ts:933](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/Cluster.ts#L933)
 
 ___
 
@@ -624,7 +624,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L170)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:170](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L170)
 
 ___
 
@@ -654,4 +654,4 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)

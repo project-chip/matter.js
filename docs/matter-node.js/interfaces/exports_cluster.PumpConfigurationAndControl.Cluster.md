@@ -16,7 +16,7 @@ working cluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2
+MatterSpecification.v11.Cluster § 4.2
 
 ## Hierarchy
 

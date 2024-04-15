@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:700](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L700)
+[packages/matter.js/src/endpoint/Endpoint.ts:720](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L720)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:701](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L701)
+[packages/matter.js/src/endpoint/Endpoint.ts:721](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L721)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:699](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L699)
+[packages/matter.js/src/endpoint/Endpoint.ts:719](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L719)
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/Endpoint.ts:702](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/Endpoint.ts#L702)
+[packages/matter.js/src/endpoint/Endpoint.ts:722](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/Endpoint.ts#L722)

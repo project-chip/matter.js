@@ -8,7 +8,7 @@ ThreadInterfaceScanResultStruct represents a single Thread network scan result.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.6
+MatterSpecification.v11.Core § 11.8.5.6
 
 ## Hierarchy
 
@@ -41,7 +41,7 @@ TypeFromSchema.channel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:235](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L235)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:234](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L234)
 
 ___
 
@@ -53,7 +53,7 @@ ExtendedAddress stands for an IEEE 802.15.4 Extended Address.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.6.1
+MatterSpecification.v11.Core § 11.8.5.6.1
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ TypeFromSchema.extendedAddress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:243](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L243)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:242](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L242)
 
 ___
 
@@ -75,7 +75,7 @@ TypeFromSchema.extendedPanId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:233](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L233)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:232](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L232)
 
 ___
 
@@ -89,7 +89,7 @@ TypeFromSchema.lqi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:246](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L246)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:245](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L245)
 
 ___
 
@@ -103,7 +103,7 @@ TypeFromSchema.networkName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:234](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L234)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:233](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L233)
 
 ___
 
@@ -117,7 +117,7 @@ TypeFromSchema.panId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:232](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L232)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:231](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L231)
 
 ___
 
@@ -131,7 +131,7 @@ TypeFromSchema.rssi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:245](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L245)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:244](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L244)
 
 ___
 
@@ -145,4 +145,4 @@ TypeFromSchema.version
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:236](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L236)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:235](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L235)

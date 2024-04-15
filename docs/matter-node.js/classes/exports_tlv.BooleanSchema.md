@@ -8,7 +8,7 @@ Schema to encode a boolean in TLV.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § A.11.3
+MatterSpecification.v10.Core § A.11.3
 
 ## Hierarchy
 

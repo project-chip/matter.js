@@ -10,7 +10,7 @@ contents replaced by null.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.8.3
+MatterSpecification.v11.Core § 11.2.8.3
 
 ## Hierarchy
 

@@ -20,11 +20,11 @@
 
 The LevelControl cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlServer](endpoint_definitions_device_SpeakerDevice.SpeakerRequirements.md#levelcontrolserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L49)
+[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L48)
 
 ___
 
@@ -34,11 +34,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffServer](endpoint_definitions_device_SpeakerDevice.SpeakerRequirements.md#onoffserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L42)
+[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L41)
 
 ___
 
@@ -58,4 +58,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L54)
+[packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/SpeakerDevice.ts#L53)

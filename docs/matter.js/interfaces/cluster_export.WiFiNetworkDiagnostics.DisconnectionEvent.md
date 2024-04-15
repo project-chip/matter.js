@@ -8,7 +8,7 @@ Body of the WiFiNetworkDiagnostics disconnection event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.1
+MatterSpecification.v11.Core § 11.14.8.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ caused the disconnection and the value shall align with Table 9-49 "Reason codes
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.1.1
+MatterSpecification.v11.Core § 11.14.8.1.1
 
 #### Inherited from
 
@@ -41,4 +41,4 @@ TypeFromSchema.reasonCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:112](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L111)

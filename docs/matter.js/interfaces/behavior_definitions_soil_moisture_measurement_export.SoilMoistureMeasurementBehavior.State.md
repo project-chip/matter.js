@@ -30,7 +30,7 @@ null value means this attribute is not defined. See Measured Value for more deta
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.6.4.3
+MatterSpecification.v11.Cluster § 2.6.4.3
 
 #### Inherited from
 
@@ -38,7 +38,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L59)
 
 ___
 
@@ -62,7 +62,7 @@ MeasuredValue is updated continuously as new measurements are made.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.6.4.1
+MatterSpecification.v11.Cluster § 2.6.4.1
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L43)
 
 ___
 
@@ -83,7 +83,7 @@ null value means this attribute is not defined. See Measured Value for more deta
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.6.4.2
+MatterSpecification.v11.Cluster § 2.6.4.2
 
 #### Inherited from
 
@@ -91,7 +91,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L52)
+[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L51)
 
 ___
 
@@ -103,7 +103,7 @@ See Measured Value.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.6.4.4
+MatterSpecification.v11.Cluster § 2.6.4.4
 
 #### Inherited from
 
@@ -111,4 +111,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L67)
+[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L66)

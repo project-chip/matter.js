@@ -8,7 +8,7 @@ Input to the Actions instantActionWithTransition command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.2
+MatterSpecification.v11.Core § 9.14.6.2
 
 ## Hierarchy
 
@@ -62,7 +62,7 @@ This field shall indicate the transition time in 1/10th of seconds.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.2.1
+MatterSpecification.v11.Core § 9.14.6.2.1
 
 #### Inherited from
 

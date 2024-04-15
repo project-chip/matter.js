@@ -39,7 +39,7 @@ The events type of a behavior [Type](../interfaces/behavior_export.Behavior.Type
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:363](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/Behavior.ts#L363)
+[packages/matter.js/src/behavior/Behavior.ts:364](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L364)
 
 ___
 
@@ -57,7 +57,7 @@ Initialization options.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:368](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/Behavior.ts#L368)
+[packages/matter.js/src/behavior/Behavior.ts:369](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L369)
 
 ___
 
@@ -75,7 +75,7 @@ Input variant of StateOf.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:353](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/Behavior.ts#L353)
+[packages/matter.js/src/behavior/Behavior.ts:354](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L354)
 
 ___
 
@@ -93,7 +93,7 @@ Configuration options you may set when adding a [Behavior](../classes/behavior_e
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:374](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/Behavior.ts#L374)
+[packages/matter.js/src/behavior/Behavior.ts:375](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L375)
 
 ___
 
@@ -111,7 +111,7 @@ Patch variant of StateOf.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:358](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/Behavior.ts#L358)
+[packages/matter.js/src/behavior/Behavior.ts:359](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L359)
 
 ___
 
@@ -129,7 +129,7 @@ The state type of a behavior [Type](../interfaces/behavior_export.Behavior.Type.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:348](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/Behavior.ts#L348)
+[packages/matter.js/src/behavior/Behavior.ts:349](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L349)
 
 ## Functions
 
@@ -152,4 +152,4 @@ method informs the endpoint that the command is not implemented.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/Behavior.ts:341](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/Behavior.ts#L341)
+[packages/matter.js/src/behavior/Behavior.ts:342](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/Behavior.ts#L342)

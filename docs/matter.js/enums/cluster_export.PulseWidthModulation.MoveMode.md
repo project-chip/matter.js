@@ -8,7 +8,7 @@ The value of PulseWidthModulation.moveMode
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.2.1
+MatterSpecification.v11.Cluster § 1.6.6.2.1
 
 ## Table of contents
 
@@ -25,7 +25,7 @@ The value of PulseWidthModulation.moveMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L77)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L76)
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L75)

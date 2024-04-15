@@ -8,7 +8,7 @@ Input to the Actions enableActionWithDuration command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.10
+MatterSpecification.v11.Core § 9.14.6.10
 
 ## Hierarchy
 

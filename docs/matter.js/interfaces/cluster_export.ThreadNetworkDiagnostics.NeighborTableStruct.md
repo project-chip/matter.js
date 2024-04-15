@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4
+MatterSpecification.v11.Core § 11.13.5.4
 
 ## Hierarchy
 
@@ -44,7 +44,7 @@ neighboring Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.2
+MatterSpecification.v11.Core § 11.13.5.4.2
 
 #### Inherited from
 
@@ -52,7 +52,7 @@ TypeFromSchema.age
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L91)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L90)
 
 ___
 
@@ -67,7 +67,7 @@ the value of null. This field shall have the units of dBm, having the range -128
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.7
+MatterSpecification.v11.Core § 11.13.5.4.7
 
 #### Inherited from
 
@@ -75,7 +75,7 @@ TypeFromSchema.averageRssi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L131)
 
 ___
 
@@ -87,7 +87,7 @@ This field shall specify the IEEE 802.15.4 extended address for the neighboring 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.1
+MatterSpecification.v11.Core § 11.13.5.4.1
 
 #### Inherited from
 
@@ -95,7 +95,7 @@ TypeFromSchema.extAddress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L83)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L82)
 
 ___
 
@@ -108,7 +108,7 @@ errors.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.9
+MatterSpecification.v11.Core § 11.13.5.4.9
 
 #### Inherited from
 
@@ -116,7 +116,7 @@ TypeFromSchema.frameErrorRate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:149](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L149)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:148](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L148)
 
 ___
 
@@ -129,7 +129,7 @@ neighboring Node only requires the stable Network Data.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.13
+MatterSpecification.v11.Core § 11.13.5.4.13
 
 #### Inherited from
 
@@ -137,7 +137,7 @@ TypeFromSchema.fullNetworkData
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:180](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L180)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:179](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L179)
 
 ___
 
@@ -149,7 +149,7 @@ This field shall specify if the neighboring Node is a full Thread device.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.12
+MatterSpecification.v11.Core § 11.13.5.4.12
 
 #### Inherited from
 
@@ -157,7 +157,7 @@ TypeFromSchema.fullThreadDevice
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:172](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L172)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:171](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L171)
 
 ___
 
@@ -170,7 +170,7 @@ attribute.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.14
+MatterSpecification.v11.Core § 11.13.5.4.14
 
 #### Inherited from
 
@@ -178,7 +178,7 @@ TypeFromSchema.isChild
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:188](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L188)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:187](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L187)
 
 ___
 
@@ -192,7 +192,7 @@ units of dBm, having the range -128 dBm to 0 dBm.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.8
+MatterSpecification.v11.Core § 11.13.5.4.8
 
 #### Inherited from
 
@@ -200,7 +200,7 @@ TypeFromSchema.lastRssi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:141](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L141)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L140)
 
 ___
 
@@ -213,7 +213,7 @@ This field shall be reset to 0 upon a reboot of the Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.4
+MatterSpecification.v11.Core § 11.13.5.4.4
 
 #### Inherited from
 
@@ -221,7 +221,7 @@ TypeFromSchema.linkFrameCounter
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L105)
 
 ___
 
@@ -234,7 +234,7 @@ scaled from 0 to 255.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.6
+MatterSpecification.v11.Core § 11.13.5.4.6
 
 #### Inherited from
 
@@ -242,7 +242,7 @@ TypeFromSchema.lqi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:122](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L122)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:121](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L121)
 
 ___
 
@@ -255,7 +255,7 @@ errors.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.10
+MatterSpecification.v11.Core § 11.13.5.4.10
 
 #### Inherited from
 
@@ -263,7 +263,7 @@ TypeFromSchema.messageErrorRate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L156)
 
 ___
 
@@ -276,7 +276,7 @@ neighboring node. This field shall be reset to 0 upon a reboot of the Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.5
+MatterSpecification.v11.Core § 11.13.5.4.5
 
 #### Inherited from
 
@@ -284,7 +284,7 @@ TypeFromSchema.mleFrameCounter
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L114)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L113)
 
 ___
 
@@ -296,7 +296,7 @@ This field shall specify the RLOC16 of the neighboring Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.3
+MatterSpecification.v11.Core § 11.13.5.4.3
 
 #### Inherited from
 
@@ -304,7 +304,7 @@ TypeFromSchema.rloc16
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:98](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L98)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L97)
 
 ___
 
@@ -317,7 +317,7 @@ state.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.4.11
+MatterSpecification.v11.Core § 11.13.5.4.11
 
 #### Inherited from
 
@@ -325,4 +325,4 @@ TypeFromSchema.rxOnWhenIdle
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:165](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L165)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:164](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L164)

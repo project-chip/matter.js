@@ -8,7 +8,7 @@ These are optional features supported by EthernetNetworkDiagnosticsCluster.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.15.4
+MatterSpecification.v11.Core § 11.15.4
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ transmission of packets on the ethernet interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:178](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L178)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:177](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L177)
 
 ___
 
@@ -44,4 +44,4 @@ Node makes available the counts for the number of received and transmitted packe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:169](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L169)

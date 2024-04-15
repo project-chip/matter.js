@@ -10,7 +10,7 @@ Attributes and commands for configuring the measurement of illuminance, and repo
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 2.2
+MatterSpecification.v11.Cluster § 2.2
 
 ## Hierarchy
 

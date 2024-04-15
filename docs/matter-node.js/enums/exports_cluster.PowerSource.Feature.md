@@ -8,7 +8,7 @@ These are optional features supported by PowerSourceCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.7.4
+MatterSpecification.v11.Core § 11.7.4
 
 ## Table of contents
 

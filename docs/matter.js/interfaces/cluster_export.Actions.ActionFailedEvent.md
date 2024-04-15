@@ -8,7 +8,7 @@ Body of the Actions actionFailed event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.7.2
+MatterSpecification.v11.Core § 9.14.7.2
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:634](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L634)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:633](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L633)
 
 ___
 
@@ -49,7 +49,7 @@ This field shall be set to indicate the reason for non-successful progress of th
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.7.2.1
+MatterSpecification.v11.Core § 9.14.7.2.1
 
 #### Inherited from
 
@@ -57,7 +57,7 @@ TypeFromSchema.error
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:643](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L643)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:642](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L642)
 
 ___
 
@@ -71,7 +71,7 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:635](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L635)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:634](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L634)
 
 ___
 
@@ -85,4 +85,4 @@ TypeFromSchema.newState
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:636](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L636)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:635](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L635)

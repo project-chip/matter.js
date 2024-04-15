@@ -50,12 +50,12 @@ These elements and properties are present in all TimeSync clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `granularity`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`Granularity`](../enums/cluster_export.TimeSync.Granularity.md), `any`\> ; `timeSource`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TimeSource`](../enums/cluster_export.TimeSync.TimeSource.md), `any`\> ; `trustedTimeNodeId`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| [`NodeId`](datatype_export.md#nodeid), `any`\> ; `utcTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number` \| `bigint`, `any`\>  } | - |
-| `attributes.granularity` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`Granularity`](../enums/cluster_export.TimeSync.Granularity.md), `any`\> | The granularity of the error that the server is willing to guarantee on the time synchronization. It is of type GranularityEnum. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.8.2 |
-| `attributes.timeSource` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TimeSource`](../enums/cluster_export.TimeSync.TimeSource.md), `any`\> | The server’s time source. This attribute indicates what method the server is using to sync, whether the source uses NTS or not and whether the source is internal or external to the Fabric. This attribute may be used by a client to determine its level of trust in the UTCTime. It is of type TimeSourceEnum. If a server is unsure if the selected NTP server is within the Fabric, it SHOULD indicate the server is NonFabric. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.8.3 |
-| `attributes.trustedTimeNodeId` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| [`NodeId`](datatype_export.md#nodeid), `any`\> | The Node ID of a trusted Time Cluster. The TrustedTimeNodeId Node is used as a check on external time sync sources and may be used as the primary time source if other time sources are unavailable. See Section 11.16.13, “Time source prioritization”. This attribute is writeable only by an Administrator. It SHOULD be set by the Commissioner during commissioning. If no appropriate TrustedTimeNodeId is available, the commissioner may set this value to null. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.8.5 |
-| `attributes.utcTime` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number` \| `bigint`, `any`\> | If the server has achieved time synchronization, this shall indicate the current time as a UTC epoch-us (Epoch Time in Microseconds). If the server has not achieved time synchronization, this shall be null. This attribute may be set when a Section 11.16.9.1, “SetUtcTime Command” is received. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.8.1 |
+| `attributes.granularity` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`Granularity`](../enums/cluster_export.TimeSync.Granularity.md), `any`\> | The granularity of the error that the server is willing to guarantee on the time synchronization. It is of type GranularityEnum. **`See`** MatterSpecification.v11.Core § 11.16.8.2 |
+| `attributes.timeSource` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`TimeSource`](../enums/cluster_export.TimeSync.TimeSource.md), `any`\> | The server’s time source. This attribute indicates what method the server is using to sync, whether the source uses NTS or not and whether the source is internal or external to the Fabric. This attribute may be used by a client to determine its level of trust in the UTCTime. It is of type TimeSourceEnum. If a server is unsure if the selected NTP server is within the Fabric, it SHOULD indicate the server is NonFabric. **`See`** MatterSpecification.v11.Core § 11.16.8.3 |
+| `attributes.trustedTimeNodeId` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| [`NodeId`](datatype_export.md#nodeid), `any`\> | The Node ID of a trusted Time Cluster. The TrustedTimeNodeId Node is used as a check on external time sync sources and may be used as the primary time source if other time sources are unavailable. See Section 11.16.13, “Time source prioritization”. This attribute is writeable only by an Administrator. It SHOULD be set by the Commissioner during commissioning. If no appropriate TrustedTimeNodeId is available, the commissioner may set this value to null. **`See`** MatterSpecification.v11.Core § 11.16.8.5 |
+| `attributes.utcTime` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number` \| `bigint`, `any`\> | If the server has achieved time synchronization, this shall indicate the current time as a UTC epoch-us (Epoch Time in Microseconds). If the server has not achieved time synchronization, this shall be null. This attribute may be set when a Section 11.16.9.1, “SetUtcTime Command” is received. **`See`** MatterSpecification.v11.Core § 11.16.8.1 |
 | `commands` | \{ `setUtcTime`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `granularity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Granularity`](../enums/cluster_export.TimeSync.Granularity.md)\> ; `timeSource`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TimeSource`](../enums/cluster_export.TimeSync.TimeSource.md)\> ; `utcTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>, `void`, `any`\>  } | - |
-| `commands.setUtcTime` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `granularity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Granularity`](../enums/cluster_export.TimeSync.Granularity.md)\> ; `timeSource`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TimeSource`](../enums/cluster_export.TimeSync.TimeSource.md)\> ; `utcTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>, `void`, `any`\> | This command may be issued by Administrator to set the time. If the Commissioner does not have a valid time source, it may send a Granularity of NoTimeGranularity. Upon receipt of this command, the server may update its UTCTime attribute to match the time specified in the command, if the stated Granularity and TimeSource are acceptable. The server shall update its UTCTime attribute if its current Granularity is NoTimeGranularity. If the time is updated, the server shall also update its Granularity attribute as appropriate server does not plan to maintain time). It shall also update its TimeSource attribute to Admin. It shall also update its last known good UTC time. If the server updates its UTCTime attribute, it shall accept the command with a status code of SUCCESS. If it opts to not update its time, it shall fail the command with a cluster specific Status Code of TimeNotAccepted. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.9.1 |
+| `commands.setUtcTime` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `granularity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Granularity`](../enums/cluster_export.TimeSync.Granularity.md)\> ; `timeSource`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TimeSource`](../enums/cluster_export.TimeSync.TimeSource.md)\> ; `utcTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\>  }\>, `void`, `any`\> | This command may be issued by Administrator to set the time. If the Commissioner does not have a valid time source, it may send a Granularity of NoTimeGranularity. Upon receipt of this command, the server may update its UTCTime attribute to match the time specified in the command, if the stated Granularity and TimeSource are acceptable. The server shall update its UTCTime attribute if its current Granularity is NoTimeGranularity. If the time is updated, the server shall also update its Granularity attribute as appropriate server does not plan to maintain time). It shall also update its TimeSource attribute to Admin. It shall also update its last known good UTC time. If the server updates its UTCTime attribute, it shall accept the command with a status code of SUCCESS. If it opts to not update its time, it shall fail the command with a cluster specific Status Code of TimeNotAccepted. **`See`** MatterSpecification.v11.Core § 11.16.9.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `defaultNtp`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<``null`` \| `string`, `any`\>  }  } = NtpClientComponent; `flags`: \{ `ntpClient`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `dstOffset`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `offset`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `validStarting`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\> ; `validUntil`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\>  }\>[], `any`\> ; `localTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number` \| `bigint`, `any`\> ; `timeZone`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `offset`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `validAt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<... \| ...\>  }\>[], `any`\> ; `timeZoneDatabase`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`boolean`, `any`\>  } ; `events`: \{ `dstStatus`: [`Event`](../interfaces/cluster_export.Event.md)\<`void`, `any`\> ; `dstTableEmpty`: [`Event`](../interfaces/cluster_export.Event.md)\<`void`, `any`\> ; `timeZoneStatus`: [`Event`](../interfaces/cluster_export.Event.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `offset`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  }  } = TimeZoneComponent; `flags`: \{ `timeZone`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `ntpServerPort`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\>  }  } = NtpServerComponent; `flags`: \{ `ntpServer`: ``true`` = true }  }] | This metadata controls which TimeSyncCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `ntpClient`: [`BitFlag`](schema_export.md#bitflag) ; `ntpServer`: [`BitFlag`](schema_export.md#bitflag) ; `timeZone`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.ntpClient` | [`BitFlag`](schema_export.md#bitflag) | NtpClient Server supports an NTP or SNTP client. |
@@ -67,7 +67,7 @@ These elements and properties are present in all TimeSync clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:490](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L490)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:489](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L489)
 
 ___
 
@@ -77,9 +77,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:621](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L621)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:620](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L620)
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:623](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L623)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:622](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L622)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:602](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L602)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:601](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L601)
 
 ___
 
@@ -103,9 +103,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:671](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L671)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:670](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L670)
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:673](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L673)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:672](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L672)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:631](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L631)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:630](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L630)
 
 ___
 
@@ -138,7 +138,7 @@ A TimeSyncCluster supports these elements if it supports feature NtpClient.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:294](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L294)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:293](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L293)
 
 ___
 
@@ -157,7 +157,7 @@ A TimeSyncCluster supports these elements if it supports feature NtpServer.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:444](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L444)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:443](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L443)
 
 ___
 
@@ -183,7 +183,7 @@ A TimeSyncCluster supports these elements if it supports feature TimeZone.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:316](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L316)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:315](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L315)
 
 ___
 
@@ -197,11 +197,11 @@ assumptions.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.4
+MatterSpecification.v11.Core § 11.16.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L74)
 
 ___
 
@@ -213,11 +213,11 @@ Input to the TimeSync setUtcTime command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.9.1
+MatterSpecification.v11.Core § 11.16.9.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:252](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L252)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:251](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L251)
 
 ___
 
@@ -229,11 +229,11 @@ Body of the TimeSync timeZoneStatus event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.10.3
+MatterSpecification.v11.Core § 11.16.10.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:107](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L107)
 
 ___
 
@@ -243,8 +243,8 @@ ___
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.3
+MatterSpecification.v11.Core § 11.16.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L39)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L38)

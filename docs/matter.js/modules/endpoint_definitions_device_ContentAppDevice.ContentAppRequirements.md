@@ -26,11 +26,11 @@
 
 The AccountLogin cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [AccountLoginServer](endpoint_definitions_device_ContentAppDevice.ContentAppRequirements.md#accountloginserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L101)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L100)
 
 ___
 
@@ -40,11 +40,11 @@ ___
 
 The ApplicationBasic cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ApplicationBasicServer](endpoint_definitions_device_ContentAppDevice.ContentAppRequirements.md#applicationbasicserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:66](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L66)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L65)
 
 ___
 
@@ -54,11 +54,11 @@ ___
 
 The ApplicationLauncher cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ApplicationLauncherServer](endpoint_definitions_device_ContentAppDevice.ContentAppRequirements.md#applicationlauncherserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L59)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L58)
 
 ___
 
@@ -68,11 +68,11 @@ ___
 
 The Channel cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ChannelServer](endpoint_definitions_device_ContentAppDevice.ContentAppRequirements.md#channelserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L73)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L72)
 
 ___
 
@@ -82,11 +82,11 @@ ___
 
 The ContentLauncher cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ContentLauncherServer](endpoint_definitions_device_ContentAppDevice.ContentAppRequirements.md#contentlauncherserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L94)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:93](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L93)
 
 ___
 
@@ -96,11 +96,11 @@ ___
 
 The KeypadInput cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [KeypadInputServer](endpoint_definitions_device_ContentAppDevice.ContentAppRequirements.md#keypadinputserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L52)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L51)
 
 ___
 
@@ -110,11 +110,11 @@ ___
 
 The MediaPlayback cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [MediaPlaybackServer](endpoint_definitions_device_ContentAppDevice.ContentAppRequirements.md#mediaplaybackserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L87)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L86)
 
 ___
 
@@ -124,11 +124,11 @@ ___
 
 The TargetNavigator cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TargetNavigatorServer](endpoint_definitions_device_ContentAppDevice.ContentAppRequirements.md#targetnavigatorserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L80)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L79)
 
 ___
 
@@ -155,4 +155,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L106)
+[packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ContentAppDevice.ts#L105)

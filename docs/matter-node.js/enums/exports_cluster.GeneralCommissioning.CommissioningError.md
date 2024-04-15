@@ -8,7 +8,7 @@ This enumeration is used by several response commands in this cluster to indicat
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.4.1
+MatterSpecification.v11.Core § 11.9.4.1
 
 ## Table of contents
 

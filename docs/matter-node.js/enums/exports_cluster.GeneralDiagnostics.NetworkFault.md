@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.3
+MatterSpecification.v11.Core § 11.11.4.3
 
 ## Table of contents
 

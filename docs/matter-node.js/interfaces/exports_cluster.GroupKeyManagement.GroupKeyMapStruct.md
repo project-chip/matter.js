@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.3
+MatterSpecification.v11.Core § 11.2.6.3
 
 ## Hierarchy
 
@@ -46,7 +46,7 @@ This field uniquely identifies the group within the scope of the given Fabric.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.3.1
+MatterSpecification.v11.Core § 11.2.6.3.1
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ A GroupKeyMapStruct shall NOT accept GroupKeySetID of 0, which is reserved for t
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.3.2
+MatterSpecification.v11.Core § 11.2.6.3.2
 
 #### Inherited from
 

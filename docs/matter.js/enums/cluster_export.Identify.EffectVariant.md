@@ -8,7 +8,7 @@ The value of Identify.effectVariant
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.3.2
+MatterSpecification.v11.Cluster § 1.2.6.3.2
 
 ## Table of contents
 
@@ -24,4 +24,4 @@ The value of Identify.effectVariant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:146](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L146)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:145](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L145)

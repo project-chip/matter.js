@@ -30,8 +30,8 @@ Upon receipt, this shall change the playback position in the media to the given 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.11
+MatterSpecification.v11.Cluster § 6.10.4.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L111)
+[packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-playback/MediaPlaybackInterface.ts#L110)

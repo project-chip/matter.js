@@ -145,11 +145,11 @@ following sequence of clean-up steps shall be executed, in order, by the receive
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.6.2
+MatterSpecification.v11.Core § 11.9.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:309](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L309)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:308](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L308)
 
 ___
 
@@ -215,11 +215,11 @@ previously established PASE session to still be usable, due to the server having
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.6.6
+MatterSpecification.v11.Core § 11.9.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:401](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L401)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:400](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L400)
 
 ___
 
@@ -269,8 +269,8 @@ attribute shall be left unchanged.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.6.4
+MatterSpecification.v11.Core § 11.9.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:344](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L344)
+[packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts:343](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/general-commissioning/GeneralCommissioningInterface.ts#L343)

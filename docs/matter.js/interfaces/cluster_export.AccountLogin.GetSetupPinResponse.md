@@ -9,7 +9,7 @@ account identified in the request does not match the active account of the runni
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.2
+MatterSpecification.v11.Cluster § 6.2.4.2
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ indicate that the accounts do not match.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.2.1
+MatterSpecification.v11.Cluster § 6.2.4.2.1
 
 #### Inherited from
 
@@ -42,4 +42,4 @@ TypeFromSchema.setupPin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L55)

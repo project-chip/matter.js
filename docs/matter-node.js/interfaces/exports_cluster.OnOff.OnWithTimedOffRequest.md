@@ -8,7 +8,7 @@ Input to the OnOff onWithTimedOff command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.6
+MatterSpecification.v11.Cluster § 1.5.7.6
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ The OffWaitTime field is used to adjust the value of the OffWaitTime attribute.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.6.3
+MatterSpecification.v11.Cluster § 1.5.7.6.3
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ is set to 0, the OnWithTimedOff command shall be processed unconditionally.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.6.1
+MatterSpecification.v11.Cluster § 1.5.7.6.1
 
 #### Inherited from
 
@@ -80,7 +80,7 @@ The OnTime field is used to adjust the value of the OnTime attribute.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.6.2
+MatterSpecification.v11.Cluster § 1.5.7.6.2
 
 #### Inherited from
 

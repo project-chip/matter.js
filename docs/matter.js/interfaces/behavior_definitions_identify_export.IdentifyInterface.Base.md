@@ -31,11 +31,11 @@ This command starts or stops the receiving device identifying itself.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.1
+MatterSpecification.v11.Cluster § 1.2.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L47)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L46)
 
 ___
 
@@ -61,8 +61,8 @@ same as and does not replace the identify mechanism used during commissioning.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.3
+MatterSpecification.v11.Cluster § 1.2.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L58)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts:57](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/identify/IdentifyInterface.ts#L57)

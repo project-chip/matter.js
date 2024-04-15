@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.6.3
+MatterSpecification.v11.Core § 11.9.6.3
 
 ## Hierarchy
 
@@ -31,7 +31,7 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.6.3.2
+MatterSpecification.v11.Core § 11.9.6.3.2
 
 #### Inherited from
 
@@ -39,7 +39,7 @@ TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:149](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L149)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:148](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L148)
 
 ___
 
@@ -52,7 +52,7 @@ description of the ArmFailSafe command.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.6.3.1
+MatterSpecification.v11.Core § 11.9.6.3.1
 
 #### Inherited from
 
@@ -60,4 +60,4 @@ TypeFromSchema.errorCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:142](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L142)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:141](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L141)

@@ -8,7 +8,7 @@ Input to the Identify identify command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.1
+MatterSpecification.v11.Cluster § 1.2.6.1
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.identifyTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L92)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L91)

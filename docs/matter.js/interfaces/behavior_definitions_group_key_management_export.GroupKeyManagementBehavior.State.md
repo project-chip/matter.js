@@ -30,7 +30,7 @@ particular group key set.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.7.1
+MatterSpecification.v11.Core § 11.2.7.1
 
 #### Inherited from
 
@@ -38,7 +38,7 @@ StateType.groupKeyMap
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:355](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L355)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:354](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L354)
 
 ___
 
@@ -57,7 +57,7 @@ endpoint, the entire GroupTable entry for that given GroupId shall be removed.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.7.2
+MatterSpecification.v11.Core § 11.2.7.2
 
 #### Inherited from
 
@@ -65,7 +65,7 @@ StateType.groupTable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:373](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L373)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:372](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L372)
 
 ___
 
@@ -79,7 +79,7 @@ specified in Group Limits.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.7.4
+MatterSpecification.v11.Core § 11.2.7.4
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ StateType.maxGroupKeysPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:396](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L396)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:395](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L395)
 
 ___
 
@@ -102,7 +102,7 @@ the MaxGroupsPerFabric attribute multiplied by the number of supported fabrics.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.7.3
+MatterSpecification.v11.Core § 11.2.7.3
 
 #### Inherited from
 
@@ -110,4 +110,4 @@ StateType.maxGroupsPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:387](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L387)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:386](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L386)

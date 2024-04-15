@@ -45,7 +45,7 @@ instances with InterfaceEnabled set to true.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.5
+MatterSpecification.v11.Core § 11.8.6.5
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ StateType.interfaceEnabled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1140](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1140)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1139](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1139)
 
 ___
 
@@ -75,7 +75,7 @@ non-concurrent networking commissioning flows.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.8
+MatterSpecification.v11.Core § 11.8.6.8
 
 #### Inherited from
 
@@ -83,7 +83,7 @@ StateType.lastConnectErrorValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1198](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1198)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1197)
 
 ___
 
@@ -104,7 +104,7 @@ non-concurrent networking commissioning flows.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.7
+MatterSpecification.v11.Core § 11.8.6.7
 
 #### Inherited from
 
@@ -112,7 +112,7 @@ StateType.lastNetworkId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1177)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1176)
 
 ___
 
@@ -130,7 +130,7 @@ non-concurrent networking commissioning flows.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.6
+MatterSpecification.v11.Core § 11.8.6.6
 
 #### Inherited from
 
@@ -138,7 +138,7 @@ StateType.lastNetworkingStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1157)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1156)
 
 ___
 
@@ -152,7 +152,7 @@ this value.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.1
+MatterSpecification.v11.Core § 11.8.6.1
 
 #### Inherited from
 
@@ -160,7 +160,7 @@ StateType.maxNetworks
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1089](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1089)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1088](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1088)
 
 ___
 
@@ -187,7 +187,7 @@ those Cluster instances.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.2
+MatterSpecification.v11.Core § 11.8.6.2
 
 #### Inherited from
 
@@ -195,4 +195,4 @@ StateType.networks
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1115)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1114](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1114)

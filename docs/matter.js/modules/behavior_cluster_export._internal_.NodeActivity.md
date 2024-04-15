@@ -6,6 +6,12 @@
 
 ## Table of contents
 
-### Interfaces
+### References
 
-- [Actor](../interfaces/behavior_cluster_export._internal_.NodeActivity.Actor.md)
+- [Activity](behavior_cluster_export._internal_.NodeActivity.md#activity)
+
+## References
+
+### Activity
+
+Re-exports [Activity](../interfaces/behavior_cluster_export._internal_.Activity.md)

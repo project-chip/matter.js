@@ -8,7 +8,7 @@ Input to the ColorControl stepColor command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.13
+MatterSpecification.v11.Cluster § 3.2.11.13
 
 ## Hierarchy
 
@@ -93,7 +93,7 @@ color change.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.13.2
+MatterSpecification.v11.Cluster § 3.2.11.13.2
 
 #### Inherited from
 

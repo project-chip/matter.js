@@ -8,7 +8,7 @@ Body of the BasicInformation reachableChanged event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.6.4
+MatterSpecification.v11.Core § 11.1.6.4
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall indicate the value of the Reachable attribute after it was chan
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.6.4.1
+MatterSpecification.v11.Core § 11.1.6.4.1
 
 #### Inherited from
 
@@ -40,4 +40,4 @@ TypeFromSchema.reachableNewValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:165](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L165)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:164](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L164)

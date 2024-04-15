@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.3
+MatterSpecification.v11.Core § 11.9.6.3
 
 ## Hierarchy
 
@@ -31,7 +31,7 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.3.2
+MatterSpecification.v11.Core § 11.9.6.3.2
 
 #### Inherited from
 
@@ -52,7 +52,7 @@ description of the ArmFailSafe command.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.3.1
+MatterSpecification.v11.Core § 11.9.6.3.1
 
 #### Inherited from
 

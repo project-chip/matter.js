@@ -95,7 +95,7 @@ Input to the OperationalCredentials addNoc command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.8
+MatterSpecification.v11.Core § 11.17.6.8
 
 #### Defined in
 
@@ -111,7 +111,7 @@ Input to the OperationalCredentials addTrustedRootCertificate command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.13
+MatterSpecification.v11.Core § 11.17.6.13
 
 #### Defined in
 
@@ -127,7 +127,7 @@ Input to the OperationalCredentials attestationRequest command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.1
+MatterSpecification.v11.Core § 11.17.6.1
 
 #### Defined in
 
@@ -148,7 +148,7 @@ See Section F.2, “Device Attestation Response test vector” for an example co
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.2
+MatterSpecification.v11.Core § 11.17.6.2
 
 #### Defined in
 
@@ -164,7 +164,7 @@ Input to the OperationalCredentials certificateChainRequest command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.3
+MatterSpecification.v11.Core § 11.17.6.3
 
 #### Defined in
 
@@ -180,7 +180,7 @@ This command shall be generated in response to a CertificateChainRequest command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.4
+MatterSpecification.v11.Core § 11.17.6.4
 
 #### Defined in
 
@@ -196,7 +196,7 @@ Input to the OperationalCredentials csrRequest command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.5
+MatterSpecification.v11.Core § 11.17.6.5
 
 #### Defined in
 
@@ -217,7 +217,7 @@ See Section F.3, “Node Operational CSR Response test vector” for an example 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.6
+MatterSpecification.v11.Core § 11.17.6.6
 
 #### Defined in
 
@@ -233,7 +233,7 @@ This structure encodes a Fabric Reference for a fabric within which a given Node
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.5
+MatterSpecification.v11.Core § 11.17.4.5
 
 #### Defined in
 
@@ -252,7 +252,7 @@ TrustedRootCertificates attribute of the Node Operational Credentials cluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.4
+MatterSpecification.v11.Core § 11.17.4.4
 
 #### Defined in
 
@@ -278,7 +278,7 @@ It provides status information about the success or failure of those commands.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.10
+MatterSpecification.v11.Core § 11.17.6.10
 
 #### Defined in
 
@@ -294,7 +294,7 @@ Input to the OperationalCredentials removeFabric command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.12
+MatterSpecification.v11.Core § 11.17.6.12
 
 #### Defined in
 
@@ -310,7 +310,7 @@ Input to the OperationalCredentials updateFabricLabel command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.11
+MatterSpecification.v11.Core § 11.17.6.11
 
 #### Defined in
 
@@ -326,7 +326,7 @@ Input to the OperationalCredentials updateNoc command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.9
+MatterSpecification.v11.Core § 11.17.6.9
 
 #### Defined in
 

@@ -42,7 +42,7 @@ Data of an event which was triggered and stored internally
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:20
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:21
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:24
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:25
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:19
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:20
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:22
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:23
 
 ___
 
@@ -98,17 +98,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:21
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:22
 
 ___
 
 ### eventNumber
 
-• **eventNumber**: `number`
+• **eventNumber**: [`EventNumber`](../modules/internal_.md#eventnumber)
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:30
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:31
 
 ___
 
@@ -122,4 +122,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:23
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:24

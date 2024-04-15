@@ -4,18 +4,6 @@
 
 ## Table of contents
 
-### References
-
-- [MatterApplicationClusterSpecificationV1\_0](export.md#matterapplicationclusterspecificationv1_0)
-- [MatterApplicationClusterSpecificationV1\_1](export.md#matterapplicationclusterspecificationv1_1)
-- [MatterApplicationClusterSpecificationV1\_2](export.md#matterapplicationclusterspecificationv1_2)
-- [MatterCoreSpecificationV1\_0](export.md#mattercorespecificationv1_0)
-- [MatterCoreSpecificationV1\_1](export.md#mattercorespecificationv1_1)
-- [MatterCoreSpecificationV1\_2](export.md#mattercorespecificationv1_2)
-- [MatterDeviceLibrarySpecificationV1\_0](export.md#matterdevicelibraryspecificationv1_0)
-- [MatterDeviceLibrarySpecificationV1\_1](export.md#matterdevicelibraryspecificationv1_1)
-- [MatterDeviceLibrarySpecificationV1\_2](export.md#matterdevicelibraryspecificationv1_2)
-
 ### Modules
 
 - [\<internal\>](export._internal_.md)
@@ -43,60 +31,6 @@
 
 - [FORBIDDEN\_PASSCODES](export.md#forbidden_passcodes)
 - [MATTER\_DATAMODEL\_VERSION](export.md#matter_datamodel_version)
-
-## References
-
-### MatterApplicationClusterSpecificationV1\_0
-
-Re-exports [MatterApplicationClusterSpecificationV1_0](../interfaces/exports_spec.MatterApplicationClusterSpecificationV1_0.md)
-
-___
-
-### MatterApplicationClusterSpecificationV1\_1
-
-Re-exports [MatterApplicationClusterSpecificationV1_1](../interfaces/exports_spec.MatterApplicationClusterSpecificationV1_1.md)
-
-___
-
-### MatterApplicationClusterSpecificationV1\_2
-
-Re-exports [MatterApplicationClusterSpecificationV1_2](../interfaces/exports_spec.MatterApplicationClusterSpecificationV1_2.md)
-
-___
-
-### MatterCoreSpecificationV1\_0
-
-Re-exports [MatterCoreSpecificationV1_0](../interfaces/exports_spec.MatterCoreSpecificationV1_0.md)
-
-___
-
-### MatterCoreSpecificationV1\_1
-
-Re-exports [MatterCoreSpecificationV1_1](../interfaces/exports_spec.MatterCoreSpecificationV1_1.md)
-
-___
-
-### MatterCoreSpecificationV1\_2
-
-Re-exports [MatterCoreSpecificationV1_2](../interfaces/exports_spec.MatterCoreSpecificationV1_2.md)
-
-___
-
-### MatterDeviceLibrarySpecificationV1\_0
-
-Re-exports [MatterDeviceLibrarySpecificationV1_0](../interfaces/exports_spec.MatterDeviceLibrarySpecificationV1_0.md)
-
-___
-
-### MatterDeviceLibrarySpecificationV1\_1
-
-Re-exports [MatterDeviceLibrarySpecificationV1_1](../interfaces/exports_spec.MatterDeviceLibrarySpecificationV1_1.md)
-
-___
-
-### MatterDeviceLibrarySpecificationV1\_2
-
-Re-exports [MatterDeviceLibrarySpecificationV1_2](../interfaces/exports_spec.MatterDeviceLibrarySpecificationV1_2.md)
 
 ## Type Aliases
 
@@ -178,7 +112,7 @@ Value of 16 means "Matter 1.0/1.1"
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/exports_spec.MatterCoreSpecificationV1_1.md) § 7.1.1
+MatterSpecification.v11.Core § 7.1.1
 
 #### Defined in
 

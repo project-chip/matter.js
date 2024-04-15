@@ -8,7 +8,7 @@ This structure encodes a Fabric Reference for a fabric within which a given Node
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.5
+MatterSpecification.v11.Core § 11.17.4.5
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ operational identity under this Fabric.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.5.3
+MatterSpecification.v11.Core § 11.17.4.5.3
 
 #### Inherited from
 
@@ -47,7 +47,7 @@ TypeFromSchema.fabricId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:107](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L107)
 
 ___
 
@@ -61,7 +61,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L127)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:126](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L126)
 
 ___
 
@@ -74,7 +74,7 @@ set by the UpdateFabricLabel command.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.5.5
+MatterSpecification.v11.Core § 11.17.4.5.5
 
 #### Inherited from
 
@@ -82,7 +82,7 @@ TypeFromSchema.label
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:125](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L125)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L124)
 
 ___
 
@@ -96,7 +96,7 @@ operational identity.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.5.4
+MatterSpecification.v11.Core § 11.17.4.5.4
 
 #### Inherited from
 
@@ -104,7 +104,7 @@ TypeFromSchema.nodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L117)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L116)
 
 ___
 
@@ -119,7 +119,7 @@ Encoding for the root in the operational certificate chain.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.5.1
+MatterSpecification.v11.Core § 11.17.4.5.1
 
 #### Inherited from
 
@@ -127,7 +127,7 @@ TypeFromSchema.rootPublicKey
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L86)
 
 ___
 
@@ -144,7 +144,7 @@ on the Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.5.2
+MatterSpecification.v11.Core § 11.17.4.5.2
 
 #### Inherited from
 
@@ -152,4 +152,4 @@ TypeFromSchema.vendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L99)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L98)

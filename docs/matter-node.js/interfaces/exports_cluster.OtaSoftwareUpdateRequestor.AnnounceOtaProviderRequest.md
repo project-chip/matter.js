@@ -8,7 +8,7 @@ Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.7.6.1
+MatterSpecification.v11.Core § 11.19.7.6.1
 
 ## Hierarchy
 

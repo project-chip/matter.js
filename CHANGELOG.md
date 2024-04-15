@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.8.1 (2024-04-15)
 * Matter-Core functionality:
   * Cluster default implementations for the following clusters were added/updated:
     * (GreydonDesu) Feature: DoorLock: Implemented bare minimal commands to lock/unlock the door

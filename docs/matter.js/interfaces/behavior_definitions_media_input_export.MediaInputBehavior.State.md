@@ -27,7 +27,7 @@ This field contains the value of the index field of the currently selected Input
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.3.2
+MatterSpecification.v11.Cluster § 6.9.3.2
 
 #### Inherited from
 
@@ -35,7 +35,7 @@ StateType.currentInput
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:186](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:185](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L185)
 
 ___
 
@@ -47,7 +47,7 @@ This list provides the media inputs supported by the device.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.3.1
+MatterSpecification.v11.Cluster § 6.9.3.1
 
 #### Inherited from
 
@@ -55,4 +55,4 @@ StateType.inputList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:179](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L179)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:178](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L178)

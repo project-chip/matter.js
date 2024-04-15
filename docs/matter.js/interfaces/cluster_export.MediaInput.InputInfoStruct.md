@@ -8,7 +8,7 @@ This contains information about an input.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.5.1
+MatterSpecification.v11.Cluster § 6.9.5.1
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ be blank, but SHOULD be provided when known.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.5.1.4
+MatterSpecification.v11.Cluster § 6.9.5.1.4
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.description
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L95)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L94)
 
 ___
 
@@ -56,7 +56,7 @@ This shall indicate the unique index into the list of Inputs.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.5.1.1
+MatterSpecification.v11.Cluster § 6.9.5.1.1
 
 #### Inherited from
 
@@ -64,7 +64,7 @@ TypeFromSchema.index
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L71)
 
 ___
 
@@ -76,7 +76,7 @@ This shall indicate the type of input
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.5.1.2
+MatterSpecification.v11.Cluster § 6.9.5.1.2
 
 #### Inherited from
 
@@ -84,7 +84,7 @@ TypeFromSchema.inputType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:79](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:78](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L78)
 
 ___
 
@@ -97,7 +97,7 @@ known.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.5.1.3
+MatterSpecification.v11.Cluster § 6.9.5.1.3
 
 #### Inherited from
 
@@ -105,4 +105,4 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L86)

@@ -53,10 +53,10 @@ These elements and properties are present in all Channel clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentChannel`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  } | - |
-| `attributes.currentChannel` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> | This optional field contains the current channel. When supported but a channel is not currently tuned to (if a content application is in foreground), the value of the field shall be null. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.6.3.3 |
+| `attributes.currentChannel` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> | This optional field contains the current channel. When supported but a channel is not currently tuned to (if a content application is in foreground), the value of the field shall be null. **`See`** MatterSpecification.v11.Cluster § 6.6.3.3 |
 | `commands` | \{ `changeChannelByNumber`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `skipChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } | - |
-| `commands.changeChannelByNumber` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | Change the channel to the channel with the given Number in the ChannelList attribute. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.6.4.3 |
-| `commands.skipChannel` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command provides channel up and channel down functionality, but allows channel index jumps of size Count. When the value of the increase or decrease is larger than the number of channels remaining in the given direction, then the behavior shall be to return to the beginning (or end) of the channel list and continue. For example, if the current channel is at index 0 and count value of -1 is given, then the current channel should change to the last channel. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.6.4.4 |
+| `commands.changeChannelByNumber` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | Change the channel to the channel with the given Number in the ChannelList attribute. **`See`** MatterSpecification.v11.Cluster § 6.6.4.3 |
+| `commands.skipChannel` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command provides channel up and channel down functionality, but allows channel index jumps of size Count. When the value of the increase or decrease is larger than the number of channels remaining in the given direction, then the behavior shall be to return to the beginning (or end) of the channel list and continue. For example, if the current channel is at index 0 and count value of -1 is given, then the current channel should change to the last channel. **`See`** MatterSpecification.v11.Cluster § 6.6.4.4 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `channelList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  }  } ; `flags`: \{ `channelList`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `lineup`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\>  }  } ; `flags`: \{ `lineupInfo`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `channelList`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `changeChannel`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `lineupInfo`: ``true``  }  }] | This metadata controls which ChannelCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `channelList`: [`BitFlag`](exports_schema.md#bitflag) ; `lineupInfo`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.channelList` | [`BitFlag`](exports_schema.md#bitflag) | ChannelList Provides list of available channels. |
@@ -141,9 +141,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1135
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1153
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1137
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1155
 
 ___
 
@@ -188,7 +188,7 @@ Input to the Channel changeChannelByNumber command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.3
+MatterSpecification.v11.Cluster § 6.6.4.3
 
 #### Defined in
 
@@ -204,7 +204,7 @@ Input to the Channel changeChannel command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.1
+MatterSpecification.v11.Cluster § 6.6.4.1
 
 #### Defined in
 
@@ -220,7 +220,7 @@ This command shall be generated in response to a ChangeChannel command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.2
+MatterSpecification.v11.Cluster § 6.6.4.2
 
 #### Defined in
 
@@ -239,7 +239,7 @@ other formats which can map into these numeric values.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.1
+MatterSpecification.v11.Cluster § 6.6.5.1
 
 #### Defined in
 
@@ -256,7 +256,7 @@ LineupName, and PostalCode MUST uniquely identify a lineup.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.5.2
+MatterSpecification.v11.Cluster § 6.6.5.2
 
 #### Defined in
 
@@ -272,7 +272,7 @@ Input to the Channel skipChannel command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.4
+MatterSpecification.v11.Cluster § 6.6.4.4
 
 #### Defined in
 

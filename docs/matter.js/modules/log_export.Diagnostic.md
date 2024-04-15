@@ -28,6 +28,7 @@
 - [lifecycle](log_export.Diagnostic.md#lifecycle)
 - [lifecycleList](log_export.Diagnostic.md#lifecyclelist)
 - [list](log_export.Diagnostic.md#list)
+- [node](log_export.Diagnostic.md#node)
 - [prefixError](log_export.Diagnostic.md#prefixerror)
 - [squash](log_export.Diagnostic.md#squash)
 - [strong](log_export.Diagnostic.md#strong)
@@ -43,7 +44,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:66](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L66)
+[packages/matter.js/src/log/Diagnostic.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L66)
 
 ___
 
@@ -53,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L67)
+[packages/matter.js/src/log/Diagnostic.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L67)
 
 ## Functions
 
@@ -75,7 +76,7 @@ Create a K/V map that presents with formatted keys.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:112](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L112)
+[packages/matter.js/src/log/Diagnostic.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L127)
 
 ___
 
@@ -91,7 +92,7 @@ Create a diagnostic that renders as elapsed time since creation.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:263](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L263)
+[packages/matter.js/src/log/Diagnostic.ts:278](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L278)
 
 ___
 
@@ -113,7 +114,7 @@ Create a Diagnostic for an error.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:122](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L122)
+[packages/matter.js/src/log/Diagnostic.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L137)
 
 ___
 
@@ -135,7 +136,7 @@ Convert an interval to text.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:231](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L231)
+[packages/matter.js/src/log/Diagnostic.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L246)
 
 ___
 
@@ -158,7 +159,7 @@ Create a diagnostic with a specific [Lifecycle](common_export.Lifecycle.md).
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:211](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L211)
+[packages/matter.js/src/log/Diagnostic.ts:226](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L226)
 
 ___
 
@@ -180,7 +181,7 @@ Create a diagnostic for a [Lifecycle.Map](common_export.Lifecycle.md#map).
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:218](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L218)
+[packages/matter.js/src/log/Diagnostic.ts:233](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L233)
 
 ___
 
@@ -202,7 +203,34 @@ Create a value presenting as a list of separate lines.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:98](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L98)
+[packages/matter.js/src/log/Diagnostic.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L113)
+
+___
+
+### node
+
+▸ **node**(`icon`, `label`, `detail`): `unknown`[]
+
+A node in a diagnostic tree.  Top-level diagnostic sources registered with DiagnosticSource should present as
+nodes.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `icon` | `string` |
+| `label` | `unknown` |
+| `detail` | `Object` |
+| `detail.children?` | `unknown`[] |
+| `detail.self?` | `unknown` |
+
+#### Returns
+
+`unknown`[]
+
+#### Defined in
+
+[packages/matter.js/src/log/Diagnostic.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L99)
 
 ___
 
@@ -223,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:202](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L202)
+[packages/matter.js/src/log/Diagnostic.ts:217](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L217)
 
 ___
 
@@ -245,7 +273,7 @@ Create a value presenting as segments of the same string without intervening spa
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L105)
+[packages/matter.js/src/log/Diagnostic.ts:120](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L120)
 
 ___
 
@@ -267,7 +295,7 @@ Create a value presented emphatically.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L72)
+[packages/matter.js/src/log/Diagnostic.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L72)
 
 ___
 
@@ -296,7 +324,7 @@ Upgrade a value to support specialized diagnostic rendering.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:280](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L280)
+[packages/matter.js/src/log/Diagnostic.ts:295](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L295)
 
 ___
 
@@ -318,7 +346,7 @@ Create a value identifying the source of a diagnostic event.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L86)
+[packages/matter.js/src/log/Diagnostic.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L86)
 
 ___
 
@@ -340,4 +368,4 @@ Create a value presented less emphatically than the default.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:79](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L79)
+[packages/matter.js/src/log/Diagnostic.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L79)

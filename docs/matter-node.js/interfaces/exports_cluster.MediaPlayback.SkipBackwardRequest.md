@@ -8,7 +8,7 @@ Input to the MediaPlayback skipBackward command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.4.10
+MatterSpecification.v11.Cluster § 6.10.4.10
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ accordingly.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.4.10.1
+MatterSpecification.v11.Cluster § 6.10.4.10.1
 
 #### Inherited from
 

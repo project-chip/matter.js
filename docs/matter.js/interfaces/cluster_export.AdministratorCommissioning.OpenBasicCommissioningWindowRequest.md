@@ -8,7 +8,7 @@ Input to the AdministratorCommissioning openBasicCommissioningWindow command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.2
+MatterSpecification.v11.Core § 11.18.8.2
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.commissioningTimeout
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L30)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L29)

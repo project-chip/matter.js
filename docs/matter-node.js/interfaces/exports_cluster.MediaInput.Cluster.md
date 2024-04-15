@@ -13,7 +13,7 @@ method.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.9
+MatterSpecification.v11.Cluster § 6.9
 
 ## Hierarchy
 
@@ -82,9 +82,9 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `hideInputStatus` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall hide the input list from the screen. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.9.4.3 |
-| `selectInput` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `index`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | Upon receipt, this shall change the media input on the device to the input at a specific index in the Input List. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.9.4.1 |
-| `showInputStatus` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall display the active status of the input list on screen. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.9.4.2 |
+| `hideInputStatus` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall hide the input list from the screen. **`See`** MatterSpecification.v11.Cluster § 6.9.4.3 |
+| `selectInput` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `index`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | Upon receipt, this shall change the media input on the device to the input at a specific index in the Input List. **`See`** MatterSpecification.v11.Cluster § 6.9.4.1 |
+| `showInputStatus` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall display the active status of the input list on screen. **`See`** MatterSpecification.v11.Cluster § 6.9.4.2 |
 
 #### Inherited from
 

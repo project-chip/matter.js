@@ -8,7 +8,7 @@ These are optional features supported by OnOffCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.4
+MatterSpecification.v11.Cluster § 1.5.4
 
 ## Table of contents
 

@@ -8,7 +8,7 @@ Input to the LevelControl moveWithOnOff command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.6.6
+MatterSpecification.v11.Cluster § 1.6.6
 
 ## Hierarchy
 

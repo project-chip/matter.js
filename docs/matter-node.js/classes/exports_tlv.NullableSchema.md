@@ -8,7 +8,7 @@ Schema to encode a nullable value in TLV.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § A.11.6
+MatterSpecification.v10.Core § A.11.6
 
 ## Type parameters
 

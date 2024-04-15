@@ -8,7 +8,7 @@ Input to the PulseWidthModulation moveToClosestFrequency command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.5
+MatterSpecification.v11.Cluster § 1.6.6.5
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.frequency
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L34)

@@ -24,11 +24,11 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.8
+MatterSpecification.v11.Cluster § 4.3.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L61)
+[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L60)
 
 ___
 
@@ -48,11 +48,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.8
+MatterSpecification.v11.Cluster § 4.3.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L56)
+[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L55)
 
 ___
 
@@ -72,8 +72,8 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.8
+MatterSpecification.v11.Cluster § 4.3.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L51)
+[packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/thermostat/ThermostatInterface.ts#L50)

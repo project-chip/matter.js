@@ -8,7 +8,7 @@ Body of the AccessControl accessControlEntryChanged event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.7.1
+MatterSpecification.v11.Core § 9.10.7.1
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ CASE or PASE session; the other shall be null.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.7.1.1
+MatterSpecification.v11.Core § 9.10.7.1.1
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ CASE or PASE session; the other shall be null.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.7.1.2
+MatterSpecification.v11.Core § 9.10.7.1.2
 
 #### Inherited from
 
@@ -83,7 +83,7 @@ The type of change as appropriate.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.7.1.3
+MatterSpecification.v11.Core § 9.10.7.1.3
 
 #### Inherited from
 
@@ -120,7 +120,7 @@ are scarce.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.7.1.4
+MatterSpecification.v11.Core § 9.10.7.1.4
 
 #### Inherited from
 

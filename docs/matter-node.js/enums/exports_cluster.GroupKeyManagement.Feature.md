@@ -8,7 +8,7 @@ These are optional features supported by GroupKeyManagementCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.5
+MatterSpecification.v11.Core § 11.2.5
 
 ## Table of contents
 
