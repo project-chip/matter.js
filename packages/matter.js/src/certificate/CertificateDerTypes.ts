@@ -17,6 +17,8 @@ import {
 import { ByteArray } from "../util/ByteArray.js";
 import { CertificateError } from "./CertificateManager.js";
 
+export const NON_WELL_DEFINED_DATE = new Date("9999-12-31 23:59:59Z");
+
 export const PublicKeyEcPrime256v1_X962 = (key: ByteArray) => ({
     type: {
         algorithm: ObjectId("2A8648CE3D0201") /* EC Public Key */,

@@ -74,9 +74,6 @@ export type DerNode = {
     [BITS_PADDING]?: number;
 };
 
-export const NON_WELL_DEFINED_DATE = new Date("9999-12-31 23:59:59Z");
-const NON_WELLDEFINED_DATE_ENCODED = ByteArray.fromHex("39393939313233313233353935395a"); // 9999-12-31 23:59:59Z encoded as GeneralizedTime
-
 export class DerCodec {
     static encode(value: any): ByteArray {
         if (Array.isArray(value)) {
@@ -137,18 +134,27 @@ export class DerCodec {
     }
 
     private static encodeDate(date: Date) {
-        if (date.getTime() === NON_WELL_DEFINED_DATE.getTime()) {
-            return this.encodeAnsi1(DerType.GeneralizedTime, NON_WELLDEFINED_DATE_ENCODED);
-        }
-        return this.encodeAnsi1(
-            DerType.UtcDate,
-            ByteArray.fromString(
-                date
-                    .toISOString()
-                    .replace(/[-:.T]/g, "")
-                    .slice(2, 14) + "Z",
-            ),
-        );
+        if (date.getFullYear() > 2049) {
+            // Dates 2050+ are encoded as GeneralizedTime. This includes the special Non Well Defined date 9999-12-31.
+            return this.encodeAnsi1(
+                DerType.GeneralizedTime,
+                ByteArray.fromString(
+                    date
+                        .toISOString()
+                        .replace(/[-:.T]/g, "")
+                        .slice(0, 14) + "Z",
+                ),
+            );
+        } else
+            return this.encodeAnsi1(
+                DerType.UtcDate,
+                ByteArray.fromString(
+                    date
+                        .toISOString()
+                        .replace(/[-:.T]/g, "")
+                        .slice(2, 14) + "Z",
+                ),
+            );
     }
 
     private static encodeBoolean(bool: boolean) {
