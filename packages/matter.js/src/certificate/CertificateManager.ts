@@ -540,6 +540,38 @@ function subjectOrIssuerToAsn1(data: { [field: string]: any }) {
     return asn;
 }
 
+function extensionsToAsn1(extensions: BaseCertificate["extensions"]) {
+    const asn = {} as { [field: string]: any[] | any };
+    Object.entries(extensions).forEach(([key, value]) => {
+        if (value === undefined) {
+            return;
+        }
+        switch (key) {
+            case "basicConstraints":
+                asn.basicConstraints = BasicConstraints_X509(value);
+                break;
+            case "keyUsage":
+                asn.keyUsage = KeyUsage_X509(
+                    ExtensionKeyUsageSchema.encode(value as TypeFromPartialBitSchema<typeof ExtensionKeyUsageBitmap>),
+                );
+                break;
+            case "extendedKeyUsage":
+                asn.extendedKeyUsage = ExtendedKeyUsage_X509(value as number[] | undefined);
+                break;
+            case "subjectKeyIdentifier":
+                asn.subjectKeyIdentifier = SubjectKeyIdentifier_X509(value as ByteArray);
+                break;
+            case "authorityKeyIdentifier":
+                asn.authorityKeyIdentifier = AuthorityKeyIdentifier_X509(value as ByteArray);
+                break;
+            case "futureExtension":
+                asn.futureExtension = RawBytes(ByteArray.concat(...((value as ByteArray[] | undefined) ?? [])));
+                break;
+        }
+    });
+    return asn;
+}
+
 export class CertificateManager {
     static #genericBuildAsn1Structure({
         serialNumber,
@@ -548,16 +580,11 @@ export class CertificateManager {
         issuer,
         subject,
         ellipticCurvePublicKey,
-        extensions: {
-            basicConstraints,
-            subjectKeyIdentifier,
-            authorityKeyIdentifier,
-            extendedKeyUsage,
-            keyUsage,
-            futureExtension,
-        },
+        extensions,
     }: Unsigned<BaseCertificate>) {
-        const { isCa, pathLen } = basicConstraints;
+        const {
+            basicConstraints: { isCa, pathLen },
+        } = extensions;
         if (!isCa && pathLen !== undefined) {
             throw new CertificateError("Path length must be undefined for non-CA certificates.");
         }
@@ -572,14 +599,7 @@ export class CertificateManager {
             },
             subject: subjectOrIssuerToAsn1(subject),
             publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509(basicConstraints),
-                keyUsage: KeyUsage_X509(ExtensionKeyUsageSchema.encode(keyUsage)),
-                extendedKeyUsage: ExtendedKeyUsage_X509(extendedKeyUsage),
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-                futureExtension: RawBytes(ByteArray.concat(...(futureExtension ?? []))),
-            }),
+            extensions: ContextTagged(3, extensionsToAsn1(extensions)),
         };
     }
 
