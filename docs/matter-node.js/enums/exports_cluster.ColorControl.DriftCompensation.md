@@ -8,7 +8,7 @@ The value of the ColorControl driftCompensation attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.7.6
+MatterSpecification.v11.Cluster § 3.2.7.6
 
 ## Table of contents
 

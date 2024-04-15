@@ -30,7 +30,7 @@ frame to be exceeded, then the SceneList field shall contain only as many scenes
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.17
+MatterSpecification.v11.Cluster § 1.4.9.17
 
 ## Hierarchy
 

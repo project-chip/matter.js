@@ -40,10 +40,10 @@ These elements and properties are present in all EthernetNetworkDiagnostics clus
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `carrierDetect`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `boolean`, `any`\> ; `fullDuplex`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `boolean`, `any`\> ; `phyRate`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| [`PHYRate`](../enums/cluster_export.EthernetNetworkDiagnostics.PHYRate.md), `any`\> ; `timeSinceReset`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\>  } | - |
-| `attributes.carrierDetect` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `boolean`, `any`\> | The CarrierDetect attribute shall indicate the value of the Carrier Detect control signal present on the ethernet network interface. A value of null shall indicate that the interface is not currently configured or operational. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.15.6.8 |
-| `attributes.fullDuplex` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `boolean`, `any`\> | The FullDuplex attribute shall indicate if the Node is currently utilizing the full-duplex operating mode. A value of null shall indicate that the interface is not currently configured or operational. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.15.6.2 |
-| `attributes.phyRate` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| [`PHYRate`](../enums/cluster_export.EthernetNetworkDiagnostics.PHYRate.md), `any`\> | The PHYRate attribute shall indicate the current nominal, usable speed at the top of the physical layer of the Node. A value of null shall indicate that the interface is not currently configured or operational. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.15.6.1 |
-| `attributes.timeSinceReset` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.15.6 |
+| `attributes.carrierDetect` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `boolean`, `any`\> | The CarrierDetect attribute shall indicate the value of the Carrier Detect control signal present on the ethernet network interface. A value of null shall indicate that the interface is not currently configured or operational. **`See`** MatterSpecification.v11.Core § 11.15.6.8 |
+| `attributes.fullDuplex` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `boolean`, `any`\> | The FullDuplex attribute shall indicate if the Node is currently utilizing the full-duplex operating mode. A value of null shall indicate that the interface is not currently configured or operational. **`See`** MatterSpecification.v11.Core § 11.15.6.2 |
+| `attributes.phyRate` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| [`PHYRate`](../enums/cluster_export.EthernetNetworkDiagnostics.PHYRate.md), `any`\> | The PHYRate attribute shall indicate the current nominal, usable speed at the top of the physical layer of the Node. A value of null shall indicate that the interface is not currently configured or operational. **`See`** MatterSpecification.v11.Core § 11.15.6.1 |
+| `attributes.timeSinceReset` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | **`See`** MatterSpecification.v11.Core § 11.15.6 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `packetRxCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\> ; `packetTxCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\>  }  } = PacketCountsComponent; `flags`: \{ `packetCounts`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `collisionCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\> ; `overrunCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\> ; `txErrCount`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number` \| `bigint`, `any`\>  }  } = ErrorCountsComponent; `flags`: \{ `errorCounts`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `resetCounts`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  }  } = PacketCountsOrErrorCountsComponent; `flags`: \{ `packetCounts`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `resetCounts`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  }  } = PacketCountsOrErrorCountsComponent; `flags`: \{ `errorCounts`: ``true`` = true }  }] | This metadata controls which EthernetNetworkDiagnosticsCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `errorCounts`: [`BitFlag`](schema_export.md#bitflag) ; `packetCounts`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.errorCounts` | [`BitFlag`](schema_export.md#bitflag) | ErrorCounts Node makes available the counts for the number of errors that have occurred during the reception and transmission of packets on the ethernet interface. |
@@ -54,7 +54,7 @@ These elements and properties are present in all EthernetNetworkDiagnostics clus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:184](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L183)
 
 ___
 
@@ -64,9 +64,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:270](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L270)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:269](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L269)
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:272](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L272)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:271](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L271)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:255](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L255)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:254](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L254)
 
 ___
 
@@ -90,9 +90,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:323](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L323)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:322](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L322)
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:325](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L325)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:324](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L324)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:279](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L279)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:278](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L278)
 
 ___
 
@@ -127,7 +127,7 @@ A EthernetNetworkDiagnosticsCluster supports these elements if it supports featu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L103)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L102)
 
 ___
 
@@ -147,7 +147,7 @@ A EthernetNetworkDiagnosticsCluster supports these elements if it supports featu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:79](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:78](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L78)
 
 ___
 
@@ -166,4 +166,4 @@ A EthernetNetworkDiagnosticsCluster supports these elements if it supports featu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:136](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:135](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L135)

@@ -206,7 +206,7 @@ ___
 
 Ƭ **TlvTag**: `Object`
 
-MatterCoreSpecificationV1_0 § A.2
+MatterSpecification.v10.Core § A.2
 
 #### Type declaration
 

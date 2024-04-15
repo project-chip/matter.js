@@ -8,7 +8,7 @@ Body of the PowerSource wiredFaultChange event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.7.7.1
+MatterSpecification.v11.Core § 11.7.7.1
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ This field shall represent the set of faults currently detected, as per Section 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.7.7.1.1
+MatterSpecification.v11.Core § 11.7.7.1.1
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ TypeFromSchema.current
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:78](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L77)
 
 ___
 
@@ -55,7 +55,7 @@ This field shall represent the set of faults detected prior to this change event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.7.7.1.2
+MatterSpecification.v11.Core § 11.7.7.1.2
 
 #### Inherited from
 
@@ -63,4 +63,4 @@ TypeFromSchema.previous
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L85)

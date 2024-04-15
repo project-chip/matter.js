@@ -9,7 +9,7 @@ Model specification for more information.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.5.4.1
+MatterSpecification.v11.Core § 9.5.4.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ cluster specifications required by the device type.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.5.4.1.1
+MatterSpecification.v11.Core § 9.5.4.1.1
 
 #### Inherited from
 
@@ -56,7 +56,7 @@ of the device type.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.5.4.1.2
+MatterSpecification.v11.Core § 9.5.4.1.2
 
 #### Inherited from
 

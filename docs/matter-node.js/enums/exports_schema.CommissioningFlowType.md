@@ -4,7 +4,7 @@
 
 [exports/schema](../modules/exports_schema.md).CommissioningFlowType
 
-See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 35
+See MatterSpecification.v10.Core § 5.1.3.1 Table 35
 
 ## Table of contents
 

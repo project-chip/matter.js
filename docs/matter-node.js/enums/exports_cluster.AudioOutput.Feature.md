@@ -8,7 +8,7 @@ These are optional features supported by AudioOutputCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.2
+MatterSpecification.v11.Cluster § 6.5.2
 
 ## Table of contents
 

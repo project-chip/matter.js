@@ -8,7 +8,7 @@ These are optional features supported by EthernetNetworkDiagnosticsCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.15.4
+MatterSpecification.v11.Core § 11.15.4
 
 ## Table of contents
 

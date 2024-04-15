@@ -29,7 +29,7 @@ EndpointListID shall exist in the EndpointLists attribute.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.5.1
+MatterSpecification.v11.Core § 9.14.5.1
 
 #### Inherited from
 
@@ -37,7 +37,7 @@ StateType.actionList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:668](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L668)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:667](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L667)
 
 ___
 
@@ -50,7 +50,7 @@ EndpointListID.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.5.2
+MatterSpecification.v11.Core § 9.14.5.2
 
 #### Inherited from
 
@@ -58,7 +58,7 @@ StateType.endpointLists
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:676](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L676)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:675](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L675)
 
 ___
 
@@ -89,7 +89,7 @@ additional information for the actions provided:
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.5.3
+MatterSpecification.v11.Core § 9.14.5.3
 
 #### Inherited from
 
@@ -97,4 +97,4 @@ StateType.setupUrl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:702](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L702)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:701](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L701)

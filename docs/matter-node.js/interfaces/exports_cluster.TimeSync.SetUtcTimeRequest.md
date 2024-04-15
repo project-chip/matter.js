@@ -8,7 +8,7 @@ Input to the TimeSync setUtcTime command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.9.1
+MatterSpecification.v11.Core § 11.16.9.1
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ This shall give the Client’s Granularity, as described in Section 11.16.8.2, �
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.9.1.2
+MatterSpecification.v11.Core § 11.16.9.1.2
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ This shall give the Client’s TimeSource, as described in Section 11.16.8.3, �
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.9.1.3
+MatterSpecification.v11.Core § 11.16.9.1.3
 
 #### Inherited from
 
@@ -74,7 +74,7 @@ This shall give the Client’s UTC Time.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.9.1.1
+MatterSpecification.v11.Core § 11.16.9.1.1
 
 #### Inherited from
 

@@ -14,7 +14,7 @@ NetworkingStatus matching the response.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.2
+MatterSpecification.v11.Core § 11.8.7.2
 
 ## Hierarchy
 
@@ -43,7 +43,7 @@ may go into logs or crash reports.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.2.2
+MatterSpecification.v11.Core § 11.8.7.2.2
 
 #### Inherited from
 
@@ -51,7 +51,7 @@ TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:294](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L294)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:293](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L293)
 
 ___
 
@@ -75,7 +75,7 @@ The NetworkingStatus field shall indicate the status of the last scan operation,
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.2.1
+MatterSpecification.v11.Core § 11.8.7.2.1
 
 #### Inherited from
 
@@ -83,7 +83,7 @@ TypeFromSchema.networkingStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:285](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L285)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:284](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L284)
 
 ___
 
@@ -104,7 +104,7 @@ limits of the response.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.2.4
+MatterSpecification.v11.Core § 11.8.7.2.4
 
 #### Inherited from
 
@@ -112,7 +112,7 @@ TypeFromSchema.threadScanResults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:327](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L327)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:326](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L326)
 
 ___
 
@@ -134,7 +134,7 @@ reachable elements are included within the size limits of the response.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.2.3
+MatterSpecification.v11.Core § 11.8.7.2.3
 
 #### Inherited from
 
@@ -142,4 +142,4 @@ TypeFromSchema.wiFiScanResults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:311](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L311)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:310](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L310)

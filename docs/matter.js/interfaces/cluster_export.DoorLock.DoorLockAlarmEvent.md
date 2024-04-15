@@ -8,7 +8,7 @@ Body of the DoorLock doorLockAlarm event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.1
+MatterSpecification.v11.Cluster § 5.2.5.1
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ The alarm code of the event that has happened.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.1.1
+MatterSpecification.v11.Cluster § 5.2.5.1.1
 
 #### Inherited from
 
@@ -40,4 +40,4 @@ TypeFromSchema.alarmCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1220](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1220)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1219](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1219)

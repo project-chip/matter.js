@@ -8,7 +8,7 @@ Body of the DoorLock doorStateChange event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.2
+MatterSpecification.v11.Cluster § 5.2.5.2
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ The new door state for this door event.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.2.1
+MatterSpecification.v11.Cluster § 5.2.5.2.1
 
 #### Inherited from
 
@@ -40,4 +40,4 @@ TypeFromSchema.doorState
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L88)

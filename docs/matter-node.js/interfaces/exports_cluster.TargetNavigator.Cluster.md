@@ -10,7 +10,7 @@ This cluster provides an interface for UX navigation within a set of targets on 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11
+MatterSpecification.v11.Cluster § 6.11
 
 ## Hierarchy
 
@@ -79,7 +79,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `navigateTarget` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`string`\> ; `target`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](exports_tlv.FieldType.md)\<[`Status`](../enums/exports_cluster.TargetNavigator.Status.md)\>  }\>, `any`\> | Upon receipt, this shall navigation the UX to the target identified. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.11.4.1 |
+| `navigateTarget` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`string`\> ; `target`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](exports_tlv.OptionalFieldType.md)\<`string`\> ; `status`: [`FieldType`](exports_tlv.FieldType.md)\<[`Status`](../enums/exports_cluster.TargetNavigator.Status.md)\>  }\>, `any`\> | Upon receipt, this shall navigation the UX to the target identified. **`See`** MatterSpecification.v11.Cluster § 6.11.4.1 |
 
 #### Inherited from
 

@@ -13,7 +13,7 @@ See Section F.2, “Device Attestation Response test vector” for an example co
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.2
+MatterSpecification.v11.Core § 11.17.6.2
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ This field shall contain the octet string of the serialized attestation_elements
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.2.1
+MatterSpecification.v11.Core § 11.17.6.2.1
 
 #### Inherited from
 
@@ -59,7 +59,7 @@ This field shall contain the octet string of the necessary attestation_signature
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.2.2
+MatterSpecification.v11.Core § 11.17.6.2.2
 
 #### Inherited from
 

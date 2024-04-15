@@ -62,7 +62,7 @@ offset is set to true. All other message counters SHALL be considered duplicate.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L33)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L33)
 
 ## Properties
 
@@ -72,7 +72,7 @@ offset is set to true. All other message counters SHALL be considered duplicate.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L30)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L30)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L31)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L31)
 
 ## Methods
 
@@ -109,7 +109,7 @@ Return number is:
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L54)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L54)
 
 ___
 
@@ -132,7 +132,7 @@ Update or move the message counter window.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L62)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L62)
 
 ___
 
@@ -154,7 +154,7 @@ Initialize the message counter state.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L41)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L41)
 
 ___
 
@@ -176,7 +176,7 @@ Check if the message counter is known in the bitmap.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:100](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L100)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L100)
 
 ___
 
@@ -202,7 +202,7 @@ Returns true if the message counter is a duplicate.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L111)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L111)
 
 ___
 
@@ -225,4 +225,4 @@ Update the message counter and window.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageReceptionState.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/MessageReceptionState.ts#L86)
+[packages/matter.js/src/protocol/MessageReceptionState.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/MessageReceptionState.ts#L86)

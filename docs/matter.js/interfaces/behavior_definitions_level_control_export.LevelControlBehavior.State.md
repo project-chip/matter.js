@@ -35,7 +35,7 @@ dependent.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.1
+MatterSpecification.v11.Cluster § 1.6.5.1
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ StateType.currentLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:366](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L366)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:365](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L365)
 
 ___
 
@@ -56,7 +56,7 @@ received with a null value Rate parameter.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.13
+MatterSpecification.v11.Cluster § 1.6.5.13
 
 #### Inherited from
 
@@ -64,7 +64,7 @@ StateType.defaultMoveRate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:447](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L447)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:446](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L446)
 
 ___
 
@@ -76,7 +76,7 @@ The MaxLevel attribute indicates the maximum value of CurrentLevel that is capab
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.4
+MatterSpecification.v11.Cluster § 1.6.5.4
 
 #### Inherited from
 
@@ -84,7 +84,7 @@ StateType.maxLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:380](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L380)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:379](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L379)
 
 ___
 
@@ -96,7 +96,7 @@ The MinLevel attribute indicates the minimum value of CurrentLevel that is capab
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.3
+MatterSpecification.v11.Cluster § 1.6.5.3
 
 #### Inherited from
 
@@ -104,7 +104,7 @@ StateType.minLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:373](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L373)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:372](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L372)
 
 ___
 
@@ -119,7 +119,7 @@ OnOffTransitionTime will be used instead.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.12
+MatterSpecification.v11.Cluster § 1.6.5.12
 
 #### Inherited from
 
@@ -127,7 +127,7 @@ StateType.offTransitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:439](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L439)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:438](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L438)
 
 ___
 
@@ -142,7 +142,7 @@ effect. For more details see Effect of On/Off Commands on the CurrentLevel Attri
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.10
+MatterSpecification.v11.Cluster § 1.6.5.10
 
 #### Inherited from
 
@@ -150,7 +150,7 @@ StateType.onLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:419](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L419)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:418](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L418)
 
 ___
 
@@ -168,7 +168,7 @@ implemented.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.9
+MatterSpecification.v11.Cluster § 1.6.5.9
 
 #### Inherited from
 
@@ -176,7 +176,7 @@ StateType.onOffTransitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:409](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L409)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:408](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L408)
 
 ___
 
@@ -191,7 +191,7 @@ OnOffTransitionTime will be used instead.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.11
+MatterSpecification.v11.Cluster § 1.6.5.11
 
 #### Inherited from
 
@@ -199,7 +199,7 @@ StateType.onTransitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:429](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L429)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:428](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L428)
 
 ___
 
@@ -220,7 +220,7 @@ Table 19. Options Attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.5.8
+MatterSpecification.v11.Cluster § 1.6.5.8
 
 #### Inherited from
 
@@ -228,4 +228,4 @@ StateType.options
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:396](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L396)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:395](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L395)

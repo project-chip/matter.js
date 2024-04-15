@@ -8,7 +8,7 @@ These are optional features supported by PumpConfigurationAndControlCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.4
+MatterSpecification.v11.Cluster § 4.2.4
 
 ## Table of contents
 

@@ -8,7 +8,7 @@ Input to the Channel changeChannel command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.1
+MatterSpecification.v11.Cluster § 6.6.4.1
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This shall contain a user-input string to match in order to identify the target 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.1.1
+MatterSpecification.v11.Cluster § 6.6.4.1.1
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ These are optional features supported by WiFiNetworkDiagnosticsCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.14.4
+MatterSpecification.v11.Core § 11.14.4
 
 ## Table of contents
 

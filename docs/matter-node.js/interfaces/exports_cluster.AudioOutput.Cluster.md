@@ -13,7 +13,7 @@ method.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5
+MatterSpecification.v11.Cluster § 6.5
 
 ## Hierarchy
 
@@ -82,7 +82,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `selectOutput` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `index`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | **`See`** MatterApplicationClusterSpecificationV1_1 § 6.5.4 |
+| `selectOutput` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `index`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 6.5.4 |
 
 #### Inherited from
 

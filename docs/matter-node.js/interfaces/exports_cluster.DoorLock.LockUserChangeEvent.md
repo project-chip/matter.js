@@ -8,7 +8,7 @@ Body of the DoorLock lockUserChange event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5
+MatterSpecification.v11.Cluster § 5.2.5.5
 
 ## Hierarchy
 
@@ -41,7 +41,7 @@ Code, Clear RFID Code, Clear Week Day Schedule, Clear Year Day Schedule, etc.).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5.7
+MatterSpecification.v11.Cluster § 5.2.5.5.7
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ The data operation performed on the lock data type changed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5.2
+MatterSpecification.v11.Cluster § 5.2.5.5.2
 
 #### Inherited from
 
@@ -82,7 +82,7 @@ that can be determined to have caused the change. This shall NOT be null if the 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5.5
+MatterSpecification.v11.Cluster § 5.2.5.5.5
 
 #### Inherited from
 
@@ -102,7 +102,7 @@ The lock data type that was changed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5.1
+MatterSpecification.v11.Cluster § 5.2.5.5.1
 
 #### Inherited from
 
@@ -122,7 +122,7 @@ The source of the user data change.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5.3
+MatterSpecification.v11.Cluster § 5.2.5.5.3
 
 #### Inherited from
 
@@ -144,7 +144,7 @@ shall be null if there was no Node involved in the change. This shall NOT be nul
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5.6
+MatterSpecification.v11.Cluster § 5.2.5.5.6
 
 #### Inherited from
 
@@ -165,7 +165,7 @@ associated with the data operation. This shall be 0xFFFE if all users are affect
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5.4
+MatterSpecification.v11.Cluster § 5.2.5.5.4
 
 #### Inherited from
 

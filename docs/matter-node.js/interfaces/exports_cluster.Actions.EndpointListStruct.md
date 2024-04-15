@@ -17,7 +17,7 @@ This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.7
+MatterSpecification.v11.Core § 9.14.4.7
 
 ## Hierarchy
 
@@ -58,7 +58,7 @@ This field shall provide a list of endpoint numbers.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.7.1
+MatterSpecification.v11.Core § 9.14.4.7.1
 
 #### Inherited from
 

@@ -9,3 +9,17 @@
 ### Interfaces
 
 - [Worker](../interfaces/environment_export._internal_.RuntimeService.Worker.md)
+
+### Variables
+
+- [label](environment_export._internal_.RuntimeService.md#label)
+
+## Variables
+
+### label
+
+• `Const` **label**: unique `symbol`
+
+#### Defined in
+
+packages/matter.js/dist/esm/environment/RuntimeService.d.ts:56

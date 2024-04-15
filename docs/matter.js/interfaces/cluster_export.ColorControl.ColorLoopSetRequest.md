@@ -8,7 +8,7 @@ Input to the ColorControl colorLoopSet command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.19
+MatterSpecification.v11.Cluster § 3.2.11.19
 
 ## Hierarchy
 
@@ -40,7 +40,7 @@ the Action Field of the ColorLoopSet Command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.19.2
+MatterSpecification.v11.Cluster § 3.2.11.19.2
 
 #### Inherited from
 
@@ -48,7 +48,7 @@ TypeFromSchema.action
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:773](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L773)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:772](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L772)
 
 ___
 
@@ -62,7 +62,7 @@ the Direction Field of the ColorLoopSet Command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.19.3
+MatterSpecification.v11.Cluster § 3.2.11.19.3
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ TypeFromSchema.direction
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:782](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L782)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:781](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L781)
 
 ___
 
@@ -84,7 +84,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:793](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L793)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:792](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L792)
 
 ___
 
@@ -98,7 +98,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:794](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L794)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:793](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L793)
 
 ___
 
@@ -112,7 +112,7 @@ TypeFromSchema.startHue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:792](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L792)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:791](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L791)
 
 ___
 
@@ -125,7 +125,7 @@ sub-field of the UpdateFlags field is set to 1.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.19.4
+MatterSpecification.v11.Cluster § 3.2.11.19.4
 
 #### Inherited from
 
@@ -133,7 +133,7 @@ TypeFromSchema.time
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:790](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L790)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:789](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L789)
 
 ___
 
@@ -165,7 +165,7 @@ sub-field is set to 0, the device shall ignore the StartHue field.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.19.1
+MatterSpecification.v11.Cluster § 3.2.11.19.1
 
 #### Inherited from
 
@@ -173,4 +173,4 @@ TypeFromSchema.updateFlags
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:764](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L764)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:763](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L763)

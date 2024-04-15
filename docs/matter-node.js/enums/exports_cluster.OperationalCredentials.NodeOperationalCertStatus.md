@@ -10,7 +10,7 @@ come of several of this cluster’s operations.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.3
+MatterSpecification.v11.Core § 11.17.4.3
 
 ## Table of contents
 

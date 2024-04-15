@@ -8,7 +8,7 @@ The value of the Thermostat acCapacityFormat attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7.51
+MatterSpecification.v11.Cluster § 4.3.7.51
 
 ## Table of contents
 

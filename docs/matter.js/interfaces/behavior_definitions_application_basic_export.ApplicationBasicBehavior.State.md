@@ -33,7 +33,7 @@ This is a list of vendor IDs. Each entry is a vendor-id.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.3.8
+MatterSpecification.v11.Cluster § 6.3.3.8
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ StateType.allowedVendorList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L151)
 
 ___
 
@@ -53,7 +53,7 @@ This attribute shall specify a Content App which consists of an Application ID u
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.3.5
+MatterSpecification.v11.Cluster § 6.3.3.5
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ StateType.application
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:130](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L130)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L129)
 
 ___
 
@@ -75,7 +75,7 @@ of UTF-8 characters.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.3.3
+MatterSpecification.v11.Cluster § 6.3.3.3
 
 #### Inherited from
 
@@ -83,7 +83,7 @@ StateType.applicationName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:114](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L114)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L113)
 
 ___
 
@@ -96,7 +96,7 @@ vendor. The maximum length of the ApplicationVersion attribute is 32 bytes of UT
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.3.7
+MatterSpecification.v11.Cluster § 6.3.3.7
 
 #### Inherited from
 
@@ -104,7 +104,7 @@ StateType.applicationVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:145](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L145)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L144)
 
 ___
 
@@ -118,7 +118,7 @@ this would be the Product ID as specified by the vendor for the certification.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.3.4
+MatterSpecification.v11.Cluster § 6.3.3.4
 
 #### Inherited from
 
@@ -126,7 +126,7 @@ StateType.productId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:123](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L122)
 
 ___
 
@@ -138,7 +138,7 @@ This attribute shall specify the current running status of the application.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.3.6
+MatterSpecification.v11.Cluster § 6.3.3.6
 
 #### Inherited from
 
@@ -146,7 +146,7 @@ StateType.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:137](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L137)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L136)
 
 ___
 
@@ -159,7 +159,7 @@ Content App.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.3.2
+MatterSpecification.v11.Cluster § 6.3.3.2
 
 #### Inherited from
 
@@ -167,7 +167,7 @@ StateType.vendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L104)
 
 ___
 
@@ -179,7 +179,7 @@ This attribute shall specify a human readable (displayable) name of the vendor f
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.3.1
+MatterSpecification.v11.Cluster § 6.3.3.1
 
 #### Inherited from
 
@@ -187,4 +187,4 @@ StateType.vendorName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L96)

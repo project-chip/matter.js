@@ -10,7 +10,7 @@ field.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.6.2
+MatterSpecification.v11.Cluster § 1.4.6.2
 
 ## Hierarchy
 

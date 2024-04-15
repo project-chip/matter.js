@@ -8,7 +8,7 @@ This structure provides some constant values that may be of use to all commissio
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.4.3
+MatterSpecification.v11.Core § 11.9.4.3
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ Commissioner to proceed with a nominal commissioning without having to-rearm the
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.4.3.1
+MatterSpecification.v11.Core § 11.9.4.3.1
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ Duration” and default to 900 seconds.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.4.3.2
+MatterSpecification.v11.Core § 11.9.4.3.2
 
 #### Inherited from
 

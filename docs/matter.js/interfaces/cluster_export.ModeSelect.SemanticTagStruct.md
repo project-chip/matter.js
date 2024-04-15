@@ -8,7 +8,7 @@ A Semantic Tag is meant to be interpreted by the client for the purpose the clus
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.8.2
+MatterSpecification.v11.Cluster § 1.8.8.2
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ instances are part of the same namespace and have the same meaning. For example:
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.8.2.2
+MatterSpecification.v11.Cluster § 1.8.8.2.2
 
 #### Inherited from
 
@@ -46,7 +46,7 @@ TypeFromSchema.mfgCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L46)
 
 ___
 
@@ -59,7 +59,7 @@ specific or standard. For semantic tags in a standard namespace, see Standard Na
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.8.2.1
+MatterSpecification.v11.Cluster § 1.8.8.2.1
 
 #### Inherited from
 
@@ -67,4 +67,4 @@ TypeFromSchema.value
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L54)

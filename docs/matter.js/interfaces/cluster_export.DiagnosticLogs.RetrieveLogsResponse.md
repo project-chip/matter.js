@@ -9,7 +9,7 @@ following.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.2
+MatterSpecification.v11.Core § 11.10.5.2
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ requested and the Status field has a value of Success.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.2.2
+MatterSpecification.v11.Core § 11.10.5.2.2
 
 #### Inherited from
 
@@ -46,7 +46,7 @@ TypeFromSchema.logContent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:223](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L223)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:222](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L222)
 
 ___
 
@@ -58,7 +58,7 @@ This field shall indicate the result of an attempt to retrieve diagnostic logs.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.2.1
+MatterSpecification.v11.Core § 11.10.5.2.1
 
 #### Inherited from
 
@@ -66,7 +66,7 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:214](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L214)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:213](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L213)
 
 ___
 
@@ -80,7 +80,7 @@ transferred represented by the number of microseconds since the last time the No
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.2.4
+MatterSpecification.v11.Core § 11.10.5.2.4
 
 #### Inherited from
 
@@ -88,7 +88,7 @@ TypeFromSchema.timeSinceBoot
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:241](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L241)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:240](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L240)
 
 ___
 
@@ -102,7 +102,7 @@ entry in the diagnostic logs that are being transferred.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.2.3
+MatterSpecification.v11.Core § 11.10.5.2.3
 
 #### Inherited from
 
@@ -110,4 +110,4 @@ TypeFromSchema.utcTimeStamp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:232](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L232)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:231](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L231)

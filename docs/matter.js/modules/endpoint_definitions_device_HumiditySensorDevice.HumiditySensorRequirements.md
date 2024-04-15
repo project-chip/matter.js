@@ -20,11 +20,11 @@
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_HumiditySensorDevice.HumiditySensorRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L31)
+[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L30)
 
 ___
 
@@ -34,11 +34,11 @@ ___
 
 The RelativeHumidityMeasurement cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [RelativeHumidityMeasurementServer](endpoint_definitions_device_HumiditySensorDevice.HumiditySensorRequirements.md#relativehumiditymeasurementserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L38)
+[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L37)
 
 ___
 
@@ -58,4 +58,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L43)
+[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L42)

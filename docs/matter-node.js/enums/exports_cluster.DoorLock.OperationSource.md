@@ -15,7 +15,7 @@ For example, code of “1, 2, 3, 4” shall be represented as 0x31, 0x32, 0x33, 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.13
+MatterSpecification.v11.Cluster § 5.2.6.13
 
 ## Table of contents
 

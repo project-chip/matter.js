@@ -8,7 +8,7 @@ Input to the AccountLogin getSetupPin command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.1
+MatterSpecification.v11.Cluster § 6.2.4.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ least 16 characters to protect the account holder against password guessing atta
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.1.1
+MatterSpecification.v11.Cluster § 6.2.4.1.1
 
 #### Inherited from
 
@@ -41,4 +41,4 @@ TypeFromSchema.tempAccountIdentifier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L32)

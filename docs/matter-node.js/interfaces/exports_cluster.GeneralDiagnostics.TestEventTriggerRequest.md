@@ -8,7 +8,7 @@ Input to the GeneralDiagnostics testEventTrigger command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.7.1
+MatterSpecification.v11.Core § 11.11.7.1
 
 ## Hierarchy
 
@@ -46,7 +46,7 @@ value configured on the device.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.7.1.1
+MatterSpecification.v11.Core § 11.11.7.1.1
 
 #### Inherited from
 
@@ -85,7 +85,7 @@ EventTrigger values.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.7.1.2
+MatterSpecification.v11.Core § 11.11.7.1.2
 
 #### Inherited from
 

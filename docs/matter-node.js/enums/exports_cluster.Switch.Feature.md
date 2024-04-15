@@ -8,7 +8,7 @@ These are optional features supported by SwitchCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.4
+MatterSpecification.v11.Cluster § 1.11.4
 
 ## Table of contents
 

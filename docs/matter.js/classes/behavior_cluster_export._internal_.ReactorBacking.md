@@ -27,6 +27,7 @@ Implementation of a single reactor.
 - [#endpoint](behavior_cluster_export._internal_.ReactorBacking.md##endpoint)
 - [#listener](behavior_cluster_export._internal_.ReactorBacking.md##listener)
 - [#lock](behavior_cluster_export._internal_.ReactorBacking.md##lock)
+- [#nodeActivity](behavior_cluster_export._internal_.ReactorBacking.md##nodeactivity)
 - [#observable](behavior_cluster_export._internal_.ReactorBacking.md##observable)
 - [#offline](behavior_cluster_export._internal_.ReactorBacking.md##offline)
 - [#owner](behavior_cluster_export._internal_.ReactorBacking.md##owner)
@@ -78,17 +79,17 @@ Implementation of a single reactor.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:93](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L93)
+[packages/matter.js/src/behavior/internal/Reactors.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L94)
 
 ## Properties
 
 ### #activity
 
-• `Private` `Optional` **#activity**: [`NodeActivity`](behavior_cluster_export._internal_.NodeActivity-1.md)
+• `Private` `Optional` **#activity**: [`Activity`](../interfaces/behavior_cluster_export._internal_.Activity.md)
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L91)
+[packages/matter.js/src/behavior/internal/Reactors.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L92)
 
 ___
 
@@ -98,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L86)
+[packages/matter.js/src/behavior/internal/Reactors.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L86)
 
 ___
 
@@ -108,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L88)
+[packages/matter.js/src/behavior/internal/Reactors.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L88)
 
 ___
 
@@ -118,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L81)
+[packages/matter.js/src/behavior/internal/Reactors.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L81)
 
 ___
 
@@ -128,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L82)
+[packages/matter.js/src/behavior/internal/Reactors.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L82)
 
 ___
 
@@ -138,7 +139,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L87)
+[packages/matter.js/src/behavior/internal/Reactors.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L87)
+
+___
+
+### #nodeActivity
+
+• `Private` `Optional` **#nodeActivity**: [`NodeActivity`](behavior_cluster_export._internal_.NodeActivity-1.md)
+
+#### Defined in
+
+[packages/matter.js/src/behavior/internal/Reactors.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L91)
 
 ___
 
@@ -148,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L84)
+[packages/matter.js/src/behavior/internal/Reactors.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L84)
 
 ___
 
@@ -158,7 +169,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L85)
+[packages/matter.js/src/behavior/internal/Reactors.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L85)
 
 ___
 
@@ -168,7 +179,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L80)
+[packages/matter.js/src/behavior/internal/Reactors.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L80)
 
 ___
 
@@ -178,7 +189,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L83)
+[packages/matter.js/src/behavior/internal/Reactors.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L83)
 
 ___
 
@@ -196,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L90)
+[packages/matter.js/src/behavior/internal/Reactors.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L90)
 
 ___
 
@@ -206,7 +217,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L89)
+[packages/matter.js/src/behavior/internal/Reactors.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L89)
 
 ## Methods
 
@@ -222,7 +233,7 @@ Trampoline the next reaction or resolve the trampoline promise.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:227](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L227)
+[packages/matter.js/src/behavior/internal/Reactors.ts:230](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L230)
 
 ___
 
@@ -244,7 +255,7 @@ Detail the reactor in error messages for errors triggered during reaction.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:394](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L394)
+[packages/matter.js/src/behavior/internal/Reactors.ts:398](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L398)
 
 ___
 
@@ -258,7 +269,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:214](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L214)
+[packages/matter.js/src/behavior/internal/Reactors.ts:217](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L217)
 
 ___
 
@@ -282,7 +293,7 @@ Grab locks if so configured before performing reaction.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:362](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L362)
+[packages/matter.js/src/behavior/internal/Reactors.ts:366](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L366)
 
 ___
 
@@ -306,7 +317,7 @@ If the reaction is asynchronous it is tracked via #reactAsync.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:250](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L250)
+[packages/matter.js/src/behavior/internal/Reactors.ts:254](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L254)
 
 ___
 
@@ -331,7 +342,7 @@ regardless of the emitter and listener because by necessity they do not act imme
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:304](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L304)
+[packages/matter.js/src/behavior/internal/Reactors.ts:308](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L308)
 
 ___
 
@@ -353,7 +364,7 @@ React in "once" mode -- react then close.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:322](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L322)
+[packages/matter.js/src/behavior/internal/Reactors.ts:326](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L326)
 
 ___
 
@@ -377,7 +388,7 @@ Invoked by #react once it obtains a context.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:351](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L351)
+[packages/matter.js/src/behavior/internal/Reactors.ts:355](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L355)
 
 ___
 
@@ -401,7 +412,7 @@ Invoke the actual reactor.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:382](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L382)
+[packages/matter.js/src/behavior/internal/Reactors.ts:386](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L386)
 
 ___
 
@@ -421,7 +432,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:207](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L207)
+[packages/matter.js/src/behavior/internal/Reactors.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L210)
 
 ___
 
@@ -435,7 +446,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:194](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L194)
+[packages/matter.js/src/behavior/internal/Reactors.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L197)
 
 ___
 
@@ -456,7 +467,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:190](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L190)
+[packages/matter.js/src/behavior/internal/Reactors.ts:193](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L193)
 
 ___
 
@@ -470,4 +481,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/Reactors.ts:202](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/Reactors.ts#L202)
+[packages/matter.js/src/behavior/internal/Reactors.ts:205](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/Reactors.ts#L205)

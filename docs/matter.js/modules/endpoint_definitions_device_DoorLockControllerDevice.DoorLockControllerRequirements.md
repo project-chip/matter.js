@@ -25,11 +25,11 @@
 
 The DoorLock cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [DoorLockBehavior](endpoint_definitions_device_DoorLockControllerDevice.DoorLockControllerRequirements.md#doorlockbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L47)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L46)
 
 ___
 
@@ -39,11 +39,11 @@ ___
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_DoorLockControllerDevice.DoorLockControllerRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L61)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L60)
 
 ___
 
@@ -53,11 +53,11 @@ ___
 
 The Identify cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyBehavior](endpoint_definitions_device_DoorLockControllerDevice.DoorLockControllerRequirements.md#identifybehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L54)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L53)
 
 ___
 
@@ -67,11 +67,11 @@ ___
 
 The Identify cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_DoorLockControllerDevice.DoorLockControllerRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L33)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L32)
 
 ___
 
@@ -81,11 +81,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesBehavior](endpoint_definitions_device_DoorLockControllerDevice.DoorLockControllerRequirements.md#scenesbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L68)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L67)
 
 ___
 
@@ -95,11 +95,11 @@ ___
 
 The TimeSync cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TimeSyncServer](endpoint_definitions_device_DoorLockControllerDevice.DoorLockControllerRequirements.md#timesyncserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L40)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L39)
 
 ___
 
@@ -122,7 +122,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:78](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L78)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L77)
 
 ___
 
@@ -143,4 +143,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L73)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L72)

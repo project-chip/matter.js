@@ -8,7 +8,7 @@ These are optional features supported by AdministratorCommissioningCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.18.4
+MatterSpecification.v11.Core § 11.18.4
 
 ## Table of contents
 

@@ -64,7 +64,7 @@ Body of the BooleanState stateChange event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.7.5.1
+MatterSpecification.v11.Cluster § 1.7.5.1
 
 #### Defined in
 

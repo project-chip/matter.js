@@ -8,7 +8,7 @@ Input to the DoorLock lockDoor command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 ## Hierarchy
 

@@ -8,7 +8,7 @@ This represents a single transition in a Thermostat schedule
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.9.5
+MatterSpecification.v11.Cluster § 4.3.9.5
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ TypeFromSchema.coolSetpoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L96)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L95)
 
 ___
 
@@ -50,7 +50,7 @@ TypeFromSchema.heatSetpoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L95)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L94)
 
 ___
 
@@ -64,7 +64,7 @@ represented by 360 minutes since midnight and 11:30pm will be represented by 141
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.9.5.1
+MatterSpecification.v11.Cluster § 4.3.9.5.1
 
 #### Inherited from
 
@@ -72,4 +72,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:93](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L93)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:92](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L92)

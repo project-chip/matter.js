@@ -71,7 +71,7 @@ Access a model of specific type by ID or name.  This is an optimized operation t
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Children.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Children.ts#L35)
+[packages/matter.js/src/model/models/Children.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/models/Children.ts#L35)
 
 ___
 
@@ -99,7 +99,7 @@ Array.push
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Children.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Children.ts#L23)
+[packages/matter.js/src/model/models/Children.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/models/Children.ts#L23)
 
 ___
 
@@ -124,7 +124,7 @@ algorithms.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Children.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Children.ts#L41)
+[packages/matter.js/src/model/models/Children.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/models/Children.ts#L41)
 
 ___
 
@@ -154,7 +154,7 @@ Array.splice
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Children.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Children.ts#L30)
+[packages/matter.js/src/model/models/Children.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/models/Children.ts#L30)
 
 ___
 
@@ -177,7 +177,7 @@ Models invoke this when their ID changes so we can update internal bookkeeping.
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Children.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Children.ts#L46)
+[packages/matter.js/src/model/models/Children.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/models/Children.ts#L46)
 
 ___
 
@@ -200,4 +200,4 @@ Models invoke this when their name changes so we can update internal bookkeeping
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Children.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Children.ts#L51)
+[packages/matter.js/src/model/models/Children.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/models/Children.ts#L51)

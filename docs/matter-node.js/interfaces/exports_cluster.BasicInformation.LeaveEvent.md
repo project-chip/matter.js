@@ -8,7 +8,7 @@ Body of the BasicInformation leave event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.3
+MatterSpecification.v11.Core § 11.1.6.3
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall contain the local Fabric Index of the fabric which the node is 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.3.1
+MatterSpecification.v11.Core § 11.1.6.3.1
 
 #### Inherited from
 

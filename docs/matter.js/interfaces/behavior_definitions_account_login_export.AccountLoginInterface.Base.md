@@ -72,11 +72,11 @@ ensure that the Temporary Account Identifier used by its clients is not valid fo
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.1
+MatterSpecification.v11.Cluster § 6.2.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L155)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L154)
 
 ___
 
@@ -132,11 +132,11 @@ ensure that the Temporary Account Identifier used by its clients is not valid fo
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.3
+MatterSpecification.v11.Cluster § 6.2.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:196](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L196)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:195](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L195)
 
 ___
 
@@ -153,8 +153,8 @@ SHOULD be used by clients of a Content App to indicate the end of a user session
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.4
+MatterSpecification.v11.Cluster § 6.2.4.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:204](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L204)
+[packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts:203](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/account-login/AccountLoginInterface.ts#L203)

@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts#L26)
+[packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts#L25)
 
-[packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts#L63)
+[packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts#L62)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts#L54)
+[packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/OtaRequestorEndpoint.ts#L53)

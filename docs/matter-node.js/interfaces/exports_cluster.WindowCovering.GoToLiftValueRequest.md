@@ -8,7 +8,7 @@ Input to the WindowCovering goToLiftValue command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.3.6.4
+MatterSpecification.v11.Cluster § 5.3.6.4
 
 ## Hierarchy
 

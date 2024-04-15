@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.2
+MatterSpecification.v11.Core § 11.10.4.2
 
 ## Table of contents
 
@@ -31,7 +31,7 @@ Client SHOULD re-attempt the request later.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.2.4
+MatterSpecification.v11.Core § 11.10.4.2.4
 
 #### Defined in
 
@@ -49,7 +49,7 @@ shall be used if the Node is denying the current transfer of diagnostic logs for
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.2.5
+MatterSpecification.v11.Core § 11.10.4.2.5
 
 #### Defined in
 
@@ -69,7 +69,7 @@ LogContent field.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.2.2
+MatterSpecification.v11.Core § 11.10.4.2.2
 
 #### Defined in
 
@@ -88,7 +88,7 @@ transfer.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.2.3
+MatterSpecification.v11.Core § 11.10.4.2.3
 
 #### Defined in
 
@@ -106,7 +106,7 @@ shall be used if diagnostic logs will be or are being transferred.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.2.1
+MatterSpecification.v11.Core § 11.10.4.2.1
 
 #### Defined in
 

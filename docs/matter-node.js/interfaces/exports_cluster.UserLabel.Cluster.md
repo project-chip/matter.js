@@ -10,7 +10,7 @@ This cluster provides a feature to tag an endpoint with zero or more labels.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.9
+MatterSpecification.v11.Core § 9.9
 
 ## Hierarchy
 

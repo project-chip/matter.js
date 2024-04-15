@@ -8,7 +8,7 @@ These are optional features supported by IdentifyCluster.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.4
+MatterSpecification.v11.Cluster § 1.2.4
 
 ## Table of contents
 
@@ -28,4 +28,4 @@ Multicast query for identification state
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:221](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L221)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:220](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L220)

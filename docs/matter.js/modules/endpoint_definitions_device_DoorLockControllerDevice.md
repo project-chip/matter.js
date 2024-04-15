@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L25)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L24)
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L92)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L91)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L84)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockControllerDevice.ts#L83)

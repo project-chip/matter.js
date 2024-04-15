@@ -9,7 +9,7 @@ created logical grouping of the endpoints (e.g. bridged devices) based on locati
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.5
+MatterSpecification.v11.Core § 9.14.4.5
 
 ## Table of contents
 
@@ -33,7 +33,7 @@ not use this for anything else than just to know which endpoints would be affect
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.5.1
+MatterSpecification.v11.Core § 9.14.4.5.1
 
 #### Defined in
 
@@ -55,7 +55,7 @@ adds a bridged device or creates a new room).
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.5.2
+MatterSpecification.v11.Core § 9.14.4.5.2
 
 #### Defined in
 
@@ -78,7 +78,7 @@ control as a group, so Matter controllers could provide the user with a way to d
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.5.3
+MatterSpecification.v11.Core § 9.14.4.5.3
 
 #### Defined in
 

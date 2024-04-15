@@ -30,11 +30,11 @@
 
 The FanControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [FanControlBehavior](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#fancontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L110)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L110)
 
 ___
 
@@ -44,11 +44,11 @@ ___
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsServer](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#groupsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L68)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L67)
 
 ___
 
@@ -58,11 +58,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L54)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L53)
 
 ___
 
@@ -72,11 +72,11 @@ ___
 
 The OccupancySensing cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OccupancySensingBehavior](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#occupancysensingbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L124)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L124)
 
 ___
 
@@ -86,11 +86,11 @@ ___
 
 The RelativeHumidityMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [RelativeHumidityMeasurementBehavior](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#relativehumiditymeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L96)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L96)
 
 ___
 
@@ -100,11 +100,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesServer](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#scenesserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L75)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L74)
 
 ___
 
@@ -114,11 +114,11 @@ ___
 
 The TemperatureMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TemperatureMeasurementBehavior](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#temperaturemeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L117)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L117)
 
 ___
 
@@ -128,11 +128,11 @@ ___
 
 The Thermostat cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ThermostatServer](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#thermostatserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L61)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L60)
 
 ___
 
@@ -142,11 +142,12 @@ ___
 
 The ThermostatUserInterfaceConfiguration cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ThermostatUserInterfaceConfigurationServer](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#thermostatuserinterfaceconfigurationserver) for
+convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L82)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L82)
 
 ___
 
@@ -156,11 +157,11 @@ ___
 
 The TimeSync cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TimeSyncBehavior](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#timesyncbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L103)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L103)
 
 ___
 
@@ -170,11 +171,11 @@ ___
 
 The TimeSync cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TimeSyncServer](endpoint_definitions_device_ThermostatDevice.ThermostatRequirements.md#timesyncserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L89)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L89)
 
 ___
 
@@ -198,7 +199,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:143](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L143)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:143](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L143)
 
 ___
 
@@ -223,4 +224,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:129](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L129)
+[packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ThermostatDevice.ts#L129)

@@ -8,7 +8,7 @@ Input to the AdministratorCommissioning openCommissioningWindow command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.1
+MatterSpecification.v11.Core § 11.18.8.1
 
 ## Hierarchy
 
@@ -40,7 +40,7 @@ commissioning session SHOULD NOT abort prematurely upon expiration of this timeo
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.1.1
+MatterSpecification.v11.Core § 11.18.8.1.1
 
 #### Inherited from
 
@@ -48,7 +48,7 @@ TypeFromSchema.commissioningTimeout
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L74)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L73)
 
 ___
 
@@ -62,7 +62,7 @@ records by long discriminator to locate and initiate commissioning with the appr
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.1.3
+MatterSpecification.v11.Core § 11.18.8.1.3
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ TypeFromSchema.discriminator
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L95)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L94)
 
 ___
 
@@ -86,7 +86,7 @@ definition of the Crypto_PBKDFParameterSet.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.1.4
+MatterSpecification.v11.Core § 11.18.8.1.4
 
 #### Inherited from
 
@@ -94,7 +94,7 @@ TypeFromSchema.iterations
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L105)
 
 ___
 
@@ -111,7 +111,7 @@ expiration of OCW, and shall be deleted by the existing Administrator after send
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.1.2
+MatterSpecification.v11.Core § 11.18.8.1.2
 
 #### Inherited from
 
@@ -119,7 +119,7 @@ TypeFromSchema.pakePasscodeVerifier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L85)
 
 ___
 
@@ -142,7 +142,7 @@ CommissioningTimeout.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.8.1.5
+MatterSpecification.v11.Core § 11.18.8.1.5
 
 #### Inherited from
 
@@ -150,4 +150,4 @@ TypeFromSchema.salt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L124)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L123)

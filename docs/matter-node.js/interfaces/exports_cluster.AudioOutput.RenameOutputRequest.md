@@ -8,7 +8,7 @@ Input to the AudioOutput renameOutput command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.4.2
+MatterSpecification.v11.Cluster § 6.5.4.2
 
 ## Hierarchy
 

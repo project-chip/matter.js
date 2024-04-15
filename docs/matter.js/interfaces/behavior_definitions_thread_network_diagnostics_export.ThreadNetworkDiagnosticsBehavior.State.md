@@ -52,7 +52,7 @@ changes in active faults may subscribe to this attribute, or they may subscribe 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.63
+MatterSpecification.v11.Core § 11.13.6.63
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ StateType.activeNetworkFaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1157)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1156)
 
 ___
 
@@ -72,7 +72,7 @@ This attribute shall be null when there is no dataset configured.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.57
+MatterSpecification.v11.Core § 11.13.6.57
 
 #### Inherited from
 
@@ -80,7 +80,7 @@ StateType.activeTimestamp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1102)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1101)
 
 ___
 
@@ -94,7 +94,7 @@ indicate that the Thread interface is not currently configured or operational.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.1
+MatterSpecification.v11.Core § 11.13.6.1
 
 #### Inherited from
 
@@ -102,7 +102,7 @@ StateType.channel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:992](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L992)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:991](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L991)
 
 ___
 
@@ -118,7 +118,7 @@ there is no dataset configured.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.61
+MatterSpecification.v11.Core § 11.13.6.61
 
 #### Inherited from
 
@@ -126,7 +126,7 @@ StateType.channelPage0Mask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1135](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1135)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1134](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1134)
 
 ___
 
@@ -139,7 +139,7 @@ attribute shall be null if not attached to a Thread network.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.12
+MatterSpecification.v11.Core § 11.13.6.12
 
 #### Inherited from
 
@@ -147,7 +147,7 @@ StateType.dataVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1077](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1077)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1076](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1076)
 
 ___
 
@@ -159,7 +159,7 @@ This attribute shall be null when there is no dataset configured.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.59
+MatterSpecification.v11.Core § 11.13.6.59
 
 #### Inherited from
 
@@ -167,7 +167,7 @@ StateType.delay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1116](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1116)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1115)
 
 ___
 
@@ -181,7 +181,7 @@ operational.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.5
+MatterSpecification.v11.Core § 11.13.6.5
 
 #### Inherited from
 
@@ -189,7 +189,7 @@ StateType.extendedPanId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1028](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1028)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1027](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1027)
 
 ___
 
@@ -203,7 +203,7 @@ a Thread network.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.14
+MatterSpecification.v11.Core § 11.13.6.14
 
 #### Inherited from
 
@@ -211,7 +211,7 @@ StateType.leaderRouterId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1095](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1095)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1094](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1094)
 
 ___
 
@@ -225,7 +225,7 @@ currently configured or operational.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.6
+MatterSpecification.v11.Core § 11.13.6.6
 
 #### Inherited from
 
@@ -233,7 +233,7 @@ StateType.meshLocalPrefix
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1037](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1037)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1036](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1036)
 
 ___
 
@@ -246,7 +246,7 @@ the Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.8
+MatterSpecification.v11.Core § 11.13.6.8
 
 #### Inherited from
 
@@ -254,7 +254,7 @@ StateType.neighborTable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1045](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1045)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1044](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1044)
 
 ___
 
@@ -268,7 +268,7 @@ currently configured or operational.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.3
+MatterSpecification.v11.Core § 11.13.6.3
 
 #### Inherited from
 
@@ -276,7 +276,7 @@ StateType.networkName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1011](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1011)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1010](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1010)
 
 ___
 
@@ -289,7 +289,7 @@ operationally acquired values.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.62
+MatterSpecification.v11.Core § 11.13.6.62
 
 #### Inherited from
 
@@ -297,7 +297,7 @@ StateType.operationalDatasetComponents
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1143](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1143)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1142](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1142)
 
 ___
 
@@ -310,7 +310,7 @@ null shall indicate that the Thread interface is not currently configured or ope
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.4
+MatterSpecification.v11.Core § 11.13.6.4
 
 #### Inherited from
 
@@ -318,7 +318,7 @@ StateType.panId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1019](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1019)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1018](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1018)
 
 ___
 
@@ -331,7 +331,7 @@ the Node is joined. This attribute shall be null if not attached to a Thread net
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.10
+MatterSpecification.v11.Core § 11.13.6.10
 
 #### Inherited from
 
@@ -339,7 +339,7 @@ StateType.partitionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1061](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1061)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1060](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1060)
 
 ___
 
@@ -351,7 +351,7 @@ This attribute shall be null when there is no dataset configured.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.58
+MatterSpecification.v11.Core § 11.13.6.58
 
 #### Inherited from
 
@@ -359,7 +359,7 @@ StateType.pendingTimestamp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1109](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1109)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1108)
 
 ___
 
@@ -372,7 +372,7 @@ been established.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.9
+MatterSpecification.v11.Core § 11.13.6.9
 
 #### Inherited from
 
@@ -380,7 +380,7 @@ StateType.routeTable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1053](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1053)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1052](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1052)
 
 ___
 
@@ -395,7 +395,7 @@ operational.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.2
+MatterSpecification.v11.Core § 11.13.6.2
 
 #### Inherited from
 
@@ -403,7 +403,7 @@ StateType.routingRole
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1002](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1002)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1001](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1001)
 
 ___
 
@@ -416,7 +416,7 @@ Node is connected. This attribute shall be null when there is no dataset configu
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.60
+MatterSpecification.v11.Core § 11.13.6.60
 
 #### Inherited from
 
@@ -424,7 +424,7 @@ StateType.securityPolicy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1124)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1123)
 
 ___
 
@@ -438,7 +438,7 @@ data the Node currently uses. This attribute shall be null if not attached to a 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.13
+MatterSpecification.v11.Core § 11.13.6.13
 
 #### Inherited from
 
@@ -446,7 +446,7 @@ StateType.stableDataVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1086](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1086)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1085](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1085)
 
 ___
 
@@ -459,7 +459,7 @@ This attribute shall be null if not attached to a Thread network.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.6.11
+MatterSpecification.v11.Core § 11.13.6.11
 
 #### Inherited from
 
@@ -467,4 +467,4 @@ StateType.weighting
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1069](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1069)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1068](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1068)

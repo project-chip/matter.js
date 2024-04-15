@@ -13,7 +13,7 @@ combinations. You must use the ThermostatCluster.with() factory method to obtain
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3
+MatterSpecification.v11.Cluster § 4.3
 
 ## Hierarchy
 

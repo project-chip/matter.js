@@ -8,7 +8,7 @@ Input to the LevelControl step command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.6.6.3
+MatterSpecification.v11.Cluster § 1.6.6.3
 
 ## Hierarchy
 

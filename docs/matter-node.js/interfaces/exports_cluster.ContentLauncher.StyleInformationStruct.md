@@ -9,7 +9,7 @@ related properties.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.7
+MatterSpecification.v11.Cluster § 6.7.5.7
 
 ## Hierarchy
 
@@ -41,7 +41,7 @@ color notation [https://www.w3.org/TR/css-color-4/#hex-notation]. Examples:
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.7.2
+MatterSpecification.v11.Cluster § 6.7.5.7.2
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ etc.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.7.1
+MatterSpecification.v11.Cluster § 6.7.5.7.1
 
 #### Inherited from
 
@@ -83,7 +83,7 @@ Watermark etc.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.7.3
+MatterSpecification.v11.Cluster § 6.7.5.7.3
 
 #### Inherited from
 

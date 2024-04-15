@@ -8,7 +8,7 @@ The UserType enum used in various commands shall indicate what the type is for a
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16
+MatterSpecification.v11.Cluster § 5.2.6.16
 
 ## Table of contents
 
@@ -36,7 +36,7 @@ UserStatus value to OccupiedDisabled automatically.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.7
+MatterSpecification.v11.Cluster § 5.2.6.16.7
 
 #### Defined in
 
@@ -55,7 +55,7 @@ timeout across reboots such that the ExpiringUserTimeout is honored.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.8
+MatterSpecification.v11.Cluster § 5.2.6.16.8
 
 #### Defined in
 
@@ -72,7 +72,7 @@ to allow a notified Node to alert emergency services or contacts on the user acc
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.6
+MatterSpecification.v11.Cluster § 5.2.6.16.6
 
 #### Defined in
 
@@ -89,7 +89,7 @@ lock to generate the appropriate event notification to any bound devices.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.5
+MatterSpecification.v11.Cluster § 5.2.6.16.5
 
 #### Defined in
 
@@ -107,7 +107,7 @@ only user that can disable the user interface (keypad, remote, etc…).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.4
+MatterSpecification.v11.Cluster § 5.2.6.16.4
 
 #### Defined in
 
@@ -126,7 +126,7 @@ over-the-air for the lock/unlock commands.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.10
+MatterSpecification.v11.Cluster § 5.2.6.16.10
 
 #### Defined in
 
@@ -142,7 +142,7 @@ User access is restricted by Week Day and/or Year Day schedule.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.9
+MatterSpecification.v11.Cluster § 5.2.6.16.9
 
 #### Defined in
 
@@ -158,7 +158,7 @@ User has access 24/7 provided proper PIN or RFID is supplied (e.g., owner).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.1
+MatterSpecification.v11.Cluster § 5.2.6.16.1
 
 #### Defined in
 
@@ -175,7 +175,7 @@ cleaning worker).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.3
+MatterSpecification.v11.Cluster § 5.2.6.16.3
 
 #### Defined in
 
@@ -191,7 +191,7 @@ User has ability to open lock within a specific time period (e.g., guest).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.2
+MatterSpecification.v11.Cluster § 5.2.6.16.2
 
 #### Defined in
 

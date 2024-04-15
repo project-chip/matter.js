@@ -11,7 +11,7 @@ other formats which can map into these numeric values.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.1
+MatterSpecification.v11.Cluster § 6.6.5.1
 
 ## Hierarchy
 
@@ -40,7 +40,7 @@ provided when known.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.1.5
+MatterSpecification.v11.Cluster § 6.6.5.1.5
 
 #### Inherited from
 
@@ -48,7 +48,7 @@ TypeFromSchema.affiliateCallSign
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:69](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L69)
 
 ___
 
@@ -61,7 +61,7 @@ provided when known.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.1.4
+MatterSpecification.v11.Cluster § 6.6.5.1.4
 
 #### Inherited from
 
@@ -69,7 +69,7 @@ TypeFromSchema.callSign
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L61)
 
 ___
 
@@ -82,7 +82,7 @@ is expressed as a string, such as "13.1" or "256", the major number would be 13 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.1.1
+MatterSpecification.v11.Cluster § 6.6.5.1.1
 
 #### Inherited from
 
@@ -90,7 +90,7 @@ TypeFromSchema.majorNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L37)
 
 ___
 
@@ -103,7 +103,7 @@ is expressed as a string, such as "13.1" or "256", the minor number would be 1 o
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.1.2
+MatterSpecification.v11.Cluster § 6.6.5.1.2
 
 #### Inherited from
 
@@ -111,7 +111,7 @@ TypeFromSchema.minorNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L45)
 
 ___
 
@@ -124,7 +124,7 @@ optional, but SHOULD be provided when known.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.1.3
+MatterSpecification.v11.Cluster § 6.6.5.1.3
 
 #### Inherited from
 
@@ -132,4 +132,4 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L53)

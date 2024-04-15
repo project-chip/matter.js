@@ -8,7 +8,7 @@ Body of the WiFiNetworkDiagnostics disconnection event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.14.8.1
+MatterSpecification.v11.Core § 11.14.8.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ caused the disconnection and the value shall align with Table 9-49 "Reason codes
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.14.8.1.1
+MatterSpecification.v11.Core § 11.14.8.1.1
 
 #### Inherited from
 

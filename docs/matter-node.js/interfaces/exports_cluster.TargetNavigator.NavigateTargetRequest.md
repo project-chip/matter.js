@@ -8,7 +8,7 @@ Input to the TargetNavigator navigateTarget command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.4.1
+MatterSpecification.v11.Cluster § 6.11.4.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.4.1.2
+MatterSpecification.v11.Cluster § 6.11.4.1.2
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ contained within one of the TargetInfoStruct objects in the TargetList attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.4.1.1
+MatterSpecification.v11.Cluster § 6.11.4.1.1
 
 #### Inherited from
 

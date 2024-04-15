@@ -14,7 +14,7 @@ PressureMeasurementCluster.with() factory method.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 2.4
+MatterSpecification.v11.Cluster § 2.4
 
 ## Hierarchy
 

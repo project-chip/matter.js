@@ -63,7 +63,7 @@ Handles execution and lifecycle management of other components.
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L30)
+[packages/matter.js/src/environment/RuntimeService.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L31)
 
 ## Properties
 
@@ -73,7 +73,7 @@ Handles execution and lifecycle management of other components.
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L25)
+[packages/matter.js/src/environment/RuntimeService.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L26)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L23)
+[packages/matter.js/src/environment/RuntimeService.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L24)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L28)
+[packages/matter.js/src/environment/RuntimeService.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L29)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L26)
+[packages/matter.js/src/environment/RuntimeService.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L27)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L27)
+[packages/matter.js/src/environment/RuntimeService.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L28)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L24)
+[packages/matter.js/src/environment/RuntimeService.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L25)
 
 ___
 
@@ -133,21 +133,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L22)
+[packages/matter.js/src/environment/RuntimeService.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L23)
 
 ## Accessors
 
 ### [value]
 
-• `get` **[value]**(): `string`
+• `get` **[value]**(): `unknown`[]
 
 #### Returns
 
-`string`
+`unknown`[]
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:173](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L173)
+[packages/matter.js/src/environment/RuntimeService.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L176)
 
 ___
 
@@ -163,7 +163,7 @@ Emits when a worker experiences an unhandled error.
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L117)
+[packages/matter.js/src/environment/RuntimeService.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L119)
 
 ___
 
@@ -179,7 +179,7 @@ Resolves when no workers are active.
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L148)
+[packages/matter.js/src/environment/RuntimeService.ts:150](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L150)
 
 ___
 
@@ -195,7 +195,7 @@ Emits when a worker is added when previously there were none.
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L103)
+[packages/matter.js/src/environment/RuntimeService.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L105)
 
 ___
 
@@ -211,7 +211,7 @@ Emits when the last worker departs.
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L110)
+[packages/matter.js/src/environment/RuntimeService.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L112)
 
 ## Methods
 
@@ -231,7 +231,7 @@ Emits when the last worker departs.
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L177)
+[packages/matter.js/src/environment/RuntimeService.ts:194](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L194)
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:235](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L235)
+[packages/matter.js/src/environment/RuntimeService.ts:252](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L252)
 
 ___
 
@@ -271,7 +271,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:211](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L211)
+[packages/matter.js/src/environment/RuntimeService.ts:228](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L228)
 
 ___
 
@@ -289,7 +289,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:169](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L169)
+[packages/matter.js/src/environment/RuntimeService.ts:172](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L172)
 
 ___
 
@@ -320,7 +320,7 @@ On completion the worker is removed and destroyed if the worker is [Destructable
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L42)
+[packages/matter.js/src/environment/RuntimeService.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L44)
 
 ___
 
@@ -338,7 +338,7 @@ On cancel the runtime destroys all workers.
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:130](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L130)
+[packages/matter.js/src/environment/RuntimeService.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L132)
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:164](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L164)
+[packages/matter.js/src/environment/RuntimeService.ts:166](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L166)
 
 ___
 
@@ -376,4 +376,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:121](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L121)
+[packages/matter.js/src/environment/RuntimeService.ts:123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L123)

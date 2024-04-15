@@ -8,7 +8,7 @@ Input to the NetworkCommissioning removeNetwork command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.7
+MatterSpecification.v11.Core § 11.8.7.7
 
 ## Hierarchy
 

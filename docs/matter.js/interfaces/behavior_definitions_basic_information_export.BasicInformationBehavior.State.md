@@ -57,7 +57,7 @@ unchanging values and SHOULD NOT cache this value permanently at Commissioning t
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.20
+MatterSpecification.v11.Core § 11.1.5.20
 
 #### Inherited from
 
@@ -65,7 +65,7 @@ StateType.capabilityMinima
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:405](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L405)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:404](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L404)
 
 ___
 
@@ -77,7 +77,7 @@ This attribute shall be set to the revision number of the Data Model against whi
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.1
+MatterSpecification.v11.Core § 11.1.5.1
 
 #### Inherited from
 
@@ -85,7 +85,7 @@ StateType.dataModelRevision
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:189](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L189)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:188](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L188)
 
 ___
 
@@ -98,7 +98,7 @@ and the versioning scheme, are vendor defined.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.8
+MatterSpecification.v11.Core § 11.1.5.8
 
 #### Inherited from
 
@@ -106,7 +106,7 @@ StateType.hardwareVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:259](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L259)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:258](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L258)
 
 ___
 
@@ -120,7 +120,7 @@ provide a more user-friendly value than that represented by the HardwareVersion 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.9
+MatterSpecification.v11.Core § 11.1.5.9
 
 #### Inherited from
 
@@ -128,7 +128,7 @@ StateType.hardwareVersionString
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:268](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L268)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:267](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L267)
 
 ___
 
@@ -143,7 +143,7 @@ ability to trigger a factory reset on the Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.17
+MatterSpecification.v11.Core § 11.1.5.17
 
 #### Inherited from
 
@@ -151,7 +151,7 @@ StateType.localConfigDisabled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:352](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L352)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:351](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L351)
 
 ___
 
@@ -172,7 +172,7 @@ region-agnostic mode is used.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.7
+MatterSpecification.v11.Core § 11.1.5.7
 
 #### Inherited from
 
@@ -180,7 +180,7 @@ StateType.location
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:247](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L247)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L246)
 
 ___
 
@@ -197,7 +197,7 @@ defined.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.12
+MatterSpecification.v11.Core § 11.1.5.12
 
 #### Inherited from
 
@@ -205,7 +205,7 @@ StateType.manufacturingDate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:303](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L303)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:302](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L302)
 
 ___
 
@@ -218,7 +218,7 @@ initial commissioning and may be updated by further reconfigurations.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.6
+MatterSpecification.v11.Core § 11.1.5.6
 
 #### Inherited from
 
@@ -226,7 +226,7 @@ StateType.nodeLabel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:227](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L227)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:226](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L226)
 
 ___
 
@@ -243,7 +243,7 @@ share the ProductID but may have a different PartNumber.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.13
+MatterSpecification.v11.Core § 11.1.5.13
 
 #### Inherited from
 
@@ -251,7 +251,7 @@ StateType.partNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:315](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L315)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:314](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L314)
 
 ___
 
@@ -265,7 +265,7 @@ StateType.productAppearance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:411](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L411)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:410](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L410)
 
 ___
 
@@ -278,7 +278,7 @@ product of the Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.5
+MatterSpecification.v11.Core § 11.1.5.5
 
 #### Inherited from
 
@@ -286,7 +286,7 @@ StateType.productId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:219](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L219)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:218](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L218)
 
 ___
 
@@ -301,7 +301,7 @@ within the VendorName attribute.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.15
+MatterSpecification.v11.Core § 11.1.5.15
 
 #### Inherited from
 
@@ -309,7 +309,7 @@ StateType.productLabel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:335](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L335)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:334](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L334)
 
 ___
 
@@ -322,7 +322,7 @@ model number (or other identifier) assigned by the vendor.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.4
+MatterSpecification.v11.Core § 11.1.5.4
 
 #### Inherited from
 
@@ -330,7 +330,7 @@ StateType.productName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:211](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L211)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L210)
 
 ___
 
@@ -345,7 +345,7 @@ maximum length of the ProductUrl attribute is 256 ASCII characters.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.14
+MatterSpecification.v11.Core § 11.1.5.14
 
 #### Inherited from
 
@@ -353,7 +353,7 @@ StateType.productUrl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:325](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L325)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:324](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L324)
 
 ___
 
@@ -369,7 +369,7 @@ indicate whether the bridged device is reachable by the bridge over the non-nati
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.18
+MatterSpecification.v11.Core § 11.1.5.18
 
 #### Inherited from
 
@@ -377,7 +377,7 @@ StateType.reachable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:367](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L367)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:366](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L366)
 
 ___
 
@@ -389,7 +389,7 @@ This attributes shall specify a human readable (displayable) serial number.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.16
+MatterSpecification.v11.Core § 11.1.5.16
 
 #### Inherited from
 
@@ -397,7 +397,7 @@ StateType.serialNumber
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:342](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L342)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:341](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L341)
 
 ___
 
@@ -413,7 +413,7 @@ to determine the currently running version of software on another given Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.10
+MatterSpecification.v11.Core § 11.1.5.10
 
 #### Inherited from
 
@@ -421,7 +421,7 @@ StateType.softwareVersion
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:279](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L279)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:278](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L278)
 
 ___
 
@@ -438,7 +438,7 @@ Examples of version strings include "1.0", "1.2.3456", "1.2-2", "1.0b123", "1.2_
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.11
+MatterSpecification.v11.Core § 11.1.5.11
 
 #### Inherited from
 
@@ -446,7 +446,7 @@ StateType.softwareVersionString
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:291](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L291)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:290](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L290)
 
 ___
 
@@ -471,7 +471,7 @@ order to prevent tracking,
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.19
+MatterSpecification.v11.Core § 11.1.5.19
 
 #### Inherited from
 
@@ -479,7 +479,7 @@ StateType.uniqueId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:387](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L387)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:386](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L386)
 
 ___
 
@@ -491,7 +491,7 @@ This attribute shall specify the Vendor ID.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.3
+MatterSpecification.v11.Core § 11.1.5.3
 
 #### Inherited from
 
@@ -499,7 +499,7 @@ StateType.vendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:203](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L203)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L202)
 
 ___
 
@@ -511,7 +511,7 @@ This attribute shall specify a human readable (displayable) name of the vendor f
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.5.2
+MatterSpecification.v11.Core § 11.1.5.2
 
 #### Inherited from
 
@@ -519,4 +519,4 @@ StateType.vendorName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:196](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:195](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L195)

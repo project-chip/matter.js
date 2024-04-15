@@ -8,7 +8,7 @@ Input to the OnOff offWithEffect command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.4
+MatterSpecification.v11.Cluster § 1.5.7.4
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ Command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.4.1
+MatterSpecification.v11.Cluster § 1.5.7.4.1
 
 #### Inherited from
 
@@ -58,7 +58,7 @@ non-reserved values listed in Values of the EffectVariant Field of the OffWithEf
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.4.2
+MatterSpecification.v11.Cluster § 1.5.7.4.2
 
 #### Inherited from
 

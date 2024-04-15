@@ -10,7 +10,7 @@ This cluster provides an interface for managing low power mode on a device.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.9
+MatterSpecification.v11.Cluster § 1.9
 
 ## Hierarchy
 
@@ -79,7 +79,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `sleep` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command shall put the device into low power mode. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.9.3.1 |
+| `sleep` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command shall put the device into low power mode. **`See`** MatterSpecification.v11.Cluster § 1.9.3.1 |
 
 #### Inherited from
 

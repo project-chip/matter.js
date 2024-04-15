@@ -35,7 +35,7 @@ When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.7.2
+MatterSpecification.v11.Core § 11.18.7.2
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ StateType.adminFabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:261](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L261)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:260](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L260)
 
 ___
 
@@ -61,7 +61,7 @@ When the WindowStatus attribute is set to WindowNotOpen, this attribute shall be
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.7.3
+MatterSpecification.v11.Core § 11.18.7.3
 
 #### Inherited from
 
@@ -69,7 +69,7 @@ StateType.adminVendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:274](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L274)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:273](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L273)
 
 ___
 
@@ -87,7 +87,7 @@ command, and therefore this attribute shall be set to WindowNotOpen on initial c
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.18.7.1
+MatterSpecification.v11.Core § 11.18.7.1
 
 #### Inherited from
 
@@ -95,4 +95,4 @@ StateType.windowStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:247](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L247)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L246)

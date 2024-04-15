@@ -13,7 +13,7 @@ See Section F.2, “Device Attestation Response test vector” for an example co
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.2
+MatterSpecification.v11.Core § 11.17.6.2
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ This field shall contain the octet string of the serialized attestation_elements
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.2.1
+MatterSpecification.v11.Core § 11.17.6.2.1
 
 #### Inherited from
 
@@ -46,7 +46,7 @@ TypeFromSchema.attestationElements
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:167](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:166](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L166)
 
 ___
 
@@ -59,7 +59,7 @@ This field shall contain the octet string of the necessary attestation_signature
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.2.2
+MatterSpecification.v11.Core § 11.17.6.2.2
 
 #### Inherited from
 
@@ -67,4 +67,4 @@ TypeFromSchema.attestationSignature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L175)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:174](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L174)

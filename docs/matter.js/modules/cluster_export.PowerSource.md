@@ -56,9 +56,9 @@ These elements and properties are present in all PowerSource clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `description`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`string`, `any`\> ; `order`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `status`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`PowerSourceStatus`](../enums/cluster_export.PowerSource.PowerSourceStatus.md), `any`\>  } | - |
-| `attributes.description` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`string`, `any`\> | This attribute shall provide a user-facing description of this source, used to distinguish it from other power sources, e.g. "DC Power", "Primary Battery" or "Battery back-up". This attribute shall NOT be used to convey information such as battery form factor, or chemistry. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.6.3 |
-| `attributes.order` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> | This attribute shall indicate the relative preference with which the Node will select this source to provide power. A source with a lower order shall be selected by the Node to provide power before any other source with a higher order, if the lower order source is available (see Status). Note, Order is read-only and therefore NOT intended to allow clients control over power source selection. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.6.2 |
-| `attributes.status` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`PowerSourceStatus`](../enums/cluster_export.PowerSource.PowerSourceStatus.md), `any`\> | This attribute shall indicate the participation of this power source in providing power to the Node as specified in PowerSourceStatusEnum. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.6.1 |
+| `attributes.description` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`string`, `any`\> | This attribute shall provide a user-facing description of this source, used to distinguish it from other power sources, e.g. "DC Power", "Primary Battery" or "Battery back-up". This attribute shall NOT be used to convey information such as battery form factor, or chemistry. **`See`** MatterSpecification.v11.Core § 11.7.6.3 |
+| `attributes.order` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> | This attribute shall indicate the relative preference with which the Node will select this source to provide power. A source with a lower order shall be selected by the Node to provide power before any other source with a higher order, if the lower order source is available (see Status). Note, Order is read-only and therefore NOT intended to allow clients control over power source selection. **`See`** MatterSpecification.v11.Core § 11.7.6.2 |
+| `attributes.status` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`PowerSourceStatus`](../enums/cluster_export.PowerSource.PowerSourceStatus.md), `any`\> | This attribute shall indicate the participation of this power source in providing power to the Node as specified in PowerSourceStatusEnum. **`See`** MatterSpecification.v11.Core § 11.7.6.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `activeWiredFaults`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`WiredFault`](../enums/cluster_export.PowerSource.WiredFault.md)[], `any`\> ; `wiredAssessedCurrent`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `wiredAssessedInputFrequency`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `wiredAssessedInputVoltage`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `wiredCurrentType`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`WiredCurrentType`](../enums/cluster_export.PowerSource.WiredCurrentType.md), `any`\> ; `wiredMaximumCurrent`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `wiredNominalVoltage`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `wiredPresent`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`boolean`, `any`\>  } ; `events`: \{ `wiredFaultChange`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`WiredFault`](../enums/cluster_export.PowerSource.WiredFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`WiredFault`](../enums/cluster_export.PowerSource.WiredFault.md)[]\>  }\>, `any`\>  }  } = WiredComponent; `flags`: \{ `wired`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `activeBatFaults`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`BatFault`](../enums/cluster_export.PowerSource.BatFault.md)[], `any`\> ; `batChargeLevel`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`BatChargeLevel`](../enums/cluster_export.PowerSource.BatChargeLevel.md), `any`\> ; `batPercentRemaining`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `batPresent`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`boolean`, `any`\> ; `batReplaceability`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`BatReplaceability`](../enums/cluster_export.PowerSource.BatReplaceability.md), `any`\> ; `batReplacementNeeded`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\> ; `batTimeRemaining`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `batVoltage`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\>  } ; `events`: \{ `batFaultChange`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`BatFault`](../enums/cluster_export.PowerSource.BatFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`BatFault`](../enums/cluster_export.PowerSource.BatFault.md)[]\>  }\>, `any`\>  }  } = BatteryComponent; `flags`: \{ `battery`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `batAnsiDesignation`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `batApprovedChemistry`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<[`BatApprovedChemistry`](../enums/cluster_export.PowerSource.BatApprovedChemistry.md), `any`\> ; `batCapacity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `batCommonDesignation`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<[`BatCommonDesignation`](../enums/cluster_export.PowerSource.BatCommonDesignation.md), `any`\> ; `batIecDesignation`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`string`, `any`\> ; `batQuantity`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `batReplacementDescription`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`string`, `any`\>  }  } = ReplaceableComponent; `flags`: \{ `replaceable`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `activeBatChargeFaults`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`BatChargeFault`](../enums/cluster_export.PowerSource.BatChargeFault.md)[], `any`\> ; `batChargeState`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`BatChargeState`](../enums/cluster_export.PowerSource.BatChargeState.md), `any`\> ; `batChargingCurrent`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\> ; `batFunctionalWhileCharging`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`boolean`, `any`\> ; `batTimeToFullCharge`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<``null`` \| `number`, `any`\>  } ; `events`: \{ `batChargeFaultChange`: [`OptionalEvent`](../interfaces/cluster_export.OptionalEvent.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`BatChargeFault`](../enums/cluster_export.PowerSource.BatChargeFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`BatChargeFault`](../enums/cluster_export.PowerSource.BatChargeFault.md)[]\>  }\>, `any`\>  }  } = RechargeableComponent; `flags`: \{ `rechargeable`: ``true`` = true }  }] | This metadata controls which PowerSourceCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `battery`: [`BitFlag`](schema_export.md#bitflag) ; `rechargeable`: [`BitFlag`](schema_export.md#bitflag) ; `replaceable`: [`BitFlag`](schema_export.md#bitflag) ; `wired`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.battery` | [`BitFlag`](schema_export.md#bitflag) | Battery A battery power source |
@@ -71,7 +71,7 @@ These elements and properties are present in all PowerSource clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1252](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1252)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1251](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1251)
 
 ___
 
@@ -99,7 +99,7 @@ A PowerSourceCluster supports these elements if it supports feature Battery.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:981](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L981)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:980](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L980)
 
 ___
 
@@ -109,9 +109,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1347](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1347)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1346](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1346)
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1349](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1349)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1348](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1348)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1332](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1332)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1331](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1331)
 
 ___
 
@@ -135,9 +135,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1490](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1490)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1489](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1489)
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1492](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1492)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1491](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1491)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1358](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1358)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1357](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1357)
 
 ___
 
@@ -176,7 +176,7 @@ A PowerSourceCluster supports these elements if it supports feature Rechargeable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1145](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1145)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1144)
 
 ___
 
@@ -201,7 +201,7 @@ A PowerSourceCluster supports these elements if it supports feature Replaceable.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1082](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1082)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1081](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1081)
 
 ___
 
@@ -213,11 +213,11 @@ Body of the PowerSource batChargeFaultChange event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.7.3
+MatterSpecification.v11.Core § 11.7.7.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:848](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L848)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:847](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L847)
 
 ___
 
@@ -229,11 +229,11 @@ Body of the PowerSource batFaultChange event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.7.2
+MatterSpecification.v11.Core § 11.7.7.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:166](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L166)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:165](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L165)
 
 ___
 
@@ -245,11 +245,11 @@ Body of the PowerSource wiredFaultChange event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.7.1
+MatterSpecification.v11.Core § 11.7.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L71)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L70)
 
 ___
 
@@ -277,4 +277,4 @@ A PowerSourceCluster supports these elements if it supports feature Wired.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:888](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L888)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:887](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L887)

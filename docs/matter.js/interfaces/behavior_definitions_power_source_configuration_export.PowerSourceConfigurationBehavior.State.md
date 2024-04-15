@@ -34,7 +34,7 @@ have the same order, there are no restrictions on their relative sorting.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.6.4.1
+MatterSpecification.v11.Core § 11.6.4.1
 
 #### Inherited from
 
@@ -42,4 +42,4 @@ StateType.sources
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L39)

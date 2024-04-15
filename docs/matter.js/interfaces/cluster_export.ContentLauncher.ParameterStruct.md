@@ -8,7 +8,7 @@ This object defines inputs to a search for content for display or playback.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.3
+MatterSpecification.v11.Cluster § 6.7.5.3
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ This shall indicate the list of additional external content identifiers.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.3.3
+MatterSpecification.v11.Cluster § 6.7.5.3.3
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ TypeFromSchema.externalIdList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:436](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L436)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:435](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L435)
 
 ___
 
@@ -54,7 +54,7 @@ This shall indicate the entity type.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.3.1
+MatterSpecification.v11.Cluster § 6.7.5.3.1
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:422](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L422)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:421](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L421)
 
 ___
 
@@ -74,7 +74,7 @@ This shall indicate the entity value, which is a search string, ex. “Mancheste
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.3.2
+MatterSpecification.v11.Cluster § 6.7.5.3.2
 
 #### Inherited from
 
@@ -82,4 +82,4 @@ TypeFromSchema.value
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:429](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L429)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:428](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L428)

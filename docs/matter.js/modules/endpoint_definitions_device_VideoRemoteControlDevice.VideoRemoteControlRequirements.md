@@ -31,11 +31,11 @@
 
 The AccountLogin cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [AccountLoginBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#accountloginbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:145](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L145)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L144)
 
 ___
 
@@ -45,11 +45,11 @@ ___
 
 The ApplicationLauncher cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ApplicationLauncherBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#applicationlauncherbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L138)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L137)
 
 ___
 
@@ -59,11 +59,11 @@ ___
 
 The AudioOutput cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [AudioOutputBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#audiooutputbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:131](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L131)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L130)
 
 ___
 
@@ -73,11 +73,11 @@ ___
 
 The Channel cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ChannelBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#channelbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L96)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L95)
 
 ___
 
@@ -87,11 +87,11 @@ ___
 
 The ContentLauncher cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ContentLauncherBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#contentlauncherbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L124)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:123](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L123)
 
 ___
 
@@ -101,11 +101,11 @@ ___
 
 The KeypadInput cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [KeypadInputBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#keypadinputbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L75)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L74)
 
 ___
 
@@ -115,11 +115,11 @@ ___
 
 The LevelControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#levelcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L82)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L81)
 
 ___
 
@@ -129,11 +129,11 @@ ___
 
 The LowPower cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LowPowerBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#lowpowerbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L117)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L116)
 
 ___
 
@@ -143,11 +143,11 @@ ___
 
 The MediaInput cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [MediaInputBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#mediainputbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L110)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L109)
 
 ___
 
@@ -157,11 +157,11 @@ ___
 
 The MediaPlayback cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [MediaPlaybackBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#mediaplaybackbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L68)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L67)
 
 ___
 
@@ -171,11 +171,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#onoffbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L61)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L60)
 
 ___
 
@@ -185,11 +185,11 @@ ___
 
 The TargetNavigator cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TargetNavigatorBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#targetnavigatorbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L103)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L102)
 
 ___
 
@@ -199,11 +199,11 @@ ___
 
 The WakeOnLan cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [WakeOnLanBehavior](endpoint_definitions_device_VideoRemoteControlDevice.VideoRemoteControlRequirements.md#wakeonlanbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L89)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L88)
 
 ___
 
@@ -235,4 +235,4 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:150](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L150)
+[packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts:149](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/VideoRemoteControlDevice.ts#L149)

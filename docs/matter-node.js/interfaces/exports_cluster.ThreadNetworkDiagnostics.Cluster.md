@@ -16,7 +16,7 @@ ThreadNetworkDiagnosticsCluster.with() factory method.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13
+MatterSpecification.v11.Core § 11.13
 
 ## Hierarchy
 
@@ -99,8 +99,8 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `connectionStatus` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `connectionStatus`: [`FieldType`](exports_tlv.FieldType.md)\<[`ConnectionStatus`](../enums/exports_cluster.ThreadNetworkDiagnostics.ConnectionStatus.md)\>  }\>, `any`\> | The ConnectionStatus Event shall indicate that a Node’s connection status to a Thread network has changed. **`See`** MatterCoreSpecificationV1_1 § 11.13.8.2 |
-| `networkFaultChange` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `current`: [`FieldType`](exports_tlv.FieldType.md)\<[`NetworkFault`](../enums/exports_cluster.ThreadNetworkDiagnostics.NetworkFault.md)[]\> ; `previous`: [`FieldType`](exports_tlv.FieldType.md)\<[`NetworkFault`](../enums/exports_cluster.ThreadNetworkDiagnostics.NetworkFault.md)[]\>  }\>, `any`\> | The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected by the Node. **`See`** MatterCoreSpecificationV1_1 § 11.13.8.1 |
+| `connectionStatus` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `connectionStatus`: [`FieldType`](exports_tlv.FieldType.md)\<[`ConnectionStatus`](../enums/exports_cluster.ThreadNetworkDiagnostics.ConnectionStatus.md)\>  }\>, `any`\> | The ConnectionStatus Event shall indicate that a Node’s connection status to a Thread network has changed. **`See`** MatterSpecification.v11.Core § 11.13.8.2 |
+| `networkFaultChange` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `current`: [`FieldType`](exports_tlv.FieldType.md)\<[`NetworkFault`](../enums/exports_cluster.ThreadNetworkDiagnostics.NetworkFault.md)[]\> ; `previous`: [`FieldType`](exports_tlv.FieldType.md)\<[`NetworkFault`](../enums/exports_cluster.ThreadNetworkDiagnostics.NetworkFault.md)[]\>  }\>, `any`\> | The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected by the Node. **`See`** MatterSpecification.v11.Core § 11.13.8.1 |
 
 #### Inherited from
 

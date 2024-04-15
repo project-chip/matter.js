@@ -33,7 +33,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts:171](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts#L171)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts:185](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts#L185)
 
 ___
 
@@ -43,4 +43,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts#L170)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts:184](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/on-off/OnOffServer.ts#L184)

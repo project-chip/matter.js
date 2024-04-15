@@ -25,7 +25,7 @@ combinations. You must use the NetworkCommissioningCluster.with() factory method
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8
+MatterSpecification.v11.Core § 11.8
 
 ## Hierarchy
 

@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L23)
+[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L22)
 
-[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L59)
+[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L58)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L48)
+[packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/HumiditySensorDevice.ts#L47)

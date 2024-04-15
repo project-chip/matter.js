@@ -37,7 +37,7 @@ binding target.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.6
+MatterSpecification.v11.Core § 9.6
 
 ## Hierarchy
 

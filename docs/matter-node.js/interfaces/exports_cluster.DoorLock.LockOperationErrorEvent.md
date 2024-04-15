@@ -8,7 +8,7 @@ Body of the DoorLock lockOperationError event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4
+MatterSpecification.v11.Cluster § 5.2.5.4
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ involved.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4.7
+MatterSpecification.v11.Cluster § 5.2.5.4.7
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ that can be determined for the given operation source. This shall NOT be null if
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4.5
+MatterSpecification.v11.Cluster § 5.2.5.4.5
 
 #### Inherited from
 
@@ -81,7 +81,7 @@ The type of the lock operation that was performed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4.1
+MatterSpecification.v11.Cluster § 5.2.5.4.1
 
 #### Inherited from
 
@@ -101,7 +101,7 @@ The lock operation error triggered when the operation was performed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4.3
+MatterSpecification.v11.Cluster § 5.2.5.4.3
 
 #### Inherited from
 
@@ -121,7 +121,7 @@ The source of the lock operation that was performed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4.2
+MatterSpecification.v11.Cluster § 5.2.5.4.2
 
 #### Inherited from
 
@@ -144,7 +144,7 @@ with the given operation source. This shall NOT be null if the operation source 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4.6
+MatterSpecification.v11.Cluster § 5.2.5.4.6
 
 #### Inherited from
 
@@ -165,7 +165,7 @@ determined for the given operation source.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4.4
+MatterSpecification.v11.Cluster § 5.2.5.4.4
 
 #### Inherited from
 

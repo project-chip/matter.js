@@ -8,7 +8,7 @@ The value of the Thermostat thermostatRunningMode attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7
+MatterSpecification.v11.Cluster § 4.3.7
 
 ## Table of contents
 

@@ -8,7 +8,7 @@ Input to the ApplicationLauncher launchApp command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.1
+MatterSpecification.v11.Cluster § 6.4.4.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This field shall specify the Application to launch.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.1.1
+MatterSpecification.v11.Cluster § 6.4.4.1.1
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.application
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L85)
 
 ___
 
@@ -58,7 +58,7 @@ launch with proprietary data.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.4.1.2
+MatterSpecification.v11.Cluster § 6.4.4.1.2
 
 #### Inherited from
 
@@ -66,4 +66,4 @@ TypeFromSchema.data
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:98](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L98)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L97)

@@ -8,7 +8,7 @@ See Section 11.19.3.2, “Querying the OTA Provider” for the semantics of thes
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.4.1
+MatterSpecification.v11.Core § 11.19.6.4.1
 
 ## Table of contents
 

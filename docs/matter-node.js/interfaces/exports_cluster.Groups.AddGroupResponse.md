@@ -8,7 +8,7 @@ The AddGroupResponse is sent by the Groups cluster server in response to an AddG
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.7
+MatterSpecification.v11.Cluster § 1.3.7.7
 
 ## Hierarchy
 

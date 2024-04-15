@@ -11,7 +11,7 @@ provision of notifications of temperature measurements.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 2.3
+MatterSpecification.v11.Cluster § 2.3
 
 ## Hierarchy
 

@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.2
+MatterSpecification.v11.Core § 9.14.4.2
 
 ## Table of contents
 
@@ -35,7 +35,7 @@ Example: flash all lights in the house when CO sensor triggers.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.2.6
+MatterSpecification.v11.Core § 9.14.4.2.6
 
 #### Defined in
 
@@ -54,7 +54,7 @@ started, stopped, paused, resumed. Example: see example 3.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.2.3
+MatterSpecification.v11.Core § 9.14.4.2.3
 
 #### Defined in
 
@@ -76,7 +76,7 @@ Example: lock the doors when the server’s system has detected no one is at hom
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.2.4
+MatterSpecification.v11.Core § 9.14.4.2.4
 
 #### Defined in
 
@@ -96,7 +96,7 @@ Example: play a pattern on the lights in the living room if there is someone in 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.2.5
+MatterSpecification.v11.Core § 9.14.4.2.5
 
 #### Defined in
 
@@ -133,7 +133,7 @@ Example: see examples 1 and 2.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.2.1
+MatterSpecification.v11.Core § 9.14.4.2.1
 
 #### Defined in
 
@@ -154,7 +154,7 @@ Example: see example 4.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.2.2
+MatterSpecification.v11.Core § 9.14.4.2.2
 
 #### Defined in
 

@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L38)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L37)
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:137](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L137)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L136)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:129](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L129)
+[packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts:128](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/ControlBridgeDevice.ts#L128)

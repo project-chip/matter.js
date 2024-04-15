@@ -8,7 +8,7 @@ Input to the GroupKeyManagement keySetWrite command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.8.1
+MatterSpecification.v11.Core § 11.2.8.1
 
 ## Hierarchy
 

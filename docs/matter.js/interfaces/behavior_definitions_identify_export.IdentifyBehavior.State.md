@@ -36,7 +36,7 @@ state.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.5.1
+MatterSpecification.v11.Cluster § 1.2.5.1
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ StateType.identifyTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:256](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L256)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L255)
 
 ___
 
@@ -59,7 +59,7 @@ Table 2. Values of the IdentifyType attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.5.2
+MatterSpecification.v11.Cluster § 1.2.5.2
 
 #### Inherited from
 
@@ -67,4 +67,4 @@ StateType.identifyType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:266](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L266)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L265)

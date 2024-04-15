@@ -8,7 +8,7 @@ A Semantic Tag is meant to be interpreted by the client for the purpose the clus
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.8.8.2
+MatterSpecification.v11.Cluster § 1.8.8.2
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ instances are part of the same namespace and have the same meaning. For example:
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.8.8.2.2
+MatterSpecification.v11.Cluster § 1.8.8.2.2
 
 #### Inherited from
 
@@ -59,7 +59,7 @@ specific or standard. For semantic tags in a standard namespace, see Standard Na
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.8.8.2.1
+MatterSpecification.v11.Cluster § 1.8.8.2.1
 
 #### Inherited from
 

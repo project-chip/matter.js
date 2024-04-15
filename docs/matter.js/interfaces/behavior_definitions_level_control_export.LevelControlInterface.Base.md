@@ -35,11 +35,11 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.2
+MatterSpecification.v11.Cluster § 1.6.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L77)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L76)
 
 ___
 
@@ -59,11 +59,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.1
+MatterSpecification.v11.Cluster § 1.6.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L72)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L71)
 
 ___
 
@@ -83,11 +83,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6
+MatterSpecification.v11.Cluster § 1.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L101)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L100)
 
 ___
 
@@ -107,11 +107,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6
+MatterSpecification.v11.Cluster § 1.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L106)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L105)
 
 ___
 
@@ -140,11 +140,11 @@ If the device is not able to move at a variable rate, the TransitionTime field m
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.3
+MatterSpecification.v11.Cluster § 1.6.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L91)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L90)
 
 ___
 
@@ -164,11 +164,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6
+MatterSpecification.v11.Cluster § 1.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L111)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L110)
 
 ___
 
@@ -188,11 +188,11 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6.4
+MatterSpecification.v11.Cluster § 1.6.6.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L96)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L95)
 
 ___
 
@@ -212,8 +212,8 @@ ___
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.6.6
+MatterSpecification.v11.Cluster § 1.6.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:116](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L116)
+[packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts:115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/level-control/LevelControlInterface.ts#L115)

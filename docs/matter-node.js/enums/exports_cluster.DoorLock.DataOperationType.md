@@ -8,7 +8,7 @@ The DataOperationType enum shall indicate the data operation performed.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.5
+MatterSpecification.v11.Cluster § 5.2.6.5
 
 ## Table of contents
 

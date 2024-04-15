@@ -8,7 +8,7 @@ The Credential Type enum shall indicate the credential type.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.4
+MatterSpecification.v11.Cluster § 5.2.6.4
 
 ## Table of contents
 

@@ -8,7 +8,7 @@ Input to the ColorControl moveHue command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.5
+MatterSpecification.v11.Cluster § 3.2.11.5
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ field is equal to 0 (Stop), the Rate field shall be ignored.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.5.1
+MatterSpecification.v11.Cluster § 3.2.11.5.1
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ INVALID_COMMAND. If the MoveMode field is set to 0 (stop) the Rate field shall b
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.5.2
+MatterSpecification.v11.Cluster § 3.2.11.5.2
 
 #### Inherited from
 

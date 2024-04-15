@@ -41,7 +41,7 @@ HardwareFaultChange.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.6
+MatterSpecification.v11.Core § 11.11.6.6
 
 #### Inherited from
 
@@ -49,7 +49,7 @@ StateType.activeHardwareFaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:535](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L535)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:534](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L534)
 
 ___
 
@@ -67,7 +67,7 @@ changes in active faults may subscribe to this attribute, or they may subscribe 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.8
+MatterSpecification.v11.Core § 11.11.6.8
 
 #### Inherited from
 
@@ -75,7 +75,7 @@ StateType.activeNetworkFaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:569](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L569)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:568](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L568)
 
 ___
 
@@ -93,7 +93,7 @@ changes in active faults may subscribe to this attribute, or they may subscribe 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.7
+MatterSpecification.v11.Core § 11.11.6.7
 
 #### Inherited from
 
@@ -101,7 +101,7 @@ StateType.activeRadioFaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:552](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L552)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:551](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L551)
 
 ___
 
@@ -113,7 +113,7 @@ The BootReason attribute shall indicate the reason for the Node’s most recent 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.5
+MatterSpecification.v11.Core § 11.11.6.5
 
 #### Inherited from
 
@@ -121,7 +121,7 @@ StateType.bootReason
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:521](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L521)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:520](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L520)
 
 ___
 
@@ -134,7 +134,7 @@ interface on the Node shall be represented by a single entry within the NetworkI
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.1
+MatterSpecification.v11.Core § 11.11.6.1
 
 #### Inherited from
 
@@ -142,7 +142,7 @@ StateType.networkInterfaces
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:479](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L479)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:478](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L478)
 
 ___
 
@@ -157,7 +157,7 @@ attribute shall only be reset to 0 upon a factory reset of the Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.2
+MatterSpecification.v11.Core § 11.11.6.2
 
 #### Inherited from
 
@@ -165,7 +165,7 @@ StateType.rebootCount
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:489](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L489)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:488](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L488)
 
 ___
 
@@ -182,7 +182,7 @@ appropriate action (e.g. warn the user and/or offer to remove all fabrics on the
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.9
+MatterSpecification.v11.Core § 11.11.6.9
 
 #### Inherited from
 
@@ -190,7 +190,7 @@ StateType.testEventTriggersEnabled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:585](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L585)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:584](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L584)
 
 ___
 
@@ -206,7 +206,7 @@ TotalOperationalHours attribute shall only be reset upon a factory reset of the 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.4
+MatterSpecification.v11.Core § 11.11.6.4
 
 #### Inherited from
 
@@ -214,7 +214,7 @@ StateType.totalOperationalHours
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:510](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L510)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:509](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L509)
 
 ___
 
@@ -229,7 +229,7 @@ reboot.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.11.6.3
+MatterSpecification.v11.Core § 11.11.6.3
 
 #### Inherited from
 
@@ -237,4 +237,4 @@ StateType.upTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:499](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L499)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:498](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L498)

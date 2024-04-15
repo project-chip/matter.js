@@ -44,10 +44,10 @@ These elements and properties are present in all AudioOutput clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentOutput`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `outputList`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } | - |
-| `attributes.currentOutput` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected OutputInfoStruct. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.5.3.2 |
-| `attributes.outputList` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> | This list provides the outputs supported by the device. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.5.3.1 |
+| `attributes.currentOutput` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected OutputInfoStruct. **`See`** MatterSpecification.v11.Cluster § 6.5.3.2 |
+| `attributes.outputList` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> | This list provides the outputs supported by the device. **`See`** MatterSpecification.v11.Cluster § 6.5.3.1 |
 | `commands` | \{ `selectOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } | - |
-| `commands.selectOutput` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterApplicationClusterSpecificationV1_1 § 6.5.4 |
+| `commands.selectOutput` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 6.5.4 |
 | `extensions` | readonly [\{ `component`: \{ `commands`: \{ `renameOutput`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `nameUpdates`: ``true``  }  }] | This metadata controls which AudioOutputCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `nameUpdates`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.nameUpdates` | [`BitFlag`](exports_schema.md#bitflag) | NameUpdates Supports updates to output names |
@@ -93,9 +93,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:386
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:390
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:388
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:392
 
 ___
 
@@ -140,7 +140,7 @@ This contains information about an output.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.5.1
+MatterSpecification.v11.Cluster § 6.5.5.1
 
 #### Defined in
 
@@ -156,7 +156,7 @@ Input to the AudioOutput renameOutput command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.4.2
+MatterSpecification.v11.Cluster § 6.5.4.2
 
 #### Defined in
 
@@ -172,7 +172,7 @@ Input to the AudioOutput selectOutput command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.5.4
+MatterSpecification.v11.Cluster § 6.5.4
 
 #### Defined in
 

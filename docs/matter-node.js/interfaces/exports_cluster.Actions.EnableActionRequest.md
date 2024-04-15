@@ -8,7 +8,7 @@ Input to the Actions enableAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.9
+MatterSpecification.v11.Core § 9.14.6.9
 
 ## Hierarchy
 

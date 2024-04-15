@@ -31,7 +31,7 @@ set to one of the non-reserved values listed in Values of the LightSensorType At
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.2.5.5
+MatterSpecification.v11.Cluster § 2.2.5.5
 
 #### Inherited from
 
@@ -39,7 +39,7 @@ StateType.lightSensorType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L75)
 
 ___
 
@@ -52,7 +52,7 @@ value of null indicates that this attribute is not defined. See Measured Value f
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.2.5.3
+MatterSpecification.v11.Cluster § 2.2.5.3
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L60)
 
 ___
 
@@ -85,7 +85,7 @@ The MeasuredValue attribute is updated continuously as new measurements are made
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.2.5.1
+MatterSpecification.v11.Cluster § 2.2.5.1
 
 #### Inherited from
 
@@ -93,7 +93,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L44)
 
 ___
 
@@ -106,7 +106,7 @@ value of null indicates that this attribute is not defined. See Measured Value f
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.2.5.2
+MatterSpecification.v11.Cluster § 2.2.5.2
 
 #### Inherited from
 
@@ -114,7 +114,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L52)
 
 ___
 
@@ -126,7 +126,7 @@ See Measured Value.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.2.5.4
+MatterSpecification.v11.Cluster § 2.2.5.4
 
 #### Inherited from
 
@@ -134,4 +134,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L67)

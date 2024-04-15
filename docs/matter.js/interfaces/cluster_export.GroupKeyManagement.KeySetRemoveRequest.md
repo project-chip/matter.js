@@ -8,7 +8,7 @@ Input to the GroupKeyManagement keySetRemove command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.8.4
+MatterSpecification.v11.Core § 11.2.8.4
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.groupKeySetId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:278](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L278)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:277](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L277)

@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.12
+MatterSpecification.v11.Cluster § 1.4.9.12
 
 ## Hierarchy
 

@@ -51,7 +51,7 @@ be asynchronous but this information is not available at runtime unless you spec
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Observable.ts#L61)
+[packages/matter.js/src/util/Observable.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L61)
 
 ## Methods
 
@@ -74,7 +74,7 @@ AsyncIterable.[asyncIterator]
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Observable.ts#L69)
+[packages/matter.js/src/util/Observable.ts:69](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L69)
 
 ___
 
@@ -90,7 +90,7 @@ Release resources associated with the observable.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Observable.ts#L74)
+[packages/matter.js/src/util/Observable.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L74)
 
 ___
 
@@ -112,7 +112,7 @@ Notify observers.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Observable.ts#L39)
+[packages/matter.js/src/util/Observable.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L39)
 
 ___
 
@@ -134,7 +134,7 @@ Remove an observer.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Observable.ts#L49)
+[packages/matter.js/src/util/Observable.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L49)
 
 ___
 
@@ -156,7 +156,7 @@ Add an observer.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Observable.ts#L44)
+[packages/matter.js/src/util/Observable.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L44)
 
 ___
 
@@ -178,4 +178,4 @@ Add an observer that emits once then is unregistered.
 
 #### Defined in
 
-[packages/matter.js/src/util/Observable.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Observable.ts#L54)
+[packages/matter.js/src/util/Observable.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Observable.ts#L54)
