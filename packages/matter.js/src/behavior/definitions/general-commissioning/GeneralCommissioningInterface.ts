@@ -166,21 +166,11 @@ export type ArmFailSafeResponse = TypeFromSchema<typeof GeneralCommissioning.Tlv
 export type SetRegulatoryConfigRequest = TypeFromSchema<typeof GeneralCommissioning.TlvSetRegulatoryConfigRequest>;
 
 /**
- * This field shall contain the result of the operation, based on the behavior specified in the functional description
- * of the SetRegulatoryConfig command.
- *
- * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
- *
  * @see {@link MatterSpecification.v11.Core} § 11.9.6.5
  */
 export type SetRegulatoryConfigResponse = TypeFromSchema<typeof GeneralCommissioning.TlvSetRegulatoryConfigResponse>;
 
 /**
- * This field shall contain the result of the operation, based on the behavior specified in the functional description
- * of the CommissioningComplete command.
- *
- * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
- *
  * @see {@link MatterSpecification.v11.Core} § 11.9.6.7
  */
 export type CommissioningCompleteResponse = TypeFromSchema<typeof GeneralCommissioning.TlvCommissioningCompleteResponse>;
