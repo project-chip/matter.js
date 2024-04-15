@@ -34,7 +34,6 @@ import { TlvField, TlvObject, TlvOptionalField, TlvOptionalRepeatedField, TlvTag
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { isObject } from "../util/Type.js";
 import {
     AuthorityKeyIdentifier_X509,
     BasicConstraints_X509,
@@ -732,6 +731,9 @@ export class CertificateManager {
         if (Object.keys(cert.subject).length > 5) {
             throw new CertificateError(`Certificate subject must not contain more than 5 RDNs.`);
         }
+        if (Object.keys(cert.issuer).length > 5) {
+            throw new CertificateError(`Certificate issuer must not contain more than 5 RDNs.`);
+        }
 
         // notBefore date should be already reached, notAfter is not checked right now
         // TODO: implement real checks when we add "Last known Good UTC time"
@@ -740,13 +742,6 @@ export class CertificateManager {
             /*throw new CertificateError(
                 `Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs()}`,
             );*/
-        }
-
-        // All implementations SHALL reject Matter certificates with more than 5 RDNs in a single DN.
-        for (const [key, value] of Object.entries(cert)) {
-            if (isObject(value) && Object.keys(value).length > 5) {
-                throw new CertificateError(`Certificate field ${key} must not contain more than 5 RDNs.`);
-            }
         }
     }
 
