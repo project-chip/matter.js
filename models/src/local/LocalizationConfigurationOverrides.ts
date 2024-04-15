@@ -8,15 +8,15 @@ import { LocalMatter } from "../local.js";
 
 LocalMatter.children.push({
     tag: "cluster",
-    name: "TimeFormatLocalization",
+    name: "LocalizationConfiguration",
 
     children: [
         // Convenience override to have automatic validation for the value
         {
             tag: "attribute",
-            name: "ActiveCalendarType",
-            id: 1,
-            constraint: "in SupportedCalendarTypes",
+            name: "ActiveLocale",
+            id: 0,
+            constraint: "max 35, in SupportedLocales",
         },
     ],
 });

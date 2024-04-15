@@ -34,11 +34,7 @@ export namespace LocalizationConfiguration {
              *
              * @see {@link MatterSpecification.v11.Core} § 11.3.4.1
              */
-            activeLocale: WritableAttribute(
-                0x0,
-                TlvString.bound({ maxLength: 35 }),
-                { persistent: true, writeAcl: AccessLevel.Manage }
-            ),
+            activeLocale: WritableAttribute(0x0, TlvString, { persistent: true, writeAcl: AccessLevel.Manage }),
 
             /**
              * The SupportedLocales attribute shall represent a list of locale strings that are valid values for the
