@@ -14,7 +14,6 @@ import {
     DerObject,
     DerType,
     ELEMENTS_KEY,
-    NON_WELL_DEFINED_DATE,
     OBJECT_ID_KEY,
     RawBytes,
 } from "../codec/DerCodec.js";
@@ -31,14 +30,7 @@ import { Time } from "../time/Time.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvBitmap, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
-import {
-    TlvField,
-    TlvFields,
-    TlvObject,
-    TlvOptionalField,
-    TlvOptionalRepeatedField,
-    TlvTaggedList,
-} from "../tlv/TlvObject.js";
+import { TlvField, TlvObject, TlvOptionalField, TlvOptionalRepeatedField, TlvTaggedList } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -58,6 +50,7 @@ import {
     KeyUsage_X509,
     LocalityName_X520,
     Name_X520,
+    NON_WELL_DEFINED_DATE,
     OrganisationName_X520,
     OrganizationalUnitName_X520,
     Pkcs7Data,
@@ -163,7 +156,8 @@ export const VendorId_Matter = GenericMatterAttCertObject<VendorId>(1, uInt16To4
 /** matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2 */
 export const ProductId_Matter = GenericMatterAttCertObject<number>(2, uInt16To4Chars);
 
-const DefaultIssuerMatterFields: TlvFields = {
+/** All defined Matter fields for subject and issuer that we always allow optionally to be encoded */
+const AllowedSubjectAndIssuerMatterFields = {
     nodeId: TlvOptionalField(17, TlvNodeId),
     firmwareSigningId: TlvOptionalField(18, TlvUInt32),
     icacId: TlvOptionalField(19, TlvUInt64),
@@ -176,7 +170,7 @@ const DefaultIssuerMatterFields: TlvFields = {
  * TLV schema for a generic subject or issuer field in a certificate. We handle all fields as optional here for the TLV
  * parsing and check required fields in the logic to make sure we return the correct errors.
  */
-const TlvGenericMatterSubjectOrIssuerTaggedList = <T extends TlvFields>(matterFields: T) => {
+const TlvGenericMatterSubjectOrIssuerTaggedList = <T>(matterFields: T) => {
     const fields = {
         // Standard DNs
         commonName: TlvOptionalField(1, TlvString),
@@ -232,19 +226,35 @@ const ExtensionKeyUsageBitmap = {
 };
 const ExtensionKeyUsageSchema = BitmapSchema(ExtensionKeyUsageBitmap);
 
-const BaseMatterCertificate = (matterFields?: { subject?: TlvFields; issuer?: TlvFields }) =>
+/**
+ * This generator enhances the generic Matter Certificate definition by allowing to override the subject and issuer
+ * fields. The overriding serves two needs:
+ * 1. to make some fields mandatory for the Tlv parsing and definition for the typescript types
+ * 2. have typing guidance when generating certificates ourself in code
+ *
+ * On Tlv definition level also all not specified allowed Matter Fields are optionally allowed and are decoded,
+ * re-encoded into Tlv and also encoded into ASN if the certificate is converted. Just the typing system do not know
+ * about them.
+ */
+const BaseMatterCertificate = <S, I>(matterFields?: { subject?: S; issuer?: I }) =>
     TlvObject({
         serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
         signatureAlgorithm: TlvField(2, TlvUInt8),
         issuer: TlvField(
             3,
-            TlvGenericMatterSubjectOrIssuerTaggedList(matterFields?.issuer ?? DefaultIssuerMatterFields),
+            TlvGenericMatterSubjectOrIssuerTaggedList<I>({
+                ...AllowedSubjectAndIssuerMatterFields,
+                ...(matterFields?.issuer ?? {}),
+            } as I),
         ),
         notBefore: TlvField(4, TlvUInt32),
         notAfter: TlvField(5, TlvUInt32),
         subject: TlvField(
             6,
-            TlvGenericMatterSubjectOrIssuerTaggedList(matterFields?.subject ?? DefaultIssuerMatterFields),
+            TlvGenericMatterSubjectOrIssuerTaggedList<S>({
+                ...AllowedSubjectAndIssuerMatterFields,
+                ...(matterFields?.subject ?? {}),
+            } as S),
         ),
         publicKeyAlgorithm: TlvField(7, TlvUInt8),
         ellipticCurveIdentifier: TlvField(8, TlvUInt8),
@@ -274,6 +284,7 @@ export const TlvRootCertificate = BaseMatterCertificate({
         rcacId: TlvField(20, TlvUInt64),
         fabricId: TlvOptionalField(21, TlvFabricId),
     },
+    issuer: AllowedSubjectAndIssuerMatterFields,
 });
 
 export const TlvOperationalCertificate = BaseMatterCertificate({
@@ -282,6 +293,7 @@ export const TlvOperationalCertificate = BaseMatterCertificate({
         fabricId: TlvField(21, TlvFabricId),
         caseAuthenticatedTags: TlvOptionalRepeatedField(22, TlvCaseAuthenticatedTag, { maxLength: 3 }),
     },
+    issuer: AllowedSubjectAndIssuerMatterFields,
 });
 
 export const TlvIntermediateCertificate = BaseMatterCertificate({
@@ -289,6 +301,7 @@ export const TlvIntermediateCertificate = BaseMatterCertificate({
         icacId: TlvField(19, TlvUInt64),
         fabricId: TlvOptionalField(21, TlvFabricId),
     },
+    issuer: AllowedSubjectAndIssuerMatterFields,
 });
 
 const TlvBaseCertificate = BaseMatterCertificate();
