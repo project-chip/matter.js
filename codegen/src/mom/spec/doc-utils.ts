@@ -6,10 +6,13 @@
 
 import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import { Specification } from "@project-chip/matter.js/model";
-import { loadHtml } from "./spec-input.js";
+import { readFileSync } from "fs";
+import { JSDOM } from "jsdom";
 import { HtmlReference } from "./spec-types.js";
 
 const logger = Logger.get("scan-index");
+
+export const DEFAULT_MATTER_VERSION = "1.1";
 
 // Parse the section ID and name from a heading element
 export function parseHeading(e: Node | null) {
@@ -39,6 +42,11 @@ export type IndexDetail = {
     hasClusters: boolean;
     hasDevices: boolean;
 };
+
+export function loadHtml(path: string) {
+    const html = readFileSync(path);
+    return new JSDOM(html).window.document;
+}
 
 // Read an index file to find the portions of the spec we care about
 export function identifyDocument(path: string): IndexDetail {

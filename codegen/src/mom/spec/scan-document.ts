@@ -6,8 +6,7 @@
 
 import { dirname, join } from "path";
 
-import { parseHeading } from "./doc-utils.js";
-import { loadHtml } from "./spec-input.js";
+import { loadHtml, parseHeading } from "./doc-utils.js";
 import { HtmlReference, Table } from "./spec-types.js";
 
 // Convert HTMLTableELement -> Table

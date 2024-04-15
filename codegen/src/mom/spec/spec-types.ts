@@ -6,7 +6,9 @@
 
 import { Specification } from "@project-chip/matter.js/model";
 
-/** An HTML table */
+/**
+ * An HTML table
+ */
 export type Table = {
     /** Field names */
     fields: string[];
