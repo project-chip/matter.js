@@ -1018,8 +1018,8 @@ export class CertificateManager {
         }
 
         // The basic constraints extension SHALL be encoded with is-ca set to true.
-        if (!rootCert.extensions.basicConstraints.isCa) {
-            throw new CertificateError(`Root certificate must have isCa set to true.`);
+        if (!icaCert.extensions.basicConstraints.isCa) {
+            throw new CertificateError(`Ica certificate must have isCa set to true.`);
         }
 
         // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
@@ -1031,24 +1031,24 @@ export class CertificateManager {
         }
 
         // The extended key usage extension SHALL NOT be present.
-        if (rootCert.extensions.extendedKeyUsage !== undefined) {
-            throw new CertificateError(`Root certificate must not have extendedKeyUsage set.`);
+        if (icaCert.extensions.extendedKeyUsage !== undefined) {
+            throw new CertificateError(`Ica certificate must not have extendedKeyUsage set.`);
         }
 
         // The subject key identifier extension SHALL be present and 160 bit long.
-        if (rootCert.extensions.subjectKeyIdentifier === undefined) {
-            throw new CertificateError(`Root certificate must have subjectKeyIdentifier set.`);
+        if (icaCert.extensions.subjectKeyIdentifier === undefined) {
+            throw new CertificateError(`Ica certificate must have subjectKeyIdentifier set.`);
         }
-        if (rootCert.extensions.subjectKeyIdentifier.length !== 20) {
-            throw new CertificateError(`Root certificate subjectKeyIdentifier must be 160 bit.`);
+        if (icaCert.extensions.subjectKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Ica certificate subjectKeyIdentifier must be 160 bit.`);
         }
 
         // The authority key identifier extension SHALL be present and 160 bit long.
-        if (rootCert.extensions.authorityKeyIdentifier === undefined) {
-            throw new CertificateError(`Root certificate must have authorityKeyIdentifier set.`);
+        if (icaCert.extensions.authorityKeyIdentifier === undefined) {
+            throw new CertificateError(`Ica certificate must have authorityKeyIdentifier set.`);
         }
-        if (rootCert.extensions.authorityKeyIdentifier.length !== 20) {
-            throw new CertificateError(`Root certificate authorityKeyIdentifier must be 160 bit.`);
+        if (icaCert.extensions.authorityKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Ica certificate authorityKeyIdentifier must be 160 bit.`);
         }
 
         // Validate authority key identifier against subject key identifier
