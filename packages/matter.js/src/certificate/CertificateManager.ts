@@ -65,6 +65,8 @@ import {
     Title_X520,
 } from "./CertificateDerTypes.js";
 
+const logger = Logger.get("CertificateManager");
+
 export class CertificateError extends MatterError {}
 
 const YEAR_S = 365 * 24 * 60 * 60;
@@ -732,10 +734,12 @@ export class CertificateManager {
         }
 
         // notBefore date should be already reached, notAfter is not checked right now
+        // TODO: implement real checks when we add "Last known Good UTC time"
         if (cert.notBefore * 1000 > Time.nowMs()) {
-            throw new CertificateError(
+            logger.warn(`Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs()}`);
+            /*throw new CertificateError(
                 `Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs()}`,
-            );
+            );*/
         }
 
         // All implementations SHALL reject Matter certificates with more than 5 RDNs in a single DN.
