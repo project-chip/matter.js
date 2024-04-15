@@ -78,7 +78,7 @@ export const ExtendedKeyUsage_X509 = (values: number[] | undefined) => {
 export const KeyUsage_X509 = (value: number) => {
     return DerObject("551d0f", {
         critical: true,
-        value: DerCodec.encode(DatatypeOverride(DerType.BitString, ByteArray.of(value))),
+        value: DerCodec.encode(DatatypeOverride(DerType.BitString, value)),
     });
 };
 export const Pkcs7Data = (data: any) => DerObject("2A864886F70D010701", { value: ContextTagged(0, data) });
@@ -91,9 +91,13 @@ export const Pkcs7SignedData = (data: any) => DerObject("2a864886f70d010702", { 
  */
 const GenericString_X520 =
     (id: number) =>
-    (value: string, asPrintedString = false) => [
-        DerObject(`5504${(asPrintedString ? id + 0x80 : id).toString(16).padStart(2, "0")}`, { value }),
-    ];
+    (data: string, asPrintedString = false) => {
+        let value: any = data;
+        if (asPrintedString) {
+            value = DatatypeOverride(DerType.PrintableString, value);
+        }
+        return [DerObject(`5504${id.toString(16).padStart(2, "0")}`, { value })];
+    };
 
 /** commonName = ASN.1 OID 2.5.4.3 */
 export const CommonName_X520 = GenericString_X520(3);
@@ -126,4 +130,6 @@ export const DnQualifier_X520 = GenericString_X520(46);
 /** pseudonym = ASN.1 OID 2.5.4.65 */
 export const Pseudonym_X520 = GenericString_X520(65);
 /** domain-component = ASN.1 OID 0.9.2342.19200300.100.1.25, IA5String */
-export const DomainComponent_X520 = (value: string) => [DerObject("06092A864886F70D010901", { value })];
+export const DomainComponent_X520 = (value: string) => [
+    DerObject("06092A864886F70D010901", { value: DatatypeOverride(DerType.IA5String, value) }),
+];
