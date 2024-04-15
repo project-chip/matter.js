@@ -132,6 +132,7 @@ export const OperationalCredentialsClusterHandler: (
                 caseAdminSubject,
             });
         } catch (error) {
+            logger.info("building fabric failed", error);
             if (error instanceof MatterFabricConflictError) {
                 return {
                     statusCode: OperationalCredentials.NodeOperationalCertStatus.FabricConflict,
@@ -156,9 +157,8 @@ export const OperationalCredentialsClusterHandler: (
                     statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
                     debugText: error.message,
                 };
-            } else {
-                throw error;
             }
+            throw error;
         }
         await failsafeContext.addFabric(fabric);
 
@@ -305,6 +305,7 @@ export const OperationalCredentialsClusterHandler: (
                 fabricIndex: updateFabric.fabricIndex,
             };
         } catch (error) {
+            logger.info("building fabric for update failed", error);
             if (
                 error instanceof CertificateError ||
                 error instanceof ValidationError ||
@@ -319,9 +320,8 @@ export const OperationalCredentialsClusterHandler: (
                     statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
                     debugText: error.message,
                 };
-            } else {
-                throw error;
             }
+            throw error;
         }
     },
 
@@ -409,15 +409,15 @@ export const OperationalCredentialsClusterHandler: (
         try {
             failsafeContext.setRootCert(rootCaCertificate);
         } catch (error) {
+            logger.info("setting root certificate failed", error);
             if (
                 error instanceof CertificateError ||
                 error instanceof ValidationError ||
                 error instanceof UnexpectedDataError
             ) {
                 throw new StatusResponseError(error.message, StatusCode.InvalidCommand);
-            } else {
-                throw error;
             }
+            throw error;
         }
     },
 });
