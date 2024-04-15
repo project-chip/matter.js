@@ -14,7 +14,7 @@ combinations. You must use the WindowCoveringCluster.with() factory method to ob
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.3
+MatterSpecification.v11.Cluster § 5.3
 
 ## Hierarchy
 

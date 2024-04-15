@@ -30,11 +30,11 @@
 
 The Binding cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [BindingBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#bindingbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L55)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L54)
 
 ___
 
@@ -44,11 +44,11 @@ ___
 
 The FlowMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [FlowMeasurementBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#flowmeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:118](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L118)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L117)
 
 ___
 
@@ -58,11 +58,11 @@ ___
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L83)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L82)
 
 ___
 
@@ -72,11 +72,11 @@ ___
 
 The Identify cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#identifybehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L76)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L75)
 
 ___
 
@@ -86,11 +86,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L48)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L47)
 
 ___
 
@@ -100,11 +100,11 @@ ___
 
 The LevelControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#levelcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L97)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L96)
 
 ___
 
@@ -114,11 +114,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#onoffbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L62)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L61)
 
 ___
 
@@ -128,11 +128,11 @@ ___
 
 The PressureMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [PressureMeasurementBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#pressuremeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L111)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L110)
 
 ___
 
@@ -142,11 +142,11 @@ ___
 
 The PumpConfigurationAndControl cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [PumpConfigurationAndControlBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#pumpconfigurationandcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L69)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L68)
 
 ___
 
@@ -156,11 +156,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#scenesbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L90)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L89)
 
 ___
 
@@ -170,11 +170,11 @@ ___
 
 The TemperatureMeasurement cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TemperatureMeasurementBehavior](endpoint_definitions_device_PumpControllerDevice.PumpControllerRequirements.md#temperaturemeasurementbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:104](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L104)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L103)
 
 ___
 
@@ -203,7 +203,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:128](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L128)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L127)
 
 ___
 
@@ -222,4 +222,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:123](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L123)
+[packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/PumpControllerDevice.ts#L122)

@@ -18,7 +18,7 @@ TimeFormatLocalizationCluster.with() factory method.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.4
+MatterSpecification.v11.Core § 11.4
 
 ## Hierarchy
 

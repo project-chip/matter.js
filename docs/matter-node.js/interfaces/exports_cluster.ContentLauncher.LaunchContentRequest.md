@@ -8,7 +8,7 @@ Input to the ContentLauncher launchContent command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.1
+MatterSpecification.v11.Cluster § 6.7.4.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ start playing automatically. * FALSE means matches should be displayed on screen
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.1.2
+MatterSpecification.v11.Cluster § 6.7.4.1.2
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.1.3
+MatterSpecification.v11.Cluster § 6.7.4.1.3
 
 #### Inherited from
 
@@ -75,7 +75,7 @@ This shall indicate the content to launch.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.1.1
+MatterSpecification.v11.Cluster § 6.7.4.1.1
 
 #### Inherited from
 

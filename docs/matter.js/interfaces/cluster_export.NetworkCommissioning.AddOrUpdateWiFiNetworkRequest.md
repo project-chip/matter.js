@@ -8,7 +8,7 @@ Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.3
+MatterSpecification.v11.Core § 11.8.7.3
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:619](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L619)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:618](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L618)
 
 ___
 
@@ -82,7 +82,7 @@ See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.3.1
+MatterSpecification.v11.Core § 11.8.7.3.1
 
 #### Inherited from
 
@@ -90,7 +90,7 @@ TypeFromSchema.credentials
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:617](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L617)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:616](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L616)
 
 ___
 
@@ -104,4 +104,4 @@ TypeFromSchema.ssid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:576](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L576)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:575](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L575)

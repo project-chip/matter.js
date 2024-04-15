@@ -8,7 +8,7 @@ The CopySceneResponse command allows a server to respond to a CopyScene command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.20
+MatterSpecification.v11.Cluster § 1.4.9.20
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ identifies the scene that was copied from the Scene Table.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.20.2
+MatterSpecification.v11.Cluster § 1.4.9.20.2
 
 #### Inherited from
 
@@ -58,7 +58,7 @@ identifies the scene that was copied from the Scene Table.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.20.3
+MatterSpecification.v11.Cluster § 1.4.9.20.3
 
 #### Inherited from
 
@@ -79,7 +79,7 @@ non-reserved values listed in Values of the Status Field of the CopySceneRespons
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.20.1
+MatterSpecification.v11.Cluster § 1.4.9.20.1
 
 #### Inherited from
 

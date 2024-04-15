@@ -8,7 +8,7 @@ The value of the Thermostat temperatureSetpointHold attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7.30
+MatterSpecification.v11.Cluster § 4.3.7.30
 
 ## Table of contents
 

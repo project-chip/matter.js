@@ -10,7 +10,7 @@ field.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.6.2
+MatterSpecification.v11.Cluster § 1.4.6.2
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ TypeFromSchema.attributeValueList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L89)
 
 ___
 
@@ -51,4 +51,4 @@ TypeFromSchema.clusterId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L88)

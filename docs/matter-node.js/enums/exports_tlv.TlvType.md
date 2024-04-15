@@ -8,7 +8,7 @@ TLV element types.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § A.7.1
+MatterSpecification.v10.Core § A.7.1
 
 ## Table of contents
 

@@ -24,7 +24,7 @@ You must use the SwitchCluster.with() factory method to obtain a working cluster
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11
+MatterSpecification.v11.Cluster § 1.11
 
 ## Hierarchy
 

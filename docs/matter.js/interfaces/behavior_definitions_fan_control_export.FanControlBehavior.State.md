@@ -31,7 +31,7 @@ table below.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.1
+MatterSpecification.v11.Cluster § 4.4.6.1
 
 #### Inherited from
 
@@ -39,7 +39,7 @@ StateType.fanMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:313](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L313)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:312](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L312)
 
 ___
 
@@ -51,7 +51,7 @@ This indicates the fan speed ranges that shall be supported.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.2
+MatterSpecification.v11.Cluster § 4.4.6.2
 
 #### Inherited from
 
@@ -59,7 +59,7 @@ StateType.fanModeSequence
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:320](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L320)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:319](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L319)
 
 ___
 
@@ -72,7 +72,7 @@ is off. See Section 4.4.6.3.1 for more details.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.4
+MatterSpecification.v11.Cluster § 4.4.6.4
 
 #### Inherited from
 
@@ -80,7 +80,7 @@ StateType.percentCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:341](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L341)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:340](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L340)
 
 ___
 
@@ -94,7 +94,7 @@ change. If this is set to 0, the server shall set the FanMode attribute value to
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.4.6.3
+MatterSpecification.v11.Cluster § 4.4.6.3
 
 #### Inherited from
 
@@ -102,4 +102,4 @@ StateType.percentSetting
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:333](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L333)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L332)

@@ -9,7 +9,7 @@ the Action field of the ApplyUpdateResponse command. See (Section 11.19.6.5.4.1,
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.19.6.4.2
+MatterSpecification.v11.Core § 11.19.6.4.2
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ Wait at least the given delay time.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:153](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L153)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:152](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L152)
 
 ___
 
@@ -41,7 +41,7 @@ The OTA Provider is conveying a desire to rescind a previously provided Software
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:158](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L157)
 
 ___
 
@@ -53,4 +53,4 @@ Apply the update.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L148)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:147](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L147)

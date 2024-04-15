@@ -8,7 +8,7 @@ This represents a Root Node for devices.
 
 **`See`**
 
-MatterDeviceLibrarySpecificationV1_0 § 1.1.5
+MatterSpecification.v10.Device § 1.1.5
 
 ## Table of contents
 

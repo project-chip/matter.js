@@ -8,7 +8,7 @@ The value of the WindowCovering endProductType attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.3.5.16
+MatterSpecification.v11.Cluster § 5.3.5.16
 
 ## Table of contents
 

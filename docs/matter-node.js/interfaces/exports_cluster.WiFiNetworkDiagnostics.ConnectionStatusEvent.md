@@ -8,7 +8,7 @@ Body of the WiFiNetworkDiagnostics connectionStatus event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.14.8.3
+MatterSpecification.v11.Core § 11.14.8.3
 
 ## Hierarchy
 

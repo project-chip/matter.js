@@ -31,7 +31,7 @@ configured or operational.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.15.6.8
+MatterSpecification.v11.Core § 11.15.6.8
 
 #### Inherited from
 
@@ -39,7 +39,7 @@ StateType.carrierDetect
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:232](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L232)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:231](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L231)
 
 ___
 
@@ -52,7 +52,7 @@ mode. A value of null shall indicate that the interface is not currently configu
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.15.6.2
+MatterSpecification.v11.Core § 11.15.6.2
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ StateType.fullDuplex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:223](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L223)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:222](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L222)
 
 ___
 
@@ -74,7 +74,7 @@ operational.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.15.6.1
+MatterSpecification.v11.Core § 11.15.6.1
 
 #### Inherited from
 
@@ -82,7 +82,7 @@ StateType.phyRate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:215](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L215)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:214](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L214)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.15.6
+MatterSpecification.v11.Core § 11.15.6
 
 #### Inherited from
 
@@ -100,4 +100,4 @@ StateType.timeSinceReset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L237)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:236](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L236)

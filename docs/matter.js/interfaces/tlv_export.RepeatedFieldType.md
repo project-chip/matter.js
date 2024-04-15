@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L23)
+[packages/matter.js/src/tlv/TlvObject.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L22)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L19)
+[packages/matter.js/src/tlv/TlvObject.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L18)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L29)
+[packages/matter.js/src/tlv/TlvObject.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L28)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L28)
+[packages/matter.js/src/tlv/TlvObject.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L27)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L21)
+[packages/matter.js/src/tlv/TlvObject.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L20)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L27)
+[packages/matter.js/src/tlv/TlvObject.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L26)
 
 ___
 
@@ -116,4 +116,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L20)
+[packages/matter.js/src/tlv/TlvObject.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L19)

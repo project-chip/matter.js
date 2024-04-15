@@ -55,8 +55,8 @@ These elements and properties are present in all Switch clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentPosition`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } | - |
-| `attributes.currentPosition` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> | This attribute shall indicate the position of the switch. The valid range is zero to NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the switch: for example the "open" state of a rocker switch, or the "idle" state of a push button switch. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.11.5.2 |
-| `attributes.numberOfPositions` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> | This attribute shall indicate the maximum number of positions the switch has. Any kind of switch has a minimum of 2 positions. Also see Section 1.11.10, “NumberOfPositions > 2” for the case NumberOfPositions>2. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.11.5.1 |
+| `attributes.currentPosition` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> | This attribute shall indicate the position of the switch. The valid range is zero to NumberOfPositions-1. CurrentPosition value 0 shall be assigned to the default position of the switch: for example the "open" state of a rocker switch, or the "idle" state of a push button switch. **`See`** MatterSpecification.v11.Cluster § 1.11.5.2 |
+| `attributes.numberOfPositions` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> | This attribute shall indicate the maximum number of positions the switch has. Any kind of switch has a minimum of 2 positions. Also see Section 1.11.10, “NumberOfPositions > 2” for the case NumberOfPositions>2. **`See`** MatterSpecification.v11.Cluster § 1.11.5.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `multiPressMax`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `multiPressComplete`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `multiPressOngoing`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchMultiPress`: ``true``  }  }, \{ `component`: \{ `events`: \{ `switchLatched`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `latchingSwitch`: ``true``  }  }, \{ `component`: \{ `events`: \{ `initialPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitch`: ``true``  }  }, \{ `component`: \{ `events`: \{ `longPress`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `longRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchLongPress`: ``true``  }  }, \{ `component`: \{ `events`: \{ `shortRelease`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `momentarySwitchRelease`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchRelease`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchLongPress`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitchLongPress`: ``true`` ; `momentarySwitchRelease`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitch`: ``false`` ; `momentarySwitchMultiPress`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `momentarySwitchMultiPress`: ``true`` ; `momentarySwitchRelease`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `latchingSwitch`: ``true`` ; `momentarySwitch`: ``true``  }  }, \{ `component`: ``false`` ; `flags`: \{ `latchingSwitch`: ``false`` ; `momentarySwitch`: ``false``  }  }] | This metadata controls which SwitchCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `latchingSwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitch`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchLongPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchMultiPress`: [`BitFlag`](exports_schema.md#bitflag) ; `momentarySwitchRelease`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.latchingSwitch` | [`BitFlag`](exports_schema.md#bitflag) | LatchingSwitch |
@@ -233,7 +233,7 @@ Body of the Switch initialPress event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.2
+MatterSpecification.v11.Cluster § 1.11.7.2
 
 #### Defined in
 
@@ -249,7 +249,7 @@ Body of the Switch longPress event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.3
+MatterSpecification.v11.Cluster § 1.11.7.3
 
 #### Defined in
 
@@ -265,7 +265,7 @@ Body of the Switch longRelease event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.5
+MatterSpecification.v11.Cluster § 1.11.7.5
 
 #### Defined in
 
@@ -281,7 +281,7 @@ Body of the Switch multiPressComplete event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.7
+MatterSpecification.v11.Cluster § 1.11.7.7
 
 #### Defined in
 
@@ -297,7 +297,7 @@ Body of the Switch multiPressOngoing event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.6
+MatterSpecification.v11.Cluster § 1.11.7.6
 
 #### Defined in
 
@@ -313,7 +313,7 @@ Body of the Switch shortRelease event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.4
+MatterSpecification.v11.Cluster § 1.11.7.4
 
 #### Defined in
 
@@ -329,7 +329,7 @@ Body of the Switch switchLatched event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.1
+MatterSpecification.v11.Cluster § 1.11.7.1
 
 #### Defined in
 

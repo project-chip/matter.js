@@ -8,7 +8,7 @@ These are optional features supported by MediaPlaybackCluster.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.2
+MatterSpecification.v11.Cluster § 6.10.2
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ example a "seek bar". Adds support for Attributes and Commands related to advanc
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:396](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L396)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:395](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L395)
 
 ___
 
@@ -44,4 +44,4 @@ Support for commands to support variable speed playback on media that supports i
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:403](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L403)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:402](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L402)

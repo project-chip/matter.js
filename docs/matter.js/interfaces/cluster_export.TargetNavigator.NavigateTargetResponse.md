@@ -8,7 +8,7 @@ This command shall be generated in response to NavigateTarget command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.4.2
+MatterSpecification.v11.Cluster § 6.11.4.2
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.4.2.2
+MatterSpecification.v11.Cluster § 6.11.4.2.2
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.data
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L117)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L116)
 
 ___
 
@@ -53,7 +53,7 @@ This shall indicate the of the command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.4.2.1
+MatterSpecification.v11.Cluster § 6.11.4.2.1
 
 #### Inherited from
 
@@ -61,4 +61,4 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L109)

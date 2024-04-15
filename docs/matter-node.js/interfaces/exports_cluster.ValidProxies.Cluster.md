@@ -11,7 +11,7 @@ subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignme
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.15.15
+MatterSpecification.v11.Core § 9.15.15
 
 ## Hierarchy
 
@@ -80,7 +80,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `getValidProxiesRequest` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | **`See`** MatterCoreSpecificationV1_1 § 9.15.15.6 |
+| `getValidProxiesRequest` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | **`See`** MatterSpecification.v11.Core § 9.15.15.6 |
 
 #### Inherited from
 

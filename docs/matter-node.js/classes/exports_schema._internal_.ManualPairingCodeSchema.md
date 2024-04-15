@@ -4,7 +4,7 @@
 
 [exports/schema](../modules/exports_schema.md).[\<internal\>](../modules/exports_schema._internal_.md).ManualPairingCodeSchema
 
-See MatterCoreSpecificationV1_0 § 5.1.4.1 Table 38/39/40
+See MatterSpecification.v10.Core § 5.1.4.1 Table 38/39/40
 
 ## Hierarchy
 

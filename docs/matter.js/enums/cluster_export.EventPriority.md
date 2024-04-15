@@ -8,7 +8,7 @@ Interfaces and helper methods to define a cluster event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 7.18.2.25
+MatterSpecification.v11.Core § 7.18.2.25
 
 ## Table of contents
 
@@ -26,7 +26,7 @@ Interfaces and helper methods to define a cluster event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:712](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/Cluster.ts#L712)
+[packages/matter.js/src/cluster/Cluster.ts:711](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/Cluster.ts#L711)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:710](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/Cluster.ts#L710)
+[packages/matter.js/src/cluster/Cluster.ts:709](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/Cluster.ts#L709)
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:711](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/Cluster.ts#L711)
+[packages/matter.js/src/cluster/Cluster.ts:710](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/Cluster.ts#L710)

@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7
+MatterSpecification.v11.Core § 11.13.5.7
 
 ## Hierarchy
 
@@ -41,7 +41,7 @@ This field shall be True if the Node has an active timestamp present, else False
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.1
+MatterSpecification.v11.Core § 11.13.5.7.1
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ This field shall be True if the Node has available a mask of available channels,
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.12
+MatterSpecification.v11.Core § 11.13.5.7.12
 
 #### Inherited from
 
@@ -82,7 +82,7 @@ False.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.9
+MatterSpecification.v11.Core § 11.13.5.7.9
 
 #### Inherited from
 
@@ -102,7 +102,7 @@ This field shall be True if the Node has the Thread network delay set, else Fals
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.7
+MatterSpecification.v11.Core § 11.13.5.7.7
 
 #### Inherited from
 
@@ -122,7 +122,7 @@ This field shall be True if the Node has an extended Pan ID, else False.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.5
+MatterSpecification.v11.Core § 11.13.5.7.5
 
 #### Inherited from
 
@@ -142,7 +142,7 @@ This field shall be True if the Node has the Thread master key, else False.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.3
+MatterSpecification.v11.Core § 11.13.5.7.3
 
 #### Inherited from
 
@@ -162,7 +162,7 @@ This field shall be True if the Node has the mesh local prefix, else False.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.6
+MatterSpecification.v11.Core § 11.13.5.7.6
 
 #### Inherited from
 
@@ -182,7 +182,7 @@ This field shall be True if the Node has the Thread network’s name, else False
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.4
+MatterSpecification.v11.Core § 11.13.5.7.4
 
 #### Inherited from
 
@@ -202,7 +202,7 @@ This field shall be True if the Node has a Pan ID, else False.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.8
+MatterSpecification.v11.Core § 11.13.5.7.8
 
 #### Inherited from
 
@@ -222,7 +222,7 @@ This field shall be True if the Node has a pending timestamp is present, else Fa
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.2
+MatterSpecification.v11.Core § 11.13.5.7.2
 
 #### Inherited from
 
@@ -242,7 +242,7 @@ This field shall be True if the Node has been configured with the Thread network
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.10
+MatterSpecification.v11.Core § 11.13.5.7.10
 
 #### Inherited from
 
@@ -263,7 +263,7 @@ False.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.7.11
+MatterSpecification.v11.Core § 11.13.5.7.11
 
 #### Inherited from
 

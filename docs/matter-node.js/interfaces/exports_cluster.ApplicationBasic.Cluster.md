@@ -11,7 +11,7 @@ an endpoint (see Device Type Library document).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.3
+MatterSpecification.v11.Cluster § 6.3
 
 ## Hierarchy
 

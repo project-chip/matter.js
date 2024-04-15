@@ -41,11 +41,11 @@ These elements and properties are present in all SoftwareDiagnostics clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentHeapFree`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } | - |
-| `attributes.currentHeapFree` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | The CurrentHeapFree attribute shall indicate the current amount of heap memory, in bytes, that are free for allocation. The effective amount may be smaller due to heap fragmentation or other reasons. **`See`** MatterCoreSpecificationV1_1 § 11.12.6.2 |
-| `attributes.currentHeapUsed` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | The CurrentHeapUsed attribute shall indicate the current amount of heap memory, in bytes, that is being used. **`See`** MatterCoreSpecificationV1_1 § 11.12.6.3 |
-| `attributes.threadMetrics` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> | The ThreadMetrics attribute shall be a list of ThreadMetricsStruct structs. Each active thread on the Node shall be represented by a single entry within the ThreadMetrics attribute. **`See`** MatterCoreSpecificationV1_1 § 11.12.6.1 |
+| `attributes.currentHeapFree` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | The CurrentHeapFree attribute shall indicate the current amount of heap memory, in bytes, that are free for allocation. The effective amount may be smaller due to heap fragmentation or other reasons. **`See`** MatterSpecification.v11.Core § 11.12.6.2 |
+| `attributes.currentHeapUsed` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<`number` \| `bigint`, `any`\> | The CurrentHeapUsed attribute shall indicate the current amount of heap memory, in bytes, that is being used. **`See`** MatterSpecification.v11.Core § 11.12.6.3 |
+| `attributes.threadMetrics` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> | The ThreadMetrics attribute shall be a list of ThreadMetricsStruct structs. Each active thread on the Node shall be represented by a single entry within the ThreadMetrics attribute. **`See`** MatterSpecification.v11.Core § 11.12.6.1 |
 | `events` | \{ `softwareFault`: [`OptionalEvent`](../interfaces/exports_cluster.OptionalEvent.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } | - |
-| `events.softwareFault` | [`OptionalEvent`](../interfaces/exports_cluster.OptionalEvent.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The SoftwareFault Event shall be generated when a software fault takes place on the Node. The ID field shall be set to the ID of the software thread in which the last software fault occurred. The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which the last software fault occurred. **`See`** MatterCoreSpecificationV1_1 § 11.12.8.1 |
+| `events.softwareFault` | [`OptionalEvent`](../interfaces/exports_cluster.OptionalEvent.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The SoftwareFault Event shall be generated when a software fault takes place on the Node. The ID field shall be set to the ID of the software thread in which the last software fault occurred. The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which the last software fault occurred. **`See`** MatterSpecification.v11.Core § 11.12.8.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `currentHeapHighWatermark`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint`, `any`\>  } ; `commands`: \{ `resetWatermarks`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `watermarks`: ``true``  }  }] | This metadata controls which SoftwareDiagnosticsCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.watermarks` | [`BitFlag`](exports_schema.md#bitflag) | Watermarks Node makes available the metrics for high watermark related to memory consumption. |
@@ -119,7 +119,7 @@ Body of the SoftwareDiagnostics softwareFault event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.8.1
+MatterSpecification.v11.Core § 11.12.8.1
 
 #### Defined in
 
@@ -133,7 +133,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.5.1
+MatterSpecification.v11.Core § 11.12.5.1
 
 #### Defined in
 

@@ -14,7 +14,7 @@ method.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.8
+MatterSpecification.v11.Cluster § 6.8
 
 ## Hierarchy
 
@@ -83,7 +83,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `sendKey` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `keyCode`: [`FieldType`](exports_tlv.FieldType.md)\<[`CecKeyCode`](../enums/exports_cluster.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `status`: [`FieldType`](exports_tlv.FieldType.md)\<[`Status`](../enums/exports_cluster.KeypadInput.Status.md)\>  }\>, `any`\> | Upon receipt, this shall process a keycode as input to the media device. If a second SendKey request with the same KeyCode value is received within 200ms, then the endpoint will consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200ms, then the endpoint will consider the last key press to be a release. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.8.3.1 |
+| `sendKey` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `keyCode`: [`FieldType`](exports_tlv.FieldType.md)\<[`CecKeyCode`](../enums/exports_cluster.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `status`: [`FieldType`](exports_tlv.FieldType.md)\<[`Status`](../enums/exports_cluster.KeypadInput.Status.md)\>  }\>, `any`\> | Upon receipt, this shall process a keycode as input to the media device. If a second SendKey request with the same KeyCode value is received within 200ms, then the endpoint will consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200ms, then the endpoint will consider the last key press to be a release. **`See`** MatterSpecification.v11.Cluster § 6.8.3.1 |
 
 #### Inherited from
 

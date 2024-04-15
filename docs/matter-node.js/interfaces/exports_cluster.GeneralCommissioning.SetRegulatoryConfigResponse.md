@@ -11,7 +11,7 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.5
+MatterSpecification.v11.Core § 11.9.6.5
 
 ## Hierarchy
 

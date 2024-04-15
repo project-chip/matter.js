@@ -9,7 +9,7 @@ the Video Player during playback.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.6
+MatterSpecification.v11.Cluster § 6.7.5.6
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ This background information may also be used by the Video Player when it is in i
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.6.2
+MatterSpecification.v11.Cluster § 6.7.5.6.2
 
 #### Inherited from
 
@@ -47,7 +47,7 @@ TypeFromSchema.background
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:169](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:168](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L168)
 
 ___
 
@@ -60,7 +60,7 @@ Player is in the idle state and Splash field is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.6.3
+MatterSpecification.v11.Cluster § 6.7.5.6.3
 
 #### Inherited from
 
@@ -68,7 +68,7 @@ TypeFromSchema.logo
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L177)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L176)
 
 ___
 
@@ -80,7 +80,7 @@ This shall indicate the style of progress bar for media playback.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.6.4
+MatterSpecification.v11.Cluster § 6.7.5.6.4
 
 #### Inherited from
 
@@ -88,7 +88,7 @@ TypeFromSchema.progressBar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:184](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L183)
 
 ___
 
@@ -100,7 +100,7 @@ This shall indicate name of of the provider for the given content.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.6.1
+MatterSpecification.v11.Cluster § 6.7.5.6.1
 
 #### Inherited from
 
@@ -108,7 +108,7 @@ TypeFromSchema.providerName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:161](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L161)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:160](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L160)
 
 ___
 
@@ -121,7 +121,7 @@ populated, the Video Player shall default to logo or the provider name.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.6.5
+MatterSpecification.v11.Cluster § 6.7.5.6.5
 
 #### Inherited from
 
@@ -129,7 +129,7 @@ TypeFromSchema.splash
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:192](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L192)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:191](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L191)
 
 ___
 
@@ -141,7 +141,7 @@ This shall indicate watermark shown when the media is playing.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.6.6
+MatterSpecification.v11.Cluster § 6.7.5.6.6
 
 #### Inherited from
 
@@ -149,4 +149,4 @@ TypeFromSchema.waterMark
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:199](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L199)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L198)

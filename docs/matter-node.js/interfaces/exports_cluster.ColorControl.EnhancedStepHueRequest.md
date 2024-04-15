@@ -8,7 +8,7 @@ Input to the ColorControl enhancedStepHue command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.17
+MatterSpecification.v11.Cluster § 3.2.11.17
 
 ## Hierarchy
 
@@ -65,7 +65,7 @@ sub-clause StepHue Command).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.17.1
+MatterSpecification.v11.Cluster § 3.2.11.17.1
 
 #### Inherited from
 
@@ -86,7 +86,7 @@ device’s enhanced hue.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.17.2
+MatterSpecification.v11.Cluster § 3.2.11.17.2
 
 #### Inherited from
 
@@ -110,7 +110,7 @@ StepHue command is of data type uint8.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.17.3
+MatterSpecification.v11.Cluster § 3.2.11.17.3
 
 #### Inherited from
 

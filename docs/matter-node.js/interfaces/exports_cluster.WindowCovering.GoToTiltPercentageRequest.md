@@ -8,7 +8,7 @@ Input to the WindowCovering goToTiltPercentage command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.3.6.7
+MatterSpecification.v11.Cluster § 5.3.6.7
 
 ## Hierarchy
 

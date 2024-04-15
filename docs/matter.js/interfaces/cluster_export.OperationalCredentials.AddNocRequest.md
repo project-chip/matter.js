@@ -8,7 +8,7 @@ Input to the OperationalCredentials addNoc command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.8
+MatterSpecification.v11.Core § 11.17.6.8
 
 ## Hierarchy
 
@@ -121,7 +121,7 @@ matching the FabricIndex under which the new Node Operational Certificate (NOC) 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.8.3
+MatterSpecification.v11.Core § 11.17.6.8.3
 
 #### Inherited from
 
@@ -129,7 +129,7 @@ TypeFromSchema.adminVendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:435](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L435)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:434](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L434)
 
 ___
 
@@ -157,7 +157,7 @@ Fabric configuration and subsequently be able to call the CommissioningComplete 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.8.2
+MatterSpecification.v11.Core § 11.17.6.8.2
 
 #### Inherited from
 
@@ -165,7 +165,7 @@ TypeFromSchema.caseAdminSubject
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:343](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L343)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:342](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L342)
 
 ___
 
@@ -179,7 +179,7 @@ TypeFromSchema.icacValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:304](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L304)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:303](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L303)
 
 ___
 
@@ -200,7 +200,7 @@ GroupKeySetID set to 0):
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.8.1
+MatterSpecification.v11.Core § 11.17.6.8.1
 
 #### Inherited from
 
@@ -208,7 +208,7 @@ TypeFromSchema.ipkValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:320](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L320)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:319](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L319)
 
 ___
 
@@ -222,4 +222,4 @@ TypeFromSchema.nocValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:303](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L303)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:302](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L302)

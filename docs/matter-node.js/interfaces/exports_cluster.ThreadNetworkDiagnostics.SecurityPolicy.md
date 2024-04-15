@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.6
+MatterSpecification.v11.Core § 11.13.5.6
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ null when there is no dataset configured.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.6.2
+MatterSpecification.v11.Core § 11.13.5.6.2
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ attribute shall be null when there is no dataset configured.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.6.1
+MatterSpecification.v11.Core § 11.13.5.6.1
 
 #### Inherited from
 

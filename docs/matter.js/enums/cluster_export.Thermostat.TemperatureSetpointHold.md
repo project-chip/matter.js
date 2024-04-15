@@ -8,7 +8,7 @@ The value of the Thermostat temperatureSetpointHold attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.7.30
+MatterSpecification.v11.Cluster § 4.3.7.30
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ Follow scheduling program
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:277](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L277)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:276](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L276)
 
 ___
 
@@ -39,4 +39,4 @@ Maintain current setpoint, regardless of schedule transitions
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:282](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L282)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:281](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L281)

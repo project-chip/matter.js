@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L28)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L27)
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L110)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L109)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L95)
+[packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmablePlugInUnitDevice.ts#L94)

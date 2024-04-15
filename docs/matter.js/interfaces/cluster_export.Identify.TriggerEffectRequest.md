@@ -8,7 +8,7 @@ Input to the Identify triggerEffect command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.3
+MatterSpecification.v11.Cluster § 1.2.6.3
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ Table 3. Values of the EffectIdentifier Field of the TriggerEffect Command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.3.1
+MatterSpecification.v11.Cluster § 1.2.6.3.1
 
 #### Inherited from
 
@@ -47,7 +47,7 @@ TypeFromSchema.effectIdentifier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:166](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L166)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:165](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L165)
 
 ___
 
@@ -63,7 +63,7 @@ Table 4. Values of the EffectVariant Field of the TriggerEffect Command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.2.6.3.2
+MatterSpecification.v11.Cluster § 1.2.6.3.2
 
 #### Inherited from
 
@@ -71,4 +71,4 @@ TypeFromSchema.effectVariant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L177)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L176)

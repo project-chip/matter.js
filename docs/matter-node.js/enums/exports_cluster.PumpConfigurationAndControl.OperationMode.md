@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.2
+MatterSpecification.v11.Cluster § 4.2.6.2
 
 ## Table of contents
 
@@ -67,7 +67,7 @@ between 0% and 100%, e.g., by means of the Level Control cluster
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.2.6.2.1
+MatterSpecification.v11.Cluster § 4.2.6.2.1
 
 #### Defined in
 

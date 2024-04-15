@@ -8,7 +8,7 @@ Input to the ColorControl moveColor command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.12
+MatterSpecification.v11.Cluster § 3.2.11.12
 
 ## Hierarchy
 
@@ -64,7 +64,7 @@ CurrentX attribute of one unit.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.12.1
+MatterSpecification.v11.Cluster § 3.2.11.12.1
 
 #### Inherited from
 
@@ -85,7 +85,7 @@ CurrentY attribute of one unit.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.12.2
+MatterSpecification.v11.Cluster § 3.2.11.12.2
 
 #### Inherited from
 

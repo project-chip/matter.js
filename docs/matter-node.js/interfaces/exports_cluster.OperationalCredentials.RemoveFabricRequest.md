@@ -8,7 +8,7 @@ Input to the OperationalCredentials removeFabric command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.12
+MatterSpecification.v11.Core § 11.17.6.12
 
 ## Hierarchy
 

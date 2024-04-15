@@ -8,7 +8,7 @@ Body of the PowerSource wiredFaultChange event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.7.7.1
+MatterSpecification.v11.Core § 11.7.7.1
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ This field shall represent the set of faults currently detected, as per Section 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.7.7.1.1
+MatterSpecification.v11.Core § 11.7.7.1.1
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ This field shall represent the set of faults detected prior to this change event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.7.7.1.2
+MatterSpecification.v11.Core § 11.7.7.1.2
 
 #### Inherited from
 

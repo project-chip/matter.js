@@ -8,7 +8,7 @@ These are optional features supported by ApplicationLauncherCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.2
+MatterSpecification.v11.Cluster § 6.4.2
 
 ## Table of contents
 

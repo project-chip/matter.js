@@ -8,7 +8,7 @@ These are optional features supported by ColorControlCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.5
+MatterSpecification.v11.Cluster § 3.2.5
 
 ## Table of contents
 

@@ -41,11 +41,11 @@ Upon receipt, this shall navigation the UX to the target identified.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.4.1
+MatterSpecification.v11.Cluster § 6.11.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L19)
+[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L18)
 
 ___
 
@@ -57,11 +57,11 @@ This command shall be generated in response to NavigateTarget command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.4.2
+MatterSpecification.v11.Cluster § 6.11.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L26)
+[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L25)
 
 ___
 
@@ -77,9 +77,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L28)
+[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L27)
 
-[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L39)
+[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L38)
 
 ## Variables
 
@@ -91,8 +91,8 @@ TargetNavigatorBehavior is the base class for objects that support interaction w
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorBehavior.ts#L23)

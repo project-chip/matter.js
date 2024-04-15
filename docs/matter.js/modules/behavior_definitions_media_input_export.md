@@ -45,9 +45,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L29)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L28)
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L65)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L64)
 
 ___
 
@@ -60,11 +60,11 @@ appear in the device’s settings menus.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.4
+MatterSpecification.v11.Cluster § 6.9.4.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L27)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L26)
 
 ___
 
@@ -76,11 +76,11 @@ Upon receipt, this shall change the media input on the device to the input at a 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.1
+MatterSpecification.v11.Cluster § 6.9.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L19)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L18)
 
 ## Variables
 
@@ -95,8 +95,8 @@ MediaInputBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputBehavior.ts#L26)

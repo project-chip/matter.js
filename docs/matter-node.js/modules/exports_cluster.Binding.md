@@ -62,7 +62,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.6.5.1
+MatterSpecification.v11.Core § 9.6.5.1
 
 #### Defined in
 

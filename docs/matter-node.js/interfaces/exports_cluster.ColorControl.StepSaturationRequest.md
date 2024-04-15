@@ -8,7 +8,7 @@ Input to the ColorControl stepSaturation command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.9
+MatterSpecification.v11.Cluster § 3.2.11.9
 
 ## Hierarchy
 
@@ -64,7 +64,7 @@ The StepMode field shall be one of the non-reserved values in Values of the Step
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.9.1
+MatterSpecification.v11.Cluster § 3.2.11.9.1
 
 #### Inherited from
 
@@ -84,7 +84,7 @@ The change to be added to (or subtracted from) the current value of the device�
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.9.2
+MatterSpecification.v11.Cluster § 3.2.11.9.2
 
 #### Inherited from
 
@@ -108,7 +108,7 @@ TransitionTime data fields in other clusters / commands.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.9.3
+MatterSpecification.v11.Cluster § 3.2.11.9.3
 
 #### Inherited from
 

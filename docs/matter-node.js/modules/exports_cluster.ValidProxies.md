@@ -64,7 +64,7 @@ Encapsulates the Node ID of a Valid Proxy.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.15.15.4.1
+MatterSpecification.v11.Core § 9.15.15.4.1
 
 #### Defined in
 

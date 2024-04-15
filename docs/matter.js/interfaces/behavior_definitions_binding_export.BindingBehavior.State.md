@@ -26,7 +26,7 @@ Each entry shall represent a binding.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.6.6.1
+MatterSpecification.v11.Core § 9.6.6.1
 
 #### Inherited from
 
@@ -34,4 +34,4 @@ StateType.binding
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L82)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L81)

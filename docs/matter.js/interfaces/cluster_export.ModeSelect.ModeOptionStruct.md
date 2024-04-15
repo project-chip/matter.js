@@ -8,7 +8,7 @@ This is a struct representing a possible mode of the server.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.8.1
+MatterSpecification.v11.Cluster § 1.8.8.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ user what this option means. This field is meant to be readable and understandab
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.8.1.1
+MatterSpecification.v11.Cluster § 1.8.8.1.1
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.label
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L77)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L76)
 
 ___
 
@@ -56,7 +56,7 @@ SupportedModes attribute.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.8.1.2
+MatterSpecification.v11.Cluster § 1.8.8.1.2
 
 #### Inherited from
 
@@ -64,7 +64,7 @@ TypeFromSchema.mode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L84)
 
 ___
 
@@ -87,7 +87,7 @@ seeking the option for either HIGH or MAX will find the same option in this case
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.8.1.3
+MatterSpecification.v11.Cluster § 1.8.8.1.3
 
 #### Inherited from
 
@@ -95,4 +95,4 @@ TypeFromSchema.semanticTags
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L103)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L102)

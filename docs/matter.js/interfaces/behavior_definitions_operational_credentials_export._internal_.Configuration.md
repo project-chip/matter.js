@@ -21,7 +21,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L68)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L68)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L70)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L70)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L69)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:69](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L69)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L67)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L67)

@@ -8,7 +8,7 @@ Input to the AccountLogin getSetupPin command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.1
+MatterSpecification.v11.Cluster § 6.2.4.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ least 16 characters to protect the account holder against password guessing atta
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.1.1
+MatterSpecification.v11.Cluster § 6.2.4.1.1
 
 #### Inherited from
 

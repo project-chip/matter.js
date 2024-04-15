@@ -35,9 +35,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:247](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L247)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L246)
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:249](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L249)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:248](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L248)
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L101)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:250](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L250)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:249](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L249)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L64)
 
 ___
 
@@ -83,11 +83,11 @@ Body of the BridgedDeviceBasicInformation reachableChanged event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.13.5.1
+MatterSpecification.v11.Core § 9.13.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L89)
 
 ___
 
@@ -99,8 +99,8 @@ Body of the BridgedDeviceBasicInformation startUp event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.13.5
+MatterSpecification.v11.Core § 9.13.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L75)

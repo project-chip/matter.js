@@ -18,7 +18,7 @@ This cluster provides a feature for the device to tag an endpoint with zero or m
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.8
+MatterSpecification.v11.Core § 9.8
 
 ## Hierarchy
 

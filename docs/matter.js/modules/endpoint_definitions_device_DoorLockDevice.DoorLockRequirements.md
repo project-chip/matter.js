@@ -22,11 +22,11 @@
 
 The DoorLock cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [DoorLockServer](endpoint_definitions_device_DoorLockDevice.DoorLockRequirements.md#doorlockserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L38)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L37)
 
 ___
 
@@ -36,11 +36,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_DoorLockDevice.DoorLockRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L31)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L30)
 
 ___
 
@@ -50,11 +50,11 @@ ___
 
 The TimeSync cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TimeSyncBehavior](endpoint_definitions_device_DoorLockDevice.DoorLockRequirements.md#timesyncbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L45)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L44)
 
 ___
 
@@ -74,7 +74,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L55)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L54)
 
 ___
 
@@ -94,4 +94,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L50)
+[packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DoorLockDevice.ts#L49)

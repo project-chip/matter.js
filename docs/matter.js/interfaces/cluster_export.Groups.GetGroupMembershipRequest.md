@@ -8,7 +8,7 @@ Input to the Groups getGroupMembership command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.3
+MatterSpecification.v11.Cluster § 1.3.7.3
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.groupList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:109](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L108)

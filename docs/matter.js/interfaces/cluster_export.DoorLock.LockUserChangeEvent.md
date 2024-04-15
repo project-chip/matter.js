@@ -8,7 +8,7 @@ Body of the DoorLock lockUserChange event
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.5
+MatterSpecification.v11.Cluster § 5.2.5.5
 
 ## Hierarchy
 
@@ -41,7 +41,7 @@ Code, Clear RFID Code, Clear Week Day Schedule, Clear Year Day Schedule, etc.).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.5.7
+MatterSpecification.v11.Cluster § 5.2.5.5.7
 
 #### Inherited from
 
@@ -49,7 +49,7 @@ TypeFromSchema.dataIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:593](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L593)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:592](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L592)
 
 ___
 
@@ -61,7 +61,7 @@ The data operation performed on the lock data type changed.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.5.2
+MatterSpecification.v11.Cluster § 5.2.5.5.2
 
 #### Inherited from
 
@@ -69,7 +69,7 @@ TypeFromSchema.dataOperationType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:551](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L551)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:550](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L550)
 
 ___
 
@@ -82,7 +82,7 @@ that can be determined to have caused the change. This shall NOT be null if the 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.5.5
+MatterSpecification.v11.Cluster § 5.2.5.5.5
 
 #### Inherited from
 
@@ -90,7 +90,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:574](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L574)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:573](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L573)
 
 ___
 
@@ -102,7 +102,7 @@ The lock data type that was changed.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.5.1
+MatterSpecification.v11.Cluster § 5.2.5.5.1
 
 #### Inherited from
 
@@ -110,7 +110,7 @@ TypeFromSchema.lockDataType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:544](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L544)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:543](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L543)
 
 ___
 
@@ -122,7 +122,7 @@ The source of the user data change.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.5.3
+MatterSpecification.v11.Cluster § 5.2.5.5.3
 
 #### Inherited from
 
@@ -130,7 +130,7 @@ TypeFromSchema.operationSource
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:558](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L558)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:557](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L557)
 
 ___
 
@@ -144,7 +144,7 @@ shall be null if there was no Node involved in the change. This shall NOT be nul
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.5.6
+MatterSpecification.v11.Cluster § 5.2.5.5.6
 
 #### Inherited from
 
@@ -152,7 +152,7 @@ TypeFromSchema.sourceNode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:583](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L583)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:582](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L582)
 
 ___
 
@@ -165,7 +165,7 @@ associated with the data operation. This shall be 0xFFFE if all users are affect
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.5.5.4
+MatterSpecification.v11.Cluster § 5.2.5.5.4
 
 #### Inherited from
 
@@ -173,4 +173,4 @@ TypeFromSchema.userIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:566](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L566)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:565](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L565)

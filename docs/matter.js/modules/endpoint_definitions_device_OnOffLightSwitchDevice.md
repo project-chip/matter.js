@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L25)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L24)
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L85)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L84)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L77)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L76)

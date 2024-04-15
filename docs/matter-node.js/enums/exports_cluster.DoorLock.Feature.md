@@ -8,7 +8,7 @@ These are optional features supported by DoorLockCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.2
+MatterSpecification.v11.Cluster § 5.2.2
 
 ## Table of contents
 

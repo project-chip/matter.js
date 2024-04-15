@@ -8,7 +8,7 @@ Body of the WiFiNetworkDiagnostics associationFailure event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.2
+MatterSpecification.v11.Core § 11.14.8.2
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ The Status field shall be set to a value from the AssociationFailureCauseEnum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.2.1
+MatterSpecification.v11.Core § 11.14.8.2.1
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.associationFailureCause
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:158](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L157)
 
 ___
 
@@ -63,7 +63,7 @@ Table 9-50 "Status codes" of IEEE 802.11-2020 contains a description of all valu
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.14.8.2.2
+MatterSpecification.v11.Core § 11.14.8.2.2
 
 #### Inherited from
 
@@ -71,4 +71,4 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L175)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:174](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L174)

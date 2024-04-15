@@ -8,7 +8,7 @@ Input to the Groups viewGroup command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.2
+MatterSpecification.v11.Cluster § 1.3.7.2
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.groupId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L77)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L76)

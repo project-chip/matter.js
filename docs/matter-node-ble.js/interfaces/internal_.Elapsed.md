@@ -23,7 +23,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:91
+matter.js/dist/esm/log/Diagnostic.d.ts:99
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:92
+matter.js/dist/esm/log/Diagnostic.d.ts:100
 
 ## Methods
 
@@ -47,4 +47,4 @@ matter.js/dist/esm/log/Diagnostic.d.ts:92
 
 #### Defined in
 
-matter.js/dist/esm/log/Diagnostic.d.ts:93
+matter.js/dist/esm/log/Diagnostic.d.ts:101

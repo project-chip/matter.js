@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.4
+MatterSpecification.v11.Core § 9.14.4.4
 
 ## Table of contents
 
@@ -25,7 +25,7 @@ The action was interrupted by another command or interaction
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:625](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L625)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:624](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L624)
 
 ___
 
@@ -37,4 +37,4 @@ Other reason not listed in the row(s) below
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:620](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L620)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:619](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L619)

@@ -32,11 +32,11 @@ The OffWithEffect command allows devices to be turned off using enhanced ways of
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.4
+MatterSpecification.v11.Cluster § 1.5.7.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L62)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L61)
 
 ___
 
@@ -54,11 +54,11 @@ The OnWithRecallGlobalScene command shall have no parameters.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.5
+MatterSpecification.v11.Cluster § 1.5.7.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L71)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L70)
 
 ___
 
@@ -85,8 +85,8 @@ turned on.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.6
+MatterSpecification.v11.Cluster § 1.5.7.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L83)
+[packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/on-off/OnOffInterface.ts#L82)

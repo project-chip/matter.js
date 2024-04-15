@@ -31,11 +31,11 @@ Change the channel to the channel with the given Number in the ChannelList attri
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.4.3
+MatterSpecification.v11.Cluster § 6.6.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L61)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L60)
 
 ___
 
@@ -63,8 +63,8 @@ should change to the last channel.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.4.4
+MatterSpecification.v11.Cluster § 6.6.4.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L74)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L73)

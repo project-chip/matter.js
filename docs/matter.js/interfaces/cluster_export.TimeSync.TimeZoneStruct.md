@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.3
+MatterSpecification.v11.Core § 11.16.6.3
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ specified by the IANA time zone database [https://www.iana.org/time-zones].
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.3.3
+MatterSpecification.v11.Core § 11.16.6.3.3
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L59)
 
 ___
 
@@ -53,7 +53,7 @@ The time zone offset from UTC in seconds.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.3.1
+MatterSpecification.v11.Core § 11.16.6.3.1
 
 #### Inherited from
 
@@ -61,7 +61,7 @@ TypeFromSchema.offset
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L44)
 
 ___
 
@@ -73,7 +73,7 @@ The UTC time when the offset shall be applied.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.6.3.2
+MatterSpecification.v11.Core § 11.16.6.3.2
 
 #### Inherited from
 
@@ -81,4 +81,4 @@ TypeFromSchema.validAt
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L52)
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L51)

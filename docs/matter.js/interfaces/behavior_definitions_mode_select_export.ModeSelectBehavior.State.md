@@ -34,7 +34,7 @@ attribute.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.5.4
+MatterSpecification.v11.Cluster § 1.8.5.4
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ StateType.currentMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:218](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L218)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:217](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L217)
 
 ___
 
@@ -59,7 +59,7 @@ the purpose of each of the instances.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.5.1
+MatterSpecification.v11.Cluster § 1.8.5.1
 
 #### Inherited from
 
@@ -67,7 +67,7 @@ StateType.description
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:187](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L187)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L186)
 
 ___
 
@@ -83,7 +83,7 @@ in another document.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.5.2
+MatterSpecification.v11.Cluster § 1.8.5.2
 
 #### Inherited from
 
@@ -91,7 +91,7 @@ StateType.standardNamespace
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:198](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L198)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L197)
 
 ___
 
@@ -116,7 +116,7 @@ If this attribute is not implemented, or is set to the null value, it shall have
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.5.5
+MatterSpecification.v11.Cluster § 1.8.5.5
 
 #### Inherited from
 
@@ -124,7 +124,7 @@ StateType.startUpMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:238](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L238)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:237](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L237)
 
 ___
 
@@ -138,7 +138,7 @@ entry in this list shall have a unique value for the Mode field.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.5.3
+MatterSpecification.v11.Cluster § 1.8.5.3
 
 #### Inherited from
 
@@ -146,4 +146,4 @@ StateType.supportedModes
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:207](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L207)
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:206](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L206)

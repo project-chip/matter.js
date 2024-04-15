@@ -9,7 +9,7 @@ the Video Player during playback.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.6
+MatterSpecification.v11.Cluster § 6.7.5.6
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ This background information may also be used by the Video Player when it is in i
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.6.2
+MatterSpecification.v11.Cluster § 6.7.5.6.2
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ Player is in the idle state and Splash field is not available.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.6.3
+MatterSpecification.v11.Cluster § 6.7.5.6.3
 
 #### Inherited from
 
@@ -80,7 +80,7 @@ This shall indicate the style of progress bar for media playback.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.6.4
+MatterSpecification.v11.Cluster § 6.7.5.6.4
 
 #### Inherited from
 
@@ -100,7 +100,7 @@ This shall indicate name of of the provider for the given content.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.6.1
+MatterSpecification.v11.Cluster § 6.7.5.6.1
 
 #### Inherited from
 
@@ -121,7 +121,7 @@ populated, the Video Player shall default to logo or the provider name.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.6.5
+MatterSpecification.v11.Cluster § 6.7.5.6.5
 
 #### Inherited from
 
@@ -141,7 +141,7 @@ This shall indicate watermark shown when the media is playing.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.6.6
+MatterSpecification.v11.Cluster § 6.7.5.6.6
 
 #### Inherited from
 

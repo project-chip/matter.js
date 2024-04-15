@@ -37,8 +37,8 @@ Upon success, the CurrentChannel attribute, if supported, shall be updated to re
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.4.1
+MatterSpecification.v11.Cluster § 6.6.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L90)
+[packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/channel/ChannelInterface.ts#L89)

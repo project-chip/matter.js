@@ -68,7 +68,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:51
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:52
 
 ## Properties
 
@@ -78,7 +78,7 @@ matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:51
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:45
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:46
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:46
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:47
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:49
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:50
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:146
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:147
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:261
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:262
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:48
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:49
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:47
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:48
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:50
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:51
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:260
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:261
 
 ## Accessors
 
@@ -172,7 +172,7 @@ matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:260
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:263
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:264
 
 ## Methods
 
@@ -186,7 +186,7 @@ matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:263
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:262
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:263
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:54
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:55
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:66
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:67
 
 ___
 
@@ -253,7 +253,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:62
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:63
 
 ___
 
@@ -284,7 +284,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:122
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:123
 
 ___
 
@@ -315,7 +315,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:129
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:130
 
 ___
 
@@ -339,7 +339,7 @@ ___
 | `options.endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
 | `options.event` | `E` |
 | `options.isFabricFiltered?` | `boolean` |
-| `options.minimumEventNumber?` | `number` \| `bigint` |
+| `options.minimumEventNumber?` | [`EventNumber`](../modules/internal_.md#eventnumber) |
 
 #### Returns
 
@@ -347,7 +347,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:139
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:140
 
 ___
 
@@ -370,7 +370,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:78
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:79
 
 ___
 
@@ -395,7 +395,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:100
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:101
 
 ___
 
@@ -418,7 +418,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:91
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:92
 
 ___
 
@@ -451,7 +451,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:243
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:244
 
 ___
 
@@ -483,7 +483,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:252
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:253
 
 ___
 
@@ -504,7 +504,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:52
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:53
 
 ___
 
@@ -524,7 +524,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:53
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:54
 
 ___
 
@@ -559,7 +559,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:147
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:148
 
 ___
 
@@ -583,7 +583,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:159
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:160
 
 ___
 
@@ -613,7 +613,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:195
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:196
 
 ___
 
@@ -649,7 +649,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:171
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:172
 
 ___
 
@@ -677,7 +677,7 @@ ___
 | `options.listener?` | (`value`: [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\>) => `void` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
-| `options.minimumEventNumber?` | `number` \| `bigint` |
+| `options.minimumEventNumber?` | [`EventNumber`](../modules/internal_.md#eventnumber) |
 | `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/internal_.md#timercallback) |
 
 #### Returns
@@ -686,7 +686,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:183
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:184
 
 ___
 
@@ -717,4 +717,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:214
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:215

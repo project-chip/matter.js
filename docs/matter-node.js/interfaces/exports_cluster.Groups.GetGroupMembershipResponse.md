@@ -32,7 +32,7 @@ GroupList field shall contain only as many groups as will fit.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.9
+MatterSpecification.v11.Cluster § 1.3.7.9
 
 ## Hierarchy
 

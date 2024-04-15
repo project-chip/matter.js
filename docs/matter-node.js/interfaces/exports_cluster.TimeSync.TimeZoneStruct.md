@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.3
+MatterSpecification.v11.Core § 11.16.6.3
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ specified by the IANA time zone database [https://www.iana.org/time-zones].
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.3.3
+MatterSpecification.v11.Core § 11.16.6.3.3
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ The time zone offset from UTC in seconds.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.3.1
+MatterSpecification.v11.Core § 11.16.6.3.1
 
 #### Inherited from
 
@@ -73,7 +73,7 @@ The UTC time when the offset shall be applied.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.3.2
+MatterSpecification.v11.Core § 11.16.6.3.2
 
 #### Inherited from
 

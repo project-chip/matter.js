@@ -8,7 +8,7 @@ These are optional features supported by ChannelCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.2
+MatterSpecification.v11.Cluster § 6.6.2
 
 ## Table of contents
 

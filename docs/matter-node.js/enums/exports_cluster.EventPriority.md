@@ -8,7 +8,7 @@ Interfaces and helper methods to define a cluster event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 7.18.2.25
+MatterSpecification.v11.Core § 7.18.2.25
 
 ## Table of contents
 

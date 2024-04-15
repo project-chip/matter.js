@@ -8,7 +8,7 @@ The value of the Thermostat acCapacityFormat attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.7.51
+MatterSpecification.v11.Cluster § 4.3.7.51
 
 ## Table of contents
 
@@ -26,4 +26,4 @@ British Thermal Unit per Hour
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:530](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L530)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:529](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L529)

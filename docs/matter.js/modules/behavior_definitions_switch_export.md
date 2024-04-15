@@ -36,8 +36,8 @@ Switch.Cluster requires you to enable one or more optional features. You can do 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts#L18)
+[packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts#L18)
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/switch/SwitchBehavior.ts#L23)

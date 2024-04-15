@@ -33,7 +33,7 @@ The interpretation of the various levels is device-dependent.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.5.5.2
+MatterSpecification.v11.Cluster § 4.5.5.2
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ StateType.keypadLockout
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:121](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L121)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:120](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L120)
 
 ___
 
@@ -62,7 +62,7 @@ Table 94. ScheduleProgrammingVisibility Attribute Values
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.5.5.3
+MatterSpecification.v11.Cluster § 4.5.5.3
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ StateType.scheduleProgrammingVisibility
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:141](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L141)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L140)
 
 ___
 
@@ -85,7 +85,7 @@ Table 92. DisplayMode Attribute Values
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.5.5.1
+MatterSpecification.v11.Cluster § 4.5.5.1
 
 #### Inherited from
 
@@ -93,4 +93,4 @@ StateType.temperatureDisplayMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L104)

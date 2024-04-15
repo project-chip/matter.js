@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.5.2
+MatterSpecification.v11.Cluster § 6.11.5.2
 
 ## Table of contents
 

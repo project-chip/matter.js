@@ -25,11 +25,11 @@
 
 The Groups cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsServer](endpoint_definitions_device_DimmableLightDevice.DimmableLightRequirements.md#groupsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L46)
+[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L45)
 
 ___
 
@@ -43,7 +43,7 @@ This version of [IdentifyServer](endpoint_definitions_device_DimmableLightDevice
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L39)
+[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L38)
 
 ___
 
@@ -57,7 +57,7 @@ This version of [LevelControlServer](endpoint_definitions_device_DimmableLightDe
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L74)
+[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L73)
 
 ___
 
@@ -67,11 +67,11 @@ ___
 
 The OccupancySensing cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OccupancySensingBehavior](endpoint_definitions_device_DimmableLightDevice.DimmableLightRequirements.md#occupancysensingbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L89)
+[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L88)
 
 ___
 
@@ -85,7 +85,7 @@ This version of [OnOffServer](endpoint_definitions_device_DimmableLightDevice.Di
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L67)
+[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L66)
 
 ___
 
@@ -99,7 +99,7 @@ This version of [ScenesServer](endpoint_definitions_device_DimmableLightDevice.D
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L53)
+[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L52)
 
 ___
 
@@ -119,7 +119,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L107)
+[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L106)
 
 ___
 
@@ -142,4 +142,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L94)
+[packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts:93](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmableLightDevice.ts#L93)

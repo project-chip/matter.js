@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L67)
 
-[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:69](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L69)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L21)
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L20)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L71)

@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:223](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L223)
+[packages/matter.js/src/log/Diagnostic.ts:238](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L238)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:224](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L224)
+[packages/matter.js/src/log/Diagnostic.ts:239](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L239)
 
 ## Methods
 
@@ -47,4 +47,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:225](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L225)
+[packages/matter.js/src/log/Diagnostic.ts:240](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L240)

@@ -8,7 +8,7 @@ Body of the BridgedDeviceBasicInformation startUp event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.13.5
+MatterSpecification.v11.Core § 9.13.5
 
 ## Hierarchy
 

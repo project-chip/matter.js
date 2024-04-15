@@ -76,16 +76,16 @@ These elements and properties are present in all MediaPlayback clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentState`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`PlaybackState`](../enums/exports_cluster.MediaPlayback.PlaybackState.md), `any`\>  } | - |
-| `attributes.currentState` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`PlaybackState`](../enums/exports_cluster.MediaPlayback.PlaybackState.md), `any`\> | This shall indicate the current playback state of media. During fast-forward, rewind, and other seek operations; this attribute shall be set to PLAYING. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.3.1 |
+| `attributes.currentState` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`PlaybackState`](../enums/exports_cluster.MediaPlayback.PlaybackState.md), `any`\> | This shall indicate the current playback state of media. During fast-forward, rewind, and other seek operations; this attribute shall be set to PLAYING. **`See`** MatterSpecification.v11.Cluster § 6.10.3.1 |
 | `commands` | \{ `next`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `pause`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `play`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `previous`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `skipBackward`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `skipForward`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `startOver`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `stop`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } | - |
-| `commands.next` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context- specific. This will often Go forward to the next media playback item. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.4.6 |
-| `commands.pause` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall pause playback of the media. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.4.2 |
-| `commands.play` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play shall return media to normal playback speed. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.4.1 |
-| `commands.previous` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is context-specific. This will often Go back to the previous media playback item. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.4.5 |
-| `commands.skipBackward` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall Skip backward in the media by the given number of milliseconds. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.4.10 |
-| `commands.skipForward` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall Skip forward in the media by the given number of milliseconds. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.4.9 |
-| `commands.startOver` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall Start Over with the current media playback item. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.4.4 |
-| `commands.stop` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may navigate the user back to the location from where the media was originally launched. **`See`** MatterApplicationClusterSpecificationV1_1 § 6.10.4.3 |
+| `commands.next` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall cause the handler to be invoked for "Next". User experience is context- specific. This will often Go forward to the next media playback item. **`See`** MatterSpecification.v11.Cluster § 6.10.4.6 |
+| `commands.pause` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall pause playback of the media. **`See`** MatterSpecification.v11.Cluster § 6.10.4.2 |
+| `commands.play` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play shall return media to normal playback speed. **`See`** MatterSpecification.v11.Cluster § 6.10.4.1 |
+| `commands.previous` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall cause the handler to be invoked for "Previous". User experience is context-specific. This will often Go back to the previous media playback item. **`See`** MatterSpecification.v11.Cluster § 6.10.4.5 |
+| `commands.skipBackward` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall Skip backward in the media by the given number of milliseconds. **`See`** MatterSpecification.v11.Cluster § 6.10.4.10 |
+| `commands.skipForward` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall Skip forward in the media by the given number of milliseconds. **`See`** MatterSpecification.v11.Cluster § 6.10.4.9 |
+| `commands.startOver` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall Start Over with the current media playback item. **`See`** MatterSpecification.v11.Cluster § 6.10.4.4 |
+| `commands.stop` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may navigate the user back to the location from where the media was originally launched. **`See`** MatterSpecification.v11.Cluster § 6.10.4.3 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `duration`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint` \| ``null``, `any`\> ; `playbackSpeed`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number`, `any`\> ; `sampledPosition`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| ``null``, `any`\> ; `seekRangeEnd`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint` \| ``null``, `any`\> ; `seekRangeStart`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint` \| ``null``, `any`\> ; `startTime`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint` \| ``null``, `any`\>  } ; `commands`: \{ `seek`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `advancedSeek`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `fastForward`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `rewind`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `variableSpeed`: ``true``  }  }] | This metadata controls which MediaPlaybackCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `advancedSeek`: [`BitFlag`](exports_schema.md#bitflag) ; `variableSpeed`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.advancedSeek` | [`BitFlag`](exports_schema.md#bitflag) | AdvancedSeek Enables clients to implement more advanced media seeking behavior in their user interface, such as for example a "seek bar". Adds support for Attributes and Commands related to advanced seek support |
@@ -132,9 +132,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1710
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1737
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1712
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1739
 
 ___
 
@@ -160,7 +160,7 @@ This structure defines a playback position within a media stream being played.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.5.3
+MatterSpecification.v11.Cluster § 6.10.5.3
 
 #### Defined in
 
@@ -176,7 +176,7 @@ This command shall be generated in response to various Playback Commands.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.4.12
+MatterSpecification.v11.Cluster § 6.10.4.12
 
 #### Defined in
 
@@ -192,7 +192,7 @@ Input to the MediaPlayback seek command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.4.11
+MatterSpecification.v11.Cluster § 6.10.4.11
 
 #### Defined in
 
@@ -208,7 +208,7 @@ Input to the MediaPlayback skipBackward command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.4.10
+MatterSpecification.v11.Cluster § 6.10.4.10
 
 #### Defined in
 
@@ -224,7 +224,7 @@ Input to the MediaPlayback skipForward command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.4.9
+MatterSpecification.v11.Cluster § 6.10.4.9
 
 #### Defined in
 

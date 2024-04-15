@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.4.4
+MatterSpecification.v11.Core § 9.10.4.4
 
 ## Hierarchy
 

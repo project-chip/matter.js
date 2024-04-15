@@ -46,7 +46,7 @@ OperationalCredentialsBehavior.State.constructor
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:196](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L196)
+[packages/matter.js/src/behavior/cluster/ClusterBehavior.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehavior.ts#L196)
 
 ## Properties
 
@@ -64,7 +64,7 @@ default if you do not provide an official certification in ServerOptions.certifi
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:413](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L413)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:413](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L413)
 
 ___
 
@@ -83,7 +83,7 @@ Upon Factory Data Reset, this attribute shall be set to a default value of 0.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.5.4
+MatterSpecification.v11.Core § 11.17.5.4
 
 #### Inherited from
 
@@ -91,7 +91,7 @@ OperationalCredentialsBehavior.State.commissionedFabrics
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:693](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L693)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:692](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L692)
 
 ___
 
@@ -107,7 +107,7 @@ Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.5.6
+MatterSpecification.v11.Core § 11.17.5.6
 
 #### Inherited from
 
@@ -115,7 +115,7 @@ OperationalCredentialsBehavior.State.currentFabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:728](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L728)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:727](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L727)
 
 ___
 
@@ -132,7 +132,7 @@ The number of entries in this list shall match the number of entries in the NOCs
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.5.2
+MatterSpecification.v11.Core § 11.17.5.2
 
 #### Inherited from
 
@@ -140,7 +140,7 @@ OperationalCredentialsBehavior.State.fabrics
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:671](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L671)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:670](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L670)
 
 ___
 
@@ -159,7 +159,7 @@ The number of entries in this list shall match the number of entries in the Fabr
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.5.1
+MatterSpecification.v11.Core § 11.17.5.1
 
 #### Inherited from
 
@@ -167,7 +167,7 @@ OperationalCredentialsBehavior.State.nocs
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:648](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L648)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:647](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L647)
 
 ___
 
@@ -180,7 +180,7 @@ a particular device.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.5.3
+MatterSpecification.v11.Core § 11.17.5.3
 
 #### Inherited from
 
@@ -188,7 +188,7 @@ OperationalCredentialsBehavior.State.supportedFabrics
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:679](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L679)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:678](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L678)
 
 ___
 
@@ -213,7 +213,7 @@ Upon Factory Data Reset, this attribute shall be set to a default value whereby 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.5.5
+MatterSpecification.v11.Core § 11.17.5.5
 
 #### Inherited from
 
@@ -221,7 +221,7 @@ OperationalCredentialsBehavior.State.trustedRootCertificates
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:713](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L713)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:712](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L712)
 
 ## Methods
 
@@ -246,4 +246,4 @@ OperationalCredentialsBehavior.State.trustedRootCertificates
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:415](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L415)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts:415](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsServer.ts#L415)

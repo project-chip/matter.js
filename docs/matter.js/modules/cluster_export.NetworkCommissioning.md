@@ -66,12 +66,12 @@ These elements and properties are present in all NetworkCommissioning clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `interfaceEnabled`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`boolean`, `any`\> ; `lastConnectErrorValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `lastNetworkId`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `Uint8Array`, `any`\> ; `lastNetworkingStatus`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md), `any`\> ; `maxNetworks`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `networks`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `connected`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>[], `any`\>  } | - |
-| `attributes.interfaceEnabled` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`boolean`, `any`\> | This attribute shall indicate whether the associated network interface is enabled or not. By default all network interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set to true). It is undefined what happens if InterfaceEnabled is written to false on the same interface as that which is used to write the value. In that case, it is possible that the Administrator would have to await expiry of the fail-safe, and associated recovery of network configuration to prior safe values, before being able to communicate with the node again (see Section 11.9.6.2, “ArmFailSafe Command”). It may be possible to disable Ethernet interfaces but it is implementation-defined. If not supported, a write to this attribute with a value of false shall fail with a status of INVALID_ACTION. When disabled, an Ethernet interface would longer employ media detection. That is, a simple unplug and replug of the cable shall NOT re-enable the interface. On Ethernet-only Nodes, there shall always be at least one of the Network Commissioning server cluster instances with InterfaceEnabled set to true. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.5 |
-| `attributes.lastConnectErrorValue` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an operational network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous connection after loss of connectivity or during initial establishment. If no such attempt was made, or no network configurations exist in the Networks attribute, then this attribute shall be set to null. If the last connection succeeded, as indicated by a value of Success in the LastNetworkingStatus attribute, then this field shall be set to null. This attribute is present to assist with error recovery during Network commissioning and to assist in non-concurrent networking commissioning flows. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.8 |
-| `attributes.lastNetworkId` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `Uint8Array`, `any`\> | This attribute shall indicate the NetworkID used in the last attempt to connect to an operational network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous connection after loss of connectivity or during initial establishment. If no such attempt was made, or no network configurations exist in the Networks attribute, then this attribute shall be set to null. If a network configuration is removed from the Networks attribute using the RemoveNetwork command after a connection attempt, this field may indicate a NetworkID that is no longer configured on the Node. This attribute is present to assist with error recovery during Network commissioning and to assist in non-concurrent networking commissioning flows. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.7 |
-| `attributes.lastNetworkingStatus` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md), `any`\> | This attribute shall indicate the status of the last attempt either scan or connect to an operational network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous connection after loss of connectivity or during initial establishment. If no such attempt was made, or no network configurations exist in the Networks attribute, then this attribute shall be set to null. This attribute is present to assist with error recovery during Network commissioning and to assist in non-concurrent networking commissioning flows. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.6 |
-| `attributes.maxNetworks` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> | This shall indicate the maximum number of network configuration entries that can be added, based on available device resources. The length of the Networks attribute list shall be less than or equal to this value. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.1 |
-| `attributes.networks` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `connected`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>[], `any`\> | This attribute shall indicate the network configurations that are usable on the network interface represented by this cluster server instance. The order of configurations in the list reflects precedence. That is, any time the Node attempts to connect to the network it shall attempt to do so using the configurations in Networks Attribute in the order as they appear in the list. The order of list items shall only be modified by the AddOrUpdateThreadNetwork, AddOrUpdateWiFiNetwork and ReorderNetwork commands. In other words, the list shall be stable over time, unless mutated externally. Ethernet networks shall be automatically populated by the cluster server. Ethernet Network Commissioning Cluster instances shall always have exactly one Section 11.8.5.4, “NetworkInfoStruct” instance in their Networks attribute. There shall be no way to add, update or remove Ethernet network configurations to those Cluster instances. **`See`** [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.6.2 |
+| `attributes.interfaceEnabled` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<`boolean`, `any`\> | This attribute shall indicate whether the associated network interface is enabled or not. By default all network interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set to true). It is undefined what happens if InterfaceEnabled is written to false on the same interface as that which is used to write the value. In that case, it is possible that the Administrator would have to await expiry of the fail-safe, and associated recovery of network configuration to prior safe values, before being able to communicate with the node again (see Section 11.9.6.2, “ArmFailSafe Command”). It may be possible to disable Ethernet interfaces but it is implementation-defined. If not supported, a write to this attribute with a value of false shall fail with a status of INVALID_ACTION. When disabled, an Ethernet interface would longer employ media detection. That is, a simple unplug and replug of the cable shall NOT re-enable the interface. On Ethernet-only Nodes, there shall always be at least one of the Network Commissioning server cluster instances with InterfaceEnabled set to true. **`See`** MatterSpecification.v11.Core § 11.8.6.5 |
+| `attributes.lastConnectErrorValue` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an operational network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous connection after loss of connectivity or during initial establishment. If no such attempt was made, or no network configurations exist in the Networks attribute, then this attribute shall be set to null. If the last connection succeeded, as indicated by a value of Success in the LastNetworkingStatus attribute, then this field shall be set to null. This attribute is present to assist with error recovery during Network commissioning and to assist in non-concurrent networking commissioning flows. **`See`** MatterSpecification.v11.Core § 11.8.6.8 |
+| `attributes.lastNetworkId` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `Uint8Array`, `any`\> | This attribute shall indicate the NetworkID used in the last attempt to connect to an operational network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous connection after loss of connectivity or during initial establishment. If no such attempt was made, or no network configurations exist in the Networks attribute, then this attribute shall be set to null. If a network configuration is removed from the Networks attribute using the RemoveNetwork command after a connection attempt, this field may indicate a NetworkID that is no longer configured on the Node. This attribute is present to assist with error recovery during Network commissioning and to assist in non-concurrent networking commissioning flows. **`See`** MatterSpecification.v11.Core § 11.8.6.7 |
+| `attributes.lastNetworkingStatus` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| [`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md), `any`\> | This attribute shall indicate the status of the last attempt either scan or connect to an operational network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous connection after loss of connectivity or during initial establishment. If no such attempt was made, or no network configurations exist in the Networks attribute, then this attribute shall be set to null. This attribute is present to assist with error recovery during Network commissioning and to assist in non-concurrent networking commissioning flows. **`See`** MatterSpecification.v11.Core § 11.8.6.6 |
+| `attributes.maxNetworks` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> | This shall indicate the maximum number of network configuration entries that can be added, based on available device resources. The length of the Networks attribute list shall be less than or equal to this value. **`See`** MatterSpecification.v11.Core § 11.8.6.1 |
+| `attributes.networks` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `connected`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>[], `any`\> | This attribute shall indicate the network configurations that are usable on the network interface represented by this cluster server instance. The order of configurations in the list reflects precedence. That is, any time the Node attempts to connect to the network it shall attempt to do so using the configurations in Networks Attribute in the order as they appear in the list. The order of list items shall only be modified by the AddOrUpdateThreadNetwork, AddOrUpdateWiFiNetwork and ReorderNetwork commands. In other words, the list shall be stable over time, unless mutated externally. Ethernet networks shall be automatically populated by the cluster server. Ethernet Network Commissioning Cluster instances shall always have exactly one Section 11.8.5.4, “NetworkInfoStruct” instance in their Networks attribute. There shall be no way to add, update or remove Ethernet network configurations to those Cluster instances. **`See`** MatterSpecification.v11.Core § 11.8.6.2 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `connectMaxTimeSeconds`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `scanMaxTimeSeconds`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `connectNetwork`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `errorValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\>  }\>, `any`\> ; `removeNetwork`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `networkIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\>  }\>, `any`\> ; `reorderNetwork`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `networkIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `networkIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\>  }\>, `any`\> ; `scanNetworks`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `ssid`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\> ; `threadScanResults`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<...\>[]\> ; `wiFiScanResults`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<...\>[]\>  }\>, `any`\>  }  } = WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent; `flags`: \{ `wiFiNetworkInterface`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `connectMaxTimeSeconds`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\> ; `scanMaxTimeSeconds`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `connectNetwork`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `errorValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\>  }\>, `any`\> ; `removeNetwork`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `networkIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\>  }\>, `any`\> ; `reorderNetwork`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `networkIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `networkIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\>  }\>, `any`\> ; `scanNetworks`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `ssid`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<``null`` \| `Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\> ; `threadScanResults`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<...\>[]\> ; `wiFiScanResults`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<...\>[]\>  }\>, `any`\>  }  } = WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent; `flags`: \{ `threadNetworkInterface`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `addOrUpdateWiFiNetwork`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `credentials`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `ssid`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `networkIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\>  }\>, `any`\>  }  } = WiFiNetworkInterfaceComponent; `flags`: \{ `wiFiNetworkInterface`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `addOrUpdateThreadNetwork`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number` \| `bigint`\> ; `operationalDataset`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `networkIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `networkingStatus`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NetworkCommissioningStatus`](../enums/cluster_export.NetworkCommissioning.NetworkCommissioningStatus.md)\>  }\>, `any`\>  }  } = ThreadNetworkInterfaceComponent; `flags`: \{ `threadNetworkInterface`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `threadNetworkInterface`: ``true`` = true; `wiFiNetworkInterface`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `ethernetNetworkInterface`: ``true`` = true; `wiFiNetworkInterface`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `ethernetNetworkInterface`: ``true`` = true; `threadNetworkInterface`: ``true`` = true }  }, \{ `component`: ``false`` = false; `flags`: \{ `ethernetNetworkInterface`: ``false`` = false; `threadNetworkInterface`: ``false`` = false; `wiFiNetworkInterface`: ``false`` = false }  }] | This metadata controls which NetworkCommissioningCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `ethernetNetworkInterface`: [`BitFlag`](schema_export.md#bitflag) ; `threadNetworkInterface`: [`BitFlag`](schema_export.md#bitflag) ; `wiFiNetworkInterface`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.ethernetNetworkInterface` | [`BitFlag`](schema_export.md#bitflag) | EthernetNetworkInterface Ethernet related features |
@@ -83,7 +83,7 @@ These elements and properties are present in all NetworkCommissioning clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1053](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1053)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1052](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1052)
 
 ___
 
@@ -93,9 +93,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1254](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1254)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1253](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1253)
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1256](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1256)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1255)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1230](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1230)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1229](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1229)
 
 ___
 
@@ -119,9 +119,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1315](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1315)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1314](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1314)
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1317](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1317)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1316](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1316)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1263](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1263)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1262](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1262)
 
 ___
 
@@ -154,7 +154,7 @@ A NetworkCommissioningCluster supports these elements if it supports feature Thr
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:992](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L992)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:991](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L991)
 
 ___
 
@@ -166,11 +166,11 @@ Input to the NetworkCommissioning addOrUpdateThreadNetwork command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.4
+MatterSpecification.v11.Core § 11.8.7.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:634](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L634)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:633](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L633)
 
 ___
 
@@ -182,11 +182,11 @@ Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.3
+MatterSpecification.v11.Core § 11.8.7.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:575](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L575)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:574](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L574)
 
 ___
 
@@ -198,11 +198,11 @@ Input to the NetworkCommissioning connectNetwork command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.9
+MatterSpecification.v11.Core § 11.8.7.9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:441](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L441)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:440](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L440)
 
 ___
 
@@ -243,11 +243,11 @@ See Section 11.8.7.2.2, “DebugText Field” for usage.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.10
+MatterSpecification.v11.Core § 11.8.7.10
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:487](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L487)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:486](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L486)
 
 ___
 
@@ -284,11 +284,11 @@ See Section 11.8.7.2.2, “DebugText Field” for usage.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.8
+MatterSpecification.v11.Core § 11.8.7.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:390](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L390)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:389](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L389)
 
 ___
 
@@ -300,11 +300,11 @@ NetworkInfoStruct struct describes an existing network configuration, as provide
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.4
+MatterSpecification.v11.Core § 11.8.5.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:663](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L663)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:662](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L662)
 
 ___
 
@@ -316,11 +316,11 @@ Input to the NetworkCommissioning removeNetwork command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.7
+MatterSpecification.v11.Core § 11.8.7.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:348](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L348)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:347](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L347)
 
 ___
 
@@ -332,11 +332,11 @@ Input to the NetworkCommissioning reorderNetwork command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.11
+MatterSpecification.v11.Core § 11.8.7.11
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:557](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L557)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:556](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L556)
 
 ___
 
@@ -348,11 +348,11 @@ Input to the NetworkCommissioning scanNetworks command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.1
+MatterSpecification.v11.Core § 11.8.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L28)
 
 ___
 
@@ -370,11 +370,11 @@ NetworkingStatus matching the response.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.2
+MatterSpecification.v11.Core § 11.8.7.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:267](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L267)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:266](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L266)
 
 ___
 
@@ -386,11 +386,11 @@ ThreadInterfaceScanResultStruct represents a single Thread network scan result.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.6
+MatterSpecification.v11.Core § 11.8.5.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:231](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L231)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:230](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L230)
 
 ___
 
@@ -402,11 +402,11 @@ WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.5
+MatterSpecification.v11.Core § 11.8.5.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:197](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L197)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L196)
 
 ___
 
@@ -425,7 +425,7 @@ A NetworkCommissioningCluster supports these elements if it supports feature WiF
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:960](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L960)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:959](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L959)
 
 ___
 
@@ -451,7 +451,7 @@ ThreadNetworkInterface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:713](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L713)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:712](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L712)
 
 ___
 
@@ -464,7 +464,7 @@ WiFiInterfaceScanResultStruct.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.1
+MatterSpecification.v11.Core § 11.8.5.1
 
 #### Type declaration
 
@@ -478,4 +478,4 @@ WiFiInterfaceScanResultStruct.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L131)

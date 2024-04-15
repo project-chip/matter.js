@@ -8,7 +8,7 @@ Input to the ColorControl moveToHueAndSaturation command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.10
+MatterSpecification.v11.Cluster § 3.2.11.10
 
 ## Hierarchy
 

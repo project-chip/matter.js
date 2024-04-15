@@ -24,11 +24,11 @@
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_OnOffLightSwitchDevice.OnOffLightSwitchRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L54)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L53)
 
 ___
 
@@ -38,11 +38,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyBehavior](endpoint_definitions_device_OnOffLightSwitchDevice.OnOffLightSwitchRequirements.md#identifybehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L40)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L39)
 
 ___
 
@@ -52,11 +52,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_OnOffLightSwitchDevice.OnOffLightSwitchRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L33)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L32)
 
 ___
 
@@ -66,11 +66,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffBehavior](endpoint_definitions_device_OnOffLightSwitchDevice.OnOffLightSwitchRequirements.md#onoffbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L47)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L46)
 
 ___
 
@@ -80,11 +80,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesBehavior](endpoint_definitions_device_OnOffLightSwitchDevice.OnOffLightSwitchRequirements.md#scenesbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L61)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L60)
 
 ___
 
@@ -107,7 +107,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L71)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L70)
 
 ___
 
@@ -126,4 +126,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:66](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L66)
+[packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffLightSwitchDevice.ts#L65)

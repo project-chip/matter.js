@@ -8,7 +8,7 @@ The value of the ThermostatUserInterfaceConfiguration scheduleProgrammingVisibil
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.5.5.3
+MatterSpecification.v11.Cluster § 4.5.5.3
 
 ## Table of contents
 

@@ -8,7 +8,7 @@ Input to the Groups getGroupMembership command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.3
+MatterSpecification.v11.Cluster § 1.3.7.3
 
 ## Hierarchy
 

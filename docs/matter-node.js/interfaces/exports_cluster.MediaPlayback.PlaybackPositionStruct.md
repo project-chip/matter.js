@@ -8,7 +8,7 @@ This structure defines a playback position within a media stream being played.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.5.3
+MatterSpecification.v11.Cluster § 6.10.5.3
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ playback (For example : Live media with no known duration and where seek is not 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.5.3.2
+MatterSpecification.v11.Cluster § 6.10.5.3.2
 
 #### Inherited from
 
@@ -59,7 +59,7 @@ This shall indicate the time when the position was last updated.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.5.3.1
+MatterSpecification.v11.Cluster § 6.10.5.3.1
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ The value of the Thermostat controlSequenceOfOperation attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7.23
+MatterSpecification.v11.Cluster § 4.3.7.23
 
 ## Table of contents
 

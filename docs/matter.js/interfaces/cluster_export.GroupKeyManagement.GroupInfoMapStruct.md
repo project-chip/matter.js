@@ -8,7 +8,7 @@ This field uniquely identifies the group within the scope of the given Fabric.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.6.5
+MatterSpecification.v11.Core § 11.2.6.5
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ This field provides the list of Endpoint IDs on the Node to which messages to th
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.6.5.1
+MatterSpecification.v11.Core § 11.2.6.5.1
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.endpoints
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L77)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L76)
 
 ___
 
@@ -57,7 +57,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L86)
 
 ___
 
@@ -71,7 +71,7 @@ TypeFromSchema.groupId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:70](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:69](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L69)
 
 ___
 
@@ -84,7 +84,7 @@ GroupId on any Endpoint via the Groups cluster.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.6.5.2
+MatterSpecification.v11.Core § 11.2.6.5.2
 
 #### Inherited from
 
@@ -92,4 +92,4 @@ TypeFromSchema.groupName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L84)

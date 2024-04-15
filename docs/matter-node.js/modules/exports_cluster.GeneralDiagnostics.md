@@ -83,7 +83,7 @@ Body of the GeneralDiagnostics bootReason event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.8.4
+MatterSpecification.v11.Core § 11.11.8.4
 
 #### Defined in
 
@@ -99,7 +99,7 @@ Body of the GeneralDiagnostics hardwareFaultChange event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.8.1
+MatterSpecification.v11.Core § 11.11.8.1
 
 #### Defined in
 
@@ -115,7 +115,7 @@ Body of the GeneralDiagnostics networkFaultChange event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.8.3
+MatterSpecification.v11.Core § 11.11.8.3
 
 #### Defined in
 
@@ -132,7 +132,7 @@ attribute.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6
+MatterSpecification.v11.Core § 11.11.4.6
 
 #### Defined in
 
@@ -148,7 +148,7 @@ Body of the GeneralDiagnostics radioFaultChange event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.8.2
+MatterSpecification.v11.Core § 11.11.8.2
 
 #### Defined in
 
@@ -164,7 +164,7 @@ Input to the GeneralDiagnostics testEventTrigger command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.7.1
+MatterSpecification.v11.Core § 11.11.7.1
 
 #### Defined in
 

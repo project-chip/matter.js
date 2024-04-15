@@ -94,7 +94,7 @@ Extended lifecycle information that only applies to root endpoints.
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L25)
+[packages/matter.js/src/node/NodeLifecycle.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L25)
 
 ## Properties
 
@@ -108,7 +108,7 @@ Extended lifecycle information that only applies to root endpoints.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L31)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L31)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L18)
+[packages/matter.js/src/node/NodeLifecycle.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L18)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L19)
+[packages/matter.js/src/node/NodeLifecycle.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L19)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L30)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L30)
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L21)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L21)
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L25)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L25)
 
 ___
 
@@ -184,7 +184,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L26)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L26)
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L20)
+[packages/matter.js/src/node/NodeLifecycle.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L20)
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L27)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L27)
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L23)
+[packages/matter.js/src/node/NodeLifecycle.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L23)
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L22)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L22)
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L22)
+[packages/matter.js/src/node/NodeLifecycle.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L22)
 
 ___
 
@@ -256,7 +256,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L23)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L23)
 
 ___
 
@@ -270,7 +270,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L24)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L24)
 
 ___
 
@@ -280,7 +280,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L17)
+[packages/matter.js/src/node/NodeLifecycle.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L17)
 
 ___
 
@@ -290,7 +290,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L16)
+[packages/matter.js/src/node/NodeLifecycle.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L16)
 
 ___
 
@@ -300,7 +300,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L21)
+[packages/matter.js/src/node/NodeLifecycle.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L21)
 
 ___
 
@@ -314,7 +314,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L35)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L35)
 
 ___
 
@@ -328,7 +328,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L28)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L28)
 
 ___
 
@@ -342,7 +342,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L34)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L34)
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L29)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L29)
 
 ## Accessors
 
@@ -376,7 +376,7 @@ EndpointLifecycle.changed
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L68)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L68)
 
 ___
 
@@ -392,7 +392,7 @@ Emits when node is first commissioned.
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L83)
+[packages/matter.js/src/node/NodeLifecycle.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L83)
 
 ___
 
@@ -408,7 +408,7 @@ Emits when node is no longer comissioned.
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L90)
+[packages/matter.js/src/node/NodeLifecycle.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L90)
 
 ___
 
@@ -428,7 +428,7 @@ EndpointLifecycle.destroyed
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L61)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L61)
 
 ___
 
@@ -448,7 +448,7 @@ endpoint that crashed as incapacitated but otherwise continue operation.
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L101)
+[packages/matter.js/src/node/NodeLifecycle.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L101)
 
 ___
 
@@ -468,7 +468,7 @@ EndpointLifecycle.hasId
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:103](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L103)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:103](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L103)
 
 ___
 
@@ -488,7 +488,7 @@ EndpointLifecycle.hasNumber
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L110)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L110)
 
 ___
 
@@ -504,7 +504,7 @@ Emits when the node's endpoint tree is ready/initialized and used to initialize 
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L62)
+[packages/matter.js/src/node/NodeLifecycle.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L62)
 
 ___
 
@@ -524,7 +524,7 @@ EndpointLifecycle.installed
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L40)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L40)
 
 ___
 
@@ -540,7 +540,7 @@ True when the node is part of at least one fabric.
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L76)
+[packages/matter.js/src/node/NodeLifecycle.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L76)
 
 ___
 
@@ -560,7 +560,7 @@ EndpointLifecycle.isInstalled
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L82)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L82)
 
 ___
 
@@ -576,7 +576,7 @@ True when the node is connected to the network.
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L48)
+[packages/matter.js/src/node/NodeLifecycle.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L48)
 
 ___
 
@@ -596,7 +596,7 @@ EndpointLifecycle.isReady
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L89)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L89)
 
 ___
 
@@ -616,7 +616,7 @@ EndpointLifecycle.isTreeReady
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L96)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L96)
 
 ___
 
@@ -632,7 +632,7 @@ Emits when the node goes offline.
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L69)
+[packages/matter.js/src/node/NodeLifecycle.ts:69](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L69)
 
 ___
 
@@ -648,7 +648,7 @@ Emits when the node is first online.
 
 #### Defined in
 
-[packages/matter.js/src/node/NodeLifecycle.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/NodeLifecycle.ts#L55)
+[packages/matter.js/src/node/NodeLifecycle.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/NodeLifecycle.ts#L55)
 
 ___
 
@@ -668,7 +668,7 @@ EndpointLifecycle.ready
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L47)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L47)
 
 ___
 
@@ -688,7 +688,7 @@ EndpointLifecycle.reset
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L75)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L75)
 
 ___
 
@@ -708,7 +708,7 @@ EndpointLifecycle.treeReady
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L54)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L54)
 
 ## Methods
 
@@ -726,7 +726,7 @@ EndpointLifecycle.treeReady
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:206](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L206)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:206](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L206)
 
 ___
 
@@ -753,7 +753,7 @@ Bubble a lifecycle change event from a child.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:128](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L128)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:128](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L128)
 
 ___
 
@@ -779,7 +779,7 @@ Inform the Lifecycle of a change in lifecycle.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:139](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L139)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:139](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L139)
 
 ___
 
@@ -804,7 +804,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:195](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L195)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:195](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L195)
 
 ___
 
@@ -824,4 +824,4 @@ Revert to uninstalled state.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:202](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L202)
+[packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts:202](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/EndpointLifecycle.ts#L202)

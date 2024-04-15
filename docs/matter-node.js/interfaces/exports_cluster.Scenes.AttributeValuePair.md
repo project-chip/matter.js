@@ -8,7 +8,7 @@ This data type indicates a combination of an identifier and the value of an attr
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.6.1
+MatterSpecification.v11.Cluster § 1.4.6.1
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ indicated by AttributeID.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.6.1.1
+MatterSpecification.v11.Cluster § 1.4.6.1.1
 
 #### Inherited from
 
@@ -57,7 +57,7 @@ for this field.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.6.1.2
+MatterSpecification.v11.Cluster § 1.4.6.1.2
 
 #### Inherited from
 

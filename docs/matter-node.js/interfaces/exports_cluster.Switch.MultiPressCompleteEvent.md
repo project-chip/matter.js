@@ -8,7 +8,7 @@ Body of the Switch multiPressComplete event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.11.7.7
+MatterSpecification.v11.Cluster § 1.11.7.7
 
 ## Hierarchy
 

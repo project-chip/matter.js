@@ -9,7 +9,7 @@ usage.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.4.2
+MatterSpecification.v11.Core § 11.9.4.2
 
 ## Table of contents
 

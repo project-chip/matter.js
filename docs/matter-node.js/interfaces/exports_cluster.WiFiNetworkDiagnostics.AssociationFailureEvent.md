@@ -8,7 +8,7 @@ Body of the WiFiNetworkDiagnostics associationFailure event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.14.8.2
+MatterSpecification.v11.Core § 11.14.8.2
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ The Status field shall be set to a value from the AssociationFailureCauseEnum.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.14.8.2.1
+MatterSpecification.v11.Core § 11.14.8.2.1
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ Table 9-50 "Status codes" of IEEE 802.11-2020 contains a description of all valu
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.14.8.2.2
+MatterSpecification.v11.Core § 11.14.8.2.2
 
 #### Inherited from
 

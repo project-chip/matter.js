@@ -38,4 +38,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/system/network/NetworkBehavior.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/system/network/NetworkBehavior.ts#L30)
+[packages/matter.js/src/behavior/system/network/NetworkBehavior.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/system/network/NetworkBehavior.ts#L30)

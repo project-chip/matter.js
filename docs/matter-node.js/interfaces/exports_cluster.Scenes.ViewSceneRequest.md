@@ -8,7 +8,7 @@ Input to the Scenes viewScene command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.3
+MatterSpecification.v11.Cluster § 1.4.9.3
 
 ## Hierarchy
 

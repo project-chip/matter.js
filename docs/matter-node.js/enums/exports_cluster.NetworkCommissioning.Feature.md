@@ -8,7 +8,7 @@ These are optional features supported by NetworkCommissioningCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.4
+MatterSpecification.v11.Core § 11.8.4
 
 ## Table of contents
 

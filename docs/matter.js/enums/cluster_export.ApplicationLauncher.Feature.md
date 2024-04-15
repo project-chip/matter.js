@@ -8,7 +8,7 @@ These are optional features supported by ApplicationLauncherCluster.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.2
+MatterSpecification.v11.Cluster § 6.4.2
 
 ## Table of contents
 
@@ -29,4 +29,4 @@ supported application catalogs
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:228](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L228)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:227](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L227)

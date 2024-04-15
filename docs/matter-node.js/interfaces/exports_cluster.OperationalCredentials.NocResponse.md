@@ -18,7 +18,7 @@ It provides status information about the success or failure of those commands.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.10
+MatterSpecification.v11.Core § 11.17.6.10
 
 ## Hierarchy
 
@@ -46,7 +46,7 @@ contents may go into logs or crash reports.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.10.3
+MatterSpecification.v11.Core § 11.17.6.10.3
 
 #### Inherited from
 
@@ -67,7 +67,7 @@ Index of the Fabric last added, removed or updated.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.10.2
+MatterSpecification.v11.Core § 11.17.6.10.2
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ This field shall contain an NOCStatus value representing the status of an operat
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.10.1
+MatterSpecification.v11.Core § 11.17.6.10.1
 
 #### Inherited from
 

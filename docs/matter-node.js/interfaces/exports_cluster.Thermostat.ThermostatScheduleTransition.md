@@ -8,7 +8,7 @@ This represents a single transition in a Thermostat schedule
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.9.5
+MatterSpecification.v11.Cluster § 4.3.9.5
 
 ## Hierarchy
 
@@ -64,7 +64,7 @@ represented by 360 minutes since midnight and 11:30pm will be represented by 141
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.9.5.1
+MatterSpecification.v11.Cluster § 4.3.9.5.1
 
 #### Inherited from
 

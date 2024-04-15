@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.5.1
+MatterSpecification.v11.Core § 11.12.5.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ thread. Efforts SHOULD be made to avoid reusing ID values when possible.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.5.1.1
+MatterSpecification.v11.Core § 11.12.5.1.1
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L40)
 
 ___
 
@@ -56,7 +56,7 @@ duration of the thread.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.5.1.2
+MatterSpecification.v11.Core § 11.12.5.1.2
 
 #### Inherited from
 
@@ -64,7 +64,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L49)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L48)
 
 ___
 
@@ -77,7 +77,7 @@ utilized on the respective thread.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.5.1.3
+MatterSpecification.v11.Core § 11.12.5.1.3
 
 #### Inherited from
 
@@ -85,7 +85,7 @@ TypeFromSchema.stackFreeCurrent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L56)
 
 ___
 
@@ -100,7 +100,7 @@ ResetWatermarks command.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.5.1.4
+MatterSpecification.v11.Core § 11.12.5.1.4
 
 #### Inherited from
 
@@ -108,7 +108,7 @@ TypeFromSchema.stackFreeMinimum
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L67)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L66)
 
 ___
 
@@ -122,7 +122,7 @@ for use by the respective thread.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.12.5.1.5
+MatterSpecification.v11.Core § 11.12.5.1.5
 
 #### Inherited from
 
@@ -130,4 +130,4 @@ TypeFromSchema.stackSize
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L75)

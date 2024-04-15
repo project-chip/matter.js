@@ -8,7 +8,7 @@ Input to the ApplicationLauncher hideApp command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.3
+MatterSpecification.v11.Cluster § 6.4.4.3
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall specify the Application to hide.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.3.1
+MatterSpecification.v11.Cluster § 6.4.4.3.1
 
 #### Inherited from
 

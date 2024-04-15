@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.3
+MatterSpecification.v11.Cluster § 6.6.5.3
 
 ## Table of contents
 
@@ -24,4 +24,4 @@ MultiSystemOperator
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L89)

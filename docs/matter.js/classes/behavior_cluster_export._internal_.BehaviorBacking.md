@@ -68,7 +68,7 @@ The "backing" for a behavior manages those portions of behavior that endure for 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L39)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L39)
 
 ## Properties
 
@@ -78,7 +78,7 @@ The "backing" for a behavior manages those portions of behavior that endure for 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L33)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L33)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L31)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L31)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L26)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L26)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L29)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L29)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L28)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L28)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L30)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L30)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L32)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L32)
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L27)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L27)
 
 ___
 
@@ -160,7 +160,7 @@ The data provider for [datasource](behavior_cluster_export._internal_.BehaviorBa
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L170)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:170](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L170)
 
 ## Accessors
 
@@ -174,7 +174,7 @@ The data provider for [datasource](behavior_cluster_export._internal_.BehaviorBa
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L35)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L35)
 
 ___
 
@@ -190,7 +190,7 @@ The source of raw data that backs managed state instances.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:147](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L147)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:147](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L147)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L155)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:155](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L155)
 
 ___
 
@@ -220,7 +220,7 @@ The [Endpoint](endpoint_export.Endpoint-1.md) that owns the behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L117)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L117)
 
 ___
 
@@ -236,7 +236,7 @@ Access the event object.  Unlike state, the events object does not vary by insta
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:186](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L186)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:186](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L186)
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L51)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L51)
 
 ___
 
@@ -266,7 +266,7 @@ A read-only offline view of behavior state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:203](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L203)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:203](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L203)
 
 ___
 
@@ -282,7 +282,7 @@ The status of the behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:196](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L196)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L196)
 
 ___
 
@@ -298,7 +298,7 @@ The [Behavior.Type](../interfaces/behavior_export.Behavior.Type.md) backed.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L124)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:124](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L124)
 
 ## Methods
 
@@ -320,7 +320,7 @@ Invoke Behavior.destroy to clean up application logic.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:224](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L224)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:224](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L224)
 
 ___
 
@@ -347,7 +347,7 @@ Instead we use a "friend" method of agent to retrieve any existing behavior or c
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:243](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L243)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:243](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L243)
 
 ___
 
@@ -370,7 +370,7 @@ Destroy the backing.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L82)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:82](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L82)
 
 ___
 
@@ -395,7 +395,7 @@ Derivatives may override to perform additional setup beyond simple instantiation
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L133)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:133](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L133)
 
 ___
 
@@ -411,7 +411,7 @@ Obtain internal state for a behavior instance.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L175)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:175](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L175)
 
 ___
 
@@ -435,7 +435,7 @@ Called by Behaviors class once the backing is installed.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L60)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L60)
 
 ___
 
@@ -461,7 +461,7 @@ crashed state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L110)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L110)
 
 ___
 
@@ -491,7 +491,7 @@ Install a reactor.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:210](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L210)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:210](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L210)
 
 ___
 
@@ -505,4 +505,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L47)
+[packages/matter.js/src/behavior/internal/BehaviorBacking.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/internal/BehaviorBacking.ts#L47)

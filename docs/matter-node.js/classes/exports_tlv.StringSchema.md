@@ -8,7 +8,7 @@ Schema to encode an byte string or an Utf8 string in TLV.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § A.11.2
+MatterSpecification.v10.Core § A.11.2
 
 ## Type parameters
 

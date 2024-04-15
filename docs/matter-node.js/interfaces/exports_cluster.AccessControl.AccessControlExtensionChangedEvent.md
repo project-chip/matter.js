@@ -8,7 +8,7 @@ Body of the AccessControl accessControlExtensionChanged event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.10.7.2
+MatterSpecification.v11.Core § 9.10.7.2
 
 ## Hierarchy
 

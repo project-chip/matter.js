@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L23)
+[packages/matter.js/src/tlv/TlvObject.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L22)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L19)
+[packages/matter.js/src/tlv/TlvObject.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L18)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L38)
+[packages/matter.js/src/tlv/TlvObject.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L37)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L33)
+[packages/matter.js/src/tlv/TlvObject.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L32)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L37)
+[packages/matter.js/src/tlv/TlvObject.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L36)
 
 ___
 
@@ -105,4 +105,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/tlv/TlvObject.ts#L20)
+[packages/matter.js/src/tlv/TlvObject.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/tlv/TlvObject.ts#L19)

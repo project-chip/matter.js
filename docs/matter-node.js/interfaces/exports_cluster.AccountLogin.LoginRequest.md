@@ -8,7 +8,7 @@ Input to the AccountLogin login command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.3
+MatterSpecification.v11.Cluster § 6.2.4.3
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This field shall provide the setup PIN code as a text string at least 11 charact
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.3.2
+MatterSpecification.v11.Cluster § 6.2.4.3.2
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ This field shall specify the client’s temporary account identifier.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.3.1
+MatterSpecification.v11.Cluster § 6.2.4.3.1
 
 #### Inherited from
 

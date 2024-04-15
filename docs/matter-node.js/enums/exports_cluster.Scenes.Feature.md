@@ -8,7 +8,7 @@ These are optional features supported by ScenesCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.4
+MatterSpecification.v11.Cluster § 1.4.4
 
 ## Table of contents
 

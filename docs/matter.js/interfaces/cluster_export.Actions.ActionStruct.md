@@ -8,7 +8,7 @@ This data type holds the details of a single action, and contains the data field
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.6
+MatterSpecification.v11.Core § 9.14.4.6
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ This field shall provide an unique identifier used to identify an action.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.6.1
+MatterSpecification.v11.Core § 9.14.4.6.1
 
 #### Inherited from
 
@@ -45,7 +45,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:219](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L219)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:218](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L218)
 
 ___
 
@@ -58,7 +58,7 @@ Node which will be impacted by this ActionID.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.6.4
+MatterSpecification.v11.Core § 9.14.4.6.4
 
 #### Inherited from
 
@@ -66,7 +66,7 @@ TypeFromSchema.endpointListId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:245](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L245)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:244](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L244)
 
 ___
 
@@ -80,7 +80,7 @@ scene".
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.6.2
+MatterSpecification.v11.Core § 9.14.4.6.2
 
 #### Inherited from
 
@@ -88,7 +88,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:228](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L228)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:227](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L227)
 
 ___
 
@@ -100,7 +100,7 @@ This field shall indicate the current state of this action.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.6.6
+MatterSpecification.v11.Core § 9.14.4.6.6
 
 #### Inherited from
 
@@ -108,7 +108,7 @@ TypeFromSchema.state
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:262](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L262)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:261](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L261)
 
 ___
 
@@ -123,7 +123,7 @@ below. Other bits shall be set to 0.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.6.5
+MatterSpecification.v11.Core § 9.14.4.6.5
 
 #### Inherited from
 
@@ -131,7 +131,7 @@ TypeFromSchema.supportedCommands
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:255](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L255)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:254](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L254)
 
 ___
 
@@ -145,7 +145,7 @@ action. See ActionTypeEnum for details and examples.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.6.3
+MatterSpecification.v11.Core § 9.14.4.6.3
 
 #### Inherited from
 
@@ -153,4 +153,4 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L237)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:236](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L236)

@@ -11,7 +11,7 @@ This field shall specify the RLOC16 for the Node for which this route table entr
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.5
+MatterSpecification.v11.Core § 11.13.5.5
 
 ## Hierarchy
 
@@ -58,7 +58,7 @@ This field shall specify if the router ID as defined within the RouterId field h
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.5.6
+MatterSpecification.v11.Core § 11.13.5.5.6
 
 #### Inherited from
 
@@ -93,7 +93,7 @@ corresponds.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.5.7
+MatterSpecification.v11.Core § 11.13.5.5.7
 
 #### Inherited from
 
@@ -114,7 +114,7 @@ scaled from 0 to 255, from the perspective of the Node reporting the neighbor ta
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.5.4
+MatterSpecification.v11.Core § 11.13.5.5.4
 
 #### Inherited from
 
@@ -138,7 +138,7 @@ which this route table entry corresponds.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.5.5
+MatterSpecification.v11.Core § 11.13.5.5.5
 
 #### Inherited from
 
@@ -159,7 +159,7 @@ entry corresponds.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.5.2
+MatterSpecification.v11.Core § 11.13.5.5.2
 
 #### Inherited from
 
@@ -179,7 +179,7 @@ This Field shall specify the cost of the route to the Node for which this route 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.5.3
+MatterSpecification.v11.Core § 11.13.5.5.3
 
 #### Inherited from
 
@@ -213,7 +213,7 @@ This field shall specify the Router ID for the Node for which this route table e
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.5.1
+MatterSpecification.v11.Core § 11.13.5.5.1
 
 #### Inherited from
 

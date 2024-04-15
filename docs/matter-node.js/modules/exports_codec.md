@@ -282,7 +282,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_2 § 4.4.4
+MatterSpecification.v12.Core § 4.4.4
 
 #### Defined in
 

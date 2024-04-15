@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.9
+MatterSpecification.v11.Cluster § 6.7.5.9
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ integer final value.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.9.2
+MatterSpecification.v11.Cluster § 6.7.5.9.2
 
 #### Defined in
 
@@ -45,7 +45,7 @@ This value is used for dimensions defined in a number of Pixels.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.9.1
+MatterSpecification.v11.Cluster § 6.7.5.9.1
 
 #### Defined in
 

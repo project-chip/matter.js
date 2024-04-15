@@ -8,7 +8,7 @@ The value of the FanControl fanMode attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.6.1
+MatterSpecification.v11.Cluster § 4.4.6.1
 
 ## Table of contents
 
@@ -42,7 +42,7 @@ These attributes shall indicate the current state of the fan while this attribut
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.6.1.3
+MatterSpecification.v11.Cluster § 4.4.6.1.3
 
 #### Defined in
 
@@ -122,7 +122,7 @@ corresponding range as defined in Speed Rules>:
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.6.1.1
+MatterSpecification.v11.Cluster § 4.4.6.1.1
 
 #### Defined in
 

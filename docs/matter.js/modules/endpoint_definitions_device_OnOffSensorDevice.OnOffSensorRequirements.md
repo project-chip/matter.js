@@ -26,11 +26,11 @@
 
 The ColorControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ColorControlBehavior](endpoint_definitions_device_OnOffSensorDevice.OnOffSensorRequirements.md#colorcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L81)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L80)
 
 ___
 
@@ -40,11 +40,11 @@ ___
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_OnOffSensorDevice.OnOffSensorRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L60)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L59)
 
 ___
 
@@ -54,11 +54,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyBehavior](endpoint_definitions_device_OnOffSensorDevice.OnOffSensorRequirements.md#identifybehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L46)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L45)
 
 ___
 
@@ -68,11 +68,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_OnOffSensorDevice.OnOffSensorRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L39)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L38)
 
 ___
 
@@ -82,11 +82,11 @@ ___
 
 The LevelControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlBehavior](endpoint_definitions_device_OnOffSensorDevice.OnOffSensorRequirements.md#levelcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L74)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L73)
 
 ___
 
@@ -96,11 +96,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffBehavior](endpoint_definitions_device_OnOffSensorDevice.OnOffSensorRequirements.md#onoffbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L53)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L52)
 
 ___
 
@@ -110,11 +110,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesBehavior](endpoint_definitions_device_OnOffSensorDevice.OnOffSensorRequirements.md#scenesbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L67)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L66)
 
 ___
 
@@ -139,7 +139,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L91)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L90)
 
 ___
 
@@ -158,4 +158,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L86)
+[packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffSensorDevice.ts#L85)

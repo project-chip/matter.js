@@ -8,7 +8,7 @@ Input to the OperationalCredentials updateFabricLabel command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.11
+MatterSpecification.v11.Core § 11.17.6.11
 
 ## Hierarchy
 

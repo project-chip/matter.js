@@ -64,7 +64,7 @@ Notifications of state change.  Normally you just await construction but this of
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L73)
+[packages/matter.js/src/util/AsyncConstruction.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L73)
 
 ___
 
@@ -76,7 +76,7 @@ If construction ends with an error, the error is saved here.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L63)
+[packages/matter.js/src/util/AsyncConstruction.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L63)
 
 ___
 
@@ -88,7 +88,7 @@ Becomes true when construction is finished.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L58)
+[packages/matter.js/src/util/AsyncConstruction.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L58)
 
 ___
 
@@ -100,7 +100,7 @@ Status of the constructed object.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L68)
+[packages/matter.js/src/util/AsyncConstruction.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L68)
 
 ## Methods
 
@@ -122,7 +122,7 @@ Throws an error if construction is ongoing or incomplete.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L95)
+[packages/matter.js/src/util/AsyncConstruction.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L95)
 
 ▸ **assert**\<`T`\>(`description`, `dependency`): `T`
 
@@ -147,7 +147,7 @@ Asserts construction is complete and that an object is defined.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:100](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L100)
+[packages/matter.js/src/util/AsyncConstruction.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L100)
 
 ___
 
@@ -164,7 +164,7 @@ resolution even if canceled.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L90)
+[packages/matter.js/src/util/AsyncConstruction.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L90)
 
 ___
 
@@ -186,7 +186,7 @@ Invoke destruction logic then move to destroyed status.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L84)
+[packages/matter.js/src/util/AsyncConstruction.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L84)
 
 ___
 
@@ -209,7 +209,7 @@ Force "crashed" state with the specified error.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L115)
+[packages/matter.js/src/util/AsyncConstruction.ts:115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L115)
 
 ___
 
@@ -233,7 +233,7 @@ Any error in this callback will crash construction or replace the crash cause.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:136](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L136)
+[packages/matter.js/src/util/AsyncConstruction.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L136)
 
 ___
 
@@ -257,7 +257,7 @@ Any error in this callback will replace the crash cause.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:129](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L129)
+[packages/matter.js/src/util/AsyncConstruction.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L129)
 
 ___
 
@@ -281,7 +281,7 @@ Any error in this callback will crash construction.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:122](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L122)
+[packages/matter.js/src/util/AsyncConstruction.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L122)
 
 ___
 
@@ -308,7 +308,7 @@ This method fails if initialization is ongoing; await completion first.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L110)
+[packages/matter.js/src/util/AsyncConstruction.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L110)
 
 ___
 
@@ -331,7 +331,7 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:79](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L79)
+[packages/matter.js/src/util/AsyncConstruction.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L79)
 
 ___
 
@@ -345,4 +345,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L138)
+[packages/matter.js/src/util/AsyncConstruction.ts:138](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L138)

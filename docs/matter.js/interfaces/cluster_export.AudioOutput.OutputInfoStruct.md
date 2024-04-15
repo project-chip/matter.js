@@ -8,7 +8,7 @@ This contains information about an output.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.5.1
+MatterSpecification.v11.Cluster § 6.5.5.1
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ This shall indicate the unique index into the list of outputs.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.5.1.1
+MatterSpecification.v11.Cluster § 6.5.5.1.1
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ TypeFromSchema.index
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L64)
 
 ___
 
@@ -55,7 +55,7 @@ but SHOULD be provided when known.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.5.1.3
+MatterSpecification.v11.Cluster § 6.5.5.1.3
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L79)
 
 ___
 
@@ -75,7 +75,7 @@ This shall indicate the type of output
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.5.5.1.2
+MatterSpecification.v11.Cluster § 6.5.5.1.2
 
 #### Inherited from
 
@@ -83,4 +83,4 @@ TypeFromSchema.outputType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L71)

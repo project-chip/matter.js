@@ -8,7 +8,7 @@ Input to the MediaPlayback seek command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.4.11
+MatterSpecification.v11.Cluster § 6.10.4.11
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ playback.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.4.11.1
+MatterSpecification.v11.Cluster § 6.10.4.11.1
 
 #### Inherited from
 

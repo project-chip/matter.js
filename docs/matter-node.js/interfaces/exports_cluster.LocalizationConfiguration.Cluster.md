@@ -16,7 +16,7 @@ localization information that a Node shall utilize when conveying values to a us
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.3
+MatterSpecification.v11.Core § 11.3
 
 ## Hierarchy
 
