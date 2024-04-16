@@ -468,7 +468,7 @@ function subjectOrIssuerToAsn1(data: { [field: string]: any }) {
             case "caseAuthenticatedTags":
                 // In theory if someone mixes multiple caseAuthenticatedTag fields with other fields we currently would
                 // code them in ASN.1 as fields at the first position from the original data which might fail
-                // certificate validation. CHanging this would require to change Tlv decoding, so lets try that way for now.
+                // certificate validation. Changing this would require to change Tlv decoding, so lets try that way for now.
                 const caseAuthenticatedTags = value as CaseAuthenticatedTag[];
                 CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
 
