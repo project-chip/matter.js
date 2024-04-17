@@ -34,35 +34,7 @@ import { TlvField, TlvObject, TlvOptionalField, TlvOptionalRepeatedField, TlvTag
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { ByteArray } from "../util/ByteArray.js";
-import {
-    AuthorityKeyIdentifier_X509,
-    BasicConstraints_X509,
-    CommonName_X520,
-    CountryName_X520,
-    DnQualifier_X520,
-    DomainComponent_X520,
-    EcdsaWithSHA256_X962,
-    ExtendedKeyUsage_X509,
-    GenerationQualifier_X520,
-    GivenName_X520,
-    Initials_X520,
-    KeyUsage_X509,
-    LocalityName_X520,
-    Name_X520,
-    NON_WELL_DEFINED_DATE,
-    OrganisationName_X520,
-    OrganizationalUnitName_X520,
-    Pkcs7Data,
-    Pkcs7SignedData,
-    Pseudonym_X520,
-    PublicKeyEcPrime256v1_X962,
-    SerialNumber_X520,
-    SHA256_CMS,
-    StateOrProvinceName_X520,
-    SubjectKeyIdentifier_X509,
-    SurName_X520,
-    Title_X520,
-} from "./CertificateDerTypes.js";
+import { Pkcs7, SHA256_CMS, X509, X520, X962 } from "./CertificateDerTypes.js";
 
 const logger = Logger.get("CertificateManager");
 
@@ -74,11 +46,11 @@ const EPOCH_OFFSET_S = 10957 * 24 * 60 * 60;
 // TODO replace usage of Date by abstraction
 
 export function matterToJsDate(date: number) {
-    return date === 0 ? NON_WELL_DEFINED_DATE : new Date((date + EPOCH_OFFSET_S) * 1000);
+    return date === 0 ? X520.NON_WELL_DEFINED_DATE : new Date((date + EPOCH_OFFSET_S) * 1000);
 }
 
 export function jsToMatterDate(date: Date, addYears = 0) {
-    return date.getTime() === NON_WELL_DEFINED_DATE.getTime()
+    return date.getTime() === X520.NON_WELL_DEFINED_DATE.getTime()
         ? 0
         : Math.floor(date.getTime() / 1000) - EPOCH_OFFSET_S + addYears * YEAR_S;
 }
@@ -403,52 +375,52 @@ function subjectOrIssuerToAsn1(data: { [field: string]: any }) {
         }
         switch (key) {
             case "commonName":
-                asn.commonName = CommonName_X520(value as string);
+                asn.commonName = X520.CommonName(value as string);
                 break;
             case "sureName":
-                asn.sureName = SurName_X520(value as string);
+                asn.sureName = X520.SurName(value as string);
                 break;
             case "serialNum":
-                asn.serialNum = SerialNumber_X520(value as string);
+                asn.serialNum = X520.SerialNumber(value as string);
                 break;
             case "countryName":
-                asn.countryName = CountryName_X520(value as string);
+                asn.countryName = X520.CountryName(value as string);
                 break;
             case "localityName":
-                asn.localityName = LocalityName_X520(value as string);
+                asn.localityName = X520.LocalityName(value as string);
                 break;
             case "stateOrProvinceName":
-                asn.stateOrProvinceName = StateOrProvinceName_X520(value as string);
+                asn.stateOrProvinceName = X520.StateOrProvinceName(value as string);
                 break;
             case "orgName":
-                asn.orgName = OrganisationName_X520(value as string);
+                asn.orgName = X520.OrganisationName(value as string);
                 break;
             case "orgUnitName":
-                asn.orgUnitName = OrganizationalUnitName_X520(value as string);
+                asn.orgUnitName = X520.OrganizationalUnitName(value as string);
                 break;
             case "title":
-                asn.title = Title_X520(value as string);
+                asn.title = X520.Title(value as string);
                 break;
             case "name":
-                asn.name = Name_X520(value as string);
+                asn.name = X520.Name(value as string);
                 break;
             case "givenName":
-                asn.givenName = GivenName_X520(value as string);
+                asn.givenName = X520.GivenName(value as string);
                 break;
             case "initials":
-                asn.initials = Initials_X520(value as string);
+                asn.initials = X520.Initials(value as string);
                 break;
             case "genQualifier":
-                asn.genQualifier = GenerationQualifier_X520(value as string);
+                asn.genQualifier = X520.GenerationQualifier(value as string);
                 break;
             case "dnQualifier":
-                asn.dnQualifier = DnQualifier_X520(value as string);
+                asn.dnQualifier = X520.DnQualifier(value as string);
                 break;
             case "pseudonym":
-                asn.pseudonym = Pseudonym_X520(value as string);
+                asn.pseudonym = X520.Pseudonym(value as string);
                 break;
             case "domainComponent":
-                asn.domainComponent = DomainComponent_X520(value as string);
+                asn.domainComponent = X520.DomainComponent(value as string);
                 break;
             case "nodeId":
                 asn.nodeId = NodeId_Matter(value as NodeId);
@@ -492,49 +464,49 @@ function subjectOrIssuerToAsn1(data: { [field: string]: any }) {
                 asn.productId = ProductId_Matter(value as number);
                 break;
             case "commonNamePs":
-                asn.commonNamePs = CommonName_X520(value as string, true);
+                asn.commonNamePs = X520.CommonName(value as string, true);
                 break;
             case "sureNamePs":
-                asn.sureNamePs = SurName_X520(value as string, true);
+                asn.sureNamePs = X520.SurName(value as string, true);
                 break;
             case "serialNumPs":
-                asn.serialNumPs = SerialNumber_X520(value as string, true);
+                asn.serialNumPs = X520.SerialNumber(value as string, true);
                 break;
             case "countryNamePs":
-                asn.countryNamePs = CountryName_X520(value as string, true);
+                asn.countryNamePs = X520.CountryName(value as string, true);
                 break;
             case "localityNamePs":
-                asn.localityNamePs = LocalityName_X520(value as string, true);
+                asn.localityNamePs = X520.LocalityName(value as string, true);
                 break;
             case "stateOrProvinceNamePs":
-                asn.stateOrProvinceNamePs = StateOrProvinceName_X520(value as string, true);
+                asn.stateOrProvinceNamePs = X520.StateOrProvinceName(value as string, true);
                 break;
             case "orgNamePs":
-                asn.orgNamePs = OrganisationName_X520(value as string, true);
+                asn.orgNamePs = X520.OrganisationName(value as string, true);
                 break;
             case "orgUnitNamePs":
-                asn.orgUnitNamePs = OrganizationalUnitName_X520(value as string, true);
+                asn.orgUnitNamePs = X520.OrganizationalUnitName(value as string, true);
                 break;
             case "titlePs":
-                asn.titlePs = Title_X520(value as string, true);
+                asn.titlePs = X520.Title(value as string, true);
                 break;
             case "namePs":
-                asn.namePs = Name_X520(value as string, true);
+                asn.namePs = X520.Name(value as string, true);
                 break;
             case "givenNamePs":
-                asn.givenNamePs = GivenName_X520(value as string, true);
+                asn.givenNamePs = X520.GivenName(value as string, true);
                 break;
             case "initialsPs":
-                asn.initialsPs = Initials_X520(value as string, true);
+                asn.initialsPs = X520.Initials(value as string, true);
                 break;
             case "genQualifierPs":
-                asn.genQualifierPs = GenerationQualifier_X520(value as string, true);
+                asn.genQualifierPs = X520.GenerationQualifier(value as string, true);
                 break;
             case "dnQualifierPs":
-                asn.dnQualifierPs = DnQualifier_X520(value as string, true);
+                asn.dnQualifierPs = X520.DnQualifier(value as string, true);
                 break;
             case "pseudonymPs":
-                asn.pseudonymPs = Pseudonym_X520(value as string, true);
+                asn.pseudonymPs = X520.Pseudonym(value as string, true);
                 break;
         }
     });
@@ -549,21 +521,21 @@ function extensionsToAsn1(extensions: BaseCertificate["extensions"]) {
         }
         switch (key) {
             case "basicConstraints":
-                asn.basicConstraints = BasicConstraints_X509(value);
+                asn.basicConstraints = X509.BasicConstraints(value);
                 break;
             case "keyUsage":
-                asn.keyUsage = KeyUsage_X509(
+                asn.keyUsage = X509.KeyUsage(
                     ExtensionKeyUsageSchema.encode(value as TypeFromPartialBitSchema<typeof ExtensionKeyUsageBitmap>),
                 );
                 break;
             case "extendedKeyUsage":
-                asn.extendedKeyUsage = ExtendedKeyUsage_X509(value as number[] | undefined);
+                asn.extendedKeyUsage = X509.ExtendedKeyUsage(value as number[] | undefined);
                 break;
             case "subjectKeyIdentifier":
-                asn.subjectKeyIdentifier = SubjectKeyIdentifier_X509(value as ByteArray);
+                asn.subjectKeyIdentifier = X509.SubjectKeyIdentifier(value as ByteArray);
                 break;
             case "authorityKeyIdentifier":
-                asn.authorityKeyIdentifier = AuthorityKeyIdentifier_X509(value as ByteArray);
+                asn.authorityKeyIdentifier = X509.AuthorityKeyIdentifier(value as ByteArray);
                 break;
             case "futureExtension":
                 asn.futureExtension = RawBytes(ByteArray.concat(...((value as ByteArray[] | undefined) ?? [])));
@@ -592,14 +564,14 @@ export class CertificateManager {
         return {
             version: ContextTagged(0, 2), // v3
             serialNumber: DatatypeOverride(DerType.Integer, serialNumber),
-            signatureAlgorithm: EcdsaWithSHA256_X962,
+            signatureAlgorithm: X962.EcdsaWithSHA256,
             issuer: subjectOrIssuerToAsn1(issuer),
             validity: {
                 notBefore: matterToJsDate(notBefore),
                 notAfter: matterToJsDate(notAfter),
             },
             subject: subjectOrIssuerToAsn1(subject),
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
+            publicKey: X962.PublicKeyEcPrime256v1(ellipticCurvePublicKey),
             extensions: ContextTagged(3, extensionsToAsn1(extensions)),
         };
     }
@@ -653,7 +625,7 @@ export class CertificateManager {
         const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
-            signAlgorithm: EcdsaWithSHA256_X962,
+            signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
     }
@@ -665,7 +637,7 @@ export class CertificateManager {
         const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
-            signAlgorithm: EcdsaWithSHA256_X962,
+            signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
     }
@@ -674,7 +646,7 @@ export class CertificateManager {
         const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
-            signAlgorithm: EcdsaWithSHA256_X962,
+            signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
     }
@@ -687,19 +659,19 @@ export class CertificateManager {
         const certificate = {
             version: 3,
             digestAlgorithm: [SHA256_CMS],
-            encapContentInfo: Pkcs7Data(eContent),
+            encapContentInfo: Pkcs7.Data(eContent),
             signerInfo: [
                 {
                     version: 3,
                     subjectKeyIdentifier: ContextTaggedBytes(0, subjectKeyIdentifier),
                     digestAlgorithm: SHA256_CMS,
-                    signatureAlgorithm: EcdsaWithSHA256_X962,
+                    signatureAlgorithm: X962.EcdsaWithSHA256,
                     signature: Crypto.sign(privateKey, eContent, "der"),
                 },
             ],
         };
 
-        return DerCodec.encode(Pkcs7SignedData(certificate));
+        return DerCodec.encode(Pkcs7.SignedData(certificate));
     }
 
     /**
@@ -1067,14 +1039,14 @@ export class CertificateManager {
     static createCertificateSigningRequest(key: Key) {
         const request = {
             version: 0,
-            subject: { organization: OrganisationName_X520("CSR") },
-            publicKey: PublicKeyEcPrime256v1_X962(key.publicKey),
+            subject: { organization: X520.OrganisationName("CSR") },
+            publicKey: X962.PublicKeyEcPrime256v1(key.publicKey),
             endSignedBytes: ContextTagged(0),
         };
 
         return DerCodec.encode({
             request,
-            signAlgorithm: EcdsaWithSHA256_X962,
+            signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(request), "der")),
         });
     }
@@ -1099,7 +1071,7 @@ export class CertificateManager {
         const publicKey = publicKeyBytesNode[BYTES_KEY];
 
         // Verify the CSR signature
-        if (!EcdsaWithSHA256_X962[OBJECT_ID_KEY][BYTES_KEY].equals(signAlgorithmNode[ELEMENTS_KEY]?.[0]?.[BYTES_KEY]))
+        if (!X962.EcdsaWithSHA256[OBJECT_ID_KEY][BYTES_KEY].equals(signAlgorithmNode[ELEMENTS_KEY]?.[0]?.[BYTES_KEY]))
             throw new CertificateError("Unsupported signature type");
         Crypto.verify(PublicKey(publicKey), DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
 

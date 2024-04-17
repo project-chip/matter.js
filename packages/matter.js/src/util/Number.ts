@@ -43,13 +43,6 @@ export function maxValue<T extends bigint | number>(a: T | undefined, b: T | und
 }
 
 /**
- * Convert a number or bigint to a hex string which is prefixed by "0x" for logging purposes
- */
-export function toLogHexString(value: number | bigint) {
-    return `0x${value.toString(16)}`;
-}
-
-/**
  * Convert a number or bigint to a hex string of a valid "even" hex length
  */
 export function toHex(value: number | bigint) {

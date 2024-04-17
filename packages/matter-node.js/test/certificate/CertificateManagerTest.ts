@@ -6,10 +6,10 @@
 
 import {
     CertificateManager,
-    EcdsaWithSHA256_X962,
     TlvIntermediateCertificate,
     TlvOperationalCertificate,
     TlvRootCertificate,
+    X962,
 } from "@project-chip/matter.js/certificate";
 import { BYTES_KEY, DerCodec, DerNode, ELEMENTS_KEY } from "@project-chip/matter.js/codec";
 import { ValidationError } from "@project-chip/matter.js/common";
@@ -299,7 +299,7 @@ describe("CertificateManager", () => {
             const derNode = DerCodec.decode(result);
             assert.equal(derNode[ELEMENTS_KEY]?.length, 3);
             const [requestNode, signatureAlgorithmNode, signatureNode] = derNode[ELEMENTS_KEY] as DerNode[];
-            assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(EcdsaWithSHA256_X962));
+            assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(X962.EcdsaWithSHA256));
             const requestBytes = DerCodec.encode(requestNode);
             assert.deepEqual(requestBytes, TEST_CSR_REQUEST_ASN1);
             Crypto.verify(PublicKey(TEST_PUBLIC_KEY), DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");

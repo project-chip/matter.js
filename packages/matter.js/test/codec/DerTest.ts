@@ -4,12 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    EcdsaWithSHA256_X962,
-    NON_WELL_DEFINED_DATE,
-    OrganisationName_X520,
-    PublicKeyEcPrime256v1_X962,
-} from "../../src/certificate/CertificateDerTypes.js";
+import { X520, X962 } from "../../src/certificate/CertificateDerTypes.js";
 import { BitByteArray, ContextTagged, DatatypeOverride, DerCodec, DerType } from "../../src/codec/DerCodec.js";
 
 import { ByteArray } from "../../src/util/ByteArray.js";
@@ -17,15 +12,15 @@ import { ByteArray } from "../../src/util/ByteArray.js";
 const DECODED = {
     request: {
         version: 0,
-        subject: { organization: OrganisationName_X520("CSR") },
-        publicKey: PublicKeyEcPrime256v1_X962(
+        subject: { organization: X520.OrganisationName("CSR") },
+        publicKey: X962.PublicKeyEcPrime256v1(
             ByteArray.fromHex(
                 "00044BD687ABD29B59D8B12E8C6614BD1664ADB2D402455B6CA3EF4E581E3BE344B83212E614F27EA4EEC8F31C75747438739B1D451A7EAB3A30542A0A7D1882A459",
             ),
         ),
         endSignedBytes: ContextTagged(0),
     },
-    signAlgorithm: EcdsaWithSHA256_X962,
+    signAlgorithm: X962.EcdsaWithSHA256,
     signature: BitByteArray(
         ByteArray.fromHex(
             "00304602210080861AD536EFF01CAD42816A8172F71BE3E4FD7230CF73A45E34945FE89D5D7202210087FC1F47ADB6D150580706865E2E21E2963C9C15006B64DAB5658BFB980A2AD3",
@@ -78,7 +73,7 @@ describe("DerCodec", () => {
         });
 
         it("encodes special non-well defined GeneralizedDate correctly", () => {
-            expect(DerCodec.encode(NON_WELL_DEFINED_DATE).toHex()).equal("180f39393939313233313233353935395a");
+            expect(DerCodec.encode(X520.NON_WELL_DEFINED_DATE).toHex()).equal("180f39393939313233313233353935395a");
         });
     });
 });

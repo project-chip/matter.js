@@ -28,6 +28,7 @@ import {
     AttestationRequest,
     CertificateChainRequest,
     CsrRequest,
+    NocResponse,
     RemoveFabricRequest,
     UpdateFabricLabelRequest,
     UpdateNocRequest,
@@ -107,6 +108,35 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
     }
 
+    #mapNocErrors(error: unknown): NocResponse {
+        if (error instanceof MatterFabricConflictError) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.FabricConflict,
+                debugText: error.message,
+            };
+        } else if (error instanceof FabricTableFullError) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
+                debugText: error.message,
+            };
+        } else if (
+            error instanceof CertificateError ||
+            error instanceof ValidationError ||
+            error instanceof UnexpectedDataError
+        ) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
+                debugText: error.message,
+            };
+        } else if (error instanceof PublicKeyError) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
+                debugText: error.message,
+            };
+        }
+        throw error;
+    }
+
     override async addNoc({ nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }: AddNocRequest) {
         const failsafeContext = this.session.context.failsafeContext;
 
@@ -156,33 +186,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 caseAdminSubject,
             });
         } catch (error) {
-            logger.info("building fabric failed", error);
-            if (error instanceof MatterFabricConflictError) {
-                return {
-                    statusCode: OperationalCredentials.NodeOperationalCertStatus.FabricConflict,
-                    debugText: error.message,
-                };
-            } else if (error instanceof FabricTableFullError) {
-                return {
-                    statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
-                    debugText: error.message,
-                };
-            } else if (
-                error instanceof CertificateError ||
-                error instanceof ValidationError ||
-                error instanceof UnexpectedDataError
-            ) {
-                return {
-                    statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
-                    debugText: error.message,
-                };
-            } else if (error instanceof PublicKeyError) {
-                return {
-                    statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
-                    debugText: error.message,
-                };
-            }
-            throw error;
+            logger.info("Building fabric for addNoc failed", error);
+            return this.#mapNocErrors(error);
         }
 
         await failsafeContext.addFabric(fabric);
@@ -278,23 +283,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 fabricIndex: updateFabric.fabricIndex,
             };
         } catch (error) {
-            logger.info("building fabric for update failed", error);
-            if (
-                error instanceof CertificateError ||
-                error instanceof ValidationError ||
-                error instanceof UnexpectedDataError
-            ) {
-                return {
-                    statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
-                    debugText: error.message,
-                };
-            } else if (error instanceof PublicKeyError) {
-                return {
-                    statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
-                    debugText: error.message,
-                };
-            }
-            throw error;
+            logger.info("Building fabric for updateNoc failed", error);
+            return this.#mapNocErrors(error);
         }
     }
 
