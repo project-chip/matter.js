@@ -50,8 +50,8 @@
         "express": "^4.19.2",
         "glob": "^10.3.12",
         "mocha": "^10.4.0",
-        "playwright": "^1.43.0",
-        "typescript": "~5.4.4",
+        "playwright": "^1.43.1",
+        "typescript": "~5.4.5",
         "yargs": "^17.7.2"
     },
     "optionalDependencies": {
