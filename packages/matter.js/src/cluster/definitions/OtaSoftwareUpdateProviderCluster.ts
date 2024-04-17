@@ -120,7 +120,7 @@ export namespace OtaSoftwareUpdateProvider {
     /**
      * Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.18
+     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.19
      */
     export const TlvApplyUpdateRequest = TlvObject({
         updateToken: TlvField(0, TlvByteString.bound({ minLength: 8, maxLength: 32 })),
@@ -130,7 +130,7 @@ export namespace OtaSoftwareUpdateProvider {
     /**
      * Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.18
+     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.19
      */
     export interface ApplyUpdateRequest extends TypeFromSchema<typeof TlvApplyUpdateRequest> {}
 
@@ -158,7 +158,7 @@ export namespace OtaSoftwareUpdateProvider {
     }
 
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.20
+     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.22
      */
     export const TlvApplyUpdateResponse = TlvObject({
         action: TlvField(0, TlvEnum<ApplyUpdateAction>()),
@@ -166,14 +166,14 @@ export namespace OtaSoftwareUpdateProvider {
     });
 
     /**
-     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.20
+     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.22
      */
     export interface ApplyUpdateResponse extends TypeFromSchema<typeof TlvApplyUpdateResponse> {}
 
     /**
      * Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.22
+     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.25
      */
     export const TlvNotifyUpdateAppliedRequest = TlvObject({
         updateToken: TlvField(0, TlvByteString.bound({ minLength: 8, maxLength: 32 })),
@@ -183,7 +183,7 @@ export namespace OtaSoftwareUpdateProvider {
     /**
      * Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
      *
-     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.22
+     * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.25
      */
     export interface NotifyUpdateAppliedRequest extends TypeFromSchema<typeof TlvNotifyUpdateAppliedRequest> {}
 
@@ -205,48 +205,12 @@ export namespace OtaSoftwareUpdateProvider {
             queryImage: Command(0x0, TlvQueryImageRequest, 0x1, TlvQueryImageResponse),
 
             /**
-             * This field shall contain the UpdateToken as specified in Section 11.19.3.6.1, “UpdateToken usage”. This
-             * field may be used by the OTA Provider to track minimal lifecycle state to allow finer-grained scheduling
-             * of the application of Software Images by OTA Requestors.
-             *
-             * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.18
+             * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.19
              */
             applyUpdateRequest: Command(0x2, TlvApplyUpdateRequest, 0x3, TlvApplyUpdateResponse),
 
             /**
-             * This field shall contain the UpdateToken as specified in Section 11.19.3.6.1, “UpdateToken usage”.
-             *
-             * The SoftwareVersion included in the request payload shall provide the same value as the SoftwareVersion
-             * attribute in the invoking OTA Requestor’s Basic Information Cluster, and SHOULD be consistent with the
-             * value representing a new version running on the Node invoking the command.
-             *
-             * When Generated
-             *
-             * The NotifyUpdateApplied command SHOULD be invoked in the following two circumstances:
-             *
-             *   1. An OTA Requestor has just successfully applied a Software Image it had obtained from a previous
-             *      QueryImage response.
-             *
-             *   2. An OTA Requestor has just successfully applied a Software Image it had obtained through means
-             *      different than those of this Cluster.
-             *
-             * An OTA Provider may use the state of invocation of this command to help track the progress of update for
-             * OTA Requestors it knows require a new OTA Software Image. However, due to the possibility that an OTA
-             * Requestor may never come back (e.g. device removed from Fabric altogether, or a critical malfunction),
-             * an OTA Provider shall NOT expect every OTA Requestor to invoke this command for correct operation of the
-             * OTA Provider.
-             *
-             * This command shall be considered optional and shall not result in reduced availability of the OTA
-             * Provider functionality if OTA Requestors never invoke this command.
-             *
-             * Effect on Receipt
-             *
-             * An OTA Provider receiving an invocation of this command may log it internally.
-             *
-             * On receiving this command, an OTA Provider may use the information to update its bookkeeping of cached
-             * Software Images, or use it for other similar administrative purposes.
-             *
-             * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.22
+             * @see {@link MatterSpecification.v11.Core} § 11.19.6.5.25
              */
             notifyUpdateApplied: Command(0x4, TlvNotifyUpdateAppliedRequest, 0x4, TlvNoResponse)
         }

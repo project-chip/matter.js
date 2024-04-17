@@ -345,7 +345,20 @@ export namespace NetworkCommissioning {
      * @see {@link MatterSpecification.v11.Core} § 11.8.7.7
      */
     export const TlvRemoveNetworkRequest = TlvObject({
+        /**
+         * This field shall contain the NetworkID for the entry to remove: the SSID for Wi-Fi and XPAN ID
+         *
+         * for Thread.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.7.1
+         */
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
+
+        /**
+         * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.7.2
+         */
         breadcrumb: TlvOptionalField(1, TlvUInt64)
     });
 
@@ -367,27 +380,34 @@ export namespace NetworkCommissioning {
      * Before generating a NetworkConfigResponse, the server shall set the LastNetworkID attribute value to the
      * NetworkID that was used in the command for which an invocation caused the response to be generated.
      *
-     * The NetworkingStatus field shall indicate the status of the last operation attempting to modify the Networks
-     * attribute configuration, taking one of these values:
-     *
-     *   • Success: Operation succeeded.
-     *
-     *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
-     *
-     *   • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section 11.8.6.1,
-     *     “MaxNetworks Attribute”.
-     *
-     *   • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the added
-     *     network configurations in Networks attribute.
-     *
-     *   • UnknownError: An internal error occurred during the operation.
-     *
-     * See Section 11.8.7.2.2, “DebugText Field” for usage.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.8.7.8
      */
     export const TlvNetworkConfigResponse = TlvObject({
+        /**
+         * The NetworkingStatus field shall indicate the status of the last operation attempting to modify the Networks
+         * attribute configuration, taking one of these values:
+         *
+         *   • Success: Operation succeeded.
+         *
+         *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
+         *
+         *   • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section 11.8.6.1,
+         *     “MaxNetworks Attribute”.
+         *
+         *   • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the added
+         *     network configurations in Networks attribute.
+         *
+         *   • UnknownError: An internal error occurred during the operation.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.8.1
+         */
         networkingStatus: TlvField(0, TlvEnum<NetworkCommissioningStatus>()),
+
+        /**
+         * See Section 11.8.7.2.2, “DebugText Field” for usage.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.8.2
+         */
         debugText: TlvOptionalField(1, TlvString.bound({ maxLength: 512 })),
 
         /**
@@ -395,7 +415,7 @@ export namespace NetworkCommissioning {
          * entry in the Networks attribute that was last added, updated or removed successfully by the associated
          * request command.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.8.7.8.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.8.3
          */
         networkIndex: TlvOptionalField(2, TlvUInt8)
     });
@@ -411,23 +431,6 @@ export namespace NetworkCommissioning {
      * Before generating a NetworkConfigResponse, the server shall set the LastNetworkID attribute value to the
      * NetworkID that was used in the command for which an invocation caused the response to be generated.
      *
-     * The NetworkingStatus field shall indicate the status of the last operation attempting to modify the Networks
-     * attribute configuration, taking one of these values:
-     *
-     *   • Success: Operation succeeded.
-     *
-     *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
-     *
-     *   • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section 11.8.6.1,
-     *     “MaxNetworks Attribute”.
-     *
-     *   • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the added
-     *     network configurations in Networks attribute.
-     *
-     *   • UnknownError: An internal error occurred during the operation.
-     *
-     * See Section 11.8.7.2.2, “DebugText Field” for usage.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.8.7.8
      */
     export interface NetworkConfigResponse extends TypeFromSchema<typeof TlvNetworkConfigResponse> {}
@@ -438,7 +441,19 @@ export namespace NetworkCommissioning {
      * @see {@link MatterSpecification.v11.Core} § 11.8.7.9
      */
     export const TlvConnectNetworkRequest = TlvObject({
+        /**
+         * This field shall contain the NetworkID for the entry used to configure the connection: the SSID for Wi-Fi
+         * and XPAN ID for Thread.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.9.1
+         */
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
+
+        /**
+         * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.9.2
+         */
         breadcrumb: TlvOptionalField(1, TlvUInt64)
     });
 
@@ -460,31 +475,40 @@ export namespace NetworkCommissioning {
      *   • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, including setting it
      *     to null if the ErrorValue is not applicable.
      *
-     * The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of these values:
-     *
-     *   • Success: Connection succeeded.
-     *
-     *   • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt to
-     *     join the network.
-     *
-     *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
-     *
-     *   • NetworkIdNotFound: The network identifier was not found among the added network configurations in Networks
-     *     attribute.
-     *
-     *   • RegulatoryError: Could not connect to a network due to lack of regulatory configuration.
-     *
-     *   • UnknownError: An internal error occurred during the operation.
-     *
-     *   • Association errors (see also description of errors in Section 11.8.5.3, “NetworkCommissioningStatusEnum”):
-     *     AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed, IPBindFailed
-     *
-     * See Section 11.8.7.2.2, “DebugText Field” for usage.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.8.7.10
      */
     export const TlvConnectNetworkResponse = TlvObject({
+        /**
+         * The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of these
+         * values:
+         *
+         *   • Success: Connection succeeded.
+         *
+         *   • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt
+         *     to join the network.
+         *
+         *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
+         *
+         *   • NetworkIdNotFound: The network identifier was not found among the added network configurations in
+         *     Networks attribute.
+         *
+         *   • RegulatoryError: Could not connect to a network due to lack of regulatory configuration.
+         *
+         *   • UnknownError: An internal error occurred during the operation.
+         *
+         *   • Association errors (see also description of errors in Section 11.8.5.3,
+         *     “NetworkCommissioningStatusEnum”): AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed,
+         *     IPBindFailed
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.10.1
+         */
         networkingStatus: TlvField(0, TlvEnum<NetworkCommissioningStatus>()),
+
+        /**
+         * See Section 11.8.7.2.2, “DebugText Field” for usage.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.10.2
+         */
         debugText: TlvOptionalField(1, TlvString),
 
         /**
@@ -507,7 +531,7 @@ export namespace NetworkCommissioning {
          *   • Otherwise, the ErrorValue field shall contain an implementation-dependent value which may be used by a
          *     reader of the structure to record, report or diagnose the failure.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.8.7.10.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.10.3
          */
         errorValue: TlvField(2, TlvNullable(TlvInt32))
     });
@@ -523,27 +547,6 @@ export namespace NetworkCommissioning {
      *   • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, including setting it
      *     to null if the ErrorValue is not applicable.
      *
-     * The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of these values:
-     *
-     *   • Success: Connection succeeded.
-     *
-     *   • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt to
-     *     join the network.
-     *
-     *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
-     *
-     *   • NetworkIdNotFound: The network identifier was not found among the added network configurations in Networks
-     *     attribute.
-     *
-     *   • RegulatoryError: Could not connect to a network due to lack of regulatory configuration.
-     *
-     *   • UnknownError: An internal error occurred during the operation.
-     *
-     *   • Association errors (see also description of errors in Section 11.8.5.3, “NetworkCommissioningStatusEnum”):
-     *     AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed, IPBindFailed
-     *
-     * See Section 11.8.7.2.2, “DebugText Field” for usage.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.8.7.10
      */
     export interface ConnectNetworkResponse extends TypeFromSchema<typeof TlvConnectNetworkResponse> {}
@@ -554,8 +557,74 @@ export namespace NetworkCommissioning {
      * @see {@link MatterSpecification.v11.Core} § 11.8.7.11
      */
     export const TlvReorderNetworkRequest = TlvObject({
+        /**
+         * This field shall contain the NetworkID for the entry to reorder: the SSID for Wi-Fi and XPAN ID for Thread.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.11.1
+         */
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
+
+        /**
+         * This field shall contain the 0-based index of the new desired position of the entry in the Networks
+         * attribute.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.11.2
+         */
         networkIndex: TlvField(1, TlvUInt8),
+
+        /**
+         * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+         *
+         * Effect when received
+         *
+         * If the Networks attribute does not contain a matching entry, the command shall immediately respond with
+         * NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound.
+         *
+         * If the NetworkIndex field has a value larger or equal to the current number of entries in the Networks
+         * attribute, the command shall immediately respond with NetworkConfigResponse having NetworkingStatus status
+         * field set to OutOfRange.
+         *
+         * On success, the NetworkConfigResponse command shall have its NetworkIndex field set to the 0- based index of
+         * the entry in the Networks attribute that was just updated, matching the incoming NetworkIndex, and a
+         * NetworkingStatus status field set to Success.
+         *
+         * The entry selected shall be inserted at the new position in the list. All other entries, if any exist, shall
+         * be moved to allow the insertion, in a way that they all retain their existing relative order between each
+         * other, with the exception of the newly re-ordered entry.
+         *
+         * Re-ordering to the same NetworkIndex as the current location shall be considered as a success and yield no
+         * visible changes of the Networks attribute.
+         *
+         * Examples of re-ordering
+         *
+         * To better illustrate the re-ordering operation, consider this initial state, exemplary of a Wi-Fi
+         *
+         * device:
+         *
+         * On receiving ReorderNetwork with:
+         *
+         *   • NetworkId = Home-Guest
+         *
+         *   • NetworkIndex = 0
+         *
+         * The outcome, after applying to the initial state would be:
+         *
+         * In the above outcome, FancyCat and BlueDolphin moved "down" and Home-Guest became the highest priority
+         * network in the list.
+         *
+         * On receiving ReorderNetwork with:
+         *
+         *   • NetworkId = FancyCat
+         *
+         *   • NetworkIndex = 3
+         *
+         * The outcome, after applying to the initial state would be:
+         *
+         * In the above outcome, BlueDolphin, Home-Guest and WillowTree moved "up" and FancyCat became the lowest
+         * priority network in the list.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.11.3
+         */
         breadcrumb: TlvOptionalField(2, TlvUInt64)
     });
 
@@ -572,6 +641,12 @@ export namespace NetworkCommissioning {
      * @see {@link MatterSpecification.v11.Core} § 11.8.7.3
      */
     export const TlvAddOrUpdateWiFiNetworkRequest = TlvObject({
+        /**
+         * This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not supported
+         * by this cluster.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.3.1
+         */
         ssid: TlvField(0, TlvByteString.bound({ maxLength: 32 })),
 
         /**
@@ -609,12 +684,15 @@ export namespace NetworkCommissioning {
          * selects a lower security connectivity type if the link quality is deemed to be too low to achieve successful
          * operation, or if all retry attempts fail.
          *
-         * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
-         *
-         * @see {@link MatterSpecification.v11.Core} § 11.8.7.3.1
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.3.2
          */
         credentials: TlvField(1, TlvByteString.bound({ maxLength: 64 })),
 
+        /**
+         * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.3.3
+         */
         breadcrumb: TlvOptionalField(2, TlvUInt64)
     });
 
@@ -638,12 +716,15 @@ export namespace NetworkCommissioning {
          * The encoding for the OperationalDataset field is defined in the Thread specification. The client shall pass
          * the OperationalDataset as an opaque octet string.
          *
-         * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
-         *
          * @see {@link MatterSpecification.v11.Core} § 11.8.7.4.1
          */
         operationalDataset: TlvField(0, TlvByteString.bound({ maxLength: 254 })),
 
+        /**
+         * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.8.7.4.2
+         */
         breadcrumb: TlvOptionalField(1, TlvUInt64)
     });
 
@@ -786,12 +867,6 @@ export namespace NetworkCommissioning {
              * index of the entry in the Networks attribute that was just removed, and a NetworkingStatus status field
              * set to Success.
              *
-             * This field shall contain the NetworkID for the entry to remove: the SSID for Wi-Fi and XPAN ID
-             *
-             * for Thread.
-             *
-             * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
-             *
              * @see {@link MatterSpecification.v11.Core} § 11.8.7.7
              */
             removeNetwork: Command(
@@ -866,11 +941,6 @@ export namespace NetworkCommissioning {
              * determining the reason for a failure after reconnecting over a Commissioning channel, especially in
              * non-concurrent commissioning situations.
              *
-             * This field shall contain the NetworkID for the entry used to configure the connection: the SSID for
-             * Wi-Fi and XPAN ID for Thread.
-             *
-             * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
-             *
              * @see {@link MatterSpecification.v11.Core} § 11.8.7.9
              */
             connectNetwork: Command(
@@ -884,62 +954,6 @@ export namespace NetworkCommissioning {
             /**
              * This command shall set the specific order of the network configuration selected by its NetworkID in the
              * Networks attribute list to match the position given by NetworkIndex.
-             *
-             * This field shall contain the NetworkID for the entry to reorder: the SSID for Wi-Fi and XPAN ID for
-             * Thread.
-             *
-             * This field shall contain the 0-based index of the new desired position of the entry in the Networks
-             * attribute.
-             *
-             * See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
-             *
-             * Effect when received
-             *
-             * If the Networks attribute does not contain a matching entry, the command shall immediately respond with
-             * NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound.
-             *
-             * If the NetworkIndex field has a value larger or equal to the current number of entries in the Networks
-             * attribute, the command shall immediately respond with NetworkConfigResponse having NetworkingStatus
-             * status field set to OutOfRange.
-             *
-             * On success, the NetworkConfigResponse command shall have its NetworkIndex field set to the 0- based
-             * index of the entry in the Networks attribute that was just updated, matching the incoming NetworkIndex,
-             * and a NetworkingStatus status field set to Success.
-             *
-             * The entry selected shall be inserted at the new position in the list. All other entries, if any exist,
-             * shall be moved to allow the insertion, in a way that they all retain their existing relative order
-             * between each other, with the exception of the newly re-ordered entry.
-             *
-             * Re-ordering to the same NetworkIndex as the current location shall be considered as a success and yield
-             * no visible changes of the Networks attribute.
-             *
-             * Examples of re-ordering
-             *
-             * To better illustrate the re-ordering operation, consider this initial state, exemplary of a Wi-Fi
-             *
-             * device:
-             *
-             * On receiving ReorderNetwork with:
-             *
-             *   • NetworkId = Home-Guest
-             *
-             *   • NetworkIndex = 0
-             *
-             * The outcome, after applying to the initial state would be:
-             *
-             * In the above outcome, FancyCat and BlueDolphin moved "down" and Home-Guest became the highest priority
-             * network in the list.
-             *
-             * On receiving ReorderNetwork with:
-             *
-             *   • NetworkId = FancyCat
-             *
-             *   • NetworkIndex = 3
-             *
-             * The outcome, after applying to the initial state would be:
-             *
-             * In the above outcome, BlueDolphin, Home-Guest and WillowTree moved "up" and FancyCat became the lowest
-             * priority network in the list.
              *
              * @see {@link MatterSpecification.v11.Core} § 11.8.7.11
              */
@@ -969,9 +983,6 @@ export namespace NetworkCommissioning {
              *
              * See Section 11.8.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for
              * behavior of addition/update.
-             *
-             * This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not
-             * supported by this cluster.
              *
              * @see {@link MatterSpecification.v11.Core} § 11.8.7.3
              */

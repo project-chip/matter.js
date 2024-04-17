@@ -4,13 +4,21 @@
     "description": "Matter.js intermediate models",
     "private": true,
     "type": "module",
-    "main": "dist/esm/index.js",
-    "scripts": {
-        "clean": "build clean",
-        "build": "build",
-        "build-clean": "build --clean"
+    "exports": {
+        ".": {
+            "import": "./dist/esm/index.js",
+            "types": "./dist/esm/index.d.ts"
+        },
+        "./*": {
+            "import": "./dist/esm/*.js",
+            "types": "./dist/esm/*.d.ts"
+        }
     },
-    "types": "dist/esm/index.d.ts",
+    "scripts": {
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/project-chip/matter.js.git"

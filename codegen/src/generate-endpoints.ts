@@ -13,36 +13,34 @@ import { InterfaceFile } from "./endpoints/InterfaceFile.js";
 import { TsFile } from "./util/TsFile.js";
 import "./util/setup.js";
 
-export async function main() {
-    const mom = new MatterModel();
+const mom = new MatterModel();
 
-    const clusters = mom.clusters.filter(cluster => cluster.id !== undefined);
+const clusters = mom.clusters.filter(cluster => cluster.id !== undefined);
 
-    for (const cluster of clusters) {
-        const variance = ClusterVariance(cluster);
-        const dir = `#behaviors/${decamelize(cluster.name)}`;
+for (const cluster of clusters) {
+    const variance = ClusterVariance(cluster);
+    const dir = `#behaviors/${decamelize(cluster.name)}`;
 
-        const exports = new TsFile(`${dir}/export`);
+    const exports = new TsFile(`${dir}/export`);
 
-        if (cluster.all(CommandModel).length) {
-            generateClusterFile(dir, InterfaceFile, cluster, exports, variance);
-        }
-        generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
-        generateClusterFile(dir, BehaviorServerFile, cluster, exports, variance);
-
-        exports.save();
+    if (cluster.all(CommandModel).length) {
+        generateClusterFile(dir, InterfaceFile, cluster, exports, variance);
     }
+    generateClusterFile(dir, BehaviorFile, cluster, exports, variance);
+    generateClusterFile(dir, BehaviorServerFile, cluster, exports, variance);
 
-    EndpointFile.clean();
-    const endpointExports = new TsFile("#endpoints/export");
-    for (const device of mom.deviceTypes) {
-        const file = new EndpointFile(device);
-        file.save();
-
-        endpointExports.atom(`export * from "./${file.definitionPath}.js"`);
-    }
-    endpointExports.save();
+    exports.save();
 }
+
+EndpointFile.clean();
+const endpointExports = new TsFile("#endpoints/export");
+for (const device of mom.deviceTypes) {
+    const file = new EndpointFile(device);
+    file.save();
+
+    endpointExports.atom(`export * from "./${file.definitionPath}.js"`);
+}
+endpointExports.save();
 
 function generateClusterFile(
     dir: string,

@@ -7,15 +7,25 @@
 import { Logger } from "@project-chip/matter.js/log";
 import { Specification } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
-import { NavigateViaToc, scanSection } from "./scan-section.js";
+import { scanDocument } from "./scan-document.js";
 import { ClusterReference, HtmlReference } from "./spec-types.js";
 
-const logger = Logger.get("load-cluster");
+const logger = Logger.get("load-clusters");
 
-type SubsectionCollector = {
+const FAKE_CLUSTER_NAMES = ["New", "Sample", "Disco Ball", "Super Disco Ball"];
+
+interface SubsectionCollector {
     subsection: string;
     collector: (ref: HtmlReference) => void;
-};
+}
+
+enum ScanDirective {
+    // Ignore section in stream
+    IGNORE = 1,
+
+    // Treat as one-level higher than actual in stream
+    POP = 2,
+}
 
 function isCluster(ref: HtmlReference, document: Specification, name: string) {
     return ref.xref.document === document && ref.name === name;
@@ -30,8 +40,10 @@ function applyPatches(subref: HtmlReference, clusterRef: HtmlReference) {
     if (isCluster(clusterRef, Specification.Core, "General Commissioning")) {
         if (isSection(subref, "11.9.6") && subref.name === "Commands" && !subref.table) {
             // In 1.1 spec, command table is not here...
-            subref.ignore = true;
-        } else if (
+            return ScanDirective.IGNORE;
+        }
+
+        if (
             isSection(subref, "11.9.6.1") &&
             subref.name === "Common fields in General Commissioning cluster responses" &&
             subref.table
@@ -40,12 +52,19 @@ function applyPatches(subref: HtmlReference, clusterRef: HtmlReference) {
             subref.name = "Commands";
             subref.detailSection = "11.9.6";
         }
-    } else if (isCluster(clusterRef, Specification.Cluster, "Thermostat") && isSection(subref, "4.3.9.6", "4.3.9.7")) {
-        subref.ignore = true;
+    } else if (isCluster(clusterRef, Specification.Cluster, "Thermostat")) {
+        if (isSection(subref, "4.3.9.6", "4.3.9.7")) {
+            return ScanDirective.IGNORE;
+        }
+
+        if (isSection(subref, "4.3.3.1")) {
+            // In 1.1 spec thermostat features is errantly nested under cluster identifiers
+            return ScanDirective.POP;
+        }
     } else if (isCluster(clusterRef, Specification.Cluster, "Content Launcher")) {
         if (isSection(subref, "6.7.3.2")) {
             // In 1.1. spec, SupportedStreamingProtocols bitmap is not here...
-            subref.ignore = true;
+            return ScanDirective.IGNORE;
         } else if (isSection(subref, "6.7.3.2.1")) {
             // ...but here
             subref.name = "SupportedStreamingProtocols Attribute";
@@ -55,24 +74,90 @@ function applyPatches(subref: HtmlReference, clusterRef: HtmlReference) {
 
 // Collect the bits that define a cluster.  Here we are just building a tree
 // of HTML nodes.  Conversion to Matter elements happens in translate-cluster
-export function loadCluster(clusterRef: HtmlReference) {
+export function* loadClusters(clusters: HtmlReference): Generator<ClusterReference> {
     // The definition we are building
-    const definition: ClusterReference = { ...clusterRef };
+    let definition: ClusterReference | undefined;
 
     // A stack of functions that ingest subsections
     const collectors = Array<SubsectionCollector>();
 
-    for (const subref of scanSection(clusterRef, NavigateViaToc)) {
-        applyPatches(subref, clusterRef);
-        if (subref.ignore) {
-            continue;
+    for (const subref of scanDocument(clusters)) {
+        if (definition) {
+            const directive = applyPatches(subref, definition);
+
+            switch (directive) {
+                case ScanDirective.IGNORE:
+                    continue;
+
+                case ScanDirective.POP:
+                    collectors.pop();
+                    break;
+            }
         }
 
         while (collectors.length && !subref.xref.section.startsWith(collectors[collectors.length - 1].subsection)) {
             collectors.pop();
         }
 
-        if (subref.xref.section === clusterRef.xref.section) {
+        if (!collectors.length) {
+            if (definition) {
+                yield definition;
+            }
+
+            definition = identifyCluster(subref);
+            if (definition) {
+                collectors.push({
+                    subsection: definition.xref.section,
+                    collector: clusterCollector,
+                });
+            }
+        }
+
+        if (collectors.length) {
+            collectors[collectors.length - 1].collector(subref);
+        }
+    }
+
+    if (definition) {
+        yield definition;
+    }
+
+    function identifyCluster(ref: HtmlReference) {
+        // Core spec convention for clusters is heading suffixed with "Cluster"
+        if (ref.name.endsWith(" Cluster")) {
+            if (Number.parseInt(ref.xref.section) < 3) {
+                // There's some noise in early sections
+                return;
+            }
+
+            const name = ref.name.slice(0, ref.name.length - 8);
+            if (FAKE_CLUSTER_NAMES.indexOf(name) !== -1) {
+                return;
+            }
+
+            return {
+                ...ref,
+                name: ref.name.slice(0, ref.name.length - 8),
+                path: ref.path,
+            };
+        }
+
+        // Cluster spec convention is one cluster per sub-section except the
+        // first sub-section which summarizes the section
+        if (ref.xref.document === Specification.Cluster) {
+            const sectionPath = ref.xref.section.split(".");
+            if (sectionPath.length === 2 && sectionPath[1] !== "1") {
+                return { ...ref };
+            }
+        }
+    }
+
+    function clusterCollector(subref: HtmlReference) {
+        if (definition === undefined) {
+            throw new Error(`Cluster collector invoked without active cluster definition`);
+        }
+
+        if (subref.xref.section === definition.xref.section) {
             definition.prose = subref.prose;
         }
 
@@ -146,13 +231,6 @@ export function loadCluster(clusterRef: HtmlReference) {
                     }
                     break;
                 }
-
-                // If we don't recognize the section name explicitly, pass to
-                // collectors so long as we're still in the relevant section
-                if (collectors.length) {
-                    collectors[collectors.length - 1].collector(subref);
-                }
-                break;
         }
     }
 
@@ -186,6 +264,10 @@ export function loadCluster(clusterRef: HtmlReference) {
             | "statusCodes",
         ref: HtmlReference,
     ) {
+        if (definition === undefined) {
+            throw new Error(`Cannot define element ${name} because there is no active cluster definition`);
+        }
+
         if (!ref.table) {
             // Sometimes there's a section with no table to indicate no
             // elements
@@ -210,6 +292,4 @@ export function loadCluster(clusterRef: HtmlReference) {
 
         collectDetails((definition[name] = ref));
     }
-
-    return definition;
 }

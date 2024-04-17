@@ -25,12 +25,13 @@ const AUTH_FILE = resolve(homedir(), ".gh-auth");
 const logger = Logger.get("load-chip");
 
 const auth = await loadAuth();
-const repo = new Repo("project-chip", "connectedhomeip", "v1.1-branch", readFileWithCache, auth);
 
 const parser = new new JSDOM("").window.DOMParser();
 
-export async function loadChip(): Promise<ClusterElement[]> {
+export async function loadChip(version: string): Promise<ClusterElement[]> {
     const elements = Array<AnyElement>();
+
+    const repo = new Repo("project-chip", "connectedhomeip", `v${version}-branch`, readFileWithCache, auth);
 
     logger.info("load chip");
     return await Logger.nestAsync(async () => {

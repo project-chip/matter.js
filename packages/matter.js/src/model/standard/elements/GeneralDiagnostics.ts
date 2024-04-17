@@ -165,25 +165,24 @@ Matter.children.push(Cluster({
 
         Event({
             name: "RadioFaultChange", id: 0x1, access: "V", conformance: "O", priority: "critical",
-
             details: "The RadioFaultChange Event shall indicate a change in the set of radio faults currently detected by " +
-                "the Node." +
-                "\n" +
-                "This field shall represent the set of faults currently detected, as per Section 11.11.4.2, " +
-                "“RadioFaultEnum”." +
-                "\n" +
-                "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                "11.11.4.2, “RadioFaultEnum”.",
-
+                "the Node.",
             xref: { document: "core", section: "11.11.8.2" },
 
             children: [
                 Field({
                     name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 7",
+                    details: "This field shall represent the set of faults currently detected, as per Section 11.11.4.2, " +
+                        "“RadioFaultEnum”.",
+                    xref: { document: "core", section: "11.11.8.2.1" },
                     children: [Field({ name: "entry", type: "RadioFaultEnum" })]
                 }),
+
                 Field({
                     name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 7",
+                    details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
+                        "11.11.4.2, “RadioFaultEnum”.",
+                    xref: { document: "core", section: "11.11.8.2.2" },
                     children: [Field({ name: "entry", type: "RadioFaultEnum" })]
                 })
             ]
@@ -191,25 +190,24 @@ Matter.children.push(Cluster({
 
         Event({
             name: "NetworkFaultChange", id: 0x2, access: "V", conformance: "O", priority: "critical",
-
             details: "The NetworkFaultChange Event shall indicate a change in the set of network faults currently " +
-                "detected by the Node." +
-                "\n" +
-                "This field shall represent the set of faults currently detected, as per Section 11.11.4.3, " +
-                "“NetworkFaultEnum”." +
-                "\n" +
-                "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                "11.11.4.3, “NetworkFaultEnum”.",
-
+                "detected by the Node.",
             xref: { document: "core", section: "11.11.8.3" },
 
             children: [
                 Field({
                     name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 4",
+                    details: "This field shall represent the set of faults currently detected, as per Section 11.11.4.3, " +
+                        "“NetworkFaultEnum”.",
+                    xref: { document: "core", section: "11.11.8.3.1" },
                     children: [Field({ name: "entry", type: "NetworkFaultEnum" })]
                 }),
+
                 Field({
                     name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 4",
+                    details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
+                        "11.11.4.3, “NetworkFaultEnum”.",
+                    xref: { document: "core", section: "11.11.8.3.2" },
                     children: [Field({ name: "entry", type: "NetworkFaultEnum" })]
                 })
             ]

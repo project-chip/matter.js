@@ -188,23 +188,6 @@ export type UpdateNocRequest = TypeFromSchema<typeof OperationalCredentials.TlvU
  * The Label SHOULD be used by Administrators to provide additional per-fabric context when operations such as
  * RemoveFabric are used.
  *
- * This field shall contain the label to set for the fabric associated with the current secure session.
- *
- * Effect on Receipt
- *
- * If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not the
- * accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the command and there
- * shall NOT be any permanent changes to any Fabric data.
- *
- * Otherwise, the Label field for the accesing fabric shall immediately be updated to reflect the
- *
- * Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be returned.
- *
- * If the command was invoked within a fail-safe context after a successful UpdateNOC command, then the label update
- * shall apply to the pending update state that will be reverted if fail-safe expires prior to a CommissioningComplete
- * command. In other words, label updates apply to the state of the Fabrics Attribute as currently visible, even for an
- * existing fabric currently in process of being updated.
- *
  * @see {@link MatterSpecification.v11.Core} § 11.17.6.11
  */
 export type UpdateFabricLabelRequest = TypeFromSchema<typeof OperationalCredentials.TlvUpdateFabricLabelRequest>;
@@ -225,41 +208,6 @@ export type UpdateFabricLabelRequest = TypeFromSchema<typeof OperationalCredenti
  * to that Fabric, whether in-band or out-of-band, then this method SHOULD be used to notify the other Administrative
  * Domain’s party of the removal. Otherwise, users may only observe the removal of a Fabric association as persistently
  * failing attempts to reach a Node operationally.
- *
- * This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is to be
- * removed from the device.
- *
- * Effect on Receipt
- *
- * If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then an NOCResponse
- * with a StatusCode of InvalidFabricIndex shall be returned for the command and there shall NOT be any permanent
- * changes to any device data.
- *
- * Otherwise, one of the following outcomes shall occur:
- *
- *   1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall delete all
- *      Matter related data on the node which was created since it was commissioned. This includes all Fabric-Scoped
- *      data, including Access Control List, bindings, scenes, group keys,
- *
- * operational certificates, etc. All Trusted Roots shall also be removed. Any Matter related data including logs,
- * secure sessions, exchanges and interaction model constructs shall also be removed. Since this operation involves the
- * removal of the secure session data that may underpin the current set of exchanges, the Node invoking the command
- * SHOULD NOT expect a response before terminating its secure session with the target.
- *
- * 2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
- * irrevocably deleting all associated Fabric-Scoped data, including Access Control List, bindings, group keys,
- * operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational certificate shall
- * also be removed. All secure sessions, exchanges and interaction model constructs related to the Operational Identity
- * under the given Fabric shall also be removed. Following the removal, an NOCResponse with a StatusCode of OK shall be
- * returned.
- *
- * 3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of irrevocably
- * deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, group keys, operational
- * certificates, etc. Any remaining Trusted Roots no longer referenced by any operational certificate shall also be
- * removed. All secure sessions, exchanges and interaction model constructs related to the Operational Identity under
- * the given Fabric shall also be removed. Since this operation involves the removal of the secure session data that
- * may underpin the current set of exchanges, the Node invoking the command SHOULD NOT expect a response before
- * terminating its secure session with the target.
  *
  * @see {@link MatterSpecification.v11.Core} § 11.17.6.12
  */
@@ -426,23 +374,6 @@ export namespace OperationalCredentialsInterface {
          * The Label SHOULD be used by Administrators to provide additional per-fabric context when operations such as
          * RemoveFabric are used.
          *
-         * This field shall contain the label to set for the fabric associated with the current secure session.
-         *
-         * Effect on Receipt
-         *
-         * If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that is not
-         * the accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be returned for the
-         * command and there shall NOT be any permanent changes to any Fabric data.
-         *
-         * Otherwise, the Label field for the accesing fabric shall immediately be updated to reflect the
-         *
-         * Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be returned.
-         *
-         * If the command was invoked within a fail-safe context after a successful UpdateNOC command, then the label
-         * update shall apply to the pending update state that will be reverted if fail-safe expires prior to a
-         * CommissioningComplete command. In other words, label updates apply to the state of the Fabrics Attribute as
-         * currently visible, even for an existing fabric currently in process of being updated.
-         *
          * @see {@link MatterSpecification.v11.Core} § 11.17.6.11
          */
         updateFabricLabel(request: UpdateFabricLabelRequest): MaybePromise<NocResponse>;
@@ -464,42 +395,6 @@ export namespace OperationalCredentialsInterface {
          * method SHOULD be used to notify the other Administrative Domain’s party of the removal. Otherwise, users may
          * only observe the removal of a Fabric association as persistently failing attempts to reach a Node
          * operationally.
-         *
-         * This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric which is
-         * to be removed from the device.
-         *
-         * Effect on Receipt
-         *
-         * If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then an
-         * NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and there shall NOT be
-         * any permanent changes to any device data.
-         *
-         * Otherwise, one of the following outcomes shall occur:
-         *
-         *   1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall delete
-         *      all Matter related data on the node which was created since it was commissioned. This includes all
-         *      Fabric-Scoped data, including Access Control List, bindings, scenes, group keys,
-         *
-         * operational certificates, etc. All Trusted Roots shall also be removed. Any Matter related data including
-         * logs, secure sessions, exchanges and interaction model constructs shall also be removed. Since this
-         * operation involves the removal of the secure session data that may underpin the current set of exchanges,
-         * the Node invoking the command SHOULD NOT expect a response before terminating its secure session with the
-         * target.
-         *
-         * 2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the process of
-         * irrevocably deleting all associated Fabric-Scoped data, including Access Control List, bindings, group keys,
-         * operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational
-         * certificate shall also be removed. All secure sessions, exchanges and interaction model constructs related
-         * to the Operational Identity under the given Fabric shall also be removed. Following the removal, an
-         * NOCResponse with a StatusCode of OK shall be returned.
-         *
-         * 3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of
-         * irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, group
-         * keys, operational certificates, etc. Any remaining Trusted Roots no longer referenced by any operational
-         * certificate shall also be removed. All secure sessions, exchanges and interaction model constructs related
-         * to the Operational Identity under the given Fabric shall also be removed. Since this operation involves the
-         * removal of the secure session data that may underpin the current set of exchanges, the Node invoking the
-         * command SHOULD NOT expect a response before terminating its secure session with the target.
          *
          * @see {@link MatterSpecification.v11.Core} § 11.17.6.12
          */

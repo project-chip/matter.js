@@ -10,9 +10,9 @@ import { IdentifyBehavior } from "./IdentifyBehavior.js";
 import { IdentifyQueryResponse, IdentifyRequest } from "./IdentifyInterface.js";
 
 /**
- * This is the default server implementation of IdentifyBehavior.
+ * This is the default server implementation of {@link IdentifyBehavior}.
  *
- * This implementation includes all features of Identify.Cluster and implements all mandatory commands. You should use
+ * This implementation includes all features of {@link Identify.Cluster} and implements all mandatory commands. You should use
  * {@link IdentifyServer.with} to specialize the class for the features your implementation supports. Alternatively
  * you can extend this class and override the methods you need to change or add mandatory commands.
  *
@@ -36,7 +36,7 @@ export class IdentifyServer extends IdentifyBehavior {
         );
 
         // So whenever the attribute OR the identify command was invoked we react to it.
-        this.reactTo(this.events.identifyTime$Change, this.#identifyTimeChangedHandler);
+        this.reactTo(this.events.identifyTime$Change, this.#identifyTimeChangedHandler, { offline: true });
     }
 
     #startIdentifying() {
@@ -76,8 +76,7 @@ export class IdentifyServer extends IdentifyBehavior {
         this.state.identifyTime = time;
     }
 
-    override identify(request: IdentifyRequest) {
-        const { identifyTime } = request;
+    override identify({ identifyTime }: IdentifyRequest) {
         this.state.identifyTime = identifyTime;
     }
 

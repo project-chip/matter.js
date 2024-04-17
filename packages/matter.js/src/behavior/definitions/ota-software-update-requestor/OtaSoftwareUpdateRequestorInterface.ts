@@ -17,8 +17,6 @@ import { OtaSoftwareUpdateRequestor } from "../../../cluster/definitions/OtaSoft
  *
  * If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.
  *
- * This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the accessing fabric.
- *
  * @see {@link MatterSpecification.v11.Core} § 11.19.7.6.1
  */
 export type AnnounceOtaProviderRequest = TypeFromSchema<typeof OtaSoftwareUpdateRequestor.TlvAnnounceOtaProviderRequest>;
@@ -31,9 +29,6 @@ export namespace OtaSoftwareUpdateRequestorInterface {
          * This command shall be scoped to the accessing fabric.
          *
          * If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.
-         *
-         * This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the
-         * accessing fabric.
          *
          * @see {@link MatterSpecification.v11.Core} § 11.19.7.6.1
          */

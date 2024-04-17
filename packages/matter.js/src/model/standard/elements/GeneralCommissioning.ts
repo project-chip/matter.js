@@ -301,14 +301,21 @@ Matter.children.push(Cluster({
 
         Command({
             name: "SetRegulatoryConfigResponse", id: 0x3, conformance: "M", direction: "response",
-            details: "This field shall contain the result of the operation, based on the behavior specified in the " +
-                "functional description of the SetRegulatoryConfig command." +
-                "\n" +
-                "See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.",
             xref: { document: "core", section: "11.9.6.5" },
+
             children: [
-                Field({ name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0 }),
-                Field({ name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "" })
+                Field({
+                    name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
+                    details: "This field shall contain the result of the operation, based on the behavior specified in the " +
+                        "functional description of the SetRegulatoryConfig command.",
+                    xref: { document: "core", section: "11.9.6.5.1" }
+                }),
+
+                Field({
+                    name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "",
+                    details: "See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.",
+                    xref: { document: "core", section: "11.9.6.5.2" }
+                })
             ]
         }),
 
@@ -377,14 +384,21 @@ Matter.children.push(Cluster({
 
         Command({
             name: "CommissioningCompleteResponse", id: 0x5, conformance: "M", direction: "response",
-            details: "This field shall contain the result of the operation, based on the behavior specified in the " +
-                "functional description of the CommissioningComplete command." +
-                "\n" +
-                "See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.",
             xref: { document: "core", section: "11.9.6.7" },
+
             children: [
-                Field({ name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0 }),
-                Field({ name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "" })
+                Field({
+                    name: "ErrorCode", id: 0x0, type: "CommissioningErrorEnum", conformance: "M", default: 0,
+                    details: "This field shall contain the result of the operation, based on the behavior specified in the " +
+                        "functional description of the CommissioningComplete command.",
+                    xref: { document: "core", section: "11.9.6.7.1" }
+                }),
+
+                Field({
+                    name: "DebugText", id: 0x1, type: "string", conformance: "M", default: "",
+                    details: "See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.",
+                    xref: { document: "core", section: "11.9.6.7.2" }
+                })
             ]
         }),
 
