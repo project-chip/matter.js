@@ -325,10 +325,44 @@ export namespace AccessControl {
      * @see {@link MatterSpecification.v11.Core} § 9.10.7.2
      */
     export const TlvAccessControlExtensionChangedEvent = TlvObject({
+        /**
+         * The Node ID of the Administrator that made the change, if the change occurred via a CASE session.
+         *
+         * Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred via a
+         * CASE or PASE session; the other shall be null.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.10.7.2.1
+         */
         adminNodeId: TlvField(1, TlvNullable(TlvNodeId)),
+
+        /**
+         * The Passcode ID of the Administrator that made the change, if the change occurred via a PASE session.
+         * Non-zero values are reserved for future use (see PasscodeId generation in PBKDFParamRequest).
+         *
+         * Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred via a
+         * CASE or PASE session; the other shall be null.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.10.7.2.2
+         */
         adminPasscodeId: TlvField(2, TlvNullable(TlvUInt16)),
+
+        /**
+         * The type of change as appropriate.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.10.7.2.3
+         */
         changeType: TlvField(3, TlvEnum<ChangeType>()),
+
+        /**
+         * The latest value of the changed extension.
+         *
+         * This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if resources
+         * are scarce.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.10.7.2.4
+         */
         latestValue: TlvField(4, TlvNullable(TlvAccessControlExtensionStruct)),
+
         fabricIndex: TlvField(254, TlvFabricIndex)
     });
 
@@ -450,24 +484,6 @@ export namespace AccessControl {
              *   • Each changed extension shall generate an event with ChangeType Changed.
              *
              *   • Each removed extension shall generate an event with ChangeType Removed.
-             *
-             * The Node ID of the Administrator that made the change, if the change occurred via a CASE session.
-             *
-             * Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred
-             * via a CASE or PASE session; the other shall be null.
-             *
-             * The Passcode ID of the Administrator that made the change, if the change occurred via a PASE session.
-             * Non-zero values are reserved for future use (see PasscodeId generation in PBKDFParamRequest).
-             *
-             * Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change occurred
-             * via a CASE or PASE session; the other shall be null.
-             *
-             * The type of change as appropriate.
-             *
-             * The latest value of the changed extension.
-             *
-             * This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if
-             * resources are scarce.
              *
              * @see {@link MatterSpecification.v11.Core} § 9.10.7.2
              */

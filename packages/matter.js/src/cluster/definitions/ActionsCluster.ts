@@ -318,25 +318,36 @@ export namespace Actions {
      * This data type holds the details of a single endpoint list, which relates to a set of endpoints that have some
      * logical relation, and contains the data fields below.
      *
-     * This field shall provide an unique identifier used to identify the endpoint list.
-     *
-     * This field shall indicate the name (as assigned by the user or automatically by the server) associated with the
-     * set of endpoints in this list. This can be used for identifying the action to the user by the client. Example:
-     * "living room".
-     *
-     * This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
-     *
      * @see {@link MatterSpecification.v11.Core} § 9.14.4.7
      */
     export const TlvEndpointListStruct = TlvObject({
+        /**
+         * This field shall provide an unique identifier used to identify the endpoint list.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.4.7.1
+         */
         endpointListId: TlvField(0, TlvUInt16),
+
+        /**
+         * This field shall indicate the name (as assigned by the user or automatically by the server) associated with
+         * the set of endpoints in this list. This can be used for identifying the action to the user by the client.
+         * Example: "living room".
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.4.7.2
+         */
         name: TlvField(1, TlvString.bound({ maxLength: 32 })),
+
+        /**
+         * This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.4.7.3
+         */
         type: TlvField(2, TlvEnum<EndpointListType>()),
 
         /**
          * This field shall provide a list of endpoint numbers.
          *
-         * @see {@link MatterSpecification.v11.Core} § 9.14.4.7.1
+         * @see {@link MatterSpecification.v11.Core} § 9.14.4.7.4
          */
         endpoints: TlvField(3, TlvArray(TlvEndpointNumber, { maxLength: 256 }))
     });
@@ -344,14 +355,6 @@ export namespace Actions {
     /**
      * This data type holds the details of a single endpoint list, which relates to a set of endpoints that have some
      * logical relation, and contains the data fields below.
-     *
-     * This field shall provide an unique identifier used to identify the endpoint list.
-     *
-     * This field shall indicate the name (as assigned by the user or automatically by the server) associated with the
-     * set of endpoints in this list. This can be used for identifying the action to the user by the client. Example:
-     * "living room".
-     *
-     * This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
      *
      * @see {@link MatterSpecification.v11.Core} § 9.14.4.7
      */
@@ -481,6 +484,12 @@ export namespace Actions {
     export const TlvPauseActionWithDurationRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
         invokeId: TlvOptionalField(1, TlvUInt32),
+
+        /**
+         * This field shall indicate the requested duration in seconds.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.6.7.1
+         */
         duration: TlvField(2, TlvUInt32)
     });
 
@@ -533,6 +542,12 @@ export namespace Actions {
     export const TlvEnableActionWithDurationRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
         invokeId: TlvOptionalField(1, TlvUInt32),
+
+        /**
+         * This field shall indicate the requested duration in seconds.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.6.10.1
+         */
         duration: TlvField(2, TlvUInt32)
     });
 
@@ -568,6 +583,12 @@ export namespace Actions {
     export const TlvDisableActionWithDurationRequest = TlvObject({
         actionId: TlvField(0, TlvUInt16),
         invokeId: TlvOptionalField(1, TlvUInt32),
+
+        /**
+         * This field shall indicate the requested duration in seconds.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.6.12.1
+         */
         duration: TlvField(2, TlvUInt32)
     });
 
@@ -584,20 +605,25 @@ export namespace Actions {
      * @see {@link MatterSpecification.v11.Core} § 9.14.7.1
      */
     export const TlvStateChangedEvent = TlvObject({
+        /**
+         * This field shall be set to the ActionID of the action which has changed state.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.7.1.1
+         */
         actionId: TlvField(0, TlvUInt16),
 
         /**
          * This field shall be set to the InvokeID which was provided to the most recent command referencing this
          * ActionID.
          *
-         * @see {@link MatterSpecification.v11.Core} § 9.14.7.1.1
+         * @see {@link MatterSpecification.v11.Core} § 9.14.7.1.2
          */
         invokeId: TlvField(1, TlvUInt32),
 
         /**
          * This field shall be set to state that the action has changed to.
          *
-         * @see {@link MatterSpecification.v11.Core} § 9.14.7.1.2
+         * @see {@link MatterSpecification.v11.Core} § 9.14.7.1.3
          */
         newState: TlvField(2, TlvEnum<ActionState>())
     });
@@ -630,14 +656,32 @@ export namespace Actions {
      * @see {@link MatterSpecification.v11.Core} § 9.14.7.2
      */
     export const TlvActionFailedEvent = TlvObject({
+        /**
+         * This field shall be set to the ActionID of the action which encountered an error.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.7.2.1
+         */
         actionId: TlvField(0, TlvUInt16),
+
+        /**
+         * This field shall be set to the InvokeID which was provided to the most recent command referencing this
+         * ActionID.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.7.2.2
+         */
         invokeId: TlvField(1, TlvUInt32),
+
+        /**
+         * This field shall be set to state that the action is in at the time of generating the event.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 9.14.7.2.3
+         */
         newState: TlvField(2, TlvEnum<ActionState>()),
 
         /**
          * This field shall be set to indicate the reason for non-successful progress of the action.
          *
-         * @see {@link MatterSpecification.v11.Core} § 9.14.7.2.1
+         * @see {@link MatterSpecification.v11.Core} § 9.14.7.2.4
          */
         error: TlvField(3, TlvEnum<ActionError>())
     });
@@ -792,8 +836,6 @@ export namespace Actions {
              * automatically resumed after some hours or during a nightly reset, while an Disable would remain in
              * effect until explicitly enabled again).
              *
-             * This field shall indicate the requested duration in seconds.
-             *
              * @see {@link MatterSpecification.v11.Core} § 9.14.6.7
              */
             pauseActionWithDuration: OptionalCommand(0x6, TlvPauseActionWithDurationRequest, 0x6, TlvNoResponse),
@@ -829,8 +871,6 @@ export namespace Actions {
              * Duration field is used to indicated the length of your absence from home. After that period, the
              * presence mimicking behavior will no longer control these lights.
              *
-             * This field shall indicate the requested duration in seconds.
-             *
              * @see {@link MatterSpecification.v11.Core} § 9.14.6.10
              */
             enableActionWithDuration: OptionalCommand(0x9, TlvEnableActionWithDurationRequest, 0x9, TlvNoResponse),
@@ -853,8 +893,6 @@ export namespace Actions {
              * from turning on in the morning while you’re not at home). After this period, the wakeup experience will
              * control the lights as before.
              *
-             * This field shall indicate the requested duration in seconds.
-             *
              * @see {@link MatterSpecification.v11.Core} § 9.14.6.12
              */
             disableActionWithDuration: OptionalCommand(0xb, TlvDisableActionWithDurationRequest, 0xb, TlvNoResponse)
@@ -872,10 +910,7 @@ export namespace Actions {
              *
              *   • one when the transition starts (NewState=Active)
              *
-             *   • one when the transition completed (NewState=Inactive) This event shall have the following data
-             *     fields:
-             *
-             * This field shall be set to the ActionID of the action which has changed state.
+             *   • one when the transition completed (NewState=Inactive)
              *
              * @see {@link MatterSpecification.v11.Core} § 9.14.7.1
              */
@@ -905,15 +940,6 @@ export namespace Actions {
              *     the transition
              *
              *   • StateChanged (InvokeID=2, NewState=Inactive) upon the execution of the action for the second command
-             *
-             * This event shall have the following data fields:
-             *
-             * This field shall be set to the ActionID of the action which encountered an error.
-             *
-             * This field shall be set to the InvokeID which was provided to the most recent command referencing this
-             * ActionID.
-             *
-             * This field shall be set to state that the action is in at the time of generating the event.
              *
              * @see {@link MatterSpecification.v11.Core} § 9.14.7.2
              */

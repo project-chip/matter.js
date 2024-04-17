@@ -832,67 +832,74 @@ Matter.children.push(Cluster({
 
         Datatype({
             name: "RouteTableStruct", type: "struct", conformance: "M",
-            details: "This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table " +
-                "entry corresponds." +
-                "\n" +
-                "This field shall specify the RLOC16 for the Node for which this route table entry corresponds.",
             xref: { document: "core", section: "11.13.5.5" },
 
             children: [
-                Field({ name: "ExtAddress", id: 0x0, type: "uint64", conformance: "M" }),
-                Field({ name: "Rloc16", id: 0x1, type: "uint16", conformance: "M" }),
+                Field({
+                    name: "ExtAddress", id: 0x0, type: "uint64", conformance: "M",
+                    details: "This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table " +
+                        "entry corresponds.",
+                    xref: { document: "core", section: "11.13.5.5.1" }
+                }),
+
+                Field({
+                    name: "Rloc16", id: 0x1, type: "uint16", conformance: "M",
+                    details: "This field shall specify the RLOC16 for the Node for which this route table entry corresponds.",
+                    xref: { document: "core", section: "11.13.5.5.2" }
+                }),
                 Field({
                     name: "RouterId", id: 0x2, type: "uint8", conformance: "M",
                     details: "This field shall specify the Router ID for the Node for which this route table entry corresponds.",
-                    xref: { document: "core", section: "11.13.5.5.1" }
+                    xref: { document: "core", section: "11.13.5.5.3" }
                 }),
 
                 Field({
                     name: "NextHop", id: 0x3, type: "uint8", conformance: "M",
                     details: "This field shall specify the Router ID for the next hop in the route to the Node for which this " +
                         "route table entry corresponds.",
-                    xref: { document: "core", section: "11.13.5.5.2" }
+                    xref: { document: "core", section: "11.13.5.5.4" }
                 }),
 
                 Field({
                     name: "PathCost", id: 0x4, type: "uint8", conformance: "M",
                     details: "This Field shall specify the cost of the route to the Node for which this route table entry " +
                         "corresponds.",
-                    xref: { document: "core", section: "11.13.5.5.3" }
+                    xref: { document: "core", section: "11.13.5.5.5" }
                 }),
 
                 Field({
                     name: "LqiIn", id: 0x5, type: "uint8", conformance: "M",
                     details: "This field shall specify the implementation specific mix of IEEE 802.15.4 PDU receive quality " +
                         "indicators, scaled from 0 to 255, from the perspective of the Node reporting the neighbor table.",
-                    xref: { document: "core", section: "11.13.5.5.4" }
+                    xref: { document: "core", section: "11.13.5.5.6" }
                 }),
 
                 Field({
                     name: "LqiOut", id: 0x6, type: "uint8", conformance: "M",
-
                     details: "This field shall specify the implementation specific mix of IEEE 802.15.4 PDU receive quality " +
                         "indicators, scaled from 0 to 255, from the perspective of the Node specified within the NextHop " +
-                        "field." +
-                        "\n" +
-                        "This field shall specify the duration of time, in seconds, since a frame has been received from the " +
-                        "Node for which this route table entry corresponds.",
-
-                    xref: { document: "core", section: "11.13.5.5.5" }
+                        "field.",
+                    xref: { document: "core", section: "11.13.5.5.7" }
                 }),
 
-                Field({ name: "Age", id: 0x7, type: "uint8", conformance: "M" }),
+                Field({
+                    name: "Age", id: 0x7, type: "uint8", conformance: "M",
+                    details: "This field shall specify the duration of time, in seconds, since a frame has been received from the " +
+                        "Node for which this route table entry corresponds.",
+                    xref: { document: "core", section: "11.13.5.5.8" }
+                }),
+
                 Field({
                     name: "Allocated", id: 0x8, type: "bool", conformance: "M",
                     details: "This field shall specify if the router ID as defined within the RouterId field has been allocated.",
-                    xref: { document: "core", section: "11.13.5.5.6" }
+                    xref: { document: "core", section: "11.13.5.5.9" }
                 }),
 
                 Field({
                     name: "LinkEstablished", id: 0x9, type: "bool", conformance: "M",
                     details: "This field shall specify if a link has been established to the Node for which this route table " +
                         "entry corresponds.",
-                    xref: { document: "core", section: "11.13.5.5.7" }
+                    xref: { document: "core", section: "11.13.5.5.10" }
                 })
             ]
         }),

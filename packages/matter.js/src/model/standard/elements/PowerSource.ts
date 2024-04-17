@@ -359,26 +359,25 @@ Matter.children.push(Cluster({
 
         Event({
             name: "BatFaultChange", id: 0x1, access: "V", conformance: "[BAT]", priority: "info",
-
             details: "The BatFaultChange Event shall be generated when the set of battery faults currently detected by " +
                 "the Node on this battery power source changes. This event shall correspond to a change in value of " +
-                "ActiveBatFaults." +
-                "\n" +
-                "This field shall represent the set of faults currently detected, as per Section 11.7.6.19, " +
-                "“ActiveBatFaults Attribute”." +
-                "\n" +
-                "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                "11.7.6.19, “ActiveBatFaults Attribute”.",
-
+                "ActiveBatFaults.",
             xref: { document: "core", section: "11.7.7.2" },
 
             children: [
                 Field({
                     name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 8", default: [],
+                    details: "This field shall represent the set of faults currently detected, as per Section 11.7.6.19, " +
+                        "“ActiveBatFaults Attribute”.",
+                    xref: { document: "core", section: "11.7.7.2.1" },
                     children: [Field({ name: "entry", type: "BatFaultEnum" })]
                 }),
+
                 Field({
                     name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 8", default: [],
+                    details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
+                        "11.7.6.19, “ActiveBatFaults Attribute”.",
+                    xref: { document: "core", section: "11.7.7.2.2" },
                     children: [Field({ name: "entry", type: "BatFaultEnum" })]
                 })
             ]
@@ -386,27 +385,26 @@ Matter.children.push(Cluster({
 
         Event({
             name: "BatChargeFaultChange", id: 0x2, access: "V", conformance: "[RECHG]", priority: "info",
-
             details: "The BatChargeFaultChange Event shall be generated when the set of charge faults currently" +
                 "\n" +
                 "detected by the Node on this battery power source changes. This event shall correspond to a change " +
-                "in value of ActiveBatChargeFaults." +
-                "\n" +
-                "This field shall represent the set of faults currently detected, as per Section 11.7.6.31, " +
-                "“ActiveBatChargeFaults Attribute”." +
-                "\n" +
-                "This field shall represent the set of faults detected prior to this change event, as per Section " +
-                "11.7.6.31, “ActiveBatChargeFaults Attribute”.",
-
+                "in value of ActiveBatChargeFaults.",
             xref: { document: "core", section: "11.7.7.3" },
 
             children: [
                 Field({
                     name: "Current", id: 0x0, type: "list", conformance: "M", constraint: "max 16", default: [],
+                    details: "This field shall represent the set of faults currently detected, as per Section 11.7.6.31, " +
+                        "“ActiveBatChargeFaults Attribute”.",
+                    xref: { document: "core", section: "11.7.7.3.1" },
                     children: [Field({ name: "entry", type: "BatChargeFaultEnum" })]
                 }),
+
                 Field({
                     name: "Previous", id: 0x1, type: "list", conformance: "M", constraint: "max 16", default: [],
+                    details: "This field shall represent the set of faults detected prior to this change event, as per Section " +
+                        "11.7.6.31, “ActiveBatChargeFaults Attribute”.",
+                    xref: { document: "core", section: "11.7.7.3.2" },
                     children: [Field({ name: "entry", type: "BatChargeFaultEnum" })]
                 })
             ]

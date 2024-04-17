@@ -346,15 +346,17 @@ Matter.children.push(Cluster({
                 "they do not appear in the Networks attribute list, for security reasons." +
                 "\n" +
                 "See Section 11.8.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” " +
-                "for behavior of addition/update." +
-                "\n" +
-                "This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not " +
-                "supported by this cluster.",
+                "for behavior of addition/update.",
 
             xref: { document: "core", section: "11.8.7.3" },
 
             children: [
-                Field({ name: "Ssid", id: 0x0, type: "octstr", conformance: "M", constraint: "max 32" }),
+                Field({
+                    name: "Ssid", id: 0x0, type: "octstr", conformance: "M", constraint: "max 32",
+                    details: "This field shall contain the SSID to which to attempt connection. Specific BSSID selection is not " +
+                        "supported by this cluster.",
+                    xref: { document: "core", section: "11.8.7.3.1" }
+                }),
 
                 Field({
                     name: "Credentials", id: 0x1, type: "octstr", conformance: "M", constraint: "max 64",
@@ -393,14 +395,16 @@ Matter.children.push(Cluster({
                         "\n" +
                         "Note that it may occur that a station cannot connect to a particular access point with higher " +
                         "security and selects a lower security connectivity type if the link quality is deemed to be too low " +
-                        "to achieve successful operation, or if all retry attempts fail." +
-                        "\n" +
-                        "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
+                        "to achieve successful operation, or if all retry attempts fail.",
 
-                    xref: { document: "core", section: "11.8.7.3.1" }
+                    xref: { document: "core", section: "11.8.7.3.2" }
                 }),
 
-                Field({ name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" })
+                Field({
+                    name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O",
+                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
+                    xref: { document: "core", section: "11.8.7.3.3" }
+                })
             ]
         }),
 
@@ -429,19 +433,19 @@ Matter.children.push(Cluster({
             children: [
                 Field({
                     name: "OperationalDataset", id: 0x0, type: "octstr", conformance: "M", constraint: "max 254",
-
                     details: "The OperationalDataset field shall contain the Thread Network Parameters, including channel, PAN " +
                         "ID, and Extended PAN ID." +
                         "\n" +
                         "The encoding for the OperationalDataset field is defined in the Thread specification. The client " +
-                        "shall pass the OperationalDataset as an opaque octet string." +
-                        "\n" +
-                        "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
-
+                        "shall pass the OperationalDataset as an opaque octet string.",
                     xref: { document: "core", section: "11.8.7.4.1" }
                 }),
 
-                Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" })
+                Field({
+                    name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
+                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
+                    xref: { document: "core", section: "11.8.7.4.2" }
+                })
             ]
         }),
 
@@ -462,18 +466,24 @@ Matter.children.push(Cluster({
                 "\n" +
                 "On success, the NetworkConfigResponse command shall have its NetworkIndex field set to the 0- based " +
                 "index of the entry in the Networks attribute that was just removed, and a NetworkingStatus status " +
-                "field set to Success." +
-                "\n" +
-                "This field shall contain the NetworkID for the entry to remove: the SSID for Wi-Fi and XPAN ID" +
-                "\n" +
-                "for Thread." +
-                "\n" +
-                "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
+                "field set to Success.",
 
             xref: { document: "core", section: "11.8.7.7" },
+
             children: [
-                Field({ name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" }),
-                Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" })
+                Field({
+                    name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32",
+                    details: "This field shall contain the NetworkID for the entry to remove: the SSID for Wi-Fi and XPAN ID" +
+                        "\n" +
+                        "for Thread.",
+                    xref: { document: "core", section: "11.8.7.7.1" }
+                }),
+
+                Field({
+                    name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
+                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
+                    xref: { document: "core", section: "11.8.7.7.2" }
+                })
             ]
         }),
 
@@ -489,40 +499,45 @@ Matter.children.push(Cluster({
                 "\n" +
                 "Before generating a NetworkConfigResponse, the server shall set the LastNetworkID attribute value " +
                 "to the NetworkID that was used in the command for which an invocation caused the response to be " +
-                "generated." +
-                "\n" +
-                "The NetworkingStatus field shall indicate the status of the last operation attempting to modify the " +
-                "Networks attribute configuration, taking one of these values:" +
-                "\n" +
-                "  • Success: Operation succeeded." +
-                "\n" +
-                "  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc)." +
-                "\n" +
-                "  • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section " +
-                "    11.8.6.1, “MaxNetworks Attribute”." +
-                "\n" +
-                "  • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the " +
-                "    added network configurations in Networks attribute." +
-                "\n" +
-                "  • UnknownError: An internal error occurred during the operation." +
-                "\n" +
-                "See Section 11.8.7.2.2, “DebugText Field” for usage.",
+                "generated.",
 
             xref: { document: "core", section: "11.8.7.8" },
 
             children: [
                 Field({
                     name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum", conformance: "M",
-                    constraint: "desc"
+                    constraint: "desc",
+
+                    details: "The NetworkingStatus field shall indicate the status of the last operation attempting to modify the " +
+                        "Networks attribute configuration, taking one of these values:" +
+                        "\n" +
+                        "  • Success: Operation succeeded." +
+                        "\n" +
+                        "  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc)." +
+                        "\n" +
+                        "  • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section " +
+                        "    11.8.6.1, “MaxNetworks Attribute”." +
+                        "\n" +
+                        "  • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the " +
+                        "    added network configurations in Networks attribute." +
+                        "\n" +
+                        "  • UnknownError: An internal error occurred during the operation.",
+
+                    xref: { document: "core", section: "11.8.7.8.1" }
                 }),
-                Field({ name: "DebugText", id: 0x1, type: "string", conformance: "O", constraint: "max 512" }),
+
+                Field({
+                    name: "DebugText", id: 0x1, type: "string", conformance: "O", constraint: "max 512",
+                    details: "See Section 11.8.7.2.2, “DebugText Field” for usage.",
+                    xref: { document: "core", section: "11.8.7.8.2" }
+                }),
 
                 Field({
                     name: "NetworkIndex", id: 0x2, type: "uint8", conformance: "O",
                     details: "When the NetworkingStatus is Success, this field shall be present. It shall contain the 0-based " +
                         "index of the entry in the Networks attribute that was last added, updated or removed successfully " +
                         "by the associated request command.",
-                    xref: { document: "core", section: "11.8.7.8.1" }
+                    xref: { document: "core", section: "11.8.7.8.3" }
                 })
             ]
         }),
@@ -595,17 +610,23 @@ Matter.children.push(Cluster({
                 "\n" +
                 "The LastNetworkingStatus, LastNetworkID and LastConnectErrorValue attributes may assist the client " +
                 "in determining the reason for a failure after reconnecting over a Commissioning channel, especially " +
-                "in non-concurrent commissioning situations." +
-                "\n" +
-                "This field shall contain the NetworkID for the entry used to configure the connection: the SSID for " +
-                "Wi-Fi and XPAN ID for Thread." +
-                "\n" +
-                "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
+                "in non-concurrent commissioning situations.",
 
             xref: { document: "core", section: "11.8.7.9" },
+
             children: [
-                Field({ name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" }),
-                Field({ name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O" })
+                Field({
+                    name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32",
+                    details: "This field shall contain the NetworkID for the entry used to configure the connection: the SSID for " +
+                        "Wi-Fi and XPAN ID for Thread.",
+                    xref: { document: "core", section: "11.8.7.9.1" }
+                }),
+
+                Field({
+                    name: "Breadcrumb", id: 0x1, type: "uint64", conformance: "O",
+                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage.",
+                    xref: { document: "core", section: "11.8.7.9.2" }
+                })
             ]
         }),
 
@@ -620,36 +641,43 @@ Matter.children.push(Cluster({
                 "    command which caused the response to be generated." +
                 "\n" +
                 "  • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, " +
-                "    including setting it to null if the ErrorValue is not applicable." +
-                "\n" +
-                "The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of " +
-                "these values:" +
-                "\n" +
-                "  • Success: Connection succeeded." +
-                "\n" +
-                "  • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the " +
-                "    attempt to join the network." +
-                "\n" +
-                "  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc)." +
-                "\n" +
-                "  • NetworkIdNotFound: The network identifier was not found among the added network configurations " +
-                "    in Networks attribute." +
-                "\n" +
-                "  • RegulatoryError: Could not connect to a network due to lack of regulatory configuration." +
-                "\n" +
-                "  • UnknownError: An internal error occurred during the operation." +
-                "\n" +
-                "  • Association errors (see also description of errors in Section 11.8.5.3, " +
-                "    “NetworkCommissioningStatusEnum”): AuthFailure, UnsupportedSecurity, OtherConnectionFailure, " +
-                "    IPV6Failed, IPBindFailed" +
-                "\n" +
-                "See Section 11.8.7.2.2, “DebugText Field” for usage.",
+                "    including setting it to null if the ErrorValue is not applicable.",
 
             xref: { document: "core", section: "11.8.7.10" },
 
             children: [
-                Field({ name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum", conformance: "M" }),
-                Field({ name: "DebugText", id: 0x1, type: "string", conformance: "O" }),
+                Field({
+                    name: "NetworkingStatus", id: 0x0, type: "NetworkCommissioningStatusEnum", conformance: "M",
+
+                    details: "The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of " +
+                        "these values:" +
+                        "\n" +
+                        "  • Success: Connection succeeded." +
+                        "\n" +
+                        "  • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the " +
+                        "    attempt to join the network." +
+                        "\n" +
+                        "  • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc)." +
+                        "\n" +
+                        "  • NetworkIdNotFound: The network identifier was not found among the added network configurations " +
+                        "    in Networks attribute." +
+                        "\n" +
+                        "  • RegulatoryError: Could not connect to a network due to lack of regulatory configuration." +
+                        "\n" +
+                        "  • UnknownError: An internal error occurred during the operation." +
+                        "\n" +
+                        "  • Association errors (see also description of errors in Section 11.8.5.3, " +
+                        "    “NetworkCommissioningStatusEnum”): AuthFailure, UnsupportedSecurity, OtherConnectionFailure, " +
+                        "    IPV6Failed, IPBindFailed",
+
+                    xref: { document: "core", section: "11.8.7.10.1" }
+                }),
+
+                Field({
+                    name: "DebugText", id: 0x1, type: "string", conformance: "O",
+                    details: "See Section 11.8.7.2.2, “DebugText Field” for usage.",
+                    xref: { document: "core", section: "11.8.7.10.2" }
+                }),
 
                 Field({
                     name: "ErrorValue", id: 0x2, type: "int32", conformance: "M", quality: "X",
@@ -674,7 +702,7 @@ Matter.children.push(Cluster({
                         "  • Otherwise, the ErrorValue field shall contain an implementation-dependent value which may be " +
                         "    used by a reader of the structure to record, report or diagnose the failure.",
 
-                    xref: { document: "core", section: "11.8.7.10.1" }
+                    xref: { document: "core", section: "11.8.7.10.3" }
                 })
             ]
         }),
@@ -682,71 +710,80 @@ Matter.children.push(Cluster({
         Command({
             name: "ReorderNetwork", id: 0x8, access: "A", conformance: "WI | TH", direction: "request",
             response: "NetworkConfigResponse",
-
             details: "This command shall set the specific order of the network configuration selected by its NetworkID in " +
-                "the Networks attribute list to match the position given by NetworkIndex." +
-                "\n" +
-                "This field shall contain the NetworkID for the entry to reorder: the SSID for Wi-Fi and XPAN ID for " +
-                "Thread." +
-                "\n" +
-                "This field shall contain the 0-based index of the new desired position of the entry in the Networks " +
-                "attribute." +
-                "\n" +
-                "See Section 11.8.7.1.2, “Breadcrumb Field” for usage." +
-                "\n" +
-                "Effect when received" +
-                "\n" +
-                "If the Networks attribute does not contain a matching entry, the command shall immediately respond " +
-                "with NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound." +
-                "\n" +
-                "If the NetworkIndex field has a value larger or equal to the current number of entries in the " +
-                "Networks attribute, the command shall immediately respond with NetworkConfigResponse having " +
-                "NetworkingStatus status field set to OutOfRange." +
-                "\n" +
-                "On success, the NetworkConfigResponse command shall have its NetworkIndex field set to the 0- based " +
-                "index of the entry in the Networks attribute that was just updated, matching the incoming " +
-                "NetworkIndex, and a NetworkingStatus status field set to Success." +
-                "\n" +
-                "The entry selected shall be inserted at the new position in the list. All other entries, if any " +
-                "exist, shall be moved to allow the insertion, in a way that they all retain their existing relative " +
-                "order between each other, with the exception of the newly re-ordered entry." +
-                "\n" +
-                "Re-ordering to the same NetworkIndex as the current location shall be considered as a success and " +
-                "yield no visible changes of the Networks attribute." +
-                "\n" +
-                "Examples of re-ordering" +
-                "\n" +
-                "To better illustrate the re-ordering operation, consider this initial state, exemplary of a Wi-Fi" +
-                "\n" +
-                "device:" +
-                "\n" +
-                "On receiving ReorderNetwork with:" +
-                "\n" +
-                "  • NetworkId = Home-Guest" +
-                "\n" +
-                "  • NetworkIndex = 0" +
-                "\n" +
-                "The outcome, after applying to the initial state would be:" +
-                "\n" +
-                "In the above outcome, FancyCat and BlueDolphin moved \"down\" and Home-Guest became the highest " +
-                "priority network in the list." +
-                "\n" +
-                "On receiving ReorderNetwork with:" +
-                "\n" +
-                "  • NetworkId = FancyCat" +
-                "\n" +
-                "  • NetworkIndex = 3" +
-                "\n" +
-                "The outcome, after applying to the initial state would be:" +
-                "\n" +
-                "In the above outcome, BlueDolphin, Home-Guest and WillowTree moved \"up\" and FancyCat became the " +
-                "lowest priority network in the list.",
-
+                "the Networks attribute list to match the position given by NetworkIndex.",
             xref: { document: "core", section: "11.8.7.11" },
+
             children: [
-                Field({ name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32" }),
-                Field({ name: "NetworkIndex", id: 0x1, type: "uint8", conformance: "M", constraint: "desc" }),
-                Field({ name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O" })
+                Field({
+                    name: "NetworkId", id: 0x0, type: "octstr", conformance: "M", constraint: "1 to 32",
+                    details: "This field shall contain the NetworkID for the entry to reorder: the SSID for Wi-Fi and XPAN ID for " +
+                        "Thread.",
+                    xref: { document: "core", section: "11.8.7.11.1" }
+                }),
+
+                Field({
+                    name: "NetworkIndex", id: 0x1, type: "uint8", conformance: "M", constraint: "desc",
+                    details: "This field shall contain the 0-based index of the new desired position of the entry in the Networks " +
+                        "attribute.",
+                    xref: { document: "core", section: "11.8.7.11.2" }
+                }),
+
+                Field({
+                    name: "Breadcrumb", id: 0x2, type: "uint64", conformance: "O",
+
+                    details: "See Section 11.8.7.1.2, “Breadcrumb Field” for usage." +
+                        "\n" +
+                        "Effect when received" +
+                        "\n" +
+                        "If the Networks attribute does not contain a matching entry, the command shall immediately respond " +
+                        "with NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound." +
+                        "\n" +
+                        "If the NetworkIndex field has a value larger or equal to the current number of entries in the " +
+                        "Networks attribute, the command shall immediately respond with NetworkConfigResponse having " +
+                        "NetworkingStatus status field set to OutOfRange." +
+                        "\n" +
+                        "On success, the NetworkConfigResponse command shall have its NetworkIndex field set to the 0- based " +
+                        "index of the entry in the Networks attribute that was just updated, matching the incoming " +
+                        "NetworkIndex, and a NetworkingStatus status field set to Success." +
+                        "\n" +
+                        "The entry selected shall be inserted at the new position in the list. All other entries, if any " +
+                        "exist, shall be moved to allow the insertion, in a way that they all retain their existing relative " +
+                        "order between each other, with the exception of the newly re-ordered entry." +
+                        "\n" +
+                        "Re-ordering to the same NetworkIndex as the current location shall be considered as a success and " +
+                        "yield no visible changes of the Networks attribute." +
+                        "\n" +
+                        "Examples of re-ordering" +
+                        "\n" +
+                        "To better illustrate the re-ordering operation, consider this initial state, exemplary of a Wi-Fi" +
+                        "\n" +
+                        "device:" +
+                        "\n" +
+                        "On receiving ReorderNetwork with:" +
+                        "\n" +
+                        "  • NetworkId = Home-Guest" +
+                        "\n" +
+                        "  • NetworkIndex = 0" +
+                        "\n" +
+                        "The outcome, after applying to the initial state would be:" +
+                        "\n" +
+                        "In the above outcome, FancyCat and BlueDolphin moved \"down\" and Home-Guest became the highest " +
+                        "priority network in the list." +
+                        "\n" +
+                        "On receiving ReorderNetwork with:" +
+                        "\n" +
+                        "  • NetworkId = FancyCat" +
+                        "\n" +
+                        "  • NetworkIndex = 3" +
+                        "\n" +
+                        "The outcome, after applying to the initial state would be:" +
+                        "\n" +
+                        "In the above outcome, BlueDolphin, Home-Guest and WillowTree moved \"up\" and FancyCat became the " +
+                        "lowest priority network in the list.",
+
+                    xref: { document: "core", section: "11.8.7.11.3" }
+                })
             ]
         }),
 

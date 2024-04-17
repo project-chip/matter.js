@@ -31,9 +31,9 @@ export namespace OnOffPlugInUnitRequirements {
     /**
      * The Identify cluster is required by the Matter specification
      *
-     * We provide this alias to the default implementation {@link IdentifyServer} for convenience.
+     * This version of {@link IdentifyServer} is specialized per the specification.
      */
-    export const IdentifyServer = BaseIdentifyServer;
+    export const IdentifyServer = BaseIdentifyServer.alter({ commands: { triggerEffect: { optional: false } } });
 
     /**
      * The Groups cluster is required by the Matter specification
@@ -45,23 +45,38 @@ export namespace OnOffPlugInUnitRequirements {
     /**
      * The Scenes cluster is required by the Matter specification
      *
-     * We provide this alias to the default implementation {@link ScenesServer} for convenience.
+     * This version of {@link ScenesServer} is specialized per the specification.
      */
-    export const ScenesServer = BaseScenesServer;
+    export const ScenesServer = BaseScenesServer
+        .alter({
+            commands: {
+                enhancedAddScene: { optional: false },
+                enhancedViewScene: { optional: false },
+                copyScene: { optional: false }
+            }
+        });
 
     /**
      * The OnOff cluster is required by the Matter specification
      *
-     * We provide this alias to the default implementation {@link OnOffServer} for convenience.
+     * This version of {@link OnOffServer} is specialized per the specification.
      */
-    export const OnOffServer = BaseOnOffServer;
+    export const OnOffServer = BaseOnOffServer.with("LevelControlForLighting");
 
     /**
      * The LevelControl cluster is optional per the Matter specification
      *
-     * We provide this alias to the default implementation {@link LevelControlServer} for convenience.
+     * This version of {@link LevelControlServer} is specialized per the specification.
      */
-    export const LevelControlServer = BaseLevelControlServer;
+    export const LevelControlServer = BaseLevelControlServer
+        .with("OnOff", "Lighting")
+        .alter({
+            attributes: {
+                currentLevel: { min: 1, max: 254 },
+                minLevel: { default: 1, min: 1, max: 2 },
+                maxLevel: { default: 254, min: 254, max: 255 }
+            }
+        });
 
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.

@@ -193,21 +193,28 @@ export namespace ThreadNetworkDiagnostics {
     export interface NeighborTableStruct extends TypeFromSchema<typeof TlvNeighborTableStruct> {}
 
     /**
-     * This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
-     * corresponds.
-     *
-     * This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.13.5.5
      */
     export const TlvRouteTableStruct = TlvObject({
+        /**
+         * This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
+         * corresponds.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.1
+         */
         extAddress: TlvField(0, TlvUInt64),
+
+        /**
+         * This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.2
+         */
         rloc16: TlvField(1, TlvUInt16),
 
         /**
          * This field shall specify the Router ID for the Node for which this route table entry corresponds.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.1
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.3
          */
         routerId: TlvField(2, TlvUInt8),
 
@@ -215,14 +222,14 @@ export namespace ThreadNetworkDiagnostics {
          * This field shall specify the Router ID for the next hop in the route to the Node for which this route table
          * entry corresponds.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.2
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.4
          */
         nextHop: TlvField(3, TlvUInt8),
 
         /**
          * This Field shall specify the cost of the route to the Node for which this route table entry corresponds.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.3
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.5
          */
         pathCost: TlvField(4, TlvUInt8),
 
@@ -230,7 +237,7 @@ export namespace ThreadNetworkDiagnostics {
          * This field shall specify the implementation specific mix of IEEE 802.15.4 PDU receive quality indicators,
          * scaled from 0 to 255, from the perspective of the Node reporting the neighbor table.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.4
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.6
          */
         lqiIn: TlvField(5, TlvUInt8),
 
@@ -238,19 +245,22 @@ export namespace ThreadNetworkDiagnostics {
          * This field shall specify the implementation specific mix of IEEE 802.15.4 PDU receive quality indicators,
          * scaled from 0 to 255, from the perspective of the Node specified within the NextHop field.
          *
-         * This field shall specify the duration of time, in seconds, since a frame has been received from the Node for
-         * which this route table entry corresponds.
-         *
-         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.5
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.7
          */
         lqiOut: TlvField(6, TlvUInt8),
 
+        /**
+         * This field shall specify the duration of time, in seconds, since a frame has been received from the Node for
+         * which this route table entry corresponds.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.8
+         */
         age: TlvField(7, TlvUInt8),
 
         /**
          * This field shall specify if the router ID as defined within the RouterId field has been allocated.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.6
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.9
          */
         allocated: TlvField(8, TlvBoolean),
 
@@ -258,17 +268,12 @@ export namespace ThreadNetworkDiagnostics {
          * This field shall specify if a link has been established to the Node for which this route table entry
          * corresponds.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.7
+         * @see {@link MatterSpecification.v11.Core} § 11.13.5.5.10
          */
         linkEstablished: TlvField(9, TlvBoolean)
     });
 
     /**
-     * This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry
-     * corresponds.
-     *
-     * This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.13.5.5
      */
     export interface RouteTableStruct extends TypeFromSchema<typeof TlvRouteTableStruct> {}

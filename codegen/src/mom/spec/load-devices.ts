@@ -5,7 +5,7 @@
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { NavigateViaNav, scanSection } from "./scan-section.js";
+import { scanDocument } from "./scan-document.js";
 import { DeviceReference, HtmlReference } from "./spec-types.js";
 
 const logger = Logger.get("load-devices");
@@ -70,12 +70,12 @@ export function* loadDevices(devices: HtmlReference) {
         }
     }
 
-    for (const section of scanSection(devices, NavigateViaNav)) {
+    for (const section of scanDocument(devices)) {
         const depth = section.xref.section.split(".").length;
         switch (depth) {
             case 1:
                 yield* emit();
-                category = section.xref.section.replace(/\s+device types?/i, "");
+                category = section.name.replace(/\s+device types$/i, "");
                 break;
 
             case 2:

@@ -23,8 +23,7 @@ export const EndContentFlags = [
 export const NotWords = new Set(["cur"]);
 
 /**
- * A light attempt dropping text to make documentation seem slightly less
- * scavenged.
+ * A light attempt at dropping text to make documentation seem slightly less scavenged.
  */
 function extractUsefulDocumentation(p: HTMLElement) {
     return Str(p)
@@ -35,7 +34,10 @@ function extractUsefulDocumentation(p: HTMLElement) {
         .replace(/The data type of the(?: \w+)+ is derived from \S+\./, "")
         .replace(/The values of the(?: \w+)+ are listed below\./, "")
         .replace(/(?:The )?\S+ Data Type is derived from \S+\./, "")
-        .replace(/(?:This command|The \w+ command) shall have the following data fields:/i, "")
+        .replace(
+            /(?:This\s+(?:command|event)|The\s+\w+\s+(?:command|event))\s+shall\s+have\s+the\s+following\s+data\s+fields:/i,
+            "",
+        )
         .replace(/The (?:data|arguments) for this command (?:shall be|is|are) as follows:/i, "")
         .replace(/This attribute has the following possible values:/, "")
         .replace(/The \w+ attribute is indicated by an enumeration:/, "")
