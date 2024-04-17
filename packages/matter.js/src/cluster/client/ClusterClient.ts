@@ -10,6 +10,7 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
 import { InteractionClient } from "../../protocol/interaction/InteractionClient.js";
@@ -17,7 +18,6 @@ import { TlvEventFilter } from "../../protocol/interaction/InteractionProtocol.j
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { toHexString } from "../../util/Number.js";
 import { capitalize } from "../../util/String.js";
 import { Merge } from "../../util/Type.js";
 import {
@@ -297,8 +297,10 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
         for (const attributeId of globalAttributeValues.attributeList) {
             if (attributeToId[attributeId] === undefined) {
                 const attribute = UnknownAttribute(attributeId);
-                addAttributeToResult(attribute, `unknownAttribute_${toHexString(attributeId)}`);
-                logger.info(`Added unknown attribute ${toHexString(attributeId)} to cluster ${toHexString(clusterId)}`);
+                addAttributeToResult(attribute, `unknownAttribute_${Diagnostic.hex(attributeId)}`);
+                logger.info(
+                    `Added unknown attribute ${Diagnostic.hex(attributeId)} to cluster ${Diagnostic.hex(clusterId)}`,
+                );
             }
         }
     }
@@ -314,8 +316,8 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
         for (const eventId of globalAttributeValues.eventList) {
             if (eventToId[eventId] === undefined) {
                 const event = UnknownEvent(eventId);
-                addEventToResult(event, `unknownEvent_${toHexString(eventId)}`);
-                logger.info(`Added unknown event ${toHexString(eventId)} to cluster ${toHexString(clusterId)}.`);
+                addEventToResult(event, `unknownEvent_${Diagnostic.hex(eventId)}`);
+                logger.info(`Added unknown event ${Diagnostic.hex(eventId)} to cluster ${Diagnostic.hex(clusterId)}.`);
             }
         }
     }
@@ -351,7 +353,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
     if (globalAttributeValues?.acceptedCommandList !== undefined) {
         for (const requestId of globalAttributeValues.acceptedCommandList) {
             if (commandToId[requestId] === undefined) {
-                logger.info(`Ignoring unknown command ${requestId} at cluster ${toHexString(clusterId)}`);
+                logger.info(`Ignoring unknown command ${requestId} at cluster ${Diagnostic.hex(clusterId)}`);
             }
         }
     }

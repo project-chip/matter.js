@@ -75,7 +75,7 @@ export abstract class FailsafeContext {
     }
 
     get fabricIndex() {
-        return this.#fabricBuilder.getFabricIndex();
+        return this.#fabricBuilder.fabricIndex;
     }
 
     get construction() {
@@ -153,11 +153,9 @@ export abstract class FailsafeContext {
      * validity checks.
      */
     createCertificateSigningRequest(isForUpdateNoc: boolean, sessionId: number) {
-        // TODO handle isForUpdateNoc and UpdateNoc correctly
-
-        // TODO If the Node Operational Key Pair generated during processing of the Node Operational CSR Procedure is
-        //  found to collide with an existing key pair already previously generated and installed, and that check had
-        //  been executed, then this command SHALL fail with a FAILURE status code sent back to the initiator.
+        if (this.#fabrics.findByKeypair(this.#fabricBuilder.keyPair)) {
+            throw new MatterFlowError("Key pair already exists."); // becomes Failure as StateResponse
+        }
 
         const result = this.#fabricBuilder.createCertificateSigningRequest();
         this.#csrSessionId = sessionId;
@@ -185,9 +183,6 @@ export abstract class FailsafeContext {
 
     /** Handles adding a trusted root certificate from Operational Credentials cluster. */
     setRootCert(rootCert: ByteArray) {
-        // TODO If the certificate from the RootCACertificate field fails any validity checks, not fulfilling all the
-        //  requirements for a valid Matter Certificate Encoding representation, including a truncated or oversize
-        //  value, then this command SHALL fail with an INVALID_COMMAND status code sent back to the initiator.
         this.#fabricBuilder.setRootCert(rootCert);
     }
 
@@ -200,8 +195,7 @@ export abstract class FailsafeContext {
             throw new MatterFlowError("No fabric associated with failsafe context, but we prepare an Fabric update.");
         }
         this.#fabricBuilder.initializeFromFabricForUpdate(this.associatedFabric);
-        this.#fabricBuilder.setOperationalCert(nocValue);
-        if (icacValue && icacValue.length > 0) this.#fabricBuilder.setIntermediateCACert(icacValue);
+        this.#fabricBuilder.setOperationalCert(nocValue, icacValue);
         return await this.#fabricBuilder.build(this.associatedFabric.fabricIndex);
     }
 
@@ -220,17 +214,13 @@ export abstract class FailsafeContext {
         const builder = this.#fabricBuilder;
 
         const { nocValue, icacValue, adminVendorId, ipkValue, caseAdminSubject } = nocData;
-        builder.setOperationalCert(nocValue);
+        builder.setOperationalCert(nocValue, icacValue);
         const fabricAlreadyExisting = this.#fabrics.getFabrics().find(fabric => builder.matchesToFabric(fabric));
 
         if (fabricAlreadyExisting) {
             throw new MatterFabricConflictError(
-                `Fabric with Id ${builder.getFabricId()} and Node Id ${builder.getNodeId()} already exists.`,
+                `Fabric with Id ${builder.fabricId} and Node Id ${builder.nodeId} already exists.`,
             );
-        }
-
-        if (icacValue && icacValue.length > 0) {
-            builder.setIntermediateCACert(icacValue);
         }
 
         return builder

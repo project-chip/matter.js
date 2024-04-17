@@ -11,10 +11,13 @@ import {
     TlvAttestation,
     TlvCertSigningRequest,
 } from "../../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
+import { CertificateError } from "../../certificate/CertificateManager.js";
 import { MatterFabricConflictError } from "../../common/FailsafeTimer.js";
-import { MatterFlowError } from "../../common/MatterError.js";
+import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
+import { ValidationError } from "../../common/ValidationError.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
+import { PublicKeyError } from "../../fabric/Fabric.js";
 import { FabricTableFullError } from "../../fabric/FabricManager.js";
 import { Logger } from "../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
@@ -80,19 +83,6 @@ export const OperationalCredentialsClusterHandler: (
     }) => {
         if (!session.isSecure) throw new MatterFlowError("addOperationalCert should be called on a secure session.");
 
-        // TODO 1. Verify the NOC using:
-        //         a. Crypto_VerifyChain(certificates = [NOCValue, ICACValue, RootCACertificate]) if ICACValue is present,
-        //         b. Crypto_VerifyChain(certificates = [NOCValue, RootCACertificate]) if ICACValue is not present. If this
-        //            verification fails, the error status SHALL be InvalidNOC.
-        //     2. The public key of the NOC SHALL match the last generated operational public key on this session, and
-        //        therefore the public key present in the last CSRResponse provided to the Administrator or
-        //        Commissioner that sent the AddNOC or UpdateNOC command. If this check fails, the error status SHALL
-        //        be InvalidPublicKey.
-        //     3. The DN Encoding Rules SHALL be validated for every certificate in the chain, including valid value
-        //        range checks for identifiers such as Fabric ID and Node ID. If this validation fails, the error status
-        //        SHALL be InvalidNodeOpId if the matter-node-id attribute in the subject DN of the NOC has a value
-        //        outside the Operational Node ID range and InvalidNOC for all other failures.
-
         const device = session.context;
 
         const failsafeContext = device.failsafeContext;
@@ -142,6 +132,7 @@ export const OperationalCredentialsClusterHandler: (
                 caseAdminSubject,
             });
         } catch (error) {
+            logger.info("building fabric failed", error);
             if (error instanceof MatterFabricConflictError) {
                 return {
                     statusCode: OperationalCredentials.NodeOperationalCertStatus.FabricConflict,
@@ -152,9 +143,22 @@ export const OperationalCredentialsClusterHandler: (
                     statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
                     debugText: error.message,
                 };
-            } else {
-                throw error;
+            } else if (
+                error instanceof CertificateError ||
+                error instanceof ValidationError ||
+                error instanceof UnexpectedDataError
+            ) {
+                return {
+                    statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
+                    debugText: error.message,
+                };
+            } else if (error instanceof PublicKeyError) {
+                return {
+                    statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
+                    debugText: error.message,
+                };
             }
+            throw error;
         }
         await failsafeContext.addFabric(fabric);
 
@@ -285,20 +289,40 @@ export const OperationalCredentialsClusterHandler: (
             );
         }
 
-        // Build a new Fabric with the updated NOC and ICAC
-        const updateFabric = await failsafeContext.buildUpdatedFabric(nocValue, icacValue);
+        try {
+            // Build a new Fabric with the updated NOC and ICAC
+            const updateFabric = await failsafeContext.buildUpdatedFabric(nocValue, icacValue);
 
-        // update FabricManager and Resumption records but leave current session intact
-        await failsafeContext.updateFabric(updateFabric);
+            // update FabricManager and Resumption records but leave current session intact
+            await failsafeContext.updateFabric(updateFabric);
 
-        // Update connected attributes
-        nocs.updated(session);
-        fabrics.updated(session);
+            // Update connected attributes
+            nocs.updated(session);
+            fabrics.updated(session);
 
-        return {
-            statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
-            fabricIndex: updateFabric.fabricIndex,
-        };
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
+                fabricIndex: updateFabric.fabricIndex,
+            };
+        } catch (error) {
+            logger.info("building fabric for update failed", error);
+            if (
+                error instanceof CertificateError ||
+                error instanceof ValidationError ||
+                error instanceof UnexpectedDataError
+            ) {
+                return {
+                    statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
+                    debugText: error.message,
+                };
+            } else if (error instanceof PublicKeyError) {
+                return {
+                    statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
+                    debugText: error.message,
+                };
+            }
+            throw error;
+        }
     },
 
     updateFabricLabel: async ({ request: { label }, attributes: { fabrics }, session }) => {
@@ -382,6 +406,18 @@ export const OperationalCredentialsClusterHandler: (
             );
         }
 
-        failsafeContext.setRootCert(rootCaCertificate);
+        try {
+            failsafeContext.setRootCert(rootCaCertificate);
+        } catch (error) {
+            logger.info("setting root certificate failed", error);
+            if (
+                error instanceof CertificateError ||
+                error instanceof ValidationError ||
+                error instanceof UnexpectedDataError
+            ) {
+                throw new StatusResponseError(error.message, StatusCode.InvalidCommand);
+            }
+            throw error;
+        }
     },
 });

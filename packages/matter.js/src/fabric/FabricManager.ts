@@ -5,6 +5,7 @@
  */
 
 import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
+import { Key } from "../crypto/Key.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -77,14 +78,14 @@ export class FabricManager {
         }
         this.#fabrics.set(fabricIndex, fabric);
         fabric.addRemoveCallback(async () => this.removeFabric(fabricIndex));
-        fabric.setPersistCallback((isUpdate = true) => {
+        fabric.persistCallback = (isUpdate = true) => {
             const persistResult = this.persistFabrics();
             return MaybePromise.then(persistResult, () => {
                 if (isUpdate) {
                     this.#events.updated.emit(fabric); // Assume Fabric got updated when persist callback is called
                 }
             });
-        });
+        };
         if (this.#initializationDone) {
             this.#events.added.emit(fabric);
         }
@@ -113,6 +114,15 @@ export class FabricManager {
         }
 
         throw new InternalError("Fabric cannot be found from destinationId");
+    }
+
+    findByKeypair(keypair: Key) {
+        for (const fabric of this.#fabrics.values()) {
+            if (fabric.matchesKeyPair(keypair)) {
+                return fabric;
+            }
+        }
+        return undefined;
     }
 
     async updateFabric(fabric: Fabric) {

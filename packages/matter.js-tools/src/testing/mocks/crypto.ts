@@ -49,6 +49,11 @@ const TheCrypto = {
             ),
         );
     },
+
+    verify() {
+        // We do not really verify anything
+        return;
+    },
 };
 
 export function cryptoSetup(Crypto: any) {

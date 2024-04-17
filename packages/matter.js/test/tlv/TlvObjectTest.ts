@@ -39,6 +39,13 @@ const schemaListOptional = TlvTaggedList({
     optionalField: TlvOptionalField(1, TlvString),
 });
 
+const schemaListRequiredAndOptional = TlvTaggedList({
+    /** Optional field jsdoc */
+    optionalField: TlvOptionalField(1, TlvString),
+    /** Required field jsdoc */
+    requiredField: TlvField(2, TlvString),
+});
+
 const schemaListOptionalRepeated = TlvTaggedList({
     /** Optional field jsdoc */
     optionalField: TlvOptionalField(1, TlvString),
@@ -297,33 +304,51 @@ describe("TlvObject tests", () => {
 
     describe("TlvTaggedList", () => {
         it("encode and decode list with optional fields", () => {
-            const encoded = schemaListOptional.encode({ optionalField: "test" });
+            const data = { optionalField: "test" };
+            const encoded = schemaListOptional.encode(data);
             expect(encoded.toHex()).equal("172c01047465737418");
-            expect(schemaListOptional.decode(encoded)).deep.equal({ optionalField: "test" });
+            expect(schemaListOptional.decode(encoded)).deep.equal(data);
+        });
+
+        it("encode and decode list with optional and required fields in list order", () => {
+            const data = { optionalField: "test", requiredField: "testreq" };
+            const encoded = schemaListRequiredAndOptional.encode(data);
+            expect(encoded.toHex()).equal("172c0104746573742c02077465737472657118");
+            expect(schemaListRequiredAndOptional.decode(encoded)).deep.equal(data);
+        });
+
+        it("encode and decode list with optional and required fields in switched order", () => {
+            const data = { requiredField: "testreq", optionalField: "test" };
+            const encoded = schemaListRequiredAndOptional.encode(data);
+            expect(encoded.toHex()).equal("172c0207746573747265712c01047465737418");
+            expect(schemaListRequiredAndOptional.decode(encoded)).deep.equal(data);
+        });
+
+        it("encode and decode list with optional and required fields without optional field", () => {
+            const data = { requiredField: "testreq" };
+            const encoded = schemaListRequiredAndOptional.encode(data);
+            expect(encoded.toHex()).equal("172c02077465737472657118");
+            expect(schemaListRequiredAndOptional.decode(encoded)).deep.equal(data);
         });
 
         it("encode and decode list with optional repeated fields", () => {
-            const encoded = schemaListOptionalRepeated.encode({
+            const data = {
                 optionalField: "test",
                 optionalRepeatedField: ["test1", "test2"],
-            });
+            };
+            const encoded = schemaListOptionalRepeated.encode(data);
             expect(encoded.toHex()).equal("172c0104746573742c020574657374312c0205746573743218");
-            expect(schemaListOptionalRepeated.decode(encoded)).deep.equal({
-                optionalField: "test",
-                optionalRepeatedField: ["test1", "test2"],
-            });
+            expect(schemaListOptionalRepeated.decode(encoded)).deep.equal(data);
         });
 
         it("encode and decode list with optional repeated fields with limit", () => {
-            const encoded = schemaListOptionalRepeatedLimit.encode({
+            const data = {
                 optionalField: "test",
                 optionalRepeatedField: ["test1", "test2"],
-            });
+            };
+            const encoded = schemaListOptionalRepeatedLimit.encode(data);
             expect(encoded.toHex()).equal("172c0104746573742c020574657374312c0205746573743218");
-            expect(schemaListOptionalRepeatedLimit.decode(encoded)).deep.equal({
-                optionalField: "test",
-                optionalRepeatedField: ["test1", "test2"],
-            });
+            expect(schemaListOptionalRepeatedLimit.decode(encoded)).deep.equal(data);
         });
 
         it("throws error on too long repeated optional fields encoding", () => {
@@ -348,39 +373,50 @@ describe("TlvObject tests", () => {
         });
 
         it("encode and decode list with repeated fields", () => {
-            const encoded = schemaListRepeatedLimited.encode({
+            const data = {
                 requiredField: "test",
                 repeatedField: ["test1", "test2"],
-            });
+            };
+            const encoded = schemaListRepeatedLimited.encode(data);
             expect(encoded.toHex()).equal("172c0104746573742c020574657374312c0205746573743218");
-            expect(schemaListRepeatedLimited.decode(encoded)).deep.equal({
-                requiredField: "test",
+            expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
+        });
+
+        it("encode and decode list with switched repeated fields", () => {
+            const data = {
                 repeatedField: ["test1", "test2"],
-            });
+                requiredField: "test",
+            };
+            const encoded = schemaListRepeatedLimited.encode(data);
+            expect(encoded.toHex()).equal("172c020574657374312c020574657374322c01047465737418");
+            expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
 
         it("encode and decode list with repeated fields with limit #1", () => {
-            const encoded = schemaListRepeatedLimited.encode({
+            const data = {
                 requiredField: "test",
                 repeatedField: ["test1", "test2"],
-            });
+            };
+            const encoded = schemaListRepeatedLimited.encode(data);
             expect(encoded.toHex()).equal("172c0104746573742c020574657374312c0205746573743218");
-            expect(schemaListRepeatedLimited.decode(encoded)).deep.equal({
-                requiredField: "test",
-                repeatedField: ["test1", "test2"],
-            });
+            expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
 
         it("encode and decode list with repeated fields with limit #2", () => {
-            const encoded = schemaListRepeatedLimited.encode({
+            const data = {
                 requiredField: "test",
                 repeatedField: ["test1"],
-            });
+            };
+            const encoded = schemaListRepeatedLimited.encode(data);
             expect(encoded.toHex()).equal("172c0104746573742c0205746573743118");
-            expect(schemaListRepeatedLimited.decode(encoded)).deep.equal({
-                requiredField: "test",
-                repeatedField: ["test1"],
-            });
+            expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
+        });
+
+        it("throws error on missing required fields", () => {
+            // @ts-expect-error test case
+            expect(() => schemaListRepeatedLimited.encode({ requiredField: "test" })).throw(
+                "(Validation/135) Missing mandatory field repeatedField",
+            );
         });
 
         it("throws error on too short or too long repeated fields", () => {
@@ -403,6 +439,16 @@ describe("TlvObject tests", () => {
             expect(() => schemaListRepeatedLimited.decode(encoded)).throw(
                 "Repeated field list for repeatedField is too long: 3, max 2.",
             );
+        });
+
+        it("preserves the field order also when different from field definition with repeated fields", () => {
+            const data = {
+                repeatedField: ["test1"],
+                requiredField: "test",
+            };
+            const encoded = schemaListRepeatedLimited.encode(data);
+            expect(encoded.toHex()).equal("172c020574657374312c01047465737418");
+            expect(schemaListRepeatedLimited.decode(encoded)).deep.equal(data);
         });
     });
 });

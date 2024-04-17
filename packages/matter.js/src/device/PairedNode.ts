@@ -30,7 +30,6 @@ import {
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
-import { toHexString } from "../util/Number.js";
 import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { PairedDevice, RootEndpoint } from "./Device.js";
@@ -39,6 +38,7 @@ import { BasicInformation } from "../cluster/definitions/BasicInformationCluster
 import { AdministratorCommissioning } from "../cluster/definitions/index.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import {
@@ -315,7 +315,7 @@ export class PairedNode {
                 const cluster = device.getClusterClientById(clusterId);
                 if (cluster === undefined) {
                     logger.info(
-                        `Ignoring received attribute update for unknown cluster ${toHexString(
+                        `Ignoring received attribute update for unknown cluster ${Diagnostic.hex(
                             clusterId,
                         )} on endpoint ${endpointId}!`,
                     );
@@ -345,7 +345,7 @@ export class PairedNode {
                 const cluster = device.getClusterClientById(clusterId);
                 if (cluster === undefined) {
                     logger.info(
-                        `Ignoring received event for unknown cluster ${toHexString(
+                        `Ignoring received event for unknown cluster ${Diagnostic.hex(
                             clusterId,
                         )} on endpoint ${endpointId}!`,
                     );

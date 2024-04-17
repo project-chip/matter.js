@@ -11,11 +11,11 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { ArraySchema } from "../../tlv/TlvArray.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { toHexString } from "../../util/Number.js";
 import { TlvAttributeData, TlvAttributeReport } from "./InteractionProtocol.js";
 
 const logger = Logger.get("AttributeDataDecoder");
@@ -132,10 +132,10 @@ export function normalizeAndDecodeAttributeData(
             const attributeDetail = getClusterAttributeById(cluster, attributeId);
             if (attributeDetail === undefined) {
                 logger.debug(
-                    `Decode unknown attribute ${toHexString(clusterId)}/${toHexString(attributeId)} via the AnySchema.`,
+                    `Decode unknown attribute ${Diagnostic.hex(clusterId)}/${Diagnostic.hex(attributeId)} via the AnySchema.`,
                 );
 
-                const attributeName = `Unknown (${toHexString(attributeId)})`;
+                const attributeName = `Unknown (${Diagnostic.hex(attributeId)})`;
                 const value = decodeUnknownAttributeValue(values);
                 result.push({
                     path: { nodeId, endpointId, clusterId, attributeId, attributeName },
@@ -154,7 +154,7 @@ export function normalizeAndDecodeAttributeData(
             });
         } catch (error: any) {
             logger.error(
-                `Error decoding attribute ${endpointId}/${toHexString(clusterId)}/${toHexString(attributeId)}: ${
+                `Error decoding attribute ${endpointId}/${Diagnostic.hex(clusterId)}/${Diagnostic.hex(attributeId)}: ${
                     error.message
                 }`,
             );

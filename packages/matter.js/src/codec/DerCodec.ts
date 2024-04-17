@@ -6,6 +6,7 @@
 import { UnexpectedDataError } from "../common/MatterError.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
+import { toHex } from "../util/Number.js";
 import { isObject } from "../util/Type.js";
 
 export const OBJECT_ID_KEY = "_objectId";
@@ -13,17 +14,24 @@ export const TAG_ID_KEY = "_tag";
 export const BYTES_KEY = "_bytes";
 export const ELEMENTS_KEY = "_elements";
 export const BITS_PADDING = "_padding";
+export const TYPE_OVERRIDE_KEY = "_type";
+export const RAW_DATA_KEY = "_raw";
 
 export enum DerType {
     Boolean = 0x01,
-    UnsignedInt = 0x02,
+    Integer = 0x02,
     BitString = 0x03,
     OctetString = 0x04,
+    Null = 0x05,
     ObjectIdentifier = 0x06,
     UTF8String = 0x0c,
     Sequence = 0x10,
     Set = 0x11,
+    PrintableString = 0x13,
+    T16String = 0x14,
+    IA5String = 0x16,
     UtcDate = 0x17,
+    GeneralizedTime = 0x18,
 }
 
 const CONSTRUCTED = 0x20;
@@ -52,6 +60,13 @@ export const ContextTaggedBytes = (tagId: number, value: ByteArray) => ({
     [TAG_ID_KEY]: tagId | DerClass.ContextSpecific,
     [BYTES_KEY]: value,
 });
+export const DatatypeOverride = (type: DerType, value: any) => ({
+    [TYPE_OVERRIDE_KEY]: type,
+    [RAW_DATA_KEY]: value,
+});
+export const RawBytes = (bytes: ByteArray) => ({
+    [BYTES_KEY]: bytes,
+});
 
 export type DerNode = {
     [TAG_ID_KEY]: number;
@@ -68,63 +83,101 @@ export class DerCodec {
             return this.encodeOctetString(value);
         } else if (value instanceof Date) {
             return this.encodeDate(value);
-        } else if (isObject(value) && value[TAG_ID_KEY] !== undefined) {
-            const { [TAG_ID_KEY]: tagId, [BITS_PADDING]: bitsPadding, [BYTES_KEY]: bytes } = value;
-            if (typeof tagId !== "number") {
-                throw new UnexpectedDataError("Tag ID is non-numeric");
-            }
-            if (bitsPadding !== undefined && typeof bitsPadding !== "number") {
-                throw new UnexpectedDataError("Bits padding is not a numeric byte value");
-            }
-            if (bytes === undefined || !ArrayBuffer.isView(bytes)) {
-                throw new UnexpectedDataError("DER bytes is not a byte array");
-            }
-            return this.encodeAnsi1(
-                tagId,
-                bitsPadding === undefined
-                    ? (bytes as Uint8Array)
-                    : ByteArray.concat(ByteArray.of(bitsPadding), bytes as Uint8Array),
-            );
-        } else if (isObject(value)) {
-            return this.encodeObject(value);
         } else if (typeof value === "string") {
             return this.encodeString(value);
-        } else if (typeof value === "number") {
-            return this.encodeUnsignedInt(value);
+        } else if (typeof value === "number" || typeof value === "bigint") {
+            return this.encodeInteger(value);
         } else if (typeof value === "boolean") {
             return this.encodeBoolean(value);
         } else if (value === undefined) {
             return new ByteArray(0);
+        } else if (isObject(value)) {
+            if (value[TAG_ID_KEY] !== undefined) {
+                const { [TAG_ID_KEY]: tagId, [BITS_PADDING]: bitsPadding, [BYTES_KEY]: bytes } = value;
+                if (typeof tagId !== "number") {
+                    throw new UnexpectedDataError("Tag ID is non-numeric");
+                }
+                if (bitsPadding !== undefined && typeof bitsPadding !== "number") {
+                    throw new UnexpectedDataError("Bits padding is not a numeric byte value");
+                }
+                if (bytes === undefined || !ArrayBuffer.isView(bytes)) {
+                    throw new UnexpectedDataError("DER bytes is not a byte array");
+                }
+                return this.encodeAsn1(
+                    tagId,
+                    bitsPadding === undefined
+                        ? (bytes as Uint8Array)
+                        : ByteArray.concat(ByteArray.of(bitsPadding), bytes as Uint8Array),
+                );
+            } else if (value[TYPE_OVERRIDE_KEY] !== undefined && value[RAW_DATA_KEY] !== undefined) {
+                if (value[TYPE_OVERRIDE_KEY] === DerType.Integer && value[RAW_DATA_KEY] instanceof ByteArray) {
+                    return this.encodeInteger(value[RAW_DATA_KEY]);
+                } else if (value[TYPE_OVERRIDE_KEY] === DerType.BitString && typeof value[RAW_DATA_KEY] === "number") {
+                    return this.encodeBitString(value[RAW_DATA_KEY]);
+                } else if (
+                    value[TYPE_OVERRIDE_KEY] === DerType.PrintableString &&
+                    typeof value[RAW_DATA_KEY] === "string"
+                ) {
+                    return this.encodePrintableString(value[RAW_DATA_KEY]);
+                } else if (value[TYPE_OVERRIDE_KEY] === DerType.IA5String && typeof value[RAW_DATA_KEY] === "string") {
+                    return this.encodeIA5String(value[RAW_DATA_KEY]);
+                } else {
+                    throw new UnexpectedDataError(`Unsupported override type ${value[TYPE_OVERRIDE_KEY]}`);
+                }
+            } else if (
+                value[BYTES_KEY] !== undefined &&
+                value[BYTES_KEY] instanceof ByteArray &&
+                Object.keys(value).length === 1
+            ) {
+                // Raw Data
+                return value[BYTES_KEY];
+            } else if (value[TYPE_OVERRIDE_KEY] === undefined && value[BYTES_KEY] === undefined) {
+                return this.encodeObject(value);
+            } else {
+                throw new UnexpectedDataError(`Unsupported object type ${typeof value}`);
+            }
         } else {
             throw new UnexpectedDataError(`Unsupported type ${typeof value}`);
         }
     }
 
     private static encodeDate(date: Date) {
-        return this.encodeAnsi1(
-            DerType.UtcDate,
-            ByteArray.fromString(
-                date
-                    .toISOString()
-                    .replace(/[-:.T]/g, "")
-                    .slice(2, 14) + "Z",
-            ),
-        );
+        if (date.getFullYear() > 2049) {
+            // Dates 2050+ are encoded as GeneralizedTime. This includes the special Non Well Defined date 9999-12-31.
+            return this.encodeAsn1(
+                DerType.GeneralizedTime,
+                ByteArray.fromString(
+                    date
+                        .toISOString()
+                        .replace(/[-:.T]/g, "")
+                        .slice(0, 14) + "Z",
+                ),
+            );
+        } else
+            return this.encodeAsn1(
+                DerType.UtcDate,
+                ByteArray.fromString(
+                    date
+                        .toISOString()
+                        .replace(/[-:.T]/g, "")
+                        .slice(2, 14) + "Z",
+                ),
+            );
     }
 
     private static encodeBoolean(bool: boolean) {
-        return this.encodeAnsi1(DerType.Boolean, ByteArray.of(bool ? 0xff : 0));
+        return this.encodeAsn1(DerType.Boolean, ByteArray.of(bool ? 0xff : 0));
     }
 
     private static encodeArray(array: Array<any>) {
-        return this.encodeAnsi1(
+        return this.encodeAsn1(
             DerType.Set | CONSTRUCTED,
             ByteArray.concat(...array.map(element => this.encode(element))),
         );
     }
 
     private static encodeOctetString(value: ByteArray) {
-        return this.encodeAnsi1(DerType.OctetString, value);
+        return this.encodeAsn1(DerType.OctetString, value);
     }
 
     private static encodeObject(object: any) {
@@ -132,25 +185,53 @@ export class DerCodec {
         for (const key in object) {
             attributes.push(this.encode(object[key]));
         }
-        return this.encodeAnsi1(DerType.Sequence | CONSTRUCTED, ByteArray.concat(...attributes));
+        return this.encodeAsn1(DerType.Sequence | CONSTRUCTED, ByteArray.concat(...attributes));
     }
 
     private static encodeString(value: string) {
-        return this.encodeAnsi1(DerType.UTF8String, ByteArray.fromString(value));
+        return this.encodeAsn1(DerType.UTF8String, ByteArray.fromString(value));
     }
 
-    private static encodeUnsignedInt(value: number) {
-        const byteArray = new ByteArray(5);
+    private static encodePrintableString(value: string) {
+        if (!/^[A-Za-z0-9 '()+,-./:=?]*$/g.test(value)) {
+            throw new UnexpectedDataError(`String ${value} is not a printable string.`);
+        }
+        return this.encodeAsn1(DerType.PrintableString, ByteArray.fromString(value));
+    }
+
+    private static encodeIA5String(value: string) {
+        /*eslint-disable-next-line no-control-regex */
+        if (!/^[\x00-\x7F]*$/.test(value)) {
+            throw new UnexpectedDataError(`String ${value} is not an IA5 string.`);
+        }
+        return this.encodeAsn1(DerType.IA5String, ByteArray.fromString(value));
+    }
+
+    private static encodeInteger(value: number | bigint | ByteArray) {
+        const isByteArray = ArrayBuffer.isView(value);
+        let valueBytes: ByteArray;
+        if (isByteArray) {
+            valueBytes = value;
+        } else {
+            valueBytes = ByteArray.fromHex(toHex(value));
+        }
+        const byteArray = ByteArray.concat(new ByteArray(1), valueBytes);
         const dataView = byteArray.getDataView();
-        dataView.setUint32(1, value);
         let start = 0;
         while (true) {
             if (dataView.getUint8(start) !== 0) break;
             if (dataView.getUint8(start + 1) >= 0x80) break;
             start++;
-            if (start === 4) break;
+            if (start === byteArray.length - 1) break;
         }
-        return this.encodeAnsi1(DerType.UnsignedInt, byteArray.slice(start));
+        return this.encodeAsn1(DerType.Integer, byteArray.slice(start));
+    }
+
+    private static encodeBitString(value: number) {
+        const reversedBits = value.toString(2).padStart(8, "0");
+        const unusedBits = reversedBits.indexOf("1");
+        const bitByteArray = ByteArray.of(parseInt(reversedBits.split("").reverse().join(""), 2));
+        return this.encode(BitByteArray(bitByteArray, unusedBits === -1 ? 8 : unusedBits));
     }
 
     private static encodeLengthBytes(value: number) {
@@ -171,7 +252,7 @@ export class DerCodec {
         return byteArray.slice(start);
     }
 
-    private static encodeAnsi1(tag: number, data: ByteArray) {
+    private static encodeAsn1(tag: number, data: ByteArray) {
         return ByteArray.concat(ByteArray.of(tag), this.encodeLengthBytes(data.length), data);
     }
 
@@ -180,7 +261,7 @@ export class DerCodec {
     }
 
     private static decodeRec(reader: DataReader<Endian.Big>): DerNode {
-        const { tag, bytes } = this.decodeAnsi1(reader);
+        const { tag, bytes } = this.decodeAsn1(reader);
         if (tag === DerType.BitString)
             return { [TAG_ID_KEY]: tag, [BYTES_KEY]: bytes.slice(1), [BITS_PADDING]: bytes[0] };
         if ((tag & CONSTRUCTED) === 0) return { [TAG_ID_KEY]: tag, [BYTES_KEY]: bytes };
@@ -192,7 +273,7 @@ export class DerCodec {
         return { [TAG_ID_KEY]: tag, [BYTES_KEY]: bytes, [ELEMENTS_KEY]: elements };
     }
 
-    private static decodeAnsi1(reader: DataReader<Endian.Big>): { tag: number; bytes: ByteArray } {
+    private static decodeAsn1(reader: DataReader<Endian.Big>): { tag: number; bytes: ByteArray } {
         const tag = reader.readUInt8();
         let length = reader.readUInt8();
         if ((length & 0x80) !== 0) {
@@ -207,38 +288,3 @@ export class DerCodec {
         return { tag, bytes };
     }
 }
-
-export const PublicKeyEcPrime256v1_X962 = (key: ByteArray) => ({
-    type: {
-        algorithm: ObjectId("2A8648CE3D0201") /* EC Public Key */,
-        curve: ObjectId("2A8648CE3D030107") /* Curve P256_V1 */,
-    },
-    bytes: BitByteArray(key),
-});
-export const EcdsaWithSHA256_X962 = DerObject("2A8648CE3D040302");
-export const SHA256_CMS = DerObject("608648016503040201"); // 2.16.840.1.101.3.4.2.1
-export const OrganisationName_X520 = (name: string) => [DerObject("55040A", { name })];
-export const SubjectKeyIdentifier_X509 = (identifier: ByteArray) =>
-    DerObject("551d0e", { value: DerCodec.encode(identifier) });
-export const AuthorityKeyIdentifier_X509 = (identifier: ByteArray) =>
-    DerObject("551d23", { value: DerCodec.encode({ id: ContextTaggedBytes(0, identifier) }) });
-export const BasicConstraints_X509 = (constraints: any) =>
-    DerObject("551d13", { critical: true, value: DerCodec.encode(constraints) });
-export const ExtendedKeyUsage_X509 = ({ clientAuth, serverAuth }: { clientAuth: boolean; serverAuth: boolean }) =>
-    DerObject("551d25", {
-        critical: true,
-        value: DerCodec.encode({
-            client: clientAuth ? ObjectId("2b06010505070302") : undefined,
-            server: serverAuth ? ObjectId("2b06010505070301") : undefined,
-        }),
-    });
-export const KeyUsage_Signature_X509 = DerObject("551d0f", {
-    critical: true,
-    value: DerCodec.encode(BitByteArray(ByteArray.of(1 << 7), 7)),
-});
-export const KeyUsage_Signature_ContentCommited_X509 = DerObject("551d0f", {
-    critical: true,
-    value: DerCodec.encode(BitByteArray(ByteArray.of(0x03 << 1), 1)),
-});
-export const Pkcs7Data = (data: any) => DerObject("2A864886F70D010701", { value: ContextTagged(0, data) });
-export const Pkcs7SignedData = (data: any) => DerObject("2a864886f70d010702", { value: ContextTagged(0, data) });

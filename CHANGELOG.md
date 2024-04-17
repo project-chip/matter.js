@@ -13,14 +13,23 @@ The main work (all changes without a GitHub username in brackets in the below li
 * Matter-Core functionality:
   * Feature: cluster default implementations for the following clusters were added/updated:
     * BooleanState: Automatically emit the StateChange event when enabled for the cluster and the stateValue changes
-    * LevelControl: Implemented all non Frequency-command handlers as defined by specification with an optional transition logic managed by matter.js
+    * LevelControl: Implemented all non-Frequency command handlers as defined by specification with an optional transition logic managed by matter.js
     * LocalizationConfiguration: Implemented activeLocale validation
     * TimeFormatLocalization: Implemented activeTimeFormat validation
+  * Enhancement: Adjusted handling of TlvList order to match better with matter specification and ensure field orders are preserved
+  * Enhancement: Adds Certificate validation and cryptographic verification during commissioning and CASE session establishment
 * matter.js New API code flows: 
   * Enhancement: Optimized constraint validations and conformance error messages
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
 * Chip testing:
   * Enhancement: Adds automatic CI testing for all clusters listed in [matter.js Readme](./packages/matter.js/README.md)
+* matter.js tooling:
+  * Enhancement: Migrates cluster identification to the pattern used in the newer device code. It now scans the entire document rather than attempting to navigate via the index.  This is simpler and more resilient
+  * Enhancement: Various other small changes improve resiliency
+  * Enhancement: Removes the "main" closure from codegen scripts that added a bit of friction to debugging
+  * Enhancement: Adds proper CLI support to codegen scripts to override various behaviors and provide information on the script
+  * Enhancement: We now version the intermediate models.  In the future we can use this to add informational revision information to model elements and make the API adaptive based on the targeted Matter version
+  * Fix: Fixes a bug that was causing field-level prose to be incorrectly associated with the containing element in malformed portions of the core spec
 
 ### 0.8.1 (2024-04-15)
 * Matter-Core functionality:

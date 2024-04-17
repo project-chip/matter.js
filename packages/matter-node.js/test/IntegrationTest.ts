@@ -21,6 +21,7 @@ import {
     OnOffCluster,
     OperationalCredentials,
 } from "@project-chip/matter.js/cluster";
+import { Crypto } from "@project-chip/matter.js/crypto";
 import {
     CaseAuthenticatedTag,
     ClusterId,
@@ -46,6 +47,7 @@ import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
 import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
 import { Time } from "@project-chip/matter.js/time";
 import { ByteArray, createPromise, singleton } from "@project-chip/matter.js/util";
+import { CryptoNode } from "../src/crypto/CryptoNode.js";
 import { TimeNode } from "../src/time/TimeNode.js";
 
 const SERVER_IPv6 = "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe";
@@ -109,8 +111,13 @@ describe("Integration Test", () => {
         time: number;
     }>();
 
+    let originalCrypto: () => Crypto;
+
     before(async () => {
         MockTime.reset(TIME_START);
+
+        originalCrypto = Crypto.get;
+        Crypto.get = singleton(() => new CryptoNode());
 
         Network.get = () => clientNetwork;
 
@@ -277,7 +284,7 @@ describe("Integration Test", () => {
 
             let commissionedCaseAuthenticatedTags: CaseAuthenticatedTag[] | undefined;
             // Catch the CASE Authenticated tags commissioned on the Fabric on the device
-            MockTime.interceptOnce(FabricBuilder.prototype, "setOperationalCert", data => {
+            MockTime.interceptOnce(FabricBuilder.prototype, "build", async data => {
                 assert.ok(data.resolve);
                 commissionedCaseAuthenticatedTags = (data.resolve as Fabric).caseAuthenticatedTags;
             });
@@ -2022,5 +2029,7 @@ describe("Integration Test", () => {
         fakeServerStorage.close();
 
         Time.get = () => mockTimeInstance;
+
+        Crypto.get = originalCrypto;
     });
 });

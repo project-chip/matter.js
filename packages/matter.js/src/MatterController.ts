@@ -126,7 +126,7 @@ export class MatterController {
                 .setRootVendorId(adminVendorId);
             fabricBuilder.setOperationalCert(
                 certificateManager.generateNoc(
-                    fabricBuilder.getPublicKey(),
+                    fabricBuilder.publicKey,
                     adminFabricId,
                     rootNodeId,
                     caseAuthenticatedTags,

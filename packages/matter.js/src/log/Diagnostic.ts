@@ -315,4 +315,11 @@ export namespace Diagnostic {
 
         return value as T;
     }
+
+    /**
+     * Convert a number or bigint to a hex string which is prefixed by "0x" for logging purposes
+     */
+    export function hex(value: number | bigint) {
+        return `0x${value.toString(16)}`;
+    }
 }

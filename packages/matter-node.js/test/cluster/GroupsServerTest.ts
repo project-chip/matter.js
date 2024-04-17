@@ -62,7 +62,7 @@ describe("Groups Server test", () => {
 
         it("add new group and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -89,7 +89,7 @@ describe("Groups Server test", () => {
 
         it("add another new group and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -127,7 +127,7 @@ describe("Groups Server test", () => {
 
         it("add another new group on other endpoint and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -251,7 +251,7 @@ describe("Groups Server test", () => {
 
         it("delete group and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -284,7 +284,7 @@ describe("Groups Server test", () => {
 
         it("delete all groups and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -366,7 +366,7 @@ describe("Groups Server test", () => {
 
         it("add group while identifying", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric!.persistCallback = () => firstResolver(testFabric!.toStorageObject());
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,

@@ -5,7 +5,7 @@
  */
 
 import { MatterController } from "../../MatterController.js";
-import { TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
+import { TlvIntermediateCertificate, TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PublicKey } from "../../crypto/Key.js";
@@ -140,26 +140,38 @@ export class CaseClient {
             });
             const {
                 ellipticCurvePublicKey: peerPublicKey,
-                subject: { nodeId: peerNodeIdCert },
+                subject: { fabricId: peerFabricIdNOCert, nodeId: peerNodeIdNOCert },
             } = TlvOperationalCertificate.decode(peerNewOpCert);
 
-            if (peerNodeIdCert !== peerNodeId) {
+            Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
+
+            if (peerNodeIdNOCert !== peerNodeId) {
                 throw new UnexpectedDataError(
                     "The node ID in the peer certificate doesn't match the expected peer node ID",
                 );
             }
+            if (peerNodeIdNOCert !== peerNodeId) {
+                throw new UnexpectedDataError(
+                    "The node ID in the peer certificate doesn't match the expected peer node ID",
+                );
+            }
+            if (peerFabricIdNOCert !== fabric.fabricId) {
+                throw new UnexpectedDataError(
+                    "The fabric ID in the peer certificate doesn't match the expected fabric ID",
+                );
+            }
+            if (peerIntermediateCACert !== undefined) {
+                const {
+                    subject: { fabricId: peerFabricIdIcaCert },
+                } = TlvIntermediateCertificate.decode(peerIntermediateCACert);
 
-            // TODO also verify:
-            //  * FabricId matches
-            //  * If an ICAC is present, and it contains a Fabric ID in its subject, then it SHALL match the FabricID in
-            //    the NOC leaf certificate.
-            //  * The certificate chain SHALL chain back to the Trusted Root CA Certificate TrustedRCAC whose public key
-            //    was used in the computation of the Destination Identifier when generating Sigma1.
-            //  * All the elements in the certificate chain SHALL respect the Matter Certificate DN Encoding Rules,
-            //    including range checks for identifiers such as Fabric ID and Node ID.
-            //  * verify certificate chain of TBEData2.responderNOC (incl. ICAC if present)
-
-            Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
+                if (peerFabricIdIcaCert !== fabric.fabricId) {
+                    throw new UnexpectedDataError(
+                        "The fabric ID in the peer intermediate CA certificate doesn't match the expected fabric ID",
+                    );
+                }
+            }
+            fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
 
             // Generate and send sigma3
             const sigma3Salt = ByteArray.concat(
