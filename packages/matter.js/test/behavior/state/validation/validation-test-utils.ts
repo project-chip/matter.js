@@ -11,7 +11,9 @@ import { AttributeModel, ClusterModel, FeatureSet, FieldModel, Globals } from ".
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 import { Properties } from "../../../../src/util/Type.js";
 
-export function Fields(...definition: { name?: string; type?: string; conformance?: string }[]): Fields {
+export function Fields(
+    ...definition: { name?: string; type?: string; conformance?: string; constraint?: string }[]
+): Fields {
     return definition.map(
         f =>
             new FieldModel({
@@ -78,7 +80,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
             throw e;
         }
         expect(e).instanceof(error.type);
-        expect((e as Error).message).equals(`${error.message} (128)`);
+        expect((e as Error).message).equals(`${error.message} (${new error.type("", {}).code})`);
     }
 }
 

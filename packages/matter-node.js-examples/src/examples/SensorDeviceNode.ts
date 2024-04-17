@@ -99,12 +99,20 @@ async function main() {
     if (isTemperature) {
         endpoint = new Endpoint(TemperatureSensorDevice, {
             id: "tempsensor",
-            temperatureMeasurement: { measuredValue: getIntValueFromCommandOrRandom("value") },
+            temperatureMeasurement: {
+                // Use this to initialize the measuredValue with the most uptodate value.
+                // If you do not know the value and also can not request it, best use "null" (if allowed by the cluster).
+                measuredValue: getIntValueFromCommandOrRandom("value"),
+            },
         });
     } else {
         endpoint = new Endpoint(HumiditySensorDevice, {
             id: "humsensor",
-            relativeHumidityMeasurement: { measuredValue: getIntValueFromCommandOrRandom("value", false) },
+            relativeHumidityMeasurement: {
+                // Use this to initialize the measuredValue with the most uptodate value.
+                // If you do not know the value and also can not request it, best use "null" (if allowed by the cluster).
+                measuredValue: getIntValueFromCommandOrRandom("value", false),
+            },
         });
     }
 

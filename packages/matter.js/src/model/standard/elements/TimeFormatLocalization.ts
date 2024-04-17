@@ -53,7 +53,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "ActiveCalendarType", id: 0x1, type: "CalendarTypeEnum", access: "RW VM",
-            conformance: "CALFMT", default: null, quality: "X N",
+            conformance: "CALFMT", constraint: "in supportedCalendarTypes", default: null, quality: "X N",
             details: "The ActiveCalendarType attribute shall represent the calendar format that the Node is currently " +
                 "configured to use when conveying dates. If provided, this value shall take priority over any unit " +
                 "implied through the ActiveLocale Attribute.",

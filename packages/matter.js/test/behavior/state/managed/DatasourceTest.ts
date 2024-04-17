@@ -144,7 +144,7 @@ describe("Datasource", () => {
         class State {
             foo = "";
 
-            [Val.properties](_session: ValueSupervisor.Session) {
+            [Val.properties](_endpoint: any, _session: ValueSupervisor.Session) {
                 return dynamic;
             }
         }
