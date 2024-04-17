@@ -9,8 +9,7 @@ import { InternalError } from "../common/MatterError.js";
 /**
  * Helper function for class generation.
  *
- * This factory does not offer TypeScript types for the resulting class.  You
- * must cast separately.
+ * This factory does not offer TypeScript types for the resulting class.  You must cast separately.
  */
 export function GeneratedClass(options: GeneratedClass.Options) {
     const { base, name, args, mixins } = options;
@@ -55,9 +54,8 @@ export namespace GeneratedClass {
      */
     export interface Mixin {
         /**
-         * A function that performs initialization after instantiation.  "this"
-         * will be the object and arguments are the arguments to the
-         * constructor.
+         * A function that performs initialization after instantiation.  "this" will be the object and arguments are the
+         * arguments to the constructor.
          */
         initialize?: (...args: any[]) => void;
 
@@ -97,8 +95,8 @@ export namespace GeneratedClass {
         base?: new (...args: any) => any;
 
         /**
-         * A preprocessor for arguments.  Derivatives may use this to
-         * transform arguments prior to call to super() and initialize().
+         * A preprocessor for arguments.  Derivatives may use this to transform arguments prior to call to super() and
+         * initialize().
          */
         args?: (...args: any[]) => any[];
 
@@ -121,12 +119,10 @@ function createConstructor({ name, base, args, mixins }: ConstructorOptions) {
     const _InternalError = InternalError;
     _InternalError;
 
-    // Have to use eval if we don't want every class to be called
-    // "GeneratedClass" in the debugger but we can ensure this won't be
-    // abused.
+    // Have to use eval if we don't want every class to be called "GeneratedClass" in the debugger but we can ensure
+    // this won't be abused.
     //
-    // "name" is the only input to this function that appears textually in the
-    // eval.
+    // "name" is the only input to this function that appears textually in the eval.
     if (!name.match(/^[a-z0-9$_]+$/i)) {
         throw new InternalError("Refusing to generate class with untrustworthy name");
     }
