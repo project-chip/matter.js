@@ -43,7 +43,7 @@
         "chai": "^4.4.1",
         "embedme": "^1.22.1",
         "mocha": "^10.4.0",
-        "typescript": "~5.4.4"
+        "typescript": "~5.4.5"
     },
     "files": [
         "dist/**/*",
