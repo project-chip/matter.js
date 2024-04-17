@@ -9,6 +9,19 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Feature: cluster default implementations for the following clusters were added/updated:
+    * BooleanState: Automatically emit the StateChange event when enabled for the cluster and the stateValue changes
+    * LevelControl: Implemented all non Frequency-command handlers as defined by specification with an optional transition logic managed by matter.js
+    * LocalizationConfiguration: Implemented activeLocale validation
+    * TimeFormatLocalization: Implemented activeTimeFormat validation
+* matter.js New API code flows: 
+  * Enhancement: Optimized constraint validations and conformance error messages
+  * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
+* Chip testing:
+  * Enhancement: Adds automatic CI testing for all clusters listed in [matter.js Readme](./packages/matter.js/README.md)
+
 ### 0.8.1 (2024-04-15)
 * Matter-Core functionality:
   * Cluster default implementations for the following clusters were added/updated:

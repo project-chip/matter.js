@@ -5,7 +5,7 @@
  */
 
 import { InternalError } from "../../../common/MatterError.js";
-import { Constraint, Metatype, ValueModel } from "../../../model/index.js";
+import { Constraint, FieldValue, Metatype, ValueModel } from "../../../model/index.js";
 import { ConstraintError } from "../../errors.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
@@ -23,10 +23,24 @@ export function createConstraintValidator(
         return;
     }
 
-    switch (schema.effectiveMetatype) {
-        case Metatype.array:
-            return createArrayConstraintValidator(constraint, schema);
+    const metatype = schema.effectiveMetatype;
+    if (metatype === Metatype.array) {
+        return createArrayConstraintValidator(constraint, schema);
+    }
 
+    if (constraint.in) {
+        return (value, _session, location) => {
+            if (!constraint.test(value as FieldValue, location.siblings)) {
+                throw new ConstraintError(
+                    schema,
+                    location,
+                    `Value ${value} is not one of the values allowed by "in" constraint`,
+                );
+            }
+        };
+    }
+
+    switch (schema.effectiveMetatype) {
         case Metatype.integer:
         case Metatype.float:
             return (value, _session, location) => {
@@ -48,7 +62,7 @@ export function createConstraintValidator(
                     throw new ConstraintError(
                         schema,
                         location,
-                        `Value ${value} is not within bounds defined by constraint`,
+                        `Lenght of value ${value} is not within bounds defined by constraint`,
                     );
                 }
             };

@@ -6,6 +6,7 @@
 
 import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { ClusterModel, Metatype, ValueModel } from "../../../model/index.js";
+import { StatusCode } from "../../../protocol/interaction/StatusCode.js";
 import { camelize } from "../../../util/String.js";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
@@ -117,11 +118,18 @@ function createNullValidator(
 function createEnumValidator(schema: ValueModel): ValueSupervisor.Validate | undefined {
     const valid = new Set(schema.members.map(member => member.id).filter(e => e !== undefined));
 
-    return (value, _session, location) => {
+    const constraint = schema.effectiveConstraint;
+    const constraintValidator = constraint.in
+        ? createConstraintValidator(schema.effectiveConstraint, schema)
+        : undefined;
+
+    return (value, session, location) => {
         assertNumber(value, location);
         if (!valid.has(value)) {
-            throw new DatatypeError(location, "defined in enum", value);
+            throw new DatatypeError(location, "defined in enum", value, StatusCode.ConstraintError);
         }
+
+        constraintValidator?.(value, session, location);
     };
 }
 

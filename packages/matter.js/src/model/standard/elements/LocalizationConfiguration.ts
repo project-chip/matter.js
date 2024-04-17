@@ -32,7 +32,7 @@ Matter.children.push(Cluster({
 
         Attribute({
             name: "ActiveLocale", id: 0x0, type: "string", access: "RW VM", conformance: "M",
-            constraint: "max 35", quality: "N",
+            constraint: "in supportedLocales", quality: "N",
 
             details: "The ActiveLocale attribute shall represent the locale that the Node is currently configured to use " +
                 "when conveying information. The ActiveLocale attribute shall be a Language Tag as defined by BCP47 " +

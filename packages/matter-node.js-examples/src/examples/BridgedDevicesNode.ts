@@ -19,7 +19,7 @@ import "@project-chip/matter-node.js";
 
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
 import { BridgedDeviceBasicInformationServer } from "@project-chip/matter.js/behavior/definitions/bridged-device-basic-information";
-import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
+import { VendorId } from "@project-chip/matter.js/datatype";
 import { logEndpoint } from "@project-chip/matter.js/device";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { OnOffPlugInUnitDevice } from "@project-chip/matter.js/devices/OnOffPlugInUnitDevice";
@@ -60,7 +60,7 @@ const server = await ServerNode.create({
     // Optional: If Ommitted some development defaults are used
     productDescription: {
         name: deviceName,
-        deviceType: DeviceTypeId(isSocket[0] ? OnOffPlugInUnitDevice.deviceType : OnOffLightDevice.deviceType),
+        deviceType: AggregatorEndpoint.deviceType,
     },
 
     // Provide defaults for the BasicInformation cluster on the Root endpoint
