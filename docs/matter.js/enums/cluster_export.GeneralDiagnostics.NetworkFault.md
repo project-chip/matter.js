@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.3
+MatterSpecification.v11.Core § 11.11.4.3
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ The Node has encountered a network fault as a result of a failure to establish a
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:306](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L306)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:305](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L305)
 
 ___
 
@@ -39,7 +39,7 @@ The Node has encountered a network fault as a result of a hardware failure.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:296](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L296)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:295](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L295)
 
 ___
 
@@ -51,7 +51,7 @@ The Node has encountered a network fault as a result of a jammed network.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:301](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L301)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:300](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L300)
 
 ___
 
@@ -63,4 +63,4 @@ The Node has encountered an unspecified fault.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:291](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L291)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:290](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L290)

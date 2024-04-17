@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:246](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L246)
+[packages/matter.js/src/model/aspects/Access.ts:246](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L246)
 
 ___
 
@@ -76,7 +76,7 @@ All valid privilege tags.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:389](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L389)
+[packages/matter.js/src/model/aspects/Access.ts:389](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L389)
 
 ___
 
@@ -91,7 +91,7 @@ like `[ RW, VA ]` or `[ Access.Rw.W, Access.Privilege.Operate ]`.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:412](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L412)
+[packages/matter.js/src/model/aspects/Access.ts:412](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L412)
 
 ___
 
@@ -103,7 +103,7 @@ All atomic access control values.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:357](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L357)
+[packages/matter.js/src/model/aspects/Access.ts:357](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L357)
 
 ___
 
@@ -115,7 +115,7 @@ A defined set of access control values.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:362](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L362)
+[packages/matter.js/src/model/aspects/Access.ts:362](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L362)
 
 ___
 
@@ -127,7 +127,7 @@ All valid timed tags.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:404](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L404)
+[packages/matter.js/src/model/aspects/Access.ts:404](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L404)
 
 ## Variables
 
@@ -137,7 +137,7 @@ All valid timed tags.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:376](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L376)
+[packages/matter.js/src/model/aspects/Access.ts:376](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L376)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:416](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L416)
+[packages/matter.js/src/model/aspects/Access.ts:416](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L416)
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:370](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L370)
+[packages/matter.js/src/model/aspects/Access.ts:370](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L370)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:375](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L375)
+[packages/matter.js/src/model/aspects/Access.ts:375](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L375)
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:382](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L382)
+[packages/matter.js/src/model/aspects/Access.ts:382](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L382)
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:374](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L374)
+[packages/matter.js/src/model/aspects/Access.ts:374](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L374)
 
 ___
 
@@ -197,7 +197,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:381](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L381)
+[packages/matter.js/src/model/aspects/Access.ts:381](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L381)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:380](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L380)
+[packages/matter.js/src/model/aspects/Access.ts:380](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L380)
 
 ___
 
@@ -228,7 +228,7 @@ Relative ordering of privilege.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:337](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L337)
+[packages/matter.js/src/model/aspects/Access.ts:337](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L337)
 
 ___
 
@@ -238,7 +238,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:364](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L364)
+[packages/matter.js/src/model/aspects/Access.ts:364](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L364)
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:366](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L366)
+[packages/matter.js/src/model/aspects/Access.ts:366](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L366)
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:367](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L367)
+[packages/matter.js/src/model/aspects/Access.ts:367](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L367)
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:371](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L371)
+[packages/matter.js/src/model/aspects/Access.ts:371](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L371)
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:384](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L384)
+[packages/matter.js/src/model/aspects/Access.ts:384](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L384)
 
 ___
 
@@ -288,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:369](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L369)
+[packages/matter.js/src/model/aspects/Access.ts:369](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L369)
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:373](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L373)
+[packages/matter.js/src/model/aspects/Access.ts:373](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L373)
 
 ___
 
@@ -308,7 +308,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:379](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L379)
+[packages/matter.js/src/model/aspects/Access.ts:379](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L379)
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:378](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L378)
+[packages/matter.js/src/model/aspects/Access.ts:378](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L378)
 
 ___
 
@@ -328,7 +328,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:377](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L377)
+[packages/matter.js/src/model/aspects/Access.ts:377](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L377)
 
 ___
 
@@ -338,4 +338,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:365](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/aspects/Access.ts#L365)
+[packages/matter.js/src/model/aspects/Access.ts:365](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/aspects/Access.ts#L365)

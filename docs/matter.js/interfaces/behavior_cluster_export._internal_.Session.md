@@ -43,7 +43,7 @@ deferred.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L86)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L86)
 
 ___
 
@@ -60,7 +60,7 @@ active.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L159)
+[packages/matter.js/src/behavior/AccessControl.ts:159](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L159)
 
 ___
 
@@ -76,7 +76,7 @@ The fabric of the authorized client.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:137](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L137)
+[packages/matter.js/src/behavior/AccessControl.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L137)
 
 ___
 
@@ -93,7 +93,7 @@ fabric.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L148)
+[packages/matter.js/src/behavior/AccessControl.ts:148](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L148)
 
 ___
 
@@ -112,7 +112,7 @@ Tracks "offline" rather than "online" because this makes the safer mode (full en
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:167](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L167)
+[packages/matter.js/src/behavior/AccessControl.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L167)
 
 ___
 
@@ -128,7 +128,7 @@ The authenticated [SubjectId](../modules/datatype_export.md#subjectid) for onlin
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:142](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L142)
+[packages/matter.js/src/behavior/AccessControl.ts:142](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L142)
 
 ___
 
@@ -144,7 +144,7 @@ If this is true a timed transaction is in effect.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:153](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L153)
+[packages/matter.js/src/behavior/AccessControl.ts:153](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L153)
 
 ___
 
@@ -157,7 +157,7 @@ information during the action.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L80)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L80)
 
 ___
 
@@ -169,7 +169,7 @@ The transaction used for isolating state changes associated with this session.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L74)
+[packages/matter.js/src/behavior/supervision/ValueSupervisor.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/supervision/ValueSupervisor.ts#L74)
 
 ## Methods
 
@@ -195,4 +195,4 @@ The access level of the authorized client.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L132)
+[packages/matter.js/src/behavior/AccessControl.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L132)

@@ -29,6 +29,8 @@ If a worker is a PromiseLike the runtime will delete and/or destroy it on comple
 
 - [[asyncDispose]](environment_export.RuntimeService.Worker.md#[asyncdispose])
 - [[dispose]](environment_export.RuntimeService.Worker.md#[dispose])
+- [[label]](environment_export.RuntimeService.Worker.md#[label])
+- [[value]](environment_export.RuntimeService.Worker.md#[value])
 - [construction](environment_export.RuntimeService.Worker.md#construction)
 - [helper](environment_export.RuntimeService.Worker.md#helper)
 - [start](environment_export.RuntimeService.Worker.md#start)
@@ -67,7 +69,7 @@ Partial.[asyncDispose]
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:291](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L291)
+[packages/matter.js/src/environment/RuntimeService.ts:310](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L310)
 
 ___
 
@@ -91,7 +93,31 @@ Partial.[dispose]
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:296](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L296)
+[packages/matter.js/src/environment/RuntimeService.ts:315](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L315)
+
+___
+
+### [label]
+
+• `Optional` **[label]**: `unknown`
+
+If label is present, it will be presented in diagnostics.  This takes precedence over [Diagnostic.value].
+
+#### Defined in
+
+[packages/matter.js/src/environment/RuntimeService.ts:320](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L320)
+
+___
+
+### [value]
+
+• `Optional` **[value]**: `unknown`
+
+In diagnostics workers render using toString() unless they provide explicit diagnostics.
+
+#### Defined in
+
+[packages/matter.js/src/environment/RuntimeService.ts:325](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L325)
 
 ___
 
@@ -108,7 +134,7 @@ If the worker supports [AsyncConstruction](../modules/behavior_cluster_export._i
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:279](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L279)
+[packages/matter.js/src/environment/RuntimeService.ts:298](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L298)
 
 ___
 
@@ -121,7 +147,7 @@ cancels helpers and emits [RuntimeService.stopped](../classes/environment_export
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:269](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L269)
+[packages/matter.js/src/environment/RuntimeService.ts:288](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L288)
 
 ___
 
@@ -147,7 +173,7 @@ Partial.start
 
 #### Defined in
 
-[packages/matter.js/src/environment/RuntimeService.ts:263](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/RuntimeService.ts#L263)
+[packages/matter.js/src/environment/RuntimeService.ts:282](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/RuntimeService.ts#L282)
 
 ## Methods
 
@@ -169,7 +195,7 @@ Partial.cancel
 
 #### Defined in
 
-[packages/matter.js/src/common/Lifecycle.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Lifecycle.ts#L95)
+[packages/matter.js/src/common/Lifecycle.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/Lifecycle.ts#L95)
 
 ___
 
@@ -187,4 +213,4 @@ Partial.close
 
 #### Defined in
 
-[packages/matter.js/src/common/Lifecycle.ts:102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/Lifecycle.ts#L102)
+[packages/matter.js/src/common/Lifecycle.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/Lifecycle.ts#L102)

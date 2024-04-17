@@ -11,7 +11,7 @@ because we don’t have any other usecases which require this datatype.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.8
+MatterSpecification.v11.Cluster § 6.7.5.8
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ This indicates the height using the metric defined in Metric
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.8.2
+MatterSpecification.v11.Cluster § 6.7.5.8.2
 
 #### Inherited from
 
@@ -57,7 +57,7 @@ This shall indicate metric used for defining Height/Width.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.8.3
+MatterSpecification.v11.Cluster § 6.7.5.8.3
 
 #### Inherited from
 
@@ -77,7 +77,7 @@ This indicates the width using the metric defined in Metric
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.8.1
+MatterSpecification.v11.Cluster § 6.7.5.8.1
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ This value shall indicate that the reason for a state change is unknown.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.19.7.4.15
+MatterSpecification.v11.Core § 11.19.7.4.15
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ The reason for a state change is a request by the OTA Provider to wait.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L175)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:174](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L174)
 
 ___
 
@@ -42,7 +42,7 @@ The reason for a state change is the failure of a prior operation.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:165](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L165)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:164](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L164)
 
 ___
 
@@ -54,7 +54,7 @@ The reason for a state change is the success of a prior operation.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:160](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L160)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:159](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L159)
 
 ___
 
@@ -66,7 +66,7 @@ The reason for a state change is a time-out.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:169](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L169)
 
 ___
 
@@ -78,4 +78,4 @@ The reason for a state change is unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L154)

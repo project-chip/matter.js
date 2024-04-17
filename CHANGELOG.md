@@ -9,9 +9,16 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.8.1 (2024-04-15)
 * Matter-Core functionality:
-  * Enhanced Identify cluster default implementation by additional state `isIdentifying` and events `startIdentifying` and `stopIdentifying`
+  * Cluster default implementations for the following clusters were added/updated:
+    * (GreydonDesu) Feature: DoorLock: Implemented bare minimal commands to lock/unlock the door
+    * Enhancement: Enhanced Identify cluster default implementation by additional state `isIdentifying` and events `startIdentifying` and `stopIdentifying`
+  * Enhancement: Diagnostic and logging information, also on SIGUSR2 signal for node.js
+  * Fix: Updates subscribed events on structure updates to make sure also new events are reported correctly
+  * Fix: Removed invalid length assumption in Sigma2
+* matter.js New API code flows: 
+  * Enhancement: Optimizes Node activity tracking and shutdown/startup handling
 
 ## 0.8.0 (2024-03-29)
 * Packages

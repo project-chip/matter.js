@@ -21,11 +21,11 @@
 
 The FanControl cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [FanControlServer](endpoint_definitions_device_FanDevice.FanRequirements.md#fancontrolserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L46)
+[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L45)
 
 ___
 
@@ -35,11 +35,11 @@ ___
 
 The Groups cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsServer](endpoint_definitions_device_FanDevice.FanRequirements.md#groupsserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L39)
+[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L38)
 
 ___
 
@@ -49,11 +49,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_FanDevice.FanRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L32)
+[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L31)
 
 ___
 
@@ -74,4 +74,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L51)
+[packages/matter.js/src/endpoint/definitions/device/FanDevice.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/FanDevice.ts#L50)

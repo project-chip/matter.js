@@ -45,6 +45,7 @@
 
 - [Action](../interfaces/behavior_cluster_export._internal_.Action.md)
 - [ActionContext](../interfaces/behavior_cluster_export._internal_.ActionContext.md)
+- [Activity](../interfaces/behavior_cluster_export._internal_.Activity.md)
 - [AsyncConstructable](../interfaces/behavior_cluster_export._internal_.AsyncConstructable.md)
 - [AsyncConstruction](../interfaces/behavior_cluster_export._internal_.AsyncConstruction-1.md)
 - [Configuration](../interfaces/behavior_cluster_export._internal_.Configuration.md)
@@ -125,9 +126,9 @@ as fields.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/supervision/Schema.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/supervision/Schema.ts#L23)
+[packages/matter.js/src/behavior/supervision/Schema.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/supervision/Schema.ts#L23)
 
-[packages/matter.js/src/behavior/supervision/Schema.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/supervision/Schema.ts#L25)
+[packages/matter.js/src/behavior/supervision/Schema.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/supervision/Schema.ts#L25)
 
 ___
 
@@ -139,7 +140,7 @@ Type for Matter structs.  In JS this is an object with string keys.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/Val.ts#L19)
+[packages/matter.js/src/behavior/state/Val.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/Val.ts#L19)
 
 ___
 
@@ -151,11 +152,11 @@ A set of behaviors an endpoint supports.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L19)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L19)
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L14)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L14)
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L30)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L30)
 
 ___
 
@@ -167,9 +168,9 @@ General type for state values.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/Val.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/Val.ts#L13)
+[packages/matter.js/src/behavior/state/Val.ts:13](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/Val.ts#L13)
 
-[packages/matter.js/src/behavior/state/Val.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/Val.ts#L15)
+[packages/matter.js/src/behavior/state/Val.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/Val.ts#L15)
 
 ## Functions
 
@@ -197,7 +198,7 @@ General type for state values.
 
 #### Defined in
 
-[packages/matter.js/src/util/AsyncConstruction.ts:141](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/AsyncConstruction.ts#L141)
+[packages/matter.js/src/util/AsyncConstruction.ts:141](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/AsyncConstruction.ts#L141)
 
 ___
 
@@ -220,7 +221,7 @@ Create a [DataModelPath](behavior_cluster_export._internal_.md#datamodelpath) ro
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/DataModelPath.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/DataModelPath.ts#L29)
+[packages/matter.js/src/endpoint/DataModelPath.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/DataModelPath.ts#L29)
 
 ___
 
@@ -248,7 +249,7 @@ Create a new datasource.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/managed/Datasource.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/managed/Datasource.ts#L59)
+[packages/matter.js/src/behavior/state/managed/Datasource.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/managed/Datasource.ts#L59)
 
 ___
 
@@ -276,7 +277,7 @@ Define a new type of endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/type/EndpointType.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/type/EndpointType.ts#L26)
+[packages/matter.js/src/endpoint/type/EndpointType.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/type/EndpointType.ts#L26)
 
 ___
 
@@ -304,4 +305,4 @@ Create SupportedBehaviors from a list of behavior types.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L19)
+[packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/properties/SupportedBehaviors.ts#L19)

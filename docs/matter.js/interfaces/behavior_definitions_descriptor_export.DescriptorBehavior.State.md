@@ -29,7 +29,7 @@ This attribute shall list each cluster ID for the client clusters present on the
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.5.5.3
+MatterSpecification.v11.Core § 9.5.5.3
 
 #### Inherited from
 
@@ -37,7 +37,7 @@ StateType.clientList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L88)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L87)
 
 ___
 
@@ -54,7 +54,7 @@ instance on the endpoint.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.5.5.1
+MatterSpecification.v11.Core § 9.5.5.1
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ StateType.deviceTypeList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L74)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:73](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L73)
 
 ___
 
@@ -76,7 +76,7 @@ include in this list.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.5.5.4
+MatterSpecification.v11.Core § 9.5.5.4
 
 #### Inherited from
 
@@ -84,7 +84,7 @@ StateType.partsList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L96)
 
 ___
 
@@ -96,7 +96,7 @@ This attribute shall list each cluster ID for the server clusters present on the
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.5.5.2
+MatterSpecification.v11.Core § 9.5.5.2
 
 #### Inherited from
 
@@ -104,4 +104,4 @@ StateType.serverList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L81)
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L80)

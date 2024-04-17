@@ -8,7 +8,7 @@ Input to the Actions stopAction command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.5
+MatterSpecification.v11.Core § 9.14.6.5
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:449](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L449)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:448](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L448)
 
 ___
 
@@ -49,4 +49,4 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:450](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L450)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:449](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L449)

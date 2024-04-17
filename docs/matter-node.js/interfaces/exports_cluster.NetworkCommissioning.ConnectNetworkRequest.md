@@ -8,7 +8,7 @@ Input to the NetworkCommissioning connectNetwork command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.9
+MatterSpecification.v11.Core § 11.8.7.9
 
 ## Hierarchy
 

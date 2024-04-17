@@ -8,7 +8,7 @@ This object defines inputs to a search for content for display or playback.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.3
+MatterSpecification.v11.Cluster § 6.7.5.3
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ This shall indicate the list of additional external content identifiers.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.3.3
+MatterSpecification.v11.Cluster § 6.7.5.3.3
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ This shall indicate the entity type.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.3.1
+MatterSpecification.v11.Cluster § 6.7.5.3.1
 
 #### Inherited from
 
@@ -74,7 +74,7 @@ This shall indicate the entity value, which is a search string, ex. “Mancheste
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.5.3.2
+MatterSpecification.v11.Cluster § 6.7.5.3.2
 
 #### Inherited from
 

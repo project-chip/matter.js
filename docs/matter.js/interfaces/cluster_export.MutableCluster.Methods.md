@@ -51,7 +51,7 @@ Modify elements using [ElementModifier.alter](../classes/cluster_export.ElementM
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L74)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L74)
 
 ___
 
@@ -79,7 +79,7 @@ Modify elements using [ElementModifier.enable](../classes/cluster_export.Element
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L88)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L88)
 
 ___
 
@@ -107,7 +107,7 @@ Modify elements using [ElementModifier.set](../classes/cluster_export.ElementMod
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L81)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L81)
 
 ___
 
@@ -135,4 +135,4 @@ Select features using [ClusterComposer.compose](../classes/cluster_export.Cluste
 
 #### Defined in
 
-[packages/matter.js/src/cluster/mutation/MutableCluster.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L67)
+[packages/matter.js/src/cluster/mutation/MutableCluster.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/mutation/MutableCluster.ts#L67)

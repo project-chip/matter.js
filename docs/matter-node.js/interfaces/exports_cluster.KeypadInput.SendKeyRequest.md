@@ -8,7 +8,7 @@ Input to the KeypadInput sendKey command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.8.3.1
+MatterSpecification.v11.Cluster § 6.8.3.1
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This shall indicate the key code to process.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.8.3.1.1
+MatterSpecification.v11.Cluster § 6.8.3.1.1
 
 #### Inherited from
 

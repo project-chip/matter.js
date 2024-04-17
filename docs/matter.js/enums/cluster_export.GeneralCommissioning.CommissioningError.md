@@ -8,7 +8,7 @@ This enumeration is used by several response commands in this cluster to indicat
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.9.4.1
+MatterSpecification.v11.Core § 11.9.4.1
 
 ## Table of contents
 
@@ -31,7 +31,7 @@ associated with the current fail- safe context.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:129](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L129)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:128](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L128)
 
 ___
 
@@ -43,7 +43,7 @@ Executed CommissioningComplete outside CASE session.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:118](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L118)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L117)
 
 ___
 
@@ -55,7 +55,7 @@ Executed CommissioningComplete when there was no active Fail-Safe context.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:123](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L122)
 
 ___
 
@@ -67,7 +67,7 @@ No error
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L107)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L106)
 
 ___
 
@@ -80,4 +80,4 @@ have proper configuration.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L113)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L112)

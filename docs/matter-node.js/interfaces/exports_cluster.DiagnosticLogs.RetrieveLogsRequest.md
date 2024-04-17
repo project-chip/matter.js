@@ -8,7 +8,7 @@ Input to the DiagnosticLogs retrieveLogsRequest command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.1
+MatterSpecification.v11.Core § 11.10.5.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ field to selectively determine the logs to transfer.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.1.1
+MatterSpecification.v11.Core § 11.10.5.1.1
 
 #### Inherited from
 
@@ -59,7 +59,7 @@ only utilize the LogContent field of the RetreiveLogsResponse command to transfe
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.1.2
+MatterSpecification.v11.Core § 11.10.5.1.2
 
 #### Inherited from
 
@@ -109,7 +109,7 @@ fail with a Status Code of INVALID_COMMAND.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.5.1.3
+MatterSpecification.v11.Core § 11.10.5.1.3
 
 #### Inherited from
 

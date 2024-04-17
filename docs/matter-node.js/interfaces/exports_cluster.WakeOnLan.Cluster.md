@@ -11,7 +11,7 @@ On Wireless LAN (WLAN) protocol (see [Wake On LAN]).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.10
+MatterSpecification.v11.Cluster § 1.10
 
 ## Hierarchy
 

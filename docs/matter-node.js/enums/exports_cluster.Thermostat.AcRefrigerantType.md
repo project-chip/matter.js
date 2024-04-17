@@ -8,7 +8,7 @@ The value of the Thermostat acRefrigerantType attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7.46
+MatterSpecification.v11.Cluster § 4.3.7.46
 
 ## Table of contents
 

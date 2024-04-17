@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts#L13)
+[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts:13](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts#L13)
 
 ___
 
@@ -54,9 +54,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts#L15)
+[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts#L15)
 
-[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts#L22)
+[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlInterface.ts#L22)
 
 ## Variables
 
@@ -68,8 +68,8 @@ BarrierControlBehavior is the base class for objects that support interaction wi
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/barrier-control/BarrierControlBehavior.ts#L23)

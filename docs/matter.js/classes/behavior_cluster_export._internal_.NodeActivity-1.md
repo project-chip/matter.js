@@ -20,6 +20,7 @@ Tracks activity associated with a node.
 
 ### Accessors
 
+- [[value]](behavior_cluster_export._internal_.NodeActivity-1.md#[value])
 - [active](behavior_cluster_export._internal_.NodeActivity-1.md#active)
 - [actors](behavior_cluster_export._internal_.NodeActivity-1.md#actors)
 - [inactive](behavior_cluster_export._internal_.NodeActivity-1.md#inactive)
@@ -27,8 +28,7 @@ Tracks activity associated with a node.
 
 ### Methods
 
-- [add](behavior_cluster_export._internal_.NodeActivity-1.md#add)
-- [delete](behavior_cluster_export._internal_.NodeActivity-1.md#delete)
+- [begin](behavior_cluster_export._internal_.NodeActivity-1.md#begin)
 
 ## Constructors
 
@@ -48,17 +48,17 @@ Tracks activity associated with a node.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L15)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L15)
 
 ___
 
 ### #actors
 
-• `Private` **#actors**: `Map`\<{}, [`Actor`](../interfaces/behavior_cluster_export._internal_.NodeActivity.Actor.md)\>
+• `Private` **#actors**: `Set`\<[`Activity`](../interfaces/behavior_cluster_export._internal_.Activity.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L14)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L14)
 
 ___
 
@@ -68,9 +68,23 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L16)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L16)
 
 ## Accessors
+
+### [value]
+
+• `get` **[value]**(): [`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)
+
+#### Returns
+
+[`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)
+
+#### Defined in
+
+[packages/matter.js/src/behavior/context/NodeActivity.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L89)
+
+___
 
 ### active
 
@@ -82,21 +96,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L22)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L22)
 
 ___
 
 ### actors
 
-• `get` **actors**(): [`Actor`](../interfaces/behavior_cluster_export._internal_.NodeActivity.Actor.md)[]
+• `get` **actors**(): [`Activity`](../interfaces/behavior_cluster_export._internal_.Activity.md)[]
 
 #### Returns
 
-[`Actor`](../interfaces/behavior_cluster_export._internal_.NodeActivity.Actor.md)[]
+[`Activity`](../interfaces/behavior_cluster_export._internal_.Activity.md)[]
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L30)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L30)
 
 ___
 
@@ -110,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L26)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L26)
 
 ___
 
@@ -124,44 +138,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L18)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L18)
 
 ## Methods
 
-### add
+### begin
 
-▸ **add**(`host`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `host` | `Object` |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L34)
-
-___
-
-### delete
-
-▸ **delete**(`host`): `void`
+▸ **begin**(`description`, `onClose?`): [`Activity`](../interfaces/behavior_cluster_export._internal_.Activity.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `host` | `Object` |
+| `description` | `unknown` |
+| `onClose?` | () => `void` |
 
 #### Returns
 
-`void`
+[`Activity`](../interfaces/behavior_cluster_export._internal_.Activity.md)
 
 #### Defined in
 
-[packages/matter.js/src/behavior/context/server/NodeActivity.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/context/server/NodeActivity.ts#L50)
+[packages/matter.js/src/behavior/context/NodeActivity.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/context/NodeActivity.ts#L34)

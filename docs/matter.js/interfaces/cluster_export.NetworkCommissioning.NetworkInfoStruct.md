@@ -8,7 +8,7 @@ NetworkInfoStruct struct describes an existing network configuration, as provide
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.4
+MatterSpecification.v11.Core § 11.8.5.4
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ network).
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.4.2
+MatterSpecification.v11.Core § 11.8.5.4.2
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.connected
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:699](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L699)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:698](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L698)
 
 ___
 
@@ -76,7 +76,7 @@ XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octet
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.4.1
+MatterSpecification.v11.Core § 11.8.5.4.1
 
 #### Inherited from
 
@@ -84,4 +84,4 @@ TypeFromSchema.networkId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:690](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L690)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:689](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L689)

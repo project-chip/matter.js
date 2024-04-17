@@ -8,7 +8,7 @@ Encapsulates the Node ID of a Valid Proxy.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.15.15.4.1
+MatterSpecification.v11.Core § 9.15.15.4.1
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.nodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L25)

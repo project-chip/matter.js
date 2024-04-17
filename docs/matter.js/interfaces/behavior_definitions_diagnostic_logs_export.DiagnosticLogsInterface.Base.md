@@ -30,8 +30,8 @@ Reception of this command starts the process of retrieving diagnostic logs from 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.1
+MatterSpecification.v11.Core § 11.10.5.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L36)
+[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L35)

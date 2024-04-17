@@ -29,6 +29,8 @@ If a worker is a PromiseLike the runtime will delete and/or destroy it on comple
 
 - [[asyncDispose]](environment_export._internal_.RuntimeService.Worker.md#[asyncdispose])
 - [[dispose]](environment_export._internal_.RuntimeService.Worker.md#[dispose])
+- [[label]](environment_export._internal_.RuntimeService.Worker.md#[label])
+- [[value]](environment_export._internal_.RuntimeService.Worker.md#[value])
 - [construction](environment_export._internal_.RuntimeService.Worker.md#construction)
 - [helper](environment_export._internal_.RuntimeService.Worker.md#helper)
 - [start](environment_export._internal_.RuntimeService.Worker.md#start)
@@ -67,7 +69,7 @@ Partial.[asyncDispose]
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/RuntimeService.d.ts:95
+packages/matter.js/dist/esm/environment/RuntimeService.d.ts:96
 
 ___
 
@@ -91,7 +93,31 @@ Partial.[dispose]
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/RuntimeService.d.ts:99
+packages/matter.js/dist/esm/environment/RuntimeService.d.ts:100
+
+___
+
+### [label]
+
+• `Optional` **[label]**: `unknown`
+
+If label is present, it will be presented in diagnostics.  This takes precedence over [Diagnostic.value].
+
+#### Defined in
+
+packages/matter.js/dist/esm/environment/RuntimeService.d.ts:104
+
+___
+
+### [value]
+
+• `Optional` **[value]**: `unknown`
+
+In diagnostics workers render using toString() unless they provide explicit diagnostics.
+
+#### Defined in
+
+packages/matter.js/dist/esm/environment/RuntimeService.d.ts:108
 
 ___
 
@@ -108,7 +134,7 @@ If the worker supports [AsyncConstruction](../modules/exports_cluster._internal_
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/RuntimeService.d.ts:84
+packages/matter.js/dist/esm/environment/RuntimeService.d.ts:85
 
 ___
 
@@ -121,7 +147,7 @@ cancels helpers and emits [RuntimeService.stopped](../classes/environment_export
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/RuntimeService.d.ts:75
+packages/matter.js/dist/esm/environment/RuntimeService.d.ts:76
 
 ___
 
@@ -147,7 +173,7 @@ Partial.start
 
 #### Defined in
 
-packages/matter.js/dist/esm/environment/RuntimeService.d.ts:70
+packages/matter.js/dist/esm/environment/RuntimeService.d.ts:71
 
 ## Methods
 

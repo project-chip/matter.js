@@ -9,7 +9,7 @@ attestation certificate chain to transmit back to the client.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.4.2
+MatterSpecification.v11.Core § 11.17.4.2
 
 ## Table of contents
 

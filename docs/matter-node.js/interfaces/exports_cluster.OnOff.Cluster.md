@@ -12,7 +12,7 @@ OnOffCluster supports optional features that you can enable with the OnOffCluste
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5
+MatterSpecification.v11.Cluster § 1.5
 
 ## Hierarchy
 
@@ -81,9 +81,9 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `off` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.1 |
-| `on` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.2 |
-| `toggle` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.3 |
+| `off` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.1 |
+| `on` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.2 |
+| `toggle` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.3 |
 
 #### Inherited from
 

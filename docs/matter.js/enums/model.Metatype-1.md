@@ -30,7 +30,7 @@ General groupings of Matter types.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L14)
+[packages/matter.js/src/model/definitions/Metatype.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L14)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L21)
+[packages/matter.js/src/model/definitions/Metatype.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L21)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L16)
+[packages/matter.js/src/model/definitions/Metatype.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L16)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L15)
+[packages/matter.js/src/model/definitions/Metatype.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L15)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L20)
+[packages/matter.js/src/model/definitions/Metatype.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L20)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L24)
+[packages/matter.js/src/model/definitions/Metatype.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L24)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L17)
+[packages/matter.js/src/model/definitions/Metatype.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L17)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L19)
+[packages/matter.js/src/model/definitions/Metatype.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L19)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L18)
+[packages/matter.js/src/model/definitions/Metatype.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L18)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L22)
+[packages/matter.js/src/model/definitions/Metatype.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L22)
 
 ___
 
@@ -130,4 +130,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/definitions/Metatype.ts#L23)
+[packages/matter.js/src/model/definitions/Metatype.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/definitions/Metatype.ts#L23)

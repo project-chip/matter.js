@@ -33,8 +33,8 @@ server shall respond with an INVALID_COMMAND status response.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.8.6.1
+MatterSpecification.v11.Cluster § 1.8.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L34)
+[packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/mode-select/ModeSelectInterface.ts#L33)

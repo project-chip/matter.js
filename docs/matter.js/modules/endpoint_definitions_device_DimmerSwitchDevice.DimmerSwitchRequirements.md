@@ -25,11 +25,11 @@
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_DimmerSwitchDevice.DimmerSwitchRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L64)
+[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L63)
 
 ___
 
@@ -39,11 +39,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyBehavior](endpoint_definitions_device_DimmerSwitchDevice.DimmerSwitchRequirements.md#identifybehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L43)
+[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L42)
 
 ___
 
@@ -53,11 +53,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_DimmerSwitchDevice.DimmerSwitchRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L36)
+[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L35)
 
 ___
 
@@ -67,11 +67,11 @@ ___
 
 The LevelControl cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlBehavior](endpoint_definitions_device_DimmerSwitchDevice.DimmerSwitchRequirements.md#levelcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L57)
+[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L56)
 
 ___
 
@@ -81,11 +81,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffBehavior](endpoint_definitions_device_DimmerSwitchDevice.DimmerSwitchRequirements.md#onoffbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L50)
+[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L49)
 
 ___
 
@@ -95,11 +95,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesBehavior](endpoint_definitions_device_DimmerSwitchDevice.DimmerSwitchRequirements.md#scenesbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L71)
+[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L70)
 
 ___
 
@@ -123,7 +123,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L81)
+[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L80)
 
 ___
 
@@ -142,4 +142,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L76)
+[packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/DimmerSwitchDevice.ts#L75)

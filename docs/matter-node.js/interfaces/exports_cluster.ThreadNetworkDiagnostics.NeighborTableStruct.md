@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4
+MatterSpecification.v11.Core § 11.13.5.4
 
 ## Hierarchy
 
@@ -44,7 +44,7 @@ neighboring Node.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.2
+MatterSpecification.v11.Core § 11.13.5.4.2
 
 #### Inherited from
 
@@ -67,7 +67,7 @@ the value of null. This field shall have the units of dBm, having the range -128
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.7
+MatterSpecification.v11.Core § 11.13.5.4.7
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ This field shall specify the IEEE 802.15.4 extended address for the neighboring 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.1
+MatterSpecification.v11.Core § 11.13.5.4.1
 
 #### Inherited from
 
@@ -108,7 +108,7 @@ errors.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.9
+MatterSpecification.v11.Core § 11.13.5.4.9
 
 #### Inherited from
 
@@ -129,7 +129,7 @@ neighboring Node only requires the stable Network Data.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.13
+MatterSpecification.v11.Core § 11.13.5.4.13
 
 #### Inherited from
 
@@ -149,7 +149,7 @@ This field shall specify if the neighboring Node is a full Thread device.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.12
+MatterSpecification.v11.Core § 11.13.5.4.12
 
 #### Inherited from
 
@@ -170,7 +170,7 @@ attribute.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.14
+MatterSpecification.v11.Core § 11.13.5.4.14
 
 #### Inherited from
 
@@ -192,7 +192,7 @@ units of dBm, having the range -128 dBm to 0 dBm.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.8
+MatterSpecification.v11.Core § 11.13.5.4.8
 
 #### Inherited from
 
@@ -213,7 +213,7 @@ This field shall be reset to 0 upon a reboot of the Node.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.4
+MatterSpecification.v11.Core § 11.13.5.4.4
 
 #### Inherited from
 
@@ -234,7 +234,7 @@ scaled from 0 to 255.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.6
+MatterSpecification.v11.Core § 11.13.5.4.6
 
 #### Inherited from
 
@@ -255,7 +255,7 @@ errors.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.10
+MatterSpecification.v11.Core § 11.13.5.4.10
 
 #### Inherited from
 
@@ -276,7 +276,7 @@ neighboring node. This field shall be reset to 0 upon a reboot of the Node.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.5
+MatterSpecification.v11.Core § 11.13.5.4.5
 
 #### Inherited from
 
@@ -296,7 +296,7 @@ This field shall specify the RLOC16 of the neighboring Node.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.3
+MatterSpecification.v11.Core § 11.13.5.4.3
 
 #### Inherited from
 
@@ -317,7 +317,7 @@ state.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.5.4.11
+MatterSpecification.v11.Core § 11.13.5.4.11
 
 #### Inherited from
 

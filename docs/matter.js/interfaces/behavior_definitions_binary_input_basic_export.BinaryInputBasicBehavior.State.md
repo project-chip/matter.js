@@ -36,7 +36,7 @@ StateType.activeText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L27)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L27)
 
 ___
 
@@ -50,7 +50,7 @@ StateType.applicationType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L35)
 
 ___
 
@@ -64,7 +64,7 @@ StateType.description
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L28)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L28)
 
 ___
 
@@ -78,7 +78,7 @@ StateType.inactiveText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L29)
 
 ___
 
@@ -92,7 +92,7 @@ StateType.outOfService
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L30)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L30)
 
 ___
 
@@ -106,7 +106,7 @@ StateType.polarity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L31)
 
 ___
 
@@ -120,7 +120,7 @@ StateType.presentValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L32)
 
 ___
 
@@ -134,7 +134,7 @@ StateType.reliability
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L33)
 
 ___
 
@@ -148,4 +148,4 @@ StateType.statusFlags
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L34)

@@ -10,7 +10,7 @@ Attributes and commands for configuring a lighting ballast.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.3
+MatterSpecification.v11.Cluster § 3.3
 
 ## Hierarchy
 

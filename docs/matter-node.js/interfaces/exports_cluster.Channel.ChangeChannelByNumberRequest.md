@@ -8,7 +8,7 @@ Input to the Channel changeChannelByNumber command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.3
+MatterSpecification.v11.Cluster § 6.6.4.3
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate the channel major number value (ATSC format) to which the ch
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.3.1
+MatterSpecification.v11.Cluster § 6.6.4.3.1
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ This shall indicate the channel minor number value (ATSC format) to which the ch
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.3.2
+MatterSpecification.v11.Cluster § 6.6.4.3.2
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ The CopySceneResponse command allows a server to respond to a CopyScene command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.20
+MatterSpecification.v11.Cluster § 1.4.9.20
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ identifies the scene that was copied from the Scene Table.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.20.2
+MatterSpecification.v11.Cluster § 1.4.9.20.2
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.groupIdentifierFrom
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:438](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L438)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:437](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L437)
 
 ___
 
@@ -58,7 +58,7 @@ identifies the scene that was copied from the Scene Table.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.20.3
+MatterSpecification.v11.Cluster § 1.4.9.20.3
 
 #### Inherited from
 
@@ -66,7 +66,7 @@ TypeFromSchema.sceneIdentifierFrom
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:447](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L447)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:446](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L446)
 
 ___
 
@@ -79,7 +79,7 @@ non-reserved values listed in Values of the Status Field of the CopySceneRespons
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.9.20.1
+MatterSpecification.v11.Cluster § 1.4.9.20.1
 
 #### Inherited from
 
@@ -87,4 +87,4 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:429](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L429)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:428](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L428)

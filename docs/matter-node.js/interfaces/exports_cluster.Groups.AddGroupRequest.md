@@ -8,7 +8,7 @@ Input to the Groups addGroup command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.1
+MatterSpecification.v11.Cluster § 1.3.7.1
 
 ## Hierarchy
 

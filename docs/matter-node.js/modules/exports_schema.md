@@ -247,7 +247,7 @@ ___
 
 • `Const` **DiscoveryCapabilitiesBitmap**: `Object`
 
-See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 36
+See MatterSpecification.v10.Core § 5.1.3.1 Table 36
 
 #### Type declaration
 

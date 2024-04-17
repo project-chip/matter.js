@@ -55,7 +55,7 @@ Read access to environmental configuration values.
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L19)
+[packages/matter.js/src/environment/VariableService.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L19)
 
 ## Properties
 
@@ -65,7 +65,7 @@ Read access to environmental configuration values.
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L17)
+[packages/matter.js/src/environment/VariableService.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L17)
 
 ## Accessors
 
@@ -79,7 +79,7 @@ Read access to environmental configuration values.
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L27)
+[packages/matter.js/src/environment/VariableService.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L27)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L31)
+[packages/matter.js/src/environment/VariableService.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L31)
 
 ## Methods
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L152)
+[packages/matter.js/src/environment/VariableService.ts:152](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L152)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L148)
+[packages/matter.js/src/environment/VariableService.ts:148](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L148)
 
 ___
 
@@ -153,7 +153,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:140](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L140)
+[packages/matter.js/src/environment/VariableService.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L140)
 
 ___
 
@@ -173,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:144](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L144)
+[packages/matter.js/src/environment/VariableService.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L144)
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:95](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L95)
+[packages/matter.js/src/environment/VariableService.ts:95](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L95)
 
 ___
 
@@ -220,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L35)
+[packages/matter.js/src/environment/VariableService.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L35)
 
 ▸ **get**\<`T`\>(`name`, `fallback?`): `undefined` \| [`Value`](../modules/environment_export.VariableService.md#value)
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L37)
+[packages/matter.js/src/environment/VariableService.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L37)
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L61)
+[packages/matter.js/src/environment/VariableService.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L61)
 
 ___
 
@@ -283,7 +283,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:134](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L134)
+[packages/matter.js/src/environment/VariableService.ts:134](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L134)
 
 ___
 
@@ -304,7 +304,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L127)
+[packages/matter.js/src/environment/VariableService.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L127)
 
 ___
 
@@ -324,7 +324,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L113)
+[packages/matter.js/src/environment/VariableService.ts:113](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L113)
 
 ___
 
@@ -345,7 +345,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L65)
+[packages/matter.js/src/environment/VariableService.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L65)
 
 ___
 
@@ -365,7 +365,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L81)
+[packages/matter.js/src/environment/VariableService.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L81)
 
 ___
 
@@ -385,4 +385,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/environment/VariableService.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/environment/VariableService.ts#L23)
+[packages/matter.js/src/environment/VariableService.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/environment/VariableService.ts#L23)

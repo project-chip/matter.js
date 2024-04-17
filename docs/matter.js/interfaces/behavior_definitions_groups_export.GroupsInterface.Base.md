@@ -35,11 +35,11 @@ The AddGroup command allows a client to add group membership in a particular gro
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.1
+MatterSpecification.v11.Cluster § 1.3.7.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L113)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L112)
 
 ___
 
@@ -65,11 +65,11 @@ This command might be used to assist configuring group membership in the absence
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.6
+MatterSpecification.v11.Cluster § 1.3.7.6
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:158](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L158)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L157)
 
 ___
 
@@ -92,11 +92,11 @@ in a number of ways.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.3
+MatterSpecification.v11.Cluster § 1.3.7.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:129](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L129)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:128](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L128)
 
 ___
 
@@ -115,11 +115,11 @@ The RemoveAllGroups command has no data fields.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.5
+MatterSpecification.v11.Cluster § 1.3.7.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:147](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L147)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:146](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L146)
 
 ___
 
@@ -142,11 +142,11 @@ endpoint, if any, in a particular group.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.4
+MatterSpecification.v11.Cluster § 1.3.7.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:137](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L137)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L136)
 
 ___
 
@@ -169,8 +169,8 @@ containing the name string for a particular group.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.3.7.2
+MatterSpecification.v11.Cluster § 1.3.7.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:121](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L121)
+[packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts:120](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/groups/GroupsInterface.ts#L120)

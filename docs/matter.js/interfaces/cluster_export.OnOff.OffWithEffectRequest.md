@@ -8,7 +8,7 @@ Input to the OnOff offWithEffect command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.4
+MatterSpecification.v11.Cluster § 1.5.7.4
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ Command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.4.1
+MatterSpecification.v11.Cluster § 1.5.7.4.1
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.effectIdentifier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L61)
 
 ___
 
@@ -58,7 +58,7 @@ non-reserved values listed in Values of the EffectVariant Field of the OffWithEf
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.5.7.4.2
+MatterSpecification.v11.Cluster § 1.5.7.4.2
 
 #### Inherited from
 
@@ -66,4 +66,4 @@ TypeFromSchema.effectVariant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L71)

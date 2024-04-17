@@ -8,7 +8,7 @@ The value of the Thermostat acCompressorType attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7.47
+MatterSpecification.v11.Cluster § 4.3.7.47
 
 ## Table of contents
 

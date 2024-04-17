@@ -8,7 +8,7 @@ Input to the ColorControl moveHue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.5
+MatterSpecification.v11.Cluster § 3.2.11.5
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ field is equal to 0 (Stop), the Rate field shall be ignored.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.5.1
+MatterSpecification.v11.Cluster § 3.2.11.5.1
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.moveMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:109](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L108)
 
 ___
 
@@ -58,7 +58,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:121](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L121)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:120](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L120)
 
 ___
 
@@ -72,7 +72,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:122](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L122)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:121](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L121)
 
 ___
 
@@ -87,7 +87,7 @@ INVALID_COMMAND. If the MoveMode field is set to 0 (stop) the Rate field shall b
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.5.2
+MatterSpecification.v11.Cluster § 3.2.11.5.2
 
 #### Inherited from
 
@@ -95,4 +95,4 @@ TypeFromSchema.rate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:119](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L119)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:118](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L118)

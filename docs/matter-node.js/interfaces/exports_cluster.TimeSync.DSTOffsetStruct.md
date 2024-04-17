@@ -10,7 +10,7 @@ assumptions.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.4
+MatterSpecification.v11.Core § 11.16.6.4
 
 ## Hierarchy
 
@@ -50,7 +50,7 @@ The UTC time when the offset shall be applied.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.4.1
+MatterSpecification.v11.Core § 11.16.6.4.1
 
 #### Inherited from
 
@@ -71,7 +71,7 @@ time.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.4.2
+MatterSpecification.v11.Core § 11.16.6.4.2
 
 #### Inherited from
 

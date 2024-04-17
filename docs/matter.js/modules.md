@@ -145,7 +145,6 @@
 - [protocol/securechannel/export](modules/protocol_securechannel_export.md)
 - [schema/export](modules/schema_export.md)
 - [session/export](modules/session_export.md)
-- [spec/export](modules/spec_export.md)
 - [storage/export](modules/storage_export.md)
 - [time/export](modules/time_export.md)
 - [tlv/export](modules/tlv_export.md)

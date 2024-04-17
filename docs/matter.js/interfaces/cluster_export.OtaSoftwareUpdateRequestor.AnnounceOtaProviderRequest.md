@@ -8,7 +8,7 @@ Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.19.7.6.1
+MatterSpecification.v11.Core § 11.19.7.6.1
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ TypeFromSchema.announcementReason
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L133)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L132)
 
 ___
 
@@ -53,7 +53,7 @@ TypeFromSchema.endpoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:135](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L135)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:134](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L134)
 
 ___
 
@@ -67,7 +67,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:136](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:135](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L135)
 
 ___
 
@@ -81,7 +81,7 @@ TypeFromSchema.metadataForNode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:134](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L134)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:133](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L133)
 
 ___
 
@@ -95,7 +95,7 @@ TypeFromSchema.providerNodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:131](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L131)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L130)
 
 ___
 
@@ -109,4 +109,4 @@ TypeFromSchema.vendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L131)

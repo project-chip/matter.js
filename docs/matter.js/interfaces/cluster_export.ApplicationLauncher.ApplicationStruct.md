@@ -8,7 +8,7 @@ This indicates a global identifier for an Application given a catalog.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.5.2
+MatterSpecification.v11.Cluster § 6.4.5.2
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ For the DIAL registry catalog, this value shall be the DIAL prefix (see [DIAL Re
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.5.2.2
+MatterSpecification.v11.Cluster § 6.4.5.2.2
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.applicationId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L47)
 
 ___
 
@@ -59,7 +59,7 @@ assign an ApplicationID to each Content App.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.4.5.2.1
+MatterSpecification.v11.Cluster § 6.4.5.2.1
 
 #### Inherited from
 
@@ -67,4 +67,4 @@ TypeFromSchema.catalogVendorId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L37)

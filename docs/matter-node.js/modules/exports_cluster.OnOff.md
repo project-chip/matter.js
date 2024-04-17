@@ -44,11 +44,11 @@ These elements and properties are present in all OnOff clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `onOff`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\>  } | - |
-| `attributes.onOff` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\> | The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.6.1 |
+| `attributes.onOff` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\> | The OnOff attribute indicates whether the device type implemented on the endpoint is turned off or turned on, in these cases the value of the OnOff attribute equals FALSE, or TRUE respectively. **`See`** MatterSpecification.v11.Cluster § 1.5.6.1 |
 | `commands` | \{ `off`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `on`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `toggle`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  } | - |
-| `commands.off` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.1 |
-| `commands.on` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.2 |
-| `commands.toggle` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.3 |
+| `commands.off` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.1 |
+| `commands.on` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.2 |
+| `commands.toggle` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.3 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `globalSceneControl`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\> ; `offWaitTime`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\> ; `onTime`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number` \| ``null``, `any`\> ; `startUpOnOff`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`StartUpOnOff`](../enums/exports_cluster.OnOff.StartUpOnOff.md) \| ``null``, `any`\>  } ; `commands`: \{ `offWithEffect`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `onWithRecallGlobalScene`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `onWithTimedOff`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `levelControlForLighting`: ``true``  }  }] | This metadata controls which OnOffCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.levelControlForLighting` | [`BitFlag`](exports_schema.md#bitflag) | LevelControlForLighting Behavior that supports lighting applications. |
@@ -148,7 +148,7 @@ The value of OnOff.onOffControl
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.6.1
+MatterSpecification.v11.Cluster § 1.5.7.6.1
 
 #### Type declaration
 
@@ -171,7 +171,7 @@ Input to the OnOff offWithEffect command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.4
+MatterSpecification.v11.Cluster § 1.5.7.4
 
 #### Defined in
 
@@ -187,7 +187,7 @@ Input to the OnOff onWithTimedOff command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.5.7.6
+MatterSpecification.v11.Cluster § 1.5.7.6
 
 #### Defined in
 

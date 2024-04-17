@@ -100,7 +100,7 @@ packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:20
 
 • `Const` **QrCodeDataSchema**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
 
-See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 35
+See MatterSpecification.v10.Core § 5.1.3.1 Table 35
 
 #### Defined in
 

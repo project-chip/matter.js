@@ -8,7 +8,7 @@ Body of the BasicInformation startUp event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.1
+MatterSpecification.v11.Core § 11.1.6.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ Basic Information Cluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.1.6.1.1
+MatterSpecification.v11.Core § 11.1.6.1.1
 
 #### Inherited from
 

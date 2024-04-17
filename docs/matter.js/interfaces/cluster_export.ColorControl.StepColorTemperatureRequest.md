@@ -8,7 +8,7 @@ Input to the ColorControl stepColorTemperature command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.22
+MatterSpecification.v11.Cluster § 3.2.11.22
 
 ## Hierarchy
 
@@ -46,7 +46,7 @@ bound for the ColorTemperatureMireds attribute.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.22.5
+MatterSpecification.v11.Cluster § 3.2.11.22.5
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ TypeFromSchema.colorTemperatureMaximumMireds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:527](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L527)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:526](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L526)
 
 ___
 
@@ -74,7 +74,7 @@ for the ColorTemperatureMireds attribute.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.22.4
+MatterSpecification.v11.Cluster § 3.2.11.22.4
 
 #### Inherited from
 
@@ -82,7 +82,7 @@ TypeFromSchema.colorTemperatureMinimumMireds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:512](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L512)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:511](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L511)
 
 ___
 
@@ -96,7 +96,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:529](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L529)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:528](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L528)
 
 ___
 
@@ -110,7 +110,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:530](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L530)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:529](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L529)
 
 ___
 
@@ -123,7 +123,7 @@ sub-clause StepHue Command).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.22.1
+MatterSpecification.v11.Cluster § 3.2.11.22.1
 
 #### Inherited from
 
@@ -131,7 +131,7 @@ TypeFromSchema.stepMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:480](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L480)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:479](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L479)
 
 ___
 
@@ -144,7 +144,7 @@ device’s color temperature.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.22.2
+MatterSpecification.v11.Cluster § 3.2.11.22.2
 
 #### Inherited from
 
@@ -152,7 +152,7 @@ TypeFromSchema.stepSize
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:488](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L488)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:487](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L487)
 
 ___
 
@@ -166,7 +166,7 @@ field.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.22.3
+MatterSpecification.v11.Cluster § 3.2.11.22.3
 
 #### Inherited from
 
@@ -174,4 +174,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:497](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L497)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:496](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L496)

@@ -8,7 +8,7 @@ ThreadInterfaceScanResultStruct represents a single Thread network scan result.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.6
+MatterSpecification.v11.Core § 11.8.5.6
 
 ## Hierarchy
 
@@ -53,7 +53,7 @@ ExtendedAddress stands for an IEEE 802.15.4 Extended Address.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.6.1
+MatterSpecification.v11.Core § 11.8.5.6.1
 
 #### Inherited from
 

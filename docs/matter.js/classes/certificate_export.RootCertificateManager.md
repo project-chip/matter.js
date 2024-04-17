@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L39)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L39)
 
 ## Properties
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L29)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L29)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L28)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L28)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L27)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L27)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L24)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L24)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L26)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L26)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L25)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L25)
 
 ## Accessors
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L31)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L31)
 
 ## Methods
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L94)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:94](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L94)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L71)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L71)
 
 ___
 
@@ -173,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L67)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L67)
 
 ___
 
@@ -193,4 +193,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/RootCertificateManager.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/certificate/RootCertificateManager.ts#L35)
+[packages/matter.js/src/certificate/RootCertificateManager.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/certificate/RootCertificateManager.ts#L35)

@@ -30,8 +30,8 @@ Upon receipt, this shall navigation the UX to the target identified.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.11.4.1
+MatterSpecification.v11.Cluster § 6.11.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L35)
+[packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/target-navigator/TargetNavigatorInterface.ts#L34)

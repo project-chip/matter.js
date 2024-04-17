@@ -8,7 +8,7 @@ NetworkInfoStruct struct describes an existing network configuration, as provide
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.4
+MatterSpecification.v11.Core § 11.8.5.4
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ network).
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.4.2
+MatterSpecification.v11.Core § 11.8.5.4.2
 
 #### Inherited from
 
@@ -76,7 +76,7 @@ XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octet
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.5.4.1
+MatterSpecification.v11.Core § 11.8.5.4.1
 
 #### Inherited from
 

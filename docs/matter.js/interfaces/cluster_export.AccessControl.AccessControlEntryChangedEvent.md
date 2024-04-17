@@ -8,7 +8,7 @@ Body of the AccessControl accessControlEntryChanged event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.7.1
+MatterSpecification.v11.Core § 9.10.7.1
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ CASE or PASE session; the other shall be null.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.7.1.1
+MatterSpecification.v11.Core § 9.10.7.1.1
 
 #### Inherited from
 
@@ -47,7 +47,7 @@ TypeFromSchema.adminNodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:283](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L283)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:282](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L282)
 
 ___
 
@@ -63,7 +63,7 @@ CASE or PASE session; the other shall be null.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.7.1.2
+MatterSpecification.v11.Core § 9.10.7.1.2
 
 #### Inherited from
 
@@ -71,7 +71,7 @@ TypeFromSchema.adminPasscodeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:294](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L294)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:293](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L293)
 
 ___
 
@@ -83,7 +83,7 @@ The type of change as appropriate.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.7.1.3
+MatterSpecification.v11.Core § 9.10.7.1.3
 
 #### Inherited from
 
@@ -91,7 +91,7 @@ TypeFromSchema.changeType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:301](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L301)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:300](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L300)
 
 ___
 
@@ -105,7 +105,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:313](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L313)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:312](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L312)
 
 ___
 
@@ -120,7 +120,7 @@ are scarce.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.7.1.4
+MatterSpecification.v11.Core § 9.10.7.1.4
 
 #### Inherited from
 
@@ -128,4 +128,4 @@ TypeFromSchema.latestValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:311](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L311)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:310](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L310)

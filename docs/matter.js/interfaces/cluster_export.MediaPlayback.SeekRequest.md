@@ -8,7 +8,7 @@ Input to the MediaPlayback seek command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.11
+MatterSpecification.v11.Cluster § 6.10.4.11
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ playback.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.11.1
+MatterSpecification.v11.Cluster § 6.10.4.11.1
 
 #### Inherited from
 
@@ -45,4 +45,4 @@ TypeFromSchema.position
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L73)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L72)

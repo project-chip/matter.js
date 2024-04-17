@@ -45,9 +45,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L32)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L31)
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L47)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L46)
 
 ___
 
@@ -63,11 +63,11 @@ endpoint will consider the last key press to be a release.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.3.1
+MatterSpecification.v11.Cluster § 6.8.3.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L23)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L22)
 
 ___
 
@@ -79,11 +79,11 @@ This command shall be generated in response to a SendKey command.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.3.2
+MatterSpecification.v11.Cluster § 6.8.3.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L30)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L29)
 
 ## Variables
 
@@ -95,8 +95,8 @@ KeypadInputBehavior is the base class for objects that support interaction with 
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputBehavior.ts#L23)

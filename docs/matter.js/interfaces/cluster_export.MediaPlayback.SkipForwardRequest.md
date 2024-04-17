@@ -8,7 +8,7 @@ Input to the MediaPlayback skipForward command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.9
+MatterSpecification.v11.Cluster § 6.10.4.9
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ cluster accordingly.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.9.1
+MatterSpecification.v11.Cluster § 6.10.4.9.1
 
 #### Inherited from
 
@@ -45,4 +45,4 @@ TypeFromSchema.deltaPositionMilliseconds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:190](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L190)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:189](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L189)

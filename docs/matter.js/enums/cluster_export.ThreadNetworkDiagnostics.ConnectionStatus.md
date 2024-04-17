@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.2
+MatterSpecification.v11.Core § 11.13.5.2
 
 ## Table of contents
 
@@ -25,7 +25,7 @@ Node is connected
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:431](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L431)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:430](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L430)
 
 ___
 
@@ -37,4 +37,4 @@ Node is not connected
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:436](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L436)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:435](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L435)

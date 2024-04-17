@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.6.3
+MatterSpecification.v11.Core § 11.2.6.3
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L56)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:55](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L55)
 
 ___
 
@@ -46,7 +46,7 @@ This field uniquely identifies the group within the scope of the given Fabric.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.6.3.1
+MatterSpecification.v11.Core § 11.2.6.3.1
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ TypeFromSchema.groupId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L42)
 
 ___
 
@@ -70,7 +70,7 @@ A GroupKeyMapStruct shall NOT accept GroupKeySetID of 0, which is reserved for t
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.6.3.2
+MatterSpecification.v11.Core § 11.2.6.3.2
 
 #### Inherited from
 
@@ -78,4 +78,4 @@ TypeFromSchema.groupKeySetId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L53)

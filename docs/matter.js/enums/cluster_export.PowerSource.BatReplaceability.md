@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.5.7
+MatterSpecification.v11.Core § 11.7.5.7
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ The battery is replaceable by an authorized factory technician.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L137)
 
 ___
 
@@ -39,7 +39,7 @@ The battery is not replaceable.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:128](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L128)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:127](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L127)
 
 ___
 
@@ -51,7 +51,7 @@ The replaceability is unspecified or unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:123](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L122)
 
 ___
 
@@ -63,4 +63,4 @@ The battery is replaceable by the user or customer.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L133)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L132)

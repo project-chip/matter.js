@@ -8,7 +8,7 @@ Input to the GeneralCommissioning setRegulatoryConfig command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.4
+MatterSpecification.v11.Core § 11.9.6.4
 
 ## Hierarchy
 

@@ -9,7 +9,7 @@ account identified in the request does not match the active account of the runni
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.2
+MatterSpecification.v11.Cluster § 6.2.4.2
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ indicate that the accounts do not match.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.2.1
+MatterSpecification.v11.Cluster § 6.2.4.2.1
 
 #### Inherited from
 

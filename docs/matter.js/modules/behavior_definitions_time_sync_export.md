@@ -53,11 +53,11 @@ to not update its time, it shall fail the command with a cluster specific Status
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.16.9.1
+MatterSpecification.v11.Core § 11.16.9.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts#L32)
+[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts#L31)
 
 ___
 
@@ -73,9 +73,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts#L34)
+[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts#L33)
 
-[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts#L59)
+[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts#L58)
 
 ## Variables
 
@@ -90,8 +90,8 @@ TimeSyncBehavior.with.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts#L19)
+[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts#L19)
 
-[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts#L24)
+[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts#L24)
 
-[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts#L26)
+[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncBehavior.ts#L26)

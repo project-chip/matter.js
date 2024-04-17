@@ -8,7 +8,7 @@ The UserType enum used in various commands shall indicate what the type is for a
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16
+MatterSpecification.v11.Cluster § 5.2.6.16
 
 ## Table of contents
 
@@ -36,11 +36,11 @@ UserStatus value to OccupiedDisabled automatically.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.7
+MatterSpecification.v11.Cluster § 5.2.6.16.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:198](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L198)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L197)
 
 ___
 
@@ -55,11 +55,11 @@ timeout across reboots such that the ExpiringUserTimeout is honored.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.8
+MatterSpecification.v11.Cluster § 5.2.6.16.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:208](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L208)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L207)
 
 ___
 
@@ -72,11 +72,11 @@ to allow a notified Node to alert emergency services or contacts on the user acc
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.6
+MatterSpecification.v11.Cluster § 5.2.6.16.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:190](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L190)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:189](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L189)
 
 ___
 
@@ -89,11 +89,11 @@ lock to generate the appropriate event notification to any bound devices.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.5
+MatterSpecification.v11.Cluster § 5.2.6.16.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:182](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L182)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:181](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L181)
 
 ___
 
@@ -107,11 +107,11 @@ only user that can disable the user interface (keypad, remote, etc…).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.4
+MatterSpecification.v11.Cluster § 5.2.6.16.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:174](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L174)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:173](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L173)
 
 ___
 
@@ -126,11 +126,11 @@ over-the-air for the lock/unlock commands.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.10
+MatterSpecification.v11.Cluster § 5.2.6.16.10
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:225](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L225)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:224](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L224)
 
 ___
 
@@ -142,11 +142,11 @@ User access is restricted by Week Day and/or Year Day schedule.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.9
+MatterSpecification.v11.Cluster § 5.2.6.16.9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:215](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L215)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:214](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L214)
 
 ___
 
@@ -158,11 +158,11 @@ User has access 24/7 provided proper PIN or RFID is supplied (e.g., owner).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.1
+MatterSpecification.v11.Cluster § 5.2.6.16.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:150](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L150)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:149](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L149)
 
 ___
 
@@ -175,11 +175,11 @@ cleaning worker).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.3
+MatterSpecification.v11.Cluster § 5.2.6.16.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:165](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L165)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:164](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L164)
 
 ___
 
@@ -191,8 +191,8 @@ User has ability to open lock within a specific time period (e.g., guest).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.16.2
+MatterSpecification.v11.Cluster § 5.2.6.16.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L156)

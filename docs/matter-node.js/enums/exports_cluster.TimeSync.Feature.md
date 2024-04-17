@@ -8,7 +8,7 @@ These are optional features supported by TimeSyncCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.5
+MatterSpecification.v11.Core § 11.16.5
 
 ## Table of contents
 

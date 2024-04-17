@@ -8,7 +8,7 @@ Input to the DiagnosticLogs retrieveLogsRequest command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.1
+MatterSpecification.v11.Core § 11.10.5.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ field to selectively determine the logs to transfer.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.1.1
+MatterSpecification.v11.Core § 11.10.5.1.1
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.intent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L89)
 
 ___
 
@@ -59,7 +59,7 @@ only utilize the LogContent field of the RetreiveLogsResponse command to transfe
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.1.2
+MatterSpecification.v11.Core § 11.10.5.1.2
 
 #### Inherited from
 
@@ -67,7 +67,7 @@ TypeFromSchema.requestedProtocol
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L101)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L100)
 
 ___
 
@@ -109,7 +109,7 @@ fail with a Status Code of INVALID_COMMAND.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.1.3
+MatterSpecification.v11.Core § 11.10.5.1.3
 
 #### Inherited from
 
@@ -117,4 +117,4 @@ TypeFromSchema.transferFileDesignator
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L137)

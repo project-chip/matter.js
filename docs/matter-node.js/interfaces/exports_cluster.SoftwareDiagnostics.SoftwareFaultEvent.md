@@ -8,7 +8,7 @@ Body of the SoftwareDiagnostics softwareFault event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.8.1
+MatterSpecification.v11.Core § 11.12.8.1
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ information such as, but not limited to, thread backtraces or register contents.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.8.1.1
+MatterSpecification.v11.Core § 11.12.8.1.1
 
 #### Inherited from
 

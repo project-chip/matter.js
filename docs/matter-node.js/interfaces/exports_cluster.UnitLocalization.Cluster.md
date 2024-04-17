@@ -19,7 +19,7 @@ factory method.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.5
+MatterSpecification.v11.Core § 11.5
 
 ## Hierarchy
 

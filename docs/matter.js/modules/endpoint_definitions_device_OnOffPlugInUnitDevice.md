@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L29)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L28)
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L90)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:89](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L89)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L76)
+[packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/OnOffPlugInUnitDevice.ts#L75)

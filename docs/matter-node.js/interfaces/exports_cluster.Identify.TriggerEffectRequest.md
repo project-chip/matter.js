@@ -8,7 +8,7 @@ Input to the Identify triggerEffect command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.6.3
+MatterSpecification.v11.Cluster § 1.2.6.3
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ Table 3. Values of the EffectIdentifier Field of the TriggerEffect Command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.6.3.1
+MatterSpecification.v11.Cluster § 1.2.6.3.1
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ Table 4. Values of the EffectVariant Field of the TriggerEffect Command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.6.3.2
+MatterSpecification.v11.Cluster § 1.2.6.3.2
 
 #### Inherited from
 

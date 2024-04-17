@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.6
+MatterSpecification.v11.Core § 11.13.5.6
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ null when there is no dataset configured.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.6.2
+MatterSpecification.v11.Core § 11.13.5.6.2
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ TypeFromSchema.flags
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:295](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L295)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:294](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L294)
 
 ___
 
@@ -53,7 +53,7 @@ attribute shall be null when there is no dataset configured.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.13.5.6.1
+MatterSpecification.v11.Core § 11.13.5.6.1
 
 #### Inherited from
 
@@ -61,4 +61,4 @@ TypeFromSchema.rotationTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:287](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L287)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:286](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L286)

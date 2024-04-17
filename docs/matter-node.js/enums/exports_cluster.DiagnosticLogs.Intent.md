@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.1
+MatterSpecification.v11.Core § 11.10.4.1
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ Node.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.1.3
+MatterSpecification.v11.Core § 11.10.4.1.3
 
 #### Defined in
 
@@ -48,7 +48,7 @@ support to an end-user.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.1.1
+MatterSpecification.v11.Core § 11.10.4.1.1
 
 #### Defined in
 
@@ -67,7 +67,7 @@ currently commissioned (and/or connected) or has previously been commissioned (a
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.1.2
+MatterSpecification.v11.Core § 11.10.4.1.2
 
 #### Defined in
 

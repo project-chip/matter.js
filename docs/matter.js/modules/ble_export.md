@@ -35,7 +35,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:11](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L11)
+[packages/matter.js/src/ble/BleConsts.ts:9](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L9)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L12)
+[packages/matter.js/src/ble/BleConsts.ts:10](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L10)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L13)
+[packages/matter.js/src/ble/BleConsts.ts:11](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L11)
 
 ___
 
@@ -65,11 +65,11 @@ ___
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 4.17.3.2
+MatterSpecification.v11.Core § 4.17.3.2
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:10](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L10)
+[packages/matter.js/src/ble/BleConsts.ts:8](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L8)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L16)
+[packages/matter.js/src/ble/BleConsts.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L14)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L15)
+[packages/matter.js/src/ble/BleConsts.ts:13](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L13)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L21)
+[packages/matter.js/src/ble/BleConsts.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L19)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L20)
+[packages/matter.js/src/ble/BleConsts.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L18)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L18)
+[packages/matter.js/src/ble/BleConsts.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L16)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BleConsts.ts#L22)
+[packages/matter.js/src/ble/BleConsts.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BleConsts.ts#L20)
 
 ___
 
@@ -139,4 +139,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/ble/BtpSessionHandler.ts#L26)
+[packages/matter.js/src/ble/BtpSessionHandler.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/ble/BtpSessionHandler.ts#L26)

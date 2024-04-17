@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.11.4.2
+MatterSpecification.v11.Core § 11.11.4.2
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ The Node has encountered a fault with its BLE radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:276](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L276)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:275](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L275)
 
 ___
 
@@ -42,7 +42,7 @@ The Node has encountered a fault with its cellular radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:261](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L261)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:260](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L260)
 
 ___
 
@@ -54,7 +54,7 @@ The Node has encountered a fault with its Ethernet controller.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:281](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L281)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:280](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L280)
 
 ___
 
@@ -66,7 +66,7 @@ The Node has encountered a fault with its NFC radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:271](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L271)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:270](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L270)
 
 ___
 
@@ -78,7 +78,7 @@ The Node has encountered a fault with its802.15.4 radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:266](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L266)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:265](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L265)
 
 ___
 
@@ -90,7 +90,7 @@ The Node has encountered an unspecified radio fault.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:251](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L251)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:250](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L250)
 
 ___
 
@@ -102,4 +102,4 @@ The Node has encountered a fault with its Wi-Fi radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:256](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L256)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:255](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L255)

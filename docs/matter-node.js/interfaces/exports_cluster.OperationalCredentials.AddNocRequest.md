@@ -8,7 +8,7 @@ Input to the OperationalCredentials addNoc command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.8
+MatterSpecification.v11.Core § 11.17.6.8
 
 ## Hierarchy
 
@@ -121,7 +121,7 @@ matching the FabricIndex under which the new Node Operational Certificate (NOC) 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.8.3
+MatterSpecification.v11.Core § 11.17.6.8.3
 
 #### Inherited from
 
@@ -157,7 +157,7 @@ Fabric configuration and subsequently be able to call the CommissioningComplete 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.8.2
+MatterSpecification.v11.Core § 11.17.6.8.2
 
 #### Inherited from
 
@@ -200,7 +200,7 @@ GroupKeySetID set to 0):
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.8.1
+MatterSpecification.v11.Core § 11.17.6.8.1
 
 #### Inherited from
 

@@ -44,12 +44,12 @@ These elements and properties are present in all MediaInput clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `currentInput`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `inputList`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[], `any`\>  } | - |
-| `attributes.currentInput` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected InputInfoStruct. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.3.2 |
-| `attributes.inputList` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[], `any`\> | This list provides the media inputs supported by the device. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.3.1 |
+| `attributes.currentInput` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> | This field contains the value of the index field of the currently selected InputInfoStruct. **`See`** MatterSpecification.v11.Cluster § 6.9.3.2 |
+| `attributes.inputList` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>[], `any`\> | This list provides the media inputs supported by the device. **`See`** MatterSpecification.v11.Cluster § 6.9.3.1 |
 | `commands` | \{ `hideInputStatus`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> ; `selectInput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `showInputStatus`: [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\>  } | - |
-| `commands.hideInputStatus` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall hide the input list from the screen. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.3 |
-| `commands.selectInput` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | Upon receipt, this shall change the media input on the device to the input at a specific index in the Input List. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.1 |
-| `commands.showInputStatus` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall display the active status of the input list on screen. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.2 |
+| `commands.hideInputStatus` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall hide the input list from the screen. **`See`** MatterSpecification.v11.Cluster § 6.9.4.3 |
+| `commands.selectInput` | [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> | Upon receipt, this shall change the media input on the device to the input at a specific index in the Input List. **`See`** MatterSpecification.v11.Cluster § 6.9.4.1 |
+| `commands.showInputStatus` | [`Command`](../interfaces/cluster_export.Command.md)\<`void`, `void`, `any`\> | Upon receipt, this shall display the active status of the input list on screen. **`See`** MatterSpecification.v11.Cluster § 6.9.4.2 |
 | `extensions` | readonly [\{ `component`: \{ `commands`: \{ `renameInput`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\>  }  } = NameUpdatesComponent; `flags`: \{ `nameUpdates`: ``true`` = true }  }] | This metadata controls which MediaInputCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.nameUpdates` | [`BitFlag`](schema_export.md#bitflag) | NameUpdates Supports updates to the input names |
@@ -59,7 +59,7 @@ These elements and properties are present in all MediaInput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L158)
 
 ___
 
@@ -69,9 +69,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:235](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L235)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:234](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L234)
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L237)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:236](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L236)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:223](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L223)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:222](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L222)
 
 ___
 
@@ -95,9 +95,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:261](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L261)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:260](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L260)
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:263](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L263)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:262](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L262)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:243](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L243)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:242](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L242)
 
 ___
 
@@ -130,7 +130,7 @@ A MediaInputCluster supports these elements if it supports feature NameUpdates.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:130](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L130)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L129)
 
 ___
 
@@ -142,11 +142,11 @@ This contains information about an input.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.5.1
+MatterSpecification.v11.Cluster § 6.9.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:66](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L66)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L65)
 
 ___
 
@@ -158,11 +158,11 @@ Input to the MediaInput renameInput command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.4
+MatterSpecification.v11.Cluster § 6.9.4.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L28)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L27)
 
 ___
 
@@ -174,8 +174,8 @@ Input to the MediaInput selectInput command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.1
+MatterSpecification.v11.Cluster § 6.9.4.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:109](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L109)

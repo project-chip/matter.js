@@ -8,7 +8,7 @@ Input to the ColorControl enhancedMoveToHue command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.15
+MatterSpecification.v11.Cluster § 3.2.11.15
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ sub-clause Use of the OptionsMask and OptionsOverride fields).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.15.2
+MatterSpecification.v11.Cluster § 3.2.11.15.2
 
 #### Inherited from
 
@@ -57,7 +57,7 @@ The EnhancedHue field specifies the target extended hue for the lamp.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.15.1
+MatterSpecification.v11.Cluster § 3.2.11.15.1
 
 #### Inherited from
 
@@ -106,7 +106,7 @@ This field is identical to the TransitionTime field of the MoveToHue command of 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.15.3
+MatterSpecification.v11.Cluster § 3.2.11.15.3
 
 #### Inherited from
 

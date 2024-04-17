@@ -8,7 +8,7 @@ The value of the Thermostat acCompressorType attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.7.47
+MatterSpecification.v11.Cluster § 4.3.7.47
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ Max working ambient 43 °C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:444](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L444)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:443](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L443)
 
 ___
 
@@ -41,7 +41,7 @@ Max working ambient 35 °C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:449](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L449)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:448](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L448)
 
 ___
 
@@ -53,7 +53,7 @@ Max working ambient 52 °C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:454](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L454)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:453](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L453)
 
 ___
 
@@ -65,4 +65,4 @@ Unknown compressor type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:439](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L439)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:438](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L438)

@@ -8,7 +8,7 @@ Input to the Actions startActionWithDuration command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.4
+MatterSpecification.v11.Core § 9.14.6.4
 
 ## Hierarchy
 
@@ -48,7 +48,7 @@ This field shall indicate the requested duration in seconds.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.4.1
+MatterSpecification.v11.Core § 9.14.6.4.1
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ Input to the AccountLogin login command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.3
+MatterSpecification.v11.Cluster § 6.2.4.3
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This field shall provide the setup PIN code as a text string at least 11 charact
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.3.2
+MatterSpecification.v11.Cluster § 6.2.4.3.2
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.setupPin
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L84)
 
 ___
 
@@ -53,7 +53,7 @@ This field shall specify the client’s temporary account identifier.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.2.4.3.1
+MatterSpecification.v11.Cluster § 6.2.4.3.1
 
 #### Inherited from
 
@@ -61,4 +61,4 @@ TypeFromSchema.tempAccountIdentifier
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:78](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L77)

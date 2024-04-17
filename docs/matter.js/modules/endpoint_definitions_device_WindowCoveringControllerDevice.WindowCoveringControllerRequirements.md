@@ -24,11 +24,11 @@
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_WindowCoveringControllerDevice.WindowCoveringControllerRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L55)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L54)
 
 ___
 
@@ -38,11 +38,11 @@ ___
 
 The Identify cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyBehavior](endpoint_definitions_device_WindowCoveringControllerDevice.WindowCoveringControllerRequirements.md#identifybehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L48)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L47)
 
 ___
 
@@ -52,11 +52,11 @@ ___
 
 The Identify cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_WindowCoveringControllerDevice.WindowCoveringControllerRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L34)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L33)
 
 ___
 
@@ -66,11 +66,11 @@ ___
 
 The Scenes cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ScenesBehavior](endpoint_definitions_device_WindowCoveringControllerDevice.WindowCoveringControllerRequirements.md#scenesbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L62)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L61)
 
 ___
 
@@ -80,11 +80,11 @@ ___
 
 The WindowCovering cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [WindowCoveringBehavior](endpoint_definitions_device_WindowCoveringControllerDevice.WindowCoveringControllerRequirements.md#windowcoveringbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L41)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L40)
 
 ___
 
@@ -107,7 +107,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:72](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L72)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L71)
 
 ___
 
@@ -127,4 +127,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L67)
+[packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts:66](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/WindowCoveringControllerDevice.ts#L66)

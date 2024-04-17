@@ -34,7 +34,7 @@ IPv4 or NDP in IPv6.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.10.2.2
+MatterSpecification.v11.Cluster § 1.10.2.2
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ StateType.linkLocalAddress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L45)
 
 ___
 
@@ -55,7 +55,7 @@ this attribute as required by the Wake on LAN protocol.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.10.2.1
+MatterSpecification.v11.Cluster § 1.10.2.1
 
 #### Inherited from
 
@@ -63,4 +63,4 @@ StateType.macAddress
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L31)

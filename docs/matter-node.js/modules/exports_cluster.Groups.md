@@ -53,14 +53,14 @@ These elements and properties are present in all Groups clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `nameSupport`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } | - |
-| `attributes.nameSupport` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This attribute provides legacy, read-only access to whether the Group Names feature is supported. The most significant bit, bit 7, shall be equal to bit 0 of the FeatureMap attribute. All other bits shall be 0. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.6.1 |
+| `attributes.nameSupport` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This attribute provides legacy, read-only access to whether the Group Names feature is supported. The most significant bit, bit 7, shall be equal to bit 0 of the FeatureMap attribute. All other bits shall be 0. **`See`** MatterSpecification.v11.Cluster § 1.3.6.1 |
 | `commands` | \{ `addGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `addGroupIfIdentifying`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getGroupMembership`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeAllGroups`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `viewGroup`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } | - |
-| `commands.addGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The AddGroup command allows a client to add group membership in a particular group for the server endpoint. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.1 |
-| `commands.addGroupIfIdentifying` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the server endpoint, on condition that the endpoint is identifying itself. Identifying functionality is controlled using the Identify cluster, (see Identify). This command might be used to assist configuring group membership in the absence of a commissioning tool. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.6 |
-| `commands.getGroupMembership` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The GetGroupMembership command allows a client to inquire about the group membership of the server endpoint, in a number of ways. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.3 |
-| `commands.removeAllGroups` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | The RemoveAllGroups command allows a client to direct the server to remove all group associations for the server endpoint. The RemoveAllGroups command has no data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.5 |
-| `commands.removeGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The RemoveGroup command allows a client to request that the server removes the membership for the server endpoint, if any, in a particular group. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.4 |
-| `commands.viewGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse command containing the name string for a particular group. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.3.7.2 |
+| `commands.addGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The AddGroup command allows a client to add group membership in a particular group for the server endpoint. **`See`** MatterSpecification.v11.Cluster § 1.3.7.1 |
+| `commands.addGroupIfIdentifying` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | The AddGroupIfIdentifying command allows a client to add group membership in a particular group for the server endpoint, on condition that the endpoint is identifying itself. Identifying functionality is controlled using the Identify cluster, (see Identify). This command might be used to assist configuring group membership in the absence of a commissioning tool. **`See`** MatterSpecification.v11.Cluster § 1.3.7.6 |
+| `commands.getGroupMembership` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The GetGroupMembership command allows a client to inquire about the group membership of the server endpoint, in a number of ways. **`See`** MatterSpecification.v11.Cluster § 1.3.7.3 |
+| `commands.removeAllGroups` | [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> | The RemoveAllGroups command allows a client to direct the server to remove all group associations for the server endpoint. The RemoveAllGroups command has no data fields. **`See`** MatterSpecification.v11.Cluster § 1.3.7.5 |
+| `commands.removeGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The RemoveGroup command allows a client to request that the server removes the membership for the server endpoint, if any, in a particular group. **`See`** MatterSpecification.v11.Cluster § 1.3.7.4 |
+| `commands.viewGroup` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The ViewGroup command allows a client to request that the server responds with a ViewGroupResponse command containing the name string for a particular group. **`See`** MatterSpecification.v11.Cluster § 1.3.7.2 |
 | `extensions` | readonly [] | This metadata controls which GroupsCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `groupNames`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.groupNames` | [`BitFlag`](exports_schema.md#bitflag) | GroupNames The ability to store a name for a group. |
@@ -118,7 +118,7 @@ The value of the Groups nameSupport attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.6.1
+MatterSpecification.v11.Cluster § 1.3.6.1
 
 #### Type declaration
 
@@ -140,7 +140,7 @@ Input to the Groups addGroupIfIdentifying command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.6
+MatterSpecification.v11.Cluster § 1.3.7.6
 
 #### Defined in
 
@@ -156,7 +156,7 @@ Input to the Groups addGroup command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.1
+MatterSpecification.v11.Cluster § 1.3.7.1
 
 #### Defined in
 
@@ -172,7 +172,7 @@ The AddGroupResponse is sent by the Groups cluster server in response to an AddG
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.7
+MatterSpecification.v11.Cluster § 1.3.7.7
 
 #### Defined in
 
@@ -188,7 +188,7 @@ Input to the Groups getGroupMembership command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.3
+MatterSpecification.v11.Cluster § 1.3.7.3
 
 #### Defined in
 
@@ -228,7 +228,7 @@ GroupList field shall contain only as many groups as will fit.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.9
+MatterSpecification.v11.Cluster § 1.3.7.9
 
 #### Defined in
 
@@ -244,7 +244,7 @@ Input to the Groups removeGroup command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.4
+MatterSpecification.v11.Cluster § 1.3.7.4
 
 #### Defined in
 
@@ -260,7 +260,7 @@ The RemoveGroupResponse command is generated by the server in response to the re
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.10
+MatterSpecification.v11.Cluster § 1.3.7.10
 
 #### Defined in
 
@@ -276,7 +276,7 @@ Input to the Groups viewGroup command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.2
+MatterSpecification.v11.Cluster § 1.3.7.2
 
 #### Defined in
 
@@ -292,7 +292,7 @@ The ViewGroupResponse command is sent by the Groups cluster server in response t
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.8
+MatterSpecification.v11.Cluster § 1.3.7.8
 
 #### Defined in
 

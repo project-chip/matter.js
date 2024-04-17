@@ -8,7 +8,7 @@ This command shall be generated in response to LaunchApp/StopApp/HideApp command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.4
+MatterSpecification.v11.Cluster § 6.4.4.4
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall specify Optional app-specific data.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.4.2
+MatterSpecification.v11.Cluster § 6.4.4.4.2
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ This shall indicate the status of the command which resulted in this response.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.4.1
+MatterSpecification.v11.Cluster § 6.4.4.4.1
 
 #### Inherited from
 

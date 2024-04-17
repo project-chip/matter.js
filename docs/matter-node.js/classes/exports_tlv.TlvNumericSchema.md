@@ -8,7 +8,7 @@ Schema to encode an unsigned integer in TLV.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § A.11.1
+MatterSpecification.v10.Core § A.11.1
 
 ## Type parameters
 

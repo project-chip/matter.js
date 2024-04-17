@@ -8,7 +8,7 @@ The Credential Type enum shall indicate the credential type.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.4
+MatterSpecification.v11.Cluster § 5.2.6.4
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ The Credential Type enum shall indicate the credential type.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:287](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L287)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:286](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L286)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:286](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L286)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:285](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L285)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:285](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L285)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:284](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L284)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:283](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L283)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:282](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L282)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:282](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L282)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:281](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L281)
 
 ___
 
@@ -79,4 +79,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:284](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L284)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:283](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L283)

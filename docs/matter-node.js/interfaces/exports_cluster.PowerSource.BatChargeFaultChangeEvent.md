@@ -8,7 +8,7 @@ Body of the PowerSource batChargeFaultChange event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.7.7.3
+MatterSpecification.v11.Core § 11.7.7.3
 
 ## Hierarchy
 

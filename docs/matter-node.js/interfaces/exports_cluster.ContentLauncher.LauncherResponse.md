@@ -10,7 +10,7 @@ WARNING TODO: Data in table above needs a max size
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.3
+MatterSpecification.v11.Cluster § 6.7.4.3
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.3.2
+MatterSpecification.v11.Cluster § 6.7.4.3.2
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ This shall indicate the status of the command which resulted in this response.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.7.4.3.1
+MatterSpecification.v11.Cluster § 6.7.4.3.1
 
 #### Inherited from
 

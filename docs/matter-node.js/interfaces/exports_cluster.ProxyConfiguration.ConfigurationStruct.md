@@ -16,7 +16,7 @@ specifically proxy.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.15.14.4.1
+MatterSpecification.v11.Core § 9.15.14.4.1
 
 ## Hierarchy
 

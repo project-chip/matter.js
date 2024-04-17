@@ -62,7 +62,7 @@ to handle subscriptions (TBD)
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:45
 
 ## Properties
 
@@ -72,7 +72,7 @@ packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:44
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:37
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:38
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:39
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:40
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:39
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:42
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:40
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41
 
 ## Accessors
 
@@ -126,7 +126,7 @@ packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:40
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:43
 
 ## Methods
 
@@ -140,7 +140,7 @@ packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:42
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:48
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:46
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:47
 
 ___
 
@@ -201,4 +201,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:43
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:44

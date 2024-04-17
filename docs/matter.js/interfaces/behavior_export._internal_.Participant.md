@@ -38,7 +38,7 @@ Post-commit logic.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L37)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L37)
 
 ___
 
@@ -51,7 +51,7 @@ a participant from the transaction.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L22)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L22)
 
 ## Methods
 
@@ -67,7 +67,7 @@ Commit phase one.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L27)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:27](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L27)
 
 ___
 
@@ -83,7 +83,7 @@ Commit phase two.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L32)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L32)
 
 ___
 
@@ -99,7 +99,7 @@ Drop isolated writes and revert to original canonical source.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L42)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L42)
 
 ___
 
@@ -115,4 +115,4 @@ Description used in error messages.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/state/transaction/Participant.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/state/transaction/Participant.ts#L16)
+[packages/matter.js/src/behavior/state/transaction/Participant.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/state/transaction/Participant.ts#L16)

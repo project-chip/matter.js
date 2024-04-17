@@ -42,7 +42,7 @@ A function that asserts access control requirements are met.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L97)
+[packages/matter.js/src/behavior/AccessControl.ts:97](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L97)
 
 ___
 
@@ -69,4 +69,4 @@ A function that returns true iff access control requirements are met.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L102)
+[packages/matter.js/src/behavior/AccessControl.ts:102](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L102)

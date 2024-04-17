@@ -13,7 +13,7 @@ See Section F.3, “Node Operational CSR Response test vector” for an example 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.6
+MatterSpecification.v11.Core § 11.17.6.6
 
 ## Hierarchy
 
@@ -40,7 +40,7 @@ TypeFromSchema.attestationSignature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:282](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L282)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:281](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L281)
 
 ___
 
@@ -55,7 +55,7 @@ This field shall contain the octet string of the necessary attestation_signature
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.6.1
+MatterSpecification.v11.Core § 11.17.6.6.1
 
 #### Inherited from
 
@@ -63,4 +63,4 @@ TypeFromSchema.nocsrElements
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:280](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L280)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:279](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L279)

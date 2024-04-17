@@ -8,7 +8,7 @@ The Alarm Code enum shall indicate the alarm type.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.2.6.1
+MatterSpecification.v11.Cluster § 5.2.6.1
 
 ## Table of contents
 
@@ -33,7 +33,7 @@ Door ajar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1201](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1201)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1200](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1200)
 
 ___
 
@@ -45,7 +45,7 @@ Forced Door Open under Door Locked Condition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1196](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1196)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1195](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1195)
 
 ___
 
@@ -57,7 +57,7 @@ Force User SOS alarm
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1206](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1206)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1205](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1205)
 
 ___
 
@@ -69,7 +69,7 @@ Tamper Alarm - front escutcheon removed from main
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1191](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1191)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1190](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1190)
 
 ___
 
@@ -81,7 +81,7 @@ Lock Reset to Factory Defaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1176](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1176)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1175](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1175)
 
 ___
 
@@ -93,7 +93,7 @@ Locking Mechanism Jammed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1171](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1171)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1170](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1170)
 
 ___
 
@@ -105,7 +105,7 @@ Lock Radio Power Cycled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1181](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1181)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1180](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1180)
 
 ___
 
@@ -117,4 +117,4 @@ Tamper Alarm - wrong code entry limit
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1186](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1186)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1185](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1185)

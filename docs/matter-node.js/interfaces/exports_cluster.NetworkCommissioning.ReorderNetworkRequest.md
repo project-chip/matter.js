@@ -8,7 +8,7 @@ Input to the NetworkCommissioning reorderNetwork command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.11
+MatterSpecification.v11.Core § 11.8.7.11
 
 ## Hierarchy
 

@@ -10,7 +10,7 @@ NOT be supported, as there is no way to authenticate the involved participants.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.19.6.4.3
+MatterSpecification.v11.Core § 11.19.6.4.3
 
 ## Table of contents
 
@@ -31,7 +31,7 @@ Indicates support for asynchronous BDX.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L39)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L38)
 
 ___
 
@@ -43,7 +43,7 @@ Indicates support for synchronous BDX.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L33)
 
 ___
 
@@ -55,7 +55,7 @@ Indicates support for HTTPS.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L43)
 
 ___
 
@@ -67,4 +67,4 @@ Indicates support for vendor specific protocol.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:49](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L49)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L48)

@@ -8,7 +8,7 @@ See Section 11.19.3.2, “Querying the OTA Provider” for the semantics of thes
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.19.6.4.1
+MatterSpecification.v11.Core § 11.19.6.4.1
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ Indicates OTA Provider may have an update, but it is not ready yet.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L88)
 
 ___
 
@@ -41,7 +41,7 @@ Indicates that the requested download protocol is not supported by the OTA Provi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L99)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L98)
 
 ___
 
@@ -53,7 +53,7 @@ Indicates that there is definitely no update currently available from the OTA Pr
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:94](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:93](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L93)
 
 ___
 
@@ -65,4 +65,4 @@ Indicates that the OTA Provider has an update available.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L84)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L83)

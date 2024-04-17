@@ -8,7 +8,7 @@ Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.3
+MatterSpecification.v11.Core § 11.8.7.3
 
 ## Hierarchy
 
@@ -82,7 +82,7 @@ See Section 11.8.7.1.2, “Breadcrumb Field” for usage.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.3.1
+MatterSpecification.v11.Core § 11.8.7.3.1
 
 #### Inherited from
 

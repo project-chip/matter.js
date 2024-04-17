@@ -17,14 +17,14 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L23)
 
 ___
 
 ### StateType
 
-Ƭ **StateType**: `InstanceType`\<typeof [`State`](../classes/behavior_definitions_identify_export.IdentifyServer-1.md#state-1)\>
+Ƭ **StateType**: `InstanceType`\<typeof `IdentifyBehavior.State`\>
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L25)
+[packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/identify/IdentifyBehavior.ts#L25)

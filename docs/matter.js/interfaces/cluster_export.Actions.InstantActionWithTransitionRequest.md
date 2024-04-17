@@ -8,7 +8,7 @@ Input to the Actions instantActionWithTransition command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.2
+MatterSpecification.v11.Core § 9.14.6.2
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:384](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L384)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:383](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L383)
 
 ___
 
@@ -50,7 +50,7 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:385](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L385)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:384](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L384)
 
 ___
 
@@ -62,7 +62,7 @@ This field shall indicate the transition time in 1/10th of seconds.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.2.1
+MatterSpecification.v11.Core § 9.14.6.2.1
 
 #### Inherited from
 
@@ -70,4 +70,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:392](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L392)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:391](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L391)

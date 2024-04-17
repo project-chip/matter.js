@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.4.5
+MatterSpecification.v11.Core § 9.10.4.5
 
 ## Hierarchy
 
@@ -34,7 +34,7 @@ The AuthMode field shall specify the authentication mode required by this Access
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.4.5.2
+MatterSpecification.v11.Core § 9.10.4.5.2
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ TypeFromSchema.authMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L151)
 
 ___
 
@@ -56,7 +56,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:214](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L214)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:213](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L213)
 
 ___
 
@@ -89,7 +89,7 @@ auth mode.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.4.5.1
+MatterSpecification.v11.Core § 9.10.4.5.1
 
 #### Inherited from
 
@@ -97,7 +97,7 @@ TypeFromSchema.privilege
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:145](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L145)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L144)
 
 ___
 
@@ -139,7 +139,7 @@ Cluster.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.4.5.3
+MatterSpecification.v11.Core § 9.10.4.5.3
 
 #### Inherited from
 
@@ -147,7 +147,7 @@ TypeFromSchema.subjects
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:189](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L189)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:188](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L188)
 
 ___
 
@@ -175,7 +175,7 @@ on all endpoints on this Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.4.5.4
+MatterSpecification.v11.Core § 9.10.4.5.4
 
 #### Inherited from
 
@@ -183,4 +183,4 @@ TypeFromSchema.targets
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:212](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L212)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:211](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L211)

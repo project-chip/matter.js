@@ -34,8 +34,8 @@ consider the first key press to be a press and hold. When such a repeat KeyCode 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.8.3.1
+MatterSpecification.v11.Cluster § 6.8.3.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L43)
+[packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/keypad-input/KeypadInputInterface.ts#L42)

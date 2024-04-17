@@ -17,7 +17,7 @@ This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.7
+MatterSpecification.v11.Core § 9.14.4.7
 
 ## Hierarchy
 
@@ -46,7 +46,7 @@ TypeFromSchema.endpointListId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:333](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L333)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L332)
 
 ___
 
@@ -58,7 +58,7 @@ This field shall provide a list of endpoint numbers.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.7.1
+MatterSpecification.v11.Core § 9.14.4.7.1
 
 #### Inherited from
 
@@ -66,7 +66,7 @@ TypeFromSchema.endpoints
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:342](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L342)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:341](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L341)
 
 ___
 
@@ -80,7 +80,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:334](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L334)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:333](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L333)
 
 ___
 
@@ -94,4 +94,4 @@ TypeFromSchema.type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:335](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L335)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:334](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L334)

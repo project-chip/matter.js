@@ -8,7 +8,7 @@ Input to the NetworkCommissioning reorderNetwork command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.11
+MatterSpecification.v11.Core § 11.8.7.11
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ TypeFromSchema.breadcrumb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:560](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L560)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:559](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L559)
 
 ___
 
@@ -50,7 +50,7 @@ TypeFromSchema.networkId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:558](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L558)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:557](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L557)
 
 ___
 
@@ -64,4 +64,4 @@ TypeFromSchema.networkIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:559](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L559)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:558](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L558)

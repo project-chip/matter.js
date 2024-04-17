@@ -62,7 +62,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L17)
+[packages/matter.js/src/util/Cache.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L18)
 
 ## Properties
 
@@ -72,7 +72,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:20](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L20)
+[packages/matter.js/src/util/Cache.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L21)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L21)
+[packages/matter.js/src/util/Cache.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L22)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L19)
+[packages/matter.js/src/util/Cache.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L20)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:12](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L12)
+[packages/matter.js/src/util/Cache.ts:13](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L13)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L15)
+[packages/matter.js/src/util/Cache.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L16)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L14)
+[packages/matter.js/src/util/Cache.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L15)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:13](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L13)
+[packages/matter.js/src/util/Cache.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L14)
 
 ## Methods
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L54)
+[packages/matter.js/src/util/Cache.ts:57](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L57)
 
 ___
 
@@ -189,7 +189,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L62)
+[packages/matter.js/src/util/Cache.ts:65](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L65)
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L45)
+[packages/matter.js/src/util/Cache.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L48)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:68](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L68)
+[packages/matter.js/src/util/Cache.ts:71](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L71)
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L29)
+[packages/matter.js/src/util/Cache.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L32)
 
 ___
 
@@ -257,4 +257,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/util/Cache.ts#L41)
+[packages/matter.js/src/util/Cache.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/util/Cache.ts#L44)

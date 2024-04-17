@@ -86,7 +86,7 @@ configuration of these can be adjusted using static methods with the identifier 
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:398](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L398)
+[packages/matter.js/src/log/Logger.ts:398](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L398)
 
 ## Properties
 
@@ -96,7 +96,7 @@ configuration of these can be adjusted using static methods with the identifier 
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:398](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L398)
+[packages/matter.js/src/log/Logger.ts:398](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L398)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:98](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L98)
+[packages/matter.js/src/log/Logger.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L98)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L105)
+[packages/matter.js/src/log/Logger.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L105)
 
 ## Accessors
 
@@ -132,7 +132,7 @@ Get default loglevel for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:214](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L214)
+[packages/matter.js/src/log/Logger.ts:214](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L214)
 
 • `set` **defaultLogLevel**(`level`): `void`
 
@@ -150,7 +150,7 @@ Set default loglevel for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:207](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L207)
+[packages/matter.js/src/log/Logger.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L207)
 
 ___
 
@@ -172,7 +172,7 @@ Set logFormatter using configuration-style format name.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:183](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L183)
+[packages/matter.js/src/log/Logger.ts:183](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L183)
 
 ___
 
@@ -194,7 +194,7 @@ Set log level using configuration-style level name for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L152)
+[packages/matter.js/src/log/Logger.ts:152](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L152)
 
 ___
 
@@ -223,7 +223,7 @@ Get the log function for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:230](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L230)
+[packages/matter.js/src/log/Logger.ts:230](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L230)
 
 • `set` **log**(`log`): `void`
 
@@ -241,7 +241,7 @@ Set the log function for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:223](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L223)
+[packages/matter.js/src/log/Logger.ts:223](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L223)
 
 ___
 
@@ -273,7 +273,7 @@ Get the log formatter for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:248](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L248)
+[packages/matter.js/src/log/Logger.ts:248](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L248)
 
 • `set` **logFormatter**(`logFormatter`): `void`
 
@@ -291,7 +291,7 @@ Set the log formatter for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:239](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L239)
+[packages/matter.js/src/log/Logger.ts:239](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L239)
 
 ___
 
@@ -307,7 +307,7 @@ Get facility loglevels for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:198](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L198)
+[packages/matter.js/src/log/Logger.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L198)
 
 • `set` **logLevels**(`levels`): `void`
 
@@ -325,7 +325,7 @@ Set facility loglevels for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:191](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L191)
+[packages/matter.js/src/log/Logger.ts:191](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L191)
 
 ## Methods
 
@@ -345,7 +345,7 @@ Set facility loglevels for the default logger.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:400](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L400)
+[packages/matter.js/src/log/Logger.ts:400](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L400)
 
 ___
 
@@ -365,7 +365,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:404](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L404)
+[packages/matter.js/src/log/Logger.ts:404](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L404)
 
 ___
 
@@ -385,7 +385,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:405](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L405)
+[packages/matter.js/src/log/Logger.ts:405](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L405)
 
 ___
 
@@ -405,7 +405,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:401](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L401)
+[packages/matter.js/src/log/Logger.ts:401](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L401)
 
 ___
 
@@ -426,7 +426,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:407](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L407)
+[packages/matter.js/src/log/Logger.ts:407](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L407)
 
 ___
 
@@ -446,7 +446,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:402](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L402)
+[packages/matter.js/src/log/Logger.ts:402](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L402)
 
 ___
 
@@ -466,7 +466,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:403](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L403)
+[packages/matter.js/src/log/Logger.ts:403](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L403)
 
 ___
 
@@ -493,7 +493,7 @@ Add additional logger to the list of loggers including the default configuration
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L108)
+[packages/matter.js/src/log/Logger.ts:108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L108)
 
 ___
 
@@ -517,7 +517,7 @@ a new facility
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:336](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L336)
+[packages/matter.js/src/log/Logger.ts:336](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L336)
 
 ___
 
@@ -539,7 +539,7 @@ Get the logger with the matching identifier.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:141](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L141)
+[packages/matter.js/src/log/Logger.ts:141](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L141)
 
 ___
 
@@ -564,7 +564,7 @@ shown unmasked.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:369](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L369)
+[packages/matter.js/src/log/Logger.ts:369](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L369)
 
 ___
 
@@ -593,7 +593,7 @@ indented while the context executes.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:377](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L377)
+[packages/matter.js/src/log/Logger.ts:377](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L377)
 
 ___
 
@@ -615,7 +615,7 @@ Async version of nest().
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:389](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L389)
+[packages/matter.js/src/log/Logger.ts:389](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L389)
 
 ___
 
@@ -635,7 +635,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:129](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L129)
+[packages/matter.js/src/log/Logger.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L129)
 
 ___
 
@@ -658,7 +658,7 @@ Set default loglevel for the logger with the matching identifier.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:273](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L273)
+[packages/matter.js/src/log/Logger.ts:273](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L273)
 
 ___
 
@@ -681,7 +681,7 @@ Set logFormatter using configuration-style format name for the logger with the m
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:258](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L258)
+[packages/matter.js/src/log/Logger.ts:258](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L258)
 
 ___
 
@@ -704,7 +704,7 @@ Set the log formatter for the logger with the matching identifier.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:318](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L318)
+[packages/matter.js/src/log/Logger.ts:318](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L318)
 
 ___
 
@@ -727,7 +727,7 @@ Set facility loglevels for the logger with the matching identifier.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:288](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L288)
+[packages/matter.js/src/log/Logger.ts:288](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L288)
 
 ___
 
@@ -750,7 +750,7 @@ Set the log function for the logger with the matching identifier.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:303](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L303)
+[packages/matter.js/src/log/Logger.ts:303](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L303)
 
 ___
 
@@ -774,4 +774,4 @@ the stringified value
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:346](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L346)
+[packages/matter.js/src/log/Logger.ts:346](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L346)

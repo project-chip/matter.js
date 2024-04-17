@@ -8,7 +8,7 @@ This object defines additional name=value pairs that can be used for identifying
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.5
+MatterSpecification.v11.Cluster § 6.7.5.5
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate the name of external id, ex. "musicbrainz".
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.5.1
+MatterSpecification.v11.Cluster § 6.7.5.5.1
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.name
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:394](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L394)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:393](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L393)
 
 ___
 
@@ -53,7 +53,7 @@ This shall indicate the value for external id, ex. "ST0000000666661".
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.5.2
+MatterSpecification.v11.Cluster § 6.7.5.5.2
 
 #### Inherited from
 
@@ -61,4 +61,4 @@ TypeFromSchema.value
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:401](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L401)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:400](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L400)

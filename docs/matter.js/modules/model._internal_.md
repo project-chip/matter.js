@@ -52,7 +52,7 @@ Re-exports [Selector](model._internal_.Children.md#selector)
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:193](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L193)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:193](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L193)
 
 ___
 
@@ -70,7 +70,7 @@ This type manages state that changes when we enter a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:313](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L313)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:313](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L313)
 
 ___
 
@@ -82,7 +82,7 @@ Map of Model -> name
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:308](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L308)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:308](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L308)
 
 ## Functions
 
@@ -113,4 +113,4 @@ Invoked by [Model](../classes/model.Model-1.md) to instantiate a new child array
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Children.ts:59](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/model/models/Children.ts#L59)
+[packages/matter.js/src/model/models/Children.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/model/models/Children.ts#L59)

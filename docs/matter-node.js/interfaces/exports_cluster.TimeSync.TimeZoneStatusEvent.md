@@ -8,7 +8,7 @@ Body of the TimeSync timeZoneStatus event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.10.3
+MatterSpecification.v11.Core § 11.16.10.3
 
 ## Hierarchy
 

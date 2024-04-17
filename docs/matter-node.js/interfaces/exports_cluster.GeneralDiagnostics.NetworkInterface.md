@@ -9,7 +9,7 @@ attribute.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6
+MatterSpecification.v11.Core § 11.11.4.6
 
 ## Hierarchy
 
@@ -42,7 +42,7 @@ in wire byte order. For addresses values less than 64 bits, the first two bytes 
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6.5
+MatterSpecification.v11.Core § 11.11.4.6.5
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ This field shall provide a list of the IPv4 addresses that are currently assigne
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6.6
+MatterSpecification.v11.Core § 11.11.4.6.6
 
 #### Inherited from
 
@@ -84,7 +84,7 @@ addresses. This list shall NOT include any multicast group addresses to which th
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6.7
+MatterSpecification.v11.Core § 11.11.4.6.7
 
 #### Inherited from
 
@@ -105,7 +105,7 @@ interface and is capable of successfully receiving incoming traffic from other N
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6.2
+MatterSpecification.v11.Core § 11.11.4.6.2
 
 #### Inherited from
 
@@ -126,7 +126,7 @@ from all other interfaces.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6.1
+MatterSpecification.v11.Core § 11.11.4.6.1
 
 #### Inherited from
 
@@ -148,7 +148,7 @@ can reach them.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6.3
+MatterSpecification.v11.Core § 11.11.4.6.3
 
 #### Inherited from
 
@@ -170,7 +170,7 @@ can reach them.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6.4
+MatterSpecification.v11.Core § 11.11.4.6.4
 
 #### Inherited from
 
@@ -190,7 +190,7 @@ This field shall indicate the type of the interface using the InterfaceTypeEnum.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.4.6.8
+MatterSpecification.v11.Core § 11.11.4.6.8
 
 #### Inherited from
 

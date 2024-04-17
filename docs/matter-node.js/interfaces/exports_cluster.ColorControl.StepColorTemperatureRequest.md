@@ -8,7 +8,7 @@ Input to the ColorControl stepColorTemperature command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.22
+MatterSpecification.v11.Cluster § 3.2.11.22
 
 ## Hierarchy
 
@@ -46,7 +46,7 @@ bound for the ColorTemperatureMireds attribute.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.22.5
+MatterSpecification.v11.Cluster § 3.2.11.22.5
 
 #### Inherited from
 
@@ -74,7 +74,7 @@ for the ColorTemperatureMireds attribute.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.22.4
+MatterSpecification.v11.Cluster § 3.2.11.22.4
 
 #### Inherited from
 
@@ -123,7 +123,7 @@ sub-clause StepHue Command).
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.22.1
+MatterSpecification.v11.Cluster § 3.2.11.22.1
 
 #### Inherited from
 
@@ -144,7 +144,7 @@ device’s color temperature.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.22.2
+MatterSpecification.v11.Cluster § 3.2.11.22.2
 
 #### Inherited from
 
@@ -166,7 +166,7 @@ field.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.22.3
+MatterSpecification.v11.Cluster § 3.2.11.22.3
 
 #### Inherited from
 

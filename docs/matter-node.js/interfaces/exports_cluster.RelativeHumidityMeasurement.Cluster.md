@@ -12,7 +12,7 @@ limited to, leaf wetness, relative humidity, and soil moisture.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 2.6
+MatterSpecification.v11.Cluster § 2.6
 
 ## Hierarchy
 

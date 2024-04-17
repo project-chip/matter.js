@@ -8,7 +8,7 @@ The value of the Thermostat systemMode attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.7.24
+MatterSpecification.v11.Cluster § 4.3.7.24
 
 ## Table of contents
 

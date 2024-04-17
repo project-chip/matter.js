@@ -8,7 +8,7 @@ Input to the ContentLauncher launchUrl command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.2
+MatterSpecification.v11.Cluster § 6.7.4.2
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ given content.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.2.3
+MatterSpecification.v11.Cluster § 6.7.4.2.3
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.brandingInformation
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:237](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L237)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:236](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L236)
 
 ___
 
@@ -55,7 +55,7 @@ This shall indicate the URL of content to launch.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.2.1
+MatterSpecification.v11.Cluster § 6.7.4.2.1
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ TypeFromSchema.contentUrl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:221](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L221)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:220](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L220)
 
 ___
 
@@ -76,7 +76,7 @@ the given URL.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.2.2
+MatterSpecification.v11.Cluster § 6.7.4.2.2
 
 #### Inherited from
 
@@ -84,4 +84,4 @@ TypeFromSchema.displayString
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:229](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L229)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:228](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L228)

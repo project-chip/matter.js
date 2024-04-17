@@ -11,7 +11,7 @@ because we don’t have any other usecases which require this datatype.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.8
+MatterSpecification.v11.Cluster § 6.7.5.8
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ This indicates the height using the metric defined in Metric
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.8.2
+MatterSpecification.v11.Cluster § 6.7.5.8.2
 
 #### Inherited from
 
@@ -45,7 +45,7 @@ TypeFromSchema.height
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L84)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L83)
 
 ___
 
@@ -57,7 +57,7 @@ This shall indicate metric used for defining Height/Width.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.8.3
+MatterSpecification.v11.Cluster § 6.7.5.8.3
 
 #### Inherited from
 
@@ -65,7 +65,7 @@ TypeFromSchema.metric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L91)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L90)
 
 ___
 
@@ -77,7 +77,7 @@ This indicates the width using the metric defined in Metric
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.8.1
+MatterSpecification.v11.Cluster § 6.7.5.8.1
 
 #### Inherited from
 
@@ -85,4 +85,4 @@ TypeFromSchema.width
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:77](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L77)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:76](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L76)

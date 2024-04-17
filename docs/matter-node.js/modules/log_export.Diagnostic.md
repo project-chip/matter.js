@@ -28,6 +28,7 @@
 - [lifecycle](log_export.Diagnostic.md#lifecycle)
 - [lifecycleList](log_export.Diagnostic.md#lifecyclelist)
 - [list](log_export.Diagnostic.md#list)
+- [node](log_export.Diagnostic.md#node)
 - [prefixError](log_export.Diagnostic.md#prefixerror)
 - [squash](log_export.Diagnostic.md#squash)
 - [strong](log_export.Diagnostic.md#strong)
@@ -75,7 +76,7 @@ Create a K/V map that presents with formatted keys.
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:76
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:84
 
 ___
 
@@ -91,7 +92,7 @@ Create a diagnostic that renders as elapsed time since creation.
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:102
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:110
 
 ___
 
@@ -113,7 +114,7 @@ Create a Diagnostic for an error.
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:80
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:88
 
 ___
 
@@ -135,7 +136,7 @@ Convert an interval to text.
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:98
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:106
 
 ___
 
@@ -158,7 +159,7 @@ Create a diagnostic with a specific [Lifecycle](exports_common.Lifecycle.md).
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:85
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:93
 
 ___
 
@@ -180,7 +181,7 @@ Create a diagnostic for a [Lifecycle.Map](exports_common.Lifecycle.md#map).
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:89
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:97
 
 ___
 
@@ -202,7 +203,34 @@ Create a value presenting as a list of separate lines.
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:68
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:76
+
+___
+
+### node
+
+▸ **node**(`icon`, `label`, `detail`): `unknown`[]
+
+A node in a diagnostic tree.  Top-level diagnostic sources registered with DiagnosticSource should present as
+nodes.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `icon` | `string` |
+| `label` | `unknown` |
+| `detail` | `Object` |
+| `detail.children?` | `unknown`[] |
+| `detail.self?` | `unknown` |
+
+#### Returns
+
+`unknown`[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:69
 
 ___
 
@@ -223,7 +251,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:81
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:89
 
 ___
 
@@ -245,7 +273,7 @@ Create a value presenting as segments of the same string without intervening spa
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:72
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:80
 
 ___
 
@@ -296,7 +324,7 @@ Upgrade a value to support specialized diagnostic rendering.
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Diagnostic.d.ts:106
+packages/matter.js/dist/esm/log/Diagnostic.d.ts:114
 
 ___
 

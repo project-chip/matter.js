@@ -8,7 +8,7 @@ Input to the AdministratorCommissioning openCommissioningWindow command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.18.8.1
+MatterSpecification.v11.Core § 11.18.8.1
 
 ## Hierarchy
 
@@ -40,7 +40,7 @@ commissioning session SHOULD NOT abort prematurely upon expiration of this timeo
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.18.8.1.1
+MatterSpecification.v11.Core § 11.18.8.1.1
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ records by long discriminator to locate and initiate commissioning with the appr
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.18.8.1.3
+MatterSpecification.v11.Core § 11.18.8.1.3
 
 #### Inherited from
 
@@ -86,7 +86,7 @@ definition of the Crypto_PBKDFParameterSet.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.18.8.1.4
+MatterSpecification.v11.Core § 11.18.8.1.4
 
 #### Inherited from
 
@@ -111,7 +111,7 @@ expiration of OCW, and shall be deleted by the existing Administrator after send
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.18.8.1.2
+MatterSpecification.v11.Core § 11.18.8.1.2
 
 #### Inherited from
 
@@ -142,7 +142,7 @@ CommissioningTimeout.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.18.8.1.5
+MatterSpecification.v11.Core § 11.18.8.1.5
 
 #### Inherited from
 

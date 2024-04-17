@@ -37,10 +37,10 @@ These elements and properties are present in all PressureMeasurement clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `maxMeasuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `measuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `minMeasuredValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `tolerance`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\>  } | - |
-| `attributes.maxMeasuredValue` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | This attribute indicates the maximum value of MeasuredValue that can be measured. See Measured Value for more details. The null value indicates that the value is not available. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.4.5.3 |
-| `attributes.measuredValue` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | This attribute represents the pressure in kPa as follows: MeasuredValue = 10 x Pressure [kPa] The null value indicates that the value is not available. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.4.5.1 |
-| `attributes.minMeasuredValue` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | This attribute indicates the minimum value of MeasuredValue that can be measured. See Measured Value for more details. The null value indicates that the value is not available. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.4.5.2 |
-| `attributes.tolerance` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> | This attribute indicates the magnitude of the possible error that is associated with ScaledValue. See Measured Value. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.4.5.4 |
+| `attributes.maxMeasuredValue` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | This attribute indicates the maximum value of MeasuredValue that can be measured. See Measured Value for more details. The null value indicates that the value is not available. **`See`** MatterSpecification.v11.Cluster § 2.4.5.3 |
+| `attributes.measuredValue` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | This attribute represents the pressure in kPa as follows: MeasuredValue = 10 x Pressure [kPa] The null value indicates that the value is not available. **`See`** MatterSpecification.v11.Cluster § 2.4.5.1 |
+| `attributes.minMeasuredValue` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> | This attribute indicates the minimum value of MeasuredValue that can be measured. See Measured Value for more details. The null value indicates that the value is not available. **`See`** MatterSpecification.v11.Cluster § 2.4.5.2 |
+| `attributes.tolerance` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> | This attribute indicates the magnitude of the possible error that is associated with ScaledValue. See Measured Value. **`See`** MatterSpecification.v11.Cluster § 2.4.5.4 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `maxScaledValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `minScaledValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\> ; `scale`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `scaledTolerance`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `scaledValue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<``null`` \| `number`, `any`\>  }  } = ExtendedComponent; `flags`: \{ `extended`: ``true`` = true }  }] | This metadata controls which PressureMeasurementCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `extended`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.extended` | [`BitFlag`](schema_export.md#bitflag) | Extended The cluster is capable of extended range and resolution |
@@ -50,7 +50,7 @@ These elements and properties are present in all PressureMeasurement clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:89](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:88](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L88)
 
 ___
 
@@ -60,9 +60,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:168](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L168)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L167)
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:169](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L169)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L154)
 
 ___
 
@@ -86,9 +86,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:208](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L208)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L207)
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:210](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L210)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:209](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L209)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L177)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L176)
 
 ___
 
@@ -125,4 +125,4 @@ A PressureMeasurementCluster supports these elements if it supports feature Exte
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L21)

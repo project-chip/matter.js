@@ -8,7 +8,7 @@ This data type indicates a combination of an identifier and the value of an attr
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.6.1
+MatterSpecification.v11.Cluster § 1.4.6.1
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ indicated by AttributeID.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.6.1.1
+MatterSpecification.v11.Cluster § 1.4.6.1.1
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.attributeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L63)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L62)
 
 ___
 
@@ -57,7 +57,7 @@ for this field.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.6.1.2
+MatterSpecification.v11.Cluster § 1.4.6.1.2
 
 #### Inherited from
 
@@ -65,4 +65,4 @@ TypeFromSchema.attributeValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L71)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L70)

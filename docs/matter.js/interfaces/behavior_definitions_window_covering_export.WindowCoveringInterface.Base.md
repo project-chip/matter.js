@@ -51,11 +51,11 @@ if Position Aware feature is supported:
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.2
+MatterSpecification.v11.Cluster § 5.3.6.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:141](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L141)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L140)
 
 ___
 
@@ -78,11 +78,11 @@ lift/slide that is currently occurring. The server attributes supported shall be
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.3
+MatterSpecification.v11.Cluster § 5.3.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L155)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L154)
 
 ___
 
@@ -123,8 +123,8 @@ if Position Aware feature is supported:
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.1
+MatterSpecification.v11.Cluster § 5.3.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:109](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L109)
+[packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts:108](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/window-covering/WindowCoveringInterface.ts#L108)

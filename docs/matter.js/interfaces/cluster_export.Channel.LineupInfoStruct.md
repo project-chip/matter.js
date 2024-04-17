@@ -9,7 +9,7 @@ LineupName, and PostalCode MUST uniquely identify a lineup.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.2
+MatterSpecification.v11.Cluster § 6.6.5.2
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ This shall indicate the type of lineup. This field is optional, but SHOULD be pr
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.2.4
+MatterSpecification.v11.Cluster § 6.6.5.2.4
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.lineupInfoType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:115](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L115)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:114](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L114)
 
 ___
 
@@ -58,7 +58,7 @@ TypeFromSchema.lineupName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:107](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L107)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:106](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L106)
 
 ___
 
@@ -70,7 +70,7 @@ This shall indicate the name of the operator, for example “Comcast”.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.2.1
+MatterSpecification.v11.Cluster § 6.6.5.2.1
 
 #### Inherited from
 
@@ -78,7 +78,7 @@ TypeFromSchema.operatorName
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L104)
 
 ___
 
@@ -92,4 +92,4 @@ TypeFromSchema.postalCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:108](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:107](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L107)
