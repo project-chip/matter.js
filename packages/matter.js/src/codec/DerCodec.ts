@@ -103,7 +103,7 @@ export class DerCodec {
                 if (bytes === undefined || !ArrayBuffer.isView(bytes)) {
                     throw new UnexpectedDataError("DER bytes is not a byte array");
                 }
-                return this.encodeAns1(
+                return this.encodeAsn1(
                     tagId,
                     bitsPadding === undefined
                         ? (bytes as Uint8Array)
@@ -144,7 +144,7 @@ export class DerCodec {
     private static encodeDate(date: Date) {
         if (date.getFullYear() > 2049) {
             // Dates 2050+ are encoded as GeneralizedTime. This includes the special Non Well Defined date 9999-12-31.
-            return this.encodeAns1(
+            return this.encodeAsn1(
                 DerType.GeneralizedTime,
                 ByteArray.fromString(
                     date
@@ -154,7 +154,7 @@ export class DerCodec {
                 ),
             );
         } else
-            return this.encodeAns1(
+            return this.encodeAsn1(
                 DerType.UtcDate,
                 ByteArray.fromString(
                     date
@@ -166,18 +166,18 @@ export class DerCodec {
     }
 
     private static encodeBoolean(bool: boolean) {
-        return this.encodeAns1(DerType.Boolean, ByteArray.of(bool ? 0xff : 0));
+        return this.encodeAsn1(DerType.Boolean, ByteArray.of(bool ? 0xff : 0));
     }
 
     private static encodeArray(array: Array<any>) {
-        return this.encodeAns1(
+        return this.encodeAsn1(
             DerType.Set | CONSTRUCTED,
             ByteArray.concat(...array.map(element => this.encode(element))),
         );
     }
 
     private static encodeOctetString(value: ByteArray) {
-        return this.encodeAns1(DerType.OctetString, value);
+        return this.encodeAsn1(DerType.OctetString, value);
     }
 
     private static encodeObject(object: any) {
@@ -185,18 +185,18 @@ export class DerCodec {
         for (const key in object) {
             attributes.push(this.encode(object[key]));
         }
-        return this.encodeAns1(DerType.Sequence | CONSTRUCTED, ByteArray.concat(...attributes));
+        return this.encodeAsn1(DerType.Sequence | CONSTRUCTED, ByteArray.concat(...attributes));
     }
 
     private static encodeString(value: string) {
-        return this.encodeAns1(DerType.UTF8String, ByteArray.fromString(value));
+        return this.encodeAsn1(DerType.UTF8String, ByteArray.fromString(value));
     }
 
     private static encodePrintableString(value: string) {
         if (!/^[A-Za-z0-9 '()+,-./:=?]*$/g.test(value)) {
             throw new UnexpectedDataError(`String ${value} is not a printable string.`);
         }
-        return this.encodeAns1(DerType.PrintableString, ByteArray.fromString(value));
+        return this.encodeAsn1(DerType.PrintableString, ByteArray.fromString(value));
     }
 
     private static encodeIA5String(value: string) {
@@ -204,7 +204,7 @@ export class DerCodec {
         if (!/^[\x00-\x7F]*$/.test(value)) {
             throw new UnexpectedDataError(`String ${value} is not an IA5 string.`);
         }
-        return this.encodeAns1(DerType.IA5String, ByteArray.fromString(value));
+        return this.encodeAsn1(DerType.IA5String, ByteArray.fromString(value));
     }
 
     private static encodeInteger(value: number | bigint | ByteArray) {
@@ -224,7 +224,7 @@ export class DerCodec {
             start++;
             if (start === byteArray.length - 1) break;
         }
-        return this.encodeAns1(DerType.Integer, byteArray.slice(start));
+        return this.encodeAsn1(DerType.Integer, byteArray.slice(start));
     }
 
     private static encodeBitString(value: number) {
@@ -252,7 +252,7 @@ export class DerCodec {
         return byteArray.slice(start);
     }
 
-    private static encodeAns1(tag: number, data: ByteArray) {
+    private static encodeAsn1(tag: number, data: ByteArray) {
         return ByteArray.concat(ByteArray.of(tag), this.encodeLengthBytes(data.length), data);
     }
 
@@ -261,7 +261,7 @@ export class DerCodec {
     }
 
     private static decodeRec(reader: DataReader<Endian.Big>): DerNode {
-        const { tag, bytes } = this.decodeAns1(reader);
+        const { tag, bytes } = this.decodeAsn1(reader);
         if (tag === DerType.BitString)
             return { [TAG_ID_KEY]: tag, [BYTES_KEY]: bytes.slice(1), [BITS_PADDING]: bytes[0] };
         if ((tag & CONSTRUCTED) === 0) return { [TAG_ID_KEY]: tag, [BYTES_KEY]: bytes };
@@ -273,7 +273,7 @@ export class DerCodec {
         return { [TAG_ID_KEY]: tag, [BYTES_KEY]: bytes, [ELEMENTS_KEY]: elements };
     }
 
-    private static decodeAns1(reader: DataReader<Endian.Big>): { tag: number; bytes: ByteArray } {
+    private static decodeAsn1(reader: DataReader<Endian.Big>): { tag: number; bytes: ByteArray } {
         const tag = reader.readUInt8();
         let length = reader.readUInt8();
         if ((length & 0x80) !== 0) {
