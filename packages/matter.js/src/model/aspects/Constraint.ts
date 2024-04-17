@@ -80,7 +80,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
     /**
      * Test a value against a constraint.  Does not recurse into arrays.
      */
-    test(value: FieldValue, properties?: Record<string, any>) {
+    test(value: FieldValue, properties?: Record<string, any>): boolean {
         // Helper that looks up "reference" field values in properties.  This is for constraints such as "min FieldName"
         function valueOf(value: unknown, raw = false) {
             if (!raw && (typeof value === "string" || Array.isArray(value))) {
@@ -129,6 +129,10 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
             if ((max !== undefined && typeof max !== typeof value) || (max as typeof value) < value) {
                 return false;
             }
+        }
+
+        if (this.parts?.every(part => part.test(value, properties) === false)) {
+            return false;
         }
 
         return true;

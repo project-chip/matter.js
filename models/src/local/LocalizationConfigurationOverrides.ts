@@ -16,7 +16,7 @@ LocalMatter.children.push({
             tag: "attribute",
             name: "ActiveLocale",
             id: 0,
-            constraint: "max 35, in SupportedLocales",
+            constraint: "in SupportedLocales",
         },
     ],
 });
