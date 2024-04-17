@@ -66,6 +66,20 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         return this.state.maxLevel ?? 0xfe;
     }
 
+    /**
+     * The current level value as number.
+     * Throws an StatusResponse Error when null!
+     */
+    get currentLevel(): number {
+        if (this.state.currentLevel === null) {
+            throw new StatusResponseError(
+                "The currentLevel value is null, so we can not operate on it.",
+                StatusCode.Failure,
+            );
+        }
+        return this.state.currentLevel;
+    }
+
     override initialize() {
         if (this.features.lighting) {
             if (this.state.currentLevel === 0) {
@@ -152,15 +166,26 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         // Determine effective transition time
         const transitionTimeValue = transitionTime ?? this.state.onOffTransitionTime ?? null;
 
+        // Adjust target level
+        if (this.maxLevel <= level) {
+            level = this.maxLevel;
+        } else if (level <= this.minLevel) {
+            level = this.minLevel;
+        }
+
         // If we should move to the new level as fast as possible ...
-        if (!this.state.managedTransitionTimeHandling || transitionTimeValue === null || transitionTimeValue === 0) {
+        if (
+            !this.state.managedTransitionTimeHandling ||
+            transitionTimeValue === null ||
+            transitionTimeValue === 0 ||
+            this.currentLevel === level
+        ) {
             this.setRemainingTime(0);
             return this.setLevel(level, withOnOff);
         }
+
         // Else calculate a rate by second and manage the transition
-        const effectiveRate = Math.floor(
-            ((level - (this.state.currentLevel ?? this.minLevel)) / transitionTimeValue) * 10,
-        );
+        const effectiveRate = Math.floor(((level - this.currentLevel) / transitionTimeValue) * 10);
         return this.#initiateTransition(
             Math.abs(effectiveRate),
             effectiveRate < 0 ? LevelControl.StepMode.Down : LevelControl.StepMode.Up,
@@ -210,10 +235,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      */
     protected moveLogic(moveMode: LevelControl.MoveMode, rate: number | null, withOnOff: boolean) {
         const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
-        if (!this.state.managedTransitionTimeHandling || effectiveRate === null) {
-            // If no rate is requested and also no default rate is set, we should move as fast as possible, so we set
-            // to min/max value directly
-            const level = moveMode === LevelControl.MoveMode.Up ? this.maxLevel : this.minLevel;
+        if (!this.state.managedTransitionTimeHandling || effectiveRate === null || effectiveRate === 0) {
+            // If null rate is requested and also no default rate is set, we should move as fast as possible, so we set
+            // to min/max value directly. If rate 0 is requested no change on level should be done.
+            const level =
+                effectiveRate === 0
+                    ? this.currentLevel
+                    : moveMode === LevelControl.MoveMode.Up
+                      ? this.maxLevel
+                      : this.minLevel;
             this.setRemainingTime(0);
             return this.setLevel(level, withOnOff);
         }
@@ -266,13 +296,13 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         withOnOff: boolean,
     ) {
         if (!this.state.managedTransitionTimeHandling || transitionTime === null || transitionTime === 0) {
-            // If no transitionTime is requested we should move as fast as possible, so we set to min/max value directly
+            // If null/0 transitionTime is requested we should move as fast as possible, so we set to min/max value directly
             this.setRemainingTime(0);
             return this.setLevel(stepMode === LevelControl.StepMode.Up ? this.maxLevel : this.minLevel, withOnOff);
         }
         const effectiveRate = Math.floor((stepSize / transitionTime) * 10);
-        const currentLevel = this.state.currentLevel ?? this.minLevel;
-        let targetLevel = stepMode === LevelControl.StepMode.Up ? currentLevel + stepSize : currentLevel - stepSize;
+        let targetLevel =
+            stepMode === LevelControl.StepMode.Up ? this.currentLevel + stepSize : this.currentLevel - stepSize;
         if (targetLevel < this.minLevel) {
             targetLevel = this.minLevel;
         } else if (targetLevel > this.maxLevel) {
@@ -391,7 +421,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * This is the default implementation of the required interaction with the OnOff cluster on the same endpoint when
      * the onOff feature is used.
      * This implementation just sets the current level to the onLevel value when the device is turned on. Other fading
-     * up/down logic required by the {@link MatterSpecification.v12.Cluster} 1.6.4.1.1 needs to be implemented in a
+     * up/down logic required by the {@link MatterSpecification.v12.Cluster} §1.6.4.1.1 needs to be implemented in a
      * specialized class if needed.
      *
      * @param onOff The new onOff state
@@ -421,16 +451,16 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             this.callback(this.#stepIntervalTick),
         ).start();
         // Re-Set the current level as start level for the step interval to handle OnOff state changes
-        return this.setLevel(this.state.currentLevel ?? this.minLevel, withOnOff);
+        return this.setLevel(this.currentLevel, withOnOff);
     }
 
     async #stepIntervalTick() {
-        if (!this.internal.currentTransitionData) {
+        if (!this.internal.currentTransitionData || this.state.currentLevel === null) {
             this.internal.transitionIntervalTimer?.stop();
             return;
         }
         const { changeRate, withOnOff, targetLevel } = this.internal.currentTransitionData;
-        const newLevel = (this.state.currentLevel ?? this.minLevel) + changeRate;
+        const newLevel = this.state.currentLevel + changeRate;
         if (newLevel <= this.minLevel) {
             logger.debug(`Stopping transition interval at minLevel: ${this.minLevel}.`);
             await this.setLevel(this.minLevel, withOnOff);
