@@ -58,6 +58,9 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         if (lifecycle.online !== undefined) {
             this.reactTo(lifecycle.online, this.#online);
         }
+        if (this.state.reachable !== undefined && this.events.reachable$Change !== undefined) {
+            this.reactTo(this.events.reachable$Change, this.#emitReachableChange, { offline: true });
+        }
     }
 
     [Symbol.asyncDispose]() {
@@ -69,6 +72,10 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
 
         const fabricManager = this.endpoint.env.get(FabricManager);
         this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric);
+    }
+
+    #emitReachableChange(reachable: boolean) {
+        this.events.reachableChanged?.emit({ reachableNewValue: reachable }, this.context);
     }
 
     #handleRemovedFabric({ fabricIndex }: Fabric) {

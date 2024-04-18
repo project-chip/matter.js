@@ -20,6 +20,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Adds Certificate validation and cryptographic verification during commissioning and CASE session establishment
 * matter.js New API code flows: 
   * Enhancement: Optimized constraint validations and conformance error messages
+  * Enhancement: Conditionally enables the ReachableChanged event on the Root Endpoint BasicInformation cluster if the reachable attribute is defined in the defauls
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
 * Chip testing:
   * Enhancement: Adds automatic CI testing for all clusters listed in [matter.js Readme](./packages/matter.js/README.md)
