@@ -226,7 +226,7 @@ For hints on options to add endpoints into a structure see next paragraph.
 ### How to add endpoints into a structure?
 The new API provides basically two ways to add endpoints into a structure:
 
-* "Lazy" way: When using `endpoint.parts.add()` or when you provide the parts in the configuration of the Endpoint when creating it. While this is convenient it has, as of current 0.8.x versions, the disadvantage that the Endpoint is not directly initialized, and so you can not directly add event handlers or such to the endpoint. This is only done when the node is online or an endpoint was added with full initialization (see next point). is planned to be changed in future versions.
+* "Lazy" way: When using `endpoint.parts.add()` or when you provide the parts in the configuration of the Endpoint when creating it. While this is convenient it has the side-effect that the Endpoint is not directly initialized, and so you can not directly add event handlers to the endpoint or access the cluster state of the endpoint. This is only possible when the node is online or an endpoint was added with full initialization (see next point). We plan to allow early/lazy event handler registrations in a future update, but the state will stay inaccessable.
 * "Initialized/Async" way: When you add the endpoint to the node with `await node.add(endpoint)` the endpoint is directly initialized, including all internal data structures, and you can add event handlers or such directly after the add call. This is currently the recommended way if you need to do something directly after the endpoint was added, but requires that you need to carefully add all relevant endpoints in the right order to the node.
 
 ### Initialize and destroy cluster logic
