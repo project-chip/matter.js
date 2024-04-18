@@ -189,7 +189,7 @@ export class CaseClient {
             const encryptedData = TlvEncryptedDataSigma3.encode({ nodeOpCert, intermediateCACert, signature });
             const encrypted = Crypto.encrypt(sigma3Key, encryptedData, TBE_DATA3_NONCE);
             const sigma3Bytes = await messenger.sendSigma3({ encrypted });
-            await messenger.waitForSuccess();
+            await messenger.waitForSuccess("Success after CASE Sigma3");
 
             // All good! Create secure session
             const secureSessionSalt = ByteArray.concat(

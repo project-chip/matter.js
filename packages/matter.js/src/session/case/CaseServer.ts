@@ -128,7 +128,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             resumptionRecord.resumptionId = resumptionId; /* Update the ID */
 
             // Wait for success on the peer side
-            await messenger.waitForSuccess();
+            await messenger.waitForSuccess("Success after CASE Sigma2Resume");
 
             await messenger.close();
             await server.saveResumptionRecord(resumptionRecord);

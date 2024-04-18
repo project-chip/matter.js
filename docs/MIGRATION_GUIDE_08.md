@@ -188,6 +188,47 @@ const endpoint = await serverNode.add(
 );
 ```
 
+### New:BridgedNodeEndpoint <--> Legacy:ComposedDevice
+To create a Composed device in a bridge context a structure container is needed to encapsulate the endpoints of the composed device. In the new API this is done by the BridgedNodeEndpoint class.
+
+An Endpoint of this type is added to the Aggregator endpoint together with it's Bridged Device Basic Information data.
+
+```javascript
+const composed = new Endpoint(BridgedNodeEndpoint, {
+    id: "composed-device", // unique ID of the endpoint here
+    bridgedDeviceBasicInformation: {
+        ...
+    },
+});
+
+const composedWC = new Endpoint(
+    WindowCoveringDevice.with(WindowCoveringServer.with("Lift", "AbsolutePosition", "PositionAwareLift")),
+    {
+        id: "composed-wc", // Unique id
+    },
+);
+const composedLight = new Endpoint(DimmableLightDevice, {
+    id: "composed-light", // Unique id
+});
+
+const aggregator = new Endpoint(AggregatorEndpoint, { id: "aggregator" });
+
+await serverNode.add(aggregator);
+
+await aggregator.add(composed);
+
+await composed.add(composedWC);
+await composed.add(composedLight);
+```
+
+For hints on options to add endpoints into a structure see next paragraph.
+
+### How to add endpoints into a structure?
+The new API provides basically two ways to add endpoints into a structure:
+
+* "Lazy" way: When using `endpoint.parts.add()` or when you provide the parts in the configuration of the Endpoint when creating it. While this is convenient it has the side-effect that the Endpoint is not directly initialized, and so you can not directly add event handlers to the endpoint or access the cluster state of the endpoint. This is only possible when the node is online or an endpoint was added with full initialization (see next point). We plan to allow early/lazy event handler registrations in a future update, but the state will stay inaccessable.
+* "Initialized/Async" way: When you add the endpoint to the node with `await node.add(endpoint)` the endpoint is directly initialized, including all internal data structures, and you can add event handlers or such directly after the add call. This is currently the recommended way if you need to do something directly after the endpoint was added, but requires that you need to carefully add all relevant endpoints in the right order to the node.
+
 ### Initialize and destroy cluster logic
 
 The legacy API had the two handler methods "initializeClusterServer" and "destroyClusterServer" to initialize and
@@ -232,7 +273,7 @@ matter.js also allows to define and add additional clusters to the system. Todo 
 -   Some glue code to provide typings and such for TypeScript and developer convenience :-)
 
 **Note**
-Currently the Tlv-Schema and the Model definition is kind of duplicated code and needs to match in their respective formats. In the future we plan to use a json representation like it is already in use for all official clusters - and then offer code generators also for custom clusters which would create all the relevant code automatically. But the adjusted generators are not yet ready.
+Currently the TLV-Schema and the Model definition is kind of duplicated code and needs to match in their respective formats. In the future we plan to use a json representation like it is already in use for all official clusters - and then offer code generators also for custom clusters which would create all the relevant code automatically. But the adjusted generators are not yet ready.
 
 The DevicesFullNode.ts contains a [MyFancyFunctionality custom cluster](../packages/matter-node.js-examples/src/examples/cluster/MyFancyOwnFunctionality.ts) that shows how this can be built right now already (with a bit overhead as described). The code contained here in one file is normally split into several files in the generated code.
 
@@ -246,11 +287,6 @@ endpoint.events.onOff.onOff$Change.on(value => {
     console.log(`OnOff is now ${value ? "ON" : "OFF"}`);
 });
 ```
-
-**IMPORTANT**
-The change handlers are executed in the scope of the called command. This means that exceptions that are thrown in the
-state change handlers let the command fail! This also means that the transaction fails and all other changes are rolled
-back automatically.
 
 ### Read or write attribute values
 
