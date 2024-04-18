@@ -29,7 +29,7 @@ type PasePake3 = TypeFromSchema<typeof TlvPasePake3>;
 
 export class PaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
     async readPbkdfParamRequest() {
-        const { payload } = await this.nextMessage(MessageType.PbkdfParamRequest);
+        const { payload } = await this.nextMessage("PASE PbkdfParamRequest", MessageType.PbkdfParamRequest);
         return { requestPayload: payload, request: TlvPbkdfParamRequest.decode(payload) };
     }
 
@@ -38,7 +38,7 @@ export class PaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
     }
 
     readPasePake1() {
-        return this.nextMessageDecoded(MessageType.PasePake1, TlvPasePake1);
+        return this.nextMessageDecoded(MessageType.PasePake1, TlvPasePake1, "PASE Pake1");
     }
 
     sendPasePake2(pasePake2: PasePake2) {
@@ -46,7 +46,7 @@ export class PaseServerMessenger extends SecureChannelMessenger<MatterDevice> {
     }
 
     readPasePake3() {
-        return this.nextMessageDecoded(MessageType.PasePake3, TlvPasePake3);
+        return this.nextMessageDecoded(MessageType.PasePake3, TlvPasePake3, "PASE Pake3");
     }
 }
 
@@ -56,7 +56,7 @@ export class PaseClientMessenger extends SecureChannelMessenger<MatterController
     }
 
     async readPbkdfParamResponse() {
-        const { payload } = await this.nextMessage(MessageType.PbkdfParamResponse);
+        const { payload } = await this.nextMessage("PASE PbkdfParamResponse", MessageType.PbkdfParamResponse);
         return { responsePayload: payload, response: TlvPbkdfParamResponse.decode(payload) };
     }
 
@@ -65,7 +65,7 @@ export class PaseClientMessenger extends SecureChannelMessenger<MatterController
     }
 
     readPasePake2() {
-        return this.nextMessageDecoded(MessageType.PasePake2, TlvPasePake2);
+        return this.nextMessageDecoded(MessageType.PasePake2, TlvPasePake2, "PASE Pake2");
     }
 
     sendPasePake3(pasePake3: PasePake3) {
