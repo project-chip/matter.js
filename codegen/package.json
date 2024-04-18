@@ -15,7 +15,7 @@
         "generate-clusters": "matter-run bin/generate-clusters.js",
         "generate-endpoints": "matter-run bin/generate-endpoints.js",
         "dump-model-names": "matter-build esm --prefix=../models && matter-run bin/dump-model-names.ts",
-        "generate": "npm run generate-model && npm run generate-clusters"
+        "generate": "npm run generate-model && npm run generate-clusters && npm run generate-endpoints"
     },
     "repository": {
         "type": "git",
