@@ -30,24 +30,24 @@ export class ChannelStatusResponseError extends MatterError {
 export class SecureChannelMessenger<ContextT> {
     constructor(protected readonly exchange: MessageExchange<ContextT>) {}
 
-    async nextMessage(expectedMessageType?: number) {
+    async nextMessage(expectedMessageInfo: string, expectedMessageType?: number) {
         const message = await this.exchange.nextMessage();
         const messageType = message.payloadHeader.messageType;
-        this.throwIfErrorStatusReport(message);
+        this.throwIfErrorStatusReport(message, expectedMessageInfo);
         if (expectedMessageType !== undefined && messageType !== expectedMessageType)
             throw new UnexpectedDataError(
-                `Received unexpected message type: ${messageType}, expected: ${expectedMessageType}`,
+                `Received unexpected message type: ${messageType}, expected: ${expectedMessageType} (${expectedMessageInfo})`,
             );
         return message;
     }
 
-    async nextMessageDecoded<T>(expectedMessageType: number, schema: TlvSchema<T>) {
-        return schema.decode((await this.nextMessage(expectedMessageType)).payload);
+    async nextMessageDecoded<T>(expectedMessageType: number, schema: TlvSchema<T>, expectedMessageInfo: string) {
+        return schema.decode((await this.nextMessage(expectedMessageInfo, expectedMessageType)).payload);
     }
 
-    async waitForSuccess() {
+    async waitForSuccess(expectedMessageInfo: string) {
         // If the status is not Success, this would throw an Error.
-        await this.nextMessage(MessageType.StatusReport);
+        await this.nextMessage(expectedMessageInfo, MessageType.StatusReport);
     }
 
     async send<T>(message: T, type: number, schema: TlvSchema<T>) {
@@ -92,7 +92,7 @@ export class SecureChannelMessenger<ContextT> {
         );
     }
 
-    protected throwIfErrorStatusReport(message: Message) {
+    protected throwIfErrorStatusReport(message: Message, logHint?: string) {
         const {
             payloadHeader: { messageType },
             payload,
@@ -102,14 +102,14 @@ export class SecureChannelMessenger<ContextT> {
         const { generalStatus, protocolId, protocolStatus } = TlvSecureChannelStatusMessage.decode(payload);
         if (generalStatus !== GeneralStatusCode.Success) {
             throw new ChannelStatusResponseError(
-                `Received general error status for protocol ${protocolId}`,
+                `Received general error status for protocol ${protocolId}${logHint ? ` (${logHint})` : ""}`,
                 generalStatus,
                 protocolStatus,
             );
         }
         if (protocolStatus !== ProtocolStatusCode.Success) {
             throw new ChannelStatusResponseError(
-                `Received general success status, but protocol status is not Success`,
+                `Received general success status, but protocol status is not Success${logHint ? ` (${logHint})` : ""}`,
                 generalStatus,
                 protocolStatus,
             );

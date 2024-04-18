@@ -18,6 +18,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     * TimeFormatLocalization: Implemented activeTimeFormat validation
   * Enhancement: Adjusted handling of TlvList order to match better with matter specification and ensure field orders are preserved
   * Enhancement: Adds Certificate validation and cryptographic verification during commissioning and CASE session establishment
+  * Enhancement: Adds additional logging information for PASE and CASE to better understand errors without debug logging
 * matter.js New API code flows: 
   * Enhancement: Optimized constraint validations and conformance error messages
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
