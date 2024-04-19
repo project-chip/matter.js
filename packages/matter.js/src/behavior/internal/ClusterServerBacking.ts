@@ -82,7 +82,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
     }
 
     #createClusterServer(behavior: Behavior) {
-        const elements = new ValidatedElements(this.type);
+        const elements = new ValidatedElements(this.type, behavior);
         elements.report();
 
         // Install command handlers that map to implementation methods
