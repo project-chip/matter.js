@@ -13,11 +13,7 @@ import { SessionsBehavior } from "../behavior/system/sessions/SessionsBehavior.j
 import { Agent } from "../endpoint/Agent.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { EndpointServer } from "../endpoint/EndpointServer.js";
-import {
-    RootEndpoint as BaseRootEndpoint,
-    RootEndpoint,
-    RootRequirements,
-} from "../endpoint/definitions/system/RootEndpoint.js";
+import { RootEndpoint as BaseRootEndpoint, RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointInitializer } from "../endpoint/properties/EndpointInitializer.js";
 import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
@@ -29,7 +25,6 @@ import { Node } from "./Node.js";
 import { IdentityService } from "./server/IdentityService.js";
 import { ServerEndpointInitializer } from "./server/ServerEndpointInitializer.js";
 import { ServerStore } from "./server/storage/ServerStore.js";
-import BasicInformationServer = RootRequirements.BasicInformationServer;
 
 const logger = Logger.get("ServerNode");
 
@@ -62,15 +57,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
     constructor(config: Partial<Node.Configuration<T>>);
 
     constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
-        const config = Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options);
-
-        // Enable reachableChanged event on the BasicInformation cluster of Root endpoint if reachable attribute is defined
-        if (config.type.deviceType === RootEndpoint.deviceType && config.basicInformation?.reachable !== undefined) {
-            config.type = config.type.with(
-                BasicInformationServer.enable({ events: { reachableChanged: true } }),
-            ) as unknown as T;
-        }
-        super(config);
+        super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));
         this.#mutex = new Mutex(this, this.construction);
         DiagnosticSource.add(this);
     }
