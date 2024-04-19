@@ -21,7 +21,7 @@ import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
 import { TlvInt32 } from "../../../src/tlv/TlvNumber.js";
 import { TlvString } from "../../../src/tlv/TlvString.js";
-import { EventEmitter, Observable } from "../../../src/util/Observable.js";
+import { BasicObservable, EventEmitter, Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
@@ -113,8 +113,8 @@ describe("ClusterBehavior", () => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.reqAttr).equals("hello");
                 expect(behavior.reqCmd).is.a("function");
-                expect(behavior.events.reqAttr$Change.constructor.name).equals("Emitter");
-                expect(behavior.events.reqEv.constructor.name).equals("Emitter");
+                expect(behavior.events.reqAttr$Change).instanceof(BasicObservable);
+                expect(behavior.events.reqEv).instanceof(BasicObservable);
             });
         });
 
@@ -123,7 +123,7 @@ describe("ClusterBehavior", () => {
             await endpoint.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.optAttr).undefined;
-                expect(behavior.events.optAttr$Change?.constructor.name).equals("Emitter");
+                expect(behavior.events.optAttr$Change).instanceof(BasicObservable);
                 expect(behavior.events.optEv).undefined;
             });
         });

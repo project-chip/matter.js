@@ -52,7 +52,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #parts?: Parts;
     #construction: AsyncConstruction<Endpoint<T>>;
     #stateView = {} as Immutable<SupportedBehaviors.StateOf<T["behaviors"]>>;
-    #eventsView = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
+    #events = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
     #activity?: NodeActivity;
 
     /**
@@ -229,7 +229,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * Events for all behaviors keyed by behavior ID.
      */
     get events() {
-        return this.#eventsView;
+        return this.#events;
     }
 
     /**
@@ -239,7 +239,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         if (!this.behaviors.has(type)) {
             throw new ImplementationError(`Behavior ${type.id} is not supported by this endpoint`);
         }
-        return this.#eventsView[type.id] as Behavior.EventsOf<T>;
+        return this.#events[type.id] as Behavior.EventsOf<T>;
     }
 
     get construction() {
@@ -572,8 +572,13 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
     async close() {
         await this.construction.close(async () => {
-            await this.parts.close();
-            await this.behaviors.close();
+            await this.#parts?.close();
+            await this.#behaviors?.close();
+
+            for (const events of Object.values(this.#events)) {
+                events[Symbol.dispose]();
+            }
+
             this.lifecycle.change(EndpointLifecycle.Change.Destroyed);
             this.#owner = undefined;
         });
