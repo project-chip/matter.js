@@ -538,7 +538,7 @@ export class TlvGenerator {
 
         const value = FieldValue.numericValue(constraint.value, model.type);
         if (value !== undefined) {
-            return { min: value, max: value + 1 };
+            return { min: value, max: value };
         }
 
         return this.#createRangeBounds(constraint, "min", "max", model.type);
