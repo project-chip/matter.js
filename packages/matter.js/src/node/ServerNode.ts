@@ -13,7 +13,7 @@ import { SessionsBehavior } from "../behavior/system/sessions/SessionsBehavior.j
 import { Agent } from "../endpoint/Agent.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { EndpointServer } from "../endpoint/EndpointServer.js";
-import { RootEndpoint as BaseRootEndpoint, RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
+import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { EndpointInitializer } from "../endpoint/properties/EndpointInitializer.js";
 import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
