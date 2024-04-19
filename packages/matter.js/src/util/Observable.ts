@@ -6,6 +6,7 @@
 
 import { ImplementationError } from "../common/MatterError.js";
 import { Logger } from "../log/Logger.js";
+import "../polyfills/disposable.js";
 import { MaybePromise } from "./Promises.js";
 
 const logger = Logger.get("Observable");
@@ -87,7 +88,10 @@ function defaultErrorHandler(error: Error) {
 
 export type ObserverErrorHandler = (error: Error, observer: Observer<any[], any>) => void;
 
-class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
+/**
+ * A concrete {@link Observable} implementation.
+ */
+export class BasicObservable<T extends any[] = any[], R = void> implements Observable<T, R> {
     #errorHandler: ObserverErrorHandler;
     #observers?: Set<Observer<T, R>>;
     #once?: Set<Observer<T, R>>;
@@ -271,7 +275,7 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
 type Next<T> = undefined | { value: T; promise: Promise<Next<T>> };
 
 function constructObservable(errorHandler?: ObserverErrorHandler) {
-    return new Emitter(errorHandler);
+    return new BasicObservable(errorHandler);
 }
 
 /**
@@ -283,7 +287,7 @@ export const Observable = constructObservable as unknown as {
 };
 
 function constructAsyncObservable(errorHandler?: ObserverErrorHandler) {
-    return new Emitter(errorHandler, true);
+    return new BasicObservable(errorHandler, true);
 }
 
 /**
@@ -331,6 +335,12 @@ export class EventEmitter {
 
     get eventNames() {
         return Object.keys(this).filter(k => typeof (this as any)[k]?.on === "function");
+    }
+
+    [Symbol.dispose]() {
+        for (const name of this.eventNames) {
+            (this as unknown as Record<string, Observable>)[name][Symbol.dispose]?.();
+        }
     }
 }
 
