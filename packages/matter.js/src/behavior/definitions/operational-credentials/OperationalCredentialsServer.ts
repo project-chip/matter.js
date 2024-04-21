@@ -5,6 +5,7 @@
  */
 
 import { CertificateError } from "../../../certificate/CertificateManager.js";
+import { AccessLevel, Command } from "../../../cluster/Cluster.js";
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../../common/MatterError.js";
@@ -16,6 +17,9 @@ import { Logger } from "../../../log/Logger.js";
 import type { Node } from "../../../node/Node.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
+import { TlvBoolean } from "../../../tlv/TlvBoolean.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../../tlv/TlvObject.js";
+import { TlvByteString } from "../../../tlv/TlvString.js";
 import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { CommissioningBehavior } from "../../system/commissioning/CommissioningBehavior.js";
@@ -36,6 +40,32 @@ import {
 import { TlvAttestation, TlvCertSigningRequest } from "./OperationalCredentialsTypes.js";
 
 const logger = Logger.get("OperationalCredentials");
+
+/**
+ * Monkey patching Tlv Structure of attestationRequest and csrRequest commands to prevent data validation of the nonce
+ * fields to be handled as ConstraintError because we need to return a special error.
+ * We do this to leave the model in fact for other validations and only apply the change for our Schema-aware Tlv parsing.
+ */
+OperationalCredentials.Cluster.commands = {
+    ...OperationalCredentials.Cluster.commands,
+    attestationRequest: Command(
+        0x0,
+        TlvObject({ attestationNonce: TlvField(0, TlvByteString) }),
+        0x1,
+        OperationalCredentials.TlvAttestationResponse,
+        { invokeAcl: AccessLevel.Administer },
+    ),
+    csrRequest: Command(
+        0x4,
+        TlvObject({
+            csrNonce: TlvField(0, TlvByteString),
+            isForUpdateNoc: TlvOptionalField(1, TlvBoolean),
+        }),
+        0x5,
+        OperationalCredentials.TlvCsrResponse,
+        { invokeAcl: AccessLevel.Administer },
+    ),
+};
 
 /**
  * This is the default server implementation of OperationalCredentialsBehavior.
@@ -60,6 +90,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {
+        if (attestationNonce.length !== 32) {
+            throw new StatusResponseError("Invalid attestation nonce length", StatusCode.InvalidCommand);
+        }
         const elements = TlvAttestation.encode({
             declaration: this.#certification.declaration,
             attestationNonce: attestationNonce,
@@ -72,7 +105,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override csrRequest({ csrNonce, isForUpdateNoc }: CsrRequest) {
-        // TODO: A malformed csrNonce (can only be case "length !== 32") should return an InvalidCommand error
+        if (csrNonce.length !== 32) {
+            throw new StatusResponseError("Invalid csr nonce length", StatusCode.InvalidCommand);
+        }
 
         if (isForUpdateNoc && this.session.isPase) {
             throw new StatusResponseError(
@@ -104,7 +139,10 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             case OperationalCredentials.CertificateChainType.PaiCertificate:
                 return { certificate: this.#certification.intermediateCertificate };
             default:
-                throw new MatterFlowError(`Unsupported certificate type: ${certificateType}`);
+                throw new StatusResponseError(
+                    `Unsupported certificate type: ${certificateType}`,
+                    StatusCode.InvalidCommand,
+                );
         }
     }
 
