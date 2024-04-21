@@ -22,16 +22,49 @@ import { FabricTableFullError } from "../../fabric/FabricManager.js";
 import { Logger } from "../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { NoAssociatedFabricError, assertSecureSession } from "../../session/SecureSession.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvByteString } from "../../tlv/TlvString.js";
+import { AccessLevel, Command } from "../Cluster.js";
 import { BasicInformation } from "../definitions/BasicInformationCluster.js";
 import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("OperationalCredentialsServer");
 
+/**
+ * Monkey patching Tlv Structure of attestationRequest and csrRequest commands to prevent data validation of the nonce
+ * fields to be handled as ConstraintError because we need to return a special error.
+ * We do this to leave the model in fact for other validations and only apply the change for our Schema-aware Tlv parsing.
+ */
+OperationalCredentials.Cluster.commands = {
+    ...OperationalCredentials.Cluster.commands,
+    attestationRequest: Command(
+        0x0,
+        TlvObject({ attestationNonce: TlvField(0, TlvByteString) }),
+        0x1,
+        OperationalCredentials.TlvAttestationResponse,
+        { invokeAcl: AccessLevel.Administer },
+    ),
+    csrRequest: Command(
+        0x4,
+        TlvObject({
+            csrNonce: TlvField(0, TlvByteString),
+            isForUpdateNoc: TlvOptionalField(1, TlvBoolean),
+        }),
+        0x5,
+        OperationalCredentials.TlvCsrResponse,
+        { invokeAcl: AccessLevel.Administer },
+    ),
+};
+
 export const OperationalCredentialsClusterHandler: (
     cert: DeviceCertification,
 ) => ClusterServerHandlers<typeof OperationalCredentials.Cluster> = cert => ({
     attestationRequest: async ({ request: { attestationNonce }, session }) => {
+        if (attestationNonce.length !== 32) {
+            throw new StatusResponseError("Invalid attestation nonce length", StatusCode.InvalidCommand);
+        }
         assertSecureSession(session);
         const elements = TlvAttestation.encode({
             declaration: cert.declaration,
@@ -42,6 +75,9 @@ export const OperationalCredentialsClusterHandler: (
     },
 
     csrRequest: async ({ request: { csrNonce, isForUpdateNoc }, session }) => {
+        if (csrNonce.length !== 32) {
+            throw new StatusResponseError("Invalid CSR nonce length", StatusCode.InvalidCommand);
+        }
         assertSecureSession(session);
         if (isForUpdateNoc && session.isPase) {
             throw new StatusResponseError(
@@ -72,7 +108,10 @@ export const OperationalCredentialsClusterHandler: (
             case OperationalCredentials.CertificateChainType.PaiCertificate:
                 return { certificate: cert.intermediateCertificate };
             default:
-                throw new MatterFlowError(`Unsupported certificate type: ${certificateType}`);
+                throw new StatusResponseError(
+                    `Unsupported certificate type: ${certificateType}`,
+                    StatusCode.InvalidCommand,
+                );
         }
     },
 
