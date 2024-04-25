@@ -22,6 +22,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Fix: Corrects returned errors for two commands on OperationalCredentials cluster 
 * matter.js New API code flows:
   * Breaking: The name of the *$Change Events for attributes and such are changed to *$Changed . Please adjust your code!
+  * Breaking: Introduced ExtensionInterface to define extensible/custom methods for behavior/Cluster-Server implementation to be available when extending this class (needed because of a TS bug 27965)
   * Enhancement: Optimized constraint validations and conformance error messages
   * Enhancement: Conditionally enables the ReachableChanged event on the Root Endpoint BasicInformation cluster if the reachable attribute is defined in the defaults
   * Enhancement: Allow to register events directly when initializing endpoints like in legacy API
