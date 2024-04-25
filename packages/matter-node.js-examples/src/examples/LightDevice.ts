@@ -32,7 +32,7 @@ class ReportingOnOffServer extends OnOffLightRequirements.OnOffServer {
 
     // Use event handlers to log on/off state reactively, after it changes.
     override initialize() {
-        this.events.onOff$Change.on(value => {
+        this.events.onOff$Changed.on(value => {
             console.log(`Light is now ${value ? "ON" : "OFF"}`);
         });
     }

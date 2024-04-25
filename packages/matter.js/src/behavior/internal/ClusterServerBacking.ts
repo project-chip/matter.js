@@ -310,7 +310,7 @@ function createAttributeAccessors(
 
 function createChangeHandler(backing: ClusterServerBehaviorBacking, name: string) {
     // Change handler requires an event source
-    const observable = (backing.events as any)[`${name}$Change`] as ClusterEvents.AttributeObservable;
+    const observable = (backing.events as any)[`${name}$Changed`] as ClusterEvents.AttributeObservable;
     if (observable === undefined) {
         return;
     }

@@ -107,7 +107,7 @@ for (let idx = 1; idx < devices.length; idx++) {
         console.log(`Stop identify logic for device ${i}...`);
     });
 
-    endpoint.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Changed.on(value => {
         executeCommand(value ? `on${i}` : `off${i}`);
         console.log(`OnOff ${i} is now ${value ? "ON" : "OFF"}`);
     });

@@ -37,14 +37,14 @@ export namespace ClusterEvents {
             : K extends string
               ? A[K] extends { optional: true }
                   ? never
-                  : `${K}$Change`
+                  : `${K}$Changed`
               : never]: AttributeObservable<A[K]>;
     } & {
         [K in keyof A as string extends K
             ? never
             : K extends string
               ? A[K] extends { optional: true }
-                  ? `${K}$Change`
+                  ? `${K}$Changed`
                   : never
               : never]?: AttributeObservable<A[K]>;
     };

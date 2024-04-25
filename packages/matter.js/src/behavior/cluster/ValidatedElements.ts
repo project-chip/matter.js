@@ -161,7 +161,7 @@ export class ValidatedElements {
 
             this.attributes.add(name);
 
-            // TODO - should we enforce presence of events.<attr>$Change?
+            // TODO - should we enforce presence of events.<attr>$Changed?
 
             // TODO - validate "optional but not nullable" if attributes get proper metadata (or go to model for this)
         }

@@ -108,7 +108,7 @@ async function main() {
         console.log(`Stop identify logic ...`);
     });
 
-    endpoint.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Changed.on(value => {
         executeCommand(value ? "on" : "off");
         console.log(`OnOff is now ${value ? "ON" : "OFF"}`);
     });

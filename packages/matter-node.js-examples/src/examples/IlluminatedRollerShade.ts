@@ -39,7 +39,7 @@ class RollerShade extends LiftingWindowCoveringServer {
     }
 
     override async initialize() {
-        this.reactTo(this.events.targetPositionLiftPercent100ths$Change, this.writeTargetToMotor, { offline: true });
+        this.reactTo(this.events.targetPositionLiftPercent100ths$Changed, this.writeTargetToMotor, { offline: true });
 
         await this.readTargetFromMotor();
         if (this.targetPos === null) {
@@ -85,7 +85,7 @@ class RollerShade extends LiftingWindowCoveringServer {
  */
 class ValanceLight extends OnOffLightRequirements.OnOffServer {
     override initialize() {
-        this.reactTo(this.events.onOff$Change, this.#stateChanged);
+        this.reactTo(this.events.onOff$Changed, this.#stateChanged);
     }
 
     #stateChanged(value: boolean) {

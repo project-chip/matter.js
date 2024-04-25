@@ -128,7 +128,7 @@ export namespace Datasource {
         path: DataModelPath;
 
         /**
-         * Events of the form "fieldName$Change", if present, emit after field changes commit.
+         * Events of the form "fieldName$Changed", if present, emit after field changes commit.
          */
         events?: Events;
 
@@ -403,7 +403,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                     changes.persistent[name] = values[name];
                 }
 
-                const event = internals.events?.[`${name}$Change`];
+                const event = internals.events?.[`${name}$Changed`];
                 if (event) {
                     changes.notifications.push({
                         event,
