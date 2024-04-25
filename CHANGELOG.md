@@ -24,7 +24,8 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Optimized constraint validations and conformance error messages
   * Enhancement: Conditionally enables the ReachableChanged event on the Root Endpoint BasicInformation cluster if the reachable attribute is defined in the defaults
   * Enhancement: Allow to register events directly when initializing endpoints like in legacy API
-  * Enhancement: Allows for cluster implementations to dynamically add/enable state attributes and events 
+  * Enhancement: Allows for cluster implementations to dynamically add/enable state attributes and events
+  * Enhancement: Allows "$Changed" event handlers to be async
   * Fix: Fixes some issues around event handling in the new API and makes sure events are not de-registered on factory resets
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
 * Chip testing:
