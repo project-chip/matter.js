@@ -105,7 +105,7 @@ for (let idx = 0; idx < isSocket.length; idx++) {
         console.log(`Stop identify logic for sub device ${i}...`);
     });
 
-    endpoint.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Changed.on(value => {
         executeCommand(value ? `on${i}` : `off${i}`);
         console.log(`OnOff ${i} is now ${value ? "ON" : "OFF"}`);
     });

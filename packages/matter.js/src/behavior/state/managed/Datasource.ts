@@ -12,6 +12,7 @@ import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { Logger } from "../../../log/Logger.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Observable } from "../../../util/Observable.js";
+import { MaybePromise } from "../../../util/Promises.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ExpiredReferenceError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
@@ -127,7 +128,7 @@ export namespace Datasource {
         path: DataModelPath;
 
         /**
-         * Events of the form "fieldName$Change", if present, emit after field changes commit.
+         * Events of the form "fieldName$Changed", if present, emit after field changes commit.
          */
         events?: Events;
 
@@ -402,7 +403,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                     changes.persistent[name] = values[name];
                 }
 
-                const event = internals.events?.[`${name}$Change`];
+                const event = internals.events?.[`${name}$Changed`];
                 if (event) {
                     changes.notifications.push({
                         event,
@@ -463,9 +464,24 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             return;
         }
 
-        for (const notification of changes.notifications) {
-            notification.event.emit(...notification.params);
+        const iterator = changes.notifications[Symbol.iterator]();
+
+        function emitChanged(): MaybePromise<void> {
+            while (true) {
+                const n = iterator.next();
+                if (n.done) {
+                    return;
+                }
+
+                const { event, params } = n.value;
+                const result = event.emit(...params);
+                if (MaybePromise.is(result)) {
+                    return Promise.resolve(result).then(emitChanged);
+                }
+            }
         }
+
+        return emitChanged();
     }
 
     /**

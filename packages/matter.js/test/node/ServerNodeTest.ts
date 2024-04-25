@@ -173,7 +173,7 @@ describe("ServerNode", () => {
         await MockTime.advance(Fixtures.failsafeLengthS * 1000 + 1);
 
         if (opcreds.commissionedFabrics > 0) {
-            await node.events.operationalCredentials.commissionedFabrics$Change;
+            await node.events.operationalCredentials.commissionedFabrics$Changed;
         }
 
         expect(opcreds.commissionedFabrics).equals(0);
@@ -215,7 +215,7 @@ describe("ServerNode", () => {
         const { node } = await commission();
 
         let lastCommissionedFabricCount;
-        node.events.operationalCredentials.commissionedFabrics$Change.on(commissionedFabrics => {
+        node.events.operationalCredentials.commissionedFabrics$Changed.on(commissionedFabrics => {
             lastCommissionedFabricCount = commissionedFabrics;
         });
 
@@ -225,7 +225,7 @@ describe("ServerNode", () => {
         });
 
         let lastFabricsCount;
-        node.events.operationalCredentials.fabrics$Change.on(fabrics => {
+        node.events.operationalCredentials.fabrics$Changed.on(fabrics => {
             lastFabricsCount = fabrics.length;
         });
 

@@ -208,12 +208,12 @@ describe("Datasource", () => {
 
     it("triggers events after transaction commit", async () => {
         const events = {
-            foo$Change: Observable<any>(),
+            foo$Changed: Observable<any>(),
         };
 
         let changed = false;
         const result = new Promise(resolve =>
-            events.foo$Change.on((...args: any[]) => {
+            events.foo$Changed.on((...args: any[]) => {
                 changed = true;
                 resolve(args);
             }),
