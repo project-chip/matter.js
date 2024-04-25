@@ -26,7 +26,7 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
         } else {
             this.reactTo(this.endpoint.lifecycle.installed, this.#configurePart, { once: true });
         }
-        this.reactTo(this.events.reachable$Change, this.#emitReachableChange);
+        this.reactTo(this.events.reachable$Changed, this.#emitReachableChange);
     }
 
     /**

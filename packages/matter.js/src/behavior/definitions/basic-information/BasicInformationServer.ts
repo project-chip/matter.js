@@ -62,7 +62,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
             this.reactTo(lifecycle.online, this.#online);
         }
 
-        if (this.state.reachable !== undefined && this.events.reachable$Change !== undefined) {
+        if (this.state.reachable !== undefined && this.events.reachable$Changed !== undefined) {
             // Manually enable the reachableChanged event if not yet existing when reachable attribute exists
             if (this.events.reachableChanged === undefined) {
                 this.events.reachableChanged = new Observable<
@@ -70,7 +70,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
                     void
                 >();
             }
-            this.reactTo(this.events.reachable$Change, this.#emitReachableChange, { offline: true });
+            this.reactTo(this.events.reachable$Changed, this.#emitReachableChange, { offline: true });
         }
     }
 

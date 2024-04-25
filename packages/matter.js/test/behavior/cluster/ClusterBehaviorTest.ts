@@ -81,7 +81,7 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 events: EventEmitter & {
-                    reqAttr$Change: Observable<[value: string, oldValue: string, context?: ActionContext]>;
+                    reqAttr$Changed: Observable<[value: string, oldValue: string, context?: ActionContext]>;
                 };
             };
 
@@ -102,7 +102,7 @@ describe("ClusterBehavior", () => {
             true satisfies MyBehavior["state"]["optAttr"];
             (() => true) satisfies MyBehavior["optCmd"];
             ((..._args: any[]) => true) satisfies MyBehavior["optCmd"];
-            ({}) as Match<MyBehavior["events"], { optAttr$Change: {} }> satisfies false;
+            ({}) as Match<MyBehavior["events"], { optAttr$Changed: {} }> satisfies false;
             ({}) as Match<MyBehavior["events"], { optEv: {} }> satisfies false;
             ({}) as Match<MyBehavior, { optCmd: (...args: any[]) => any }> satisfies true;
         });
@@ -113,7 +113,7 @@ describe("ClusterBehavior", () => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.reqAttr).equals("hello");
                 expect(behavior.reqCmd).is.a("function");
-                expect(behavior.events.reqAttr$Change).instanceof(BasicObservable);
+                expect(behavior.events.reqAttr$Changed).instanceof(BasicObservable);
                 expect(behavior.events.reqEv).instanceof(BasicObservable);
             });
         });
@@ -123,7 +123,7 @@ describe("ClusterBehavior", () => {
             await endpoint.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.optAttr).undefined;
-                expect(behavior.events.optAttr$Change).instanceof(BasicObservable);
+                expect(behavior.events.optAttr$Changed).instanceof(BasicObservable);
                 expect(behavior.events.optEv).undefined;
             });
         });

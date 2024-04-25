@@ -128,7 +128,7 @@ for (let idx = 0; idx < isSocket.length; idx++) {
         console.log(`Stop identify logic for ${name} ...`);
     });
 
-    endpoint.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Changed.on(value => {
         executeCommand(value ? `on${i}` : `off${i}`);
         console.log(`${name} is now ${value ? "ON" : "OFF"}`);
     });
@@ -163,7 +163,7 @@ logEndpoint(EndpointServer.forEndpoint(server));
     });
     await aggregator.add(endpoint);
 
-    endpoint.events.onOff.onOff$Change.on(value => {
+    endpoint.events.onOff.onOff$Changed.on(value => {
         executeCommand(value ? `on3` : `off3`);
         console.log(`${name} is now ${value ? "ON" : "OFF"}`);
     });

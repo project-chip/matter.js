@@ -78,7 +78,7 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
     const events = {} as Record<string, Observable<any>>;
     for (const index in fields) {
         const observable = Observable();
-        events[`${camelize(index)}$Change`] = observable;
+        events[`${camelize(index)}$Changed`] = observable;
         observable.on((newValue: Val, oldValue: Val) => {
             notifies.push({ index, oldValue, newValue });
         });

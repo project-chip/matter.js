@@ -46,15 +46,15 @@ describe("ClusterEvents", () => {
 
         it("includes required", () => {
             ({}) as Ep satisfies EventEmitter & {
-                reqAttr$Change: Observable<[value: string, oldValue: string, context?: ActionContext]>;
+                reqAttr$Changed: Observable<[value: string, oldValue: string, context?: ActionContext]>;
 
                 reqEv: Observable<[payload: string, context?: ActionContext]>;
             };
         });
 
         it("allows optional", () => {
-            undefined satisfies Ep["optAttr$Change"];
-            ({}) as Observable<[boolean, boolean, context: ActionContext]> satisfies Ep["optAttr$Change"];
+            undefined satisfies Ep["optAttr$Changed"];
+            ({}) as Observable<[boolean, boolean, context: ActionContext]> satisfies Ep["optAttr$Changed"];
             undefined satisfies Ep["optEv"];
             ({}) as Observable<[string, context: ActionContext]> satisfies Ep["optEv"];
         });
@@ -104,15 +104,15 @@ describe("ClusterEvents", () => {
 
         it("requires mandatory", () => {
             ({}) as Ei satisfies {
-                reqAttr$Change: Observable<[value: string, oldValue: string, context: ActionContext]>;
+                reqAttr$Changed: Observable<[value: string, oldValue: string, context: ActionContext]>;
 
                 reqEv: Observable<[payload: string, context: ActionContext]>;
             };
         });
 
         it("allows optional", () => {
-            undefined satisfies Ei["optAttr$Change"];
-            ({}) as Observable<[boolean, boolean, context: ActionContext]> satisfies Ei["optAttr$Change"];
+            undefined satisfies Ei["optAttr$Changed"];
+            ({}) as Observable<[boolean, boolean, context: ActionContext]> satisfies Ei["optAttr$Changed"];
             undefined satisfies Ei["optEv"];
             ({}) as Observable<[string, context: ActionContext]> satisfies Ei["optEv"];
         });
@@ -146,8 +146,8 @@ describe("ClusterEvents", () => {
     describe("Properties", () => {
         it("specifies correct properties with enabled", () => {
             type Props = ClusterEvents.Properties<MyClusterWithOptEvent>;
-            ({}) as keyof Props satisfies "reqEv" | "optEv" | "reqAttr$Change" | "optAttr$Change";
-            "" as "reqEv" | "optEv" | "reqAttr$Change" | "optAttr$Change" satisfies keyof Props;
+            ({}) as keyof Props satisfies "reqEv" | "optEv" | "reqAttr$Changed" | "optAttr$Changed";
+            "" as "reqEv" | "optEv" | "reqAttr$Changed" | "optAttr$Changed" satisfies keyof Props;
         });
 
         it("leaves behind EventEmitter when omitted from existing events", () => {
