@@ -89,6 +89,13 @@ export type ClusterOf<B extends Behavior.Type> = B extends { cluster: infer C ex
     : ClusterType.Unknown;
 
 /**
+ * The extension interface for a behavior.
+ */
+export type ExtensionInterfaceOf<B extends Behavior.Type> = B extends { ExtensionInterface: infer I extends {} }
+    ? I
+    : {};
+
+/**
  * Create a new state subclass that inherits relevant default values from a base Behavior.Type and adds new default
  * values from cluster attributes.
  */
