@@ -9,7 +9,7 @@ import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { AttributeModel, ClusterModel, ElementTag, FeatureSet, Matter, Metatype } from "../../model/index.js";
 import { GeneratedClass } from "../../util/GeneratedClass.js";
-import { Observable } from "../../util/Observable.js";
+import { AsyncObservable } from "../../util/Observable.js";
 import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
@@ -192,7 +192,7 @@ function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNam
 
         initialize() {
             for (const name of names) {
-                (this as any)[name] = Observable();
+                (this as any)[name] = AsyncObservable();
             }
         },
     });
