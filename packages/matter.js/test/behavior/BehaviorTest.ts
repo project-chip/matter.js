@@ -27,7 +27,7 @@ namespace TestBehavior {
     }
 
     export class Events extends EventEmitter {
-        endpointValue$Change = Observable();
+        endpointValue$Changed = Observable();
     }
 }
 
@@ -48,14 +48,14 @@ describe("Behavior", () => {
         expect(behavior.agent.get(TestBehavior)).equals(behavior);
         expect(behavior.state.valueOne).equals(1);
         expect(behavior.state.valueTwo).equals(2);
-        expect(behavior.events.endpointValue$Change).instanceOf(BasicObservable);
+        expect(behavior.events.endpointValue$Changed).instanceOf(BasicObservable);
     });
 
     test("instantiates with correct properties", behavior => {
         expect(behavior.agent.get(TestBehavior)).equals(behavior);
         expect(behavior.state.valueOne).equals(1);
         expect(behavior.state.valueTwo).equals(2);
-        expect(behavior.events.endpointValue$Change).instanceOf(BasicObservable);
+        expect(behavior.events.endpointValue$Changed).instanceOf(BasicObservable);
     });
 
     test("unifies state", behavior => {
@@ -89,20 +89,20 @@ describe("Behavior", () => {
         it("triggers on endpoint, emit on endpoint", async () => {
             await using endpoint = await MockEndpoint.createWith(TestBehavior);
             let emitted = false;
-            endpoint.events.test.endpointValue$Change.on(() => {
+            endpoint.events.test.endpointValue$Changed.on(() => {
                 emitted = true;
             });
-            endpoint.events.test.endpointValue$Change.emit();
+            endpoint.events.test.endpointValue$Changed.emit();
             expect(emitted).true;
         });
 
         it("triggers on endpoint, emit on behavior", async () => {
             await using endpoint = await MockEndpoint.createWith(TestBehavior);
             let emitted = false;
-            endpoint.events.test.endpointValue$Change.on(() => {
+            endpoint.events.test.endpointValue$Changed.on(() => {
                 emitted = true;
             });
-            await endpoint.act(agent => agent.test.events.endpointValue$Change.emit());
+            await endpoint.act(agent => agent.test.events.endpointValue$Changed.emit());
             expect(emitted).true;
         });
 
@@ -110,11 +110,11 @@ describe("Behavior", () => {
             await using endpoint = await MockEndpoint.createWith(TestBehavior);
             let emitted = false;
             await endpoint.act(agent =>
-                agent.test.events.endpointValue$Change.on(() => {
+                agent.test.events.endpointValue$Changed.on(() => {
                     emitted = true;
                 }),
             );
-            endpoint.events.test.endpointValue$Change.emit();
+            endpoint.events.test.endpointValue$Changed.emit();
             expect(emitted).true;
         });
 
@@ -122,11 +122,11 @@ describe("Behavior", () => {
             await using endpoint = await MockEndpoint.createWith(TestBehavior);
             let emitted = false;
             await endpoint.act(agent =>
-                agent.test.events.endpointValue$Change.on(() => {
+                agent.test.events.endpointValue$Changed.on(() => {
                     emitted = true;
                 }),
             );
-            await endpoint.act(agent => agent.test.events.endpointValue$Change.emit());
+            await endpoint.act(agent => agent.test.events.endpointValue$Changed.emit());
             expect(emitted).true;
         });
 
@@ -134,12 +134,12 @@ describe("Behavior", () => {
             const endpoint = await MockEndpoint.createWith(TestBehavior);
             let emitted = false;
             await endpoint.act(agent =>
-                agent.test.events.endpointValue$Change.on(() => {
+                agent.test.events.endpointValue$Changed.on(() => {
                     emitted = true;
                 }),
             );
             await endpoint.close();
-            endpoint.events.test.endpointValue$Change.emit();
+            endpoint.events.test.endpointValue$Changed.emit();
             expect(emitted).false;
         });
     });

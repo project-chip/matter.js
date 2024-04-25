@@ -119,7 +119,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         }
 
         if (this.features.onOff && this.agent.has(OnOffServer)) {
-            this.reactTo(this.agent.get(OnOffServer).events.onOff$Change, this.handleOnOffChange, { offline: true });
+            this.reactTo(this.agent.get(OnOffServer).events.onOff$Changed, this.handleOnOffChange, { offline: true });
         }
     }
 
