@@ -174,7 +174,7 @@ export abstract class FailsafeContext {
         await this.#construction;
         await this.#construction.close(async () => {
             if (this.#failsafe) {
-                this.#failsafe.close();
+                await this.#failsafe.close();
                 this.#failsafe = undefined;
                 await this.rollback();
             }

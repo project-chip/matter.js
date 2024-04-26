@@ -185,9 +185,14 @@ function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNam
 
     // Add events for mandatory attributes that are not present in the base class
     for (const attrName of stateNames) {
-        const name = `${attrName}$Changed`;
-        if (baseInstance[name] === undefined) {
-            names.add(name);
+        const changing = `${attrName}$Changing`;
+        if (baseInstance[changing] === undefined) {
+            names.add(changing);
+        }
+
+        const changed = `${attrName}$Changed`;
+        if (baseInstance[changed] === undefined) {
+            names.add(changed);
         }
     }
 
