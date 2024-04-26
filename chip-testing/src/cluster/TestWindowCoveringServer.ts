@@ -8,7 +8,7 @@ import {
     MovementType,
     WindowCoveringServer,
 } from "@project-chip/matter.js/behavior/definitions/window-covering";
-import { WindowCovering } from "@project-chip/matter.js/cluster/";
+import { WindowCovering } from "@project-chip/matter.js/cluster";
 import { Logger } from "@project-chip/matter.js/log";
 import { Time, Timer } from "@project-chip/matter.js/time";
 
@@ -37,9 +37,9 @@ type MoveData = {
 export class TestWindowCoveringServer extends TestWindowCoveringServerBase {
     protected declare internal: TestWindowCoveringServer.Internal;
 
-    override initialize(): void {
+    override initialize() {
         logger.info("TestWindowCoveringServer initialized");
-        super.initialize();
+        return super.initialize();
     }
 
     override async handleMovement(
@@ -143,7 +143,7 @@ export class TestWindowCoveringServer extends TestWindowCoveringServerBase {
     override handleStopMovement() {
         this.internal.moveData.lift?.timer.stop();
         this.internal.moveData.tilt?.timer.stop();
-        super.handleStopMovement();
+        return super.handleStopMovement();
     }
 
     override async executeCalibration() {
@@ -154,7 +154,7 @@ export class TestWindowCoveringServer extends TestWindowCoveringServerBase {
     override async [Symbol.asyncDispose]() {
         this.internal.moveData.lift?.timer.stop();
         this.internal.moveData.tilt?.timer.stop();
-        await super[Symbol.asyncDispose]?.();
+        return super[Symbol.asyncDispose]?.();
     }
 }
 

@@ -62,7 +62,9 @@ jobs:
         with:
           filters: |
             src:
-              - "chip-testing/src/suites-long/**"
+              - "packages/matter.js/src/behavior/definitions/administrator-commissioning/**"
+              - "packages/matter.js/src/behavior/definitions/general-commissioning/**"
+              - "packages/matter.js/src/behavior/definitions/operational-credentials/**"
 
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests]') == true }}
         name: Chip Tool tests required to run?
@@ -133,8 +135,8 @@ jobs:
               --tv-app ../chip-testing/dist/esm/TvTestApp.js \
             '
 
-  # Execute the application cluster tests
-  chip-tests-app:
+  # Execute the fast application cluster tests
+  chip-tests-app-fast:
     needs: [prepare-chip-build]
     if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
@@ -147,8 +149,8 @@ jobs:
         with:
           rebuild-chip-tool: "false"
 
-      - name: 0.8-API App - Run Application cluster tests using the python parser sending commands to chip-tool from yaml files
-        id: test-execution-08-app
+      - name: 0.8-API App - Run fast application cluster tests using the python parser sending commands to chip-tool from yaml files
+        id: test-execution-08-app-fast
         shell: bash
         run: |
           cd connectedhomeip
@@ -157,7 +159,39 @@ jobs:
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
               --log-level info \
-              --target-glob "{Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_I_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_LVL_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,Test_TV_WNCV_*,TestUserLabelCluster*}" \
+              --target-glob "{Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_I_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,TestUserLabelCluster*}" \
+              run \
+              --iterations 1 \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+              --tv-app ../chip-testing/dist/esm/TvTestApp.js \
+            '
+
+  # Execute the slower (because simulated) application cluster tests
+  chip-tests-app-slow:
+    needs: [prepare-chip-build]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+
+      - name: 0.8-API App - Run slower application cluster tests using the python parser sending commands to chip-tool from yaml files
+        id: test-execution-08-app-slow
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../bin/chip-tool \
+              --log-level info \
+              --target-glob "{Test_TC_LVL_*,Test_TV_WNCV_*}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \

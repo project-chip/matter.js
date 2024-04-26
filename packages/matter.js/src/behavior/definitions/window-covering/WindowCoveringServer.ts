@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ClusterType } from "../../../cluster/ClusterType.js";
 import { WindowCovering } from "../../../cluster/definitions/WindowCoveringCluster.js";
 import { ImplementationError } from "../../../common/MatterError.js";
 import { Logger } from "../../../log/Logger.js";
@@ -18,6 +19,7 @@ import {
     GoToTiltPercentageRequest,
     GoToTiltValueRequest,
 } from "./WindowCoveringInterface.js";
+
 const logger = Logger.get("WindowCoveringServer");
 
 const WindowCoveringServerBase = WindowCoveringBehavior.with(
@@ -138,7 +140,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
 
     /** Validates the Type attribute as long as the Validation does not support feature specific enums. */
     #assertTypeAttribute() {
-        const allowedTypes = Array();
+        const allowedTypes = new Array<WindowCovering.WindowCoveringType>();
         if (this.features.lift) {
             if (this.features.tilt) {
                 allowedTypes.push(WindowCovering.WindowCoveringType.TiltBlindLift);
@@ -376,11 +378,11 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                 }
                 break;
         }
-        let directionInfo =
+        const directionInfo =
             direction === MovementDirection.DefinedByPosition
                 ? ` in direction by position`
                 : ` in direction ${direction === MovementDirection.Close ? "Close" : "Open"}`;
-        let targetInfo =
+        const targetInfo =
             targetPercent100ths === undefined ? "" : ` to target position ${(targetPercent100ths / 100).toFixed(2)}`;
         logger.debug(
             `Moving the device ${type === MovementType.Lift ? "Lift" : "Tilt"}${directionInfo} (reversed=${reversed})${targetInfo}`,
@@ -645,8 +647,8 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
             outputMin = outputHighValue;
             outputMax = outputLowValue;
         }
-        let inputRange = inputMax - inputMin;
-        let outputRange = outputMax - outputMin;
+        const inputRange = inputMax - inputMin;
+        const outputRange = outputMax - outputMin;
         if (value < inputMin) {
             return outputMin;
         }
@@ -737,6 +739,4 @@ export namespace WindowCoveringServerLogic {
     };
 }
 
-export class WindowCoveringServer extends WindowCoveringServerLogic.with("Lift") /*.for(
-    ClusterType(WindowCovering.Base),
-)*/ {}
+export class WindowCoveringServer extends WindowCoveringServerLogic.for(ClusterType(WindowCovering.Base)) {}

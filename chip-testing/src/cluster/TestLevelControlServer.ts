@@ -9,18 +9,18 @@ import { Logger } from "@project-chip/matter.js/log";
 const logger = Logger.get("TestLevelControlServer");
 
 export class TestLevelControlServer extends LevelControlServer {
-    override initialize(): void {
+    override initialize() {
         logger.info("TestLevelControlServer initialized");
-        super.initialize();
+        return super.initialize();
     }
 
     override moveToLevel(request: MoveToLevelRequest) {
         logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
-        super.moveToLevel(request);
+        return super.moveToLevel(request);
     }
 
-    override moveToLevelLogic(level: number, transitionTime: number | null, withOnOff: boolean): void {
+    override moveToLevelLogic(level: number, transitionTime: number | null, withOnOff: boolean) {
         logger.info(`TestLevelControlServer move level to ${level} LOGIC`);
-        super.moveToLevelLogic(level, transitionTime, withOnOff);
+        return super.moveToLevelLogic(level, transitionTime, withOnOff);
     }
 }
