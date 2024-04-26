@@ -90,7 +90,7 @@ function patchClusterTypes(cluster: ClusterModel) {
                 model.children = [];
                 promote.add(datatype);
             }
-        } else if (model.type === undefined) {
+        } else if (model.type === undefined || model.type.startsWith("enum")) {
             model.type = datatype.name;
             promote.add(datatype);
         }
