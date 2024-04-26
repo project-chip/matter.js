@@ -11,13 +11,20 @@ import { Schema } from "../../supervision/Schema.js";
 import { Val } from "../Val.js";
 import { ValidationLocation } from "./location.js";
 
+export class UnsupportedConformanceNodeError extends SchemaImplementationError {
+    constructor(schema: Schema, compiledNode: DynamicNode) {
+        super(
+            DataModelPath(schema.path),
+            `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
+        );
+    }
+}
+
 export enum Code {
-    // Ignored in logical disjunctions (groups and "|" operator); equivalent to
-    // disallowed otherwise
+    // Ignored in logical disjunctions (groups and "|" operator); equivalent to disallowed otherwise
     Nonconformant = "nonconformant",
 
-    // Expression matches; may convert to optional inside [] but mandatory
-    // otherwise
+    // Expression matches; may convert to optional inside [] but mandatory otherwise
     Conformant = "conformant",
 
     // Expression matches and value is optional
@@ -26,8 +33,7 @@ export enum Code {
     // Value must be undefined
     Disallowed = "disallowed",
 
-    // A value; used in an expression or else evaluates to mandatory iff the
-    // associated value is defined
+    // A value; used in an expression or else evaluates to mandatory iff the associated value is defined
     Value = "value",
 
     // Dynamic node must be evaluated at runtime to produce static node
@@ -228,3 +234,5 @@ export function createComparison(
             ),
     };
 }
+
+export type EnumMemberValidator = (location: ValidationLocation) => void;

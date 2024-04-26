@@ -5,17 +5,20 @@
  */
 
 import { DataModelPath } from "../../../endpoint/DataModelPath.js";
-import { Conformance, FeatureSet, FieldValue, ValueModel } from "../../../model/index.js";
+import { Conformance, FeatureSet, FieldValue, Metatype, ValueModel } from "../../../model/index.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
+import { Schema } from "../../supervision/Schema.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
 import {
     Code,
     ConformantNode,
     DynamicNode,
+    EnumMemberValidator,
     NonconformantNode,
     StaticNode,
+    UnsupportedConformanceNodeError,
     asBoolean,
     asConformance,
     createComparison,
@@ -56,27 +59,31 @@ export function astToFunction(
     // Compile the AST
     const compiledNode = compile(ast);
 
+    let validator: ValueSupervisor.Validate | undefined;
+
     // The compiled AST is a DynamicNode describing how to test a field for conformance.  Convert this into a validation
     // function
     switch (compiledNode.code) {
         case Code.Conformant:
             // Passes validation if the field is present
-            return requireValue;
+            validator = requireValue;
+            break;
 
         case Code.Nonconformant:
         case Code.Disallowed:
             // Passes validation if the field is not present
-            return disallowValue;
+            validator = disallowValue;
+            break;
 
         case Code.Optional:
             // No conformance validation required
-            return;
+            break;
 
         case Code.Evaluate:
             // We must perform runtime evaluation to determine whether the field is conformant
-            const evaluate = compiledNode.evaluate;
+            const { evaluate } = compiledNode;
 
-            return (value, session, location) => {
+            validator = (value, session, location) => {
                 const staticNode = evaluate(value, location);
 
                 switch (staticNode.code) {
@@ -93,19 +100,20 @@ export function astToFunction(
                         break;
 
                     default:
-                        throw new SchemaImplementationError(
-                            DataModelPath(schema.path),
-                            `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
-                        );
+                        throw new UnsupportedConformanceNodeError(schema, compiledNode);
                 }
             };
+            break;
 
         default:
-            throw new SchemaImplementationError(
-                DataModelPath(schema.path),
-                `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
-            );
+            throw new UnsupportedConformanceNodeError(schema, compiledNode);
     }
+
+    if (validator !== disallowValue && schema.effectiveMetatype === Metatype.enum) {
+        validator = addEnumMemberValidation(validator);
+    }
+
+    return validator;
 
     /**
      * Convert an AST node into a DynamicNode.
@@ -504,5 +512,109 @@ export function astToFunction(
         if (value !== undefined) {
             throw new ConformanceError(schema, location, "Value is present but disallowed per Matter specification");
         }
+    }
+
+    function disallowEnumValue(schema: Schema): EnumMemberValidator {
+        return location => {
+            throw new ConformanceError(
+                schema,
+                location,
+                `Enum value ${schema.name} (ID ${schema.effectiveId}) is disallowed per Matter specification`,
+            );
+        };
+    }
+
+    /**
+     * Extends the "main" validator (conformance on the field itself) with member validation (validation of specific
+     * values).
+     */
+    function addEnumMemberValidation(
+        mainValidator: ValueSupervisor.Validate | undefined,
+    ): ValueSupervisor.Validate | undefined {
+        // If there are no members we can't enforce anything
+        const members = schema.members;
+        if (!members.length) {
+            return mainValidator;
+        }
+
+        // Create a validator for each member with conformance.  If the member is not constrained then we perform no
+        // special validation for it
+        let memberValidators: undefined | Record<number, EnumMemberValidator>;
+        for (const member of members) {
+            // If there's no ID the schema is invalid so just skip
+            const id = member.effectiveId;
+            if (id === undefined) {
+                continue;
+            }
+
+            const compiledNode = compile(member.conformance.ast);
+
+            let memberValidator: undefined | EnumMemberValidator;
+            switch (compiledNode.code) {
+                case Code.Conformant:
+                case Code.Optional:
+                    // There's nothing to enforce here
+                    continue;
+
+                case Code.Nonconformant:
+                case Code.Disallowed:
+                    // If this member is selected it's an error
+                    memberValidator = disallowEnumValue(member);
+                    break;
+
+                case Code.Evaluate:
+                    // Requires runtime evaluation
+                    const { evaluate } = compiledNode;
+
+                    const disallow = disallowEnumValue(member);
+
+                    memberValidator = location => {
+                        // Note that we don't need the value here as it is constant so just use "true" indicating the
+                        // value is present
+                        const staticNode = evaluate(true, location);
+
+                        switch (staticNode.code) {
+                            case Code.Conformant:
+                            case Code.Optional:
+                                // Acceptable
+                                break;
+
+                            case Code.Nonconformant:
+                            case Code.Disallowed:
+                                // Unacceptable; throw an error
+                                disallow(location);
+                                break;
+
+                            default:
+                                throw new UnsupportedConformanceNodeError(member, compiledNode);
+                        }
+                    };
+                    break;
+
+                default:
+                    throw new UnsupportedConformanceNodeError(member, compiledNode);
+            }
+
+            if (!memberValidators) {
+                memberValidators = {};
+            }
+
+            memberValidators[id] = memberValidator;
+        }
+
+        // If we did not find members with conformance that requires enforcement then just return the main validator
+        if (memberValidators === undefined) {
+            return mainValidator;
+        }
+
+        // Extend the main validator with member validation
+        return (value, session, location) => {
+            mainValidator?.(value, session, location);
+
+            if (typeof value === "number") {
+                // Invoke the member validator if one exists for the selecte value
+                memberValidators[value]?.(location);
+            }
+        };
     }
 }
