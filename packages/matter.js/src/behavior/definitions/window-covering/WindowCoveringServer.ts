@@ -86,6 +86,14 @@ const WC_PERCENT100THS_COEFFICIENT = 100;
  * * {@link WindowCoveringServerLogic.handleMovement} Logic to actually move the device. Via Parameters the movement type (Lift/Tilt), direction, target percentage and information if motor is configured reversed are provided. When the device moves the current Positions (if supported by the device) are updated with the movement. The operational state is automatically updated by the default implementation based on current and target values of the cluster state.
  * * {@link WindowCoveringServerLogic.handleStopMovement} Logic to stop any movement of the device. You can use the super.handleStopMovement() to set the target positions to the current positions or do this yourself.
  * * {@link WindowCoveringServerLogic.executeCalibration} If supported, override this method to implement the calibration process. The default implementation returns an error as defined when Calibration is not supported. When not supported you should also add a Changing event handler to the mode attribute to make sure calibration mode is not set (needs to throw an ConstraintError).
+ *
+ * IMPORTANT NOTE:
+ * This default implementation could have pitfalls when the calibration process and/or movement is handled via long
+ * running promises. There could be edge cases not correctly handled by the current implementation when it comes to long
+ * running movements or calibration processes - especially when these processes are long running async JS operations.
+ * Also a movement coming in while another movement is still running is assumned to be handled by the device and not
+ * expected on cluster side. If you have such cases please provide feedback and we can discuss how to improve the
+ * default implementation.
  */
 export class WindowCoveringServerLogic extends WindowCoveringServerBase {
     protected declare internal: WindowCoveringServerLogic.Internal;
