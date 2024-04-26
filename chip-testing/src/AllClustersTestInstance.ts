@@ -9,7 +9,6 @@ import { BooleanStateServer } from "@project-chip/matter.js/behavior/definitions
 import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/fixed-label";
 import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
 import { IlluminanceMeasurementServer } from "@project-chip/matter.js/behavior/definitions/illuminance-measurement";
-import { LevelControlServer } from "@project-chip/matter.js/behavior/definitions/level-control";
 import { LocalizationConfigurationServer } from "@project-chip/matter.js/behavior/definitions/localization-configuration";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
@@ -44,6 +43,7 @@ import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
+import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
 
 export class AllClustersTestInstance implements TestInstance {
     serverNode: ServerNode | undefined;
@@ -197,7 +197,7 @@ export class AllClustersTestInstance implements TestInstance {
                 FlowMeasurementServer,
                 TestIdentifyServer,
                 IlluminanceMeasurementServer,
-                LevelControlServer.with(
+                TestLevelControlServer.with(
                     LevelControl.Feature.OnOff,
                     LevelControl.Feature.Lighting,
                     LevelControl.Feature.Frequency,
