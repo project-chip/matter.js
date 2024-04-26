@@ -3301,18 +3301,10 @@ export const SpecMatter = Matter({
                             details: "The Hue field specifies the hue to be moved to.",
                             xref: { document: "cluster", section: "3.2.11.4.1" }
                         }),
-
                         Field({
-                            name: "Direction", id: 0x1, type: "enum8", conformance: "M", constraint: "desc",
+                            name: "Direction", id: 0x1, type: "Direction", conformance: "M", constraint: "desc",
                             details: "The Direction field shall be one of the non-reserved values in Values of the Direction Field.",
-                            xref: { document: "cluster", section: "3.2.11.4.2" },
-
-                            children: [
-                                Field({ name: "ShortestDistance", id: 0x0 }),
-                                Field({ name: "LongestDistance", id: 0x1 }),
-                                Field({ name: "Up", id: 0x2 }),
-                                Field({ name: "Down", id: 0x3 })
-                            ]
+                            xref: { document: "cluster", section: "3.2.11.4.2" }
                         }),
 
                         Field({
@@ -3621,7 +3613,7 @@ export const SpecMatter = Matter({
                         }),
 
                         Field({
-                            name: "Direction", id: 0x1, type: "enum8", conformance: "M", constraint: "desc",
+                            name: "Direction", id: 0x1, type: "Direction", conformance: "M", constraint: "desc",
                             details: "This field is identical to the Direction field of the MoveToHue command of the Color Control " +
                                 "cluster (see sub-clause Use of the OptionsMask and OptionsOverride fields).",
                             xref: { document: "cluster", section: "3.2.11.15.2" }
@@ -3652,7 +3644,7 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "MoveMode", id: 0x0, type: "enum8", conformance: "M", constraint: "desc",
+                            name: "MoveMode", id: 0x0, type: "MoveMode", conformance: "M", constraint: "desc",
                             details: "This field is identical to the MoveMode field of the MoveHue command of the Color Control cluster " +
                                 "(see sub-clause MoveHue Command). If the MoveMode field is equal to 0 (Stop), the Rate field shall " +
                                 "be ignored.",
@@ -3687,7 +3679,7 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "StepMode", id: 0x0, type: "enum8", conformance: "M", constraint: "desc",
+                            name: "StepMode", id: 0x0, type: "StepMode", conformance: "M", constraint: "desc",
                             details: "This field is identical to the StepMode field of the StepHue command of the Color Control cluster " +
                                 "(see sub-clause StepHue Command).",
                             xref: { document: "cluster", section: "3.2.11.17.1" }
@@ -4028,6 +4020,18 @@ export const SpecMatter = Matter({
                     name: "StepMode", type: "enum8",
                     xref: { document: "cluster", section: "3.2.11.6.1" },
                     children: [Field({ name: "Up", id: 0x1 }), Field({ name: "Down", id: 0x3 })]
+                }),
+
+                Datatype({
+                    name: "Direction", type: "enum8",
+                    xref: { document: "cluster", section: "3.2.11.4.2" },
+
+                    children: [
+                        Field({ name: "ShortestDistance", id: 0x0 }),
+                        Field({ name: "LongestDistance", id: 0x1 }),
+                        Field({ name: "Up", id: 0x2 }),
+                        Field({ name: "Down", id: 0x3 })
+                    ]
                 })
             ]
         }),
