@@ -52,6 +52,41 @@ namespace BehaviorWithCustomMethods {
     };
 }
 
+const BehaviorWithCustomMethodsWithRevertedFeature = BehaviorWithCustomMethods.for(MyCluster);
+
+const BehaviorWithCustomMethodsWithRevertedAndChangedFeature =
+    BehaviorWithCustomMethodsWithRevertedFeature.with("Awesome");
+
+class BehaviorWithOverriddenCustomMethods extends BehaviorWithCustomMethods {
+    override foo() {
+        return false;
+    }
+
+    override bar() {
+        return 3;
+    }
+}
+
+class BehaviorWithOverriddenCustomMethodsFromRevertedFeatures extends BehaviorWithCustomMethodsWithRevertedFeature {
+    override foo() {
+        return false;
+    }
+
+    override bar() {
+        return 3;
+    }
+}
+
+class BehaviorWithOverriddenCustomMethodsFromChangedFeatures extends BehaviorWithCustomMethodsWithRevertedAndChangedFeature {
+    override foo() {
+        return false;
+    }
+
+    override bar() {
+        return 3;
+    }
+}
+
 describe("ClusterBehavior", () => {
     type Match<Input, Type> = Input extends Type ? true : false;
 
@@ -192,11 +227,9 @@ describe("ClusterBehavior", () => {
         it("carries forward non-command methods", () => {
             ({}) as BehaviorWithCustomMethods satisfies { foo(): boolean };
 
-            const WithRevertedFeature = BehaviorWithCustomMethods.for(MyCluster);
+            ({}) as InstanceType<typeof BehaviorWithCustomMethodsWithRevertedFeature> satisfies { foo(): boolean };
 
-            ({}) as InstanceType<typeof WithRevertedFeature> satisfies { foo(): boolean };
-
-            class FooOverrideBehavior extends WithRevertedFeature {
+            class FooOverrideBehavior extends BehaviorWithCustomMethodsWithRevertedFeature {
                 // Note -- limitation due to https://github.com/microsoft/TypeScript/issues/27965 requires us to
                 // override as an instance function rather than a method
                 override foo = () => {
