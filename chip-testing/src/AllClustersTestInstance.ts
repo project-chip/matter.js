@@ -33,6 +33,7 @@ import {
     Switch,
     ThermostatUserInterfaceConfiguration,
     TimeFormatLocalization,
+    WindowCovering,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLightDevice";
@@ -44,6 +45,7 @@ import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
 import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
+import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
 
 export class AllClustersTestInstance implements TestInstance {
     serverNode: ServerNode | undefined;
@@ -211,6 +213,7 @@ export class AllClustersTestInstance implements TestInstance {
                 TemperatureMeasurementServer,
                 ThermostatUserInterfaceConfigurationServer,
                 UserLabelServer,
+                TestWindowCoveringServer,
             ),
             {
                 number: EndpointNumber(1),
