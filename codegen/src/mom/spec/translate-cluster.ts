@@ -39,12 +39,26 @@ const TYPE_ERRORS: { [badType: string]: string } = {
     String: "string",
     variable: "any",
     SubjectId: "subject-id",
+    SubjectID: "subject-id",
 };
 
 function fixTypeError(type: string | undefined) {
-    if (type !== undefined && TYPE_ERRORS[type]) {
+    if (type === undefined) {
+        return type;
+    }
+
+    if (type.startsWith("list[") && type.endsWith("]")) {
+        const entryType = type.slice(5, type.length - 1);
+        if (TYPE_ERRORS[entryType]) {
+            return `list[${TYPE_ERRORS[entryType]}]`;
+        }
+        return type;
+    }
+
+    if (TYPE_ERRORS[type]) {
         return TYPE_ERRORS[type];
     }
+
     return type;
 }
 

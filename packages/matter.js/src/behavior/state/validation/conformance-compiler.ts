@@ -30,23 +30,20 @@ import { ValidationLocation } from "./location.js";
 /**
  * Generates JS function equivalent of a conformance expression.
  *
- * We generate a function for each node in the AST.  In addition to the
- * function, we track whether the function evaluates pure-feature conformance
- * (vs. an expression).
+ * We generate a function for each node in the AST.  In addition to the function, we track whether the function
+ * evaluates pure-feature conformance (vs. an expression).
  *
- * In general the conformance AST jumbles set logic with expression evaluation
- * so we need to track two types of state to implement properly.
+ * In general the conformance AST jumbles set logic with expression evaluation so we need to track two types of state to
+ * implement properly.
  *
- * Many of the comments reference "static" vs "runtime" evaluation.  This is
- * an important distinction that we use to heavily optimize the generated
- * function:
+ * Many of the comments reference "static" vs "runtime" evaluation.  This is an important distinction that we use to
+ * heavily optimize the generated function:
  *
- *   - "static" means conformance is known at compile time and runtime
- *     evaluation is thus minimal.  These result in a {@link StaticNode}.
+ *   - "static" means conformance is known at compile time and runtime evaluation is thus minimal.  These result in a
+ *     {@link StaticNode}.
  *
- *   - "runtime" means conformance depends on sibling fields in an object.
- *     These result in a {@link RuntimeNode} with additional logic that
- *     performs additional logic against operational state.
+ *   - "runtime" means conformance depends on sibling fields in an object. These result in a {@link RuntimeNode} with
+ *     additional logic that applies to operational state.
  */
 export function astToFunction(
     schema: ValueModel,
@@ -59,8 +56,8 @@ export function astToFunction(
     // Compile the AST
     const compiledNode = compile(ast);
 
-    // The compiled AST is DynamicNode describing how to test a field for
-    // conformance.  Convert this into a validation function.
+    // The compiled AST is a DynamicNode describing how to test a field for conformance.  Convert this into a validation
+    // function
     switch (compiledNode.code) {
         case Code.Conformant:
             // Passes validation if the field is present
