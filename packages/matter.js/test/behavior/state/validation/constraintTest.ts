@@ -20,6 +20,20 @@ const AllTests = Tests({
         },
     }),
 
+    "min with reference": Tests(Fields({ constraint: "min MinVal" }, { name: "MinVal", quality: "X" }), {
+        "accepts if over": { record: { test: 5, minVal: 4 } },
+        "rejects if under": {
+            record: { test: 3, minVal: 4 },
+            error: {
+                type: ConstraintError,
+                message:
+                    'Validating Test.test: Constraint "min minVal": Value 3 is not within bounds defined by constraint',
+            },
+        },
+        "accepts if reference value is missing": { record: { test: 3 } },
+        "accepts if reference value is null": { record: { test: 3, minVal: null } },
+    }),
+
     max: Tests(Fields({ constraint: "max 4" }), {
         "rejects if over": {
             record: { test: 5 },
@@ -32,6 +46,20 @@ const AllTests = Tests({
         "accepts if under": {
             record: { test: 3 },
         },
+    }),
+
+    "max with reference": Tests(Fields({ constraint: "max MaxVal" }, { name: "MaxVal", quality: "X" }), {
+        "rejects if over": {
+            record: { test: 5, maxVal: 4 },
+            error: {
+                type: ConstraintError,
+                message:
+                    'Validating Test.test: Constraint "max maxVal": Value 5 is not within bounds defined by constraint',
+            },
+        },
+        "accepts if under": { record: { test: 3, maxVal: 4 } },
+        "accepts if reference value is missing": { record: { test: 3 } },
+        "accepts if reference value is null": { record: { test: 3, maxVal: null } },
     }),
 
     compound: Tests(Fields({ constraint: "3 to 4, 6 to 7" }), {

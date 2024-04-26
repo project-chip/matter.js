@@ -30,6 +30,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Allows "$Changed" event handlers to be async
   * Fix: Fixes some issues around event handling in the new API and makes sure events are not de-registered on factory resets
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
+  * Fix: Fixes bounds check with references to null fields
 * Chip testing:
   * Enhancement: Adds automatic CI testing for all clusters listed in [matter.js Readme](./packages/matter.js/README.md)
 * matter.js tooling:

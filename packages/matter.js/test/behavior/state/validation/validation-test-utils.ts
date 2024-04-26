@@ -12,7 +12,7 @@ import { StatusResponseError } from "../../../../src/protocol/interaction/Status
 import { Properties } from "../../../../src/util/Type.js";
 
 export function Fields(
-    ...definition: { name?: string; type?: string; conformance?: string; constraint?: string }[]
+    ...definition: { name?: string; type?: string; conformance?: string; constraint?: string; quality?: string }[]
 ): Fields {
     return definition.map(
         f =>
