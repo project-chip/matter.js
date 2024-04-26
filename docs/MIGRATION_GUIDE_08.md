@@ -279,11 +279,15 @@ The DevicesFullNode.ts contains a [MyFancyFunctionality custom cluster](../packa
 
 ### React to change events on cluster attributes
 
-To react to change events in your code outside of cluster implementations (there special rule might apply because of the transactionality) you do:
+matter.js supports two type of change events for attribute values:
+* **"fieldName$Changed"**: This is the most commonly used when you want to react to the final value of a changed attribute. This event is triggered when the attribute value is already considered "changed" and you want to react based on this "fact" and want to execute other actions. Be careful when you change other state values of the same or other clusters of this device in this event handler - this might lead to errors because the state could be locked by such an action and especially multiple change handlers trying to adjust the same cluster might produce errors that might be hard to tackle. Exceptions thrown in $Changed event handlers are logged but do not lead to a rollback of the transaction.
+* **fieldName$Changing**: Since matter.js v0.9 this new event is available. This event is triggered when the attribute value is about to be changed. This is especially useful if you want to react to the change to adjust other state values of the same or other clusters of this device. This event handler should not be used to actually trigger actions because there could be cyclic dependencies between such $Changing event handlers that modify the state again. Additionally, exceptions thrown in $Changing event handlers lead to a rollback of the current transactions, so another use case for $Changing are special value checks. Most likely the use of these event handlers is for special cases and requirements only.
+
+To react to an attribute change event in your code outside of cluster implementations you do:
 
 ```javascript
 // Register for the change event of the onOff attribute for the OnOff cluster of the endpoint
-endpoint.events.onOff.onOff$Change.on(value => {
+endpoint.events.onOff.onOff$Changed.on(value => {
     console.log(`OnOff is now ${value ? "ON" : "OFF"}`);
 });
 ```
@@ -427,13 +431,13 @@ Please check the package dependencies in your package.json and make sure that th
 
 ### How do I find the names for all the state and events available on my device?
 
-The naming of all these elements is 100% in sync with the specification with the main difference that we use camel case. Change events for attributes always have "$Change" after the element name.
+The naming of all these elements is 100% in sync with the specification with the main difference that we use camel case. Change events for attributes always have "$Changed" after the element name.
 
 The three ways to access the data are the following:
 
 * Use `endpoint.state.onOff.onOff` to read the OnOff attribute of the OnOff cluster of your endpoint
 * Use `await endpoint.set({ onOff: { onOff: true } })` to set the OnOff attribute of the OnOff cluster of your endpoint
-* Use `endpoint.events.onOff.onOff$Change.on(value => { ... })` to setup a change handler for the OnOff attribute of the OnOff cluster
+* Use `endpoint.events.onOff.onOff$Changed.on(value => { ... })` to setup a change handler for the OnOff attribute of the OnOff cluster
 * Use `await server.set({ basicInformation: { reachable: false } })` to set the reachable event on the "Basic Information" cluster on the Root Endpoint of the server. This also automatically fires the "ReachableChanged" event
 * To fire events use `server.act(agent => agent.basicInformation.reachableChanged?.emit({ ... }, agent.context));`. This manually fires the "Reachable Changed" event which normally (see above) should not be needed, so serves as an example here.
 
@@ -501,3 +505,165 @@ Your Storage need to implement the "Storage" interface of matter.js.
 Alternatively, create on complete own Environment like [NodeJsEnvironment](../packages/matter-node.js/src/environment/NodeJsEnvironment.ts).
 
 If needed (for logging purposes) you can also set a storage location to `storageService.location`.
+
+### How can I best add dynamic dependencies or hardware specific implementations to my device or cluster implementations?
+
+In some cases it is not sufficient to just react on "fieldName$Changed" events to realize the change on the device. This is especially the case when the action on the device could fail and you want to correctly handle these cases within the command handler execution, or when you need to implement more fancy commands like "dimming up/down in a defined timeframe".
+For these cases you can extend the default cluster implementations to add own logic.
+
+In the new matter.js API since v0.8.0 cluster implementations are more likely static classes and no instances as it was before and the default interface is defined by matter rules.
+
+There are two options to use dynamic dependencies or hardware specific implementations.
+
+#### Extending the cluster state
+The first requires to extend the cluster implementation and adding own custom state attributes that can then be initialized with a value or an implementation instance when adding the endpoint to the node. YOu can then access this normally via `this.state.myDeviceImpl` in the cluster implementation.
+
+This option works good for cluster specific dynamic enhancements, means when you mainly need this just on one cluster. 
+
+```javascript
+export class MyLevelControlServer extends LevelControlServer {
+    declare state: LevelControlServerLogic.State;
+
+    override async moveToLevel(request: MoveToLevelRequest) {
+        logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
+        await this.state.myDeviceImpl.doTheMove(request.level);
+        super.moveToLevel(request);
+    }
+}
+
+export namespace MyLevelControlServer {
+    export class State extends LevelControlServer.State {
+        myDeviceImpl: MyDeviceImpl;
+    }
+}
+
+const endpoint = new Endpoint(DimmableLightDeviec.with(MyLevelControlServer), {
+    levelControl: {
+        currentLevel: 0,
+        remainingTime: 0,
+        myDeviceImpl: new MyDeviceImpl(),
+    },
+});
+```
+
+If you need it even more generic and need to add the same dynamic dependencies to multiple clusters you can use the second option.
+
+#### Using own Behavior classes and add them to the endpoint
+
+If multiple cluster implementations need the same dynamic dependencies you can create a own Behavior class that is added to the endpoint and then can be accessed by all clusters of this endpoint.
+
+```javascript
+// create the own Behavior
+export class MyDeviceBehavior extends Behavior {
+    static override readonly id = "myDeviceImpl"; // give the Bahavior a unique name
+
+    declare state: MyDeviceBehavior.State;
+}
+
+export namespace MyDeviceBehavior {
+    export class State {
+        myDeviceImpl: MyDeviceImpl;
+    }
+}
+
+// Generically extend the cluster implementation(s) and generically use the device implementation
+export class MyLevelControlServer extends LevelControlServer {
+    override async moveToLevel(request: MoveToLevelRequest) {
+        logger.info(`TestLevelControlServer move level to ${Logger.toJSON(request)}`);
+        const myDeviceImpl = this.agent.get(MyDeviceBehavior).state.myDeviceImpl;
+        await myDeviceImpl.doTheMove(request.level);
+        super.moveToLevel(request);
+    }
+}
+
+export class MyOnOffServer extends OnOffServer {
+    override async on() {
+        logger.info(`TestOnOffServer on`);
+        const myDeviceImpl = this.agent.get(MyDeviceBehavior).state.myDeviceImpl;
+        await myDeviceImpl.onOff(true);
+        super.on();
+    }
+
+    override async off() {
+        logger.info(`TestOnOffServer off`);
+        const myDeviceImpl = this.agent.get(MyDeviceBehavior).state.myDeviceImpl;
+        await myDeviceImpl.onOff(false);
+        super.off();
+    }
+}
+
+// Add the Behavior to the endpoint
+const endpoint = new Endpoint(DimmableLightDeviec.with(MyOnOffServer, MyLevelControlServer, MyDeviceBehavior), {
+    onOff: {
+        onOff: true
+    },
+    levelControl: {
+        currentLevel: 0,
+        remainingTime: 0,
+    },
+    myDeviceImpl: {
+        myDeviceImpl: new MyDeviceImpl(),
+    }
+});
+```
+
+Using this way you can abstract the dynamic dependencies to a own class and add it to the endpoint and then access it from all cluster implementations. This is more flexible and also more generic.
+
+### How can I store some additional state values in my own Cluster implementation?
+
+In some cases you need to store additional state values in your cluster implementation that are not directly related to the cluster attributes. For this you need to extend the state of the cluster implementation with the relevant attributes and then extend the cluster storage schema to store these values.
+
+```javascript
+export class MyLevelControlServer extends LevelControlServer {
+    declare state: LevelControlServerLogic.State;
+
+    static {
+        MyLevelControlServer.schema?.children.push(
+            FieldElement({ name: "mySpecialDeviceAttribute", type: "int16", quality: "N" }),
+        );
+    }
+}
+
+export namespace MyLevelControlServer {
+    export class State extends LevelControlServer.State {
+        mySpecialDeviceAttribute: number;
+    }
+}
+
+const endpoint = new Endpoint(DimmableLightDeviec.with(MyLevelControlServer), {
+    levelControl: {
+        currentLevel: 0,
+        remainingTime: 0,
+        mySpecialDeviceAttribute: 42,
+    },
+});
+```
+
+The above example defines an own state value `mySpecialDeviceAttribute` and also defines the storage schema for this attribute as "int16" (16 Bit Signed Integer). Important is the "N" in the quality field because this defined that the value is "non-volatile" and will be persisted and also restored on new initialization.
+
+The same also is possible for own Behavior classes, with the main different that the schema can be defined completely there and not extended:
+
+```javascript
+export class MyBehavior extends Behavior {
+    static override readonly id = "myBehavior"; // give the Bahavior a unique name
+
+    declare state: MyDeviceBehavior.State;
+
+    /**
+     * Define logical schema to make passcode and discriminator persistent.
+     */
+    static override readonly schema = new DatatypeModel({
+        name: "MyBehaviorState",
+        children: [
+            FieldElement({ name: "mySpecialDeviceAttribute", type: "int16", quality: "N" }),
+        ],
+    });
+}
+
+export namespace MyBehavior {
+    export class State {
+        mySpecialDeviceAttribute: number;
+    }
+}
+
+```
