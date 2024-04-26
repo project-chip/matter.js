@@ -60,17 +60,17 @@ Matter.children.push(Cluster({
             xref: { document: "cluster", section: "5.3.5.1" },
 
             children: [
-                Field({ name: "Rollershade", id: 0x0, conformance: "M" }),
-                Field({ name: "Rollershade2Motor", id: 0x1, conformance: "M" }),
-                Field({ name: "RollershadeExterior", id: 0x2, conformance: "M" }),
-                Field({ name: "RollershadeExterior2Motor", id: 0x3, conformance: "M" }),
-                Field({ name: "Drapery", id: 0x4, conformance: "M" }),
-                Field({ name: "Awning", id: 0x5, conformance: "M" }),
-                Field({ name: "Shutter", id: 0x6, conformance: "M" }),
-                Field({ name: "TiltBlindTiltOnly", id: 0x7, conformance: "M" }),
-                Field({ name: "TiltBlindLift", id: 0x8, conformance: "M" }),
-                Field({ name: "ProjectorScreen", id: 0x9, conformance: "M" }),
-                Field({ name: "Unknown", id: 0xff, conformance: "M" })
+                Field({ name: "Rollershade", id: 0x0, conformance: "LF & !TL" }),
+                Field({ name: "Rollershade2Motor", id: 0x1, conformance: "LF & !TL" }),
+                Field({ name: "RollershadeExterior", id: 0x2, conformance: "LF & !TL" }),
+                Field({ name: "RollershadeExterior2Motor", id: 0x3, conformance: "LF & !TL" }),
+                Field({ name: "Drapery", id: 0x4, conformance: "LF & !TL" }),
+                Field({ name: "Awning", id: 0x5, conformance: "LF & !TL" }),
+                Field({ name: "Shutter", id: 0x6, conformance: "LF | TL" }),
+                Field({ name: "TiltBlindTiltOnly", id: 0x7, conformance: "!LF & TL" }),
+                Field({ name: "TiltBlindLift", id: 0x8, conformance: "LF & TL" }),
+                Field({ name: "ProjectorScreen", id: 0x9, conformance: "LF & !TL" }),
+                Field({ name: "Unknown", id: 0xff, conformance: "O" })
             ]
         }),
 
@@ -228,31 +228,31 @@ Matter.children.push(Cluster({
             xref: { document: "cluster", section: "5.3.5.16" },
 
             children: [
-                Field({ name: "RollerShade", id: 0x0, conformance: "M" }),
-                Field({ name: "RomanShade", id: 0x1, conformance: "M" }),
-                Field({ name: "BalloonShade", id: 0x2, conformance: "M" }),
-                Field({ name: "WovenWood", id: 0x3, conformance: "M" }),
-                Field({ name: "PleatedShade", id: 0x4, conformance: "M" }),
-                Field({ name: "CellularShade", id: 0x5, conformance: "M" }),
-                Field({ name: "LayeredShade", id: 0x6, conformance: "M" }),
-                Field({ name: "LayeredShade2D", id: 0x7, conformance: "M" }),
-                Field({ name: "SheerShade", id: 0x8, conformance: "M" }),
-                Field({ name: "TiltOnlyInteriorBlind", id: 0x9, conformance: "M" }),
-                Field({ name: "InteriorBlind", id: 0xa, conformance: "M" }),
-                Field({ name: "VerticalBlindStripCurtain", id: 0xb, conformance: "M" }),
-                Field({ name: "InteriorVenetianBlind", id: 0xc, conformance: "M" }),
-                Field({ name: "ExteriorVenetianBlind", id: 0xd, conformance: "M" }),
-                Field({ name: "LateralLeftCurtain", id: 0xe, conformance: "M" }),
-                Field({ name: "LateralRightCurtain", id: 0xf, conformance: "M" }),
-                Field({ name: "CentralCurtain", id: 0x10, conformance: "M" }),
-                Field({ name: "RollerShutter", id: 0x11, conformance: "M" }),
-                Field({ name: "ExteriorVerticalScreen", id: 0x12, conformance: "M" }),
-                Field({ name: "AwningTerrace", id: 0x13, conformance: "M" }),
-                Field({ name: "AwningVerticalScreen", id: 0x14, conformance: "M" }),
-                Field({ name: "TiltOnlyPergola", id: 0x15, conformance: "M" }),
-                Field({ name: "SwingingShutter", id: 0x16, conformance: "M" }),
-                Field({ name: "SlidingShutter", id: 0x17, conformance: "M" }),
-                Field({ name: "Unknown", id: 0xff, conformance: "M" })
+                Field({ name: "RollerShade", id: 0x0, conformance: "LF" }),
+                Field({ name: "RomanShade", id: 0x1, conformance: "LF" }),
+                Field({ name: "BalloonShade", id: 0x2, conformance: "LF" }),
+                Field({ name: "WovenWood", id: 0x3, conformance: "LF" }),
+                Field({ name: "PleatedShade", id: 0x4, conformance: "LF" }),
+                Field({ name: "CellularShade", id: 0x5, conformance: "LF" }),
+                Field({ name: "LayeredShade", id: 0x6, conformance: "LF" }),
+                Field({ name: "LayeredShade2D", id: 0x7, conformance: "LF" }),
+                Field({ name: "SheerShade", id: 0x8, conformance: "LF & TL" }),
+                Field({ name: "TiltOnlyInteriorBlind", id: 0x9, conformance: "TL" }),
+                Field({ name: "InteriorBlind", id: 0xa, conformance: "LF & TL" }),
+                Field({ name: "VerticalBlindStripCurtain", id: 0xb, conformance: "LF & TL" }),
+                Field({ name: "InteriorVenetianBlind", id: 0xc, conformance: "LF & TL" }),
+                Field({ name: "ExteriorVenetianBlind", id: 0xd, conformance: "LF & TL" }),
+                Field({ name: "LateralLeftCurtain", id: 0xe, conformance: "LF" }),
+                Field({ name: "LateralRightCurtain", id: 0xf, conformance: "LF" }),
+                Field({ name: "CentralCurtain", id: 0x10, conformance: "LF" }),
+                Field({ name: "RollerShutter", id: 0x11, conformance: "LF" }),
+                Field({ name: "ExteriorVerticalScreen", id: 0x12, conformance: "LF" }),
+                Field({ name: "AwningTerrace", id: 0x13, conformance: "LF" }),
+                Field({ name: "AwningVerticalScreen", id: 0x14, conformance: "LF" }),
+                Field({ name: "TiltOnlyPergola", id: 0x15, conformance: "LF | TL" }),
+                Field({ name: "SwingingShutter", id: 0x16, conformance: "LF | TL" }),
+                Field({ name: "SlidingShutter", id: 0x17, conformance: "LF | TL" }),
+                Field({ name: "Unknown", id: 0xff, conformance: "O" })
             ]
         }),
 
@@ -511,7 +511,10 @@ Matter.children.push(Cluster({
                 "will be returned.",
 
             xref: { document: "cluster", section: "5.3.6.4" },
-            children: [Field({ name: "LiftValue", id: 0x0, type: "uint16", conformance: "M", constraint: "desc" })]
+            children: [Field({
+                name: "LiftValue", id: 0x0, type: "uint16", conformance: "M",
+                constraint: "installedOpenLimitLift to installedClosedLimitLift"
+            })]
         }),
 
         Command({
@@ -553,7 +556,10 @@ Matter.children.push(Cluster({
                 "CONSTRAINT_ERROR will be returned.",
 
             xref: { document: "cluster", section: "5.3.6.6" },
-            children: [Field({ name: "TiltValue", id: 0x0, type: "uint16", conformance: "M", constraint: "desc" })]
+            children: [Field({
+                name: "TiltValue", id: 0x0, type: "uint16", conformance: "M",
+                constraint: "installedOpenLimitTilt to installedClosedLimitTilt"
+            })]
         }),
 
         Command({
@@ -585,6 +591,24 @@ Matter.children.push(Cluster({
         }),
 
         Datatype({
+            name: "Type", type: "enum8", conformance: "M",
+
+            children: [
+                Field({ name: "RollerShade", id: 0x0, conformance: "M" }),
+                Field({ name: "RollerShade2Motor", id: 0x1, conformance: "M" }),
+                Field({ name: "RollerShadeExterior", id: 0x2, conformance: "M" }),
+                Field({ name: "RollerShadeExterior2Motor", id: 0x3, conformance: "M" }),
+                Field({ name: "Drapery", id: 0x4, conformance: "M" }),
+                Field({ name: "Awning", id: 0x5, conformance: "M" }),
+                Field({ name: "Shutter", id: 0x6, conformance: "M" }),
+                Field({ name: "TiltBlindTiltOnly", id: 0x7, conformance: "M" }),
+                Field({ name: "TiltBlindLiftAndTilt", id: 0x8, conformance: "M" }),
+                Field({ name: "ProjectorScreen", id: 0x9, conformance: "M" }),
+                Field({ name: "Unknown", id: 0xff, conformance: "M" })
+            ]
+        }),
+
+        Datatype({
             name: "ConfigStatus", type: "map8", conformance: "M",
 
             children: [
@@ -604,6 +628,38 @@ Matter.children.push(Cluster({
                 Field({ name: "Global", constraint: "0 to 2" }),
                 Field({ name: "Lift", constraint: "2 to 4" }),
                 Field({ name: "Tilt", constraint: "4 to 6" })
+            ]
+        }),
+
+        Datatype({
+            name: "EndProductType", type: "enum8", conformance: "M",
+
+            children: [
+                Field({ name: "RollerShade", id: 0x0, conformance: "M" }),
+                Field({ name: "RomanShade", id: 0x1, conformance: "M" }),
+                Field({ name: "BalloonShade", id: 0x2, conformance: "M" }),
+                Field({ name: "WovenWood", id: 0x3, conformance: "M" }),
+                Field({ name: "PleatedShade", id: 0x4, conformance: "M" }),
+                Field({ name: "CellularShade", id: 0x5, conformance: "M" }),
+                Field({ name: "LayeredShade", id: 0x6, conformance: "M" }),
+                Field({ name: "LayeredShade2D", id: 0x7, conformance: "M" }),
+                Field({ name: "SheerShade", id: 0x8, conformance: "M" }),
+                Field({ name: "TiltOnlyInteriorBlind", id: 0x9, conformance: "M" }),
+                Field({ name: "InteriorBlind", id: 0xa, conformance: "M" }),
+                Field({ name: "VerticalBlindStripCurtain", id: 0xb, conformance: "M" }),
+                Field({ name: "InteriorVenetianBlind", id: 0xc, conformance: "M" }),
+                Field({ name: "ExteriorVenetianBlind", id: 0xd, conformance: "M" }),
+                Field({ name: "LateralLeftCurtain", id: 0xe, conformance: "M" }),
+                Field({ name: "LateralRightCurtain", id: 0xf, conformance: "M" }),
+                Field({ name: "CentralCurtain", id: 0x10, conformance: "M" }),
+                Field({ name: "RollerShutter", id: 0x11, conformance: "M" }),
+                Field({ name: "ExteriorVerticalScreen", id: 0x12, conformance: "M" }),
+                Field({ name: "AwningTerracePatio", id: 0x13, conformance: "M" }),
+                Field({ name: "AwningVerticalScreen", id: 0x14, conformance: "M" }),
+                Field({ name: "TiltOnlyPergola", id: 0x15, conformance: "M" }),
+                Field({ name: "SwingingShutter", id: 0x16, conformance: "M" }),
+                Field({ name: "SlidingShutter", id: 0x17, conformance: "M" }),
+                Field({ name: "Unknown", id: 0xff, conformance: "M" })
             ]
         }),
 

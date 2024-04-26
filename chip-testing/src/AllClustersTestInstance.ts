@@ -9,7 +9,6 @@ import { BooleanStateServer } from "@project-chip/matter.js/behavior/definitions
 import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/fixed-label";
 import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
 import { IlluminanceMeasurementServer } from "@project-chip/matter.js/behavior/definitions/illuminance-measurement";
-import { LevelControlServer } from "@project-chip/matter.js/behavior/definitions/level-control";
 import { LocalizationConfigurationServer } from "@project-chip/matter.js/behavior/definitions/localization-configuration";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
@@ -34,6 +33,7 @@ import {
     Switch,
     ThermostatUserInterfaceConfiguration,
     TimeFormatLocalization,
+    WindowCovering,
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { DimmableLightDevice } from "@project-chip/matter.js/devices/DimmableLightDevice";
@@ -44,6 +44,8 @@ import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { TestInstance } from "./GenericTestApp.js";
 import { TestIdentifyServer } from "./cluster/TestIdentifyServer.js";
+import { TestLevelControlServer } from "./cluster/TestLevelControlServer.js";
+import { TestWindowCoveringServer } from "./cluster/TestWindowCoveringServer.js";
 
 export class AllClustersTestInstance implements TestInstance {
     serverNode: ServerNode | undefined;
@@ -197,7 +199,7 @@ export class AllClustersTestInstance implements TestInstance {
                 FlowMeasurementServer,
                 TestIdentifyServer,
                 IlluminanceMeasurementServer,
-                LevelControlServer.with(
+                TestLevelControlServer.with(
                     LevelControl.Feature.OnOff,
                     LevelControl.Feature.Lighting,
                     LevelControl.Feature.Frequency,
@@ -211,6 +213,7 @@ export class AllClustersTestInstance implements TestInstance {
                 TemperatureMeasurementServer,
                 ThermostatUserInterfaceConfigurationServer,
                 UserLabelServer,
+                TestWindowCoveringServer,
             ),
             {
                 number: EndpointNumber(1),
@@ -295,6 +298,23 @@ export class AllClustersTestInstance implements TestInstance {
                 },
                 userLabel: {
                     labelList: [{ label: "foo", value: "bar" }],
+                },
+                windowCovering: {
+                    type: WindowCovering.WindowCoveringType.TiltBlindLift,
+                    currentPositionLiftPercent100ths: 0,
+                    currentPositionTiltPercent100ths: 0,
+                    safetyStatus: {},
+                    currentPositionLift: 0,
+                    currentPositionTilt: 0,
+                    numberOfActuationsLift: 0,
+                    numberOfActuationsTilt: 0,
+                    currentPositionLiftPercentage: 0,
+                    currentPositionTiltPercentage: 0,
+                    physicalClosedLimitLift: 0,
+                    physicalClosedLimitTilt: 0,
+                    installedOpenLimitLift: 0,
+                    installedOpenLimitTilt: 0,
+                    supportsCalibration: false,
                 },
             },
         );

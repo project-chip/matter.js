@@ -25,6 +25,7 @@ import {
 const logger = Logger.get("LevelControlServer");
 
 const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting);
+
 /**
  * This is the default server implementation of {@link LevelControlBehavior}.
  *
@@ -32,7 +33,7 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  * On-Off Feature is automatically turned on as defined by the matter specification.
  * You should use {@link LevelControlServer.with} to specialize the class for the features your implementation supports.
  *
- * This default implementation also handles the OmOff cluster dependency as defined by the Matter specification
+ * This default implementation also handles the OnOff cluster dependency as defined by the Matter specification
  * automatically.
  *
  * This implementation ignores by default all transition times and sets the level immediately. Alternatively, you can
@@ -40,7 +41,7 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  * changing the level value step wise every second. This might be an intermediate solution if you develop
  * independently of defined hardware.
  *
- * If you develop for a specific hardware you should extend the {@link LevelControlServerLogic} class and implement the
+ * If you develop for a specific hardware you should extend the {@link LevelControlServer} class and implement the
  * following methods to natively use device features to correctly support the transition times. For this the default
  * implementation uses special protected methods which are used by the real commands and are only responsible for the
  * actual value change logic. The benefit of this structure is that basic data validations and options checks are
@@ -49,6 +50,7 @@ const LevelControlLogicBase = LevelControlBehavior.with(LevelControl.Feature.OnO
  * * {@link LevelControlServerLogic.moveLogic} Logic to move the value up or down with a defined rate
  * * {@link LevelControlServerLogic.stepLogic} Logic to step the value up or down with a defined step size and transition
  * * {@link LevelControlServerLogic.stopLogic} Logic to stop any currently running transitions
+ * * {@link LevelControlServerLogic.handleOnOffChange} Logic to handle dimming to onLevel when device got turned on by connected OnOff cluster
  *
  * If you add own implementation you can use:
  * * {@link LevelControlServerLogic.setLevel} to set the level attribute including automatic handling of the onoff dependency
@@ -531,6 +533,21 @@ export namespace LevelControlServerLogic {
          */
         managedTransitionTimeHandling = false;
     }
+
+    export declare const ExtensionInterface: {
+        moveToLevelLogic(level: number, transitionTime: number | null, withOnOff: boolean): MaybePromise<void>;
+        moveLogic(moveMode: LevelControl.MoveMode, rate: number | null, withOnOff: boolean): MaybePromise<void>;
+        stepLogic(
+            stepMode: LevelControl.StepMode,
+            stepSize: number,
+            transitionTime: number | null,
+            withOnOff: boolean,
+        ): MaybePromise<void>;
+        stopLogic(): MaybePromise<void>;
+        setLevel(level: number, withOnOff: boolean): MaybePromise<void>;
+        setRemainingTime(remainingTime: number): void;
+        handleOnOffChange(onOff: boolean): void;
+    };
 }
 
 // We had turned on some more features to provide da default implementation, but export the cluster with default
