@@ -6,7 +6,7 @@
 
 import type { Endpoint } from "../../endpoint/Endpoint.js";
 import { GeneratedClass } from "../../util/GeneratedClass.js";
-import { BasicObservable, EventEmitter, Observable } from "../../util/Observable.js";
+import { EventEmitter, Observable, ObservableProxy } from "../../util/Observable.js";
 import { BehaviorBacking } from "./BehaviorBacking.js";
 
 type Implementation = new (target: EventEmitter) => EventEmitter;
@@ -39,38 +39,6 @@ export function BackingEvents(backing: BehaviorBacking): EventEmitter {
 }
 
 const TARGET = Symbol("target");
-
-/**
- * A single event on a behavior.
- *
- * Emits emitted here instead emit on the target {@link Observable}.  Events emitted on the target emit locally via
- * a listener installed by the proxy.
- *
- * "Proxy" acts as a proxy but is not a {@link Proxy}.
- */
-class ObservableProxy extends BasicObservable {
-    #target: Observable;
-    #emitter = (...args: unknown[]) => super.emit(...args);
-
-    constructor(target: Observable) {
-        super();
-        this.#target = target;
-        this.#target.on(this.#emitter);
-    }
-
-    override [Symbol.dispose]() {
-        this.#target.off(this.#emitter);
-        super[Symbol.dispose]();
-    }
-
-    override get isAsync() {
-        return this.#target.isAsync;
-    }
-
-    override emit(...payload: any[]): void | undefined {
-        this.#target.emit(...payload);
-    }
-}
 
 /**
  * Generates a proxy {@link EventEmitter} for the given {@link EventEmitter} instance.

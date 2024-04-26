@@ -21,7 +21,7 @@ import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
 import { TlvInt32 } from "../../../src/tlv/TlvNumber.js";
 import { TlvString } from "../../../src/tlv/TlvString.js";
-import { BasicObservable, EventEmitter, Observable } from "../../../src/util/Observable.js";
+import { AsyncObservable, BasicObservable, EventEmitter, Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
@@ -98,7 +98,7 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 events: EventEmitter & {
-                    reqAttr$Changed: Observable<[value: string, oldValue: string, context?: ActionContext]>;
+                    reqAttr$Changed: AsyncObservable<[value: string, oldValue: string, context?: ActionContext]>;
                 };
             };
 

@@ -19,6 +19,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Adjusted handling of TlvList order to match better with matter specification and ensure field orders are preserved
   * Enhancement: Adds Certificate validation and cryptographic verification during commissioning and CASE session establishment
   * Enhancement: Adds additional logging information for PASE and CASE to better understand errors without debug logging
+  * Enhancement: Adds several Optimizations and adjustments for Obervers (e.g. Observable.isObserved)
   * Fix: Corrects returned errors for two commands on OperationalCredentials cluster 
 * matter.js New API code flows:
   * Breaking: The name of the *$Change Events for attributes and such are changed to *$Changed . Please adjust your code!
@@ -27,9 +28,11 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Conditionally enables the ReachableChanged event on the Root Endpoint BasicInformation cluster if the reachable attribute is defined in the defaults
   * Enhancement: Allow to register events directly when initializing endpoints like in legacy API
   * Enhancement: Allows for cluster implementations to dynamically add/enable state attributes and events
-  * Enhancement: Allows "$Changed" event handlers to be async
+  * Enhancement: Added "fieldName$Changing" event handlers that emit in transaction pre-commit and allow for state mutation and will cycle for a limited number of times until state is stable
+  * Enhancement: Allows "fieldName$Changed" and "fieldName$Changing" event handlers to be async
   * Fix: Fixes some issues around event handling in the new API and makes sure events are not de-registered on factory resets
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
+  * Fix: Fixes a floating promise in FailsafeTimer; it tended to kill a test run without an easy way to identify the cause
   * Fix: Fixes bounds check with references to null fields
 * Chip testing:
   * Enhancement: Adds automatic CI testing for all clusters listed in [matter.js Readme](./packages/matter.js/README.md)

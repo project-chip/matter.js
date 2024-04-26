@@ -10,11 +10,12 @@ import { OfflineContext } from "../../../../src/behavior/context/server/OfflineC
 import { StateType } from "../../../../src/behavior/state/StateType.js";
 import { Val } from "../../../../src/behavior/state/Val.js";
 import { Datasource } from "../../../../src/behavior/state/managed/Datasource.js";
+import { FinalizationError } from "../../../../src/behavior/state/transaction/Errors.js";
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
 import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
 import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
 import { DatatypeModel, FieldElement } from "../../../../src/model/index.js";
-import { Observable } from "../../../../src/util/Observable.js";
+import { AsyncObservable, Observable } from "../../../../src/util/Observable.js";
 import { MaybePromise } from "../../../../src/util/Promises.js";
 
 class MyState {
@@ -206,37 +207,145 @@ describe("Datasource", () => {
         expect(store.sets[1]).deep.equals({ foo: "woof" });
     });
 
-    it("triggers events after transaction commit", async () => {
-        const events = {
-            foo$Changed: Observable<any>(),
-        };
+    describe("$Changing events", () => {
+        it("trigger before transaction commit", async () => {
+            const events = {
+                foo$Changing: AsyncObservable<any>(),
+            };
 
-        let changed = false;
-        const result = new Promise(resolve =>
-            events.foo$Changed.on((...args: any[]) => {
-                changed = true;
-                resolve(args);
-            }),
-        );
+            let observed = false;
 
-        let actualContext: ActionContext | undefined;
+            const ds = createDatasource({ events });
 
-        await withDatasourceAndReference({ events }, async ({ context, state }) => {
-            actualContext = context;
+            events.foo$Changing.on(async (newValue, oldValue) => {
+                observed = true;
 
-            await context.transaction.commit();
+                expect(newValue).equals("!bar");
+                expect(oldValue).equals("bar");
 
-            expect(changed).false;
+                // Ensure canonical value has not yet changed
+                expect(ds.view.foo).equals("bar");
+            });
 
-            state.foo = "BAR";
+            await withReference(ds, async ({ state }) => {
+                state.foo = "!bar";
+            });
 
-            expect(changed).false;
-
-            // Auto-commit
+            expect(ds.view.foo).equals("!bar");
+            expect(observed).true;
         });
 
-        expect(changed).true;
+        it("handles mixed sync/async observers sequentially", async () => {
+            const event = AsyncObservable<any>();
 
-        await expect(result).eventually.deep.equal(["BAR", "bar", actualContext]);
+            const ds = createDatasource({ events: { foo$Changing: event } });
+
+            const observations = Array<number>();
+
+            event.on((_oldValue, _newValue, context) => {
+                ds.reference(context).foo = "y";
+                observations.push(1);
+            });
+            event.on(async () => {
+                observations.push(2);
+            });
+            event.on(() => {
+                observations.push(3);
+            });
+            event.on(async (_oldValue, _newValue, context) => {
+                ds.reference(context).foo = "z";
+                observations.push(4);
+            });
+
+            await withReference(ds, async ({ state }) => (state.foo = "x"));
+
+            expect(ds.view.foo).equals("z");
+            expect(observations).deep.equals([1, 2, 3, 4, 1, 2, 3, 4]);
+        });
+
+        it("allows 4 cascading mutation", async () => {
+            const events = { foo$Changing: AsyncObservable<any>() };
+
+            const ds = createDatasource({ events });
+
+            events.foo$Changing.on((newValue, _oldValue, context) => {
+                if (newValue.length < 4) {
+                    ds.reference(context).foo = `${newValue}x`;
+                }
+            });
+
+            await withReference(ds, async ({ state }) => (state.foo = "x"));
+
+            expect(ds.view.foo).equals("xxxx");
+        });
+
+        async function assertRejects(observer: (ds: Datasource<typeof MyState>, ...args: any[]) => MaybePromise) {
+            const events = { foo$Changing: AsyncObservable<any>() };
+
+            const ds = createDatasource({ events });
+
+            events.foo$Changing.on((...args: any[]) => observer(ds, ...args));
+
+            await expect(withReference(ds, async ({ state }) => (state.foo = "x"))).eventually.rejectedWith(
+                FinalizationError,
+                "Rolled back due to pre-commit error",
+            );
+
+            expect(ds.view.foo).equals("bar");
+        }
+
+        it("disallows infinite cascading mutations", async () => {
+            await assertRejects(async (ds, newValue, _oldValue, context) => {
+                ds.reference(context).foo = `${newValue}x`;
+            });
+        });
+
+        it("aborts on sync listener error", async () => {
+            await assertRejects(() => {
+                throw new Error("oops");
+            });
+        });
+
+        it("aborts on async listener error", async () => {
+            await assertRejects(async () => {
+                throw new Error("oops");
+            });
+        });
+    });
+
+    describe("$Changed events", () => {
+        it("trigger after transaction commit", async () => {
+            const events = {
+                foo$Changed: Observable<any>(),
+            };
+
+            let changed = false;
+            const result = new Promise(resolve =>
+                events.foo$Changed.on((...args: any[]) => {
+                    changed = true;
+                    resolve(args);
+                }),
+            );
+
+            let actualContext: ActionContext | undefined;
+
+            await withDatasourceAndReference({ events }, async ({ context, state }) => {
+                actualContext = context;
+
+                await context.transaction.commit();
+
+                expect(changed).false;
+
+                state.foo = "BAR";
+
+                expect(changed).false;
+
+                // Auto-commit
+            });
+
+            expect(changed).true;
+
+            await expect(result).eventually.deep.equal(["BAR", "bar", actualContext]);
+        });
     });
 });

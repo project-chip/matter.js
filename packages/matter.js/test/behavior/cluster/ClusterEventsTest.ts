@@ -13,7 +13,8 @@ import { BasicInformationBehavior } from "../../../src/behavior/definitions/basi
 import { BasicInformationServer } from "../../../src/behavior/definitions/basic-information/BasicInformationServer.js";
 import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { BasicInformation } from "../../../src/cluster/definitions/BasicInformationCluster.js";
-import { EventEmitter, Observable } from "../../../src/util/Observable.js";
+import { AsyncObservable, EventEmitter, Observable } from "../../../src/util/Observable.js";
+import { MaybePromise } from "../../../src/util/Promises.js";
 import { MyCluster, MySchema } from "./cluster-behavior-test-util.js";
 
 const MyClusterWithOptEvent = MyCluster.enable({ events: { optEv: true } });
@@ -46,7 +47,7 @@ describe("ClusterEvents", () => {
 
         it("includes required", () => {
             ({}) as Ep satisfies EventEmitter & {
-                reqAttr$Changed: Observable<[value: string, oldValue: string, context?: ActionContext]>;
+                reqAttr$Changed: Observable<[value: string, oldValue: string, context?: ActionContext], MaybePromise>;
 
                 reqEv: Observable<[payload: string, context?: ActionContext]>;
             };
@@ -54,7 +55,7 @@ describe("ClusterEvents", () => {
 
         it("allows optional", () => {
             undefined satisfies Ep["optAttr$Changed"];
-            ({}) as Observable<[boolean, boolean, context: ActionContext]> satisfies Ep["optAttr$Changed"];
+            ({}) as AsyncObservable<[boolean, boolean, context: ActionContext]> satisfies Ep["optAttr$Changed"];
             undefined satisfies Ep["optEv"];
             ({}) as Observable<[string, context: ActionContext]> satisfies Ep["optEv"];
         });
@@ -104,7 +105,7 @@ describe("ClusterEvents", () => {
 
         it("requires mandatory", () => {
             ({}) as Ei satisfies {
-                reqAttr$Changed: Observable<[value: string, oldValue: string, context: ActionContext]>;
+                reqAttr$Changed: Observable<[value: string, oldValue: string, context: ActionContext], MaybePromise>;
 
                 reqEv: Observable<[payload: string, context: ActionContext]>;
             };
@@ -112,7 +113,7 @@ describe("ClusterEvents", () => {
 
         it("allows optional", () => {
             undefined satisfies Ei["optAttr$Changed"];
-            ({}) as Observable<[boolean, boolean, context: ActionContext]> satisfies Ei["optAttr$Changed"];
+            ({}) as AsyncObservable<[boolean, boolean, context: ActionContext]> satisfies Ei["optAttr$Changed"];
             undefined satisfies Ei["optEv"];
             ({}) as Observable<[string, context: ActionContext]> satisfies Ei["optEv"];
         });
@@ -146,7 +147,13 @@ describe("ClusterEvents", () => {
     describe("Properties", () => {
         it("specifies correct properties with enabled", () => {
             type Props = ClusterEvents.Properties<MyClusterWithOptEvent>;
-            ({}) as keyof Props satisfies "reqEv" | "optEv" | "reqAttr$Changed" | "optAttr$Changed";
+            ({}) as keyof Props satisfies
+                | "reqEv"
+                | "optEv"
+                | "reqAttr$Changing"
+                | "reqAttr$Changed"
+                | "optAttr$Changing"
+                | "optAttr$Changed";
             "" as "reqEv" | "optEv" | "reqAttr$Changed" | "optAttr$Changed" satisfies keyof Props;
         });
 
