@@ -11,6 +11,7 @@ export enum Specification {
     Core = "core",
     Cluster = "cluster",
     Device = "device",
+    Namespace = "namespace",
 }
 
 export namespace Specification {
@@ -21,6 +22,7 @@ export namespace Specification {
         core = "Matter Core Specification",
         cluster = "Matter Application Cluster Specification",
         device = "Matter Device Library Specification",
+        namespace = "Matter Standard Namespace Specification",
     }
 
     /**

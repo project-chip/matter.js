@@ -7,6 +7,7 @@
 import { dirname, join } from "path";
 
 import { loadHtml, parseHeading } from "./doc-utils.js";
+import { Str } from "./html-translators.js";
 import { HtmlReference, Table } from "./spec-types.js";
 
 // Convert HTMLTableELement -> Table
@@ -165,13 +166,10 @@ export function* scanDocument(docRef: HtmlReference) {
                     // heuristics to do that.  Otherwise we just collect as prose associated with the section
 
                     // Extract text
-                    const text = element.textContent
-                        ?.trim()
-                        .replace(/(\s\u200c)+/, "")
-                        .replace(/\s*\([^)]+\)\s*/g, " ");
+                    const text = Str(element).replace(/\s*\([^)]+\)\s*/g, " ");
 
                     // Test for "heading" shapes with a numerical prefix followed by a label
-                    if (text?.match(/^\d+\.(\d+\.)+ [ a-zA-Z0-9]+$/) || text?.match(/^\d+\.(\d+\.)+ .+ \(.+ type\)/)) {
+                    if (text?.match(/^\d+\.(\d+\.)+ [ a-zA-Z0-9]+$/) || text?.match(/^\d+\.(\d+\.)+ .+ \(.+ type\)/i)) {
                         let possibleHeading = parseHeading(element);
 
                         // Ignore links elsewhere.  This occurs in TOC entries.  If this gets too fiddly then we can
@@ -216,7 +214,11 @@ export function* scanDocument(docRef: HtmlReference) {
                             },
                         };
                         break;
-                    } else if (text?.match(/^[a-z0-9]+(?:Enum|Struct| Attribute| Command| Event| Field| Value)$/i)) {
+                    } else if (
+                        text?.match(
+                            /^[a-z0-9]+(?:Enum(?: Type)?|Struct(?: Type)?| Attribute| Command| Event| Field| Value)$/i,
+                        )
+                    ) {
                         // Looks like a section
                         const realSection = currentRef ? currentRef.xref.section : ref.xref.section;
                         yield* emit();

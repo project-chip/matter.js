@@ -119,6 +119,10 @@ export const Globals = {
     posixMs: extInt("posix-ms", "POSIX time in milliseconds", UINT64),
     systimeUs: extInt("systime-us", "Sytem time in microseconds", UINT64),
     systimeMs: extInt("systime-ms", "System time in milliseconds", UINT64),
+    elapsedS: extInt("elapsed-s", "System type in seconds", UINT32),
+
+    // Physical quantities
+    temperature: extInt("temperature", "Temperature in Celsius", UINT16),
 
     // Discrete enumeration
     enum8: enumt(ENUM8, "8-bit enumeration", UINT8),
@@ -225,7 +229,7 @@ export const Globals = {
 
     // Not defined as global in the specification but used across multiple
     // clusters without structured definition
-    SubjectId: DatatypeElement({ name: "SubjectID", type: "uint64" }),
+    subjectId: DatatypeElement({ name: "subject-id", type: "uint64" }),
 
     // Not formal part of specification, indicates field's type may vary
     any: DatatypeElement({ name: "any", description: "Any value", metatype: "any" }),

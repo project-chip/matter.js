@@ -22,8 +22,7 @@ import { isDeepEqual } from "@project-chip/matter.js/util";
 const logger = Logger.get("create-model");
 
 /**
- * Get the properties of children without xrefs so we can compare types using
- * isDeepEqual
+ * Get the properties of children without xrefs so we can compare types using isDeepEqual
  */
 function childrenIdentity(model: ValueModel) {
     return model.children.map(child => {
@@ -35,9 +34,8 @@ function childrenIdentity(model: ValueModel) {
 }
 
 /**
- * Some enum definitions are left hanging that we can fix with a quick scan
- * comparing names.  I believe this only affects enums in ColorControlCluster
- * from the spec but the logic is generic and safe so applying to all clusters
+ * Some enum definitions are left hanging that we can fix with a quick scan comparing names.  I believe this only
+ * affects enums in ColorControlCluster from the spec but the logic is generic and safe so applying to all clusters
  */
 function patchClusterTypes(cluster: ClusterModel) {
     // First gather existing datatypes so we treat them as canonical
@@ -64,8 +62,7 @@ function patchClusterTypes(cluster: ClusterModel) {
         }
     });
 
-    // Update the type for datatypes that a.) share the name but do not have
-    // children, or b.) duplicate this datatype
+    // Update the type for datatypes that a.) share the name but do not have children, or b.) duplicate this datatype
     const promote = new Set<ValueModel>();
     cluster.visit(model => {
         if (!(model instanceof ValueModel)) {
@@ -93,7 +90,7 @@ function patchClusterTypes(cluster: ClusterModel) {
                 model.children = [];
                 promote.add(datatype);
             }
-        } else {
+        } else if (model.type === undefined || model.type.startsWith("enum")) {
             model.type = datatype.name;
             promote.add(datatype);
         }
@@ -123,9 +120,8 @@ function patchClusterTypes(cluster: ClusterModel) {
 }
 
 /**
- * The optionsMask/OptionsOverrides pattern defined by LevelControl is used
- * by a number of clusters.  These usually specify their type as "map8" rather
- * than the appropriate type.  This function fixes this.
+ * The optionsMask/OptionsOverrides pattern defined by LevelControl is used by a number of clusters.  These usually
+ * specify their type as "map8" rather than the appropriate type.  This function fixes this.
  */
 function patchOptionsTypes(cluster: ClusterModel) {
     for (const element of cluster.children) {

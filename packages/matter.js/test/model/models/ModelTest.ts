@@ -116,7 +116,7 @@ describe("Model", () => {
             expect(Fixtures.matter.all(ClusterModel).length).equal(3);
 
             // 66 standard datatypes + 3 defined in our fake model
-            expect(Fixtures.matter.all(DatatypeModel).length).equal(69);
+            expect(Fixtures.matter.all(DatatypeModel).length).equal(71);
         });
     });
 

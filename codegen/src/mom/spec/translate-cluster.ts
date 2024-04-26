@@ -38,12 +38,27 @@ const TYPE_ERRORS: { [badType: string]: string } = {
     HardwareAddress: "hwadr",
     String: "string",
     variable: "any",
+    SubjectId: "subject-id",
+    SubjectID: "subject-id",
 };
 
 function fixTypeError(type: string | undefined) {
-    if (type !== undefined && TYPE_ERRORS[type]) {
+    if (type === undefined) {
+        return type;
+    }
+
+    if (type.startsWith("list[") && type.endsWith("]")) {
+        const entryType = type.slice(5, type.length - 1);
+        if (TYPE_ERRORS[entryType]) {
+            return `list[${TYPE_ERRORS[entryType]}]`;
+        }
+        return type;
+    }
+
+    if (TYPE_ERRORS[type]) {
         return TYPE_ERRORS[type];
     }
+
     return type;
 }
 
@@ -90,9 +105,9 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
     translateFeatures();
 
     return {
-        ids: ids,
-        classification: classification,
-        revision: revision,
+        ids,
+        classification,
+        revision,
         derivesFrom,
     };
 
@@ -493,18 +508,18 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
         const records = translateTable("command", definition.commands, {
             id: Integer,
             name: Identifier,
-            direction: Str,
+            direction: Optional(Str),
             response: Optional(Identifier),
             access: Optional(Str),
             conformance: Optional(Code),
             children: Children(translateValueChildren),
-        });
+        }).filter(r => r.conformance !== "Zigbee");
 
         const commands = translateRecordsToMatter("command", records, r => {
             let direction: CommandElement.Direction | undefined;
-            if (r.direction.match(/client.*server/i)) {
+            if (r.direction?.match(/client.*server/i)) {
                 direction = CommandElement.Direction.Request;
-            } else if (r.direction.match(/server.*client/i)) {
+            } else if (r.direction?.match(/server.*client/i)) {
                 direction = CommandElement.Direction.Response;
             }
 
@@ -524,7 +539,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
                     break;
             }
 
-            return CommandElement({ ...r, response: response, direction: direction });
+            return CommandElement({ ...r, response, direction });
         });
         commands && children.push(...commands);
     }
@@ -597,11 +612,26 @@ function translateDatatypes(definition: ClusterReference, children: Array<Cluste
 
     function translateDatatype(definition: HtmlReference) {
         let name = definition.name;
-        const text = definition.prose?.[0]?.textContent;
+        const text = definition.prose?.[0] ? Str(definition.prose?.[0]) : undefined;
         if (!text) {
             logger.warn(`no text to search for base type`);
         }
+
+        // Up through 1.1 prose was informal but remarkably consistent; "derived from" always matches
         let match = text?.match(/derived from ([a-z0-9\-_]+)/i);
+
+        // This now applies to cluster 1.2 § 1.14.15.1, because consistency is overrated
+        if (!match) {
+            match = text?.match(/data type shall be a ([a-z0-9\-_]+)/i);
+        }
+
+        // Applies to a handful of overrides of ModeOptionStruct in cluster 1.2
+        if (!match) {
+            match = text?.match(
+                /lists the changes relative to the [a-z0-9\-_ ]+ cluster for the fields of the ([a-z0-9\-_]+) type/i,
+            );
+        }
+
         let type = match?.[1];
 
         let description: string | undefined;
@@ -613,7 +643,7 @@ function translateDatatypes(definition: ClusterReference, children: Array<Cluste
                 logger.warn(`no base detected, guessing enum8`);
                 type = "enum8";
             }
-        } else if (name.match(/bits$/i) || type?.match(/^map/i)) {
+        } else if (name.match(/bits$/i) || name.match(/bitmap$/i) || type?.match(/^map/i)) {
             if (!type) {
                 logger.warn(`no base detected, guessing map8`);
                 type = "map8";
