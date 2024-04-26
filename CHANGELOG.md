@@ -16,6 +16,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     * LevelControl: Implemented all non-Frequency command handlers as defined by specification with an optional transition logic managed by matter.js
     * LocalizationConfiguration: Implemented activeLocale validation
     * TimeFormatLocalization: Implemented activeTimeFormat validation
+    * WindowCovering: Implemented all features and commands as defined by specification
   * Enhancement: Adjusted handling of TlvList order to match better with matter specification and ensure field orders are preserved
   * Enhancement: Adds Certificate validation and cryptographic verification during commissioning and CASE session establishment
   * Enhancement: Adds additional logging information for PASE and CASE to better understand errors without debug logging
