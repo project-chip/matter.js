@@ -299,6 +299,23 @@ export class AllClustersTestInstance implements TestInstance {
                 userLabel: {
                     labelList: [{ label: "foo", value: "bar" }],
                 },
+                windowCovering: {
+                    type: WindowCovering.WindowCoveringType.TiltBlindLift,
+                    currentPositionLiftPercent100ths: 0,
+                    currentPositionTiltPercent100ths: 0,
+                    safetyStatus: {},
+                    currentPositionLift: 0,
+                    currentPositionTilt: 0,
+                    numberOfActuationsLift: 0,
+                    numberOfActuationsTilt: 0,
+                    currentPositionLiftPercentage: 0,
+                    currentPositionTiltPercentage: 0,
+                    physicalClosedLimitLift: 0,
+                    physicalClosedLimitTilt: 0,
+                    installedOpenLimitLift: 0,
+                    installedOpenLimitTilt: 0,
+                    supportsCalibration: false,
+                },
             },
         );
         await serverNode.add(endpoint1);
