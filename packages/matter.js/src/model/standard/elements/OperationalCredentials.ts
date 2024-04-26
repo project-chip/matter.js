@@ -289,7 +289,7 @@ Matter.children.push(Cluster({
                 }),
 
                 Field({
-                    name: "CaseAdminSubject", id: 0x3, type: "SubjectID", conformance: "M",
+                    name: "CaseAdminSubject", id: 0x3, type: "subject-id", conformance: "M",
 
                     details: "If the AddNOC command succeeds according to the semantics of the following subsections, then the" +
                         "\n" +

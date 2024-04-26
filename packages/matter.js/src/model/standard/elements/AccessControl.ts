@@ -379,7 +379,7 @@ Matter.children.push(Cluster({
                         "Management Cluster.",
 
                     xref: { document: "core", section: "9.10.4.5.3" },
-                    children: [Field({ name: "entry", type: "SubjectID" })]
+                    children: [Field({ name: "entry", type: "subject-id" })]
                 }),
 
                 Field({
