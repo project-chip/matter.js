@@ -8,6 +8,7 @@ import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import { Specification } from "@project-chip/matter.js/model";
 import { readFileSync } from "fs";
 import { JSDOM } from "jsdom";
+import { Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";
 
 const logger = Logger.get("scan-index");
@@ -15,12 +16,12 @@ const logger = Logger.get("scan-index");
 export const DEFAULT_MATTER_VERSION = "1.1";
 
 // Parse the section ID and name from a heading element
-export function parseHeading(e: Node | null) {
+export function parseHeading(e: HTMLElement | null) {
     if (!e) {
         return undefined;
     }
 
-    const heading = e.textContent?.trim().replace(/\s+/g, " ").replace("\u200c", "");
+    const heading = Str(e);
     if (!heading) {
         return undefined;
     }
@@ -72,9 +73,10 @@ export function identifyDocument(path: string): IndexDetail {
     } else if (title.match(/device/i)) {
         spec = Specification.Device;
         hasDevices = true;
+    } else if (title.match(/namespaces/i)) {
+        spec = Specification.Namespace;
     } else {
-        logger.error(`matter specification name ${title} unrecognized`);
-        return result;
+        throw new Error(`Matter specification name ${title} unrecognized`);
     }
 
     const versionEl = titleEl.nextElementSibling;

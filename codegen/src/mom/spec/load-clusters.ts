@@ -123,10 +123,10 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
     }
 
     function identifyCluster(ref: HtmlReference) {
-        // Core spec convention for clusters is heading suffixed with "Cluster"
+        // Core spec (and cluster spec >= 1.2) convention for clusters is heading suffixed with "Cluster"
         if (ref.name.endsWith(" Cluster")) {
-            if (Number.parseInt(ref.xref.section) < 3) {
-                // There's some noise in early sections
+            if (ref.xref.document === Specification.Core && Number.parseInt(ref.xref.section) < 3) {
+                // There's some noise in early sections of core spec
                 return;
             }
 
@@ -205,6 +205,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                         if (!definition.datatypes) {
                             definition.datatypes = [];
                         }
+                        datatypeRef.name = datatypeRef.name.replace(/\s+type$/i, "");
                         logger.debug(`datatype ${datatypeRef.name} § ${datatypeRef.xref.section}`);
                         definition.datatypes.push(datatypeRef);
                         if (datatypeRef.table) {

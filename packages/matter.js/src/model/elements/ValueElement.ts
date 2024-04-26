@@ -14,11 +14,11 @@ import { BaseElement } from "./BaseElement.js";
  */
 export type ValueElement = BaseElement & {
     /**
-     * Derived datatypes as defined by the Matter Specification must specify
-     * the name of the base type.  This is every type that is not global.
+     * Derived datatypes as defined by the Matter Specification must specify the name of the base type.  This is every
+     * type that is not global.
      *
-     * Elements may use the shortcut "list[EntryType]" to designate an element
-     * as type "list" with a single child that is the entry type.
+     * Elements may use the shortcut "list[EntryType]" to designate an element as type "list" with a single child that
+     * is the entry type.
      */
     type?: string;
 
@@ -97,10 +97,8 @@ export namespace ValueElement {
     export type Size = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
     /**
-     * Legal bitmap sizes.  The Matter specification defines enums as
-     * extensions of int8 or in16 so the size information is not used for
-     * actual enums, just for bitmaps, which are used (somewhat inconsistently)
-     * as base types.
+     * Legal bitmap sizes.  The Matter specification defines enums as extensions of int8 or in16 so the size information
+     * is not used for actual enums, just for bitmaps, which are used (somewhat inconsistently) as base types.
      */
     export type BitmapSize = 1 | 2 | 4 | 8;
 }

@@ -1,2 +1,1 @@
-spec.ts linguist-generated=true
-chip.ts linguist-generated=true
+src/v*/*.ts linguist-generated=true
