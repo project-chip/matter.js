@@ -196,6 +196,17 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         );
     }
 
+    #determineEffectiveMoveRate(rate: number | null) {
+        const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
+        if (effectiveRate === 0) {
+            throw new StatusResponseError(
+                "A rate of 0 or null is invalid for a move command.",
+                StatusCode.InvalidCommand,
+            );
+        }
+        return effectiveRate;
+    }
+
     /**
      * Default implementation notes:
      * After the options checks it uses the {@link moveLogic} method to set the level.
@@ -209,15 +220,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             return;
         }
 
-        const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
-        if (effectiveRate === 0) {
-            throw new StatusResponseError(
-                "A rate of 0 or null is invalid for a move command.",
-                StatusCode.InvalidCommand,
-            );
-        }
-
-        return this.moveLogic(moveMode, effectiveRate, false);
+        return this.moveLogic(moveMode, this.#determineEffectiveMoveRate(rate), false);
     }
 
     /**
@@ -229,15 +232,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * level is increased or decreased by the step size every second.
      */
     override moveWithOnOff({ moveMode, rate }: MoveWithOnOffRequest) {
-        const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
-        if (effectiveRate === 0) {
-            throw new StatusResponseError(
-                "A rate of 0 or null is invalid for a move command.",
-                StatusCode.InvalidCommand,
-            );
-        }
-
-        return this.moveLogic(moveMode, effectiveRate, true);
+        return this.moveLogic(moveMode, this.#determineEffectiveMoveRate(rate), true);
     }
 
     /**
