@@ -612,7 +612,7 @@ export function astToFunction(
             mainValidator?.(value, session, location);
 
             if (typeof value === "number") {
-                // Invoke the member validator if one exists for the selecte value
+                // Invoke the member validator if one exists for the selected value
                 memberValidators[value]?.(location);
             }
         };
