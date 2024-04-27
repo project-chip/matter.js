@@ -209,7 +209,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             return;
         }
 
-        return this.moveLogic(moveMode, rate, false);
+        const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
+        if (effectiveRate === 0) {
+            throw new StatusResponseError(
+                "A rate of 0 or null is invalid for a move command.",
+                StatusCode.InvalidCommand,
+            );
+        }
+
+        return this.moveLogic(moveMode, effectiveRate, false);
     }
 
     /**
@@ -221,7 +229,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * level is increased or decreased by the step size every second.
      */
     override moveWithOnOff({ moveMode, rate }: MoveWithOnOffRequest) {
-        return this.moveLogic(moveMode, rate, true);
+        const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
+        if (effectiveRate === 0) {
+            throw new StatusResponseError(
+                "A rate of 0 or null is invalid for a move command.",
+                StatusCode.InvalidCommand,
+            );
+        }
+
+        return this.moveLogic(moveMode, effectiveRate, true);
     }
 
     /**
@@ -236,20 +252,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * @protected
      */
     protected moveLogic(moveMode: LevelControl.MoveMode, rate: number | null, withOnOff: boolean) {
-        const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
-        if (!this.state.managedTransitionTimeHandling || effectiveRate === null || effectiveRate === 0) {
+        if (!this.state.managedTransitionTimeHandling || rate === null) {
             // If null rate is requested and also no default rate is set, we should move as fast as possible, so we set
             // to min/max value directly. If rate 0 is requested no change on level should be done.
             const level =
-                effectiveRate === 0
-                    ? this.currentLevel
-                    : moveMode === LevelControl.MoveMode.Up
-                      ? this.maxLevel
-                      : this.minLevel;
+                rate === 0 ? this.currentLevel : moveMode === LevelControl.MoveMode.Up ? this.maxLevel : this.minLevel;
             this.setRemainingTime(0);
             return this.setLevel(level, withOnOff);
         }
-        return this.#initiateTransition(effectiveRate, moveMode as unknown as LevelControl.StepMode, withOnOff);
+        return this.#initiateTransition(rate, moveMode as unknown as LevelControl.StepMode, withOnOff);
     }
 
     /**
