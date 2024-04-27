@@ -7,12 +7,26 @@
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
 import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
-import { AttributeModel, ClusterModel, FeatureSet, FieldModel, Globals } from "../../../../src/model/index.js";
+import {
+    AttributeModel,
+    ClusterModel,
+    FeatureSet,
+    FieldElement,
+    FieldModel,
+    Globals,
+} from "../../../../src/model/index.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 import { Properties } from "../../../../src/util/Type.js";
 
 export function Fields(
-    ...definition: { name?: string; type?: string; conformance?: string; constraint?: string; quality?: string }[]
+    ...definition: {
+        name?: string;
+        type?: string;
+        conformance?: string;
+        constraint?: string;
+        quality?: string;
+        children?: FieldElement[];
+    }[]
 ): Fields {
     return definition.map(
         f =>

@@ -5,6 +5,7 @@
  */
 
 import { ConformanceError } from "../../../../src/behavior/errors.js";
+import { FieldElement } from "../../../../src/model/index.js";
 import { Features, Fields, Tests, testValidation } from "./validation-test-utils.js";
 
 const AllTests = Tests({
@@ -475,6 +476,53 @@ const AllTests = Tests({
                 },
             ),
         }),
+
+        "enum values": Tests(
+            Features({ FT: "Feature" }),
+            Fields({
+                name: "Test",
+                type: "enum8",
+                children: [
+                    FieldElement({ id: 1, name: "noConformance" }),
+                    FieldElement({ id: 2, name: "mandatory", conformance: "M" }),
+                    FieldElement({ id: 3, name: "disallowed", conformance: "X" }),
+                    FieldElement({ id: 4, name: "ifFeature", conformance: "FT" }),
+                ],
+            }),
+
+            {
+                "allows without conformance": {
+                    record: { test: 1 },
+                },
+
+                "allows without mandatory": {
+                    record: { test: 2 },
+                },
+
+                "disallows disallowed": {
+                    record: { test: 3 },
+                    error: {
+                        type: ConformanceError,
+                        message:
+                            'Validating Test.test: Conformance "X": Enum value disallowed (ID 3) is disallowed per Matter specification',
+                    },
+                },
+
+                "disallows non-conformant by feature": {
+                    record: { test: 4 },
+                    error: {
+                        type: ConformanceError,
+                        message:
+                            'Validating Test.test: Conformance "FT": Enum value ifFeature (ID 4) is disallowed per Matter specification',
+                    },
+                },
+
+                "allows conformant by feature": {
+                    supports: ["FT"],
+                    record: { test: 4 },
+                },
+            },
+        ),
     }),
 });
 
