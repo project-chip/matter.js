@@ -199,10 +199,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     #determineEffectiveMoveRate(rate: number | null) {
         const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
         if (effectiveRate === 0) {
-            throw new StatusResponseError(
-                "A rate of 0 or null is invalid for a move command.",
-                StatusCode.InvalidCommand,
-            );
+            throw new StatusResponseError("A move rate of 0 is invalid.", StatusCode.InvalidCommand);
         }
         return effectiveRate;
     }
