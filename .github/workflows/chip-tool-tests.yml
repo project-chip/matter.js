@@ -65,6 +65,8 @@ jobs:
               - "packages/matter.js/src/behavior/definitions/administrator-commissioning/**"
               - "packages/matter.js/src/behavior/definitions/general-commissioning/**"
               - "packages/matter.js/src/behavior/definitions/operational-credentials/**"
+              - "packages/matter.js/src/session/pase/**"
+              - "packages/matter.js/src/session/case/**"
 
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests]') == true }}
         name: Chip Tool tests required to run?
