@@ -247,8 +247,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         if (!this.state.managedTransitionTimeHandling || rate === null) {
             // If null rate is requested and also no default rate is set, we should move as fast as possible, so we set
             // to min/max value directly. If rate 0 is requested no change on level should be done.
-            const level =
-                rate === 0 ? this.currentLevel : moveMode === LevelControl.MoveMode.Up ? this.maxLevel : this.minLevel;
+            const level = moveMode === LevelControl.MoveMode.Up ? this.maxLevel : this.minLevel;
             this.setRemainingTime(0);
             return this.setLevel(level, withOnOff);
         }
