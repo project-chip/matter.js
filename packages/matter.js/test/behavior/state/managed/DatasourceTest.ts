@@ -12,9 +12,10 @@ import { Val } from "../../../../src/behavior/state/Val.js";
 import { Datasource } from "../../../../src/behavior/state/managed/Datasource.js";
 import { FinalizationError } from "../../../../src/behavior/state/transaction/Errors.js";
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
+import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
 import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
-import { DatatypeModel, FieldElement } from "../../../../src/model/index.js";
+import { DatatypeModel, FieldElement, FieldModel } from "../../../../src/model/index.js";
 import { AsyncObservable, Observable } from "../../../../src/util/Observable.js";
 import { MaybePromise } from "../../../../src/util/Promises.js";
 
@@ -346,6 +347,214 @@ describe("Datasource", () => {
             expect(changed).true;
 
             await expect(result).eventually.deep.equal(["BAR", "bar", actualContext]);
+        });
+    });
+
+    describe("subfield events", () => {
+        const Schema = new DatatypeModel({
+            name: "StateWithSubfields",
+            type: "struct",
+            children: [
+                new FieldModel({
+                    name: "compound",
+                    type: "struct",
+                    children: [
+                        new FieldModel({
+                            name: "subfield",
+                            type: "int8",
+                        }),
+                        new FieldModel({
+                            name: "subfield2",
+                            type: "bool",
+                            conformance: "O",
+                        }),
+                    ],
+                }),
+
+                new FieldModel({
+                    name: "name",
+                    type: "string",
+                }),
+            ],
+        });
+
+        class Compound {
+            subfield: number = 0;
+            subfield2?: boolean;
+        }
+
+        class State {
+            compound = new Compound();
+            name = "Anonymous";
+        }
+
+        class Events {
+            compound$Changing = Observable<[Compound, Compound], MaybePromise>();
+            compound$Changed = Observable<[Compound, Compound], MaybePromise>();
+            name$Changing = Observable<[string, string], MaybePromise>();
+            name$Changed = Observable<[string, string], MaybePromise>();
+        }
+
+        type Result = { type: "changed" | "changing"; oldValue: Compound | string; newValue: Compound | string }[];
+
+        async function test({
+            setup,
+            start,
+            expected,
+        }: {
+            setup?: (events: Events, state: State) => void;
+            start?: (state: State) => void;
+            expected: Result;
+        }) {
+            const events = new Events();
+
+            const output = [] as Result;
+
+            if (!start) {
+                start = state => {
+                    state.compound.subfield = 1;
+                };
+            }
+
+            await withDatasourceAndReference(
+                {
+                    type: State,
+                    supervisor: new RootSupervisor(Schema, State),
+                    events: events as unknown as Datasource.Events,
+                },
+                ({ state }) => {
+                    events.compound$Changing.on((newValue, oldValue) => {
+                        output.push({ type: "changing", newValue: { ...newValue }, oldValue: { ...oldValue } });
+                    });
+
+                    events.compound$Changed.on((newValue, oldValue) => {
+                        output.push({ type: "changed", newValue: { ...newValue }, oldValue: { ...oldValue } });
+                    });
+
+                    events.name$Changing.on((newValue, oldValue) => {
+                        output.push({ type: "changing", newValue, oldValue });
+                    });
+
+                    events.name$Changed.on((newValue, oldValue) => {
+                        output.push({ type: "changed", newValue, oldValue });
+                    });
+
+                    setup?.(events, state);
+                    start(state);
+                },
+            );
+
+            expect(output).deep.equals(expected);
+        }
+
+        it("trigger", async () => {
+            await test({
+                expected: [
+                    {
+                        type: "changing",
+                        newValue: { subfield: 1 },
+                        oldValue: { subfield: 0 },
+                    },
+                    {
+                        type: "changed",
+                        newValue: { subfield: 1 },
+                        oldValue: { subfield: 0 },
+                    },
+                ],
+            });
+        });
+
+        it("trigger as secondary change from different field", async () => {
+            await test({
+                setup(events, state) {
+                    events.name$Changing.on(() => {
+                        state.compound.subfield = 1;
+                    });
+                },
+
+                start(state) {
+                    state.name = "Fred";
+                },
+
+                expected: [
+                    {
+                        type: "changing",
+                        newValue: "Fred",
+                        oldValue: "Anonymous",
+                    },
+                    {
+                        type: "changing",
+                        newValue: { subfield: 1 },
+                        oldValue: { subfield: 0 },
+                    },
+                    {
+                        type: "changed",
+                        newValue: { subfield: 1 },
+                        oldValue: { subfield: 0 },
+                    },
+                    {
+                        type: "changed",
+                        newValue: "Fred",
+                        oldValue: "Anonymous",
+                    },
+                ],
+            });
+        });
+
+        it("trigger from second change to same subfield", async () => {
+            await test({
+                setup(events, state) {
+                    events.compound$Changing.on(() => {
+                        state.compound.subfield = 2;
+                    });
+                },
+
+                expected: [
+                    {
+                        type: "changing",
+                        newValue: { subfield: 1 },
+                        oldValue: { subfield: 0 },
+                    },
+                    {
+                        type: "changing",
+                        newValue: { subfield: 2 },
+                        oldValue: { subfield: 1 },
+                    },
+                    {
+                        type: "changed",
+                        newValue: { subfield: 2 },
+                        oldValue: { subfield: 0 },
+                    },
+                ],
+            });
+        });
+
+        it("trigger from second change on different subfield", async () => {
+            await test({
+                setup(events, state) {
+                    events.compound$Changing.on(() => {
+                        state.compound.subfield2 = true;
+                    });
+                },
+
+                expected: [
+                    {
+                        type: "changing",
+                        newValue: { subfield: 1 },
+                        oldValue: { subfield: 0 },
+                    },
+                    {
+                        type: "changing",
+                        newValue: { subfield: 1, subfield2: true },
+                        oldValue: { subfield: 1 },
+                    },
+                    {
+                        type: "changed",
+                        newValue: { subfield: 1, subfield2: true },
+                        oldValue: { subfield: 0 },
+                    },
+                ],
+            });
         });
     });
 });

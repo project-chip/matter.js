@@ -494,9 +494,9 @@ function createSessionContext(resource: Resource, internals: Internals, session:
         }
 
         for (const name in values) {
-            const oldval = internals.values[name];
             const newval = values[name];
-            if (oldval !== newval && !isDeepEqual(values[name], internals.values[name])) {
+            const oldval = internals.values[name];
+            if (oldval !== newval && !isDeepEqual(newval, oldval)) {
                 if (!changes) {
                     changes = { notifications: [] };
                 }
