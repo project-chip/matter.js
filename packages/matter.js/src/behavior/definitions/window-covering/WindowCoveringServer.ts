@@ -237,20 +237,20 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
     /** Update the operational state when the target lift position changes. */
     #handleLiftTargetPositionChanging(percent100ths: number | null) {
         if (this.features.positionAwareLift) {
-            this.state.operationalStatus = {
-                ...this.state.operationalStatus,
-                lift: this.#computeOperationalState(percent100ths, this.state.currentPositionLiftPercent100ths),
-            };
+            this.state.operationalStatus.lift = this.#computeOperationalState(
+                percent100ths,
+                this.state.currentPositionLiftPercent100ths,
+            );
         }
     }
 
     /** Update the operational state when the target tilt position changes. */
     #handleTiltTargetPositionChanging(percent100ths: number | null) {
         if (this.features.positionAwareTilt) {
-            this.state.operationalStatus = {
-                ...this.state.operationalStatus,
-                tilt: this.#computeOperationalState(percent100ths, this.state.currentPositionTiltPercent100ths),
-            };
+            this.state.operationalStatus.tilt = this.#computeOperationalState(
+                percent100ths,
+                this.state.currentPositionTiltPercent100ths,
+            );
         }
     }
 

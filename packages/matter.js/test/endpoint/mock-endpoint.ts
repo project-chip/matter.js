@@ -1,6 +1,8 @@
 import { Behavior } from "../../src/behavior/Behavior.js";
+import { InternalError } from "../../src/common/MatterError.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
+import { Observer } from "../../src/util/Observable.js";
 import { MockEndpointType } from "../behavior/mock-behavior.js";
 import { MockServerNode } from "../node/mock-server-node.js";
 
@@ -55,6 +57,27 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
     override async close() {
         activeParts.delete(this);
         await super.close();
+    }
+
+    captureEvents<T extends Behavior.Type>(type: T, options?: { names?: Array<keyof InstanceType<T["Events"]>> }) {
+        const events = this.events[type.id];
+        if (events === undefined) {
+            throw new InternalError(`Events unavailable for behavior ${type.id}`);
+        }
+
+        const capturedEvents = Array<{ name: string; newValue: unknown; oldValue: unknown }>();
+
+        const names = options?.names ?? Object.keys(events);
+        for (const name of names) {
+            const event = events[name as keyof typeof events] as { on?: (observer: Observer) => void };
+            if (event.on) {
+                event.on((newValue, oldValue) => {
+                    capturedEvents.push({ name: name as string, oldValue, newValue });
+                });
+            }
+        }
+
+        return capturedEvents;
     }
 
     static create<const T extends EndpointType>(definition: T | Endpoint.Configuration<T>): Promise<MockEndpoint<T>>;
