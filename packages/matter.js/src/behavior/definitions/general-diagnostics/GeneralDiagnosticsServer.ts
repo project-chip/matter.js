@@ -40,6 +40,9 @@ export class GeneralDiagnosticsServer extends GeneralDiagnosticsBehavior {
     }
 
     #online() {
-        this.events.bootReason.emit({ bootReason: GeneralDiagnostics.BootReason.Unspecified }, this.context);
+        this.events.bootReason.emit(
+            { bootReason: this.state.bootReason ?? GeneralDiagnostics.BootReason.Unspecified },
+            this.context,
+        );
     }
 }
