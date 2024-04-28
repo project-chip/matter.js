@@ -10,7 +10,6 @@ import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/f
 import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
 import { IlluminanceMeasurementServer } from "@project-chip/matter.js/behavior/definitions/illuminance-measurement";
 import { LocalizationConfigurationServer } from "@project-chip/matter.js/behavior/definitions/localization-configuration";
-import { LowPowerServer } from "@project-chip/matter.js/behavior/definitions/low-power";
 import { ModeSelectServer } from "@project-chip/matter.js/behavior/definitions/mode-select";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
@@ -207,7 +206,6 @@ export class AllClustersTestInstance implements TestInstance {
                     LevelControl.Feature.Lighting,
                     LevelControl.Feature.Frequency,
                 ),
-                LowPowerServer,
                 ModeSelectServer.with(ModeSelect.Feature.OnOff),
                 OccupancySensingServer,
                 PowerSourceServer.with(PowerSource.Feature.Battery),
