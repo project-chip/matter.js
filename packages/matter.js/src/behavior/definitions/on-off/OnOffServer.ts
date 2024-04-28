@@ -5,8 +5,11 @@
  */
 
 import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
+import { GeneralDiagnostics } from "../../../cluster/definitions/index.js";
+import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { MaybePromise } from "../../../util/Promises.js";
+import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffBehavior } from "./OnOffBehavior.js";
 import { OnWithTimedOffRequest } from "./OnOffInterface.js";
 
@@ -24,8 +27,10 @@ export class OnOffServer extends Base {
     protected declare internal: OnOffServer.Internal;
 
     override initialize() {
-        if (this.features.levelControlForLighting) {
-            // TODO Only do this if it was not a "OTA upgrade reboot" case
+        if (
+            this.features.levelControlForLighting &&
+            this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted
+        ) {
             const startUpOnOffValue = this.state.startUpOnOff ?? null;
             const currentOnOffStatus = this.state.onOff;
             if (startUpOnOffValue !== null) {
@@ -180,6 +185,13 @@ export class OnOffServer extends Base {
             this.internal.delayedOffTimer?.stop(); // Delayed off ended
         }
         this.state.offWaitTime = time;
+    }
+
+    #getBootReason() {
+        const rootEndpoint = this.endpoint.ownerOfType(RootEndpoint);
+        if (rootEndpoint !== undefined && rootEndpoint.behaviors.has(GeneralDiagnosticsBehavior)) {
+            return rootEndpoint.stateOf(GeneralDiagnosticsBehavior).bootReason;
+        }
     }
 }
 

@@ -4,11 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
+import { Observable } from "../../../util/Observable.js";
 import { LowPowerBehavior } from "./LowPowerBehavior.js";
 
 /**
  * This is the default server implementation of {@link LowPowerBehavior}.
  */
-export class LowPowerServer extends LowPowerBehavior {}
+export class LowPowerServer extends LowPowerBehavior {
+    declare events: LowPowerServer.Events;
+
+    override sleep() {
+        this.events.enterLowPowerMode.emit();
+    }
+}
+
+export namespace LowPowerServer {
+    export class Events extends LowPowerBehavior.Events {
+        enterLowPowerMode = Observable();
+    }
+}

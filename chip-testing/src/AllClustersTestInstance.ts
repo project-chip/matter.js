@@ -10,6 +10,7 @@ import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/f
 import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
 import { IlluminanceMeasurementServer } from "@project-chip/matter.js/behavior/definitions/illuminance-measurement";
 import { LocalizationConfigurationServer } from "@project-chip/matter.js/behavior/definitions/localization-configuration";
+import { ModeSelectServer } from "@project-chip/matter.js/behavior/definitions/mode-select";
 import { NetworkCommissioningServer } from "@project-chip/matter.js/behavior/definitions/network-commissioning";
 import { OccupancySensingServer } from "@project-chip/matter.js/behavior/definitions/occupancy-sensing";
 import { PowerSourceServer } from "@project-chip/matter.js/behavior/definitions/power-source";
@@ -26,6 +27,7 @@ import {
     AdministratorCommissioning,
     BasicInformation,
     LevelControl,
+    ModeSelect,
     NetworkCommissioning,
     OccupancySensing,
     PowerSource,
@@ -204,6 +206,7 @@ export class AllClustersTestInstance implements TestInstance {
                     LevelControl.Feature.Lighting,
                     LevelControl.Feature.Frequency,
                 ),
+                ModeSelectServer.with(ModeSelect.Feature.OnOff),
                 OccupancySensingServer,
                 PowerSourceServer.with(PowerSource.Feature.Battery),
                 PressureMeasurementServer,
@@ -253,6 +256,18 @@ export class AllClustersTestInstance implements TestInstance {
                     minFrequency: 50,
                     maxFrequency: 60,
                     managedTransitionTimeHandling: true, // enable transition management
+                },
+                modeSelect: {
+                    description: "ModeSelect",
+                    standardNamespace: null,
+                    supportedModes: [
+                        { label: "Black", mode: 0, semanticTags: [{ mfgCode: 0, value: 0 }] },
+                        { label: "Cappuccino", mode: 4, semanticTags: [{ mfgCode: 0, value: 0 }] },
+                        { label: "Espresso", mode: 7, semanticTags: [{ mfgCode: 0, value: 0 }] },
+                    ],
+                    currentMode: 0,
+                    startUpMode: 4,
+                    onMode: 7,
                 },
                 occupancySensing: {
                     occupancySensorType: OccupancySensing.OccupancySensorType.Pir,

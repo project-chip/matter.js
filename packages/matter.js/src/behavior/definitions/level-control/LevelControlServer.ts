@@ -5,11 +5,14 @@
  */
 
 import { LevelControl } from "../../../cluster/definitions/LevelControlCluster.js";
+import { GeneralDiagnostics } from "../../../cluster/definitions/index.js";
+import { RootEndpoint } from "../../../endpoint/definitions/system/RootEndpoint.js";
 import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { MaybePromise } from "../../../util/Promises.js";
+import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffServer } from "../on-off/OnOffServer.js";
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
 import {
@@ -100,23 +103,24 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
                 );
             }
 
-            // TODO Only do this if it was not a "OTA upgrade reboot" case, no way right now to distinguish
-            const startUpLevelValue = this.state.startUpCurrentLevel ?? null;
-            const currentLevelValue = this.state.currentLevel;
-            let targetLevelValue: number | null;
-            switch (startUpLevelValue) {
-                case 0:
-                    targetLevelValue = this.minLevel;
-                    break;
-                case null:
-                    targetLevelValue = currentLevelValue;
-                    break;
-                default:
-                    targetLevelValue = startUpLevelValue;
-                    break;
-            }
-            if (targetLevelValue !== currentLevelValue) {
-                this.state.currentLevel = targetLevelValue;
+            if (this.#getBootReason() !== GeneralDiagnostics.BootReason.SoftwareUpdateCompleted) {
+                const startUpLevelValue = this.state.startUpCurrentLevel ?? null;
+                const currentLevelValue = this.state.currentLevel;
+                let targetLevelValue: number | null;
+                switch (startUpLevelValue) {
+                    case 0:
+                        targetLevelValue = this.minLevel;
+                        break;
+                    case null:
+                        targetLevelValue = currentLevelValue;
+                        break;
+                    default:
+                        targetLevelValue = startUpLevelValue;
+                        break;
+                }
+                if (targetLevelValue !== currentLevelValue) {
+                    this.state.currentLevel = targetLevelValue;
+                }
             }
         }
 
@@ -499,6 +503,13 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             } else {
                 this.setRemainingTime(Math.floor(Math.ceil((newLevel - this.minLevel) / changeRate) * 10));
             }
+        }
+    }
+
+    #getBootReason() {
+        const rootEndpoint = this.endpoint.ownerOfType(RootEndpoint);
+        if (rootEndpoint !== undefined && rootEndpoint.behaviors.has(GeneralDiagnosticsBehavior)) {
+            return rootEndpoint.stateOf(GeneralDiagnosticsBehavior).bootReason;
         }
     }
 
