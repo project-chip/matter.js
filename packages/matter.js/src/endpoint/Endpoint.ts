@@ -108,6 +108,19 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
+     * Search for the owner of a specific type.
+     *
+     * Returns undefined if this owner is not found on the way up to the root endpoint.
+     */
+    ownerOfType<T extends EndpointType.Empty>(type: T): Endpoint<T> | undefined {
+        for (let endpoint: Endpoint | undefined = this; endpoint !== undefined; endpoint = endpoint.owner) {
+            if (endpoint.type.deviceClass === type.deviceClass) {
+                return endpoint as Endpoint<T>;
+            }
+        }
+    }
+
+    /**
      * The endpoint's environment.  Endpoint implementations use the environment to access platform components such as
      * storage and network components.
      */
