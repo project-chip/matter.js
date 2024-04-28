@@ -1,4 +1,7 @@
-# Matter.js Development API Overview
+# Matter.js Development Legacy-API Overview
+
+[!NOTE]
+This is a legacy API overview for the API used before 0.8.x. With 0.8.x a completely new API was introduced for the Device development.
 
 Until we have a proper generated API doc this file should summarize the basic API concept of matter.js.
 
