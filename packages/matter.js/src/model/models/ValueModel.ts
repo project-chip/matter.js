@@ -220,7 +220,7 @@ export abstract class ValueModel extends Model implements ValueElement {
     /**
      * Is this model deprecated?
      */
-    get deprecated() {
+    get isDeprecated() {
         return this.effectiveConformance.type === Conformance.Flag.Deprecated;
     }
 

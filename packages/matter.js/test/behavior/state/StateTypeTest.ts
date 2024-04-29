@@ -6,7 +6,7 @@
 
 import { DerivedState, EmptyState, StateType } from "../../../src/behavior/state/StateType.js";
 
-describe("State", () => {
+describe("StateType", () => {
     describe("EmptyState", () => {
         it("satisfies StateType", () => {
             EmptyState satisfies StateType;

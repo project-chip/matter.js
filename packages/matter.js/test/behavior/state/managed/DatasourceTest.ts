@@ -419,7 +419,7 @@ describe("Datasource", () => {
             await withDatasourceAndReference(
                 {
                     type: State,
-                    supervisor: new RootSupervisor(Schema, State),
+                    supervisor: new RootSupervisor(Schema),
                     events: events as unknown as Datasource.Events,
                 },
                 ({ state }) => {

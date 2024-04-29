@@ -263,10 +263,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                 this.state.operationalStatus.lift !== WindowCovering.MovementStatus.Stopped &&
                 percent100ths === this.state.targetPositionLiftPercent100ths
             ) {
-                this.state.operationalStatus = {
-                    ...this.state.operationalStatus,
-                    lift: WindowCovering.MovementStatus.Stopped,
-                };
+                this.state.operationalStatus.lift = WindowCovering.MovementStatus.Stopped;
                 logger.debug("Lift movement stopped, target value reached");
             }
         }
@@ -287,10 +284,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                 this.state.operationalStatus.tilt !== WindowCovering.MovementStatus.Stopped &&
                 percent100ths === this.state.targetPositionTiltPercent100ths
             ) {
-                this.state.operationalStatus = {
-                    ...this.state.operationalStatus,
-                    tilt: WindowCovering.MovementStatus.Stopped,
-                };
+                this.state.operationalStatus.tilt = WindowCovering.MovementStatus.Stopped;
                 logger.debug("Tilt movement stopped, target value reached");
             }
         }
@@ -426,13 +420,10 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                             : MovementDirection.Open;
                 }
                 if (direction !== MovementDirection.DefinedByPosition) {
-                    this.state.operationalStatus = {
-                        ...this.state.operationalStatus,
-                        lift:
-                            direction === MovementDirection.Close
-                                ? WindowCovering.MovementStatus.Closing
-                                : WindowCovering.MovementStatus.Opening,
-                    };
+                    this.state.operationalStatus.lift =
+                        direction === MovementDirection.Close
+                            ? WindowCovering.MovementStatus.Closing
+                            : WindowCovering.MovementStatus.Opening;
                 }
                 break;
             case MovementType.Tilt:
@@ -449,13 +440,10 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                             : MovementDirection.Open;
                 }
                 if (direction !== MovementDirection.DefinedByPosition) {
-                    this.state.operationalStatus = {
-                        ...this.state.operationalStatus,
-                        tilt:
-                            direction === MovementDirection.Close
-                                ? WindowCovering.MovementStatus.Closing
-                                : WindowCovering.MovementStatus.Opening,
-                    };
+                    this.state.operationalStatus.tilt =
+                        direction === MovementDirection.Close
+                            ? WindowCovering.MovementStatus.Closing
+                            : WindowCovering.MovementStatus.Opening;
                 }
                 break;
         }

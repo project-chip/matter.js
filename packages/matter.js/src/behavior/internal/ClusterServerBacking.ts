@@ -297,7 +297,7 @@ function createAttributeAccessors(
                 trace.input = value;
             }
 
-            const state = behavior.state as Record<string, any>;
+            const state = behavior.state as Val.Struct;
 
             state[name] = value;
 

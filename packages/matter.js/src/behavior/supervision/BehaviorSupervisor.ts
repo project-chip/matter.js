@@ -76,7 +76,7 @@ export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSup
         });
     }
 
-    return new RootSupervisor(schema, options.State);
+    return new RootSupervisor(schema);
 }
 
 export namespace BehaviorSupervisor {

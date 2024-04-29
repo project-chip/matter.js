@@ -29,8 +29,8 @@ export function convertJsonDataWithModel(model: ValueModel, data: any): any {
         case "integer":
             if (typeof data === "string") {
                 if (definingModel.metabase?.byteSize !== undefined && definingModel.metabase.byteSize > 6) {
-                    // If we have an integer with byteSize > 6 and a string value, we need to convert the string to a BigInt
-                    // also handles 0x prefixed hex strings
+                    // If we have an integer with byteSize > 6 and a string value, we need to convert the string to a
+                    // BigInt also handles 0x prefixed hex strings
                     return BigInt(data);
                 } else if (data.startsWith("0x")) {
                     // Else if hex string convert to number

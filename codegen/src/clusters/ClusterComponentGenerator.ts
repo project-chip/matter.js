@@ -210,7 +210,7 @@ export class ClusterComponentGenerator {
         target: Block,
         define: (model: InstanceType<T>, add: (factory: string) => Block) => void,
     ) {
-        const typed = elements.filter(e => e instanceof type && !e.deprecated);
+        const typed = elements.filter(e => e instanceof type && !e.isDeprecated);
 
         const definitions = target.expressions(`${type.Tag}s: {`, "}");
         for (const model of typed) {
