@@ -10,7 +10,7 @@ import { MockEndpoint } from "../../../endpoint/mock-endpoint.js";
 
 async function createTiltBlindLift() {
     return MockEndpoint.createWith(
-        WindowCoveringServer.with("Lift", "Tilt").set({ type: WindowCovering.WindowCoveringType.TiltBlindLift }),
+        WindowCoveringServer.with("Lift", "Tilt", "PositionAwareLift", "PositionAwareTilt").set({ type: WindowCovering.WindowCoveringType.TiltBlindLift }),
     );
 }
 
