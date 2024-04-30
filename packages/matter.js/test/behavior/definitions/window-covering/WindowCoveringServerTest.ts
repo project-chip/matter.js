@@ -79,18 +79,18 @@ describe("WindowCoveringServer", () => {
                 newValue: { lift: 1, tilt: 1, global: 1 },
             },
             {
-                name: "operationalStatus$Changed",
+                name: "operationalStatus$Changing",
                 oldValue: { lift: 1, tilt: 1, global: 1 },
                 newValue: { lift: 0, tilt: 0, global: 0 },
             },
             {
                 name: "operationalStatus$Changing",
-                oldValue: { lift: 1, tilt: 1, global: 1 },
+                oldValue: { lift: 0, tilt: 0, global: 1 },
                 newValue: { global: 0, lift: 0, tilt: 0 },
             },
             {
-                name: "operationalStatus$Changing",
-                oldValue: { lift: 0, tilt: 0, global: 1 },
+                name: "operationalStatus$Changed",
+                oldValue: { lift: 1, tilt: 1, global: 1 },
                 newValue: { global: 0, lift: 0, tilt: 0 },
             },
         ]);

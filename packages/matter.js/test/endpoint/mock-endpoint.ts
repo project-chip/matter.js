@@ -2,6 +2,7 @@ import { Behavior } from "../../src/behavior/Behavior.js";
 import { InternalError } from "../../src/common/MatterError.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
+import { deepCopy } from "../../src/util/DeepCopy.js";
 import { Observer } from "../../src/util/Observable.js";
 import { MockEndpointType } from "../behavior/mock-behavior.js";
 import { MockServerNode } from "../node/mock-server-node.js";
@@ -72,7 +73,11 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
             const event = events[name as keyof typeof events] as { on?: (observer: Observer) => void };
             if (event.on) {
                 event.on((newValue, oldValue) => {
-                    capturedEvents.push({ name: name as string, oldValue, newValue });
+                    capturedEvents.push({
+                        name: name as string,
+                        oldValue: deepCopy(oldValue),
+                        newValue: deepCopy(newValue),
+                    });
                 });
             }
         }
