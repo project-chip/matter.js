@@ -94,10 +94,14 @@ function configureRuntime(env: Environment) {
 
 function configureStorage(env: Environment) {
     const service = env.get(StorageService);
-    const location = env.vars.get("storage.path", env.vars.get("path.root", "."));
-    service.location = location;
+
+    env.vars.use(() => {
+        const location = env.vars.get("storage.path", env.vars.get("path.root", "."));
+        service.location = location;
+    });
+
     service.factory = namespace =>
-        new StorageBackendDisk(resolve(location, namespace), env.vars.get("storage.clear", false));
+        new StorageBackendDisk(resolve(service.location ?? ".", namespace), env.vars.get("storage.clear", false));
 }
 
 function configureNetwork(env: Environment) {
