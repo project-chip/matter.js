@@ -422,6 +422,7 @@ describe("Datasource", () => {
                     supervisor: new RootSupervisor(Schema),
                     events: events as unknown as Datasource.Events,
                 },
+
                 ({ state }) => {
                     events.compound$Changing.on((newValue, oldValue) => {
                         output.push({ type: "changing", newValue: { ...newValue }, oldValue: { ...oldValue } });
@@ -452,7 +453,7 @@ describe("Datasource", () => {
                 expected: [
                     {
                         type: "changing",
-                        newValue: { subfield: 1 },
+                        newValue: { subfield: 1, subfield2: undefined },
                         oldValue: { subfield: 0 },
                     },
                     {
@@ -484,7 +485,7 @@ describe("Datasource", () => {
                     },
                     {
                         type: "changing",
-                        newValue: { subfield: 1 },
+                        newValue: { subfield: 1, subfield2: undefined },
                         oldValue: { subfield: 0 },
                     },
                     {
@@ -512,12 +513,12 @@ describe("Datasource", () => {
                 expected: [
                     {
                         type: "changing",
-                        newValue: { subfield: 1 },
+                        newValue: { subfield: 1, subfield2: undefined },
                         oldValue: { subfield: 0 },
                     },
                     {
                         type: "changing",
-                        newValue: { subfield: 2 },
+                        newValue: { subfield: 2, subfield2: undefined },
                         oldValue: { subfield: 1 },
                     },
                     {
@@ -540,7 +541,7 @@ describe("Datasource", () => {
                 expected: [
                     {
                         type: "changing",
-                        newValue: { subfield: 1 },
+                        newValue: { subfield: 1, subfield2: undefined },
                         oldValue: { subfield: 0 },
                     },
                     {
@@ -552,6 +553,185 @@ describe("Datasource", () => {
                         type: "changed",
                         newValue: { subfield: 1, subfield2: true },
                         oldValue: { subfield: 0 },
+                    },
+                ],
+            });
+        });
+    });
+
+    describe("bitfield events", () => {
+        const Schema = new DatatypeModel({
+            name: "StateWithBitmap",
+            type: "struct",
+            children: [
+                new FieldModel({
+                    name: "bits",
+                    type: "map8",
+                    children: [
+                        new FieldModel({
+                            name: "flag",
+                            constraint: "0",
+                        }),
+                        new FieldModel({
+                            name: "field",
+                            constraint: "1 to 3",
+                        }),
+                    ],
+                }),
+            ],
+        });
+
+        interface Bits {
+            flag: boolean;
+            field?: number;
+        }
+
+        class State {
+            bits: Bits = {
+                flag: false,
+            };
+        }
+
+        class Events {
+            bits$Changing = Observable<[Bits, Bits], MaybePromise>();
+            bits$Changed = Observable<[Bits, Bits], MaybePromise>();
+        }
+
+        type Result = { type: "changed" | "changing"; oldValue: Bits; newValue: Bits }[];
+
+        async function test({
+            setup,
+            start,
+            expected,
+        }: {
+            setup?: (events: Events, state: State) => void;
+            start?: (state: State) => void;
+            expected: Result;
+        }) {
+            const events = new Events();
+
+            const output = [] as Result;
+
+            if (!start) {
+                start = state => {
+                    state.bits.flag = true;
+                };
+            }
+
+            await withDatasourceAndReference(
+                {
+                    type: State,
+                    supervisor: new RootSupervisor(Schema),
+                    events: events as unknown as Datasource.Events,
+                },
+
+                ({ state }) => {
+                    events.bits$Changing.on((newValue, oldValue) => {
+                        output.push({ type: "changing", newValue: { ...newValue }, oldValue: { ...oldValue } });
+                    });
+
+                    events.bits$Changed.on((newValue, oldValue) => {
+                        output.push({ type: "changed", newValue: { ...newValue }, oldValue: { ...oldValue } });
+                    });
+
+                    setup?.(events, state);
+                    start(state);
+                },
+            );
+
+            expect(output).deep.equals(expected);
+        }
+
+        it("trigger on flag", async () => {
+            await test({
+                expected: [
+                    {
+                        type: "changing",
+                        newValue: { flag: true, field: undefined },
+                        oldValue: { flag: false },
+                    },
+                    {
+                        type: "changed",
+                        newValue: { flag: true },
+                        oldValue: { flag: false },
+                    },
+                ],
+            });
+        });
+
+        it("trigger on bitfield", async () => {
+            await test({
+                start(state) {
+                    state.bits.field = 1;
+                },
+
+                expected: [
+                    {
+                        type: "changing",
+                        newValue: { flag: false, field: 1 },
+                        oldValue: { flag: false },
+                    },
+                    {
+                        type: "changed",
+                        newValue: { flag: false, field: 1 },
+                        oldValue: { flag: false },
+                    },
+                ],
+            });
+        });
+
+        it("trigger on bitfield in response to flag events", async () => {
+            await test({
+                setup(events, state) {
+                    events.bits$Changing.on(() => {
+                        switch (state.bits.field) {
+                            case undefined:
+                                state.bits.field = 1;
+                                break;
+
+                            case 2:
+                                state.bits.field = 3;
+                                break;
+                        }
+                    });
+
+                    events.bits$Changed.on(() => {
+                        if (state.bits.field === 1) {
+                            state.bits.field = 2;
+                        }
+                    });
+                },
+
+                expected: [
+                    {
+                        type: "changing",
+                        newValue: { flag: true, field: undefined },
+                        oldValue: { flag: false },
+                    },
+                    {
+                        type: "changing",
+                        newValue: { flag: true, field: 1 },
+                        oldValue: { flag: true },
+                    },
+                    {
+                        type: "changed",
+                        newValue: { flag: true, field: 1 },
+                        oldValue: { flag: false },
+                    },
+                    {
+                        type: "changing",
+                        newValue: { flag: true, field: 2 },
+                        oldValue: { flag: true, field: 1 },
+                    },
+                    {
+                        type: "changing",
+                        newValue: { flag: true, field: 3 },
+                        oldValue: { flag: true, field: 2 },
+                    },
+                    {
+                        type: "changed",
+                        newValue: { flag: true, field: 3 },
+                        oldValue: { flag: true, field: 1 },
                     },
                 ],
             });

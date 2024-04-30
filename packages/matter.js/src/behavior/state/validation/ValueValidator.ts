@@ -162,6 +162,10 @@ function createBitmapValidator(schema: ValueModel): ValueSupervisor.Validate | u
             }
 
             const fieldValue = value[key];
+            if (fieldValue === undefined) {
+                continue;
+            }
+
             if (field.max === 1) {
                 assertBoolean(fieldValue, subpath);
             } else {

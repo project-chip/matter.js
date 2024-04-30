@@ -425,7 +425,9 @@ function createSessionContext(resource: Resource, internals: Internals, session:
         }
         precommitValues[name] = deepCopy(newValue);
 
-        return { newValue, oldValue };
+        // Since we are notifying of data in flight, pass the managed value for "newValue" so that we validate changes
+        // and subsequent listeners are updated
+        return { newValue: context.managed[name], oldValue };
     }
 
     /**

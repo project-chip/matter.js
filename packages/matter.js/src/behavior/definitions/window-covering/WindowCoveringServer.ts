@@ -67,33 +67,56 @@ const WC_PERCENT100THS_COEFFICIENT = 100;
  * This is the default server implementation of {@link WindowCoveringBehavior}.
  *
  * This implementation includes all features of {@link WindowCovering.Cluster} and implements all mandatory commands.
- * When the cluster is used with position awareness, the default logic will automatically sync the current positions and
- * also the operational state as soon as the currentPosition*Percent100ths attributes are set. This means that the
- * develop also needs to set the currentPosition*Percent100ths and the rest is managed automatically. When the targetPosition*Percent100ths attribute is set, then the operational state is automatically updated based on the current and target values.
- * You should use {@link WindowCoveringServer.with} to specialize the class for the features your implementation supports.
+ * You should use {@link WindowCoveringServer.with} to specialize the class for the features your implementation
+ * supports.
  *
- * This implementation ignores by default all normal move-times and sets the target percentages immediately.
+ * If you enable position awareness (positionAware* features), the default logic automatically syncs current positions
+ * and operational state when the currentPosition*Percent100ths attributes change. You should update
+ * currentPosition*Percent100ths with the actual position from your device.  This updates other attributes
+ * automatically.
  *
- * The default implementation introduces the following additional attributes:
- * * supportsCalibration: set to true if the device supports calibration. Then also {@link WindowCoveringServerLogic.executeCalibration} must be implemented, default: false
- * * supportsMaintenanceMode: set to false if the device does not support a maintenance mode, default: true
+ * When targetPosition*Percent100ths attributes change, operational state updates bases on the current and target
+ * values.
  *
- * If you develop for a specific hardware you should extend the {@link WindowCoveringServer} class and implement the
- * following methods to natively use device features to correctly support the movement. For this the default
- * implementation uses special protected methods which are used by the real commands and are only responsible for the
- * actual value change logic. The benefit of this structure is that basic data validations and options checks are
- * already done and you can focus on the actual hardware interaction:
- * * {@link WindowCoveringServerLogic.handleMovement} Logic to actually move the device. Via Parameters the movement type (Lift/Tilt), direction, target percentage and information if motor is configured reversed are provided. When the device moves the current Positions (if supported by the device) are updated with the movement. The operational state is automatically updated by the default implementation based on current and target values of the cluster state.
- * * {@link WindowCoveringServerLogic.handleStopMovement} Logic to stop any movement of the device. You can use the super.handleStopMovement() to set the target positions to the current positions or do this yourself.
- * * {@link WindowCoveringServerLogic.executeCalibration} If supported, override this method to implement the calibration process. The default implementation returns an error as defined when Calibration is not supported. When not supported you should also add a Changing event handler to the mode attribute to make sure calibration mode is not set (needs to throw an ConstraintError).
+ * If you do not override {@link handleMovement} the default implementation updates current position to the target
+ * position immediately.
+ *
+ * In addition to Matter attributes, {@link WindowCoveringServerLogic.State} includes the following configuration
+ * properties:
+ *
+ *   * supportsCalibration (default false): Set to true if the device supports calibration. You must implement
+ *     {@link WindowCoveringServerLogic.executeCalibration} to perform actual calibration.
+ *
+ *   * supportsMaintenanceMode (default true): Set to false if the device has no maintenance mode
+ *
+ * When developing for specific hardware you should extend {@link WindowCoveringServer} and implement the following
+ * methods to map movement to your device. The default implementation maps Matter commands to these methods. The benefit
+ * of this structure is that basic data validations and option checks are already done and you can focus on the actual
+ * hardware interaction:
+ *
+ *   * {@link WindowCoveringServerLogic.handleMovement} Logic to actually move the device. Via Parameters the movement
+ *     type (Lift/Tilt), direction, target percentage and information if motor is configured reversed are provided. When
+ *     the device moves the current Positions (if supported by the device) are updated with the movement. The
+ *     operational state is automatically updated by the default implementation based on current and target values of
+ *     the cluster state.
+ *
+ *   * {@link WindowCoveringServerLogic.handleStopMovement} Logic to stop any movement of the device. You can use the
+ *     super.handleStopMovement() to set the target positions to the current positions or do this yourself.
+ *
+ *   * {@link WindowCoveringServerLogic.executeCalibration} If supported, override this method to implement the
+ *     calibration process. The default implementation returns an error to indicate calibration is unsupported. If
+ *     unsupported you should also add a Changing event handler to the mode attribute to ensure calibration mode is not
+ *     set (needs to throw an ConstraintError).
  *
  * IMPORTANT NOTE:
+ *
  * This default implementation could have pitfalls when the calibration process and/or movement is handled via long
  * running promises. There could be edge cases not correctly handled by the current implementation when it comes to long
  * running movements or calibration processes - especially when these processes are long running async JS operations.
- * Also a movement coming in while another movement is still running is assumned to be handled by the device and not
- * expected on cluster side. If you have such cases please provide feedback and we can discuss how to improve the
- * default implementation.
+ *
+ * A movement coming in while another movement is still running is assumed to be handled by the device. It is not
+ * handled here. If this causes you trouble please provide feedback and we can discuss how to improve the default
+ * implementation.
  */
 export class WindowCoveringServerLogic extends WindowCoveringServerBase {
     protected declare internal: WindowCoveringServerLogic.Internal;
@@ -222,7 +245,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
     #handleOperationalStatusChanging(
         operationalStatus: TypeFromPartialBitSchema<typeof WindowCovering.OperationalStatus>,
     ) {
-        // Global Always follow Lift by priority or therefore fallback to Tilt
+        // Global tracks lift if moving otherwise it follows tilt
         const globalStatus =
             operationalStatus.lift !== WindowCovering.MovementStatus.Stopped
                 ? operationalStatus.lift
@@ -338,22 +361,25 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
     }
 
     /**
-     * This is the default implementation for a device that do not support calibration, so an error is returned when the
-     * calibration is requested. Override this method to implement an own calibration process if required.
+     * Calibrate the device.  The default implementation takes no action. Override to implement calibration if
+     * necessary.
+     *
      * @protected
      */
-    protected executeCalibration(): MaybePromise {
-        // We do nothing
-    }
+    protected executeCalibration(): MaybePromise {}
 
     /**
-     * This is the default implementation to actually "move" the device. It logs the movement and updates the current
-     * position based on the target position. Override this method to implement the actual movement of the device.
+     * Perform actual "movement".  Override to initiate movement of your device.
+     *
+     * The default implementation logs and immediately updates current position to the target positions.  This is
+     * probably not desirable for a real device so do not invoke `super.handleMovement()` from your implementation.
      *
      * @param type Which element should move, Lift or Tilt
      * @param reversed If the motor is configured reversed
      * @param direction The direction of the movement (Open, Close, DefinedByPosition)
-     * @param targetPercent100ths Optionally the target position in percent 100ths. It depends on the used feature set of the cluster if this is provided or not.
+     * @param targetPercent100ths Optionally the target position in percent 100ths. It depends on the used feature set
+     * of the cluster if this is provided or not.
+     *
      * @protected
      */
     protected async handleMovement(
@@ -371,6 +397,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                     this.state.currentPositionLiftPercent100ths = targetPercent100ths;
                 }
                 break;
+
             case MovementType.Tilt:
                 if (this.features.positionAwareTilt) {
                     if (targetPercent100ths === undefined) {
@@ -392,10 +419,11 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
     }
 
     /**
-     * Internal method to handle a movement. If calibration is supported and needed then executeCalibration() is executed
-     * before the actual movement. The method increases the numberOfActuations* attribute and updates the operational
-     * status. The actual movement is triggered by the handleMovement method as a worker. This means, that the response
-     * is sent in parallel to the actual movement.
+     * Handle a movement. If calibration is supported and needed then {@link executeCalibration} runs before the actual
+     * movement. The method increases the numberOfActuations* attribute and updates the operational status.
+     *
+     * Actual movement occurs in {@link handleMovement} as a worker. Thus this method returns before actual movement
+     * completes.
      */
     #prepareMovement(type: MovementType, direction: MovementDirection, targetPercent100ths?: number): void {
         if (this.state.supportsCalibration && this.internal.calibrationMode === CalibrationMode.Enabled) {
@@ -426,6 +454,7 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
                             : WindowCovering.MovementStatus.Opening;
                 }
                 break;
+
             case MovementType.Tilt:
                 this.state.numberOfActuationsTilt = (this.state.numberOfActuationsTilt ?? 0) + 1;
                 if (
@@ -471,10 +500,11 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
     }
 
     /**
-     * This is the default implementation to stop any movement of the device. It sets the target positions to the current
-     * positions and updates the operational state. Override this method to implement the actual stop movement logic.
-     * If you make sure your implementation sets the current positions correctly, you can use "super.handleStopMovement()"
-     * to re-use this default logic.
+     * Stop device movement.  Sets the target position to the current position and updates operational state. Override
+     * to implement the actual stop movement logic.
+     *
+     * If you update the current positions you can include the default logic via "super.handleStopMovement()".
+     *
      * @protected
      */
     protected handleStopMovement(): MaybePromise {

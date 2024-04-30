@@ -133,14 +133,16 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
             set(this: Wrapper, value: Val) {
                 const ref = this[Internal.reference];
 
-                assertBoolean(value, ref.location.path);
+                if (value !== undefined) {
+                    assertBoolean(value, ref.location.path);
+                }
 
                 ref.change(() => {
                     const bits = ref.value;
                     if (bits === undefined) {
                         throw new PhantomReferenceError(this[Internal.reference].location);
                     }
-                    bits[name] = value;
+                    bits[name] = !!value;
                 });
             },
         };
@@ -160,20 +162,22 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
         set(this: Wrapper, value: Val) {
             const ref = this[Internal.reference];
 
-            assertNumber(value, ref.location.path);
+            if (value !== undefined) {
+                assertNumber(value, ref.location.path);
 
-            if (value >= max) {
-                throw new ConstraintError(
-                    schema,
-                    this[Internal.reference].location,
-                    `Value ${value} is too large for bitfield`,
-                );
-            } else if (value < 0) {
-                throw new ConstraintError(
-                    schema,
-                    this[Internal.reference].location,
-                    `Illegal negative value ${value} for bitfield`,
-                );
+                if (value >= max) {
+                    throw new ConstraintError(
+                        schema,
+                        this[Internal.reference].location,
+                        `Value ${value} is too large for bitfield`,
+                    );
+                } else if (value < 0) {
+                    throw new ConstraintError(
+                        schema,
+                        this[Internal.reference].location,
+                        `Illegal negative value ${value} for bitfield`,
+                    );
+                }
             }
 
             ref.change(() => {
@@ -181,7 +185,7 @@ function configureProperty(name: string, maxBit: number, schema: ValueModel) {
                 if (bits === undefined) {
                     throw new PhantomReferenceError(this[Internal.reference].location);
                 }
-                bits[name] = value;
+                bits[name] = value ? value : 0;
             });
         },
     };
