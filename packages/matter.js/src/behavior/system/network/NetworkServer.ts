@@ -28,7 +28,6 @@ export class NetworkServer extends NetworkBehavior {
 
     override initialize() {
         if (this.state.ble === undefined) {
-            // TODO make working again when State init gets fixed!
             this.state.ble = Ble.enabled;
         } else if (this.state.ble && !Ble.enabled) {
             logger.warn("Disabling Bluetooth commissioning because BLE support is not installed");

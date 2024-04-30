@@ -674,7 +674,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
         const afterEndpointInitialized = () => {
             this.lifecycle.change(EndpointLifecycle.Change.Ready);
-            if (trace) {
+            if (trace && this.env.has(ActionTracer)) {
                 trace.path = this.path;
                 this.env.get(ActionTracer).record(trace);
             }

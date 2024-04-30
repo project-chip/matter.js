@@ -22,14 +22,21 @@ export class NodeJsActionTracer extends ActionTracer {
     }
 
     static configure(env: Environment) {
-        if (!env.vars.boolean("trace.enable")) {
-            return;
-        }
-        const path = resolve(env.vars.get("path.root", "."), env.vars.get("trace.path", "trace.jsonl"));
+        env.vars.use(() => {
+            if (env.has(ActionTracer)) {
+                env.delete(env.get(ActionTracer).constructor as new () => ActionTracer);
+            }
 
-        const tracer = new NodeJsActionTracer(path);
-        env.set(ActionTracer, tracer);
-        env.runtime.add(tracer);
+            if (!env.vars.boolean("trace.enable")) {
+                return;
+            }
+
+            const path = resolve(env.vars.get("path.root", "."), env.vars.get("trace.path", "trace.jsonl"));
+
+            const tracer = new NodeJsActionTracer(path);
+            env.set(ActionTracer, tracer);
+            env.runtime.add(tracer);
+        });
     }
 
     [Symbol.asyncDispose]() {

@@ -15,6 +15,8 @@ import { Environmental } from "./Environmental.js";
  */
 export class VariableService {
     #vars = {} as VariableService.Map;
+    #usageCollectors = Array<Set<string>>();
+    #usages = new Set<VariableService.Usage>();
 
     constructor(environment: Environment) {
         environment.set(VariableService, this);
@@ -32,11 +34,44 @@ export class VariableService {
         return this.#vars;
     }
 
+    /**
+     * Configure a component.
+     *
+     * Runs the supplied {@link configurator} immediately and whenever variables reference by the {@link configurator}
+     * change.
+     *
+     * To terminate reconfiguration invoke {@link VariableService.Usage.close} on the return value.
+     */
+    use(configurator: () => void): VariableService.Usage {
+        const variables = new Set<string>();
+        try {
+            this.#usageCollectors.push(variables);
+            configurator();
+        } finally {
+            this.#usageCollectors.pop();
+        }
+
+        const usage = {
+            variables,
+            configurator,
+            close: () => {
+                this.#usages.delete(usage);
+            },
+        };
+        this.#usages.add(usage);
+
+        return usage;
+    }
+
     get<T extends VariableService.Primitive>(name: string, fallback?: T): T;
 
     get<T>(name: string, fallback?: VariableService.Value): VariableService.Value | undefined;
 
     get(name: string, fallback?: VariableService.Value) {
+        for (const collector of this.#usageCollectors) {
+            collector.add(name);
+        }
+
         switch (typeof fallback) {
             case "string":
                 return this.string(name) ?? fallback;
@@ -75,7 +110,18 @@ export class VariableService {
             }
             parent = nextParent;
         }
+
+        if (parent[key] === value) {
+            return;
+        }
+
         parent[key] = value;
+
+        for (const usage of this.#usages) {
+            if (usage.variables.has(name)) {
+                usage.configurator();
+            }
+        }
     }
 
     string(name: string) {
@@ -138,7 +184,22 @@ export class VariableService {
     }
 
     addConfigStyle(vars: VariableService.Map) {
-        this.#vars = merge(this.#vars, vars);
+        const path = Array<string>();
+
+        const add = (vars: VariableService.Map) => {
+            for (const name in vars) {
+                const val = vars[name];
+                if (isObject(val)) {
+                    path.push(name);
+                    add(val);
+                    path.pop();
+                } else {
+                    this.set([...path, name].join("."), val);
+                }
+            }
+        };
+
+        add(vars);
     }
 
     addUnixEnvStyle(vars: Record<string, string | undefined>) {
@@ -174,6 +235,11 @@ export namespace VariableService {
     export type List = Value[];
     export type Primitive = number | string | boolean;
     export type Value = Primitive | Map | List;
+    export interface Usage {
+        variables: Set<string>;
+        configurator(): void;
+        close(): void;
+    }
 }
 
 function addVariable(into: Record<string, any>, path: string[], value: any) {
@@ -200,10 +266,10 @@ function parseUnixStyle(values: Record<string, string | undefined>) {
 
     for (const key in values) {
         if (key.startsWith("MATTER_")) {
-            if (variables[key] === undefined || variables[key] === "") {
+            if (values[key] === undefined || values[key] === "") {
                 continue;
             }
-            addVariable(variables, key.slice(7).toLowerCase().split("_"), variables[key]);
+            addVariable(variables, key.slice(7).toLowerCase().split("_"), values[key]);
         }
     }
 
@@ -237,22 +303,4 @@ function parseArgvStyle(values: string[]) {
     }
 
     return variables;
-}
-
-export function merge(a: VariableService.Map, b: VariableService.Map) {
-    const merged = { ...a };
-    for (const key in b) {
-        const aval = a[key];
-        const bval = b[key];
-        if (isObject(bval)) {
-            if (isObject(aval)) {
-                merged[key] = merge(aval, bval);
-            } else {
-                merged[key] = bval;
-            }
-        } else if (typeof aval !== "object") {
-            merged[key] = bval;
-        }
-    }
-    return merged;
 }
