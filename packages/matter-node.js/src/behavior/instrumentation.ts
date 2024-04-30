@@ -9,7 +9,7 @@ import { Instrumentation } from "@project-chip/matter.js/behavior/state/managed"
 import { inspect } from "util";
 
 /**
- * Node's default console formatting makes it difficult to view the value of manaaged collections.  This function
+ * Node's default console formatting makes it difficult to view the value of managed collections.  This function
  * instruments values to make inspection work more naturally.
  */
 export function installInspectionInstrumentation() {

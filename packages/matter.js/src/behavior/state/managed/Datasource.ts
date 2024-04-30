@@ -425,7 +425,9 @@ function createSessionContext(resource: Resource, internals: Internals, session:
         }
         precommitValues[name] = deepCopy(newValue);
 
-        return { newValue, oldValue };
+        // Since we are notifying of data in flight, pass the managed value for "newValue" so that we validate changes
+        // and subsequent listeners are updated
+        return { newValue: context.managed[name], oldValue };
     }
 
     /**
@@ -494,9 +496,9 @@ function createSessionContext(resource: Resource, internals: Internals, session:
         }
 
         for (const name in values) {
-            const oldval = internals.values[name];
             const newval = values[name];
-            if (oldval !== newval && !isDeepEqual(values[name], internals.values[name])) {
+            const oldval = internals.values[name];
+            if (oldval !== newval && !isDeepEqual(newval, oldval)) {
                 if (!changes) {
                     changes = { notifications: [] };
                 }

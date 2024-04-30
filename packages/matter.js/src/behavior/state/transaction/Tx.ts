@@ -304,7 +304,7 @@ class Tx implements Transaction {
         }
 
         // Perform the actual commit once preCommit completes
-        const finalizeCommit = () => {
+        const performCommit = () => {
             const participants = [...this.#participants];
             const result = this.#finalize(Status.CommittingPhaseOne, "committed", this.#executeCommit.bind(this));
             if (MaybePromise.is(result)) {
@@ -315,9 +315,9 @@ class Tx implements Transaction {
 
         const result = this.#executePreCommit();
         if (MaybePromise.is(result)) {
-            return result.then(finalizeCommit);
+            return result.then(performCommit);
         }
-        return finalizeCommit();
+        return performCommit();
     }
 
     rollback() {

@@ -95,7 +95,7 @@ export class DefaultValueGenerator {
             }
 
             const definition = model.bitDefinition(bit);
-            if (!definition || definition.deprecated) {
+            if (!definition || definition.isDeprecated) {
                 continue;
             }
 

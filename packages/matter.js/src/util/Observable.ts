@@ -446,6 +446,6 @@ export class ObservableProxy extends BasicObservable {
     }
 
     override emit(...payload: any[]): void | undefined {
-        this.#target.emit(...payload);
+        return this.#target.emit(...payload);
     }
 }

@@ -6,9 +6,10 @@
 
 import { ImplementationError } from "../../../../common/MatterError.js";
 import { FabricIndex } from "../../../../datatype/FabricIndex.js";
-import { Access, Metatype, ValueModel } from "../../../../model/index.js";
+import { Access, ElementTag, Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
+import { isObject } from "../../../../util/Type.js";
 import { AccessControl } from "../../../AccessControl.js";
 import { PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
@@ -26,14 +27,14 @@ const AUTHORIZE_READ = Symbol("authorize-read");
 /**
  * For structs we generate a class with accessors for each property in the schema.
  */
-export function StructManager(owner: RootSupervisor, schema: Schema, _managed?: new () => Val): ValueSupervisor.Manage {
+export function StructManager(owner: RootSupervisor, schema: Schema): ValueSupervisor.Manage {
     const instanceDescriptors = {} as PropertyDescriptorMap;
     const propertyAccessControls = {} as Record<string, AccessControl>;
     let hasFabricIndex = false;
 
     // Scan the schema and configure each member (field or attribute) as a property
     for (const member of schema.members) {
-        if (member.isGlobalAttribute || member.deprecated) {
+        if (member.isGlobalAttribute || member.isDeprecated) {
             continue;
         }
 
@@ -50,14 +51,11 @@ export function StructManager(owner: RootSupervisor, schema: Schema, _managed?: 
     }
 
     const Wrapper = GeneratedClass({
-        name: schema.effectiveType,
-
-        // Inheriting from managed class increases complexity with little benefit
-        // base: managed,
+        name: schema.tag === ElementTag.Cluster ? `${schema.name}$State` : `${schema.name}`,
 
         initialize(this: Wrapper, ref: Val.Reference, session: ValueSupervisor.Session) {
             // Only objects are acceptable
-            if (typeof ref.value !== "object" || Array.isArray(ref.value)) {
+            if (!isObject(ref.value)) {
                 throw new SchemaImplementationError(
                     ref.location,
                     `Cannot manage ${typeof ref.value} because it is not a struct`,
@@ -258,10 +256,26 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
     } else {
         // For collections we create a managed value
         let cloneContainer: (container: Val) => Val;
-        if (schema.effectiveMetatype === Metatype.array) {
-            cloneContainer = (container: Val) => [...(container as Val.List)];
-        } else {
-            cloneContainer = (container: Val) => ({ ...(container as Val.Struct) });
+        switch (schema.effectiveMetatype) {
+            case Metatype.array:
+                cloneContainer = (container: Val) => [...(container as Val.List)];
+                break;
+
+            case Metatype.bitmap:
+                cloneContainer = (container: Val) => {
+                    // Special case for bitmaps -- this only occurs when the manager takes control and converts from
+                    // a number to an object
+                    if (typeof container === "number" || typeof container === "bigint") {
+                        return {};
+                    }
+
+                    // Already an object
+                    return { ...(container as Val.Struct) };
+                };
+                break;
+
+            default:
+                cloneContainer = (container: Val) => ({ ...(container as Val.Struct) });
         }
 
         descriptor.get = function (this: Wrapper) {
