@@ -100,8 +100,6 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
     declare state: WindowCoveringServerLogic.State;
 
     override initialize() {
-        this.#assertTypeAttribute(); // TODO: Remove once Validation supports feature specific enums
-
         // Initialize Internal state from the Mode attribute and keep in sync
         this.internal.inMaintenanceMode = !!this.state.mode.maintenanceMode;
         this.internal.calibrationMode =
@@ -144,38 +142,6 @@ export class WindowCoveringServerLogic extends WindowCoveringServerBase {
 
         // Update the global operational status when lift or tilt status changes
         this.reactTo(this.events.operationalStatus$Changing, this.#handleOperationalStatusChanging);
-    }
-
-    /** Validates the Type attribute as long as the Validation does not support feature specific enums. */
-    #assertTypeAttribute() {
-        const allowedTypes = new Array<WindowCovering.WindowCoveringType>();
-        if (this.features.lift) {
-            if (this.features.tilt) {
-                allowedTypes.push(WindowCovering.WindowCoveringType.TiltBlindLift);
-            } else {
-                allowedTypes.push(
-                    WindowCovering.WindowCoveringType.Rollershade,
-                    WindowCovering.WindowCoveringType.Rollershade2Motor,
-                    WindowCovering.WindowCoveringType.RollershadeExterior,
-                    WindowCovering.WindowCoveringType.RollershadeExterior2Motor,
-                    WindowCovering.WindowCoveringType.Drapery,
-                    WindowCovering.WindowCoveringType.Awning,
-                    WindowCovering.WindowCoveringType.Shutter,
-                    WindowCovering.WindowCoveringType.ProjectorScreen,
-                );
-            }
-        }
-        if (this.features.tilt && !this.features.lift) {
-            allowedTypes.push(WindowCovering.WindowCoveringType.TiltBlindTiltOnly);
-        }
-        if (!allowedTypes.includes(this.state.type)) {
-            throw new ImplementationError(
-                `Unsupported type ${this.state.type} for features ${Logger.toJSON({
-                    lift: this.features.lift,
-                    tilt: this.features.tilt,
-                })}`,
-            );
-        }
     }
 
     /**
