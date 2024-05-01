@@ -66,19 +66,30 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
             throw new InternalError(`Events unavailable for behavior ${type.id}`);
         }
 
-        const capturedEvents = Array<{ name: string; newValue: unknown; oldValue: unknown }>();
+        const capturedEvents = Array<
+            { name: string } & ({ newValue: unknown; oldValue: unknown } | { value: unknown })
+        >();
 
         const names = options?.names ?? Object.keys(events);
         for (const name of names) {
             const event = events[name as keyof typeof events] as { on?: (observer: Observer) => void };
-            if (event.on) {
-                event.on((newValue, oldValue) => {
-                    capturedEvents.push({
-                        name: name as string,
-                        oldValue: deepCopy(oldValue),
-                        newValue: deepCopy(newValue),
+            if (event?.on) {
+                if ((name as string).includes("$Change")) {
+                    event.on((newValue, oldValue) => {
+                        capturedEvents.push({
+                            name: name as string,
+                            oldValue: deepCopy(oldValue),
+                            newValue: deepCopy(newValue),
+                        });
                     });
-                });
+                } else {
+                    event.on(value => {
+                        capturedEvents.push({
+                            name: name as string,
+                            value: deepCopy(value),
+                        });
+                    });
+                }
             }
         }
 
