@@ -17,6 +17,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     * LocalizationConfiguration: Implemented activeLocale validation
     * LowPower: Implemented event `enterLowPowerMode` to be emitted when the sleep command gets called
     * ModeSelect: Implemented all features and commands as defined by specification
+    * Switch: Implement all features and events including debouncing (optional), switch-release, long- and multi-press detections
     * TimeFormatLocalization: Implemented activeTimeFormat validation
     * WindowCovering: Implemented all features and commands as defined by specification
   * Enhancement: Adjusted handling of TlvList order to match better with matter specification and ensure field orders are preserved
