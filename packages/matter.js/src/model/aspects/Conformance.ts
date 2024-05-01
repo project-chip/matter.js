@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Lexer } from "../../parser/Lexer.js";
+import { BasicToken } from "../../parser/Token.js";
+import { TokenStream } from "../../parser/TokenStream.js";
 import { FieldValue } from "../definitions/index.js";
 import { Aspect } from "./Aspect.js";
 
@@ -32,18 +35,20 @@ export class Conformance extends Aspect<Conformance.Definition> {
     constructor(definition: Conformance.Definition) {
         super(definition);
 
-        let ast: Conformance.Ast;
         if (definition === undefined) {
             this.ast = { type: Conformance.Special.Empty };
             return;
-        } else if (typeof definition === "string") {
+        }
+
+        let ast: Conformance.Ast;
+        if (typeof definition === "string") {
             if (definition.toLowerCase() === "desc") {
                 this.ast = { type: Conformance.Special.Desc };
                 return;
             }
-            ast = new Parser(this, definition).ast;
+            ast = ParsedAst(this, definition);
         } else if (Array.isArray(definition)) {
-            const asts = definition.map(def => new Parser(this, def).ast);
+            const asts = definition.map(def => ParsedAst(this, def));
             if (asts.length === 1) {
                 ast = asts[0];
             } else {
@@ -356,7 +361,7 @@ export namespace Conformance {
             case Special.Name:
             case Special.Value:
                 // Name or value
-                return FieldValue.serialize(ast.param) as string;
+                return FieldValue.serialize(ast.param);
 
             default:
                 // Flag
@@ -388,240 +393,15 @@ export namespace Conformance {
     }
 }
 
-function isNameChar(c: string) {
-    return (c >= "A" && c <= "Z") || (c >= "a" && c <= "z") || (c >= "0" && c <= "9") || c === "_";
-}
-
-namespace Tokenizer {
-    export enum Special {
-        Not = "!",
-        Equal = "==",
-        NotEqual = "!=",
-        Or = "|",
-        Xor = "^",
-        And = "&",
-        Dot = ".",
-        Comma = ",",
-        OptionalBegin = "[",
-        OptionalEnd = "]",
-        GroupBegin = "(",
-        GroupEnd = ")",
-        Plus = "+",
-        GreaterThan = ">",
-        LessThan = "<",
-        GreaterThanOrEqual = ">=",
-        LessThanOrEqual = "<=",
-    }
-
-    export enum TokenType {
-        Flag,
-        Special,
-        Name,
-        Choice,
-        Number,
-    }
-
-    namespace Token {
-        export type Flag = {
-            type: TokenType.Flag;
-            value: Conformance.Flag;
-        };
-
-        export type Special = {
-            type: TokenType.Special;
-            value: Tokenizer.Special;
-        };
-
-        export type Name = {
-            type: TokenType.Name;
-            value: string;
-        };
-
-        export type Choice = {
-            type: TokenType.Choice;
-            value: Conformance.ChoiceName;
-        };
-
-        export type Number = {
-            type: TokenType.Number;
-            value: FieldValue;
-        };
-    }
-
-    export type Token = Token.Flag | Token.Special | Token.Name | Token.Choice | Token.Number;
-
-    export function* tokenize(conformance: Conformance, definition: string): Generator<Token> {
-        const i = definition[Symbol.iterator]();
-
-        let current = i.next();
-        if (current.done) {
-            return;
-        }
-        let peeked = i.next();
-
-        function next() {
-            current = peeked;
-            if (!current.done) {
-                peeked = i.next();
-            }
-        }
-
-        function tokenizeName(): Token {
-            const name = [current.value];
-            while (isNameChar(peeked.value)) {
-                next();
-                name.push(current.value);
-            }
-            return { type: TokenType.Name, value: name.join("") };
-        }
-
-        while (!current.done) {
-            switch (current.value) {
-                case Conformance.Flag.Mandatory:
-                case Conformance.Flag.Optional:
-                case Conformance.Flag.Provisional:
-                case Conformance.Flag.Deprecated:
-                case Conformance.Flag.Disallowed:
-                    if (isNameChar(peeked.value)) {
-                        yield tokenizeName();
-                    } else {
-                        yield { type: TokenType.Flag, value: current.value };
-                    }
-                    break;
-
-                case Special.Or:
-                case Special.Xor:
-                case Special.And:
-                case Special.Dot:
-                case Special.Comma:
-                case Special.OptionalBegin:
-                case Special.OptionalEnd:
-                case Special.GroupBegin:
-                case Special.GroupEnd:
-                case Special.Plus:
-                    yield { type: TokenType.Special, value: current.value };
-                    break;
-
-                case "0":
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                case "7":
-                case "8":
-                case "9":
-                    let num: FieldValue = 0;
-                    while (true) {
-                        num = num * 10 + current.value.charCodeAt(0) - "0".charCodeAt(0);
-                        if (peeked.done || peeked.value < "0" || peeked.value > "9") {
-                            break;
-                        }
-                        next();
-                    }
-                    if (peeked.value === "%") {
-                        next();
-                        num = FieldValue.Percent(num);
-                    } else if (peeked.value === "°") {
-                        next();
-                        if (peeked.value?.toLowerCase() === "C") {
-                            next();
-                        }
-                        num = FieldValue.Celsius(num);
-                    }
-                    yield { type: TokenType.Number, value: num };
-                    break;
-
-                case "!":
-                case ">":
-                case "<":
-                    {
-                        const base = current.value;
-                        if (peeked.value === "=") {
-                            next();
-                            yield { type: TokenType.Special, value: `${base}${peeked.value}` as Special };
-                        } else {
-                            yield { type: TokenType.Special, value: base as Special };
-                        }
-                    }
-                    break;
-
-                case "=":
-                    if (peeked.value === "=") {
-                        next();
-                    } else {
-                        conformance.error("BAD_EQUAL", `"=" must be followed by another "="`);
-                    }
-                    yield { type: TokenType.Special, value: Special.Equal };
-                    break;
-
-                case " ":
-                case "\t":
-                case "\r":
-                case "\n":
-                case "\v":
-                case "\f":
-                    break;
-
-                default:
-                    if (current.value >= "a" && current.value <= "z") {
-                        yield { type: TokenType.Choice, value: current.value as Conformance.ChoiceName };
-                    } else if (current.value >= "A" && current.value <= "Z") {
-                        yield tokenizeName();
-                    } else {
-                        conformance.error("GARBAGE_CHARACTER", `Unexpected character "${current.value}"`);
-                    }
-                    break;
-            }
-            next();
-        }
-    }
-}
+const flags = new Set(Object.values(Conformance.Flag));
 
 // The DSL is *almost* complex enough to warrant a proper parser library.  Not quite though...
-class Parser {
-    public ast: Conformance.Ast;
+function ParsedAst(conformance: Conformance, definition: string) {
+    definition = definition.replace(" or ", " | ");
+    const tokens = TokenStream(Lexer.Basic.lex(definition, (code, message) => conformance.error(code, message)));
+    return parseGroup();
 
-    private tokens: Iterator<Tokenizer.Token>;
-    private token?: Tokenizer.Token;
-    private peeked?: Tokenizer.Token;
-
-    constructor(
-        private conformance: Conformance,
-        definition: string,
-    ) {
-        // Spec conformance sometimes encodes "or" (illegally) as "or" rather
-        // than "|"
-        definition = definition.replace(" or ", " | ");
-
-        this.tokens = Tokenizer.tokenize(conformance, definition);
-        const next = this.tokens.next();
-        if (!next.done) {
-            this.peeked = next.value;
-            this.next();
-        }
-        this.ast = this.parse();
-    }
-
-    private next() {
-        this.token = this.peeked;
-        const next = this.tokens.next();
-
-        if (next.done) {
-            this.peeked = undefined;
-        } else {
-            this.peeked = next.value;
-        }
-    }
-
-    // Note that Conformance.Definition effectively serves as our AST.  Its design is slightly suboptimal for this
-    // purpose because it also attempts to serve as a DSL for manual expression of conformance
-    private parse(): Conformance.Ast {
-        return this.parseGroup();
-    }
-
-    private parseGroup(end?: Tokenizer.Special): Conformance.Ast {
+    function parseGroup(end?: BasicToken.Operator): Conformance.Ast {
         const group = [] as Conformance.Ast[];
 
         function groupAsAst(): Conformance.Ast {
@@ -636,61 +416,58 @@ class Parser {
         }
 
         while (true) {
-            if (!this.token) {
+            if (tokens.done) {
                 if (end) {
-                    this.conformance.error("UNTERMINATED_CONFORMANCE_GROUPING", "Unterminated conformance grouping");
+                    conformance.error("UNTERMINATED_CONFORMANCE_GROUPING", "Unterminated conformance grouping");
                 }
                 return groupAsAst();
             }
 
             // Optional brackets are only allowed at the top-level
-            const optional = !end && this.atSpecial(Tokenizer.Special.OptionalBegin);
+            const optional = !end && atOperator("[");
 
             if (optional) {
-                this.next();
+                tokens.next();
                 let expr: Conformance.Ast = {
                     type: Conformance.Special.OptionalIf,
-                    param: this.parseGroup(Tokenizer.Special.OptionalEnd),
+                    param: parseGroup("]"),
                 };
-                expr = this.parseChoice(expr) as Conformance.Ast;
+                expr = parseChoice(expr);
                 group.push(expr);
             } else {
-                const expr = this.parseExpression();
+                const expr = parseExpression();
                 if (expr) {
                     group.push(expr);
                 }
             }
 
-            if (this.atSpecial(Tokenizer.Special.Comma)) {
-                this.next();
-            } else if (end && this.atSpecial(end)) {
-                this.next();
+            if (atOperator(",")) {
+                tokens.next();
+            } else if (end && atOperator(end)) {
+                tokens.next();
                 return groupAsAst();
             }
         }
     }
 
-    private atSpecial(special: Tokenizer.Special) {
-        return this.token && this.token.type === Tokenizer.TokenType.Special && this.token.value === special;
+    function atOperator(operator: BasicToken.Operator) {
+        const { token } = tokens;
+        return token && token.type === operator;
     }
 
-    private parseExpression() {
-        const elements = [] as (Tokenizer.Special | Conformance.Ast | string)[];
+    function parseExpression() {
+        const elements = [] as (BasicToken.Operator | Conformance.Ast | string)[];
 
         // Collect binary expressions into an array so we can back up and
         // apply operator precedence
-        let expr = this.parseAtomicExpression();
+        let expr = parseAtomicExpression();
         if (expr) {
             elements.push(expr);
         }
-        while (
-            this.token &&
-            this.token.type === Tokenizer.TokenType.Special &&
-            Parser.BinaryOperators.has(this.token.value)
-        ) {
-            elements.push(this.token.value);
-            this.next();
-            expr = this.parseAtomicExpression();
+        while (tokens.token && Parser.BinaryOperators.has(tokens.token.type)) {
+            elements.push(tokens.token.type);
+            tokens.next();
+            expr = parseAtomicExpression();
             if (expr) {
                 elements.push(expr);
             }
@@ -699,7 +476,7 @@ class Parser {
         // Convert binary operators into AST nodes in order of precedence
         Parser.BinaryOperatorPrecedence.forEach(operators => {
             for (let i = 0; i < elements.length; i++) {
-                if (operators.indexOf(elements[i + 1] as Tokenizer.Special) !== -1) {
+                if (operators.indexOf(elements[i + 1] as BasicToken.Operator) !== -1) {
                     const [lhs, op, rhs] = elements.splice(i, 3);
                     elements.splice(i, 0, {
                         type: op,
@@ -713,32 +490,51 @@ class Parser {
         return elements[0] as Conformance.Ast;
     }
 
-    private parseChoice(expr: string | Conformance.Ast | undefined): string | Conformance.Ast | undefined {
-        if (!this.atSpecial(Tokenizer.Special.Dot)) {
+    function extractChoiceNameAndNumber(text: string): { name: Conformance.ChoiceName; num: number } {
+        let name = text[0];
+        let num;
+        if (name[0] < "a" || name[0] > "z") {
+            conformance.error("INVALID_CHOICE", "Choice indicator is not a lowercase letter");
+            name = "?";
+            num = 1;
+        } else if (text.length > 1) {
+            num = Number.parseInt(text[1]);
+            if (Number.isNaN(num) || num < 0 || num > 9) {
+                conformance.error("INVALID_CHOICE", "Choice indicator may only be a single lowercase letter");
+                name = "?";
+                num = 1;
+            } else if (name.length > 2) {
+                conformance.error("INVALID_CHOICE", "Choice number followed by unexpected word characters");
+                name = "?";
+            }
+        } else {
+            num = 1;
+        }
+
+        return { name: name as Conformance.ChoiceName, num };
+    }
+
+    function parseChoice(expr: Conformance.Ast): Conformance.Ast {
+        if (!atOperator(".")) {
             return expr;
         }
 
-        this.next();
+        tokens.next();
 
-        if ((this.token as any)?.type !== Tokenizer.TokenType.Choice) {
-            this.conformance.error(
-                "INVALID_CHOICE",
-                'Choice indicator (".") must be followed by a single lowercase letter',
-            );
+        let name, num;
+        if (tokens.token?.type !== "word") {
+            conformance.error("INVALID_CHOICE", 'Choice indicator (".") not followed by identifier');
+            name = "?" as Conformance.ChoiceName;
+            num = 1;
+        } else {
+            ({ name, num } = extractChoiceNameAndNumber(tokens.token.value));
+            tokens.next();
         }
-        const choice = {
-            name: this.token?.value ?? "?",
-            expr: expr,
-            num: 1,
-        } as Conformance.Ast.Choice;
-        this.next();
-        if ((this.token as any)?.type === Tokenizer.TokenType.Number) {
-            choice.num = this.token?.value as number;
-            this.next();
-        }
-        if (this.atSpecial(Tokenizer.Special.Plus)) {
+
+        const choice: Conformance.Ast.Choice = { name, expr, num };
+        if (atOperator("+")) {
             choice.orMore = true;
-            this.next();
+            tokens.next();
         }
 
         return {
@@ -747,67 +543,56 @@ class Parser {
         };
     }
 
-    private parseAtomicExpression(): string | Conformance.Ast | undefined {
-        const expr = this.parseAtomicExpressionWithoutChoice();
+    function parseAtomicExpression(): string | Conformance.Ast | undefined {
+        const expr = parseAtomicExpressionWithoutChoice();
         if (!expr) {
             return;
         }
 
-        return this.parseChoice(expr);
+        return parseChoice(expr);
     }
 
-    private parseAtomicExpressionWithoutChoice(): string | Conformance.Ast | undefined {
-        if (!this.token) {
-            this.conformance.error("PREMATURE_CONFORMANCE_TERMINATION", "Terminated with expression expected");
+    function parseAtomicExpressionWithoutChoice(): Conformance.Ast | undefined {
+        if (!tokens.token) {
+            conformance.error("PREMATURE_CONFORMANCE_TERMINATION", "Terminated with expression expected");
             return;
         }
 
-        if (this.token.type === Tokenizer.TokenType.Flag) {
-            const value = this.token.value;
-            this.next();
-            return { type: value };
-        }
+        if (tokens.token.type === "word") {
+            const name = tokens.token.value;
+            tokens.next();
 
-        if (this.token.type === Tokenizer.TokenType.Name) {
-            const name = this.token.value;
-            this.next();
+            if (flags.has(name as Conformance.Flag)) {
+                return { type: name as Conformance.Flag };
+            }
+
             return { type: Conformance.Special.Name, param: name };
         }
 
-        if (this.token.type === Tokenizer.TokenType.Number) {
-            const value = this.token.value;
-            this.next();
+        if (tokens.token.type === "value") {
+            const value = tokens.token.value;
+            tokens.next();
             return { type: Conformance.Special.Value, param: value };
         }
 
-        if (this.atSpecial(Tokenizer.Special.Not)) {
-            this.next();
-            return { type: Conformance.Operator.NOT, param: this.parseAtomicExpression() as Conformance.Ast };
+        if (atOperator("!")) {
+            tokens.next();
+            return { type: Conformance.Operator.NOT, param: parseAtomicExpression() as Conformance.Ast };
         }
 
-        if (this.atSpecial(Tokenizer.Special.GroupBegin)) {
-            this.next();
-            return this.parseGroup(Tokenizer.Special.GroupEnd);
+        if (atOperator("(")) {
+            tokens.next();
+            return parseGroup(")");
         }
 
-        this.conformance.error("UNEXPECTED_CONFORMANCE_TOKEN", `Unexpected "${this.token.value}"`);
-        this.next();
+        conformance.error("UNEXPECTED_CONFORMANCE_TOKEN", `Unexpected "${tokens.token.type}"`);
+        tokens.next();
     }
 }
 
 namespace Parser {
     // Highest precedence first
-    export const BinaryOperatorPrecedence = [
-        [Tokenizer.Special.And],
-        [Tokenizer.Special.Or, Tokenizer.Special.Xor],
-        [
-            Tokenizer.Special.GreaterThan,
-            Tokenizer.Special.LessThan,
-            Tokenizer.Special.GreaterThanOrEqual,
-            Tokenizer.Special.LessThanOrEqual,
-        ],
-        [Tokenizer.Special.Equal, Tokenizer.Special.NotEqual],
-    ];
+    export const BinaryOperatorPrecedence = [["&"], ["|", "^"], [">", "<", ">=", "<="], ["==", "!="]];
 
     export const BinaryOperators = new Set(BinaryOperatorPrecedence.flat());
 }

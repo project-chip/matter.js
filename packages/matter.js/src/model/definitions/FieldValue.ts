@@ -19,7 +19,7 @@ export type FieldValue =
     | bigint
     | boolean
     | Date
-    | []
+    | FieldValue[]
     | FieldValue.Properties
     | FieldValue.Reference
     | FieldValue.Percent
@@ -108,7 +108,7 @@ export namespace FieldValue {
     /**
      * Convert the field value to a "defacto-standard" form.
      */
-    export function serialize(value: FieldValue) {
+    export function serialize(value: FieldValue): string {
         if (value === null) {
             return "null";
         }
@@ -122,7 +122,7 @@ export namespace FieldValue {
             return `${(value as Percent).value}%';`;
         }
         if (is(value, properties)) {
-            return stringSerialize((value as Properties).properties);
+            return stringSerialize((value as Properties).properties) ?? "?";
         }
         return value.toString();
     }
