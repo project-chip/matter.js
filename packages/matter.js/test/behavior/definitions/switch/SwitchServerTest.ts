@@ -96,6 +96,9 @@ async function doTestPress(
     expect(events).deep.equals(expectedEvents);
 }
 
+/**
+ * The tests are mainly based on examples described in the @see {@link MatterSpecification.v11.Cluster} §1.12.7/8/9
+ */
 describe("SwitchServer", () => {
     describe("Test Debounce", () => {
         let device: MockEndpoint<any>;
