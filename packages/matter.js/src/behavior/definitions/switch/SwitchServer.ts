@@ -63,14 +63,14 @@ export class SwitchServerLogic extends SwitchServerBase {
         this.internal.previouslyReportedPosition = this.state.currentPosition;
 
         // Validate positions set to respect constraints, TODO: Remove with 1.3 update
-        this.reactTo(this.events.rawPosition$Changing, this.#assertPositionInRange, { offline: true });
-        this.reactTo(this.events.currentPosition$Changing, this.#assertPositionInRange, { offline: true });
+        this.reactTo(this.events.rawPosition$Changing, this.#assertPositionInRange);
+        this.reactTo(this.events.currentPosition$Changing, this.#assertPositionInRange);
 
         // Debounce raw position changes
-        this.reactTo(this.events.rawPosition$Changed, this.#debounceRawPosition, { offline: true });
+        this.reactTo(this.events.rawPosition$Changed, this.#debounceRawPosition);
 
         // Handle switch position changes
-        this.reactTo(this.events.currentPosition$Changed, this.#handleSwitchPositionChange, { offline: true });
+        this.reactTo(this.events.currentPosition$Changed, this.#handleSwitchPositionChange);
     }
 
     // TODO remove when Validator logic can assess that with 1.3 introduction

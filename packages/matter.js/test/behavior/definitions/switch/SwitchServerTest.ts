@@ -100,6 +100,36 @@ async function doTestPress(
  * The tests are mainly based on examples described in the @see {@link MatterSpecification.v11.Cluster} §1.12.7/8/9
  */
 describe("SwitchServer", () => {
+    describe("test custom validators", () => {
+        it("Accept valid currentPosition", async () => {
+            const device = await createLatchingSwitch();
+            await expect(device.set({ switch: { currentPosition: 1 } })).to.not.be.rejectedWith(
+                "Rolled back due to pre-commit error",
+            );
+        });
+
+        it("Reject invalid currentPosition", async () => {
+            const device = await createLatchingSwitch();
+            await expect(device.set({ switch: { currentPosition: 2 } })).to.be.rejectedWith(
+                "Rolled back due to pre-commit error",
+            );
+        });
+
+        it("Accept valid rawPosition", async () => {
+            const device = await createLatchingSwitch();
+            await expect(device.set({ switch: { rawPosition: 1 } })).to.not.be.rejectedWith(
+                "Rolled back due to pre-commit error",
+            );
+        });
+
+        it("Reject invalid rawPosition", async () => {
+            const device = await createLatchingSwitch();
+            await expect(device.set({ switch: { rawPosition: 2 } })).to.be.rejectedWith(
+                "Rolled back due to pre-commit error",
+            );
+        });
+    });
+
     describe("Test Debounce", () => {
         let device: MockEndpoint<any>;
 
@@ -140,9 +170,6 @@ describe("SwitchServer", () => {
                     rawPosition: 1,
                 },
             });
-
-            // We need to trick the event loop a bit - but we do not advance time so anything is still "not timer based"
-            await new Promise<void>(resolve => device.events.switch.currentPosition$Changed.on(() => resolve()));
 
             expect(events).deep.equals([
                 {
