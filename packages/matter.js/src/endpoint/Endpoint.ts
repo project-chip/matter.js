@@ -426,7 +426,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * Add a child endpoint.
      *
-     * @param config the {@link Endpoint} or {@link Endpoint.Configuration}
+     * @param endpoint the {@link Endpoint} or {@link Endpoint.Configuration}
      */
     async add<T extends EndpointType>(endpoint: Endpoint<T> | Endpoint.Configuration<T> | T): Promise<Endpoint<T>>;
 

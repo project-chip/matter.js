@@ -4,14 +4,280 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
+import { ClusterType } from "../../../cluster/ClusterType.js";
+import { Switch } from "../../../cluster/definitions/SwitchCluster.js";
+import { FieldElement } from "../../../model/elements/FieldElement.js";
+import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { Time, Timer } from "../../../time/Time.js";
+import { Observable } from "../../../util/Observable.js";
+import { ActionContext } from "../../context/ActionContext.js";
 import { SwitchBehavior } from "./SwitchBehavior.js";
+
+const SwitchServerBase = SwitchBehavior.for(Switch.Complete).with(
+    Switch.Feature.LatchingSwitch,
+    Switch.Feature.MomentarySwitch,
+    Switch.Feature.MomentarySwitchRelease,
+    Switch.Feature.MomentarySwitchLongPress,
+    Switch.Feature.MomentarySwitchMultiPress,
+);
 
 /**
  * This is the default server implementation of {@link SwitchBehavior}.
  *
- * The Matter specification requires the Switch cluster to support features we do not enable by default. You should use
- * {@link SwitchServer.with} to specialize the class for the features your implementation supports.
+ * This implementation includes all features of {@link WindowCovering.Cluster} and implements all mandatory commands.
+ * You should use {@link WindowCoveringServer.with} to specialize the class for the features your implementation
+ * supports.
+ *
+ * To support all features and events the implementation adds some custom state attributes that can - or are required
+ * to - be used. These are:
+ * * `rawPosition` - The raw position of the switch. This is the position as reported by the device and is not yet
+ *  debounced. If the position is already debounced, just set the `currentPosition` attribute. The debouncing uses the
+ *  `debounceDelay` attribute value as timeframe in milliseconds and sets the `currentPosition` attribute when the value
+ *  is stable for this timeframe.
+ * * `debounceDelay` - The timeframe in milliseconds to wait until a newly reported position is considered stable.
+ * * `longPressDelay` - The timeframe in milliseconds to wait until a position is considered "long" pressed. This
+ *  attribute is REQUIRED if the device supports the Momentary Switch LongPress (MSL) feature.
+ * * `multiPressDelay` - The timeframe in milliseconds starting with a stable release to detect multi-presses. This
+ *  attribute is REQUIRED if the device supports the Momentary Switch MultiPress (MSM) feature.
+ * * `momentaryNeutralPosition` - The number of the position considered as the neutral position for the momentary switch.
+ *  This defaults to position 0 but can be changed by settings this attribute. it is available as soon as the Momentary
+ *  Switch (MS) feature is used.
  */
-export class SwitchServer extends SwitchBehavior {}
+export class SwitchServerLogic extends SwitchServerBase {
+    protected declare internal: SwitchServerLogic.Internal;
+    declare state: SwitchServerLogic.State;
+    declare events: SwitchServerLogic.Events;
+
+    // Enhance Schema to define conformance for some of the additional state attributes
+    static {
+        SwitchServerLogic.schema?.children.push(
+            FieldElement({ name: "longPressDelay", type: "uint32", quality: "M", conformance: "MSL" }),
+            FieldElement({ name: "multiPressDelay", type: "uint32", quality: "M", conformance: "MSM" }),
+            FieldElement({ name: "momentaryNeutralPosition", type: "uint8", quality: "O", conformance: "MS" }),
+        );
+    }
+
+    override initialize() {
+        this.state.rawPosition = this.state.currentPosition;
+        this.internal.currentUnstablePosition = this.state.currentPosition;
+        this.internal.previouslyReportedPosition = this.state.currentPosition;
+
+        // Validate positions set to respect constraints, TODO: Remove with 1.3 update
+        this.reactTo(this.events.rawPosition$Changing, this.#assertPositionInRange);
+        this.reactTo(this.events.currentPosition$Changing, this.#assertPositionInRange);
+
+        // Debounce raw position changes
+        this.reactTo(this.events.rawPosition$Changed, this.#debounceRawPosition);
+
+        // Handle switch position changes
+        this.reactTo(this.events.currentPosition$Changed, this.#handleSwitchPositionChange);
+    }
+
+    // TODO remove when Validator logic can assess that with 1.3 introduction
+    #assertPositionInRange(position: number) {
+        if (position < 0 || position >= this.state.numberOfPositions) {
+            throw new StatusResponseError(`Position ${position} invalid`, StatusCode.ConstraintError);
+        }
+    }
+
+    #debounceRawPosition(newPosition: number) {
+        // When a debounce delay is set then we debounce the raw position, else we set the current position immediately
+        if (this.state.debounceDelay !== 0) {
+            this.internal.debounceTimer?.stop();
+
+            this.internal.currentUnstablePosition = newPosition;
+            this.internal.debounceTimer = Time.getTimer(
+                "debounce",
+                this.state.debounceDelay,
+                this.callback(this.#setCurrentPositionAfterDebounce),
+            ).start();
+        } else {
+            this.state.currentPosition = newPosition;
+        }
+    }
+
+    #setCurrentPositionAfterDebounce() {
+        this.state.currentPosition = this.internal.currentUnstablePosition;
+    }
+
+    #handleSwitchPositionChange(newPosition: number) {
+        // Latching Switch
+        if (this.features.latchingSwitch) {
+            // This event SHALL be generated, when the latching switch is moved to a new position.
+            this.events.switchLatched?.emit({ newPosition }, this.context);
+            return;
+        }
+
+        // Momentary Switch
+        if (newPosition !== this.state.momentaryNeutralPosition) {
+            // This event SHALL be generated, when the momentary switch starts to be pressed.
+            this.events.initialPress?.emit({ newPosition }, this.context);
+        }
+
+        if (this.features.momentarySwitchLongPress) {
+            if (newPosition === this.state.momentaryNeutralPosition) {
+                if (this.internal.longPressTimer?.isRunning) {
+                    // If the server supports the Momentary Switch LongPress (MSL) feature, this event SHALL be generated
+                    // when the switch is released if no LongPress event had been generated since the previous InitialPress
+                    // event.
+                    this.events.shortRelease?.emit(
+                        { previousPosition: this.internal.previouslyReportedPosition },
+                        this.context,
+                    );
+                } else if (this.internal.currentIsLongPress) {
+                    // This event SHALL be generated, when the momentary switch has been released (after debouncing) and
+                    // after having been pressed for a long time, i.e. this event SHALL be generated when the switch is
+                    // released if a LongPress event has been generated since the previous InitialPress event.
+                    this.events.longRelease?.emit(
+                        { previousPosition: this.internal.previouslyReportedPosition },
+                        this.context,
+                    );
+                }
+            }
+
+            this.internal.longPressTimer?.stop();
+            this.internal.currentIsLongPress = false;
+            this.internal.currentLongPressPosition = null;
+
+            if (newPosition !== this.state.momentaryNeutralPosition) {
+                this.internal.currentLongPressPosition = newPosition;
+                this.internal.longPressTimer = Time.getTimer(
+                    "longPress",
+                    this.state.longPressDelay,
+                    this.callback(this.#handleLongPress),
+                ).start();
+            }
+        } else if (this.features.momentarySwitchRelease && newPosition === this.state.momentaryNeutralPosition) {
+            // If the server does not support the Momentary Switch LongPress (MSL) feature, this event SHALL be generated
+            // when the switch is released - even when the switch was pressed for a long time.
+            this.events.shortRelease?.emit(
+                { previousPosition: this.internal.previouslyReportedPosition },
+                this.context,
+            );
+        }
+
+        if (this.features.momentarySwitchMultiPress) {
+            if (this.internal.multiPressTimer?.isRunning && newPosition !== this.state.momentaryNeutralPosition) {
+                // The Button is at the same position as the time before, so it is a multiPress
+                // Increment the number of presses
+                this.internal.currentNumberOfPressesCounter++;
+
+                // Emit MultiPressOngoing event
+                this.events.multiPressOngoing?.emit(
+                    {
+                        newPosition,
+                        currentNumberOfPressesCounted: this.internal.currentNumberOfPressesCounter,
+                    },
+                    this.context,
+                );
+
+                // TODO: Handle the case that there are more presses then we can handle maxNumberOfPresses
+                //  Specs do not tell anything about that so ignore for now
+            }
+            this.internal.multiPressTimer?.stop();
+
+            this.internal.multiPressTimer = Time.getTimer(
+                "multiPress",
+                this.state.multiPressDelay,
+                this.callback(this.#handleMultiPressComplete),
+            ).start();
+            this.internal.previousMultiPressPosition = this.internal.previouslyReportedPosition;
+        }
+        // Store the currently processed position to be used as "previous" in some events
+        this.internal.previouslyReportedPosition = newPosition;
+    }
+
+    // Method is called by a timer, so no change to the position for longPressDelay
+    #handleLongPress() {
+        if (this.internal.currentLongPressPosition === null) {
+            return;
+        }
+        // This event SHALL be generated, when the momentary switch has been pressed for a "long" time.
+        this.events.longPress?.emit({ newPosition: this.internal.currentLongPressPosition }, this.context);
+        this.internal.currentIsLongPress = true;
+    }
+
+    #handleMultiPressComplete() {
+        if (this.internal.previousMultiPressPosition === null) {
+            return;
+        }
+        this.events.multiPressComplete?.emit(
+            {
+                previousPosition: this.internal.previousMultiPressPosition,
+                totalNumberOfPressesCounted: this.internal.currentNumberOfPressesCounter,
+            },
+            this.context,
+        );
+
+        // Reset the number of presses
+        this.internal.currentNumberOfPressesCounter = 1;
+        this.internal.previousMultiPressPosition = null;
+    }
+
+    override async [Symbol.asyncDispose]() {
+        this.internal.debounceTimer?.stop();
+        this.internal.longPressTimer?.stop();
+        this.internal.multiPressTimer?.stop();
+        await super[Symbol.asyncDispose]?.();
+    }
+}
+
+export namespace SwitchServerLogic {
+    export class Internal {
+        /** Timer to debounce the raw position. */
+        debounceTimer?: Timer;
+
+        /** Timer to detect a long press. */
+        longPressTimer?: Timer;
+
+        /** Timer to detect multi presses. */
+        multiPressTimer?: Timer;
+
+        /** Counter to count the number of presses. */
+        currentNumberOfPressesCounter: number = 1;
+
+        /** Position previously reported in events. */
+        previouslyReportedPosition: number = 0;
+
+        /** Position of the previous multi press. */
+        previousMultiPressPosition: number | null = null;
+
+        /** Position of the current long press. */
+        currentLongPressPosition: number | null = null;
+
+        /** Flag to indicate if the current press is a long press. */
+        currentIsLongPress: boolean = false;
+
+        /** Position of the current unstable position which is debounced */
+        currentUnstablePosition: number = 0;
+    }
+
+    export class State extends SwitchServerBase.State {
+        /** Raw position of the switch. Set this to debounce the value. */
+        rawPosition: number = 0;
+
+        /**
+         * Debounce Delay to wait until a newly reported raw position is considered stable and written to the
+         * currentPosition attribue.
+         */
+        debounceDelay: number = 0;
+
+        /** Time to wait until a value is considered "long" pressed */
+        longPressDelay: number = 0;
+
+        /** Timeframe starting with a stable release to detect multi-presses. */
+        multiPressDelay: number = 0;
+
+        /** Number of the position considered as the neutral position for the momentary switch. */
+        momentaryNeutralPosition: number = 0;
+    }
+
+    /** Enhance the relevant events for rawPosition attribute. */
+    export class Events extends SwitchServerBase.Events {
+        rawPosition$Changed = new Observable<[value: number, oldValue: number, context?: ActionContext]>();
+        rawPosition$Changing = new Observable<[value: number, oldValue: number, context?: ActionContext]>();
+    }
+}
+
+// Reset all Features
+export class SwitchServer extends SwitchServerLogic.for(ClusterType(Switch.Base)) {}
