@@ -212,7 +212,7 @@ export class AllClustersTestInstance implements TestInstance {
                 PressureMeasurementServer,
                 PumpConfigurationAndControlServer.with(PumpConfigurationAndControl.Feature.ConstantPressure),
                 RelativeHumidityMeasurementServer,
-                SwitchServer.with(Switch.Feature.LatchingSwitch),
+                SwitchServer.with(Switch.Feature.LatchingSwitch), // More not possible with Chip right now
                 TemperatureMeasurementServer,
                 ThermostatUserInterfaceConfigurationServer,
                 UserLabelServer,
