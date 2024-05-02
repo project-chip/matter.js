@@ -86,7 +86,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
         this.state.commissionedFabrics = this.state.fabrics.length;
 
-        this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline, { offline: true });
+        this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {

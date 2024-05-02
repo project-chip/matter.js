@@ -11,7 +11,7 @@ import { BooleanStateBehavior } from "./BooleanStateBehavior.js";
  */
 export class BooleanStateServer extends BooleanStateBehavior {
     override initialize() {
-        this.reactTo(this.events.stateValue$Changed, this.#emitStateChange, { offline: true });
+        this.reactTo(this.events.stateValue$Changed, this.#emitStateChange);
     }
 
     #emitStateChange(stateValue: boolean) {

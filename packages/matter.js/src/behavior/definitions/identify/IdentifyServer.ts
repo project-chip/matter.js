@@ -36,7 +36,7 @@ export class IdentifyServer extends IdentifyBehavior {
         );
 
         // So whenever the attribute OR the identify command was invoked we react to it.
-        this.reactTo(this.events.identifyTime$Changed, this.#identifyTimeChangedHandler, { offline: true });
+        this.reactTo(this.events.identifyTime$Changed, this.#identifyTimeChangedHandler);
     }
 
     #startIdentifying() {
