@@ -46,7 +46,7 @@ export class ModeSelectServerLogic extends ModeSelectServerBase {
                     this.state.currentMode = this.state.onMode;
                     currentModeOverridden = true;
                 }
-                this.reactTo(onOffServer.events.onOff$Changed, this.#handleOnOffDependency, { offline: true });
+                this.reactTo(onOffServer.events.onOff$Changed, this.#handleOnOffDependency);
             } else {
                 logger.warn("OnOffServer not found on endpoint, but OnMode is set.");
             }

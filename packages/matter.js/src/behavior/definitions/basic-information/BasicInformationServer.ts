@@ -70,7 +70,7 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
                     void
                 >();
             }
-            this.reactTo(this.events.reachable$Changed, this.#emitReachableChange, { offline: true });
+            this.reactTo(this.events.reachable$Changed, this.#emitReachableChange);
         }
     }
 

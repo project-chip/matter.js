@@ -7,13 +7,13 @@
 import { ActionContext } from "../behavior/context/ActionContext.js";
 import { Endpoint } from "../endpoint/Endpoint.js";
 import { EndpointLifecycle } from "../endpoint/properties/EndpointLifecycle.js";
-import { Observable } from "../util/Observable.js";
+import { AsyncObservable, Observable } from "../util/Observable.js";
 
 /**
  * Extended lifecycle information that only applies to root endpoints.
  */
 export class NodeLifecycle extends EndpointLifecycle {
-    #online = Observable<[context: ActionContext]>();
+    #online = AsyncObservable<[context: ActionContext]>();
     #offline = Observable<[Context: ActionContext]>();
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
