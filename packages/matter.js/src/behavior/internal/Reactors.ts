@@ -164,7 +164,12 @@ class ReactorBacking<T extends any[], R> {
                 if (MaybePromise.is(resolution)) {
                     // Do not catch resolution errors, they are passed to the emitter.  Do initiate the trampoline once
                     // they complete
-                    void Promise.resolve(resolution).finally(this.#afterReaction.bind(this));
+                    void Promise.resolve(resolution)
+                        .finally(this.#afterReaction.bind(this))
+
+                        // If resolution rejects, the error will pass through our finally and crash the process unless
+                        // we catch it here.  #afterReaction cannot throw (see comments there)
+                        .catch(() => {});
                 } else {
                     this.#afterReaction();
                 }
@@ -226,24 +231,33 @@ class ReactorBacking<T extends any[], R> {
 
     /**
      * Trampoline the next reaction or resolve the trampoline promise.
+     *
+     * Note - this method *cannot* throw because we invoke it within a finally that may be on a rejected promise.
+     * Errors on that promise must be caught by the emitter.  But the finally also creates a promise and *that* promise
+     * will throw if the original promise is rejected, which requires us to have a catch() on the finally promise or
+     * the promise will crash with an unhandled error.
      */
     #afterReaction() {
-        if (this.#deferred.length) {
-            const next = this.#deferred.shift() as () => Promise<void>;
+        try {
+            if (this.#deferred.length) {
+                const next = this.#deferred.shift() as () => Promise<void>;
 
-            void next()
-                .catch(e => {
-                    // Reactors should not throw because they have error handling.  So any error here is internal
-                    logger.error("Internal reaction error", e);
-                })
-                .finally(this.#afterReaction.bind(this));
+                void next()
+                    .catch(e => {
+                        // Reactors should not throw because they have error handling.  So any error here is internal
+                        logger.error("Internal error invoking next reactor", e);
+                    })
+                    .finally(this.#afterReaction.bind(this));
 
-            return;
+                return;
+            }
+
+            this.#resolveTrampoline?.();
+            this.#activity?.[Symbol.dispose]();
+            this.#activity = undefined;
+        } catch (e) {
+            logger.error("Internal error after final reaction", e);
         }
-
-        this.#resolveTrampoline?.();
-        this.#activity?.[Symbol.dispose]();
-        this.#activity = undefined;
     }
 
     /**
