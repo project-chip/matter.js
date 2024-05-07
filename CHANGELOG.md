@@ -34,12 +34,13 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Allows for cluster implementations to dynamically add/enable state attributes and events
   * Enhancement: Added "fieldName$Changing" event handlers that emit in transaction pre-commit and allow for state mutation and will cycle for a limited number of times until state is stable
   * Enhancement: Allows "fieldName$Changed" and "fieldName$Changing" event handlers to be async
-  * Enhancement: Adds Conformance validation for enums
+  * Enhancement: Adds Conformance validation for enums, fieldname references and some more cases
   * Enhancement: Makes various config variables apply dynamically
   * Fix: Fixes some issues around event handling in the new API and makes sure events are not de-registered on factory resets
   * Fix: Corrects the returned status error code when an Enum value is set to an invalid value
   * Fix: Fixes a floating promise in FailsafeTimer; it tended to kill a test run without an easy way to identify the cause
   * Fix: Fixes bounds check with references to null fields
+  * Fix: Addresses rejections that were erroniously being treated as uncaught when multiple reactions were queued
 * Chip testing:
   * Enhancement: Adds automatic CI testing for all clusters listed in [matter.js Readme](./packages/matter.js/README.md)
 * matter.js tooling:
