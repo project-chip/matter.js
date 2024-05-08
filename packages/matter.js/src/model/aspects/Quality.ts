@@ -22,6 +22,9 @@ export class Quality extends Aspect<Quality.Definition> implements Quality.Ast {
     public reportable?: boolean;
     public singleton?: boolean;
     public disallowed?: Quality.AllProperties;
+    public quieter?: boolean;
+    public largeMessage?: boolean;
+    public diagnostics?: boolean;
 
     /**
      * Initialize from a Quality.All definition or a string conforming to the
@@ -111,6 +114,9 @@ export namespace Quality {
         reportable = "P",
         changesOmitted = "C",
         singleton = "I",
+        quieter = "Q",
+        largeMessage = "L",
+        diagnostics = "K",
     }
 
     /**
@@ -124,6 +130,9 @@ export namespace Quality {
         P = "reportable",
         C = "changesOmitted",
         I = "singleton",
+        Q = "quieter",
+        L = "largeMessage",
+        K = "diagnostics",
     }
 
     /**
@@ -134,7 +143,7 @@ export namespace Quality {
     /**
      * Runtime version of QualityFlag.
      */
-    export const FlagNames: FlagName[] = ["X", "N", "F", "S", "P", "C", "I"];
+    export const FlagNames: FlagName[] = ["X", "N", "F", "S", "P", "C", "I", "Q", "L", "K"];
 
     /**
      * Quality values that apply to data fields.
@@ -167,6 +176,12 @@ export namespace Quality {
          * unavailable.
          */
         changesOmitted?: boolean;
+
+        /**
+         * Designates data with fluctuating product rate or where some deltas are meaningless or otherwise undesirable
+         * to report.
+         */
+        quieter?: boolean;
     };
 
     /**
@@ -184,15 +199,30 @@ export namespace Quality {
         reportable?: boolean;
     };
 
-    /**
-     * Quality properties that apply to device types.
-     */
-    export type AllProperties = Attribute & {
+    export type Command = {
+        /**
+         * Designates commands with payloads that potentially exceed a single IPv6 packet (1280 bytes, the minimum IPv6
+         * MTU).
+         */
+        largeMessage?: boolean;
+    };
+
+    export type Cluster = {
         /**
          * Designates a cluster as a singleton on the node for the device type.
          */
         singleton?: boolean;
+
+        /**
+         * Designates a cluster as a diagnostics cluster.  Diagnostics clusters may be omitted from attribute expansion.
+         */
+        diagnostics?: boolean;
     };
+
+    /**
+     * Quality properties that apply to device types.
+     */
+    export type AllProperties = Attribute & Command & Cluster;
 
     /**
      * Quality values that apply to device types.

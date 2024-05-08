@@ -14,12 +14,15 @@ import { ValueElement } from "./ValueElement.js";
 
 // Constants for all type names used more than once
 export const OCTSTR = "octstr";
+export const STRING = "string";
 export const STRUCT = "struct";
 export const ENUM8 = "enum8";
 export const UINT8 = "uint8";
 export const UINT16 = "uint16";
 export const UINT32 = "uint32";
 export const UINT64 = "uint64";
+export const INT16 = "int16";
+export const INT64 = "int64";
 
 // Base type factories (types with metatypes)
 const bool = (name: string, description: string) => DatatypeElement({ name, description, metatype: Metatype.boolean });
@@ -40,7 +43,7 @@ const enumt = (name: string, description: string, type: string) =>
 const extInt = (name: string, description: string, type: string) => DatatypeElement({ name, description, type });
 const depInt = (name: string, description: string, type: string) =>
     DatatypeElement({ name, description, type, conformance: Conformance.Flag.Deprecated });
-const extOctet = (name: string, description: string, constraint?: Constraint.Definition) =>
+const extOctstr = (name: string, description: string, constraint?: Constraint.Definition) =>
     DatatypeElement({ name, description, type: OCTSTR, constraint });
 const extEnum = (name: string, description: string, values: DatatypeElement.ValueMap) =>
     DatatypeElement({ name, description, type: ENUM8, children: DatatypeElement.ListValues(values) });
@@ -59,6 +62,20 @@ const DateFields = [
     FieldElement({ type: "uint8", name: "month" }),
     FieldElement({ type: "uint8", name: "day" }),
     FieldElement({ type: "uint8", name: "dow" }),
+];
+
+const SemtagFields = [
+    FieldElement({ type: "vendor-id", name: "MfgCode", quality: "X", default: null, conformance: "M" }),
+    FieldElement({ type: "namespace", name: "NamespaceID", conformance: "M" }),
+    FieldElement({ type: "tag", name: "Tag", conformance: "M" }),
+    FieldElement({
+        type: STRING,
+        name: "Label",
+        constraint: "max 64",
+        quality: "X",
+        default: null,
+        conformance: "MfgCode != null, O",
+    }),
 ];
 
 /**
@@ -88,13 +105,13 @@ export const Globals = {
     uint56: int("uint56", "Signed 56-bit integer", 7),
     uint64: int(UINT64, "Signed 64-bit integer", 8),
     int8: int("int8", "Unsigned 8-bit integer", 1),
-    int16: int("int16", "Unsigned 16-bit integer", 2),
+    int16: int(INT16, "Unsigned 16-bit integer", 2),
     int24: int("int24", "Unsigned 24-bit integer", 3),
     int32: int("int32", "Unsigned 32-bit integer", 4),
     int40: int("int40", "Unsigned 40-bit integer", 5),
     int48: int("int48", "Unsigned 48-bit integer", 6),
     int56: int("int56", "Unsigned 56-bit integer", 7),
-    int64: int("int64", "Unsigned 64-bit integer", 8),
+    int64: int(INT64, "Unsigned 64-bit integer", 8),
 
     // Analog float
     single: float("single", "Single precision", 4),
@@ -122,7 +139,11 @@ export const Globals = {
     elapsedS: extInt("elapsed-s", "System type in seconds", UINT32),
 
     // Physical quantities
-    temperature: extInt("temperature", "Temperature in Celsius", UINT16),
+    temperature: extInt("temperature", "Temperature in Celsius", INT16),
+    powerMw: extInt("power-mW", "Power in milliwatts", INT64),
+    amperageMa: extInt("amperage-mA", "Amperage in milliamps", INT64),
+    voltageMv: extInt("voltage-mV", "Voltage in millivolts", INT64),
+    energyMwh: extInt("energy-mWh", "Energy in milliwatt-hours", INT64),
 
     // Discrete enumeration
     enum8: enumt(ENUM8, "8-bit enumeration", UINT8),
@@ -157,15 +178,19 @@ export const Globals = {
     eventNo: extInt("event-no", "Event number", UINT64),
 
     // Composite string
-    string: string("string", "Character string"),
+    string: string(STRING, "Character string"),
 
     // Composite address
-    // Using CHIP type for ipadr because spec specifies 0xd3 which conflicts with vendor-id
-    ipadr: extOctet("ipadr", "IP Address", { min: 4, max: 16 }),
-    ipv4adr: extOctet("ipv4adr", "IPv4 address", 4),
-    ipv6adr: extOctet("ipv6adr", "IPv6 address", 16),
-    ipv6pre: extOctet("ipv6pre", "IPv6 prefix", { min: 1, max: 17 }),
-    hwadr: extOctet("hwadr", "Hardware address", { min: 6, max: 8 }),
+    ipadr: extOctstr("ipadr", "IP Address", { min: 4, max: 16 }),
+    ipv4adr: extOctstr("ipv4adr", "IPv4 address", 4),
+    ipv6adr: extOctstr("ipv6adr", "IPv6 address", 16),
+    ipv6pre: extOctstr("ipv6pre", "IPv6 prefix", { min: 1, max: 17 }),
+    hwadr: extOctstr("hwadr", "Hardware address", { min: 6, max: 8 }),
+
+    // Composite tag
+    semtag: extStruct("semtag", "Semantic tag", SemtagFields),
+    namespace: extEnum("namespace", "Namespace", {}),
+    tag: extEnum("tag", "Tag", {}),
 
     // Global elements
     ClusterRevision: AttributeElement({

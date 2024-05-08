@@ -9,18 +9,19 @@ import { hideBin } from "yargs/helpers";
 
 const USAGE = `Generates a Matter object model from specification documents.
 
-This script scrapes specification information from a HTML version of the
-Matter specification.  You may override the default location with
-MATTER_SPECIFICATION_PATH environment variable.
+This script scrapes specification information from an HTML version of the
+Matter specification.  You may override the default location with the
+MATTER_SPECIFICATION_PATH environment variable or --path= command line
+argument.
 
 I used Adobe Acrobat Pro v23.001.20174.0 to generate the HTML, choosing the
 option to save individual HTML based on headers.  We will probably parse
 output of the current Acrobat version.  Other means of HTML generation will
-likely require this code to be reworked.
+require this code to be reworked.
 
-Reach out in Matter Integrators Discord server if you would like access to a
-Dropbox folder with the HTML version of the specification.  Specifically
-mention the term "masochist".`;
+If you have access to the spec PDFs, reach out in Matter Integrators Discord
+server if you would like access to a Dropbox folder with the HTML version of
+the specification.  Specifically mention the term "masochist".`;
 
 import "./util/setup.js";
 
