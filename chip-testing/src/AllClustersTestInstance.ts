@@ -27,6 +27,7 @@ import { UserLabelServer } from "@project-chip/matter.js/behavior/definitions/us
 import {
     AdministratorCommissioning,
     BasicInformation,
+    ColorControl,
     LevelControl,
     ModeSelect,
     NetworkCommissioning,
