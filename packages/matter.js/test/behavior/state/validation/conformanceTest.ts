@@ -298,6 +298,37 @@ const AllTests = Tests({
                     },
                 }),
             }),
+
+            "with field": Tests(
+                Fields(
+                    { name: "Value", type: "uint8" },
+                    { name: "ValueIsSet", type: "bool", conformance: "F & Value" },
+                ),
+                {
+                    "allows if present": {
+                        supports: ["foo"],
+                        record: { value: 4, valueIsSet: true },
+                    },
+
+                    "requires if present": {
+                        supports: ["foo"],
+                        record: { value: 4 },
+                        error: {
+                            type: ConformanceError,
+                            message: `Validating Test.valueIsSet: Conformance "F & Value": Value is undefined but is mandatory per Matter specification`,
+                        },
+                    },
+
+                    "disallows if not present": {
+                        supports: ["foo"],
+                        record: { valueIsSet: true },
+                        error: {
+                            type: ConformanceError,
+                            message: `Validating Test.valueIsSet: Conformance "F & Value": Value is present but disallowed per Matter specification`,
+                        },
+                    },
+                },
+            ),
         }),
 
         "trinary logical feature": Tests(Features({ A: "Aye", B: "Bee", C: "See" }), {
@@ -520,6 +551,70 @@ const AllTests = Tests({
                 "allows conformant by feature": {
                     supports: ["FT"],
                     record: { test: 4 },
+                },
+            },
+        ),
+
+        comparisons: Tests(
+            Fields(
+                {
+                    name: "Value",
+                    type: "uint8",
+                },
+                {
+                    name: "IsGreaterThan",
+                    type: "bool",
+                    conformance: "Value > 4",
+                },
+                {
+                    name: "IsLessThan",
+                    type: "bool",
+                    conformance: "Value < 4",
+                },
+            ),
+            {
+                "allows if >": {
+                    record: { value: 5, isGreaterThan: true },
+                },
+
+                "requires if >": {
+                    record: { value: 5 },
+                    error: {
+                        type: ConformanceError,
+                        message:
+                            'Validating Test.isGreaterThan: Conformance "Value > 4": Value is undefined but is mandatory per Matter specification',
+                    },
+                },
+
+                "disallows if <": {
+                    record: { value: 4, isGreaterThan: true },
+                    error: {
+                        type: ConformanceError,
+                        message:
+                            'Validating Test.isGreaterThan: Conformance "Value > 4": Value is present but disallowed per Matter specification',
+                    },
+                },
+
+                "allows if <": {
+                    record: { value: 3, isLessThan: true },
+                },
+
+                "requires if <": {
+                    record: { value: 3 },
+                    error: {
+                        type: ConformanceError,
+                        message:
+                            'Validating Test.isLessThan: Conformance "Value < 4": Value is undefined but is mandatory per Matter specification',
+                    },
+                },
+
+                "disallows if >": {
+                    record: { value: 4, isLessThan: true },
+                    error: {
+                        type: ConformanceError,
+                        message:
+                            'Validating Test.isLessThan: Conformance "Value < 4": Value is present but disallowed per Matter specification',
+                    },
                 },
             },
         ),

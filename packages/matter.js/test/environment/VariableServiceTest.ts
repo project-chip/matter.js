@@ -55,7 +55,7 @@ describe("VariableService", () => {
         );
     });
 
-    it.only("updates usages automatically", () => {
+    it("updates usages automatically", () => {
         const vars = new VariableService(new Environment("test"));
 
         vars.set("some.text", "foo");

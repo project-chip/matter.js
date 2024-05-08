@@ -74,7 +74,7 @@ export class MockEndpoint<T extends EndpointType> extends Endpoint<T> {
         for (const name of names) {
             const event = events[name as keyof typeof events] as { on?: (observer: Observer) => void };
             if (event?.on) {
-                if ((name as string).includes("$Change")) {
+                if ((name as string).endsWith("$Changed") || (name as string).endsWith("$Changing")) {
                     event.on((newValue, oldValue) => {
                         capturedEvents.push({
                             name: name as string,

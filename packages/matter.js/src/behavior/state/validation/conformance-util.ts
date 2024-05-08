@@ -78,7 +78,10 @@ export function evaluateNode(node: DynamicNode, value: Val, location: Validation
 export function asConformance<T extends DynamicNode>(node: T) {
     if (node.code === Code.Value) {
         return {
-            code: node.value === undefined ? Code.Nonconformant : Code.Conformant,
+            code:
+                node.value === undefined || node.value === null || node.value === false
+                    ? Code.Nonconformant
+                    : Code.Conformant,
         } as const;
     } else {
         return node;
@@ -232,6 +235,27 @@ export function createComparison(
                 schema,
                 location,
             ),
+    };
+}
+
+/**
+ * Create a node that performs a runtime boolean test.
+ */
+export function createBooleanTest(node: DynamicNode): DynamicNode {
+    if (isStatic(node)) {
+        return node;
+    }
+
+    const { evaluate } = node;
+
+    return {
+        code: Code.Evaluate,
+
+        evaluate: (value, location) => {
+            const result = evaluate(value, location);
+            assertValue(location, result, "boolean test");
+            return asConformance(result);
+        },
     };
 }
 

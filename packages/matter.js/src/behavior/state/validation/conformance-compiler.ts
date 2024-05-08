@@ -6,6 +6,7 @@
 
 import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { Conformance, FeatureSet, FieldValue, Metatype, ValueModel } from "../../../model/index.js";
+import { camelize } from "../../../util/String.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
 import { Schema } from "../../supervision/Schema.js";
@@ -21,6 +22,7 @@ import {
     UnsupportedConformanceNodeError,
     asBoolean,
     asConformance,
+    createBooleanTest,
     createComparison,
     createLogicalBinaryEvaluator,
     createLogicalInversion,
@@ -306,6 +308,7 @@ export function astToFunction(
         } else {
             // Name references a sibling property.  This results in a value
             // node but must be evaluated at runtime against a specific struct
+            param = camelize(param);
             return {
                 code: Code.Evaluate,
 
@@ -399,8 +402,8 @@ export function astToFunction(
         operator: Conformance.Operator,
         { lhs, rhs }: Conformance.Ast.BinaryOperands,
     ): DynamicNode {
-        const compiledLhs = compile(lhs);
-        const compiledRhs = compile(rhs);
+        const compiledLhs = createBooleanTest(compile(lhs));
+        const compiledRhs = createBooleanTest(compile(rhs));
 
         switch (operator) {
             case Conformance.Operator.AND:
