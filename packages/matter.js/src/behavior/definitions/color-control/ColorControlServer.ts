@@ -2075,6 +2075,15 @@ export class ColorControlServerLogic extends ColorControlServerBase {
         }
         (this.state as any)[fieldName] = cropValueRange(Math.round(value * 65536), MIN_CIE_XY_VALUE, MAX_CIE_XY_VALUE);
     }
+
+    override async [Symbol.asyncDispose]() {
+        this.internal.stopHueTransition();
+        this.internal.stopSaturationTransition();
+        this.internal.stopColorTemperatureTransition();
+        this.internal.stopXTransition();
+        this.internal.stopYTransition();
+        await super[Symbol.asyncDispose]?.();
+    }
 }
 
 type TransitionData = {
