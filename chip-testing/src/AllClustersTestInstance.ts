@@ -6,6 +6,7 @@
 
 import { AdministratorCommissioningServer } from "@project-chip/matter.js/behavior/definitions/administrator-commissioning";
 import { BooleanStateServer } from "@project-chip/matter.js/behavior/definitions/boolean-state";
+import { ColorControlServer } from "@project-chip/matter.js/behavior/definitions/color-control";
 import { FixedLabelServer } from "@project-chip/matter.js/behavior/definitions/fixed-label";
 import { FlowMeasurementServer } from "@project-chip/matter.js/behavior/definitions/flow-measurement";
 import { IlluminanceMeasurementServer } from "@project-chip/matter.js/behavior/definitions/illuminance-measurement";
@@ -197,6 +198,13 @@ export class AllClustersTestInstance implements TestInstance {
         const endpoint1 = new Endpoint(
             DimmableLightDevice.with(
                 BooleanStateServer.enable({ events: { stateChange: true } }),
+                ColorControlServer.with(
+                    ColorControl.Feature.HueSaturation,
+                    ColorControl.Feature.EnhancedHue,
+                    ColorControl.Feature.ColorLoop,
+                    ColorControl.Feature.Xy,
+                    ColorControl.Feature.ColorTemperature,
+                ),
                 FixedLabelServer,
                 FlowMeasurementServer,
                 TestIdentifyServer,
@@ -223,6 +231,44 @@ export class AllClustersTestInstance implements TestInstance {
                 id: "onoff1",
                 booleanState: {
                     stateValue: false,
+                },
+                colorControl: {
+                    coupleColorTempToLevelMinMireds: 0,
+                    remainingTime: 0,
+                    driftCompensation: 0,
+                    compensationText: "foo",
+                    startUpColorTemperatureMireds: 32639,
+                    numberOfPrimaries: 6,
+                    primary1X: 0,
+                    primary1Y: 0,
+                    primary1Intensity: 0,
+                    primary2X: 0,
+                    primary2Y: 0,
+                    primary2Intensity: 0,
+                    primary3X: 0,
+                    primary3Y: 0,
+                    primary3Intensity: 0,
+                    primary4X: 0,
+                    primary4Y: 0,
+                    primary4Intensity: 0,
+                    primary5X: 0,
+                    primary5Y: 0,
+                    primary5Intensity: 0,
+                    primary6X: 0,
+                    primary6Y: 0,
+                    primary6Intensity: 0,
+                    whitePointX: 0,
+                    whitePointY: 0,
+                    colorPointRx: 0,
+                    colorPointRy: 0,
+                    colorPointRIntensity: 0,
+                    colorPointGx: 0,
+                    colorPointGy: 0,
+                    colorPointGIntensity: 0,
+                    colorPointBx: 0,
+                    colorPointBy: 0,
+                    colorPointBIntensity: 0,
+                    managedTransitionTimeHandling: true, // enable transition management
                 },
                 fixedLabel: {
                     labelList: [

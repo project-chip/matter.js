@@ -193,7 +193,7 @@ jobs:
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
               --log-level info \
-              --target-glob "{Test_TC_LVL_*,Test_TC_WNCV_*}" \
+              --target-glob "{Test_TC_CC_*,Test_TC_LVL_*,Test_TC_WNCV_*}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
