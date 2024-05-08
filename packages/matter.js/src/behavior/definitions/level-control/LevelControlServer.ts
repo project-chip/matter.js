@@ -12,6 +12,7 @@ import { StatusCode, StatusResponseError } from "../../../protocol/interaction/S
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { MaybePromise } from "../../../util/Promises.js";
+import { ColorControlServer } from "../color-control/ColorControlServer.js";
 import { GeneralDiagnosticsBehavior } from "../general-diagnostics/GeneralDiagnosticsBehavior.js";
 import { OnOffServer } from "../on-off/OnOffServer.js";
 import { LevelControlBehavior } from "./LevelControlBehavior.js";
@@ -136,13 +137,14 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * If you want to implement own logic just override {@link moveToLevelLogic} with is also used for {@link moveToLevelWithOnOff}.
      */
     override moveToLevel({ level, transitionTime, optionsMask, optionsOverride }: MoveToLevelRequest) {
-        if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
+        const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
+        if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
         }
 
         this.#assertLevelValue(level);
 
-        return this.moveToLevelLogic(level, transitionTime, false);
+        return this.moveToLevelLogic(level, transitionTime, false, effectiveOptions);
     }
 
     /**
@@ -166,9 +168,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * @param level Level to set
      * @param transitionTime Transition time, ignored in this default implementation
      * @param withOnOff true if the method is called by a *WithOnOff command
+     * @param options Options for the command
      * @protected
      */
-    protected moveToLevelLogic(level: number, transitionTime: number | null, withOnOff: boolean) {
+    protected moveToLevelLogic(
+        level: number,
+        transitionTime: number | null,
+        withOnOff: boolean,
+        options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
+    ) {
         // Determine effective transition time
         const transitionTimeValue = transitionTime ?? this.state.onOffTransitionTime ?? null;
 
@@ -187,17 +195,12 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             this.currentLevel === level
         ) {
             this.setRemainingTime(0);
-            return this.setLevel(level, withOnOff);
+            return this.setLevel(level, withOnOff, options);
         }
 
         // Else calculate a rate by second and manage the transition
-        const effectiveRate = Math.floor(((level - this.currentLevel) / transitionTimeValue) * 10);
-        return this.#initiateTransition(
-            Math.abs(effectiveRate),
-            effectiveRate < 0 ? LevelControl.StepMode.Down : LevelControl.StepMode.Up,
-            withOnOff,
-            level,
-        );
+        const effectiveRate = Math.ceil(((level - this.currentLevel) / transitionTimeValue) * 10);
+        return this.#initiateTransition(effectiveRate, withOnOff, level, options);
     }
 
     /**
@@ -209,11 +212,12 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * level is increased or decreased by the step size every second.
      */
     override move({ moveMode, rate, optionsMask, optionsOverride }: MoveRequest) {
-        if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
+        const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
+        if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
         }
 
-        return this.moveLogic(moveMode, rate, false);
+        return this.moveLogic(moveMode, rate, false, effectiveOptions);
     }
 
     /**
@@ -237,9 +241,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * @param moveMode Mode (Up/Down) of the move action
      * @param rate Rate of the move action, null if no rate is provided and the default should be used
      * @param withOnOff true if the method is called by a *WithOnOff command
+     * @param options Options for the command
      * @protected
      */
-    protected moveLogic(moveMode: LevelControl.MoveMode, rate: number | null, withOnOff: boolean) {
+    protected moveLogic(
+        moveMode: LevelControl.MoveMode,
+        rate: number | null,
+        withOnOff: boolean,
+        options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
+    ) {
         const effectiveRate = rate ?? this.state.defaultMoveRate ?? null;
         if (!this.state.managedTransitionTimeHandling || effectiveRate === null || effectiveRate === 0) {
             // If null rate is requested and also no default rate is set, we should move as fast as possible, so we set
@@ -251,9 +261,14 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
                       ? this.maxLevel
                       : this.minLevel;
             this.setRemainingTime(0);
-            return this.setLevel(level, withOnOff);
+            return this.setLevel(level, withOnOff, options);
         }
-        return this.#initiateTransition(effectiveRate, moveMode as unknown as LevelControl.StepMode, withOnOff);
+        return this.#initiateTransition(
+            effectiveRate * (moveMode === LevelControl.MoveMode.Up ? 1 : -1),
+            withOnOff,
+            undefined,
+            options,
+        );
     }
 
     /**
@@ -265,10 +280,11 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * by the step size every transition time interval.
      */
     override step({ stepMode, stepSize, transitionTime, optionsMask, optionsOverride }: StepRequest) {
-        if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
+        const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
+        if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
         }
-        return this.stepLogic(stepMode, stepSize, transitionTime, false);
+        return this.stepLogic(stepMode, stepSize, transitionTime, false, effectiveOptions);
     }
 
     /**
@@ -293,6 +309,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      * @param stepSize Size of the step action
      * @param transitionTime Time of the step action in 10th of a second
      * @param withOnOff true if the method is called by a *WithOnOff command
+     * @param options Options for the command
      * @protected
      */
     protected stepLogic(
@@ -300,6 +317,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         stepSize: number,
         transitionTime: number | null,
         withOnOff: boolean,
+        options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
     ) {
         if (!this.state.managedTransitionTimeHandling || transitionTime === null || transitionTime === 0) {
             // If null/0 transitionTime is requested we should move as fast as possible, so we set to min/max value directly
@@ -318,11 +336,12 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
     }
 
     override stop({ optionsMask, optionsOverride }: StopRequest) {
-        if (!this.#optionsAllowExecution(optionsMask, optionsOverride)) {
+        const effectiveOptions = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
+        if (!this.#optionsAllowExecution(effectiveOptions)) {
             return;
         }
 
-        return this.stopLogic();
+        return this.stopLogic(effectiveOptions);
     }
 
     override stopWithOnOff() {
@@ -335,10 +354,8 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      *
      * @protected
      */
-    protected stopLogic(): MaybePromise<void> {
-        if (this.internal.transitionIntervalTimer?.isRunning) {
-            this.internal.transitionIntervalTimer.stop();
-        }
+    protected stopLogic(_options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {}): MaybePromise<void> {
+        this.internal.transitionIntervalTimer?.stop();
         this.setRemainingTime(0);
     }
 
@@ -362,9 +379,14 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
      *
      * @param level Level which is set by the command
      * @param withOnOff true if the method is called by a *WithOnOff command
+     * @param options Options for the command
      * @protected
      */
-    protected setLevel(level: number, withOnOff: boolean) {
+    protected setLevel(
+        level: number,
+        withOnOff: boolean,
+        options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
+    ): MaybePromise<void> {
         const onOffServer =
             this.features.onOff && withOnOff && this.agent.has(OnOffServer) ? this.agent.get(OnOffServer) : undefined;
 
@@ -377,8 +399,16 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
 
         this.state.currentLevel = level;
 
+        let colorSyncResult;
+        // Sync color temperature with level if the feature is enabled and the option is set
+        if (this.features.lighting && options.coupleColorTempToLevel && this.agent.has(ColorControlServer)) {
+            colorSyncResult = this.agent.get(ColorControlServer).syncColorTemperatureWithLevel(level);
+        }
+
         if (onOffServer !== undefined && level > this.minLevel && !onOffServer.state.onOff) {
-            return onOffServer.on();
+            return MaybePromise.then(colorSyncResult, () => onOffServer.on());
+        } else {
+            return colorSyncResult;
         }
     }
 
@@ -389,17 +419,15 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         const options = this.state.options ?? {};
         return {
             executeIfOff: optionsMask.executeIfOff ? optionsOverride.executeIfOff : options.executeIfOff,
-            coupleColorTempToLevel: optionsMask.coupleColorTempToLevel
-                ? optionsOverride.coupleColorTempToLevel
-                : options.coupleColorTempToLevel,
+            coupleColorTempToLevel: this.features.lighting
+                ? optionsMask.coupleColorTempToLevel
+                    ? optionsOverride.coupleColorTempToLevel
+                    : options.coupleColorTempToLevel
+                : false,
         };
     }
 
-    #optionsAllowExecution(
-        optionsMask: TypeFromPartialBitSchema<typeof LevelControl.Options>,
-        optionsOverride: TypeFromPartialBitSchema<typeof LevelControl.Options>,
-    ) {
-        const options = this.#calculateEffectiveOptions(optionsMask, optionsOverride);
+    #optionsAllowExecution(options: TypeFromPartialBitSchema<typeof LevelControl.Options>) {
         return (
             options.executeIfOff ||
             !this.features.onOff ||
@@ -440,15 +468,19 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
         this.state.currentLevel = this.state.onLevel;
     }
 
-    #initiateTransition(stepSize: number, stepMode: LevelControl.StepMode, withOnOff: boolean, targetLevel?: number) {
-        if (this.internal.transitionIntervalTimer?.isRunning) {
-            this.internal.transitionIntervalTimer.stop();
-        }
+    #initiateTransition(
+        stepSize: number,
+        withOnOff: boolean,
+        targetLevel?: number,
+        options: TypeFromPartialBitSchema<typeof LevelControl.Options> = {},
+    ) {
+        this.internal.transitionIntervalTimer?.stop();
 
         this.internal.currentTransitionData = {
             changeRate: stepSize * (stepMode === LevelControl.StepMode.Up ? 1 : -1),
             withOnOff,
             targetLevel,
+            options,
         };
         logger.debug(`Starting transition interval with stepSize: ${stepSize}, stepMode: ${stepMode}.`);
         this.internal.transitionIntervalTimer = Time.getPeriodicTimer(
@@ -457,7 +489,7 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             this.callback(this.#stepIntervalTick),
         ).start();
         // Re-Set the current level as start level for the step interval to handle OnOff state changes
-        return this.setLevel(this.currentLevel, withOnOff);
+        return this.setLevel(this.currentLevel, withOnOff, options);
     }
 
     async #stepIntervalTick() {
@@ -465,16 +497,16 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             this.internal.transitionIntervalTimer?.stop();
             return;
         }
-        const { changeRate, withOnOff, targetLevel } = this.internal.currentTransitionData;
+        const { changeRate, withOnOff, targetLevel, options } = this.internal.currentTransitionData;
         const newLevel = this.state.currentLevel + changeRate;
         if (newLevel <= this.minLevel) {
             logger.debug(`Stopping transition interval at minLevel: ${this.minLevel}.`);
-            await this.setLevel(this.minLevel, withOnOff);
+            await this.setLevel(this.minLevel, withOnOff, options);
             this.internal.transitionIntervalTimer?.stop();
             this.setRemainingTime(0);
         } else if (newLevel >= this.maxLevel) {
             logger.debug(`Stopping transition interval at maxLevel: ${this.maxLevel}.`);
-            await this.setLevel(this.maxLevel, withOnOff);
+            await this.setLevel(this.maxLevel, withOnOff, options);
             this.internal.transitionIntervalTimer?.stop();
             this.setRemainingTime(0);
         } else {
@@ -482,20 +514,20 @@ export class LevelControlServerLogic extends LevelControlLogicBase {
             if (targetLevel !== undefined) {
                 if (changeRate > 0 && newLevel >= targetLevel) {
                     logger.debug(`Stopping transition interval at targetLevel: ${targetLevel}.`);
-                    await this.setLevel(targetLevel, withOnOff);
+                    await this.setLevel(targetLevel, withOnOff, options);
                     this.internal.transitionIntervalTimer?.stop();
                     this.setRemainingTime(0);
                     return;
                 } else if (changeRate < 0 && newLevel <= targetLevel) {
                     logger.debug(`Stopping transition interval at targetLevel: ${targetLevel}.`);
-                    await this.setLevel(targetLevel, withOnOff);
+                    await this.setLevel(targetLevel, withOnOff, options);
                     this.internal.transitionIntervalTimer?.stop();
                     this.setRemainingTime(0);
                     return;
                 }
             }
             logger.debug(`Setting new level in transition interval: ${newLevel}.`);
-            await this.setLevel(newLevel, withOnOff);
+            await this.setLevel(newLevel, withOnOff, options);
 
             // There is no definition on how often the remaining time should be updated, so we update it with every step
             if (this.internal.currentTransitionData.changeRate > 0) {
@@ -531,6 +563,7 @@ export namespace LevelControlServerLogic {
             changeRate: number;
             withOnOff: boolean;
             targetLevel?: number;
+            options?: TypeFromPartialBitSchema<typeof LevelControl.Options>;
         };
     }
 
