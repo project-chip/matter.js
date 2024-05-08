@@ -11,6 +11,22 @@ LocalMatter.children.push({
     name: "ColorControl",
 
     children: [
+        // 63353 (0xFFF) is used as "endless" when color is looping (hue/enhanced hue)
+        {
+            tag: "attribute",
+            name: "RemainingTime",
+            id: 0x2,
+            constraint: "0 to 65535",
+        },
+
+        // Adjust the constraints to match the spec
+        {
+            tag: "attribute",
+            id: 0x7,
+            name: "ColorTemperatureMireds",
+            constraint: "ColorTempPhysicalMinMireds to ColorTempPhysicalMaxMireds",
+        },
+
         // Override primary conformance using our ">" extension to conformance syntax
         { tag: "attribute", id: 0x11, name: "Primary1X", conformance: "NumberOfPrimaries > 0" },
         { tag: "attribute", id: 0x12, name: "Primary1Y", conformance: "NumberOfPrimaries > 0" },
@@ -31,6 +47,30 @@ LocalMatter.children.push({
         { tag: "attribute", id: 0x29, name: "Primary6Y", conformance: "NumberOfPrimaries > 5" },
         { tag: "attribute", id: 0x2a, name: "Primary6Intensity", conformance: "NumberOfPrimaries > 5" },
 
+        // Convert the enum like number usage to an enum for convenience
+        {
+            tag: "attribute",
+            id: 0x4002,
+            name: "ColorLoopActive",
+            type: "enum16",
+            children: [
+                { tag: "field", name: "Inactive", id: 0 },
+                { tag: "field", name: "Active", id: 1 },
+            ],
+        },
+
+        // Convert the enum like number usage to an enum for convenience
+        {
+            tag: "attribute",
+            id: 0x4003,
+            name: "ColorLoopDirection",
+            type: "enum16",
+            children: [
+                { tag: "field", name: "Decrement", id: 0 },
+                { tag: "field", name: "Increment", id: 1 },
+            ],
+        },
+
         // Spec defines conformance on these as "CT | ColorTemperatureMireds" which doesn't make sense because
         // conformance on ColorTemperatureMireds is "CT"
         {
@@ -47,6 +87,60 @@ LocalMatter.children.push({
         },
 
         // Spec states the values of this bitmap are the same as the feature map
-        { tag: "attribute", id: 0x400a, name: "ColorCapabilities", type: "FeatureMap" },
+        {
+            tag: "attribute",
+            id: 0x400a,
+            name: "ColorCapabilities",
+            type: "map16",
+            children: [
+                {
+                    tag: "field",
+                    name: "HueSaturation",
+                    constraint: "0",
+                },
+                {
+                    tag: "field",
+                    name: "EnhancedHue",
+                    constraint: "1",
+                },
+                {
+                    tag: "field",
+                    name: "ColorLoop",
+                    constraint: "2",
+                },
+                {
+                    tag: "field",
+                    name: "XY",
+                    constraint: "3",
+                },
+                {
+                    tag: "field",
+                    name: "ColorTemperature",
+                    constraint: "4",
+                },
+            ],
+        },
+
+        // Set the correct type of ModeMode because just in the description
+        {
+            tag: "command",
+            id: 0x4b,
+            name: "MoveColorTemperature",
+
+            children: [
+                { tag: "field", name: "MoveMode", id: 0x0, type: "MoveMode", conformance: "M", constraint: "desc" },
+            ],
+        },
+
+        // Set the correct type if StepMode because just in the description
+        {
+            tag: "command",
+            id: 0x4c,
+            name: "StepColorTemperature",
+
+            children: [
+                { tag: "field", name: "StepMode", id: 0x0, type: "StepMode", conformance: "M", constraint: "desc" },
+            ],
+        },
     ],
 });
