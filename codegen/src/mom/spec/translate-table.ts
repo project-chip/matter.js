@@ -55,7 +55,7 @@ type FieldType<F> =
             : never;
 
 // Create TS object type from schema definition
-type TableRecord<T extends TableSchema> = {
+export type TableRecord<T extends TableSchema> = {
     [name in keyof T]: FieldType<T[name]>;
 } & { xref?: Specification.CrossReference; name?: string; details?: string };
 

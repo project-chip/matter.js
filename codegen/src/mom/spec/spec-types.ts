@@ -21,10 +21,10 @@ export type Table = {
 };
 
 /**
- * A reference to a specific portion of the specification.  Captures details
- * as raw HTML DOM nodes from the Matter specification
+ * A reference to a specific portion of the specification.  Captures details as raw HTML DOM nodes from the Matter
+ * specification
  */
-export type HtmlReference = {
+export interface HtmlReference {
     xref: Specification.CrossReference;
     name: string;
     path: string;
@@ -32,13 +32,21 @@ export type HtmlReference = {
     prose?: HTMLElement[];
     detailSection?: string;
     details?: HtmlReference[];
-};
+}
 
 /**
- * Intermediate representation of a cluster.  Has all the bits we think we'll
- * need but still encoded as ugly HTML
+ * Intermediate representation of a global element not defined in a cluster.
  */
-export type ClusterReference = HtmlReference & {
+export interface GlobalReference extends HtmlReference {
+    type: "global";
+    collection?: boolean;
+}
+
+/**
+ * Intermediate representation of a cluster.  Has all the bits we think we'll need but still encoded as ugly HTML
+ */
+export interface ClusterReference extends HtmlReference {
+    type: "cluster";
     ids?: HtmlReference;
     revisions?: HtmlReference;
     classifications?: HtmlReference;
@@ -49,16 +57,16 @@ export type ClusterReference = HtmlReference & {
     events?: HtmlReference;
     statusCodes?: HtmlReference;
     datatypes?: HtmlReference[];
-};
+}
 
 /**
  * Intermediate representation of a device.
  */
-export type DeviceReference = HtmlReference & {
+export interface DeviceReference extends HtmlReference {
     category?: string;
     classification?: HtmlReference;
     revisions?: HtmlReference;
     conditionSets?: HtmlReference[];
     clusters?: HtmlReference;
     elements?: HtmlReference;
-};
+}

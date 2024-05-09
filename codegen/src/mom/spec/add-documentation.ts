@@ -73,9 +73,8 @@ function mergeSplitParagraphs(paragraphs: string[]) {
 }
 
 /**
- * Make a valiant attempt to extract comprehensible documentation from the
- * gobbledy gook produced by tired spec writers -> word -> PDF -> HTML -> us
- * pipeline.
+ * Make a valiant attempt to extract comprehensible documentation from the gobbledy gook produced by tired spec writers
+ * -> word -> PDF -> HTML -> us pipeline.
  */
 export function addDocumentation(target: { details?: string }, definition: HtmlReference) {
     const prose = definition.prose;
@@ -97,10 +96,9 @@ export function addDocumentation(target: { details?: string }, definition: HtmlR
                 continue;
             }
 
-            // This edge case happens a half dozen times or so; subsection
-            // headings would otherwise appear as unadorned text.  Instead
-            // stick a markdownish prefix on them.  Heuristically ignore
-            // various junk that also appears in links but isn't a heading
+            // This edge case happens a half dozen times or so; subsection headings would otherwise appear as unadorned
+            // text.  Instead stick a markdownish prefix on them.  Heuristically ignore various junk that also appears
+            // in links but isn't a heading
             if (text.match(/^[^(.:]*$/)) {
                 looksLikeHeading = true;
             }

@@ -13,54 +13,16 @@ import {
     EventElement,
     FieldElement,
     Globals,
-    Metatype,
 } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
-import { Bits, Code, Identifier, Integer, LowerIdentifier, NoSpace, Str, UpperIdentifier } from "./html-translators.js";
-import { ClusterReference, HtmlReference } from "./spec-types.js";
-import {
-    Alias,
-    Children,
-    Optional,
-    chooseIdentityAliases,
-    translateRecordsToMatter,
-    translateTable,
-} from "./translate-table.js";
+import { fixConformanceErrors } from "./fixes.js";
+import { Code, Identifier, Integer, LowerIdentifier, NoSpace, Str, UpperIdentifier } from "./html-translators.js";
+import { ClusterReference } from "./spec-types.js";
+import { translateDatatype, translateFields, translateValueChildren } from "./translate-datatype.js";
+import { Alias, Children, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
 
 const logger = Logger.get("translate-cluster");
-
-const TYPE_ERRORS: { [badType: string]: string } = {
-    "attribute-id": "attrib-id",
-    bitmap8: "map8",
-    "node-idx": "node-id",
-    SystemTimeMicroseconds: "systime-us",
-    HardwareAddress: "hwadr",
-    String: "string",
-    variable: "any",
-    SubjectId: "subject-id",
-    SubjectID: "subject-id",
-};
-
-function fixTypeError(type: string | undefined) {
-    if (type === undefined) {
-        return type;
-    }
-
-    if (type.startsWith("list[") && type.endsWith("]")) {
-        const entryType = type.slice(5, type.length - 1);
-        if (TYPE_ERRORS[entryType]) {
-            return `list[${TYPE_ERRORS[entryType]}]`;
-        }
-        return type;
-    }
-
-    if (TYPE_ERRORS[type]) {
-        return TYPE_ERRORS[type];
-    }
-
-    return type;
-}
 
 // Translate from DOM -> MOM
 export function* translateCluster(definition: ClusterReference) {
@@ -222,6 +184,10 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
             default: Optional(Alias(NoSpace, "def")),
         });
 
+        for (const record of records) {
+            fixConformanceErrors(record);
+        }
+
         const values = translateRecordsToMatter("feature", records, FieldElement);
         values &&
             children.push({
@@ -232,254 +198,6 @@ function translateMetadata(definition: ClusterReference, children: Array<Cluster
                 children: values,
                 xref: definition.features?.xref,
             });
-    }
-}
-
-// For some reason, "default" fabric access appears in an informational row
-// instead of the access column in many of the core definitions.  Fix this.
-//
-// We also use the presence of this record to add the implicit FabrixIndex
-// field
-function applyAccessNotes(fields?: HtmlReference, records?: { id: number; access?: string }[]) {
-    if (!fields?.table?.notes.length || !records) {
-        return;
-    }
-
-    // Determine what the access flag should be
-    let flag: string | undefined;
-    for (const n of fields.table.notes) {
-        const match = n.textContent?.match(/access quality: fabric[\s-](\w+)/i);
-        if (match) {
-            const quality = match[1].toLowerCase();
-
-            switch (quality) {
-                case "scoped":
-                    flag = "F";
-                    break;
-
-                case "sensitive":
-                    flag = "S";
-                    break;
-
-                default:
-                    logger.warn(`ignoring unrecognized fabric access quality ${quality}`);
-            }
-
-            if (flag) {
-                break;
-            }
-        }
-    }
-
-    // If we have the flag, apply it
-    if (flag) {
-        // Update access for each record unless it already has a fabric flag
-        let haveFabricIndex = false;
-        for (const r of records) {
-            if (r.id === Globals.FabricIndex.id) {
-                haveFabricIndex = true;
-            }
-            const access = r.access;
-            if (!access) {
-                r.access = flag;
-            } else if (!access.match(/[SF]/i)) {
-                r.access += flag;
-            }
-        }
-
-        // Add the FabricIndex field if not already present
-        if (!haveFabricIndex) {
-            const fabricIndex = { ...Globals.FabricIndex };
-            delete fabricIndex.global;
-            records.push(fabricIndex as { id: number; name: string });
-        }
-    }
-}
-
-// Translate fields for an attribute or struct
-function translateFields(desc: string, fields?: HtmlReference) {
-    const records = translateTable(desc, fields, {
-        id: Integer,
-        name: Alias(Identifier, "field"),
-
-        // Not really optional but we want to process rows even if missing
-        type: Optional(NoSpace),
-
-        constraint: Optional(Str),
-        quality: Optional(Str),
-        default: Optional(NoSpace),
-        access: Optional(Str),
-        conformance: Optional(Code),
-        children: Children(translateValueChildren),
-    });
-
-    records.forEach(r => {
-        r.type = fixTypeError(r.type);
-
-        if (r.conformance === "Matter!Zigbee") {
-            delete r.conformance;
-        }
-
-        if (r.constraint) {
-            // Remove units and otherwise normalize constraint
-            r.constraint = r.constraint
-                .replace(/ octets| entries| bytes| per node/i, "")
-                .replace(/ to(\d|max)/i, " to $1")
-                .replace(/ValuetoMax/, "Value to Max");
-
-            // Ignore window covering's bitmap constraints
-            if (r.constraint.match(/^[0x]{4} [0x]{4}$/)) {
-                delete r.constraint;
-            }
-        }
-
-        if (typeof r.default === "string") {
-            switch (r.default.toLowerCase()) {
-                case "desc": // See description
-                case "n/a": // Not available
-                case "ms": // Manufacturer specific
-                case "-": // Sometimes used for "none"
-                case "–": // This is perhaps the dash used for "none"
-                    delete r.default;
-                    break;
-
-                case "varied":
-                    r.default = "any";
-                    break;
-
-                case "!lt:0lt:1":
-                    // Pump control conditional defaults; just ignore
-                    delete r.default;
-                    break;
-
-                default:
-                    // Sometimes enum values are suffixed with enum name in parenthesis
-                    if (r.default.match(/^\d+\(.*\)$/)) {
-                        r.default = r.default.replace(/^(\d+).*/, "$1");
-                    }
-
-                    // Sometimes default value strings have "" around them
-                    if (r.default.startsWith('"') && r.default.endsWith('"')) {
-                        r.default = r.default.slice(1, r.default.length - 1);
-                    }
-                    break;
-            }
-        }
-    });
-
-    applyAccessNotes(fields, records);
-
-    return records;
-}
-
-function hasColumn(definition: HtmlReference, ...names: string[]) {
-    for (const name of names) {
-        if (definition.table?.rows[0]?.[name] !== undefined) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// Translate children of enums, bitmaps, structs, commands, attributes and
-// events.  If "parent" is none of these, returns undefined
-function translateValueChildren(
-    tag: string,
-    parent: undefined | { type?: string },
-    definition: HtmlReference,
-): FieldElement[] | undefined {
-    let type = parent?.type;
-    if (type === undefined) {
-        switch (tag) {
-            case "command":
-            case "event":
-                type = "struct";
-                break;
-
-            default:
-                return;
-        }
-    }
-
-    const dt = (Globals as any)[type];
-    switch (dt?.metatype) {
-        case Metatype.enum: {
-            // Column names are all over the place so examine the table to find
-            // a "name" column.
-            //
-            // Originally mapped manually and had identified the following:
-            //     "type", "description", "statuscode", "presentation", "endproducttype", "effect"
-            //
-            // Turns out after this conversion we already had them all but
-            // leaving this logic in as it's more general and will adapt better
-            // in the future
-            const { ids, names } = chooseIdentityAliases(
-                definition,
-                ["id", "value", "enum"],
-                ["name", "type", "statuscode", "description"],
-            );
-
-            let records = translateTable("value", definition, {
-                id: Alias(Integer, ...ids),
-                name: Alias(Identifier, ...names),
-                conformance: Optional(Code),
-                description: Optional(Alias(Str, "summary", "notes")),
-                meaning: Optional(Str),
-            });
-
-            records = records.filter(r => r.name !== "Reserved");
-
-            return translateRecordsToMatter("value", records, FieldElement);
-        }
-
-        case Metatype.bitmap: {
-            if (hasColumn(definition, "meaning")) {
-                // Window covering cluster just plain made up their own format.
-                // We extract bits, description and conformance but just
-                // leave a placeholder for the name
-                const records = translateTable("bit", definition, {
-                    bit: Bits,
-                    description: Str,
-                    conformance: Optional(Alias(Str, "M")),
-                });
-
-                return translateRecordsToMatter("wc bit", records, r => {
-                    const constraint = r.bit;
-                    let name;
-                    if (typeof constraint === "number") {
-                        name = `Bit${constraint}`;
-                    } else if (typeof constraint === "object") {
-                        name = `Bits${constraint.min}To${constraint.max - 1}`;
-                    }
-                    if (name) {
-                        return FieldElement({
-                            name,
-                            constraint,
-                            description: r.description,
-                            conformance: r.conformance,
-                        });
-                    }
-                });
-            }
-
-            // Standard(ish) bitmap table
-            //
-            // Previously had identified aliases as "mappedprotocol", "statebit", "function", "relatedattribute"
-            // but this was only a partial list.  Auto-detection makes more sense
-            const { ids, names } = chooseIdentityAliases(definition, ["bit", "id"], ["name", "eventdescription"]);
-            const records = translateTable("bit", definition, {
-                constraint: Alias(Bits, ...ids),
-                name: Alias(Identifier, ...names),
-                description: Optional(Alias(Str, "summary")),
-            });
-
-            return translateRecordsToMatter("bit", records, FieldElement);
-        }
-
-        case Metatype.object: {
-            const records = translateFields("field", definition);
-            return translateRecordsToMatter("field", records, FieldElement);
-        }
     }
 }
 
@@ -496,8 +214,7 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
             attributeSets.push(...definition.attributeSets);
         }
         for (const attributeSet of attributeSets) {
-            const records = translateFields("attribute", attributeSet);
-            const attributes = translateRecordsToMatter("attribute", records, AttributeElement);
+            const attributes = translateFields(AttributeElement, attributeSet);
             if (attributes) {
                 children.push(...attributes);
             }
@@ -517,7 +234,10 @@ function translateInvokable(definition: ClusterReference, children: Array<Cluste
 
         const commands = translateRecordsToMatter("command", records, r => {
             let direction: CommandElement.Direction | undefined;
-            if (r.direction?.match(/client.*server/i)) {
+
+            if (r.direction?.match(/client.*⇐.*server/i)) {
+                direction = CommandElement.Direction.Response;
+            } else if (r.direction?.match(/client.*server/i)) {
                 direction = CommandElement.Direction.Request;
             } else if (r.direction?.match(/server.*client/i)) {
                 direction = CommandElement.Direction.Response;
@@ -604,75 +324,8 @@ function translateDatatypes(definition: ClusterReference, children: Array<Cluste
         Logger.nest(() => {
             const child = translateDatatype(datatype);
             if (child) {
-                addDocumentation(child, datatype);
                 children.push(child);
             }
         });
-    }
-
-    function translateDatatype(definition: HtmlReference) {
-        let name = definition.name;
-        const text = definition.prose?.[0] ? Str(definition.prose?.[0]) : undefined;
-        if (!text) {
-            logger.warn(`no text to search for base type`);
-        }
-
-        // Up through 1.1 prose was informal but remarkably consistent; "derived from" always matches
-        let match = text?.match(/derived from ([a-z0-9\-_]+)/i);
-
-        // This now applies to cluster 1.2 § 1.14.15.1, because consistency is overrated
-        if (!match) {
-            match = text?.match(/data type shall be a ([a-z0-9\-_]+)/i);
-        }
-
-        // Applies to a handful of overrides of ModeOptionStruct in cluster 1.2
-        if (!match) {
-            match = text?.match(
-                /lists the changes relative to the [a-z0-9\-_ ]+ cluster for the fields of the ([a-z0-9\-_]+) type/i,
-            );
-        }
-
-        let type = match?.[1];
-
-        let description: string | undefined;
-
-        type = fixTypeError(type);
-
-        if (name.match(/enum$/i) || type?.match(/^enum/i)) {
-            if (!type) {
-                logger.warn(`no base detected, guessing enum8`);
-                type = "enum8";
-            }
-        } else if (name.match(/bits$/i) || name.match(/bitmap$/i) || type?.match(/^map/i)) {
-            if (!type) {
-                logger.warn(`no base detected, guessing map8`);
-                type = "map8";
-            } else if (type.match(/^bitmap/)) {
-                type = type.slice(3);
-            }
-        } else if (name.match(/struct$/i) || type === "struct" || definition.table?.rows[0].type) {
-            if (!type) {
-                type = "struct";
-            }
-        } else if (name.match(/status$/i)) {
-            if (!type) {
-                type = "status";
-            }
-        } else {
-            match = name.match(/(.+) \((\S+) type\)/i);
-            if (match) {
-                description = match[1];
-                name = match[2];
-            }
-        }
-
-        if (!type && name.match(/\s/)) {
-            // This isn't actually a datatype
-            return;
-        }
-
-        const datatype = DatatypeElement({ type: type, name, description, xref: definition.xref });
-        datatype.children = translateValueChildren("field", datatype, definition);
-        return datatype;
     }
 }

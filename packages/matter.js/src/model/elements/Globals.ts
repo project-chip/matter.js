@@ -74,7 +74,7 @@ const SemtagFields = [
         constraint: "max 64",
         quality: "X",
         default: null,
-        conformance: "MfgCode != null, O",
+        conformance: "MfgCode, O",
     }),
 ];
 

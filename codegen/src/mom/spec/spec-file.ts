@@ -13,6 +13,7 @@ import { DEFAULT_MATTER_VERSION, IndexDetail, identifyDocument } from "./doc-uti
 import { loadClusters } from "./load-clusters.js";
 import { loadDevices } from "./load-devices.js";
 import { translateCluster } from "./translate-cluster.js";
+import { translateDatatype } from "./translate-datatype.js";
 import { translateDevice } from "./translate-device.js";
 
 const logger = Logger.get("intermediate-model");
@@ -42,9 +43,18 @@ export class SpecFile {
             return;
         }
 
-        for (const clusterRef of loadClusters(this.#index.ref)) {
-            logger.info(`translate ${clusterRef.name} (${clusterRef.xref.document} § ${clusterRef.xref.section})`);
-            Logger.nest(() => target.add(...translateCluster(clusterRef)));
+        for (const ref of loadClusters(this.#index.ref)) {
+            logger.info(`translate ${ref.name} (${ref.xref.document} § ${ref.xref.section})`);
+            Logger.nest(() => {
+                if (ref.type === "cluster") {
+                    target.add(...translateCluster(ref));
+                } else {
+                    const datatype = translateDatatype(ref);
+                    if (datatype) {
+                        target.add(datatype);
+                    }
+                }
+            });
         }
     }
 

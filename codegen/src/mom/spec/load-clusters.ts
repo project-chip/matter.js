@@ -8,7 +8,7 @@ import { Logger } from "@project-chip/matter.js/log";
 import { Specification } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
 import { scanDocument } from "./scan-document.js";
-import { ClusterReference, HtmlReference } from "./spec-types.js";
+import { ClusterReference, GlobalReference, HtmlReference } from "./spec-types.js";
 
 const logger = Logger.get("load-clusters");
 
@@ -72,9 +72,14 @@ function applyPatches(subref: HtmlReference, clusterRef: HtmlReference) {
     }
 }
 
-// Collect the bits that define a cluster.  Here we are just building a tree
-// of HTML nodes.  Conversion to Matter elements happens in translate-cluster
-export function* loadClusters(clusters: HtmlReference): Generator<ClusterReference> {
+/**
+ * Collect the bits that define a cluster.  Here we are just building a tree of HTML nodes.  Conversion to Matter
+ * elements happens in translate-cluster.
+ *
+ * Note that this routine returns bare datatypes in cases where the type is "global" -- that is, not defined within a
+ * specific cluster.
+ */
+export function* loadClusters(clusters: HtmlReference): Generator<ClusterReference | GlobalReference> {
     // The definition we are building
     let definition: ClusterReference | undefined;
 
@@ -122,7 +127,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
         yield definition;
     }
 
-    function identifyCluster(ref: HtmlReference) {
+    function identifyCluster(ref: HtmlReference): ClusterReference | undefined {
         // Core spec (and cluster spec >= 1.2) convention for clusters is heading suffixed with "Cluster"
         if (ref.name.endsWith(" Cluster")) {
             if (ref.xref.document === Specification.Core && Number.parseInt(ref.xref.section) < 3) {
@@ -136,6 +141,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
             }
 
             return {
+                type: "cluster",
                 ...ref,
                 name: ref.name.slice(0, ref.name.length - 8),
                 path: ref.path,
@@ -147,7 +153,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
         if (ref.xref.document === Specification.Cluster) {
             const sectionPath = ref.xref.section.split(".");
             if (sectionPath.length === 2 && sectionPath[1] !== "1") {
-                return { ...ref };
+                return { type: "cluster", ...ref };
             }
         }
     }
