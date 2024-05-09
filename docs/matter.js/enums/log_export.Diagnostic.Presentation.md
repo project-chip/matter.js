@@ -25,7 +25,7 @@ A key/value diagnostic.  Rendered as a group of key/value pairs.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L58)
+[packages/matter.js/src/log/Diagnostic.ts:58](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L58)
 
 ___
 
@@ -40,7 +40,7 @@ Within an iterable, a list also serves to present contained items as subordinate
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L38)
+[packages/matter.js/src/log/Diagnostic.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L38)
 
 ___
 
@@ -52,7 +52,7 @@ Render iterables without intervening spaces.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L43)
+[packages/matter.js/src/log/Diagnostic.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L43)
 
 ___
 
@@ -64,7 +64,7 @@ An emphasized diagnostic.  Rendered to draw attention.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L48)
+[packages/matter.js/src/log/Diagnostic.ts:48](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L48)
 
 ___
 
@@ -76,7 +76,7 @@ Path, resource or session identifier.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L63)
+[packages/matter.js/src/log/Diagnostic.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L63)
 
 ___
 
@@ -88,4 +88,4 @@ A deemphasized diagnostic.  Rendered to draw less attention than default renderi
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L53)
+[packages/matter.js/src/log/Diagnostic.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L53)

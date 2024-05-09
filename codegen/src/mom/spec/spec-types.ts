@@ -6,7 +6,9 @@
 
 import { Specification } from "@project-chip/matter.js/model";
 
-/** An HTML table */
+/**
+ * An HTML table
+ */
 export type Table = {
     /** Field names */
     fields: string[];
@@ -29,7 +31,6 @@ export type HtmlReference = {
     table?: Table;
     prose?: HTMLElement[];
     detailSection?: string;
-    ignore?: boolean;
     details?: HtmlReference[];
 };
 

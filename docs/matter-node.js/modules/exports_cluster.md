@@ -484,9 +484,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1068
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1073
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1069
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1074
 
 ___
 
@@ -579,9 +579,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:390
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:394
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:391
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:395
 
 ___
 
@@ -675,9 +675,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1139
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1157
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1140
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1158
 
 ___
 
@@ -946,9 +946,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:611
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:707
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:612
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:708
 
 ___
 
@@ -1022,9 +1022,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:825
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:790
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:826
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:791
 
 ___
 
@@ -1110,7 +1110,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 7.13
+MatterSpecification.v11.Core § 7.13
 
 #### Type parameters
 
@@ -1283,9 +1283,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:487
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:491
 
-packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:488
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:492
 
 ___
 
@@ -1295,9 +1295,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1714
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1741
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1715
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1742
 
 ___
 
@@ -1749,9 +1749,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1316
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1289
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1317
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1290
 
 ___
 
@@ -1761,9 +1761,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:186
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:191
 
-packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:187
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:192
 
 ___
 
@@ -1893,9 +1893,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1068
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1073
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1069
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1074
 
 ___
 
@@ -1905,9 +1905,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:390
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:394
 
-packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:391
+packages/matter.js/dist/esm/cluster/definitions/AudioOutputCluster.d.ts:395
 
 ___
 
@@ -2001,9 +2001,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1139
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1157
 
-packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1140
+packages/matter.js/dist/esm/cluster/definitions/ChannelCluster.d.ts:1158
 
 ___
 
@@ -2097,9 +2097,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:611
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:707
 
-packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:612
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:708
 
 ___
 
@@ -2109,9 +2109,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:825
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:790
 
-packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:826
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:791
 
 ___
 
@@ -2289,9 +2289,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:487
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:491
 
-packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:488
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:492
 
 ___
 
@@ -2301,9 +2301,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1714
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1741
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1715
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1742
 
 ___
 
@@ -2625,9 +2625,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1316
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1289
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1317
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1290
 
 ___
 
@@ -2647,9 +2647,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:186
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:191
 
-packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:187
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:192
 
 ___
 
@@ -4032,7 +4032,7 @@ Factory function to create an EVentClient for a given event.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:15
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:16
 
 ___
 

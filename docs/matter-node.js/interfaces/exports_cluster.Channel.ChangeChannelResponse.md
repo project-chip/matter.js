@@ -8,7 +8,7 @@ This command shall be generated in response to a ChangeChannel command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.2
+MatterSpecification.v11.Cluster § 6.6.4.2
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.2.2
+MatterSpecification.v11.Cluster § 6.6.4.2.2
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ This shall indicate the status of the command which resulted in this response.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.6.4.2.1
+MatterSpecification.v11.Cluster § 6.6.4.2.1
 
 #### Inherited from
 

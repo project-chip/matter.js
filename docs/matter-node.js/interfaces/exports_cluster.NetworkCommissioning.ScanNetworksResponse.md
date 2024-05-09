@@ -14,7 +14,7 @@ NetworkingStatus matching the response.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.2
+MatterSpecification.v11.Core § 11.8.7.2
 
 ## Hierarchy
 
@@ -43,7 +43,7 @@ may go into logs or crash reports.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.2.2
+MatterSpecification.v11.Core § 11.8.7.2.2
 
 #### Inherited from
 
@@ -75,7 +75,7 @@ The NetworkingStatus field shall indicate the status of the last scan operation,
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.2.1
+MatterSpecification.v11.Core § 11.8.7.2.1
 
 #### Inherited from
 
@@ -104,7 +104,7 @@ limits of the response.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.2.4
+MatterSpecification.v11.Core § 11.8.7.2.4
 
 #### Inherited from
 
@@ -134,7 +134,7 @@ reachable elements are included within the size limits of the response.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.2.3
+MatterSpecification.v11.Core § 11.8.7.2.3
 
 #### Inherited from
 

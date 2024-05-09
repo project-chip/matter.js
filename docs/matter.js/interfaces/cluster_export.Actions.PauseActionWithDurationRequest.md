@@ -8,7 +8,7 @@ Input to the Actions pauseActionWithDuration command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.7
+MatterSpecification.v11.Core § 9.14.6.7
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:483](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L483)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:482](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L482)
 
 ___
 
@@ -50,7 +50,7 @@ TypeFromSchema.duration
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:485](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L485)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:484](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L484)
 
 ___
 
@@ -64,4 +64,4 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:484](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L484)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:483](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L483)

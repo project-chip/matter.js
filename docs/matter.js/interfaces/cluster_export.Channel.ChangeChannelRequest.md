@@ -8,7 +8,7 @@ Input to the Channel changeChannel command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.4.1
+MatterSpecification.v11.Cluster § 6.6.4.1
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This shall contain a user-input string to match in order to identify the target 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.4.1.1
+MatterSpecification.v11.Cluster § 6.6.4.1.1
 
 #### Inherited from
 
@@ -40,4 +40,4 @@ TypeFromSchema.match
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:137](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L137)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L136)

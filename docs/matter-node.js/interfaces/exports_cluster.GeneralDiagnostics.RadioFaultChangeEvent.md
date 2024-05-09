@@ -8,7 +8,7 @@ Body of the GeneralDiagnostics radioFaultChange event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.8.2
+MatterSpecification.v11.Core § 11.11.8.2
 
 ## Hierarchy
 

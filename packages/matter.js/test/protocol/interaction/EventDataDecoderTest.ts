@@ -7,6 +7,7 @@ import { BasicInformation } from "../../../src/cluster/definitions/BasicInformat
 import { ClusterId } from "../../../src/datatype/ClusterId.js";
 import { EndpointNumber } from "../../../src/datatype/EndpointNumber.js";
 import { EventId } from "../../../src/datatype/EventId.js";
+import { EventNumber } from "../../../src/datatype/EventNumber.js";
 import { normalizeAndDecodeEventData, normalizeEventData } from "../../../src/protocol/interaction/EventDataDecoder.js";
 import { TlvEventData } from "../../../src/protocol/interaction/InteractionProtocol.js";
 import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
@@ -18,14 +19,14 @@ describe("EventDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
-                    eventNumber: 1,
+                    eventNumber: EventNumber(1),
                     priority: 1,
                     epochTimestamp: 0,
                     data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
                 },
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
-                    eventNumber: 2,
+                    eventNumber: EventNumber(2),
                     priority: 1,
                     epochTimestamp: 0,
                     data: TlvVoid.encodeTlv(),
@@ -38,7 +39,7 @@ describe("EventDataDecoder", () => {
                 [
                     {
                         path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
-                        eventNumber: 1,
+                        eventNumber: EventNumber(1),
                         priority: 1,
                         epochTimestamp: 0,
                         data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
@@ -47,7 +48,7 @@ describe("EventDataDecoder", () => {
                 [
                     {
                         path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
-                        eventNumber: 2,
+                        eventNumber: EventNumber(2),
                         priority: 1,
                         epochTimestamp: 0,
                         data: TlvVoid.encodeTlv(),
@@ -60,21 +61,21 @@ describe("EventDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
-                    eventNumber: 1,
+                    eventNumber: EventNumber(1),
                     priority: 1,
                     epochTimestamp: 0,
                     data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 1 }),
                 },
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
-                    eventNumber: 2,
+                    eventNumber: EventNumber(2),
                     priority: 1,
                     epochTimestamp: 0,
                     data: TlvVoid.encodeTlv(),
                 },
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
-                    eventNumber: 3,
+                    eventNumber: EventNumber(3),
                     priority: 1,
                     epochTimestamp: 0,
                     data: BasicInformation.TlvStartUpEvent.encodeTlv({ softwareVersion: 3 }),
@@ -118,7 +119,7 @@ describe("EventDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
-                    eventNumber: 1,
+                    eventNumber: EventNumber(1),
                     priority: 1,
                     epochTimestamp: 0,
                     systemTimestamp: undefined,
@@ -128,7 +129,7 @@ describe("EventDataDecoder", () => {
                 },
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
-                    eventNumber: 2,
+                    eventNumber: EventNumber(2),
                     priority: 1,
                     epochTimestamp: 0,
                     systemTimestamp: undefined,
@@ -151,7 +152,7 @@ describe("EventDataDecoder", () => {
                     },
                     events: [
                         {
-                            eventNumber: 1,
+                            eventNumber: EventNumber(1),
                             priority: 1,
                             epochTimestamp: 0,
                             systemTimestamp: undefined,
@@ -172,7 +173,7 @@ describe("EventDataDecoder", () => {
                     },
                     events: [
                         {
-                            eventNumber: 2,
+                            eventNumber: EventNumber(2),
                             priority: 1,
                             epochTimestamp: 0,
                             systemTimestamp: undefined,
@@ -190,7 +191,7 @@ describe("EventDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
-                    eventNumber: 1,
+                    eventNumber: EventNumber(1),
                     priority: 1,
                     epochTimestamp: 0,
                     systemTimestamp: undefined,
@@ -200,7 +201,7 @@ describe("EventDataDecoder", () => {
                 },
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(1) },
-                    eventNumber: 2,
+                    eventNumber: EventNumber(2),
                     priority: 1,
                     epochTimestamp: 0,
                     systemTimestamp: undefined,
@@ -210,7 +211,7 @@ describe("EventDataDecoder", () => {
                 },
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) },
-                    eventNumber: 3,
+                    eventNumber: EventNumber(3),
                     priority: 1,
                     epochTimestamp: 0,
                     systemTimestamp: undefined,
@@ -233,7 +234,7 @@ describe("EventDataDecoder", () => {
                     },
                     events: [
                         {
-                            eventNumber: 1,
+                            eventNumber: EventNumber(1),
                             priority: 1,
                             epochTimestamp: 0,
                             systemTimestamp: undefined,
@@ -243,7 +244,7 @@ describe("EventDataDecoder", () => {
                             path: undefined,
                         },
                         {
-                            eventNumber: 3,
+                            eventNumber: EventNumber(3),
                             priority: 1,
                             epochTimestamp: 0,
                             systemTimestamp: undefined,
@@ -264,7 +265,7 @@ describe("EventDataDecoder", () => {
                     },
                     events: [
                         {
-                            eventNumber: 2,
+                            eventNumber: EventNumber(2),
                             priority: 1,
                             epochTimestamp: 0,
                             systemTimestamp: undefined,
@@ -284,7 +285,7 @@ describe("EventDataDecoder", () => {
             const data: TypeFromSchema<typeof TlvEventData>[] = [
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x999), eventId: EventId(0) },
-                    eventNumber: 1,
+                    eventNumber: EventNumber(1),
                     priority: 1,
                     epochTimestamp: 0,
                     systemTimestamp: undefined,
@@ -294,7 +295,7 @@ describe("EventDataDecoder", () => {
                 },
                 {
                     path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x999), eventId: EventId(1) },
-                    eventNumber: 2,
+                    eventNumber: EventNumber(2),
                     priority: 1,
                     epochTimestamp: 0,
                     systemTimestamp: undefined,
@@ -317,7 +318,7 @@ describe("EventDataDecoder", () => {
                     },
                     events: [
                         {
-                            eventNumber: 1,
+                            eventNumber: EventNumber(1),
                             priority: 1,
                             epochTimestamp: 0,
                             systemTimestamp: undefined,
@@ -338,7 +339,7 @@ describe("EventDataDecoder", () => {
                     },
                     events: [
                         {
-                            eventNumber: 2,
+                            eventNumber: EventNumber(2),
                             priority: 1,
                             epochTimestamp: 0,
                             systemTimestamp: undefined,

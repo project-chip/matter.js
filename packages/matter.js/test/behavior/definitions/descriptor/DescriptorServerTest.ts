@@ -77,9 +77,15 @@ describe("DescriptorServer", () => {
     it("adds servers automatically", async () => {
         const device = await MockEndpoint.create(MockEndpointType);
 
+        const promise = new Promise<void>(resolve => {
+            device.events.descriptor.serverList$Changed.once(() => {
+                resolve();
+            });
+        });
+
         device.behaviors.require(OnOffServer);
 
-        await device.events.descriptor.serverList$Change;
+        await promise;
 
         expect(device.state.descriptor.serverList).deep.equals([29, 6]);
     });
@@ -88,7 +94,7 @@ describe("DescriptorServer", () => {
         const { parent } = await createFamily();
 
         if (!parent.state.descriptor.partsList.length) {
-            await parent.events.descriptor.partsList$Change;
+            await parent.events.descriptor.partsList$Changed;
         }
 
         const partsList = parent.state.descriptor.partsList;
@@ -99,7 +105,7 @@ describe("DescriptorServer", () => {
         const { parent, child } = await createFamily();
 
         if (!parent.state.descriptor.partsList.length) {
-            await parent.events.descriptor.partsList$Change;
+            await parent.events.descriptor.partsList$Changed;
         }
 
         const partsState = parent.state.descriptor;
@@ -108,7 +114,7 @@ describe("DescriptorServer", () => {
         await child.close();
 
         if (parent.state.descriptor.partsList.length) {
-            await parent.events.descriptor.partsList$Change;
+            await parent.events.descriptor.partsList$Changed;
         }
         expect(parent.state.descriptor.partsList.length).equals(0);
 

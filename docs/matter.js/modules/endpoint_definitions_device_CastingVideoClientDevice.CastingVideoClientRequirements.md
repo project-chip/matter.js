@@ -32,11 +32,11 @@
 
 The AccountLogin cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [AccountLoginBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#accountloginbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:155](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L155)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:154](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L154)
 
 ___
 
@@ -46,11 +46,11 @@ ___
 
 The ApplicationBasic cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ApplicationBasicBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#applicationbasicbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:85](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L85)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:84](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L84)
 
 ___
 
@@ -60,11 +60,11 @@ ___
 
 The ApplicationLauncher cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ApplicationLauncherBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#applicationlauncherbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L148)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:147](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L147)
 
 ___
 
@@ -74,11 +74,11 @@ ___
 
 The AudioOutput cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [AudioOutputBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#audiooutputbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:141](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L141)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:140](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L140)
 
 ___
 
@@ -88,11 +88,11 @@ ___
 
 The Channel cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ChannelBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#channelbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:106](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L106)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:105](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L105)
 
 ___
 
@@ -102,11 +102,11 @@ ___
 
 The ContentLauncher cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [ContentLauncherBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#contentlauncherbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:78](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L78)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L77)
 
 ___
 
@@ -116,11 +116,11 @@ ___
 
 The KeypadInput cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [KeypadInputBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#keypadinputbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:71](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L71)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:70](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L70)
 
 ___
 
@@ -130,11 +130,11 @@ ___
 
 The LevelControl cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LevelControlBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#levelcontrolbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L92)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L91)
 
 ___
 
@@ -144,11 +144,11 @@ ___
 
 The LowPower cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [LowPowerBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#lowpowerbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:134](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L134)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:133](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L133)
 
 ___
 
@@ -158,11 +158,11 @@ ___
 
 The MediaInput cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [MediaInputBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#mediainputbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:127](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L127)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:126](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L126)
 
 ___
 
@@ -172,11 +172,11 @@ ___
 
 The MediaPlayback cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [MediaPlaybackBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#mediaplaybackbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:120](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L120)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L119)
 
 ___
 
@@ -186,11 +186,11 @@ ___
 
 The OnOff cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [OnOffBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#onoffbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L64)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L63)
 
 ___
 
@@ -200,11 +200,11 @@ ___
 
 The TargetNavigator cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [TargetNavigatorBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#targetnavigatorbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L113)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L112)
 
 ___
 
@@ -214,11 +214,11 @@ ___
 
 The WakeOnLan cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [WakeOnLanBehavior](endpoint_definitions_device_CastingVideoClientDevice.CastingVideoClientRequirements.md#wakeonlanbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L99)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L98)
 
 ___
 
@@ -251,4 +251,4 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:160](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L160)
+[packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts:159](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/CastingVideoClientDevice.ts#L159)

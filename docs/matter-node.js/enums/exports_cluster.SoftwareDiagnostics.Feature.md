@@ -8,7 +8,7 @@ These are optional features supported by SoftwareDiagnosticsCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.4
+MatterSpecification.v11.Core § 11.12.4
 
 ## Table of contents
 

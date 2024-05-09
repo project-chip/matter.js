@@ -15,6 +15,7 @@ import { MaybePromise } from "../../util/Promises.js";
 import type { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
 import { Datasource } from "../state/managed/Datasource.js";
+import { BackingEvents } from "./BackingEvents.js";
 import { Reactors } from "./Reactors.js";
 
 const logger = Logger.get("BehaviorBacking");
@@ -185,7 +186,7 @@ export abstract class BehaviorBacking {
      */
     get events() {
         if (!this.#events) {
-            this.#events = new this.#type.Events();
+            this.#events = BackingEvents(this);
         }
         return this.#events;
     }
@@ -225,10 +226,14 @@ export abstract class BehaviorBacking {
         // Do not use Agent.get because backing is in "destroying" state
         const behavior = this.#lifecycleInstance(agent);
 
-        return MaybePromise.then(
-            () => behavior?.[Symbol.asyncDispose](),
-            undefined,
-            e => logger.error(`Destroying ${this}:`, e),
+        return MaybePromise.finally(
+            () =>
+                MaybePromise.then(
+                    () => behavior?.[Symbol.asyncDispose](),
+                    undefined,
+                    e => logger.error(`Destroying ${this}:`, e),
+                ),
+            () => this.#events?.[Symbol.dispose](),
         );
     }
 

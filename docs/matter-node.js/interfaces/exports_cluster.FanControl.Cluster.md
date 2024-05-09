@@ -13,7 +13,7 @@ method.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4
+MatterSpecification.v11.Cluster § 4.4
 
 ## Hierarchy
 

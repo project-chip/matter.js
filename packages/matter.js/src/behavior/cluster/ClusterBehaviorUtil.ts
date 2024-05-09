@@ -9,7 +9,7 @@ import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { AttributeModel, ClusterModel, ElementTag, FeatureSet, Matter, Metatype } from "../../model/index.js";
 import { GeneratedClass } from "../../util/GeneratedClass.js";
-import { Observable } from "../../util/Observable.js";
+import { AsyncObservable } from "../../util/Observable.js";
 import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
@@ -87,6 +87,13 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
 export type ClusterOf<B extends Behavior.Type> = B extends { cluster: infer C extends ClusterType }
     ? C
     : ClusterType.Unknown;
+
+/**
+ * The extension interface for a behavior.
+ */
+export type ExtensionInterfaceOf<B extends Behavior.Type> = B extends { ExtensionInterface: infer I extends {} }
+    ? I
+    : {};
 
 /**
  * Create a new state subclass that inherits relevant default values from a base Behavior.Type and adds new default
@@ -178,9 +185,14 @@ function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNam
 
     // Add events for mandatory attributes that are not present in the base class
     for (const attrName of stateNames) {
-        const name = `${attrName}$Change`;
-        if (baseInstance[name] === undefined) {
-            names.add(name);
+        const changing = `${attrName}$Changing`;
+        if (baseInstance[changing] === undefined) {
+            names.add(changing);
+        }
+
+        const changed = `${attrName}$Changed`;
+        if (baseInstance[changed] === undefined) {
+            names.add(changed);
         }
     }
 
@@ -192,7 +204,7 @@ function createDerivedEvents(cluster: ClusterType, base: Behavior.Type, stateNam
 
         initialize() {
             for (const name of names) {
-                (this as any)[name] = Observable();
+                (this as any)[name] = AsyncObservable();
             }
         },
     });

@@ -8,7 +8,7 @@ This field uniquely identifies the group within the scope of the given Fabric.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.5
+MatterSpecification.v11.Core § 11.2.6.5
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ This field provides the list of Endpoint IDs on the Node to which messages to th
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.5.1
+MatterSpecification.v11.Core § 11.2.6.5.1
 
 #### Inherited from
 
@@ -84,7 +84,7 @@ GroupId on any Endpoint via the Groups cluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.2.6.5.2
+MatterSpecification.v11.Core § 11.2.6.5.2
 
 #### Inherited from
 

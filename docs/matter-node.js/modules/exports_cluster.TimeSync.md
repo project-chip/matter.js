@@ -50,12 +50,12 @@ These elements and properties are present in all TimeSync clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `granularity`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`Granularity`](../enums/exports_cluster.TimeSync.Granularity.md), `any`\> ; `timeSource`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`TimeSource`](../enums/exports_cluster.TimeSync.TimeSource.md), `any`\> ; `trustedTimeNodeId`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_NodeId_.md) \| ``null``, `any`\> ; `utcTime`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint` \| ``null``, `any`\>  } | - |
-| `attributes.granularity` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`Granularity`](../enums/exports_cluster.TimeSync.Granularity.md), `any`\> | The granularity of the error that the server is willing to guarantee on the time synchronization. It is of type GranularityEnum. **`See`** MatterCoreSpecificationV1_1 § 11.16.8.2 |
-| `attributes.timeSource` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`TimeSource`](../enums/exports_cluster.TimeSync.TimeSource.md), `any`\> | The server’s time source. This attribute indicates what method the server is using to sync, whether the source uses NTS or not and whether the source is internal or external to the Fabric. This attribute may be used by a client to determine its level of trust in the UTCTime. It is of type TimeSourceEnum. If a server is unsure if the selected NTP server is within the Fabric, it SHOULD indicate the server is NonFabric. **`See`** MatterCoreSpecificationV1_1 § 11.16.8.3 |
-| `attributes.trustedTimeNodeId` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_NodeId_.md) \| ``null``, `any`\> | The Node ID of a trusted Time Cluster. The TrustedTimeNodeId Node is used as a check on external time sync sources and may be used as the primary time source if other time sources are unavailable. See Section 11.16.13, “Time source prioritization”. This attribute is writeable only by an Administrator. It SHOULD be set by the Commissioner during commissioning. If no appropriate TrustedTimeNodeId is available, the commissioner may set this value to null. **`See`** MatterCoreSpecificationV1_1 § 11.16.8.5 |
-| `attributes.utcTime` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint` \| ``null``, `any`\> | If the server has achieved time synchronization, this shall indicate the current time as a UTC epoch-us (Epoch Time in Microseconds). If the server has not achieved time synchronization, this shall be null. This attribute may be set when a Section 11.16.9.1, “SetUtcTime Command” is received. **`See`** MatterCoreSpecificationV1_1 § 11.16.8.1 |
+| `attributes.granularity` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`Granularity`](../enums/exports_cluster.TimeSync.Granularity.md), `any`\> | The granularity of the error that the server is willing to guarantee on the time synchronization. It is of type GranularityEnum. **`See`** MatterSpecification.v11.Core § 11.16.8.2 |
+| `attributes.timeSource` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`TimeSource`](../enums/exports_cluster.TimeSync.TimeSource.md), `any`\> | The server’s time source. This attribute indicates what method the server is using to sync, whether the source uses NTS or not and whether the source is internal or external to the Fabric. This attribute may be used by a client to determine its level of trust in the UTCTime. It is of type TimeSourceEnum. If a server is unsure if the selected NTP server is within the Fabric, it SHOULD indicate the server is NonFabric. **`See`** MatterSpecification.v11.Core § 11.16.8.3 |
+| `attributes.trustedTimeNodeId` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"`](exports_cluster._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_NodeId_.md) \| ``null``, `any`\> | The Node ID of a trusted Time Cluster. The TrustedTimeNodeId Node is used as a check on external time sync sources and may be used as the primary time source if other time sources are unavailable. See Section 11.16.13, “Time source prioritization”. This attribute is writeable only by an Administrator. It SHOULD be set by the Commissioner during commissioning. If no appropriate TrustedTimeNodeId is available, the commissioner may set this value to null. **`See`** MatterSpecification.v11.Core § 11.16.8.5 |
+| `attributes.utcTime` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint` \| ``null``, `any`\> | If the server has achieved time synchronization, this shall indicate the current time as a UTC epoch-us (Epoch Time in Microseconds). If the server has not achieved time synchronization, this shall be null. This attribute may be set when a Section 11.16.9.1, “SetUtcTime Command” is received. **`See`** MatterSpecification.v11.Core § 11.16.8.1 |
 | `commands` | \{ `setUtcTime`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } | - |
-| `commands.setUtcTime` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command may be issued by Administrator to set the time. If the Commissioner does not have a valid time source, it may send a Granularity of NoTimeGranularity. Upon receipt of this command, the server may update its UTCTime attribute to match the time specified in the command, if the stated Granularity and TimeSource are acceptable. The server shall update its UTCTime attribute if its current Granularity is NoTimeGranularity. If the time is updated, the server shall also update its Granularity attribute as appropriate server does not plan to maintain time). It shall also update its TimeSource attribute to Admin. It shall also update its last known good UTC time. If the server updates its UTCTime attribute, it shall accept the command with a status code of SUCCESS. If it opts to not update its time, it shall fail the command with a cluster specific Status Code of TimeNotAccepted. **`See`** MatterCoreSpecificationV1_1 § 11.16.9.1 |
+| `commands.setUtcTime` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command may be issued by Administrator to set the time. If the Commissioner does not have a valid time source, it may send a Granularity of NoTimeGranularity. Upon receipt of this command, the server may update its UTCTime attribute to match the time specified in the command, if the stated Granularity and TimeSource are acceptable. The server shall update its UTCTime attribute if its current Granularity is NoTimeGranularity. If the time is updated, the server shall also update its Granularity attribute as appropriate server does not plan to maintain time). It shall also update its TimeSource attribute to Admin. It shall also update its last known good UTC time. If the server updates its UTCTime attribute, it shall accept the command with a status code of SUCCESS. If it opts to not update its time, it shall fail the command with a cluster specific Status Code of TimeNotAccepted. **`See`** MatterSpecification.v11.Core § 11.16.9.1 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `defaultNtp`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`string` \| ``null``, `any`\>  }  } ; `flags`: \{ `ntpClient`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `dstOffset`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `localTime`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| `bigint` \| ``null``, `any`\> ; `timeZone`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `timeZoneDatabase`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`boolean`, `any`\>  } ; `events`: \{ `dstStatus`: [`Event`](../interfaces/exports_cluster.Event.md)\<`void`, `any`\> ; `dstTableEmpty`: [`Event`](../interfaces/exports_cluster.Event.md)\<`void`, `any`\> ; `timeZoneStatus`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `timeZone`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `ntpServerPort`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`number` \| ``null``, `any`\>  }  } ; `flags`: \{ `ntpServer`: ``true``  }  }] | This metadata controls which TimeSyncCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `ntpClient`: [`BitFlag`](exports_schema.md#bitflag) ; `ntpServer`: [`BitFlag`](exports_schema.md#bitflag) ; `timeZone`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.ntpClient` | [`BitFlag`](exports_schema.md#bitflag) | NtpClient Server supports an NTP or SNTP client. |
@@ -103,9 +103,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1312
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1285
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1314
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1287
 
 ___
 
@@ -197,7 +197,7 @@ assumptions.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.4
+MatterSpecification.v11.Core § 11.16.6.4
 
 #### Defined in
 
@@ -213,7 +213,7 @@ Input to the TimeSync setUtcTime command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.9.1
+MatterSpecification.v11.Core § 11.16.9.1
 
 #### Defined in
 
@@ -229,7 +229,7 @@ Body of the TimeSync timeZoneStatus event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.10.3
+MatterSpecification.v11.Core § 11.16.10.3
 
 #### Defined in
 
@@ -243,7 +243,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.6.3
+MatterSpecification.v11.Core § 11.16.6.3
 
 #### Defined in
 

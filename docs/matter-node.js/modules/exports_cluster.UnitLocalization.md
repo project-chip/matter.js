@@ -82,9 +82,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:182
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:187
 
-packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:184
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:189
 
 ___
 

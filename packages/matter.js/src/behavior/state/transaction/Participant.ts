@@ -22,6 +22,17 @@ export interface Participant {
     role?: {};
 
     /**
+     * Pre-commit logic.
+     *
+     * Pre-commit logic returns a boolean indicating whether it performed an action that affects state.  The transaction
+     * will cycle through participants continuously until all participants return false.
+     *
+     * Thus `preCommit` implementations must be stateful and expect to be invoked more than once for a single
+     * transaction.
+     */
+    preCommit?: () => MaybePromise<boolean>;
+
+    /**
      * Commit phase one.
      */
     commit1(): MaybePromise;

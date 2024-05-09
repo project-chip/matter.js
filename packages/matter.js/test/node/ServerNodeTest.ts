@@ -9,6 +9,8 @@ import { PumpConfigurationAndControlServer } from "../../src/behavior/definition
 import { GeneralCommissioning } from "../../src/cluster/definitions/GeneralCommissioningCluster.js";
 import { PumpConfigurationAndControl } from "../../src/cluster/definitions/PumpConfigurationAndControlCluster.js";
 import { DnsCodec, DnsMessage, DnsRecordType } from "../../src/codec/DnsCodec.js";
+import { Crypto } from "../../src/crypto/Crypto.js";
+import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { Endpoint } from "../../src/endpoint/Endpoint.js";
@@ -21,7 +23,30 @@ import { ServerNode } from "../../src/node/ServerNode.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { MockServerNode } from "./mock-server-node.js";
 
+let commissionForFabricNumber: number | undefined = undefined;
+
+Crypto.get().createKeyPair = () => {
+    const DEFAULT_SEC1_KEY = ByteArray.fromHex(
+        "30770201010420aef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba",
+    );
+
+    const sec1Key =
+        commissionForFabricNumber !== undefined
+            ? Fixtures.fabrics[commissionForFabricNumber]?.sec1Key
+            : DEFAULT_SEC1_KEY;
+
+    return Key({ sec1: sec1Key }) as PrivateKey;
+};
+
 describe("ServerNode", () => {
+    before(() => {
+        MockTime.reset(663774400000); // Initialize later then Certificate validity start time
+    });
+
+    beforeEach(() => {
+        commissionForFabricNumber = undefined;
+    });
+
     it("starts and stops and emits correct lifecycle changes", async () => {
         const node = new MockServerNode();
 
@@ -148,7 +173,7 @@ describe("ServerNode", () => {
         await MockTime.advance(Fixtures.failsafeLengthS * 1000 + 1);
 
         if (opcreds.commissionedFabrics > 0) {
-            await node.events.operationalCredentials.commissionedFabrics$Change;
+            await node.events.operationalCredentials.commissionedFabrics$Changed;
         }
 
         expect(opcreds.commissionedFabrics).equals(0);
@@ -190,7 +215,7 @@ describe("ServerNode", () => {
         const { node } = await commission();
 
         let lastCommissionedFabricCount;
-        node.events.operationalCredentials.commissionedFabrics$Change.on(commissionedFabrics => {
+        node.events.operationalCredentials.commissionedFabrics$Changed.on(commissionedFabrics => {
             lastCommissionedFabricCount = commissionedFabrics;
         });
 
@@ -200,7 +225,7 @@ describe("ServerNode", () => {
         });
 
         let lastFabricsCount;
-        node.events.operationalCredentials.fabrics$Change.on(fabrics => {
+        node.events.operationalCredentials.fabrics$Changed.on(fabrics => {
             lastFabricsCount = fabrics.length;
         });
 
@@ -258,6 +283,7 @@ async function almostCommission(node?: MockServerNode, number = 0) {
     }
 
     const params = Fixtures.fabrics[number];
+    commissionForFabricNumber = number;
 
     const session = await node.createSession();
 
@@ -296,13 +322,14 @@ async function almostCommission(node?: MockServerNode, number = 0) {
     });
 
     await node.online(context, async agent => {
-        await agent.operationalCredentials.addNoc({
+        const result = await agent.operationalCredentials.addNoc({
             nocValue: params.nocValue,
             icacValue: params.icacValue,
             ipkValue: params.ipkValue,
             caseAdminSubject: NodeId(number * 100),
             adminVendorId: VendorId(65521),
         });
+        expect(result.statusCode).deep.equals(0);
     });
 
     return { node, context };
@@ -352,7 +379,7 @@ namespace Fixtures {
             ),
 
             nocValue: u(
-                "1530010101240201370324130218260480228127260580254d3a3706241501241101182407012408013009410458b5d8a547375bae6f7e36f6969f6b8322f47386ec57efd7d2b93ec9d559c624e7526c4cfc9590fce7f6b796c66f5cff4cb43cc6dd0d86f78e9b349ca55137c9370a350128011824020136030402040118300414b02b87728e8fe0d7becfe48e60e59962c91531c730051494d101c4667b1123bffe5ccbc3a88dba7a9bc94018300b40fbf900de9b3e2771363af8902eff38edc7b129d54c111087e0221d58ca4afbc74bfa379248a4a2a85ae21baeb33b3cc1dae2e98aa2dbf663081ede54a05bade318",
+                "1530010101240201370324130218260480228127260580254d3a370624150124110118240701240801300941043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba370a350128011824020136030402040118300414b02b87728e8fe0d7becfe48e60e59962c91531c730051494d101c4667b1123bffe5ccbc3a88dba7a9bc94018300b40fbf900de9b3e2771363af8902eff38edc7b129d54c111087e0221d58ca4afbc74bfa379248a4a2a85ae21baeb33b3cc1dae2e98aa2dbf663081ede54a05bade318",
             ),
 
             icacValue: u(
@@ -360,6 +387,10 @@ namespace Fixtures {
             ),
 
             ipkValue: u("74656d706f726172792069706b203031"),
+
+            sec1Key: u(
+                "30770201010420aef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba",
+            ),
         },
         {
             attestationNonce: u("35655d2c73a9fd8067443f7394da7b3030bc239a5d6d8de0bc727c1be339c0bf"),
@@ -371,7 +402,7 @@ namespace Fixtures {
             ),
 
             nocValue: u(
-                "1530010101240201370324130218260480228127260580254d3a37062415012411021824070124080130094104350707d035029b082073b387a7aaed4b307a8cd0091cd963832e03e73925b7f973453a69733aad397dd11550ffe0f4dfe8e0f11479172cd8def08e5a89717cd9370a350128011824020136030402040118300414f93ba80eac51bb6001c5eb1a9bcb7695c37ea59530051435efb6ef11a6ba2623301212798224a21cd2832118300b40b7a069f6cc83f0bede4c0eacb33a4d58a4f9ec3fb1423114f36566e6c06d2884d6f3d1f06b957f56b4ccc52e7a440880709b629a7ea983c6779d691045be553818",
+                "1530010101240201370324130218260480228127260580254d3a3706241501241102182407012408013009410490495e266f4291ffae925d58654ecf67527b052256af369cd81e20ee23d68e6f2e769ba7358eb4459c5df393799a57fe996f1cd4e8bc9ff977e3279f62adf182370a350128011824020136030402040118300414f93ba80eac51bb6001c5eb1a9bcb7695c37ea59530051435efb6ef11a6ba2623301212798224a21cd2832118300b40b7a069f6cc83f0bede4c0eacb33a4d58a4f9ec3fb1423114f36566e6c06d2884d6f3d1f06b957f56b4ccc52e7a440880709b629a7ea983c6779d691045be553818",
             ),
 
             icacValue: u(
@@ -379,6 +410,10 @@ namespace Fixtures {
             ),
 
             ipkValue: u("74656d706f726172792069706b203031"),
+
+            sec1Key: u(
+                "30770201010420fef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba",
+            ),
         },
     ];
 

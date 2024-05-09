@@ -42,7 +42,7 @@ Data of an event which was triggered and stored internally
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/EventHandler.ts#L29)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/EventHandler.ts#L30)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/EventHandler.ts#L33)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/EventHandler.ts#L34)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/EventHandler.ts#L28)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:29](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/EventHandler.ts#L29)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/EventHandler.ts#L31)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/EventHandler.ts#L32)
 
 ___
 
@@ -98,17 +98,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/EventHandler.ts#L30)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/EventHandler.ts#L31)
 
 ___
 
 ### eventNumber
 
-• **eventNumber**: `number`
+• **eventNumber**: [`EventNumber`](../modules/datatype_export.md#eventnumber)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/EventHandler.ts#L40)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/EventHandler.ts#L41)
 
 ___
 
@@ -122,4 +122,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/EventHandler.ts#L32)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:33](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/EventHandler.ts#L33)

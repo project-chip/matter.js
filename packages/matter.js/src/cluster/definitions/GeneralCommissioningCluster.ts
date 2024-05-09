@@ -172,47 +172,51 @@ export namespace GeneralCommissioning {
     export interface SetRegulatoryConfigRequest extends TypeFromSchema<typeof TlvSetRegulatoryConfigRequest> {}
 
     /**
-     * This field shall contain the result of the operation, based on the behavior specified in the functional
-     * description of the SetRegulatoryConfig command.
-     *
-     * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.9.6.5
      */
     export const TlvSetRegulatoryConfigResponse = TlvObject({
+        /**
+         * This field shall contain the result of the operation, based on the behavior specified in the functional
+         * description of the SetRegulatoryConfig command.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.5.1
+         */
         errorCode: TlvField(0, TlvEnum<CommissioningError>()),
+
+        /**
+         * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.5.2
+         */
         debugText: TlvField(1, TlvString)
     });
 
     /**
-     * This field shall contain the result of the operation, based on the behavior specified in the functional
-     * description of the SetRegulatoryConfig command.
-     *
-     * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.9.6.5
      */
     export interface SetRegulatoryConfigResponse extends TypeFromSchema<typeof TlvSetRegulatoryConfigResponse> {}
 
     /**
-     * This field shall contain the result of the operation, based on the behavior specified in the functional
-     * description of the CommissioningComplete command.
-     *
-     * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.9.6.7
      */
     export const TlvCommissioningCompleteResponse = TlvObject({
+        /**
+         * This field shall contain the result of the operation, based on the behavior specified in the functional
+         * description of the CommissioningComplete command.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.7.1
+         */
         errorCode: TlvField(0, TlvEnum<CommissioningError>()),
+
+        /**
+         * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.9.6.7.2
+         */
         debugText: TlvField(1, TlvString)
     });
 
     /**
-     * This field shall contain the result of the operation, based on the behavior specified in the functional
-     * description of the CommissioningComplete command.
-     *
-     * See Section 11.9.6.1, “Common fields in General Commissioning cluster responses”.
-     *
      * @see {@link MatterSpecification.v11.Core} § 11.9.6.7
      */
     export interface CommissioningCompleteResponse extends TypeFromSchema<typeof TlvCommissioningCompleteResponse> {}

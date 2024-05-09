@@ -23,7 +23,9 @@ import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
+import { EventNumber } from "../../datatype/EventNumber.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
@@ -31,7 +33,6 @@ import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { toHexString } from "../../util/Number.js";
 import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
 import {
     AttributeReportPayload,
@@ -361,8 +362,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                 }
                 eventReportsPayload.push(
                     ...reportsForPath.sort((a, b) => {
-                        const eventNumberA = a.eventData?.eventNumber ?? 0;
-                        const eventNumberB = b.eventData?.eventNumber ?? 0;
+                        const eventNumberA = a.eventData?.eventNumber ?? EventNumber(0);
+                        const eventNumberB = b.eventData?.eventNumber ?? EventNumber(0);
                         if (eventNumberA > eventNumberB) {
                             return 1;
                         } else if (eventNumberA < eventNumberB) {
@@ -964,8 +965,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice>, Interac
                             ),
                         StatusResponseError,
                         async error => {
-                            const errorLogText = `Error ${toHexString(error.code)}${
-                                error.clusterCode !== undefined ? `/${toHexString(error.clusterCode)}` : ""
+                            const errorLogText = `Error ${Diagnostic.hex(error.code)}${
+                                error.clusterCode !== undefined ? `/${Diagnostic.hex(error.clusterCode)}` : ""
                             } while invoking command: ${error.message}`;
                             if (error instanceof ValidationError) {
                                 logger.info(

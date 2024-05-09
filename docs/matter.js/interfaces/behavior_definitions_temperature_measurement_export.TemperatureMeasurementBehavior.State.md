@@ -32,7 +32,7 @@ The null value indicates that the value is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.3.4.3
+MatterSpecification.v11.Cluster § 2.3.4.3
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L57)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L56)
 
 ___
 
@@ -57,7 +57,7 @@ temperature is unknown.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.3.4.1
+MatterSpecification.v11.Cluster § 2.3.4.1
 
 #### Inherited from
 
@@ -65,7 +65,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L36)
 
 ___
 
@@ -80,7 +80,7 @@ The null value indicates that the value is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.3.4.2
+MatterSpecification.v11.Cluster § 2.3.4.2
 
 #### Inherited from
 
@@ -88,7 +88,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L46)
 
 ___
 
@@ -100,7 +100,7 @@ See Measured Value.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.3.4.4
+MatterSpecification.v11.Cluster § 2.3.4.4
 
 #### Inherited from
 
@@ -108,4 +108,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:64](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L64)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:63](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L63)

@@ -8,7 +8,7 @@ Input to the Scenes copyScene command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.11
+MatterSpecification.v11.Cluster § 1.4.9.11
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ Table.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.11.2
+MatterSpecification.v11.Cluster § 1.4.9.11.2
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ Table.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.11.4
+MatterSpecification.v11.Cluster § 1.4.9.11.4
 
 #### Inherited from
 
@@ -85,7 +85,7 @@ shall be ignored. Otherwise this field is set to 0.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.11.1
+MatterSpecification.v11.Cluster § 1.4.9.11.1
 
 #### Inherited from
 
@@ -107,7 +107,7 @@ Table.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.11.3
+MatterSpecification.v11.Cluster § 1.4.9.11.3
 
 #### Inherited from
 
@@ -129,7 +129,7 @@ Table.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.11.5
+MatterSpecification.v11.Cluster § 1.4.9.11.5
 
 #### Inherited from
 

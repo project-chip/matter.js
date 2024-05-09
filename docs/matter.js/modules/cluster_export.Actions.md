@@ -64,9 +64,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:962](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L962)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:961](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L961)
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:964](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L964)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:963](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L963)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:656](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L656)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:655](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L655)
 
 ___
 
@@ -92,7 +92,7 @@ Note - The bit allocation of this bitmap shall follow the ID’s of the Commands
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.1
+MatterSpecification.v11.Core § 9.14.4.1
 
 #### Type declaration
 
@@ -113,7 +113,7 @@ Note - The bit allocation of this bitmap shall follow the ID’s of the Commands
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:119](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L119)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:118](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L118)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:965](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L965)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:964](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L964)
 
 ___
 
@@ -135,11 +135,11 @@ Body of the Actions actionFailed event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.7.2
+MatterSpecification.v11.Core § 9.14.7.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:633](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L633)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:632](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L632)
 
 ___
 
@@ -151,11 +151,11 @@ This data type holds the details of a single action, and contains the data field
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.6
+MatterSpecification.v11.Core § 9.14.4.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:213](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L213)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:212](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L212)
 
 ___
 
@@ -167,11 +167,11 @@ Input to the Actions disableAction command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.11
+MatterSpecification.v11.Core § 9.14.6.11
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:552](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L552)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:551](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L551)
 
 ___
 
@@ -183,11 +183,11 @@ Input to the Actions disableActionWithDuration command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.12
+MatterSpecification.v11.Core § 9.14.6.12
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:569](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L569)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:568](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L568)
 
 ___
 
@@ -199,11 +199,11 @@ Input to the Actions enableAction command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.9
+MatterSpecification.v11.Core § 9.14.6.9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:517](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L517)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:516](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L516)
 
 ___
 
@@ -215,11 +215,11 @@ Input to the Actions enableActionWithDuration command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.10
+MatterSpecification.v11.Core § 9.14.6.10
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:534](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L534)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:533](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L533)
 
 ___
 
@@ -240,11 +240,11 @@ This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.7
+MatterSpecification.v11.Core § 9.14.4.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:332](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L332)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:331](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L331)
 
 ___
 
@@ -256,11 +256,11 @@ Input to the Actions instantAction command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.1
+MatterSpecification.v11.Core § 9.14.6.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:366](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L366)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:365](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L365)
 
 ___
 
@@ -272,11 +272,11 @@ Input to the Actions instantActionWithTransition command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.2
+MatterSpecification.v11.Core § 9.14.6.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:383](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L383)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:382](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L382)
 
 ___
 
@@ -288,11 +288,11 @@ Input to the Actions pauseAction command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.6
+MatterSpecification.v11.Core § 9.14.6.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:465](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L465)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:464](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L464)
 
 ___
 
@@ -304,11 +304,11 @@ Input to the Actions pauseActionWithDuration command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.7
+MatterSpecification.v11.Core § 9.14.6.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:482](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L482)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:481](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L481)
 
 ___
 
@@ -320,11 +320,11 @@ Input to the Actions resumeAction command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.8
+MatterSpecification.v11.Core § 9.14.6.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:500](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L500)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:499](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L499)
 
 ___
 
@@ -336,11 +336,11 @@ Input to the Actions startAction command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.3
+MatterSpecification.v11.Core § 9.14.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:407](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L407)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:406](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L406)
 
 ___
 
@@ -352,11 +352,11 @@ Input to the Actions startActionWithDuration command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.4
+MatterSpecification.v11.Core § 9.14.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:424](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L424)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:423](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L423)
 
 ___
 
@@ -368,11 +368,11 @@ Body of the Actions stateChanged event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.7.1
+MatterSpecification.v11.Core § 9.14.7.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:587](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L587)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:586](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L586)
 
 ___
 
@@ -384,8 +384,8 @@ Input to the Actions stopAction command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.5
+MatterSpecification.v11.Core § 9.14.6.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:448](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L448)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:447](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L447)

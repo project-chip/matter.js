@@ -8,7 +8,7 @@ This data type holds the details of a single action, and contains the data field
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.6
+MatterSpecification.v11.Core § 9.14.4.6
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ This field shall provide an unique identifier used to identify an action.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.6.1
+MatterSpecification.v11.Core § 9.14.4.6.1
 
 #### Inherited from
 
@@ -58,7 +58,7 @@ Node which will be impacted by this ActionID.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.6.4
+MatterSpecification.v11.Core § 9.14.4.6.4
 
 #### Inherited from
 
@@ -80,7 +80,7 @@ scene".
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.6.2
+MatterSpecification.v11.Core § 9.14.4.6.2
 
 #### Inherited from
 
@@ -100,7 +100,7 @@ This field shall indicate the current state of this action.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.6.6
+MatterSpecification.v11.Core § 9.14.4.6.6
 
 #### Inherited from
 
@@ -123,7 +123,7 @@ below. Other bits shall be set to 0.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.6.5
+MatterSpecification.v11.Core § 9.14.4.6.5
 
 #### Inherited from
 
@@ -145,7 +145,7 @@ action. See ActionTypeEnum for details and examples.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.6.3
+MatterSpecification.v11.Core § 9.14.4.6.3
 
 #### Inherited from
 

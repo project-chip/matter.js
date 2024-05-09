@@ -4,11 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
 import { BooleanStateBehavior } from "./BooleanStateBehavior.js";
 
 /**
  * This is the default server implementation of {@link BooleanStateBehavior}.
  */
-export class BooleanStateServer extends BooleanStateBehavior {}
+export class BooleanStateServer extends BooleanStateBehavior {
+    override initialize() {
+        this.reactTo(this.events.stateValue$Changed, this.#emitStateChange);
+    }
+
+    #emitStateChange(stateValue: boolean) {
+        this.events.stateChange?.emit({ stateValue }, this.context);
+    }
+}

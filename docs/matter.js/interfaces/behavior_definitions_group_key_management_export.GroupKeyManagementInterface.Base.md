@@ -42,11 +42,11 @@ this command shall fail with a NOT_FOUND status code.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.8.2
+MatterSpecification.v11.Core § 11.2.8.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:175](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L175)
+[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:174](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L174)
 
 ___
 
@@ -69,11 +69,11 @@ structs.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.8.5
+MatterSpecification.v11.Core § 11.2.8.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:213](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L213)
+[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:212](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L212)
 
 ___
 
@@ -112,11 +112,11 @@ GroupKeySetID requested did not exist.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.8.4
+MatterSpecification.v11.Core § 11.2.8.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:199](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L199)
+[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L198)
 
 ___
 
@@ -173,8 +173,8 @@ Upon completion, this command shall send a status code back to the initiator:
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.2.8.1
+MatterSpecification.v11.Core § 11.2.8.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L159)
+[packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/group-key-management/GroupKeyManagementInterface.ts#L158)

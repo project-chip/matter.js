@@ -18,7 +18,7 @@ It provides status information about the success or failure of those commands.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.10
+MatterSpecification.v11.Core § 11.17.6.10
 
 ## Hierarchy
 
@@ -46,7 +46,7 @@ contents may go into logs or crash reports.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.10.3
+MatterSpecification.v11.Core § 11.17.6.10.3
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:542](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L542)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:541](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L541)
 
 ___
 
@@ -67,7 +67,7 @@ Index of the Fabric last added, removed or updated.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.10.2
+MatterSpecification.v11.Core § 11.17.6.10.2
 
 #### Inherited from
 
@@ -75,7 +75,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:533](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L533)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:532](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L532)
 
 ___
 
@@ -87,7 +87,7 @@ This field shall contain an NOCStatus value representing the status of an operat
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.10.1
+MatterSpecification.v11.Core § 11.17.6.10.1
 
 #### Inherited from
 
@@ -95,4 +95,4 @@ TypeFromSchema.statusCode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:525](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L525)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:524](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L524)

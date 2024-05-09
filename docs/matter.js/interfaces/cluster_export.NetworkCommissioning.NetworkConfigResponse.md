@@ -33,7 +33,7 @@ See Section 11.8.7.2.2, “DebugText Field” for usage.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.8
+MatterSpecification.v11.Core § 11.8.7.8
 
 ## Hierarchy
 
@@ -61,7 +61,7 @@ TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:392](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L392)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:391](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L391)
 
 ___
 
@@ -75,7 +75,7 @@ request command.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.8.1
+MatterSpecification.v11.Core § 11.8.7.8.1
 
 #### Inherited from
 
@@ -83,7 +83,7 @@ TypeFromSchema.networkIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:401](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L401)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:400](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L400)
 
 ___
 
@@ -97,4 +97,4 @@ TypeFromSchema.networkingStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:391](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L391)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:390](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L390)

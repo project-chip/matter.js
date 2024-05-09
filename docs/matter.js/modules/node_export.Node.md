@@ -33,7 +33,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/node/Node.ts:126](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/Node.ts#L126)
+[packages/matter.js/src/node/Node.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/Node.ts#L144)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/Node.ts:124](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/Node.ts#L124)
+[packages/matter.js/src/node/Node.ts:142](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/Node.ts#L142)
 
 ## Functions
 
@@ -77,4 +77,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/node/Node.ts:128](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/node/Node.ts#L128)
+[packages/matter.js/src/node/Node.ts:146](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/node/Node.ts#L146)

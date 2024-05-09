@@ -19,6 +19,7 @@ import { ImplementationError, InternalError, ReadOnlyError } from "../../common/
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { FeatureSet } from "../../model/index.js";
+import { EventEmitter } from "../../util/Observable.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
@@ -102,7 +103,7 @@ export class Behaviors {
         }
 
         this.#endpoint = endpoint;
-        this.#supported = supported;
+        this.#supported = { ...supported };
         this.#options = options;
 
         // DescriptorBehavior is unequivocally mandatory
@@ -110,15 +111,15 @@ export class Behaviors {
             this.#supported.descriptor = DescriptorServer;
         }
 
-        for (const id in supported) {
-            const type = supported[id];
+        for (const id in this.#supported) {
+            const type = this.#supported[id];
             if (!(type.prototype instanceof Behavior)) {
                 throw new ImplementationError(`${endpoint}.${id}" is not a Behavior.Type`);
             }
             if (typeof type.id !== "string") {
                 throw new ImplementationError(`${endpoint}.${id} has no ID`);
             }
-            this.#augmentPartShortcuts(type);
+            this.#augmentEndpoint(type);
         }
     }
 
@@ -179,7 +180,7 @@ export class Behaviors {
 
         this.#supported[type.id] = type;
 
-        this.#augmentPartShortcuts(type);
+        this.#augmentEndpoint(type);
 
         this.#endpoint.lifecycle.change(EndpointLifecycle.Change.ServersChanged);
 
@@ -528,7 +529,10 @@ export class Behaviors {
         return myType;
     }
 
-    #augmentPartShortcuts(type: Behavior.Type) {
+    /**
+     * Updates endpoint "state" and "events" properties to include properties for our implementations.
+     */
+    #augmentEndpoint(type: Behavior.Type) {
         Object.defineProperty(this.#endpoint.state, type.id, {
             get: () => {
                 return this.#backingFor("state", type).stateView;
@@ -541,9 +545,13 @@ export class Behaviors {
             enumerable: true,
         });
 
+        let events: undefined | EventEmitter;
         Object.defineProperty(this.#endpoint.events, type.id, {
             get: () => {
-                return this.#backingFor("events", type).events;
+                if (!events) {
+                    events = new type.Events();
+                }
+                return events;
             },
 
             enumerable: true,

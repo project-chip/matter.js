@@ -11,7 +11,7 @@ thermostat controller device, that supports a keypad and LCD screen.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.5
+MatterSpecification.v11.Cluster § 4.5
 
 ## Hierarchy
 

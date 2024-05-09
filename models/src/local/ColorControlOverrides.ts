@@ -48,7 +48,5 @@ LocalMatter.children.push({
 
         // Spec states the values of this bitmap are the same as the feature map
         { tag: "attribute", id: 0x400a, name: "ColorCapabilities", type: "FeatureMap" },
-
-        // The spec defines "direction"
     ],
 });

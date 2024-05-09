@@ -52,7 +52,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     #parts?: Parts;
     #construction: AsyncConstruction<Endpoint<T>>;
     #stateView = {} as Immutable<SupportedBehaviors.StateOf<T["behaviors"]>>;
-    #eventsView = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
+    #events = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
     #activity?: NodeActivity;
 
     /**
@@ -105,6 +105,19 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      */
     get owner(): Endpoint | undefined {
         return this.#owner;
+    }
+
+    /**
+     * Search for the owner of a specific type.
+     *
+     * Returns undefined if this owner is not found on the way up to the root endpoint.
+     */
+    ownerOfType<T extends EndpointType.Empty>(type: T): Endpoint<T> | undefined {
+        for (let endpoint: Endpoint | undefined = this; endpoint !== undefined; endpoint = endpoint.owner) {
+            if (endpoint.type.deviceClass === type.deviceClass) {
+                return endpoint as Endpoint<T>;
+            }
+        }
     }
 
     /**
@@ -229,7 +242,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
      * Events for all behaviors keyed by behavior ID.
      */
     get events() {
-        return this.#eventsView;
+        return this.#events;
     }
 
     /**
@@ -239,7 +252,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
         if (!this.behaviors.has(type)) {
             throw new ImplementationError(`Behavior ${type.id} is not supported by this endpoint`);
         }
-        return this.#eventsView[type.id] as Behavior.EventsOf<T>;
+        return this.#events[type.id] as Behavior.EventsOf<T>;
     }
 
     get construction() {
@@ -413,7 +426,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
     /**
      * Add a child endpoint.
      *
-     * @param config the {@link Endpoint} or {@link Endpoint.Configuration}
+     * @param endpoint the {@link Endpoint} or {@link Endpoint.Configuration}
      */
     async add<T extends EndpointType>(endpoint: Endpoint<T> | Endpoint.Configuration<T> | T): Promise<Endpoint<T>>;
 
@@ -572,8 +585,13 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
     async close() {
         await this.construction.close(async () => {
-            await this.parts.close();
-            await this.behaviors.close();
+            await this.#parts?.close();
+            await this.#behaviors?.close();
+
+            for (const events of Object.values(this.#events)) {
+                events[Symbol.dispose]();
+            }
+
             this.lifecycle.change(EndpointLifecycle.Change.Destroyed);
             this.#owner = undefined;
         });
@@ -656,7 +674,7 @@ export class Endpoint<T extends EndpointType = EndpointType.Empty> {
 
         const afterEndpointInitialized = () => {
             this.lifecycle.change(EndpointLifecycle.Change.Ready);
-            if (trace) {
+            if (trace && this.env.has(ActionTracer)) {
                 trace.path = this.path;
                 this.env.get(ActionTracer).record(trace);
             }

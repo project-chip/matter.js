@@ -21,7 +21,7 @@ import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
 import { TlvNullable } from "../../../src/tlv/TlvNullable.js";
 import { TlvInt32 } from "../../../src/tlv/TlvNumber.js";
 import { TlvString } from "../../../src/tlv/TlvString.js";
-import { EventEmitter, Observable } from "../../../src/util/Observable.js";
+import { AsyncObservable, BasicObservable, EventEmitter, Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockEndpoint } from "../../endpoint/mock-endpoint.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
@@ -29,10 +29,27 @@ import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
 class MyEventedBehavior extends MyBehavior {
     declare events: MyEventedBehavior.Events;
 }
+
 namespace MyEventedBehavior {
     export class Events extends MyBehavior.Events {
         somethingHappened = new Observable<[]>();
     }
+}
+
+class BehaviorWithCustomMethods extends MyBehavior.with("Awesome") {
+    foo() {
+        return true;
+    }
+
+    bar() {
+        return 4;
+    }
+}
+
+namespace BehaviorWithCustomMethods {
+    export declare const ExtensionInterface: {
+        bar(): number;
+    };
 }
 
 describe("ClusterBehavior", () => {
@@ -81,7 +98,7 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 events: EventEmitter & {
-                    reqAttr$Change: Observable<[value: string, oldValue: string, context?: ActionContext]>;
+                    reqAttr$Changed: AsyncObservable<[value: string, oldValue: string, context?: ActionContext]>;
                 };
             };
 
@@ -102,7 +119,7 @@ describe("ClusterBehavior", () => {
             true satisfies MyBehavior["state"]["optAttr"];
             (() => true) satisfies MyBehavior["optCmd"];
             ((..._args: any[]) => true) satisfies MyBehavior["optCmd"];
-            ({}) as Match<MyBehavior["events"], { optAttr$Change: {} }> satisfies false;
+            ({}) as Match<MyBehavior["events"], { optAttr$Changed: {} }> satisfies false;
             ({}) as Match<MyBehavior["events"], { optEv: {} }> satisfies false;
             ({}) as Match<MyBehavior, { optCmd: (...args: any[]) => any }> satisfies true;
         });
@@ -113,8 +130,8 @@ describe("ClusterBehavior", () => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.reqAttr).equals("hello");
                 expect(behavior.reqCmd).is.a("function");
-                expect(behavior.events.reqAttr$Change.constructor.name).equals("Emitter");
-                expect(behavior.events.reqEv.constructor.name).equals("Emitter");
+                expect(behavior.events.reqAttr$Changed).instanceof(BasicObservable);
+                expect(behavior.events.reqEv).instanceof(BasicObservable);
             });
         });
 
@@ -123,7 +140,7 @@ describe("ClusterBehavior", () => {
             await endpoint.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.optAttr).undefined;
-                expect(behavior.events.optAttr$Change?.constructor.name).equals("Emitter");
+                expect(behavior.events.optAttr$Changed).instanceof(BasicObservable);
                 expect(behavior.events.optEv).undefined;
             });
         });
@@ -170,6 +187,29 @@ describe("ClusterBehavior", () => {
             expect(MyBehavior.defaults.attr2).equals(123);
             expect(MyBehavior.defaults.attr3).equals("abc");
             expect(MyBehavior.defaults.attr4).equals(undefined);
+        });
+
+        it("carries forward non-command methods", () => {
+            ({}) as BehaviorWithCustomMethods satisfies { foo(): boolean };
+
+            const WithRevertedFeature = BehaviorWithCustomMethods.for(MyCluster);
+
+            ({}) as InstanceType<typeof WithRevertedFeature> satisfies { foo(): boolean };
+
+            class FooOverrideBehavior extends WithRevertedFeature {
+                // Note -- limitation due to https://github.com/microsoft/TypeScript/issues/27965 requires us to
+                // override as an instance function rather than a method
+                override foo = () => {
+                    return false;
+                };
+
+                // This is in ExtensionInterface so TS bug above does not apply
+                override bar() {
+                    return 5;
+                }
+            }
+
+            ({}) as InstanceType<typeof FooOverrideBehavior> satisfies { foo(): boolean };
         });
     });
 

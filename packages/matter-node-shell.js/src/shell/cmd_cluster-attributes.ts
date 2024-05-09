@@ -7,9 +7,8 @@
 import { SupportedAttributeClient } from "@project-chip/matter.js/cluster";
 import { ValidationError } from "@project-chip/matter.js/common";
 import { AttributeId, ClusterId, EndpointNumber } from "@project-chip/matter.js/datatype";
-import { Logger } from "@project-chip/matter.js/log";
+import { Diagnostic, Logger } from "@project-chip/matter.js/log";
 import { AttributeModel, ClusterModel, MatterModel } from "@project-chip/matter.js/model";
-import { toHexString } from "@project-chip/matter.js/util";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { convertJsonDataWithModel } from "../util/Json";
@@ -70,7 +69,7 @@ function generateAllAttributeHandlersForCluster(yargs: Argv, theNode: MatterNode
                     value,
                 } of result) {
                     console.log(
-                        `    ${toHexString(attributeId)}${attributeName !== undefined ? ` (${attributeName})` : ""}: ${Logger.toJSON(value)}`,
+                        `    ${Diagnostic.hex(attributeId)}${attributeName !== undefined ? ` (${attributeName})` : ""}: ${Logger.toJSON(value)}`,
                     );
                 }
             } catch (error) {

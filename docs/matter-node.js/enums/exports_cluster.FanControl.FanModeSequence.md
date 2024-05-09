@@ -8,7 +8,7 @@ The value of the FanControl fanModeSequence attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.4.6.2
+MatterSpecification.v11.Cluster § 4.4.6.2
 
 ## Table of contents
 

@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/descriptor/DescriptorServer.ts:176](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/descriptor/DescriptorServer.ts#L176)
+[packages/matter.js/src/behavior/definitions/descriptor/DescriptorServer.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/descriptor/DescriptorServer.ts#L176)

@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:58
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:65
 
 ___
 

@@ -8,7 +8,7 @@ This structure provides some constant values that may be of use to all commissio
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.4.3
+MatterSpecification.v11.Core § 11.9.4.3
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ Commissioner to proceed with a nominal commissioning without having to-rearm the
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.4.3.1
+MatterSpecification.v11.Core § 11.9.4.3.1
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ TypeFromSchema.failSafeExpiryLengthSeconds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:35](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L35)
 
 ___
 
@@ -61,7 +61,7 @@ Duration” and default to 900 seconds.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.9.4.3.2
+MatterSpecification.v11.Core § 11.9.4.3.2
 
 #### Inherited from
 
@@ -69,4 +69,4 @@ TypeFromSchema.maxCumulativeFailsafeSeconds
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L47)

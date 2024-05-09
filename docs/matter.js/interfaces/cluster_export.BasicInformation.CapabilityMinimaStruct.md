@@ -9,7 +9,7 @@ cluster-specific.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.4.1
+MatterSpecification.v11.Core § 11.1.4.1
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ CASE Sessions”.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.4.1.1
+MatterSpecification.v11.Core § 11.1.4.1.1
 
 #### Inherited from
 
@@ -46,7 +46,7 @@ TypeFromSchema.caseSessionsPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L51)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L50)
 
 ___
 
@@ -61,7 +61,7 @@ Transaction”.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.1.4.1.2
+MatterSpecification.v11.Core § 11.1.4.1.2
 
 #### Inherited from
 
@@ -69,4 +69,4 @@ TypeFromSchema.subscriptionsPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L61)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L60)

@@ -86,7 +86,19 @@ export namespace SoftwareDiagnostics {
      * @see {@link MatterSpecification.v11.Core} § 11.12.8.1
      */
     export const TlvSoftwareFaultEvent = TlvObject({
+        /**
+         * The ID field shall be set to the ID of the software thread in which the last software fault occurred.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.12.8.1.1
+         */
         id: TlvField(0, TlvUInt64),
+
+        /**
+         * The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which the
+         * last software fault occurred.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.12.8.1.2
+         */
         name: TlvOptionalField(1, TlvString.bound({ maxLength: 8 })),
 
         /**
@@ -94,7 +106,7 @@ export namespace SoftwareDiagnostics {
          * in further diagnosing or debugging a software fault. The FaultRecording field may be used to convey
          * information such as, but not limited to, thread backtraces or register contents.
          *
-         * @see {@link MatterSpecification.v11.Core} § 11.12.8.1.1
+         * @see {@link MatterSpecification.v11.Core} § 11.12.8.1.3
          */
         faultRecording: TlvOptionalField(2, TlvByteString.bound({ maxLength: 1024 }))
     });
@@ -205,11 +217,6 @@ export namespace SoftwareDiagnostics {
         events: {
             /**
              * The SoftwareFault Event shall be generated when a software fault takes place on the Node.
-             *
-             * The ID field shall be set to the ID of the software thread in which the last software fault occurred.
-             *
-             * The Name field shall be set to a manufacturer-specified name or prefix of the software thread in which
-             * the last software fault occurred.
              *
              * @see {@link MatterSpecification.v11.Core} § 11.12.8.1
              */

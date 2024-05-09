@@ -7,7 +7,7 @@
 import { Behavior } from "../../src/behavior/Behavior.js";
 import { BehaviorBacking } from "../../src/behavior/internal/BehaviorBacking.js";
 import { Agent } from "../../src/endpoint/Agent.js";
-import { EventEmitter, Observable } from "../../src/util/Observable.js";
+import { BasicObservable, EventEmitter, Observable } from "../../src/util/Observable.js";
 import { MockEndpoint } from "../endpoint/mock-endpoint.js";
 
 class TestBehavior extends Behavior {
@@ -27,13 +27,13 @@ namespace TestBehavior {
     }
 
     export class Events extends EventEmitter {
-        endpointValue$Change = Observable();
+        endpointValue$Changed = Observable();
     }
 }
 
 function test(what: string, fn: (behavior: TestBehavior) => void) {
     it(what, async () => {
-        const endpoint = await MockEndpoint.createWith(TestBehavior);
+        await using endpoint = await MockEndpoint.createWith(TestBehavior);
         await endpoint.act(agent => {
             const behavior = agent.test;
             fn(behavior);
@@ -48,14 +48,14 @@ describe("Behavior", () => {
         expect(behavior.agent.get(TestBehavior)).equals(behavior);
         expect(behavior.state.valueOne).equals(1);
         expect(behavior.state.valueTwo).equals(2);
-        expect(behavior.events.endpointValue$Change.constructor.name).equals("Emitter");
+        expect(behavior.events.endpointValue$Changed).instanceOf(BasicObservable);
     });
 
     test("instantiates with correct properties", behavior => {
         expect(behavior.agent.get(TestBehavior)).equals(behavior);
         expect(behavior.state.valueOne).equals(1);
         expect(behavior.state.valueTwo).equals(2);
-        expect(behavior.events.endpointValue$Change.constructor.name).equals("Emitter");
+        expect(behavior.events.endpointValue$Changed).instanceOf(BasicObservable);
     });
 
     test("unifies state", behavior => {
@@ -82,6 +82,65 @@ describe("Behavior", () => {
 
             expect(state.valueOne).equals(3);
             expect(state.valueTwo).equals(2);
+        });
+    });
+
+    describe("observer", () => {
+        it("triggers on endpoint, emit on endpoint", async () => {
+            await using endpoint = await MockEndpoint.createWith(TestBehavior);
+            let emitted = false;
+            endpoint.events.test.endpointValue$Changed.on(() => {
+                emitted = true;
+            });
+            endpoint.events.test.endpointValue$Changed.emit();
+            expect(emitted).true;
+        });
+
+        it("triggers on endpoint, emit on behavior", async () => {
+            await using endpoint = await MockEndpoint.createWith(TestBehavior);
+            let emitted = false;
+            endpoint.events.test.endpointValue$Changed.on(() => {
+                emitted = true;
+            });
+            await endpoint.act(agent => agent.test.events.endpointValue$Changed.emit());
+            expect(emitted).true;
+        });
+
+        it("triggers on behavior, emit on endpoint", async () => {
+            await using endpoint = await MockEndpoint.createWith(TestBehavior);
+            let emitted = false;
+            await endpoint.act(agent =>
+                agent.test.events.endpointValue$Changed.on(() => {
+                    emitted = true;
+                }),
+            );
+            endpoint.events.test.endpointValue$Changed.emit();
+            expect(emitted).true;
+        });
+
+        it("triggers on behavior, emit on behavior", async () => {
+            await using endpoint = await MockEndpoint.createWith(TestBehavior);
+            let emitted = false;
+            await endpoint.act(agent =>
+                agent.test.events.endpointValue$Changed.on(() => {
+                    emitted = true;
+                }),
+            );
+            await endpoint.act(agent => agent.test.events.endpointValue$Changed.emit());
+            expect(emitted).true;
+        });
+
+        it("does not trigger on behavior after close", async () => {
+            const endpoint = await MockEndpoint.createWith(TestBehavior);
+            let emitted = false;
+            await endpoint.act(agent =>
+                agent.test.events.endpointValue$Changed.on(() => {
+                    emitted = true;
+                }),
+            );
+            await endpoint.close();
+            endpoint.events.test.endpointValue$Changed.emit();
+            expect(emitted).false;
         });
     });
 });

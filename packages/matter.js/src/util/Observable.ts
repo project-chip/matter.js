@@ -6,6 +6,7 @@
 
 import { ImplementationError } from "../common/MatterError.js";
 import { Logger } from "../log/Logger.js";
+import "../polyfills/disposable.js";
 import { MaybePromise } from "./Promises.js";
 
 const logger = Logger.get("Observable");
@@ -24,7 +25,10 @@ const logger = Logger.get("Observable");
  *
  * @param payload a list of arguments to be emitted
  */
-export type Observer<T extends any[] = any[], R = void> = (...payload: T) => MaybePromise<R | undefined>;
+export interface Observer<T extends any[] = any[], R = void> {
+    (...payload: T): MaybePromise<R | undefined>;
+    [observant]?: boolean;
+}
 
 /**
  * A discrete event that may be monitored via callback.  Could call it "event" but that could be confused with Matter
@@ -54,6 +58,11 @@ export interface Observable<T extends any[] = any[], R = void> extends AsyncIter
     once(observer: Observer<T, R>): void;
 
     /**
+     * True if there is at least one observer registered.
+     */
+    isObserved: boolean;
+
+    /**
      * This flag indicates whether the observable is asynchronous.  Any observable that accepts promise returns may
      * be asynchronous but this information is not available at runtime unless you specify here, typically via
      * {@link AsyncObservable}.
@@ -75,9 +84,15 @@ export interface Observable<T extends any[] = any[], R = void> extends AsyncIter
 }
 
 /**
+ * An observer may designate itself as "not observant" for the purposes of {@link Observable.isObserved} by returning
+ * false from this field.
+ */
+export const observant = Symbol("consider-observed");
+
+/**
  * An {@link Observable} that explicitly supports asynchronous observers.
  */
-export interface AsyncObservable<T extends any[], R> extends Observable<T, MaybePromise<R>> {
+export interface AsyncObservable<T extends any[] = any[], R = void> extends Observable<T, MaybePromise<R>> {
     isAsync: true;
 }
 
@@ -87,7 +102,10 @@ function defaultErrorHandler(error: Error) {
 
 export type ObserverErrorHandler = (error: Error, observer: Observer<any[], any>) => void;
 
-class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
+/**
+ * A concrete {@link Observable} implementation.
+ */
+export class BasicObservable<T extends any[] = any[], R = void> implements Observable<T, R> {
     #errorHandler: ObserverErrorHandler;
     #observers?: Set<Observer<T, R>>;
     #once?: Set<Observer<T, R>>;
@@ -114,6 +132,26 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
 
     set isAsync(isAsync: boolean | undefined) {
         this.#isAsync = isAsync;
+    }
+
+    get isObserved() {
+        if (this.#observers) {
+            for (const observer of this.#observers) {
+                if (observer[observant] !== false) {
+                    return true;
+                }
+            }
+        }
+
+        if (this.#once) {
+            for (const observer of this.#once) {
+                if (observer[observant] !== false) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     emit(...payload: T): R | undefined {
@@ -271,11 +309,11 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
 type Next<T> = undefined | { value: T; promise: Promise<Next<T>> };
 
 function constructObservable(errorHandler?: ObserverErrorHandler) {
-    return new Emitter(errorHandler);
+    return new BasicObservable(errorHandler);
 }
 
 /**
- * A general implementation of {@link Observable}.
+ * Create an {@link Observable}.
  */
 export const Observable = constructObservable as unknown as {
     new <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
@@ -283,11 +321,11 @@ export const Observable = constructObservable as unknown as {
 };
 
 function constructAsyncObservable(errorHandler?: ObserverErrorHandler) {
-    return new Emitter(errorHandler, true);
+    return new BasicObservable(errorHandler, true);
 }
 
 /**
- * An {@link Observable} that explicitly supports asynchronous results
+ * Create an {@link AsyncObservable} that explicitly supports asynchronous results
  */
 export const AsyncObservable = constructAsyncObservable as unknown as {
     new <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): AsyncObservable<T, R>;
@@ -332,6 +370,12 @@ export class EventEmitter {
     get eventNames() {
         return Object.keys(this).filter(k => typeof (this as any)[k]?.on === "function");
     }
+
+    [Symbol.dispose]() {
+        for (const name of this.eventNames) {
+            (this as unknown as Record<string, Observable>)[name][Symbol.dispose]?.();
+        }
+    }
 }
 
 export namespace EventEmitter {
@@ -359,4 +403,49 @@ export namespace EventEmitter {
         : never;
 
     export type ObserverOf<This, E extends string> = Observable<PayloadOf<This, E>>;
+}
+
+/**
+ * An {@link Observable} that proxies to another {@link Observable}.
+ *
+ * Emits emitted here instead emit on the target {@link Observable}.  Events emitted on the target emit locally via
+ * a listener installed by the proxy.
+ *
+ * This is useful for managing a subset of {@link Observer}s for an {@link Observable}.
+ *
+ * Note that this "proxy" acts as a proxy but is not a JS {@link Proxy}.
+ */
+export class ObservableProxy extends BasicObservable {
+    #target: Observable;
+    #emitter = (...args: unknown[]) => super.emit(...args);
+
+    constructor(target: Observable) {
+        super();
+
+        Object.defineProperty(this.#emitter, observant, {
+            get() {
+                return this.isObserved;
+            },
+        });
+
+        this.#target = target;
+        this.#target.on(this.#emitter);
+    }
+
+    override [Symbol.dispose]() {
+        this.#target.off(this.#emitter);
+        super[Symbol.dispose]();
+    }
+
+    override get isAsync() {
+        return this.#target.isAsync;
+    }
+
+    override get isObserved(): boolean {
+        return this.#target.isObserved;
+    }
+
+    override emit(...payload: any[]): void | undefined {
+        return this.#target.emit(...payload);
+    }
 }

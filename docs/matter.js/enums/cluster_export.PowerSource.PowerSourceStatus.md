@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.7.5.4
+MatterSpecification.v11.Core § 11.7.5.4
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ Indicate the source is available and currently supplying power
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:872](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L872)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:871](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L871)
 
 ___
 
@@ -39,7 +39,7 @@ Indicate the source is available, but is not currently supplying power
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:877](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L877)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:876](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L876)
 
 ___
 
@@ -51,7 +51,7 @@ Indicate the source is not currently available to supply power
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:882](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L882)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:881](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L881)
 
 ___
 
@@ -63,4 +63,4 @@ Indicate the source status is not specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:867](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L867)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:866](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L866)

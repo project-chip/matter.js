@@ -110,10 +110,7 @@ Matter.children.push(Cluster({
 
         Event({
             name: "DownloadError", id: 0x2, access: "V", conformance: "M", priority: "info",
-            details: "This event shall be generated whenever an error occurs during OTA Requestor download operation." +
-                "\n" +
-                "This field shall be set to the value of the SoftwareVersion being downloaded, matching the " +
-                "SoftwareVersion field of the QueryImageResponse that caused the failing download to take place.",
+            details: "This event shall be generated whenever an error occurs during OTA Requestor download operation.",
             xref: { document: "core", section: "11.19.7.7.9" },
 
             children: [
@@ -130,16 +127,11 @@ Matter.children.push(Cluster({
         Command({
             name: "AnnounceOtaProvider", id: 0x0, access: "A", conformance: "O", direction: "request",
             response: "status",
-
             details: "This command may be invoked by Administrators to announce the presence of a particular OTA Provider." +
                 "\n" +
                 "This command shall be scoped to the accessing fabric." +
                 "\n" +
-                "If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code." +
-                "\n" +
-                "This field shall contain the Node ID of a Node implementing the OTA Provider cluster server, on the " +
-                "accessing fabric.",
-
+                "If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.",
             xref: { document: "core", section: "11.19.7.6.1" },
 
             children: [
@@ -223,7 +215,6 @@ Matter.children.push(Cluster({
 
         Datatype({
             name: "ChangeReasonEnum", type: "enum8", conformance: "M",
-            details: "This value shall indicate that the reason for a state change is unknown.",
             xref: { document: "core", section: "11.19.7.4.15" },
 
             children: [
@@ -253,7 +244,7 @@ Matter.children.push(Cluster({
         Datatype({
             name: "ProviderLocationStruct", type: "struct", access: "R F", conformance: "M",
             details: "This structure encodes a fabric-scoped location of an OTA provider on a given fabric.",
-            xref: { document: "core", section: "11.19.7.4.20" },
+            xref: { document: "core", section: "11.19.7.4.21" },
 
             children: [
                 Field({ name: "ProviderNodeId", id: 0x1, type: "node-id", access: "F", conformance: "M" }),

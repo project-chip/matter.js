@@ -78,7 +78,7 @@ Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.7.6.1
+MatterSpecification.v11.Core § 11.19.7.6.1
 
 #### Defined in
 
@@ -94,7 +94,7 @@ Body of the OtaSoftwareUpdateRequestor downloadError event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.7.7.9
+MatterSpecification.v11.Core § 11.19.7.7.9
 
 #### Defined in
 
@@ -110,7 +110,7 @@ This structure encodes a fabric-scoped location of an OTA provider on a given fa
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.7.4.20
+MatterSpecification.v11.Core § 11.19.7.4.20
 
 #### Defined in
 
@@ -126,7 +126,7 @@ Body of the OtaSoftwareUpdateRequestor stateTransition event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.7.7.1
+MatterSpecification.v11.Core § 11.19.7.7.1
 
 #### Defined in
 
@@ -142,7 +142,7 @@ Body of the OtaSoftwareUpdateRequestor versionApplied event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.7.7.6
+MatterSpecification.v11.Core § 11.19.7.7.6
 
 #### Defined in
 

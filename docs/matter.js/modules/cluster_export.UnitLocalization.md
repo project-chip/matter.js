@@ -46,7 +46,7 @@ These elements and properties are present in all UnitLocalization clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L75)
 
 ___
 
@@ -56,9 +56,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:118](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L118)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:117](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L117)
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:120](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L119)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:100](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L100)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:99](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L99)
 
 ___
 
@@ -82,9 +82,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:146](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L146)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:145](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L145)
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:148](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L148)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:147](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L147)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:126](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L126)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:125](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L125)
 
 ___
 
@@ -117,4 +117,4 @@ A UnitLocalizationCluster supports these elements if it supports feature Tempera
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:42](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L42)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:41](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L41)

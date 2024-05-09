@@ -8,7 +8,7 @@ Input to the WindowCovering goToLiftPercentage command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 5.3.6.5
+MatterSpecification.v11.Cluster § 5.3.6.5
 
 ## Hierarchy
 
@@ -34,4 +34,4 @@ TypeFromSchema.liftPercent100thsValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L36)

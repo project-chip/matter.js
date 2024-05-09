@@ -72,7 +72,7 @@ Special EventClient class to allow identifying events that are supported because
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:27
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:28
 
 ## Properties
 
@@ -86,7 +86,7 @@ packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:27
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:23
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:24
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:22
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:23
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:20
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:21
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:26
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:27
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:21
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:22
 
 ## Methods
 
@@ -166,7 +166,7 @@ packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:21
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:31
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:32
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `minimumEventNumber?` | `number` \| `bigint` |
+| `minimumEventNumber?` | [`EventNumber`](../modules/exports_datatype.md#eventnumber) |
 | `isFabricFiltered?` | `boolean` |
 
 #### Returns
@@ -191,7 +191,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:28
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:29
 
 ___
 
@@ -215,7 +215,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:32
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:33
 
 ___
 
@@ -230,7 +230,7 @@ ___
 | `minIntervalFloorSeconds` | `number` |
 | `maxIntervalCeilingSeconds` | `number` |
 | `isUrgent?` | `boolean` |
-| `minimumEventNumber?` | `number` \| `bigint` |
+| `minimumEventNumber?` | [`EventNumber`](../modules/exports_datatype.md#eventnumber) |
 | `isFabricFiltered?` | `boolean` |
 
 #### Returns
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:29
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:30
 
 ___
 
@@ -267,4 +267,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:30
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:31

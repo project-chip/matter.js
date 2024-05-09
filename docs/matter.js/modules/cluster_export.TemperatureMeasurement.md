@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:76](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L75)
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:78](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L77)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L21)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L20)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L79)

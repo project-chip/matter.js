@@ -44,8 +44,8 @@ TimeNotAccepted.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.16.9.1
+MatterSpecification.v11.Core § 11.16.9.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts#L55)
+[packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/time-sync/TimeSyncInterface.ts#L54)

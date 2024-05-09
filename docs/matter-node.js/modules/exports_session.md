@@ -236,7 +236,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.2.3
+MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
@@ -250,7 +250,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.2.3
+MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
@@ -264,7 +264,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.2.3
+MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
@@ -278,7 +278,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.2.3
+MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
@@ -292,7 +292,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.2.3
+MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
@@ -306,7 +306,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.2.3
+MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 
@@ -320,7 +320,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.1.2
+MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
@@ -334,7 +334,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.1.2
+MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
@@ -348,7 +348,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.1.2
+MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
@@ -362,7 +362,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.1.2
+MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
@@ -376,7 +376,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.1.2
+MatterSpecification.v10.Core § 4.13.1.2
 
 #### Defined in
 
@@ -390,7 +390,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_2 § 4.11.8
+MatterSpecification.v12.Core § 4.11.8
 
 #### Defined in
 
@@ -404,7 +404,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 4.13.2.3
+MatterSpecification.v10.Core § 4.13.2.3
 
 #### Defined in
 

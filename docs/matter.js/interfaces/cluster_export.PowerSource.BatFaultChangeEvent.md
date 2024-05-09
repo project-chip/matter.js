@@ -8,7 +8,7 @@ Body of the PowerSource batFaultChange event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.7.7.2
+MatterSpecification.v11.Core § 11.7.7.2
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ TypeFromSchema.current
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:167](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:166](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L166)
 
 ___
 
@@ -49,4 +49,4 @@ TypeFromSchema.previous
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:168](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L168)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L167)

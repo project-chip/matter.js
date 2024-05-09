@@ -8,7 +8,7 @@ Body of the Actions stateChanged event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.7.1
+MatterSpecification.v11.Core § 9.14.7.1
 
 ## Hierarchy
 
@@ -49,7 +49,7 @@ ActionID.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.7.1.1
+MatterSpecification.v11.Core § 9.14.7.1.1
 
 #### Inherited from
 
@@ -69,7 +69,7 @@ This field shall be set to state that the action has changed to.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.7.1.2
+MatterSpecification.v11.Core § 9.14.7.1.2
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ Input to the Thermostat getWeeklySchedule command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 4.3.8
+MatterSpecification.v11.Cluster § 4.3.8
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ TypeFromSchema.daysToReturn
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:131](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L131)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L130)
 
 ___
 
@@ -49,4 +49,4 @@ TypeFromSchema.modeToReturn
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L131)

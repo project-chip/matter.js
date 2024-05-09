@@ -149,6 +149,7 @@
 - [FieldType](../interfaces/internal_.FieldType.md)
 - [FixedAttribute](../interfaces/internal_.FixedAttribute.md)
 - [InstanceBroadcaster](../interfaces/internal_.InstanceBroadcaster.md)
+- [InteractionRecipient](../interfaces/internal_.InteractionRecipient.md)
 - [Key](../interfaces/internal_.Key.md)
 - [Listener](../interfaces/internal_.Listener.md)
 - [Message](../interfaces/internal_.Message.md)
@@ -573,7 +574,7 @@ An Attribute ID is a 32 bit number and indicates an attribute defined in a clust
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 7.18.2.15
+MatterSpecification.v10.Core § 7.18.2.15
 
 #### Defined in
 
@@ -795,7 +796,7 @@ A CASE Authenticated Tag (CAT) is a special subject distinguished name within th
 
 **`See`**
 
-MatterCoreSpecificationV1_2 § 6.6.2.1.2.
+MatterSpecification.v12.Core § 6.6.2.1.2.
 
 #### Defined in
 
@@ -965,7 +966,7 @@ SHALL define conformance to that specification.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 7.10
+MatterSpecification.v10.Core § 7.10
 
 #### Type parameters
 
@@ -1008,7 +1009,7 @@ A Command ID is a 32 bit number and indicates a command defined in a cluster spe
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 7.18.2.18
+MatterSpecification.v10.Core § 7.18.2.18
 
 #### Defined in
 
@@ -1050,7 +1051,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
+[matter-node-ble.js/src/ble/BleScanner.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter-node-ble.js/src/ble/BleScanner.ts#L25)
 
 ___
 
@@ -1173,7 +1174,7 @@ version of cluster attribute data.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 7.18.2.26
+MatterSpecification.v11.Core § 7.18.2.26
 
 #### Defined in
 
@@ -1232,13 +1233,13 @@ ___
 | `deltaEpochTimestamp?` | `number` \| `bigint` |
 | `deltaSystemTimestamp?` | `number` \| `bigint` |
 | `epochTimestamp?` | `number` \| `bigint` |
-| `eventNumber` | `number` \| `bigint` |
+| `eventNumber` | [`EventNumber`](internal_.md#eventnumber) |
 | `priority` | [`EventPriority`](../enums/internal_.EventPriority.md) |
 | `systemTimestamp?` | `number` \| `bigint` |
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:13
+matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:14
 
 ___
 
@@ -1266,7 +1267,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:22
+matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:23
 
 ___
 
@@ -1278,7 +1279,7 @@ A Device type ID is a 32-bit number that defines the type of the device.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 7.15
+MatterSpecification.v10.Core § 7.15
 
 #### Type parameters
 
@@ -1347,7 +1348,7 @@ A Endpoint Number is a 16-bit number that that indicates an instance of a device
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 7.18.2.11
+MatterSpecification.v10.Core § 7.18.2.11
 
 #### Defined in
 
@@ -1366,7 +1367,7 @@ entry in a list.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 7.18.2.23
+MatterSpecification.v11.Core § 7.18.2.23
 
 #### Defined in
 
@@ -1412,7 +1413,7 @@ An EVent ID is a 32 bit number and indicates an event defined in a cluster speci
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 7.18.2.17
+MatterSpecification.v10.Core § 7.18.2.17
 
 #### Defined in
 
@@ -1424,14 +1425,14 @@ ___
 
 ### EventNumber
 
-Ƭ **EventNumber**: [`Branded`](internal_.md#branded)\<`number` \| `bigint`, ``"EventNumber"``\>
+Ƭ **EventNumber**: [`Branded`](internal_.md#branded)\<`bigint`, ``"EventNumber"``\>
 
 An "event number" is an increasing 64-bit unsigned integer assigned to
 cluster events.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 7.14.2.1
+MatterSpecification.v11.Core § 7.14.2.1
 
 #### Defined in
 
@@ -1518,7 +1519,7 @@ a particular root CA.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 2.5.1
+MatterSpecification.v10.Core § 2.5.1
 
 #### Defined in
 
@@ -1541,7 +1542,7 @@ a fabric, such as fabric-scoped data model elements, then the fabric-index value
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 7.5.2
+MatterSpecification.v10.Core § 7.5.2
 
 #### Defined in
 
@@ -1609,7 +1610,7 @@ in a cluster struct type.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 7.18.2.18
+MatterSpecification.v11.Core § 7.18.2.18
 
 #### Defined in
 
@@ -1673,7 +1674,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 7.13
+MatterSpecification.v11.Core § 7.13
 
 #### Type parameters
 
@@ -1715,7 +1716,7 @@ The Group ID space is allocated as described in Table 2, “Group ID Allocations
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 2.5.4
+MatterSpecification.v10.Core § 2.5.4
 
 #### Defined in
 
@@ -1901,7 +1902,7 @@ group of Nodes on a Fabric.
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 2.5.5
+MatterSpecification.v10.Core § 2.5.5
 
 #### Defined in
 
@@ -2390,7 +2391,7 @@ ___
 
 Ƭ **TlvTag**: `Object`
 
-MatterCoreSpecificationV1_0 § A.2
+MatterSpecification.v10.Core § A.2
 
 #### Type declaration
 
@@ -2555,7 +2556,7 @@ Connectivity Standards Alliance (see [CSA Manufacturer Code Database]).
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 2.5.2
+MatterSpecification.v10.Core § 2.5.2
 
 #### Defined in
 
@@ -2651,7 +2652,7 @@ ___
 
 • `Const` **DiscoveryCapabilitiesBitmap**: `Object`
 
-See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 36
+See MatterSpecification.v10.Core § 5.1.3.1 Table 36
 
 #### Type declaration
 
@@ -2749,7 +2750,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.5
+MatterSpecification.v10.Core, section 10.5.5
 
 #### Defined in
 
@@ -2773,7 +2774,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.6.3
+MatterSpecification.v10.Core, section 10.6.3
 
 #### Defined in
 
@@ -2787,7 +2788,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.9
+MatterSpecification.v10.Core, section 10.5.9
 
 #### Defined in
 
@@ -2801,7 +2802,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.6
+MatterSpecification.v10.Core, section 10.5.6
 
 #### Defined in
 
@@ -2815,7 +2816,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 10.5.10
+MatterSpecification.v10.Core, section 10.5.10
 
 #### Defined in
 

@@ -8,7 +8,7 @@ Body of the Actions actionFailed event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.7.2
+MatterSpecification.v11.Core § 9.14.7.2
 
 ## Hierarchy
 
@@ -49,7 +49,7 @@ This field shall be set to indicate the reason for non-successful progress of th
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.7.2.1
+MatterSpecification.v11.Core § 9.14.7.2.1
 
 #### Inherited from
 

@@ -8,7 +8,7 @@ Body of the DoorLock doorStateChange event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.2
+MatterSpecification.v11.Cluster § 5.2.5.2
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ The new door state for this door event.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.2.1
+MatterSpecification.v11.Cluster § 5.2.5.2.1
 
 #### Inherited from
 

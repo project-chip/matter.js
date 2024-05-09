@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:78](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:77](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L77)
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:79](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L79)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L21)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:20](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L20)
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:82](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L82)
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L81)

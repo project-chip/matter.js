@@ -8,7 +8,7 @@ Input to the ColorControl colorLoopSet command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.19
+MatterSpecification.v11.Cluster § 3.2.11.19
 
 ## Hierarchy
 
@@ -40,7 +40,7 @@ the Action Field of the ColorLoopSet Command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.19.2
+MatterSpecification.v11.Cluster § 3.2.11.19.2
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ the Direction Field of the ColorLoopSet Command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.19.3
+MatterSpecification.v11.Cluster § 3.2.11.19.3
 
 #### Inherited from
 
@@ -125,7 +125,7 @@ sub-field of the UpdateFlags field is set to 1.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.19.4
+MatterSpecification.v11.Cluster § 3.2.11.19.4
 
 #### Inherited from
 
@@ -165,7 +165,7 @@ sub-field is set to 0, the device shall ignore the StartHue field.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.19.1
+MatterSpecification.v11.Cluster § 3.2.11.19.1
 
 #### Inherited from
 

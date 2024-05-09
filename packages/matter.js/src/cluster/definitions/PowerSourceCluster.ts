@@ -163,7 +163,20 @@ export namespace PowerSource {
      * @see {@link MatterSpecification.v11.Core} § 11.7.7.2
      */
     export const TlvBatFaultChangeEvent = TlvObject({
+        /**
+         * This field shall represent the set of faults currently detected, as per Section 11.7.6.19, “ActiveBatFaults
+         * Attribute”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.7.7.2.1
+         */
         current: TlvField(0, TlvArray(TlvEnum<BatFault>(), { maxLength: 8 })),
+
+        /**
+         * This field shall represent the set of faults detected prior to this change event, as per Section 11.7.6.19,
+         * “ActiveBatFaults Attribute”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.7.7.2.2
+         */
         previous: TlvField(1, TlvArray(TlvEnum<BatFault>(), { maxLength: 8 }))
     });
 
@@ -845,7 +858,20 @@ export namespace PowerSource {
      * @see {@link MatterSpecification.v11.Core} § 11.7.7.3
      */
     export const TlvBatChargeFaultChangeEvent = TlvObject({
+        /**
+         * This field shall represent the set of faults currently detected, as per Section 11.7.6.31,
+         * “ActiveBatChargeFaults Attribute”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.7.7.3.1
+         */
         current: TlvField(0, TlvArray(TlvEnum<BatChargeFault>(), { maxLength: 16 })),
+
+        /**
+         * This field shall represent the set of faults detected prior to this change event, as per Section 11.7.6.31,
+         * “ActiveBatChargeFaults Attribute”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.7.7.3.2
+         */
         previous: TlvField(1, TlvArray(TlvEnum<BatChargeFault>(), { maxLength: 16 }))
     });
 
@@ -1063,12 +1089,6 @@ export namespace PowerSource {
              * Node on this battery power source changes. This event shall correspond to a change in value of
              * ActiveBatFaults.
              *
-             * This field shall represent the set of faults currently detected, as per Section 11.7.6.19,
-             * “ActiveBatFaults Attribute”.
-             *
-             * This field shall represent the set of faults detected prior to this change event, as per Section
-             * 11.7.6.19, “ActiveBatFaults Attribute”.
-             *
              * @see {@link MatterSpecification.v11.Core} § 11.7.7.2
              */
             batFaultChange: OptionalEvent(0x1, EventPriority.Info, TlvBatFaultChangeEvent)
@@ -1197,12 +1217,6 @@ export namespace PowerSource {
              *
              * detected by the Node on this battery power source changes. This event shall correspond to a change in
              * value of ActiveBatChargeFaults.
-             *
-             * This field shall represent the set of faults currently detected, as per Section 11.7.6.31,
-             * “ActiveBatChargeFaults Attribute”.
-             *
-             * This field shall represent the set of faults detected prior to this change event, as per Section
-             * 11.7.6.31, “ActiveBatChargeFaults Attribute”.
              *
              * @see {@link MatterSpecification.v11.Core} § 11.7.7.3
              */

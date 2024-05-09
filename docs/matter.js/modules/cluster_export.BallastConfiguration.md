@@ -28,7 +28,7 @@ The value of the BallastConfiguration ballastStatus attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.6.3
+MatterSpecification.v11.Cluster § 3.3.6.3
 
 #### Type declaration
 
@@ -39,7 +39,7 @@ The value of the BallastConfiguration ballastStatus attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:31](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L30)
 
 ___
 
@@ -49,9 +49,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:243](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L243)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:242](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L242)
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:245](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L245)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:244](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L244)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L42)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:246](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L246)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:245](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L245)
 
 ___
 
@@ -87,7 +87,7 @@ The value of the BallastConfiguration lampAlarmMode attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.9.5
+MatterSpecification.v11.Cluster § 3.3.9.5
 
 #### Type declaration
 
@@ -97,4 +97,4 @@ The value of the BallastConfiguration lampAlarmMode attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L37)

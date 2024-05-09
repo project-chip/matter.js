@@ -29,8 +29,11 @@ export const Str = (el: HTMLElement) => {
             // Remove soft hyphen and any surrounding whitespace
             .replace(/\s*\u00ad\s*/g, "")
 
+            // Remove zero-width non-joiner
+            .replace(/\u200c/g, "")
+
             // Collapse whitespace
-            .replace(/\s+/g, " ")
+            .replace(/\s/g, " ")
     );
 };
 

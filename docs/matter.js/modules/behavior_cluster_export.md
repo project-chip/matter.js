@@ -49,9 +49,9 @@ Event instance type for ClusterBehaviors.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L17)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L17)
 
-[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L23)
+[packages/matter.js/src/behavior/cluster/ClusterEvents.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterEvents.ts#L23)
 
 ___
 
@@ -98,9 +98,9 @@ If TS team ever fixes:
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:39](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L39)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L39)
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L43)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L43)
 
 ___
 
@@ -118,7 +118,7 @@ The cluster type for a behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:80](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L80)
+[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L87)
 
 ___
 
@@ -137,9 +137,9 @@ Instance type for complete (endpoint + fabric) state.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterState.ts:15](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterState.ts#L15)
+[packages/matter.js/src/behavior/cluster/ClusterState.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterState.ts#L15)
 
-[packages/matter.js/src/behavior/cluster/ClusterState.ts:17](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterState.ts#L17)
+[packages/matter.js/src/behavior/cluster/ClusterState.ts:17](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterState.ts#L17)
 
 ## Functions
 
@@ -181,7 +181,7 @@ This is the actual implementation of ClusterBehavior.for().  The result must mat
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L30)
+[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L30)
 
 ___
 
@@ -203,4 +203,4 @@ Create a non-functional instance of a [Behavior](../classes/behavior_export.Beha
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L23)
+[packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterBehaviorUtil.ts#L23)

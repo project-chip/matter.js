@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.4.5.1
+MatterSpecification.v11.Core § 11.4.5.1
 
 ## Table of contents
 
@@ -25,7 +25,7 @@ Time conveyed with a 12-hour clock
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:92](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L92)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:91](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L91)
 
 ___
 
@@ -37,4 +37,4 @@ Time conveyed with a 24-hour clock
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:97](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L96)

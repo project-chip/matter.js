@@ -8,7 +8,7 @@ Input to the Scenes removeAllScenes command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.4.9.5
+MatterSpecification.v11.Cluster § 1.4.9.5
 
 ## Hierarchy
 

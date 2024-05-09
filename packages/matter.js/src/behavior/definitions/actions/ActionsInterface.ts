@@ -90,8 +90,6 @@ export type PauseActionRequest = TypeFromSchema<typeof Actions.TlvPauseActionReq
  * differently in the implementation of the action (e.g. a Pause would be automatically resumed after some hours or
  * during a nightly reset, while an Disable would remain in effect until explicitly enabled again).
  *
- * This field shall indicate the requested duration in seconds.
- *
  * @see {@link MatterSpecification.v11.Core} § 9.14.6.7
  */
 export type PauseActionWithDurationRequest = TypeFromSchema<typeof Actions.TlvPauseActionWithDurationRequest>;
@@ -126,8 +124,6 @@ export type EnableActionRequest = TypeFromSchema<typeof Actions.TlvEnableActionR
  * used to indicated the length of your absence from home. After that period, the presence mimicking behavior will no
  * longer control these lights.
  *
- * This field shall indicate the requested duration in seconds.
- *
  * @see {@link MatterSpecification.v11.Core} § 9.14.6.10
  */
 export type EnableActionWithDurationRequest = TypeFromSchema<typeof Actions.TlvEnableActionWithDurationRequest>;
@@ -148,8 +144,6 @@ export type DisableActionRequest = TypeFromSchema<typeof Actions.TlvDisableActio
  *
  * Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them from turning on
  * in the morning while you’re not at home). After this period, the wakeup experience will control the lights as before.
- *
- * This field shall indicate the requested duration in seconds.
  *
  * @see {@link MatterSpecification.v11.Core} § 9.14.6.12
  */
@@ -241,8 +235,6 @@ export namespace ActionsInterface {
          * some hours or during a nightly reset, while an Disable would remain in effect until explicitly enabled
          * again).
          *
-         * This field shall indicate the requested duration in seconds.
-         *
          * @see {@link MatterSpecification.v11.Core} § 9.14.6.7
          */
         pauseActionWithDuration(request: PauseActionWithDurationRequest): MaybePromise;
@@ -277,8 +269,6 @@ export namespace ActionsInterface {
          * field is used to indicated the length of your absence from home. After that period, the presence mimicking
          * behavior will no longer control these lights.
          *
-         * This field shall indicate the requested duration in seconds.
-         *
          * @see {@link MatterSpecification.v11.Core} § 9.14.6.10
          */
         enableActionWithDuration(request: EnableActionWithDurationRequest): MaybePromise;
@@ -300,8 +290,6 @@ export namespace ActionsInterface {
          * Example: disable a "wakeup" experience for a period of 1 week when going on holiday (to prevent them from
          * turning on in the morning while you’re not at home). After this period, the wakeup experience will control
          * the lights as before.
-         *
-         * This field shall indicate the requested duration in seconds.
          *
          * @see {@link MatterSpecification.v11.Core} § 9.14.6.12
          */

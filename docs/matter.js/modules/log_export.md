@@ -25,7 +25,6 @@
 ### Interfaces
 
 - [Diagnostic](../interfaces/log_export.Diagnostic-1.md)
-- [DiagnosticSource](../interfaces/log_export.DiagnosticSource.md)
 
 ### Type Aliases
 
@@ -58,13 +57,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Format.ts#L56)
+[packages/matter.js/src/log/Format.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Format.ts#L56)
 
 ## Variables
 
 ### DiagnosticSource
 
-• **DiagnosticSource**: `Object`
+• `Const` **DiagnosticSource**: `Object`
 
 Registry of diagnostic sources.
 
@@ -73,15 +72,13 @@ Registry of diagnostic sources.
 | Name | Type |
 | :------ | :------ |
 | `get [presentation]()` | [`Presentation`](../enums/log_export.Diagnostic.Presentation.md) |
-| `get [value]()` | ([`Diagnostic`](../interfaces/log_export.Diagnostic-1.md) \| [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md))[][] |
-| `add` | (`source`: [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md)) => `void` |
-| `delete` | (`source`: [`DiagnosticSource`](../interfaces/log_export.DiagnosticSource.md)) => `void` |
+| `get [value]()` | `Set`\<[`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)\> |
+| `add` | (`source`: [`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)) => `void` |
+| `delete` | (`source`: [`Diagnostic`](../interfaces/log_export.Diagnostic-1.md)) => `void` |
 
 #### Defined in
 
-[packages/matter.js/src/log/DiagnosticSource.ts:14](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/DiagnosticSource.ts#L14)
-
-[packages/matter.js/src/log/DiagnosticSource.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/DiagnosticSource.ts#L22)
+[packages/matter.js/src/log/DiagnosticSource.ts:14](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/DiagnosticSource.ts#L14)
 
 ## Functions
 
@@ -104,7 +101,7 @@ Create a diagnostic giving a value a specific presentation.
 
 #### Defined in
 
-[packages/matter.js/src/log/Diagnostic.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Diagnostic.ts#L23)
+[packages/matter.js/src/log/Diagnostic.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Diagnostic.ts#L23)
 
 ___
 
@@ -142,7 +139,7 @@ Get a formatter for the specified format.
 
 #### Defined in
 
-[packages/matter.js/src/log/Format.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Format.ts#L16)
+[packages/matter.js/src/log/Format.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Format.ts#L16)
 
 ___
 
@@ -165,7 +162,7 @@ Log messages to the console.  This is the default logging mechanism.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Logger.ts#L16)
+[packages/matter.js/src/log/Logger.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Logger.ts#L16)
 
 ___
 
@@ -190,4 +187,4 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/log/Level.ts:7](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/log/Level.ts#L7)
+[packages/matter.js/src/log/Level.ts:7](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/log/Level.ts#L7)

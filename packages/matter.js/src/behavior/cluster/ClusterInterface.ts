@@ -13,28 +13,32 @@ import type { MaybePromise } from "../../util/Promises.js";
 /**
  * This type defines methods for a behavior grouped by named cluster component.
  *
- * Ideally we would do this using a simple mapped type.  Unfortunately as of
- * TypeScript 5.2 there is no way to define a method using a mapped type.
- * Instead the mapped type defines function properties.
+ * Ideally we would do this using a simple mapped type.  Unfortunately as of TypeScript 5.2 there is no way to define a
+ * method using a mapped type. Instead the mapped type defines function properties.
  *
- * Function properties work identically to methods semantically but TypeScript
- * doesn't allow you to override them with standard methods (see error TS2425).
+ * Function properties work identically to methods semantically but TypeScript doesn't allow you to override them with
+ * standard methods (see error TS2425).
  *
- * Thus we are forced to generate an interface for every cluster component
- * and assemble based on selected features using logic that mirrors
- * {@link ClusterComposer.Of}.
+ * Thus we are forced to generate an interface for every cluster component and assemble based on selected features using
+ * logic that mirrors {@link ClusterComposer.Of}.
  *
- * Note that we only need to do this for commands.  The public interface for
- * attributes and events consists solely of properties so we generate using
- * mapped types.  This is handled by ClusterState and
- * ClusterEvents respectively.
+ * Note that we only need to do this for commands.  The public interface for attributes and events consists solely of
+ * properties so we generate using mapped types.  This is handled by ClusterState and ClusterEvents respectively.
  *
  * If TS team ever fixes:
  *
  *   https://github.com/microsoft/TypeScript/issues/27965
  *
- * ...then we can remove the interface and just use
- * {@link ClusterInterface.MappedMethodsOf}.
+ * ...then we can remove the interface and just use {@link ClusterInterface.MappedMethodsOf}.
+ *
+ * This appears to be a duplicate (but is still open):
+ *
+ *   https://github.com/microsoft/TypeScript/issues/27689
+ *
+ * Proposed solution is to just remove the error:
+ *
+ *   https://github.com/microsoft/TypeScript/issues/48125
+ *
  */
 export type ClusterInterface<F extends BitSchema = {}> = {
     components: ClusterInterface.Component<F>[];
@@ -56,7 +60,7 @@ export namespace ClusterInterface {
     export type MethodsOf<I extends ClusterInterface, C extends ClusterType> =
         // This is the workaround for TS issue #27965
         InterfaceMethodsOf<I, C["supportedFeatures"]> &
-            // Fall back to mapping for ommands not defined in an interface
+            // Fall back to mapping for methods not defined in an interface
             Omit<MappedMethodsOf<C["commands"]>, keyof InterfaceMethodsOf<I, C["supportedFeatures"]>>;
 
     export type InterfaceMethodsOf<

@@ -8,7 +8,7 @@ Input to the Actions startActionWithDuration command
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.4
+MatterSpecification.v11.Core § 9.14.6.4
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ TypeFromSchema.actionId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:425](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L425)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:424](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L424)
 
 ___
 
@@ -48,7 +48,7 @@ This field shall indicate the requested duration in seconds.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.14.6.4.1
+MatterSpecification.v11.Core § 9.14.6.4.1
 
 #### Inherited from
 
@@ -56,7 +56,7 @@ TypeFromSchema.duration
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:433](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L433)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:432](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L432)
 
 ___
 
@@ -70,4 +70,4 @@ TypeFromSchema.invokeId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:426](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L426)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:425](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L425)

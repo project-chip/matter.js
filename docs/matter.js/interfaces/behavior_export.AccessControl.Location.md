@@ -24,7 +24,7 @@ The owning behavior.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:116](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L116)
+[packages/matter.js/src/behavior/AccessControl.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L116)
 
 ___
 
@@ -37,7 +37,7 @@ enforcement.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:122](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L122)
+[packages/matter.js/src/behavior/AccessControl.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L122)
 
 ___
 
@@ -49,4 +49,4 @@ The diagnostic path to the location.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/AccessControl.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/AccessControl.ts#L111)
+[packages/matter.js/src/behavior/AccessControl.ts:111](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/AccessControl.ts#L111)

@@ -13,9 +13,9 @@ Currently the tests are designed to work with a chip-tool and test framework com
 Please follow these steps to setup all this locally:
 * [Checkout Matter-SDK](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#checking-out-the-matter-code)
 * [Prepare for building](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#prepare-for-building)
-* Build chip-tool in an activated environment `./scripts/build/build_examples.py --target linux-x64-chip-tool build` (replace linux by darwin if you run on macOs.)
+* Build chip-tool in an activated environment `./scripts/build/build_examples.py --target=linux-x64-chip-tool build` (replace linux by darwin if you run on macOs.)
 * Build Python Environment in an activated environment `./scripts/build_python.sh --install_virtual_env out/venv`
-* Copy the patched  yaml files from chip-testing/patched-test-files to src/app/tests/suites/ (in connectedhomeip directory)
+* Copy the patched yaml files from chip-testing/patched-test-files to src/app/tests/suites/ (in connectedhomeip directory)
 * build matter.js so that the test binaries are also built
 
 ## Execution

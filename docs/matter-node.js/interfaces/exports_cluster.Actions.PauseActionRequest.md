@@ -8,7 +8,7 @@ Input to the Actions pauseAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.6
+MatterSpecification.v11.Core § 9.14.6.6
 
 ## Hierarchy
 

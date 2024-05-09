@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.6.5.4
+MatterSpecification.v11.Cluster § 6.6.5.4
 
 ## Table of contents
 
@@ -26,7 +26,7 @@ More than one equal match for the ChannelInfoStruct passed in.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L158)
 
 ___
 
@@ -38,7 +38,7 @@ No matches for the ChannelInfoStruct passed in.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:164](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L164)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:163](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L163)
 
 ___
 
@@ -50,4 +50,4 @@ Command succeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:154](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:153](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L153)

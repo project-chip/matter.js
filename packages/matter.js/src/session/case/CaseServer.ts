@@ -128,7 +128,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             resumptionRecord.resumptionId = resumptionId; /* Update the ID */
 
             // Wait for success on the peer side
-            await messenger.waitForSuccess();
+            await messenger.waitForSuccess("Success after CASE Sigma2Resume");
 
             await messenger.close();
             await server.saveResumptionRecord(resumptionRecord);
@@ -181,13 +181,15 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 Crypto.hash([sigma1Bytes, sigma2Bytes]),
             );
             const sigma3Key = await Crypto.hkdf(sharedSecret, sigma3Salt, KDFSR3_INFO);
-            const peerEncryptedData = Crypto.decrypt(sigma3Key, peerEncrypted, TBE_DATA3_NONCE);
+            const peerDecryptedData = Crypto.decrypt(sigma3Key, peerEncrypted, TBE_DATA3_NONCE);
             const {
                 nodeOpCert: peerNewOpCert,
                 intermediateCACert: peerIntermediateCACert,
                 signature: peerSignature,
-            } = TlvEncryptedDataSigma3.decode(peerEncryptedData);
+            } = TlvEncryptedDataSigma3.decode(peerDecryptedData);
+
             fabric.verifyCredentials(peerNewOpCert, peerIntermediateCACert);
+
             const peerSignatureData = TlvSignedData.encode({
                 nodeOpCert: peerNewOpCert,
                 intermediateCACert: peerIntermediateCACert,
@@ -196,8 +198,13 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             });
             const {
                 ellipticCurvePublicKey: peerPublicKey,
-                subject: { nodeId: peerNodeId },
+                subject: { fabricId: peerFabricId, nodeId: peerNodeId },
             } = TlvOperationalCertificate.decode(peerNewOpCert);
+
+            if (fabric.fabricId !== peerFabricId) {
+                throw new UnexpectedDataError(`Fabric ID mismatch: ${fabric.fabricId} !== ${peerFabricId}`);
+            }
+
             Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             // All good! Create secure session

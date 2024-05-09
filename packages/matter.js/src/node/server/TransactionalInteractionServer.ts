@@ -44,7 +44,6 @@ export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
     #changeListener: (type: EndpointLifecycle.Change) => void;
     #endpoint: Endpoint;
-    #tracer?: ActionTracer;
     #activity: NodeActivity;
     #newActivityBlocked = false;
 
@@ -58,10 +57,6 @@ export class TransactionalInteractionServer extends InteractionServer {
         });
 
         this.#activity = endpoint.env.get(NodeActivity);
-
-        if (endpoint.env.has(ActionTracer)) {
-            this.#tracer = endpoint.env.get(ActionTracer);
-        }
 
         this.#endpoint = endpoint;
         this.#endpointStructure = structure;
@@ -166,6 +161,12 @@ export class TransactionalInteractionServer extends InteractionServer {
             tracer: this.#tracer,
             actionType: ActionTracer.ActionType.Invoke,
         }).act(invokeCommand);
+    }
+
+    get #tracer() {
+        if (this.#endpoint.env.has(ActionTracer)) {
+            return this.#endpoint.env.get(ActionTracer);
+        }
     }
 
     #updateStructure() {

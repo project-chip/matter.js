@@ -173,7 +173,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 4.11.2.1
+MatterSpecification.v10.Core, section 4.11.2.1
 
 #### Defined in
 

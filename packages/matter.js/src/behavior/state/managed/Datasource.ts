@@ -10,8 +10,10 @@ import { Crypto } from "../../../crypto/Crypto.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
 import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { Logger } from "../../../log/Logger.js";
+import { deepCopy } from "../../../util/DeepCopy.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Observable } from "../../../util/Observable.js";
+import { MaybePromise } from "../../../util/Promises.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ExpiredReferenceError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
@@ -67,7 +69,11 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
         },
 
         reference(session: ValueSupervisor.Session) {
-            return options.supervisor.manage(createRootReference(this, internals, session), session) as InstanceType<T>;
+            let context = internals.sessions?.get(session);
+            if (!context) {
+                context = createSessionContext(this, internals, session);
+            }
+            return context.managed as InstanceType<T>;
         },
 
         get version() {
@@ -91,10 +97,7 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
                     },
                     transaction: ReadOnlyTransaction,
                 };
-                readOnlyView = options.supervisor.manage(
-                    createRootReference(this, internals, session),
-                    session,
-                ) as InstanceType<T>;
+                readOnlyView = createSessionContext(this, internals, session).managed as InstanceType<T>;
             }
             return readOnlyView;
         },
@@ -105,7 +108,7 @@ export namespace Datasource {
     /**
      * Datasource events.
      */
-    export interface Events extends Record<string, Observable<Parameters<ValueObserver>>> {}
+    export interface Events extends Record<string, Observable<Parameters<ValueObserver>, MaybePromise>> {}
 
     /**
      * Datasource configuration options.
@@ -127,7 +130,10 @@ export namespace Datasource {
         path: DataModelPath;
 
         /**
-         * Events of the form "fieldName$Change", if present, emit after field changes commit.
+         * Events triggered automatically.
+         *
+         * Events named "fieldName$Changing", if present, emit before changes commit.  Events named "fieldName$Changed",
+         * if present, emit after field changes commit.
          */
         events?: Events;
 
@@ -177,17 +183,31 @@ export namespace Datasource {
     }
 }
 
+/**
+ * Detail on all active references associated with the datasource.
+ */
+interface SessionContext {
+    managed: Val.Struct;
+    onChange(oldValues: Val.Struct): void;
+}
+
+/**
+ * Internal datasource state.
+ */
 interface Internals extends Datasource.Options {
     path: DataModelPath;
     values: Val.Struct;
     version: number;
-    changed?: Observable<[oldValues: Val.Struct]>;
+    sessions?: Map<ValueSupervisor.Session, SessionContext>;
 }
 
-interface Changes {
+/**
+ * Changes that are applied during a commit (computed post-commit).
+ */
+interface CommitChanges {
     persistent?: Val.Struct;
     notifications: Array<{
-        event: Observable;
+        event: Observable<any[], MaybePromise>;
         params: Parameters<Datasource.ValueObserver>;
     }>;
 }
@@ -216,15 +236,17 @@ function configure(options: Datasource.Options): Internals {
  *
  * This reference provides external access to the {@link Val.Struct} in the context of a specific session.
  */
-function createRootReference(resource: Resource, internals: Internals, session: ValueSupervisor.Session) {
+function createSessionContext(resource: Resource, internals: Internals, session: ValueSupervisor.Session) {
     let values = internals.values;
-    let changes: Changes | undefined;
+    let precommitValues: Val.Struct | undefined;
+    let changes: CommitChanges | undefined;
     let expired = false;
 
     const participant = {
         toString() {
             return internals.path.toString();
         },
+        preCommit,
         commit1,
         commit2,
         postCommit,
@@ -244,32 +266,6 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                     e,
                 );
             }
-        }
-    });
-
-    // Register a listener on the datasource so we can update our reference when the datasource changes
-    const changeListener = (oldValues: Val.Struct) => {
-        if (values === oldValues) {
-            values = internals.values;
-            refreshSubrefs();
-        }
-    };
-    if (!internals.changed) {
-        internals.changed = Observable();
-    }
-    internals.changed.on(changeListener);
-
-    // When the transaction is destroyed, decouple from the datasource and expire
-    void transaction.onClose(() => {
-        try {
-            internals.changed?.off(changeListener);
-            expired = true;
-            refreshSubrefs();
-        } catch (e) {
-            logger.error(
-                `Error detaching reference to ${internals.path} from closed transaction ${transaction.via}:`,
-                e,
-            );
         }
     });
 
@@ -347,7 +343,37 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
     reference.toString = () => `ref<${resource}>`;
 
-    return reference;
+    // Register a listener on the datasource so we can update our reference when the datasource changes
+    const context: SessionContext = {
+        managed: internals.supervisor.manage(reference, session) as Val.Struct,
+
+        onChange(oldValues: Val.Struct) {
+            if (values === oldValues) {
+                values = internals.values;
+                refreshSubrefs();
+            }
+        },
+    };
+    if (!internals.sessions) {
+        internals.sessions = new Map();
+    }
+    internals.sessions.set(session, context);
+
+    // When the transaction is destroyed, decouple from the datasource and expire
+    void transaction.onClose(() => {
+        try {
+            internals.sessions?.delete(session);
+            expired = true;
+            refreshSubrefs();
+        } catch (e) {
+            logger.error(
+                `Error detaching reference to ${internals.path} from closed transaction ${transaction.via}:`,
+                e,
+            );
+        }
+    });
+
+    return context;
 
     function startWrite() {
         // Add myself as a resource so I can be locked
@@ -379,8 +405,90 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         }
     }
 
-    // In "changed" state, values !== data.values, but here we identify logical changes on a per-property basis
-    function computeChanges() {
+    // On the first pre-commit cycle, any change is a "pre-commit" change.  On subsequent cycles we only consider
+    // changes since the previous cycle
+    function computePreCommitChange(name: string): undefined | { newValue: unknown; oldValue: unknown } {
+        let oldValue;
+        if (precommitValues && name in precommitValues) {
+            oldValue = precommitValues[name];
+        } else {
+            oldValue = internals.values[name];
+        }
+
+        const newValue = values[name];
+        if (isDeepEqual(oldValue, newValue)) {
+            return;
+        }
+
+        if (!precommitValues) {
+            precommitValues = {};
+        }
+        precommitValues[name] = deepCopy(newValue);
+
+        // Since we are notifying of data in flight, pass the managed value for "newValue" so that we validate changes
+        // and subsequent listeners are updated
+        return { newValue: context.managed[name], oldValue };
+    }
+
+    /**
+     * For pre-commit we trigger "fieldName$Changing" events for any fields that have changed since the previous
+     * pre-commit cycle.
+     *
+     * Tracking data here is relatively expensive so we limit to events with registered observers.
+     */
+    function preCommit() {
+        // We do nothing if there are not events registered
+        const { events } = internals;
+        if (!events) {
+            return false;
+        }
+
+        // Mutation is only possible if we emit a $Changing event
+        let mayHaveMutated = false;
+
+        // Emit is optionally async so we must iterate manually
+        const keyIterator = Object.keys(values)[Symbol.iterator]();
+
+        // Proceed with next key on first iteration or after async notification
+        function nextKey(): MaybePromise<boolean> {
+            while (true) {
+                const n = keyIterator.next();
+                if (n.done) {
+                    return mayHaveMutated;
+                }
+
+                const name = n.value;
+
+                // Eventing here is relatively expensive because we need deep clones and will trigger another pre-commit
+                // cycle across all participants.  So we only process properties that are observed
+                const event = events?.[`${name}$Changing`];
+                if (!event?.isObserved) {
+                    continue;
+                }
+
+                const change = computePreCommitChange(name);
+                if (change) {
+                    // The pre-commit cycle will need to re-run
+                    mayHaveMutated = true;
+
+                    // Notify observers
+                    const result = event.emit(change.newValue, change.oldValue, session);
+
+                    // For pre-commit we run observers serially.  If the observer is async then we continue the loop
+                    // after the observer completes
+                    if (MaybePromise.is(result)) {
+                        return result.then(nextKey);
+                    }
+                }
+            }
+        }
+
+        return nextKey();
+    }
+
+    // In "changed" state, values !== data.values, but here we identify logical changes on a per-property basis.  For
+    // each change we record the "changed" event to trigger and collect those we must persist
+    function computePostCommitChanges() {
         changes = undefined;
 
         if (internals.values === values) {
@@ -388,9 +496,9 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         }
 
         for (const name in values) {
-            const oldval = internals.values[name];
             const newval = values[name];
-            if (oldval !== newval && !isDeepEqual(values[name], internals.values[name])) {
+            const oldval = internals.values[name];
+            if (oldval !== newval && !isDeepEqual(newval, oldval)) {
                 if (!changes) {
                     changes = { notifications: [] };
                 }
@@ -402,8 +510,8 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                     changes.persistent[name] = values[name];
                 }
 
-                const event = internals.events?.[`${name}$Change`];
-                if (event) {
+                const event = internals.events?.[`${name}$Changed`];
+                if (event?.isObserved) {
                     changes.notifications.push({
                         event,
                         params: [values[name], internals.values[name], session],
@@ -423,9 +531,9 @@ function createRootReference(resource: Resource, internals: Internals, session: 
      * For commit phase one we pass values to the persistence layer if present.
      */
     function commit1() {
-        computeChanges();
+        computePostCommitChanges();
 
-        // No phase one commit if there are not persistent changes
+        // No phase one commit if there are no persistent changes
         const persistent = changes?.persistent;
         if (!persistent) {
             return;
@@ -444,7 +552,11 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
         const oldValues = internals.values;
         internals.values = values;
-        internals.changed?.emit(oldValues);
+        if (internals.sessions) {
+            for (const context of internals.sessions.values()) {
+                context.onChange(oldValues);
+            }
+        }
 
         if (session.trace && changes.persistent) {
             let mutations = session.trace.mutations;
@@ -458,14 +570,33 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         }
     }
 
+    /**
+     * Post-commit logic.  Emit "changed" events.  Observers may be synchronous or asynchronous.
+     */
     function postCommit() {
         if (!changes || !internals.events) {
             return;
         }
 
-        for (const notification of changes.notifications) {
-            notification.event.emit(...notification.params);
+        // Emit is optionally async so we must iterate manually
+        const iterator = changes.notifications[Symbol.iterator]();
+
+        function emitChanged(): MaybePromise<void> {
+            while (true) {
+                const n = iterator.next();
+                if (n.done) {
+                    return;
+                }
+
+                const { event, params } = n.value;
+                const result = event.emit(...params);
+                if (MaybePromise.is(result)) {
+                    return Promise.resolve(result).then(emitChanged);
+                }
+            }
         }
+
+        return emitChanged();
     }
 
     /**

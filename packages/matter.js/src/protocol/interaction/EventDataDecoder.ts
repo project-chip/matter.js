@@ -10,17 +10,18 @@ import { UnexpectedDataError } from "../../common/MatterError.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
+import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
 import { TlvStream, TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { toHexString } from "../../util/Number.js";
 import { TlvEventData, TlvEventReport } from "./InteractionProtocol.js";
 
 const logger = Logger.get("EventDataDecoder");
 
 export type DecodedEventData<T> = {
-    eventNumber: number | bigint;
+    eventNumber: EventNumber;
     priority: EventPriority;
     epochTimestamp?: number | bigint;
     systemTimestamp?: number | bigint;
@@ -86,10 +87,10 @@ export function normalizeAndDecodeEventData(
             const eventDetail = getClusterEventById(cluster, eventId);
             if (eventDetail === undefined) {
                 logger.debug(
-                    `Decode unknown event ${toHexString(clusterId)}/${toHexString(eventId)} via the AnySchema.`,
+                    `Decode unknown event ${Diagnostic.hex(clusterId)}/${Diagnostic.hex(eventId)} via the AnySchema.`,
                 );
 
-                const eventName = `Unknown (${toHexString(eventId)})`;
+                const eventName = `Unknown (${Diagnostic.hex(eventId)})`;
 
                 const events = values.map(eventData => ({
                     ...eventData,

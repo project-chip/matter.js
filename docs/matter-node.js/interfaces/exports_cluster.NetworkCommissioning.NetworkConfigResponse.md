@@ -33,7 +33,7 @@ See Section 11.8.7.2.2, “DebugText Field” for usage.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.8
+MatterSpecification.v11.Core § 11.8.7.8
 
 ## Hierarchy
 
@@ -75,7 +75,7 @@ request command.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.8.7.8.1
+MatterSpecification.v11.Core § 11.8.7.8.1
 
 #### Inherited from
 

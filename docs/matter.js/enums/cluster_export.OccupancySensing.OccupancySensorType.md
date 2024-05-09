@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.7.5.2
+MatterSpecification.v11.Cluster § 2.7.5.2
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ Indicates a physical contact sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L52)
 
 ___
 
@@ -39,7 +39,7 @@ Indicates a passive infrared sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:37](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L37)
 
 ___
 
@@ -51,7 +51,7 @@ Indicates a passive infrared and ultrasonic sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:48](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:47](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L47)
 
 ___
 
@@ -63,4 +63,4 @@ Indicates a ultrasonic sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:42](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L42)

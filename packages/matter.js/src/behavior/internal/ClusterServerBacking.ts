@@ -82,7 +82,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
     }
 
     #createClusterServer(behavior: Behavior) {
-        const elements = new ValidatedElements(this.type);
+        const elements = new ValidatedElements(this.type, behavior);
         elements.report();
 
         // Install command handlers that map to implementation methods
@@ -297,7 +297,7 @@ function createAttributeAccessors(
                 trace.input = value;
             }
 
-            const state = behavior.state as Record<string, any>;
+            const state = behavior.state as Val.Struct;
 
             state[name] = value;
 
@@ -310,7 +310,7 @@ function createAttributeAccessors(
 
 function createChangeHandler(backing: ClusterServerBehaviorBacking, name: string) {
     // Change handler requires an event source
-    const observable = (backing.events as any)[`${name}$Change`] as ClusterEvents.AttributeObservable;
+    const observable = (backing.events as any)[`${name}$Changed`] as ClusterEvents.AttributeObservable;
     if (observable === undefined) {
         return;
     }

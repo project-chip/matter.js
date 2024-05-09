@@ -8,7 +8,7 @@ Body of the GeneralDiagnostics bootReason event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.8.4
+MatterSpecification.v11.Core § 11.11.8.4
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall contain the reason for this BootReason event.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.11.8.4.1
+MatterSpecification.v11.Core § 11.11.8.4.1
 
 #### Inherited from
 

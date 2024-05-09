@@ -91,43 +91,43 @@ These elements and properties are present in all ColorControl clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `colorCapabilities`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `cl`: [`BitFlag`](schema_export.md#bitflag) ; `ct`: [`BitFlag`](schema_export.md#bitflag) ; `ehue`: [`BitFlag`](schema_export.md#bitflag) ; `hs`: [`BitFlag`](schema_export.md#bitflag) ; `xy`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `colorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> ; `colorPointBIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointBx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointBy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointGx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointGy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRIntensity`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> ; `colorPointRx`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `colorPointRy`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `compensationText`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> ; `driftCompensation`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> ; `enhancedColorMode`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> ; `numberOfPrimaries`: [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> ; `primary1Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary1X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary1Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary2X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary2Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary3X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary3Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary4X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary4Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary5X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary5Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Intensity`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> ; `primary6X`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `primary6Y`: [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> ; `remainingTime`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `whitePointX`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> ; `whitePointY`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\>  } | - |
-| `attributes.colorCapabilities` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `cl`: [`BitFlag`](schema_export.md#bitflag) ; `ct`: [`BitFlag`](schema_export.md#bitflag) ; `ehue`: [`BitFlag`](schema_export.md#bitflag) ; `hs`: [`BitFlag`](schema_export.md#bitflag) ; `xy`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | Bits 0-4 of the ColorCapabilities attribute shall have the same values as the corresponding bits of the FeatureMap attribute. All other bits in ColorCapabilities shall be 0. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.18 |
-| `attributes.colorMode` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> | The ColorMode attribute indicates which attributes are currently determining the color of the device. The value of the ColorMode attribute cannot be written directly - it is set upon reception of any command in section Commands to the appropriate mode for that command. Table 39. Values of the ColorMode Attribute **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.9 |
-| `attributes.colorPointBIntensity` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10 |
-| `attributes.colorPointBx` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10 |
-| `attributes.colorPointBy` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10 |
-| `attributes.colorPointGIntensity` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10 |
-| `attributes.colorPointGx` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10 |
-| `attributes.colorPointGy` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10 |
-| `attributes.colorPointRIntensity` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> | The ColorPointRIntensity attribute contains a representation of the relative intensity of the red color point as defined in the Dimming Light Curve in the Ballast Configuration cluster (see Ballast Configuration Cluster), normalized such that the color point with the highest relative intensity contains the value 0xfe. A value of null shall indicate an invalid value. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.5 |
-| `attributes.colorPointRx` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | The ColorPointRX attribute contains the normalized chromaticity value x, as defined in the CIE xyY Color Space, of the red color point of the device. The value of x shall be related to the ColorPointRX attribute by the relationship x = ColorPointRX / 65536 (ColorPointRX in the range 0 to 65279 inclusive) **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.3 |
-| `attributes.colorPointRy` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | The ColorPointRY attribute contains the normalized chromaticity value y, as defined in the CIE xyY Color Space, of the red color point of the device. The value of y shall be related to the ColorPointRY attribute by the relationship y = ColorPointRY / 65536 (ColorPointRY in the range 0 to 65279 inclusive) **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.4 |
-| `attributes.compensationText` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> | The CompensationText attribute holds a textual indication of what mechanism, if any, is in use to compensate for color/intensity drift over time. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.7 |
-| `attributes.driftCompensation` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> | The DriftCompensation attribute indicates what mechanism, if any, is in use for compensation for color/intensity drift over time. It shall be one of the non-reserved values in Values of the DriftCompensation Attribute. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.6 |
-| `attributes.enhancedColorMode` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> | The EnhancedColorMode attribute specifies which attributes are currently determining the color of the device, as detailed in Values of the EnhancedColorMode Attribute. To provide compatibility with standard ZCL, the original ColorMode attribute shall indicate ‘CurrentHue and CurrentSaturation’ when the light uses the EnhancedCurrentHue attribute. If the ColorMode attribute is changed, e.g., due to one of the standard Color Control cluster commands defined in the ZCL, its new value shall be copied to the EnhancedColorMode attribute. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.12 |
-| `attributes.numberOfPrimaries` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> | The NumberOfPrimaries attribute contains the number of color primaries implemented on this device. A value of null shall indicate that the number of primaries is unknown. Where this attribute is implemented, the attributes below for indicating the “x” and “y” color values of the primaries shall also be implemented for each of the primaries from 1 to NumberOfPrimaries, without leaving gaps. Implementation of the Primary1Intensity attribute and subsequent intensity attributes is optional. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8.1 |
-| `attributes.options` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | The Options attribute is meant to be changed only during commissioning. The Options attribute is a bitmap that determines the default behavior of some cluster commands. Each command that is dependent on the Options attribute shall first construct a temporary Options bitmap that is in effect during the command processing. The temporary Options bitmap has the same format and meaning as the Options attribute, but includes any bits that may be overridden by command fields. Below is the format and description of the Options attribute and temporary Options bitmap and the effect on dependent commands. Table 40. Options Attribute ExecuteIfOff Options bit: Command execution shall NOT continue beyond the Options processing if all of these criteria are true: • The On/Off cluster exists on the same endpoint as this cluster. • The OnOff attribute of the On/Off cluster, on this endpoint, is FALSE. • The value of the ExecuteIfOff bit is 0. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.10 |
-| `attributes.primary1Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | The Primary1intensity attribute contains a representation of the maximum intensity of this primary as defined in the Dimming Light Curve in the Ballast Configuration cluster (see Ballast Configuration Cluster), normalized such that the primary with the highest maximum intensity contains the value 0xfe. A value of null shall indicate that this primary is not available. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8.4 |
-| `attributes.primary1X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | The Primary1X attribute contains the normalized chromaticity value x for this primary, as defined in the CIE xyY Color Space. The value of x shall be related to the Primary1X attribute by the relationship x = Primary1X / 65536 (Primary1X in the range 0 to 65279 inclusive) **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8.2 |
-| `attributes.primary1Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | The Primary1Y attribute contains the normalized chromaticity value y for this primary, as defined in the CIE xyY Color Space. The value of y shall be related to the Primary1Y attribute by the relationship y = Primary1Y / 65536 (Primary1Y in the range 0 to 65279 inclusive) **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8.3 |
-| `attributes.primary2Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8 |
-| `attributes.primary2X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8 |
-| `attributes.primary2Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8 |
-| `attributes.primary3Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8 |
-| `attributes.primary3X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8 |
-| `attributes.primary3Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.8 |
-| `attributes.primary4Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.primary4X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.primary4Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.primary5Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.primary5X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.primary5Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.primary6Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.primary6X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.primary6Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.9 |
-| `attributes.remainingTime` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> | The RemainingTime attribute holds the time remaining, in 1/10ths of a second, until the currently active command will be complete. **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.3 |
-| `attributes.whitePointX` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | The WhitePointX attribute contains the normalized chromaticity value x, as defined in the CIE xyY Color Space, of the current white point of the device. The value of x shall be related to the WhitePointX attribute by the relationship x = WhitePointX / 65536 (WhitePointX in the range 0 to 65279 inclusive) **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.1 |
-| `attributes.whitePointY` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | The WhitePointY attribute contains the normalized chromaticity value y, as defined in the CIE xyY Color Space, of the current white point of the device. The value of y shall be related to the WhitePointY attribute by the relationship y = WhitePointY / 65536 (WhitePointY in the range 0 to 65279 inclusive) **`See`** [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.10.2 |
+| `attributes.colorCapabilities` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `cl`: [`BitFlag`](schema_export.md#bitflag) ; `ct`: [`BitFlag`](schema_export.md#bitflag) ; `ehue`: [`BitFlag`](schema_export.md#bitflag) ; `hs`: [`BitFlag`](schema_export.md#bitflag) ; `xy`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | Bits 0-4 of the ColorCapabilities attribute shall have the same values as the corresponding bits of the FeatureMap attribute. All other bits in ColorCapabilities shall be 0. **`See`** MatterSpecification.v11.Cluster § 3.2.7.18 |
+| `attributes.colorMode` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`ColorMode`](../enums/cluster_export.ColorControl.ColorMode.md), `any`\> | The ColorMode attribute indicates which attributes are currently determining the color of the device. The value of the ColorMode attribute cannot be written directly - it is set upon reception of any command in section Commands to the appropriate mode for that command. Table 39. Values of the ColorMode Attribute **`See`** MatterSpecification.v11.Cluster § 3.2.7.9 |
+| `attributes.colorPointBIntensity` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.10 |
+| `attributes.colorPointBx` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.10 |
+| `attributes.colorPointBy` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.10 |
+| `attributes.colorPointGIntensity` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.10 |
+| `attributes.colorPointGx` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.10 |
+| `attributes.colorPointGy` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.10 |
+| `attributes.colorPointRIntensity` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\> | The ColorPointRIntensity attribute contains a representation of the relative intensity of the red color point as defined in the Dimming Light Curve in the Ballast Configuration cluster (see Ballast Configuration Cluster), normalized such that the color point with the highest relative intensity contains the value 0xfe. A value of null shall indicate an invalid value. **`See`** MatterSpecification.v11.Cluster § 3.2.10.5 |
+| `attributes.colorPointRx` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | The ColorPointRX attribute contains the normalized chromaticity value x, as defined in the CIE xyY Color Space, of the red color point of the device. The value of x shall be related to the ColorPointRX attribute by the relationship x = ColorPointRX / 65536 (ColorPointRX in the range 0 to 65279 inclusive) **`See`** MatterSpecification.v11.Cluster § 3.2.10.3 |
+| `attributes.colorPointRy` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | The ColorPointRY attribute contains the normalized chromaticity value y, as defined in the CIE xyY Color Space, of the red color point of the device. The value of y shall be related to the ColorPointRY attribute by the relationship y = ColorPointRY / 65536 (ColorPointRY in the range 0 to 65279 inclusive) **`See`** MatterSpecification.v11.Cluster § 3.2.10.4 |
+| `attributes.compensationText` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`string`, `any`\> | The CompensationText attribute holds a textual indication of what mechanism, if any, is in use to compensate for color/intensity drift over time. **`See`** MatterSpecification.v11.Cluster § 3.2.7.7 |
+| `attributes.driftCompensation` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<[`DriftCompensation`](../enums/cluster_export.ColorControl.DriftCompensation.md), `any`\> | The DriftCompensation attribute indicates what mechanism, if any, is in use for compensation for color/intensity drift over time. It shall be one of the non-reserved values in Values of the DriftCompensation Attribute. **`See`** MatterSpecification.v11.Cluster § 3.2.7.6 |
+| `attributes.enhancedColorMode` | [`Attribute`](../interfaces/cluster_export.Attribute.md)\<[`EnhancedColorMode`](../enums/cluster_export.ColorControl.EnhancedColorMode.md), `any`\> | The EnhancedColorMode attribute specifies which attributes are currently determining the color of the device, as detailed in Values of the EnhancedColorMode Attribute. To provide compatibility with standard ZCL, the original ColorMode attribute shall indicate ‘CurrentHue and CurrentSaturation’ when the light uses the EnhancedCurrentHue attribute. If the ColorMode attribute is changed, e.g., due to one of the standard Color Control cluster commands defined in the ZCL, its new value shall be copied to the EnhancedColorMode attribute. **`See`** MatterSpecification.v11.Cluster § 3.2.7.12 |
+| `attributes.numberOfPrimaries` | [`FixedAttribute`](../interfaces/cluster_export.FixedAttribute.md)\<``null`` \| `number`, `any`\> | The NumberOfPrimaries attribute contains the number of color primaries implemented on this device. A value of null shall indicate that the number of primaries is unknown. Where this attribute is implemented, the attributes below for indicating the “x” and “y” color values of the primaries shall also be implemented for each of the primaries from 1 to NumberOfPrimaries, without leaving gaps. Implementation of the Primary1Intensity attribute and subsequent intensity attributes is optional. **`See`** MatterSpecification.v11.Cluster § 3.2.8.1 |
+| `attributes.options` | [`WritableAttribute`](../interfaces/cluster_export.WritableAttribute.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: [`BitFlag`](schema_export.md#bitflag)  }\>, `any`\> | The Options attribute is meant to be changed only during commissioning. The Options attribute is a bitmap that determines the default behavior of some cluster commands. Each command that is dependent on the Options attribute shall first construct a temporary Options bitmap that is in effect during the command processing. The temporary Options bitmap has the same format and meaning as the Options attribute, but includes any bits that may be overridden by command fields. Below is the format and description of the Options attribute and temporary Options bitmap and the effect on dependent commands. Table 40. Options Attribute ExecuteIfOff Options bit: Command execution shall NOT continue beyond the Options processing if all of these criteria are true: • The On/Off cluster exists on the same endpoint as this cluster. • The OnOff attribute of the On/Off cluster, on this endpoint, is FALSE. • The value of the ExecuteIfOff bit is 0. **`See`** MatterSpecification.v11.Cluster § 3.2.7.10 |
+| `attributes.primary1Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | The Primary1intensity attribute contains a representation of the maximum intensity of this primary as defined in the Dimming Light Curve in the Ballast Configuration cluster (see Ballast Configuration Cluster), normalized such that the primary with the highest maximum intensity contains the value 0xfe. A value of null shall indicate that this primary is not available. **`See`** MatterSpecification.v11.Cluster § 3.2.8.4 |
+| `attributes.primary1X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | The Primary1X attribute contains the normalized chromaticity value x for this primary, as defined in the CIE xyY Color Space. The value of x shall be related to the Primary1X attribute by the relationship x = Primary1X / 65536 (Primary1X in the range 0 to 65279 inclusive) **`See`** MatterSpecification.v11.Cluster § 3.2.8.2 |
+| `attributes.primary1Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | The Primary1Y attribute contains the normalized chromaticity value y for this primary, as defined in the CIE xyY Color Space. The value of y shall be related to the Primary1Y attribute by the relationship y = Primary1Y / 65536 (Primary1Y in the range 0 to 65279 inclusive) **`See`** MatterSpecification.v11.Cluster § 3.2.8.3 |
+| `attributes.primary2Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.8 |
+| `attributes.primary2X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.8 |
+| `attributes.primary2Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.8 |
+| `attributes.primary3Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.8 |
+| `attributes.primary3X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.8 |
+| `attributes.primary3Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.8 |
+| `attributes.primary4Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.primary4X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.primary4Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.primary5Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.primary5X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.primary5Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.primary6Intensity` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<``null`` \| `number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.primary6X` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.primary6Y` | [`OptionalFixedAttribute`](../interfaces/cluster_export.OptionalFixedAttribute.md)\<`number`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 3.2.9 |
+| `attributes.remainingTime` | [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> | The RemainingTime attribute holds the time remaining, in 1/10ths of a second, until the currently active command will be complete. **`See`** MatterSpecification.v11.Cluster § 3.2.7.3 |
+| `attributes.whitePointX` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | The WhitePointX attribute contains the normalized chromaticity value x, as defined in the CIE xyY Color Space, of the current white point of the device. The value of x shall be related to the WhitePointX attribute by the relationship x = WhitePointX / 65536 (WhitePointX in the range 0 to 65279 inclusive) **`See`** MatterSpecification.v11.Cluster § 3.2.10.1 |
+| `attributes.whitePointY` | [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<`number`, `any`\> | The WhitePointY attribute contains the normalized chromaticity value y, as defined in the CIE xyY Color Space, of the current white point of the device. The value of y shall be related to the WhitePointY attribute by the relationship y = WhitePointY / 65536 (WhitePointY in the range 0 to 65279 inclusive) **`See`** MatterSpecification.v11.Cluster § 3.2.10.2 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `currentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `currentSaturation`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `moveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `moveMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md)\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `rate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `moveSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `moveMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md)\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `rate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `moveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `direction`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ColorControlDirection`](../enums/cluster_export.ColorControl.ColorControlDirection.md)\> ; `hue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `moveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `hue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `saturation`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `moveToSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `saturation`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `stepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `stepMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StepMode`](../enums/cluster_export.ColorControl.StepMode.md)\> ; `stepSize`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `stepSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `stepMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StepMode`](../enums/cluster_export.ColorControl.StepMode.md)\> ; `stepSize`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = HueSaturationComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `currentX`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `currentY`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `moveColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `rateX`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `rateY`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `moveToColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `colorX`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `colorY`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `stepColor`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `stepX`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `stepY`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = XyComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorTempPhysicalMaxMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorTempPhysicalMinMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorTemperatureMireds`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `coupleColorTempToLevelMinMireds`: [`OptionalAttribute`](../interfaces/cluster_export.OptionalAttribute.md)\<`number`, `any`\> ; `startUpColorTemperatureMireds`: [`OptionalWritableAttribute`](../interfaces/cluster_export.OptionalWritableAttribute.md)\<``null`` \| `number`, `any`\>  } ; `commands`: \{ `moveColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `colorTemperatureMaximumMireds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `colorTemperatureMinimumMireds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `moveMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `rate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `moveToColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `colorTemperatureMireds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `stepColorTemperature`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `colorTemperatureMaximumMireds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `colorTemperatureMinimumMireds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `stepMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `stepSize`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = ColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `enhancedCurrentHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `enhancedMoveHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `moveMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`MoveMode`](../enums/cluster_export.ColorControl.MoveMode.md)\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `rate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `enhancedMoveToHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `direction`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ColorControlDirection`](../enums/cluster_export.ColorControl.ColorControlDirection.md)\> ; `enhancedHue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `enhancedMoveToHueAndSaturation`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `enhancedHue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `saturation`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `enhancedStepHue`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `stepMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StepMode`](../enums/cluster_export.ColorControl.StepMode.md)\> ; `stepSize`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  } = EnhancedHueComponent; `flags`: \{ `enhancedHue`: ``true`` = true }  }, \{ `component`: \{ `attributes`: \{ `colorLoopActive`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorLoopDirection`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorLoopStartEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorLoopStoredEnhancedHue`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\> ; `colorLoopTime`: [`Attribute`](../interfaces/cluster_export.Attribute.md)\<`number`, `any`\>  } ; `commands`: \{ `colorLoopSet`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `action`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Action`](../enums/cluster_export.ColorControl.Action.md)\> ; `direction`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ColorLoopSetDirection`](../enums/cluster_export.ColorControl.ColorLoopSetDirection.md)\> ; `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `startHue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `time`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `updateFlags`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `reserved`: ... ; `updateAction`: ... ; `updateDirection`: ... ; `updateStartHue`: ... ; `updateTime`: ...  }\>\>  }\>, `void`, `any`\>  }  } = ColorLoopComponent; `flags`: \{ `colorLoop`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\>  }\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `hueSaturation`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\>  }\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `xy`: ``true`` = true }  }, \{ `component`: \{ `commands`: \{ `stopMoveStep`: [`Command`](../interfaces/cluster_export.Command.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `optionsMask`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\> ; `optionsOverride`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<\{ `executeIfOff`: ...  }\>\>  }\>, `void`, `any`\>  }  } = HueSaturationOrXyOrColorTemperatureComponent; `flags`: \{ `colorTemperature`: ``true`` = true }  }] | This metadata controls which ColorControlCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `colorLoop`: [`BitFlag`](schema_export.md#bitflag) ; `colorTemperature`: [`BitFlag`](schema_export.md#bitflag) ; `enhancedHue`: [`BitFlag`](schema_export.md#bitflag) ; `hueSaturation`: [`BitFlag`](schema_export.md#bitflag) ; `xy`: [`BitFlag`](schema_export.md#bitflag)  } | - |
 | `features.colorLoop` | [`BitFlag`](schema_export.md#bitflag) | ColorLoop Color loop is supported. |
@@ -141,7 +141,7 @@ These elements and properties are present in all ColorControl clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1317](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1317)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1316](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1316)
 
 ___
 
@@ -151,9 +151,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1735](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1735)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1734](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1734)
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1737](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1737)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1736](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1736)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1723](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1723)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1722](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1722)
 
 ___
 
@@ -192,7 +192,7 @@ A ColorControlCluster supports these elements if it supports feature ColorLoop.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1197](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1197)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1196](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1196)
 
 ___
 
@@ -219,7 +219,7 @@ A ColorControlCluster supports these elements if it supports feature ColorTemper
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1031](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1031)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1030](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1030)
 
 ___
 
@@ -229,9 +229,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1876](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1876)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1875](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1875)
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1878](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1878)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1877](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1877)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1747](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1747)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1746](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1746)
 
 ___
 
@@ -269,7 +269,7 @@ A ColorControlCluster supports these elements if it supports feature EnhancedHue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1136](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1136)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1135](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1135)
 
 ___
 
@@ -281,7 +281,7 @@ The value of the ColorControl featureMap attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.5
+MatterSpecification.v11.Cluster § 3.2.5
 
 #### Type declaration
 
@@ -295,7 +295,7 @@ The value of the ColorControl featureMap attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:862](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L862)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:861](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L861)
 
 ___
 
@@ -323,7 +323,7 @@ A ColorControlCluster supports these elements if it supports feature HueSaturati
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:902](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L902)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:901](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L901)
 
 ___
 
@@ -342,7 +342,7 @@ A ColorControlCluster supports these elements if it supports features HueSaturat
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1258](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1258)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1257](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1257)
 
 ___
 
@@ -354,7 +354,7 @@ The value of the ColorControl options attribute
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.7.10
+MatterSpecification.v11.Cluster § 3.2.7.10
 
 #### Type declaration
 
@@ -364,7 +364,7 @@ The value of the ColorControl options attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L46)
 
 ___
 
@@ -376,11 +376,11 @@ Input to the ColorControl colorLoopSet command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.19
+MatterSpecification.v11.Cluster § 3.2.11.19
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:738](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L738)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:737](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L737)
 
 ___
 
@@ -392,11 +392,11 @@ Input to the ColorControl enhancedMoveHue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.16
+MatterSpecification.v11.Cluster § 3.2.11.16
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:585](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L585)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:584](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L584)
 
 ___
 
@@ -408,11 +408,11 @@ Input to the ColorControl enhancedMoveToHueAndSaturation command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.18
+MatterSpecification.v11.Cluster § 3.2.11.18
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:664](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L664)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:663](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L663)
 
 ___
 
@@ -424,11 +424,11 @@ Input to the ColorControl enhancedMoveToHue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.15
+MatterSpecification.v11.Cluster § 3.2.11.15
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:545](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L545)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:544](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L544)
 
 ___
 
@@ -440,11 +440,11 @@ Input to the ColorControl enhancedStepHue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.17
+MatterSpecification.v11.Cluster § 3.2.11.17
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:620](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L620)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:619](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L619)
 
 ___
 
@@ -456,11 +456,11 @@ Input to the ColorControl moveColor command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.12
+MatterSpecification.v11.Cluster § 3.2.11.12
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:326](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L326)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:325](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L325)
 
 ___
 
@@ -472,11 +472,11 @@ Input to the ColorControl moveColorTemperature command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.21
+MatterSpecification.v11.Cluster § 3.2.11.21
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:406](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L406)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:405](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L405)
 
 ___
 
@@ -488,11 +488,11 @@ Input to the ColorControl moveHue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.5
+MatterSpecification.v11.Cluster § 3.2.11.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:102](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:101](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L101)
 
 ___
 
@@ -504,11 +504,11 @@ Input to the ColorControl moveSaturation command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.8
+MatterSpecification.v11.Cluster § 3.2.11.8
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:208](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L208)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:207](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L207)
 
 ___
 
@@ -520,11 +520,11 @@ Input to the ColorControl moveToColor command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.11
+MatterSpecification.v11.Cluster § 3.2.11.11
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:306](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L306)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:305](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L305)
 
 ___
 
@@ -536,11 +536,11 @@ Input to the ColorControl moveToColorTemperature command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.14
+MatterSpecification.v11.Cluster § 3.2.11.14
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:387](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L387)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:386](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L386)
 
 ___
 
@@ -552,11 +552,11 @@ Input to the ColorControl moveToHueAndSaturation command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.10
+MatterSpecification.v11.Cluster § 3.2.11.10
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:286](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L286)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:285](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L285)
 
 ___
 
@@ -568,11 +568,11 @@ Input to the ColorControl moveToHue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.4
+MatterSpecification.v11.Cluster § 3.2.11.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L53)
 
 ___
 
@@ -584,11 +584,11 @@ Input to the ColorControl moveToSaturation command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.7
+MatterSpecification.v11.Cluster § 3.2.11.7
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:189](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L189)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:188](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L188)
 
 ___
 
@@ -600,11 +600,11 @@ Input to the ColorControl stepColor command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.13
+MatterSpecification.v11.Cluster § 3.2.11.13
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:359](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L359)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:358](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L358)
 
 ___
 
@@ -616,11 +616,11 @@ Input to the ColorControl stepColorTemperature command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.22
+MatterSpecification.v11.Cluster § 3.2.11.22
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:473](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L473)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:472](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L472)
 
 ___
 
@@ -632,11 +632,11 @@ Input to the ColorControl stepHue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.6
+MatterSpecification.v11.Cluster § 3.2.11.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:145](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L145)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L144)
 
 ___
 
@@ -648,11 +648,11 @@ Input to the ColorControl stepSaturation command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.9
+MatterSpecification.v11.Cluster § 3.2.11.9
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:244](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L244)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:243](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L243)
 
 ___
 
@@ -664,11 +664,11 @@ Input to the ColorControl stopMoveStep command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.20
+MatterSpecification.v11.Cluster § 3.2.11.20
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:809](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L809)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:808](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L808)
 
 ___
 
@@ -680,7 +680,7 @@ The value of ColorControl.updateFlags
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.19.1
+MatterSpecification.v11.Cluster § 3.2.11.19.1
 
 #### Type declaration
 
@@ -694,7 +694,7 @@ The value of ColorControl.updateFlags
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:704](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L704)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:703](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L703)
 
 ___
 
@@ -718,4 +718,4 @@ A ColorControlCluster supports these elements if it supports feature Xy.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:977](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L977)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:976](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L976)

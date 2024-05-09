@@ -8,7 +8,7 @@ Body of the OtaSoftwareUpdateRequestor stateTransition event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.7.7.1
+MatterSpecification.v11.Core § 11.19.7.7.1
 
 ## Hierarchy
 

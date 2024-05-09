@@ -9,71 +9,183 @@ import {
     TlvIntermediateCertificate,
     TlvOperationalCertificate,
     TlvRootCertificate,
+    X962,
 } from "@project-chip/matter.js/certificate";
-import { BYTES_KEY, DerCodec, DerNode, ELEMENTS_KEY, EcdsaWithSHA256_X962 } from "@project-chip/matter.js/codec";
+import { BYTES_KEY, DerCodec, DerNode, ELEMENTS_KEY } from "@project-chip/matter.js/codec";
 import { ValidationError } from "@project-chip/matter.js/common";
 import { Crypto, PrivateKey, PublicKey } from "@project-chip/matter.js/crypto";
-import { CaseAuthenticatedTag } from "@project-chip/matter.js/datatype";
+import { CaseAuthenticatedTag, FabricId, NodeId } from "@project-chip/matter.js/datatype";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
-
-const ROOT_CERT_TLV = TlvRootCertificate.decode(
-    ByteArray.fromHex(
-        "153001010024020137032414001826048012542826058015203b37062414001824070124080130094104d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9d370a3501290118240260300414e766069362d7e35b79687161644d222bdde93a68300514e766069362d7e35b79687161644d222bdde93a6818300b404e8fb06526f0332b3e928166864a6d29cade53fb5b8918a6d134d0994bf1ae6dce6762dcba99e80e96249d2f1ccedb336b26990f935dba5a0b9e5b4c9e5d1d8f18",
-    ),
-);
-const ROOT_CERT_ASN1 = ByteArray.fromHex(
-    "3082013ca003020102020100300a06082a8648ce3d04030230223120301e060a2b0601040182a27c01040c1030303030303030303030303030303030301e170d3231303631303030303030305a170d3331303630383030303030305a30223120301e060a2b0601040182a27c01040c10303030303030303030303030303030303059301306072a8648ce3d020106082a8648ce3d03010703420004d89eb7e3f3226d0918f4b85832457bb9981bca7aaef58c18fb5ec07525e472b2bd1617fb75ee41bd388f94ae6a6070efc896777516a5c54aff74ec0804cdde9da3633061300f0603551d130101ff040530030101ff300e0603551d0f0101ff040403020106301d0603551d0e04160414e766069362d7e35b79687161644d222bdde93a68301f0603551d23041830168014e766069362d7e35b79687161644d222bdde93a68",
-);
-
-const NOC_CERT_TLV = TlvOperationalCertificate.decode(
-    ByteArray.fromHex(
-        "153001010124020137032414001826048012542826058015203b37062415012411da1824070124080130094104e0bf14a052dd7ab08d485e20570c6e6ac6fbb99513d3aacd66808c722941ae0538e9323ec89f39228bd228270f1716539cecc64e62b26c58c3355d68935d87b2370a350128011824020136030402040118300414c524e05cad04a826ecda84501766732b5f181354300514e766069362d7e35b79687161644d222bdde93a6818300b40aca27ff4b68e81168295b85753e128226ec3d7b35916be9b32f4311bb4eb39a3b9e5583c8d762be1e9332647d61088bb057b6844892654c97624797d0390c9c318",
-    ),
-);
-const NOC_CERT_ASN1 = ByteArray.fromHex(
-    "3082017fa003020102020101300a06082a8648ce3d04030230223120301e060a2b0601040182a27c01040c1030303030303030303030303030303030301e170d3231303631303030303030305a170d3331303630383030303030305a30443120301e060a2b0601040182a27c01050c10303030303030303030303030303030313120301e060a2b0601040182a27c01010c10303030303030303030303030303044413059301306072a8648ce3d020106082a8648ce3d03010703420004e0bf14a052dd7ab08d485e20570c6e6ac6fbb99513d3aacd66808c722941ae0538e9323ec89f39228bd228270f1716539cecc64e62b26c58c3355d68935d87b2a38183308180300c0603551d130101ff04023000300e0603551d0f0101ff04040302078030200603551d250101ff0416301406082b0601050507030206082b06010505070301301d0603551d0e04160414c524e05cad04a826ecda84501766732b5f181354301f0603551d23041830168014e766069362d7e35b79687161644d222bdde93a68",
-);
-
-const NOC_CERT_CAT_ASN1 = ByteArray.fromHex(
-    "308201cea003020102020101300a06082a8648ce3d04030230223120301e060a2b0601040182a27c01040c1030303030303030303030303030303030301e170d3231303631303030303030305a170d3331303630383030303030305a3081923120301e060a2b0601040182a27c01050c10303030303030303030303030303030313120301e060a2b0601040182a27c01010c103030303030303030303030303030444131183016060a2b0601040182a27c01060c08313233343536373831183016060a2b0601040182a27c01060c08353637383930313231183016060a2b0601040182a27c01060c0839303132333435363059301306072a8648ce3d020106082a8648ce3d03010703420004e0bf14a052dd7ab08d485e20570c6e6ac6fbb99513d3aacd66808c722941ae0538e9323ec89f39228bd228270f1716539cecc64e62b26c58c3355d68935d87b2a38183308180300c0603551d130101ff04023000300e0603551d0f0101ff04040302078030200603551d250101ff0416301406082b0601050507030206082b06010505070301301d0603551d0e04160414c524e05cad04a826ecda84501766732b5f181354301f0603551d23041830168014e766069362d7e35b79687161644d222bdde93a68",
-);
-
-const ICAC_CERT_TLV_SPECS = TlvIntermediateCertificate.decode(
-    ByteArray.fromHex(
-        "153001082db444855641aedf2402013703271401000000cacacaca182604ef171b2726056eb5b94c3706271303000000cacacaca1824070124080130094104c5d0861bb8f90c405c12314e4c5ebeea939f72774bcc33239e2f59f6f46af8dc7d4682a0e3ccc646e6df29ea86bf562ae720a898337d383f32c0a09e416019ea370a35012901182402603004145352d7059e9c15a508906862864801a29f1f41d330051413af81ab37374b2ed2a9649b12b7a3a4287e151d18300b40841a06d43b5e9fecd24e87b1244eb51c6a2cf20d9b5e6ba07f11e6002f7e0ca34e32a602c3609d0092d348bdbd198a114646bd41cf103783641ae25e3f23fd2618",
-    ),
-);
-
-const PRIVATE_KEY = ByteArray.fromHex("727F1005CBA47ED7822A9D930943621617CFD3B79D9AF528B801ECF9F1992204");
-const PUBLIC_KEY = ByteArray.fromHex(
-    "0462e2b6e1baff8d74a6fd8216c4cb67a3363a31e691492792e61aee610261481396725ef95e142686ba98f339b0ff65bc338bec7b9e8be0bdf3b2774982476220",
-);
-const CSR_REQUEST_ASN1 = ByteArray.fromHex(
-    "3070020100300e310c300a060355040a0c034353523059301306072a8648ce3d020106082a8648ce3d0301070342000462e2b6e1baff8d74a6fd8216c4cb67a3363a31e691492792e61aee610261481396725ef95e142686ba98f339b0ff65bc338bec7b9e8be0bdf3b2774982476220a000",
-);
+import {
+    CERTIFICATE_SETS,
+    TEST_CSR_REQUEST_ASN1,
+    TEST_NOC_CERT_CAT_ASN1,
+    TEST_PRIVATE_KEY,
+    TEST_PUBLIC_KEY,
+} from "./TestCertificates.js";
 
 describe("CertificateManager", () => {
-    describe("rootCertToAsn1", () => {
-        it("generates the correct ASN1 bytes", () => {
-            const result = CertificateManager.rootCertToAsn1(ROOT_CERT_TLV);
+    before(() => {
+        MockTime.reset(767158951000);
+    });
 
-            assert.equal(result.toHex(), ROOT_CERT_ASN1.toHex());
+    /**
+     * These tests make sure that the TLV can be recoded to the same bytes. This mainly verifies that the order
+     * of Lists are correctly preserved.
+     */
+    describe("Recode Tlv", () => {
+        Object.entries(CERTIFICATE_SETS).forEach(([key, certs]) => {
+            describe(`recodes Tlv for ${key}`, () => {
+                it("recode root certificate", () => {
+                    const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
+                    expect(TlvRootCertificate.encode(rootTlv).toHex()).equal(certs.ROOT.TLV.toHex());
+                });
+
+                if ("ICAC" in certs) {
+                    it("recode intermediate certificate", () => {
+                        const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        expect(TlvIntermediateCertificate.encode(icacTlv).toHex()).equal(certs.ICAC.TLV.toHex());
+                    });
+                }
+
+                it("recode operational certificate", () => {
+                    const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                    expect(TlvOperationalCertificate.encode(nocTlv).toHex()).equal(certs.NOC.TLV.toHex());
+                });
+            });
         });
     });
 
-    describe("nocCertToAsn1", () => {
-        it("generates the correct ASN1 bytes without CASE Authenticated Tags", () => {
-            const result = CertificateManager.nocCertToAsn1(NOC_CERT_TLV);
+    /**
+     * For all Root certs and some ICAC/NOC we verified ASN1 encoding. This test verifies that the encoding manually,
+     * so we can also verify that. For the others the certificate validation below serves the same purpose.
+     */
+    describe("generates the correct ASN1 bytes", () => {
+        Object.entries(CERTIFICATE_SETS).forEach(([key, certs]) => {
+            describe(`generates the correct ASN1 bytes for ${key}`, () => {
+                it("encode root certificate", () => {
+                    const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
+                    assert.equal(CertificateManager.rootCertToAsn1(rootTlv).toHex(), certs.ROOT.ASN1.toHex());
+                });
 
-            assert.equal(result.toHex(), NOC_CERT_ASN1.toHex());
+                if ("ICAC" in certs && "ASN1" in certs.ICAC) {
+                    it("encode intermediate certificate", () => {
+                        const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        assert.equal(
+                            CertificateManager.intermediateCaCertToAsn1(icacTlv).toHex(),
+                            // @ts-expect-error ASN1 might not be in TlvIntermediateCertificate
+                            certs.ICAC.ASN1.toHex(),
+                        );
+                    });
+                }
+
+                if ("ASN1" in certs.NOC) {
+                    it("encode operational certificate", () => {
+                        const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        assert.equal(
+                            CertificateManager.nodeOperationalCertToAsn1(nocTlv).toHex(),
+                            // @ts-expect-error ASN1 might not be in TlvOperationalCertificate
+                            certs.NOC.ASN1.toHex(),
+                        );
+                    });
+                }
+            });
+        });
+    });
+
+    /**
+     * We verify all certificates which also verifies them cryptographically.
+     */
+    describe("verifies certificates", () => {
+        Object.entries(CERTIFICATE_SETS).forEach(([key, certs]) => {
+            describe(`verify certificates for ${key}`, () => {
+                it("verify root certificate", () => {
+                    const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
+                    CertificateManager.verifyRootCertificate(rootTlv);
+                });
+
+                if ("ICAC" in certs) {
+                    it("verify intermediate certificate via ROOT", () => {
+                        const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        CertificateManager.verifyIntermediateCaCertificate(rootTlv, icacTlv);
+                    });
+
+                    it("verify operational certificate via ICAC", () => {
+                        const icacTlv = TlvIntermediateCertificate.decode(certs.ICAC.TLV);
+                        const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        CertificateManager.verifyNodeOperationalCertificate(icacTlv, nocTlv);
+                    });
+                } else {
+                    it("verify operational certificate via ROOT", () => {
+                        const rootTlv = TlvRootCertificate.decode(certs.ROOT.TLV);
+                        const nocTlv = TlvOperationalCertificate.decode(certs.NOC.TLV);
+                        CertificateManager.verifyNodeOperationalCertificate(rootTlv, nocTlv);
+                    });
+                }
+            });
+        });
+    });
+
+    describe("special Noc encoding cases", () => {
+        it("validates TLV order preserve", () => {
+            const NOC_JSON = {
+                serialNumber: ByteArray.fromHex("01"),
+                signatureAlgorithm: 1,
+                issuer: { rcacId: 0 },
+                notBefore: 734738627,
+                notAfter: 1081634627,
+                subject: {
+                    caseAuthenticatedTags: [CaseAuthenticatedTag(305419896), CaseAuthenticatedTag(1450709556)],
+                    fabricId: FabricId(1),
+                    nodeId: NodeId(BigInt("9544138254462263483")),
+                },
+                publicKeyAlgorithm: 1,
+                ellipticCurveIdentifier: 1,
+                ellipticCurvePublicKey: ByteArray.fromHex(
+                    "047a13da11a960c91abdbe002c6f969f03b88f7f5c58f36f6755c6dce7e1ddd460ab4b2df33f8ed1da1ff5ebf21c3a293c3251241c445b208a22bea0abec369740",
+                ),
+                extensions: {
+                    basicConstraints: { isCa: false },
+                    keyUsage: {
+                        digitalSignature: true,
+                        nonRepudiation: false,
+                        keyEncipherment: false,
+                        dataEncipherment: false,
+                        keyAgreement: false,
+                        keyCertSign: false,
+                        cRLSign: false,
+                        encipherOnly: false,
+                        decipherOnly: false,
+                    },
+                    extendedKeyUsage: [2, 1],
+                    subjectKeyIdentifier: ByteArray.fromHex("50a7b210085872f47492e9442ccb2bfec82097da"),
+                    authorityKeyIdentifier: ByteArray.fromHex("9f833bc968b9c7ce347b1d10f046ebda0aeb0b3e"),
+                },
+                signature: ByteArray.fromHex(
+                    "3fcd56cf81d769100934b32f6a8b07afddfbf6c32f01e97385f251b8c71bc631a876c56fac76dd3c81449b71a0a450d28d9eaf314ccd3a166b61cddd965829f1",
+                ),
+            };
+            const NOC_ASN1 = CertificateManager.nodeOperationalCertToAsn1(NOC_JSON);
+            const NOC_TLV = TlvOperationalCertificate.encode(NOC_JSON);
+
+            const unTlv = TlvOperationalCertificate.decode(NOC_TLV);
+            const unAsn1 = CertificateManager.nodeOperationalCertToAsn1(unTlv);
+
+            expect(unTlv).to.deep.equal(NOC_JSON);
+            expect(Object.keys(unTlv.subject)).to.deep.equal(Object.keys(NOC_JSON.subject));
+            expect(unAsn1.toHex()).to.deep.equal(NOC_ASN1.toHex());
         });
 
         it("generates the correct ASN1 bytes with three different CASE Authenticated Tags", () => {
+            const TEST_NOC_CERT_TLV = TlvOperationalCertificate.decode(
+                CERTIFICATE_SETS["General Test Certificates"].NOC.TLV,
+            );
             const nocWithCat = {
-                ...NOC_CERT_TLV,
+                ...TEST_NOC_CERT_TLV,
                 subject: {
-                    ...NOC_CERT_TLV.subject,
+                    ...TEST_NOC_CERT_TLV.subject,
                     caseAuthenticatedTags: [
                         CaseAuthenticatedTag(0x12345678),
                         CaseAuthenticatedTag(0x56789012),
@@ -81,16 +193,19 @@ describe("CertificateManager", () => {
                     ],
                 },
             };
-            const result = CertificateManager.nocCertToAsn1(nocWithCat);
+            const result = CertificateManager.nodeOperationalCertToAsn1(nocWithCat);
 
-            assert.equal(result.toHex(), NOC_CERT_CAT_ASN1.toHex());
+            assert.equal(result.toHex(), TEST_NOC_CERT_CAT_ASN1.toHex());
         });
 
         it("throws error if more then 3 tags are provided", () => {
+            const TEST_NOC_CERT_TLV = TlvOperationalCertificate.decode(
+                CERTIFICATE_SETS["General Test Certificates"].NOC.TLV,
+            );
             const nocWithCat = {
-                ...NOC_CERT_TLV,
+                ...TEST_NOC_CERT_TLV,
                 subject: {
-                    ...NOC_CERT_TLV.subject,
+                    ...TEST_NOC_CERT_TLV.subject,
                     caseAuthenticatedTags: [
                         CaseAuthenticatedTag(0x12345678),
                         CaseAuthenticatedTag(0x56789012),
@@ -100,16 +215,19 @@ describe("CertificateManager", () => {
                 },
             };
             assert.throws(
-                () => CertificateManager.nocCertToAsn1(nocWithCat),
+                () => CertificateManager.nodeOperationalCertToAsn1(nocWithCat),
                 new ValidationError("Too many CaseAuthenticatedTags (4)."),
             );
         });
 
         it("throws error if tags contain duplicate identifier values", () => {
+            const TEST_NOC_CERT_TLV = TlvOperationalCertificate.decode(
+                CERTIFICATE_SETS["General Test Certificates"].NOC.TLV,
+            );
             const nocWithCat = {
-                ...NOC_CERT_TLV,
+                ...TEST_NOC_CERT_TLV,
                 subject: {
-                    ...NOC_CERT_TLV.subject,
+                    ...TEST_NOC_CERT_TLV.subject,
                     caseAuthenticatedTags: [
                         CaseAuthenticatedTag(0x12345678),
                         CaseAuthenticatedTag(0x56789012),
@@ -118,30 +236,21 @@ describe("CertificateManager", () => {
                 },
             };
             assert.throws(
-                () => CertificateManager.nocCertToAsn1(nocWithCat),
+                () => CertificateManager.nodeOperationalCertToAsn1(nocWithCat),
                 new ValidationError("CASE Authenticated Tags field contains duplicate identifier values."),
             );
         });
     });
 
-    describe("validateRootCertificate", () => {
-        it("validates a correct root cert", () => {
-            CertificateManager.validateRootCertificate(ROOT_CERT_TLV);
-        });
-    });
-
-    describe("validateNocCertificate", () => {
-        it("validates a correct NOC cert", () => {
-            CertificateManager.validateNocCertificate(ROOT_CERT_TLV, NOC_CERT_TLV);
-        });
-    });
-
     describe("decodeIcacCertificate", () => {
         it("decodes a correct ICAC cert", () => {
-            assert.deepEqual(ICAC_CERT_TLV_SPECS, {
+            const SPECS_ICAC_CERT_TLV = TlvIntermediateCertificate.decode(
+                CERTIFICATE_SETS["Matter 1.2 Specification Certificates"].ICAC.TLV,
+            );
+            assert.deepEqual(SPECS_ICAC_CERT_TLV, {
                 serialNumber: new ByteArray([45, 180, 68, 133, 86, 65, 174, 223]),
                 signatureAlgorithm: 1,
-                issuer: { issuerRcacId: BigInt("14612714909889200129") },
+                issuer: { rcacId: BigInt("14612714909889200129") },
                 notBefore: 656087023,
                 notAfter: 1287239022,
                 subject: { icacId: BigInt("14612714909889200131") },
@@ -154,7 +263,17 @@ describe("CertificateManager", () => {
                 ]),
                 extensions: {
                     basicConstraints: { isCa: true },
-                    keyUsage: 96,
+                    keyUsage: {
+                        cRLSign: true,
+                        dataEncipherment: false,
+                        decipherOnly: false,
+                        digitalSignature: false,
+                        encipherOnly: false,
+                        keyAgreement: false,
+                        keyCertSign: true,
+                        keyEncipherment: false,
+                        nonRepudiation: false,
+                    },
                     subjectKeyIdentifier: new ByteArray([
                         83, 82, 215, 5, 158, 156, 21, 165, 8, 144, 104, 98, 134, 72, 1, 162, 159, 31, 65, 211,
                     ]),
@@ -174,28 +293,28 @@ describe("CertificateManager", () => {
     describe("createCertificateSigningRequest", () => {
         it("generates a valid CSR", () => {
             const result = CertificateManager.createCertificateSigningRequest(
-                PrivateKey(PRIVATE_KEY, { publicKey: PUBLIC_KEY }),
+                PrivateKey(TEST_PRIVATE_KEY, { publicKey: TEST_PUBLIC_KEY }),
             );
 
             const derNode = DerCodec.decode(result);
             assert.equal(derNode[ELEMENTS_KEY]?.length, 3);
             const [requestNode, signatureAlgorithmNode, signatureNode] = derNode[ELEMENTS_KEY] as DerNode[];
-            assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(EcdsaWithSHA256_X962));
+            assert.deepEqual(DerCodec.encode(signatureAlgorithmNode), DerCodec.encode(X962.EcdsaWithSHA256));
             const requestBytes = DerCodec.encode(requestNode);
-            assert.deepEqual(requestBytes, CSR_REQUEST_ASN1);
-            Crypto.verify(PublicKey(PUBLIC_KEY), DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
+            assert.deepEqual(requestBytes, TEST_CSR_REQUEST_ASN1);
+            Crypto.verify(PublicKey(TEST_PUBLIC_KEY), DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
         });
     });
 
     describe("getPublicKeyFromCsr", () => {
         it("get the public key from the CSR", () => {
             const csr = CertificateManager.createCertificateSigningRequest(
-                PrivateKey(PRIVATE_KEY, { publicKey: PUBLIC_KEY }),
+                PrivateKey(TEST_PRIVATE_KEY, { publicKey: TEST_PUBLIC_KEY }),
             );
 
             const result = CertificateManager.getPublicKeyFromCsr(csr);
 
-            assert.deepEqual(result, PUBLIC_KEY);
+            assert.deepEqual(result, TEST_PUBLIC_KEY);
         });
     });
 });

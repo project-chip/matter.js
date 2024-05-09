@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:74](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L74)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L74)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:67](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L67)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:67](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L67)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L62)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L62)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:54](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L54)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L54)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L87)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L87)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:83](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L83)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L83)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:56](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L56)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L56)
 
 ## Variables
 
@@ -168,6 +168,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L44)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L44)
 
-[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L45)
+[packages/matter.js/src/behavior/cluster/ClusterInterface.ts:45](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/cluster/ClusterInterface.ts#L45)

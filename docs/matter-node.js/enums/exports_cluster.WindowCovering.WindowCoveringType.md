@@ -8,7 +8,7 @@ The value of the WindowCovering type attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.3.5.1
+MatterSpecification.v11.Cluster § 5.3.5.1
 
 ## Table of contents
 

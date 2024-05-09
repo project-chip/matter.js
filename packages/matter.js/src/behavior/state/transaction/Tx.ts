@@ -19,6 +19,10 @@ import { Transaction } from "./Transaction.js";
 
 const logger = Logger.get("Transaction");
 
+// Controls the number of times we will cycle pre-commit handlers waiting for state to settle
+const MAX_PRECOMMIT_CYCLES = 5;
+
+// Controls the number of commits that may occur due to mutation in post-commit handlers
 const MAX_CHAINED_COMMITS = 5;
 
 /**
@@ -35,7 +39,7 @@ export function act<T>(via: string, actor: (transaction: Transaction) => T): T {
 
         if (commits > MAX_CHAINED_COMMITS) {
             throw new TransactionFlowError(
-                `Transaction commits have cascaded ${MAX_CHAINED_COMMITS} times which likely indicates a logic error`,
+                `Transaction commits have cascaded ${MAX_CHAINED_COMMITS} times which likely indicates an infinite loop`,
             );
         }
 
@@ -299,14 +303,21 @@ class Tx implements Transaction {
             return this.rollback();
         }
 
-        const participants = [...this.#participants];
+        // Perform the actual commit once preCommit completes
+        const performCommit = () => {
+            const participants = [...this.#participants];
+            const result = this.#finalize(Status.CommittingPhaseOne, "committed", this.#executeCommit.bind(this));
+            if (MaybePromise.is(result)) {
+                return result.then(() => this.#executePostCommit(participants));
+            }
+            return this.#executePostCommit(participants);
+        };
 
-        // Perform the actual commit
-        const result = this.#finalize(Status.CommittingPhaseOne, "committed", this.#executeCommit.bind(this));
+        const result = this.#executePreCommit();
         if (MaybePromise.is(result)) {
-            return result.then(() => this.#executePostCommit(participants));
+            return result.then(performCommit);
         }
-        return this.#executePostCommit(participants);
+        return performCommit();
     }
 
     rollback() {
@@ -392,7 +403,102 @@ class Tx implements Transaction {
     }
 
     /**
-     * Commit logic passed to #finish.
+     * Iteratively execute pre-commit until all participants "settle" and report no possible mutation.
+     */
+    #executePreCommit(): MaybePromise<void> {
+        let mayHaveMutated = false;
+        let abortedDueToError = false;
+        let iterator = this.participants[Symbol.iterator]();
+        let cycles = 1;
+
+        const errorRollback = () => {
+            const result = this.#executeRollback();
+
+            if (MaybePromise.is(result)) {
+                return result.then(() => {
+                    throw new FinalizationError("Rolled back due to pre-commit error");
+                });
+            }
+
+            throw new FinalizationError("Rolled back due to pre-commit error");
+        };
+
+        const nextCycle = () => {
+            // Guard against infinite loops
+            cycles++;
+            if (cycles > MAX_PRECOMMIT_CYCLES) {
+                logger.error(
+                    `State has not settled after ${MAX_PRECOMMIT_CYCLES} pre-commit cycles which likely indicates an infinite loop`,
+                );
+                return errorRollback();
+            }
+
+            // Restart iteration at the first participant
+            mayHaveMutated = false;
+            iterator = this.participants[Symbol.iterator]();
+        };
+
+        const nextPreCommit = (previousResult?: boolean): MaybePromise<void> => {
+            // If an error occurred
+            if (abortedDueToError) {
+                return;
+            }
+
+            // When resuming after an async pre-commit handler, "previousResult" is the handler's return value
+            // indicating whether mutation may have occurred
+            if (previousResult) {
+                mayHaveMutated = true;
+            }
+
+            // Cycle through participants until exhausted, there is an error or a pre-commit function is async
+            while (true) {
+                const n = iterator.next();
+
+                // If we've exhausted participants, we are either done or need to restart the cycle
+                if (n.done) {
+                    // Restart the cycle if necessary
+                    if (mayHaveMutated) {
+                        const result = nextCycle();
+                        if (MaybePromise.is(result)) {
+                            return result;
+                        }
+                        continue;
+                    }
+
+                    // Done
+                    break;
+                }
+
+                // Process the next participant
+                const participant = n.value;
+
+                // When an error occurs this function performs rollback then throws
+                const handleError = (error: any) => {
+                    abortedDueToError = true;
+                    logger.error(`Error pre-commit of ${participant}:`, error);
+                    return errorRollback();
+                };
+
+                // Execute the pre-commit for this participant
+                try {
+                    const result = participant.preCommit?.();
+                    if (MaybePromise.is(result)) {
+                        return Promise.resolve(result).catch(handleError).then(nextPreCommit);
+                    }
+                    if (result) {
+                        mayHaveMutated = true;
+                    }
+                } catch (e) {
+                    return handleError(e);
+                }
+            }
+        };
+
+        return nextPreCommit();
+    }
+
+    /**
+     * Commit logic passed to #finalize.
      */
     #executeCommit(): MaybePromise {
         //this.#log("commit");

@@ -20,7 +20,7 @@ Server rejected the attempt to set the UTC time
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.16.7
+MatterSpecification.v11.Core § 11.16.7
 
 #### Defined in
 

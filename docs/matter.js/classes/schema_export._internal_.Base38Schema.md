@@ -4,7 +4,7 @@
 
 [schema/export](../modules/schema_export.md).[\<internal\>](../modules/schema_export._internal_.md).Base38Schema
 
-See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificationV1_0.md) § 5.1.3.1
+See MatterSpecification.v10.Core § 5.1.3.1
 
 ## Hierarchy
 
@@ -67,7 +67,7 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:84](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/Base38Schema.ts#L84)
+[packages/matter.js/src/schema/Base38Schema.ts:83](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Base38Schema.ts#L83)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/Base38Schema.ts#L45)
+[packages/matter.js/src/schema/Base38Schema.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Base38Schema.ts#L44)
 
 ___
 
@@ -139,7 +139,7 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/Base38Schema.ts#L35)
+[packages/matter.js/src/schema/Base38Schema.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Base38Schema.ts#L34)
 
 ___
 
@@ -184,7 +184,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/Base38Schema.ts#L16)
+[packages/matter.js/src/schema/Base38Schema.ts:15](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Base38Schema.ts#L15)
 
 ___
 
@@ -210,4 +210,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/schema/Schema.ts#L28)

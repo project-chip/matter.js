@@ -78,7 +78,7 @@ Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.5.18
+MatterSpecification.v11.Core § 11.19.6.5.18
 
 #### Defined in
 
@@ -92,7 +92,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.5.20
+MatterSpecification.v11.Core § 11.19.6.5.20
 
 #### Defined in
 
@@ -108,7 +108,7 @@ Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.5.22
+MatterSpecification.v11.Core § 11.19.6.5.22
 
 #### Defined in
 
@@ -124,7 +124,7 @@ Input to the OtaSoftwareUpdateProvider queryImage command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.5.1
+MatterSpecification.v11.Core § 11.19.6.5.1
 
 #### Defined in
 
@@ -138,7 +138,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.5.10
+MatterSpecification.v11.Core § 11.19.6.5.10
 
 #### Defined in
 

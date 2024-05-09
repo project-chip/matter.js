@@ -178,43 +178,51 @@ Matter.children.push(Cluster({
                 "\n" +
                 "  • Each changed extension shall generate an event with ChangeType Changed." +
                 "\n" +
-                "  • Each removed extension shall generate an event with ChangeType Removed." +
-                "\n" +
-                "The Node ID of the Administrator that made the change, if the change occurred via a CASE session." +
-                "\n" +
-                "Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change " +
-                "occurred via a CASE or PASE session; the other shall be null." +
-                "\n" +
-                "The Passcode ID of the Administrator that made the change, if the change occurred via a PASE " +
-                "session. Non-zero values are reserved for future use (see PasscodeId generation in " +
-                "PBKDFParamRequest)." +
-                "\n" +
-                "Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change " +
-                "occurred via a CASE or PASE session; the other shall be null." +
-                "\n" +
-                "The type of change as appropriate." +
-                "\n" +
-                "The latest value of the changed extension." +
-                "\n" +
-                "This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if " +
-                "resources are scarce.",
+                "  • Each removed extension shall generate an event with ChangeType Removed.",
 
             xref: { document: "core", section: "9.10.7.2" },
 
             children: [
                 Field({
                     name: "AdminNodeId", id: 0x1, type: "node-id", access: "S", conformance: "M", constraint: "desc",
-                    quality: "X"
+                    quality: "X",
+                    details: "The Node ID of the Administrator that made the change, if the change occurred via a CASE session." +
+                        "\n" +
+                        "Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change " +
+                        "occurred via a CASE or PASE session; the other shall be null.",
+                    xref: { document: "core", section: "9.10.7.2.1" }
                 }),
+
                 Field({
                     name: "AdminPasscodeId", id: 0x2, type: "uint16", access: "S", conformance: "M", constraint: "desc",
-                    quality: "X"
+                    quality: "X",
+
+                    details: "The Passcode ID of the Administrator that made the change, if the change occurred via a PASE " +
+                        "session. Non-zero values are reserved for future use (see PasscodeId generation in " +
+                        "PBKDFParamRequest)." +
+                        "\n" +
+                        "Exactly one of AdminNodeID and AdminPasscodeID shall be set, depending on whether the change " +
+                        "occurred via a CASE or PASE session; the other shall be null.",
+
+                    xref: { document: "core", section: "9.10.7.2.2" }
                 }),
-                Field({ name: "ChangeType", id: 0x3, type: "ChangeTypeEnum", access: "S", conformance: "M" }),
+
+                Field({
+                    name: "ChangeType", id: 0x3, type: "ChangeTypeEnum", access: "S", conformance: "M",
+                    details: "The type of change as appropriate.",
+                    xref: { document: "core", section: "9.10.7.2.3" }
+                }),
+
                 Field({
                     name: "LatestValue", id: 0x4, type: "AccessControlExtensionStruct", access: "S", conformance: "M",
-                    quality: "X"
+                    quality: "X",
+                    details: "The latest value of the changed extension." +
+                        "\n" +
+                        "This field SHOULD be set if resources are adequate for it; otherwise it shall be set to NULL if " +
+                        "resources are scarce.",
+                    xref: { document: "core", section: "9.10.7.2.4" }
                 }),
+
                 Field({
                     name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
                     constraint: "1 to 254"
@@ -371,7 +379,7 @@ Matter.children.push(Cluster({
                         "Management Cluster.",
 
                     xref: { document: "core", section: "9.10.4.5.3" },
-                    children: [Field({ name: "entry", type: "SubjectID" })]
+                    children: [Field({ name: "entry", type: "subject-id" })]
                 }),
 
                 Field({

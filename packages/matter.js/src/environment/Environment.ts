@@ -168,13 +168,15 @@ export class Environment {
     static set default(env: Environment) {
         global = env;
 
-        Logger.level = env.vars.get("log.level", Logger.level);
-        Logger.format = env.vars.get("log.format", Logger.format);
+        env.vars.use(() => {
+            Logger.level = env.vars.get("log.level", Logger.level);
+            Logger.format = env.vars.get("log.format", Logger.format);
 
-        const stackLimit = global.vars.number("log.stack.limit");
-        if (stackLimit !== undefined) {
-            Error.stackTraceLimit = stackLimit;
-        }
+            const stackLimit = global.vars.number("log.stack.limit");
+            if (stackLimit !== undefined) {
+                (Error as { stackTraceLimit?: number }).stackTraceLimit = stackLimit;
+            }
+        });
     }
 
     /**

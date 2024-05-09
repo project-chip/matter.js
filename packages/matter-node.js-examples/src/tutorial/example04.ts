@@ -6,7 +6,7 @@ const node = await ServerNode.create();
 
 const light = await node.add(OnOffLightDevice);
 
-light.events.onOff.onOff$Change.on(newValue => {
+light.events.onOff.onOff$Changed.on(newValue => {
     console.log(`Light is ${newValue ? "on" : "off"}`);
 });
 

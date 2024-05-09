@@ -8,7 +8,7 @@ WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.5
+MatterSpecification.v11.Core § 11.8.5.5
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ TypeFromSchema.bssid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:200](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L200)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:199](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L199)
 
 ___
 
@@ -53,7 +53,7 @@ TypeFromSchema.channel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:201](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L201)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:200](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L200)
 
 ___
 
@@ -65,7 +65,7 @@ This field, if present, shall denote the signal strength in dBm of the associate
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.5.2
+MatterSpecification.v11.Core § 11.8.5.5.2
 
 #### Inherited from
 
@@ -73,7 +73,7 @@ TypeFromSchema.rssi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:216](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L216)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:215](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L215)
 
 ___
 
@@ -87,7 +87,7 @@ TypeFromSchema.security
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:198](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L198)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:197](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L197)
 
 ___
 
@@ -101,7 +101,7 @@ TypeFromSchema.ssid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:199](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L199)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:198](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L198)
 
 ___
 
@@ -114,7 +114,7 @@ Wi-Fi frequency bands.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.5.5.1
+MatterSpecification.v11.Core § 11.8.5.5.1
 
 #### Inherited from
 
@@ -122,4 +122,4 @@ TypeFromSchema.wiFiBand
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:209](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L209)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:208](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L208)

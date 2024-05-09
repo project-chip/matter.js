@@ -8,7 +8,7 @@ Input to the MediaInput renameInput command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.9.4.4
+MatterSpecification.v11.Cluster § 6.9.4.4
 
 ## Hierarchy
 

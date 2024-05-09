@@ -9,7 +9,7 @@ related properties.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.7
+MatterSpecification.v11.Cluster § 6.7.5.7
 
 ## Hierarchy
 
@@ -41,7 +41,7 @@ color notation [https://www.w3.org/TR/css-color-4/#hex-notation]. Examples:
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.7.2
+MatterSpecification.v11.Cluster § 6.7.5.7.2
 
 #### Inherited from
 
@@ -49,7 +49,7 @@ TypeFromSchema.color
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:130](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L130)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L129)
 
 ___
 
@@ -62,7 +62,7 @@ etc.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.7.1
+MatterSpecification.v11.Cluster § 6.7.5.7.1
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ TypeFromSchema.imageUrl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:117](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L117)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:116](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L116)
 
 ___
 
@@ -83,7 +83,7 @@ Watermark etc.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.5.7.3
+MatterSpecification.v11.Cluster § 6.7.5.7.3
 
 #### Inherited from
 
@@ -91,4 +91,4 @@ TypeFromSchema.size
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L137)

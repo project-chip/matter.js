@@ -68,7 +68,7 @@ Input to the AccountLogin getSetupPin command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.1
+MatterSpecification.v11.Cluster § 6.2.4.1
 
 #### Defined in
 
@@ -85,7 +85,7 @@ account identified in the request does not match the active account of the runni
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.2
+MatterSpecification.v11.Cluster § 6.2.4.2
 
 #### Defined in
 
@@ -101,7 +101,7 @@ Input to the AccountLogin login command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.2.4.3
+MatterSpecification.v11.Cluster § 6.2.4.3
 
 #### Defined in
 

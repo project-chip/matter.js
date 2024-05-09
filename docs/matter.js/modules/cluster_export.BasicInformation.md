@@ -39,9 +39,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:470](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L470)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:469](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L469)
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:472](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L472)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:471](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L471)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:178](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L178)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:177](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L177)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:473](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L473)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:472](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L472)
 
 ___
 
@@ -78,11 +78,11 @@ cluster-specific.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.1.4.1
+MatterSpecification.v11.Core § 11.1.4.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:41](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:40](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L40)
 
 ___
 
@@ -94,11 +94,11 @@ Body of the BasicInformation leave event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.1.6.3
+MatterSpecification.v11.Core § 11.1.6.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:138](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:137](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L137)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:105](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:104](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L104)
 
 ___
 
@@ -120,11 +120,11 @@ Body of the BasicInformation reachableChanged event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.1.6.4
+MatterSpecification.v11.Core § 11.1.6.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L158)
 
 ___
 
@@ -136,8 +136,8 @@ Body of the BasicInformation startUp event
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.1.6.1
+MatterSpecification.v11.Core § 11.1.6.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:116](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L116)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:115](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L115)

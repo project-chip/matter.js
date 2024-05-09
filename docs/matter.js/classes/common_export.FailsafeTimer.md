@@ -47,7 +47,7 @@ Manages the failsafe timer associated with a [FailsafeContext](common_export.Fai
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L21)
+[packages/matter.js/src/common/FailsafeTimer.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L21)
 
 ## Properties
 
@@ -57,7 +57,7 @@ Manages the failsafe timer associated with a [FailsafeContext](common_export.Fai
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L22)
+[packages/matter.js/src/common/FailsafeTimer.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L22)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:25](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L25)
+[packages/matter.js/src/common/FailsafeTimer.ts:25](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L25)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:18](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L18)
+[packages/matter.js/src/common/FailsafeTimer.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L18)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L19)
+[packages/matter.js/src/common/FailsafeTimer.ts:19](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L19)
 
 ## Methods
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:36](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L36)
+[packages/matter.js/src/common/FailsafeTimer.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L36)
 
 ___
 
@@ -125,7 +125,7 @@ Complete the FailSafe context. This is called when the commissioning is complete
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L81)
+[packages/matter.js/src/common/FailsafeTimer.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L81)
 
 ___
 
@@ -141,7 +141,7 @@ Expire the FailSafe context. This is called by the timer and can also be called 
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L75)
+[packages/matter.js/src/common/FailsafeTimer.ts:75](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L75)
 
 ___
 
@@ -164,4 +164,4 @@ Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or f
 
 #### Defined in
 
-[packages/matter.js/src/common/FailsafeTimer.ts:46](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/common/FailsafeTimer.ts#L46)
+[packages/matter.js/src/common/FailsafeTimer.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/common/FailsafeTimer.ts#L46)

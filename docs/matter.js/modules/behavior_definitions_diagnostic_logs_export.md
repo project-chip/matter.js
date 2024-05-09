@@ -45,9 +45,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:29](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L29)
+[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:28](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L28)
 
-[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L40)
+[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L39)
 
 ___
 
@@ -59,11 +59,11 @@ Reception of this command starts the process of retrieving diagnostic logs from 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.1
+MatterSpecification.v11.Core § 11.10.5.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:19](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L19)
+[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:18](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L18)
 
 ___
 
@@ -76,11 +76,11 @@ following.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.10.5.2
+MatterSpecification.v11.Core § 11.10.5.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L27)
+[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsInterface.ts#L26)
 
 ## Variables
 
@@ -92,8 +92,8 @@ DiagnosticLogsBehavior is the base class for objects that support interaction wi
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts:16](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts#L16)
+[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts:16](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts#L16)
 
-[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts#L21)
+[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts#L21)
 
-[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts#L23)
+[packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/diagnostic-logs/DiagnosticLogsBehavior.ts#L23)

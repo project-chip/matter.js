@@ -8,7 +8,7 @@ Input to the ApplicationLauncher launchApp command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.1
+MatterSpecification.v11.Cluster § 6.4.4.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This field shall specify the Application to launch.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.1.1
+MatterSpecification.v11.Cluster § 6.4.4.1.1
 
 #### Inherited from
 
@@ -58,7 +58,7 @@ launch with proprietary data.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.1.2
+MatterSpecification.v11.Cluster § 6.4.4.1.2
 
 #### Inherited from
 

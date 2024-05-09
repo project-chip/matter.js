@@ -8,7 +8,7 @@ Input to the OperationalCredentials addTrustedRootCertificate command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.13
+MatterSpecification.v11.Core § 11.17.6.13
 
 ## Hierarchy
 

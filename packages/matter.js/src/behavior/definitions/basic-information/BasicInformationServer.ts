@@ -5,12 +5,15 @@
  */
 
 import { MATTER_DATAMODEL_VERSION } from "../../../CommissioningServer.js";
+import { BasicInformation } from "../../../cluster/definitions/BasicInformationCluster.js";
 import { VendorId } from "../../../datatype/VendorId.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { FabricManager } from "../../../fabric/FabricManager.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
+import { Observable } from "../../../util/Observable.js";
+import { ActionContext } from "../../context/ActionContext.js";
 import { BasicInformationBehavior } from "./BasicInformationBehavior.js";
 
 const logger = Logger.get("BasicInformationServer");
@@ -58,6 +61,17 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
         if (lifecycle.online !== undefined) {
             this.reactTo(lifecycle.online, this.#online);
         }
+
+        if (this.state.reachable !== undefined && this.events.reachable$Changed !== undefined) {
+            // Manually enable the reachableChanged event if not yet existing when reachable attribute exists
+            if (this.events.reachableChanged === undefined) {
+                this.events.reachableChanged = new Observable<
+                    [payload: BasicInformation.ReachableChangedEvent, context: ActionContext],
+                    void
+                >();
+            }
+            this.reactTo(this.events.reachable$Changed, this.#emitReachableChange);
+        }
     }
 
     [Symbol.asyncDispose]() {
@@ -69,6 +83,10 @@ export class BasicInformationServer extends BasicInformationBehavior.enable({
 
         const fabricManager = this.endpoint.env.get(FabricManager);
         this.reactTo(fabricManager.events.deleted, this.#handleRemovedFabric);
+    }
+
+    #emitReachableChange(reachable: boolean) {
+        this.events.reachableChanged?.emit({ reachableNewValue: reachable }, this.context);
     }
 
     #handleRemovedFabric({ fabricIndex }: Fabric) {

@@ -48,11 +48,11 @@ These elements and properties are present in all Identify clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `identifyTime`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `identifyType`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`IdentifyType`](../enums/exports_cluster.Identify.IdentifyType.md), `any`\>  } | - |
-| `attributes.identifyTime` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> | This attribute specifies the remaining length of time, in seconds, that the endpoint will continue to identify itself. If this attribute is set to a value other than 0 then the device shall enter its identification state, in order to indicate to an observer which of several nodes and/or endpoints it is. It is RECOMMENDED that this state consists of flashing a light with a period of 0.5 seconds. The IdentifyTime attribute shall be decremented every second while in this state. If this attribute reaches or is set to the value 0 then the device shall terminate its identification state. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.2.5.1 |
-| `attributes.identifyType` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`IdentifyType`](../enums/exports_cluster.Identify.IdentifyType.md), `any`\> | This attribute specifies how the identification state is presented to the user. This field shall contain one of the values listed below: Table 2. Values of the IdentifyType attribute **`See`** MatterApplicationClusterSpecificationV1_1 § 1.2.5.2 |
+| `attributes.identifyTime` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> | This attribute specifies the remaining length of time, in seconds, that the endpoint will continue to identify itself. If this attribute is set to a value other than 0 then the device shall enter its identification state, in order to indicate to an observer which of several nodes and/or endpoints it is. It is RECOMMENDED that this state consists of flashing a light with a period of 0.5 seconds. The IdentifyTime attribute shall be decremented every second while in this state. If this attribute reaches or is set to the value 0 then the device shall terminate its identification state. **`See`** MatterSpecification.v11.Cluster § 1.2.5.1 |
+| `attributes.identifyType` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`IdentifyType`](../enums/exports_cluster.Identify.IdentifyType.md), `any`\> | This attribute specifies how the identification state is presented to the user. This field shall contain one of the values listed below: Table 2. Values of the IdentifyType attribute **`See`** MatterSpecification.v11.Cluster § 1.2.5.2 |
 | `commands` | \{ `identify`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `triggerEffect`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } | - |
-| `commands.identify` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command starts or stops the receiving device identifying itself. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.2.6.1 |
-| `commands.triggerEffect` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command allows the support of feedback to the user, such as a certain light effect. It is used to allow an implementation to provide visual feedback to the user under certain circumstances such as a color light turning green when it has successfully connected to a network. The use of this command and the effects themselves are entirely up to the implementer to use whenever a visual feedback is useful but it is not the same as and does not replace the identify mechanism used during commissioning. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.2.6.3 |
+| `commands.identify` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command starts or stops the receiving device identifying itself. **`See`** MatterSpecification.v11.Cluster § 1.2.6.1 |
+| `commands.triggerEffect` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | This command allows the support of feedback to the user, such as a certain light effect. It is used to allow an implementation to provide visual feedback to the user under certain circumstances such as a color light turning green when it has successfully connected to a network. The use of this command and the effects themselves are entirely up to the implementer to use whenever a visual feedback is useful but it is not the same as and does not replace the identify mechanism used during commissioning. **`See`** MatterSpecification.v11.Cluster § 1.2.6.3 |
 | `extensions` | readonly [\{ `component`: \{ `commands`: \{ `identifyQuery`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `query`: ``true``  }  }] | This metadata controls which IdentifyCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `query`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.query` | [`BitFlag`](exports_schema.md#bitflag) | Query Multicast query for identification state |
@@ -146,7 +146,7 @@ case that the device is currently identifying itself.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.6.4
+MatterSpecification.v11.Cluster § 1.2.6.4
 
 #### Defined in
 
@@ -162,7 +162,7 @@ Input to the Identify identify command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.6.1
+MatterSpecification.v11.Cluster § 1.2.6.1
 
 #### Defined in
 
@@ -178,7 +178,7 @@ Input to the Identify triggerEffect command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.2.6.3
+MatterSpecification.v11.Cluster § 1.2.6.3
 
 #### Defined in
 

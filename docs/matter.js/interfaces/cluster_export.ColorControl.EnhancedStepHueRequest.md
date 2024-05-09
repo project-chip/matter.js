@@ -8,7 +8,7 @@ Input to the ColorControl enhancedStepHue command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.17
+MatterSpecification.v11.Cluster § 3.2.11.17
 
 ## Hierarchy
 
@@ -38,7 +38,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:648](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L648)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:647](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L647)
 
 ___
 
@@ -52,7 +52,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:649](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L649)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:648](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L648)
 
 ___
 
@@ -65,7 +65,7 @@ sub-clause StepHue Command).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.17.1
+MatterSpecification.v11.Cluster § 3.2.11.17.1
 
 #### Inherited from
 
@@ -73,7 +73,7 @@ TypeFromSchema.stepMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:627](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L627)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:626](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L626)
 
 ___
 
@@ -86,7 +86,7 @@ device’s enhanced hue.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.17.2
+MatterSpecification.v11.Cluster § 3.2.11.17.2
 
 #### Inherited from
 
@@ -94,7 +94,7 @@ TypeFromSchema.stepSize
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:635](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L635)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:634](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L634)
 
 ___
 
@@ -110,7 +110,7 @@ StepHue command is of data type uint8.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.17.3
+MatterSpecification.v11.Cluster § 3.2.11.17.3
 
 #### Inherited from
 
@@ -118,4 +118,4 @@ TypeFromSchema.transitionTime
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:646](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L646)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:645](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L645)

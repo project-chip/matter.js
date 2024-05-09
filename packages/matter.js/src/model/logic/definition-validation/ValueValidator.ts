@@ -61,7 +61,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
             // Spec does not always provide type information for deprecated
             // fields
-            if (this.model.deprecated) {
+            if (this.model.isDeprecated) {
                 return;
             }
 

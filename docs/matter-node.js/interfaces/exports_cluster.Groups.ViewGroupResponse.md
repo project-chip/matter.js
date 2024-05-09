@@ -8,7 +8,7 @@ The ViewGroupResponse command is sent by the Groups cluster server in response t
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 1.3.7.8
+MatterSpecification.v11.Cluster § 1.3.7.8
 
 ## Hierarchy
 

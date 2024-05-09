@@ -8,7 +8,7 @@ The UserStatus enum used in various commands shall indicate what the status is f
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.15
+MatterSpecification.v11.Cluster § 5.2.6.15
 
 ## Table of contents
 

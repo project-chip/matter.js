@@ -30,9 +30,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:168](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L168)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:167](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L167)
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:170](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:169](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L169)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:86](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L86)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:85](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L85)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:171](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L171)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:170](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L170)
 
 ___
 
@@ -68,8 +68,8 @@ This indicates a global identifier for an Application given a catalog.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.3.4.1
+MatterSpecification.v11.Cluster § 6.3.4.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:27](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L27)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L26)

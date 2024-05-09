@@ -5,26 +5,17 @@
  */
 
 import {
-    AuthorityKeyIdentifier_X509,
-    BasicConstraints_X509,
     BitByteArray,
     BYTES_KEY,
     ContextTagged,
     ContextTaggedBytes,
+    DatatypeOverride,
     DerCodec,
     DerObject,
-    EcdsaWithSHA256_X962,
+    DerType,
     ELEMENTS_KEY,
-    ExtendedKeyUsage_X509,
-    KeyUsage_Signature_ContentCommited_X509,
-    KeyUsage_Signature_X509,
     OBJECT_ID_KEY,
-    OrganisationName_X520,
-    Pkcs7Data,
-    Pkcs7SignedData,
-    PublicKeyEcPrime256v1_X962,
-    SHA256_CMS,
-    SubjectKeyIdentifier_X509,
+    RawBytes,
 } from "../codec/DerCodec.js";
 import { MatterError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
@@ -33,13 +24,19 @@ import { CaseAuthenticatedTag, TlvCaseAuthenticatedTag } from "../datatype/CaseA
 import { FabricId, TlvFabricId } from "../datatype/FabricId.js";
 import { NodeId, TlvNodeId } from "../datatype/NodeId.js";
 import { TlvVendorId, VendorId } from "../datatype/VendorId.js";
+import { Logger } from "../log/Logger.js";
+import { BitFlag, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { Time } from "../time/Time.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
-import { TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
+import { TlvBitmap, TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField, TlvOptionalRepeatedField, TlvTaggedList } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { ByteArray } from "../util/ByteArray.js";
+import { Pkcs7, SHA256_CMS, X509, X520, X962 } from "./CertificateDerTypes.js";
+
+const logger = Logger.get("CertificateManager");
 
 export class CertificateError extends MatterError {}
 
@@ -49,11 +46,13 @@ const EPOCH_OFFSET_S = 10957 * 24 * 60 * 60;
 // TODO replace usage of Date by abstraction
 
 export function matterToJsDate(date: number) {
-    return new Date((date + EPOCH_OFFSET_S) * 1000);
+    return date === 0 ? X520.NON_WELL_DEFINED_DATE : new Date((date + EPOCH_OFFSET_S) * 1000);
 }
 
 export function jsToMatterDate(date: Date, addYears = 0) {
-    return Math.floor(date.getTime() / 1000) - EPOCH_OFFSET_S + addYears * YEAR_S;
+    return date.getTime() === X520.NON_WELL_DEFINED_DATE.getTime()
+        ? 0
+        : Math.floor(date.getTime() / 1000) - EPOCH_OFFSET_S + addYears * YEAR_S;
 }
 
 function intTo16Chars(value: bigint | number) {
@@ -77,249 +76,267 @@ function uInt16To4Chars(value: number) {
     return byteArray.toHex().toUpperCase();
 }
 
-/** commonName = ASN.1 OID 2.5.4.3 */
-export const CommonName_X520 = (name: string) => [DerObject("550403", { value: name })];
+/**
+ * Matter specific ASN.1 OIDs
+ * @see {@link MatterSpecification.v12.Core} Appendix E
+ */
+
+/**
+ * Generator function to create a specific ASN field for a Matter OpCert DN with the OID base 1.3.6.1.4.1.37244.1.*.
+ * The returned function takes the value and returns the ASN.1 DER object.
+ */
+const GenericMatterOpCertObject =
+    <T>(id: number, valueConverter?: (value: T) => string) =>
+    (value: T) => [
+        DerObject(`2b0601040182a27c01${id.toString(16).padStart(2, "0")}`, {
+            value: (valueConverter ?? intTo16Chars)(value as any),
+        }),
+    ];
+
+/**
+ * Generator function to create a specific ASN field for a Matter AttCert DN with the OID base 1.3.6.1.4.1.37244.2.*.
+ * The returned function takes the value and returns the ASN.1 DER object.
+ */
+const GenericMatterAttCertObject =
+    <T>(id: number, valueConverter?: (value: T) => string) =>
+    (value: T) => [
+        DerObject(`2b0601040182a27c02${id.toString(16).padStart(2, "0")}`, {
+            value: (valueConverter ?? intTo16Chars)(value as any),
+        }),
+    ];
 
 /** matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1 */
-export const NodeId_Matter = (nodeId: NodeId) => [DerObject("2b0601040182a27c0101", { value: intTo16Chars(nodeId) })];
+export const NodeId_Matter = GenericMatterOpCertObject<NodeId>(1);
 
 /** matter-firmware-signing-id = ASN.1 OID 1.3.6.1.4.1.37244.1.2 */
-export const FirmwareSigningId_Matter = (signingId: number) => [
-    DerObject("2b0601040182a27c0102", { value: intTo16Chars(signingId) }),
-];
+export const FirmwareSigningId_Matter = GenericMatterOpCertObject<number>(2);
 
 /** matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3 */
-export const IcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0103", { value: intTo16Chars(id) })];
+export const IcacId_Matter = GenericMatterOpCertObject<bigint | number>(3);
 
 /** matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4 */
-export const RcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0104", { value: intTo16Chars(id) })];
+export const RcacId_Matter = GenericMatterOpCertObject<bigint | number>(4);
 
 /** matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5 */
-export const FabricId_Matter = (id: FabricId) => [DerObject("2b0601040182a27c0105", { value: intTo16Chars(id) })];
+export const FabricId_Matter = GenericMatterOpCertObject<FabricId>(5);
 
 /** matter-noc-cat = ASN.1 OID 1.3.6.1.4.1.37244.1.6 */
-export const NocCat_Matter = (cat: number) => [DerObject("2b0601040182a27c0106", { value: uInt16To8Chars(cat) })];
+export const NocCat_Matter = GenericMatterOpCertObject<number>(6, uInt16To8Chars);
 
 /** matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1 */
-export const VendorId_Matter = (vendorId: VendorId) => [
-    DerObject("2b0601040182a27c0201", { value: uInt16To4Chars(vendorId) }),
-];
+export const VendorId_Matter = GenericMatterAttCertObject<VendorId>(1, uInt16To4Chars);
 
 /** matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2 */
-export const ProductId_Matter = (id: number) => [DerObject("2b0601040182a27c0202", { value: uInt16To4Chars(id) })];
+export const ProductId_Matter = GenericMatterAttCertObject<number>(2, uInt16To4Chars);
 
-export const TlvRootCertificate = TlvObject({
-    serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
-    signatureAlgorithm: TlvField(2, TlvUInt8),
-    issuer: TlvField(
-        3,
-        TlvTaggedList({
-            issuerRcacId: TlvOptionalField(20, TlvUInt64),
-        }),
-    ),
-    notBefore: TlvField(4, TlvUInt32),
-    notAfter: TlvField(5, TlvUInt32),
-    subject: TlvField(
-        6,
-        TlvTaggedList({
-            rcacId: TlvField(20, TlvUInt64),
-        }),
-    ),
-    publicKeyAlgorithm: TlvField(7, TlvUInt8),
-    ellipticCurveIdentifier: TlvField(8, TlvUInt8),
-    ellipticCurvePublicKey: TlvField(9, TlvByteString),
-    extensions: TlvField(
-        10,
-        TlvTaggedList({
-            basicConstraints: TlvField(
-                1,
-                TlvObject({
-                    isCa: TlvField(1, TlvBoolean),
-                    pathLen: TlvOptionalField(2, TlvUInt8),
-                }),
-            ),
-            keyUsage: TlvField(2, TlvUInt16),
-            extendedKeyUsage: TlvOptionalField(3, TlvArray(TlvUInt8)),
-            subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
-            authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
-            futureExtension: TlvOptionalField(6, TlvByteString),
-        }),
-    ),
-    signature: TlvField(11, TlvByteString),
+/** All defined Matter fields for subject and issuer that we always allow optionally to be encoded */
+const AllowedSubjectAndIssuerMatterFields = {
+    nodeId: TlvOptionalField(17, TlvNodeId),
+    firmwareSigningId: TlvOptionalField(18, TlvUInt32),
+    icacId: TlvOptionalField(19, TlvUInt64),
+    rcacId: TlvOptionalField(20, TlvUInt64),
+    fabricId: TlvOptionalField(21, TlvFabricId),
+    caseAuthenticatedTags: TlvOptionalRepeatedField(22, TlvCaseAuthenticatedTag, { maxLength: 3 }),
+};
+
+/**
+ * TLV schema for a generic subject or issuer field in a certificate. We handle all fields as optional here for the TLV
+ * parsing and check required fields in the logic to make sure we return the correct errors.
+ */
+const TlvGenericMatterSubjectOrIssuerTaggedList = <T>(matterFields: T) => {
+    const fields = {
+        // Standard DNs
+        commonName: TlvOptionalField(1, TlvString),
+        sureName: TlvOptionalField(2, TlvString),
+        serialNum: TlvOptionalField(3, TlvString),
+        countryName: TlvOptionalField(4, TlvString),
+        localityName: TlvOptionalField(5, TlvString),
+        stateOrProvinceName: TlvOptionalField(6, TlvString),
+        orgName: TlvOptionalField(7, TlvString),
+        orgUnitName: TlvOptionalField(8, TlvString),
+        title: TlvOptionalField(9, TlvString),
+        name: TlvOptionalField(10, TlvString),
+        givenName: TlvOptionalField(11, TlvString),
+        initials: TlvOptionalField(12, TlvString),
+        genQualifier: TlvOptionalField(13, TlvString),
+        dnQualifier: TlvOptionalField(14, TlvString),
+        pseudonym: TlvOptionalField(15, TlvString),
+        domainComponent: TlvOptionalField(16, TlvString),
+
+        // Matter specific DNs
+        ...matterFields,
+
+        // Standard DNs when encoded as Printable String
+        commonNamePs: TlvOptionalField(129, TlvString),
+        sureNamePs: TlvOptionalField(130, TlvString),
+        serialNumPs: TlvOptionalField(131, TlvString),
+        countryNamePs: TlvOptionalField(132, TlvString),
+        localityNamePs: TlvOptionalField(133, TlvString),
+        stateOrProvinceNamePs: TlvOptionalField(134, TlvString),
+        orgNamePs: TlvOptionalField(135, TlvString),
+        orgUnitNamePs: TlvOptionalField(136, TlvString),
+        titlePs: TlvOptionalField(137, TlvString),
+        namePs: TlvOptionalField(138, TlvString),
+        givenNamePs: TlvOptionalField(139, TlvString),
+        initialsPs: TlvOptionalField(140, TlvString),
+        genQualifierPs: TlvOptionalField(141, TlvString),
+        dnQualifierPs: TlvOptionalField(142, TlvString),
+        pseudonymPs: TlvOptionalField(143, TlvString),
+    };
+    return TlvTaggedList(fields);
+};
+
+const ExtensionKeyUsageBitmap = {
+    digitalSignature: BitFlag(0),
+    nonRepudiation: BitFlag(1),
+    keyEncipherment: BitFlag(2),
+    dataEncipherment: BitFlag(3),
+    keyAgreement: BitFlag(4),
+    keyCertSign: BitFlag(5),
+    cRLSign: BitFlag(6),
+    encipherOnly: BitFlag(7),
+    decipherOnly: BitFlag(8),
+};
+const ExtensionKeyUsageSchema = BitmapSchema(ExtensionKeyUsageBitmap);
+
+/**
+ * This generator enhances the generic Matter Certificate definition by allowing to override the subject and issuer
+ * fields. The overriding serves two needs:
+ * 1. to make some fields mandatory for the Tlv parsing and definition for the typescript types
+ * 2. have typing guidance when generating certificates ourself in code
+ *
+ * On Tlv definition level also all not specified allowed Matter Fields are optionally allowed and are decoded,
+ * re-encoded into Tlv and also encoded into ASN if the certificate is converted. Just the typing system do not know
+ * about them.
+ */
+const BaseMatterCertificate = <S, I>(matterFields?: { subject?: S; issuer?: I }) =>
+    TlvObject({
+        serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
+        signatureAlgorithm: TlvField(2, TlvUInt8),
+        issuer: TlvField(
+            3,
+            TlvGenericMatterSubjectOrIssuerTaggedList<I>({
+                ...AllowedSubjectAndIssuerMatterFields,
+                ...(matterFields?.issuer ?? {}),
+            } as I),
+        ),
+        notBefore: TlvField(4, TlvUInt32),
+        notAfter: TlvField(5, TlvUInt32),
+        subject: TlvField(
+            6,
+            TlvGenericMatterSubjectOrIssuerTaggedList<S>({
+                ...AllowedSubjectAndIssuerMatterFields,
+                ...(matterFields?.subject ?? {}),
+            } as S),
+        ),
+        publicKeyAlgorithm: TlvField(7, TlvUInt8),
+        ellipticCurveIdentifier: TlvField(8, TlvUInt8),
+        ellipticCurvePublicKey: TlvField(9, TlvByteString),
+        extensions: TlvField(
+            10,
+            TlvTaggedList({
+                basicConstraints: TlvField(
+                    1,
+                    TlvObject({
+                        isCa: TlvField(1, TlvBoolean),
+                        pathLen: TlvOptionalField(2, TlvUInt8),
+                    }),
+                ),
+                keyUsage: TlvField(2, TlvBitmap(TlvUInt16, ExtensionKeyUsageBitmap)),
+                extendedKeyUsage: TlvOptionalField(3, TlvArray(TlvUInt8)),
+                subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
+                authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
+                futureExtension: TlvOptionalRepeatedField(6, TlvByteString),
+            }),
+        ),
+        signature: TlvField(11, TlvByteString),
+    });
+
+export const TlvRootCertificate = BaseMatterCertificate({
+    subject: {
+        rcacId: TlvField(20, TlvUInt64),
+        fabricId: TlvOptionalField(21, TlvFabricId),
+    },
+    issuer: AllowedSubjectAndIssuerMatterFields,
 });
 
-export const TlvOperationalCertificate = TlvObject({
-    serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
-    signatureAlgorithm: TlvField(2, TlvUInt8),
-    issuer: TlvField(
-        3,
-        TlvTaggedList({
-            issuerRcacId: TlvOptionalField(20, TlvUInt64),
-        }),
-    ),
-    notBefore: TlvField(4, TlvUInt32),
-    notAfter: TlvField(5, TlvUInt32),
-    subject: TlvField(
-        6,
-        TlvTaggedList({
-            fabricId: TlvField(21, TlvFabricId),
-            nodeId: TlvField(17, TlvNodeId),
-            caseAuthenticatedTags: TlvOptionalRepeatedField(22, TlvCaseAuthenticatedTag, { maxLength: 3 }),
-        }),
-    ),
-    publicKeyAlgorithm: TlvField(7, TlvUInt8),
-    ellipticCurveIdentifier: TlvField(8, TlvUInt8),
-    ellipticCurvePublicKey: TlvField(9, TlvByteString),
-    extensions: TlvField(
-        10,
-        TlvTaggedList({
-            basicConstraints: TlvField(
-                1,
-                TlvObject({
-                    isCa: TlvField(1, TlvBoolean),
-                    pathLen: TlvOptionalField(2, TlvUInt8),
-                }),
-            ),
-            keyUsage: TlvField(2, TlvUInt16),
-            extendedKeyUsage: TlvOptionalField(3, TlvArray(TlvUInt8)),
-            subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
-            authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
-            futureExtension: TlvOptionalField(6, TlvByteString),
-        }),
-    ),
-    signature: TlvField(11, TlvByteString),
+export const TlvOperationalCertificate = BaseMatterCertificate({
+    subject: {
+        nodeId: TlvField(17, TlvNodeId),
+        fabricId: TlvField(21, TlvFabricId),
+        caseAuthenticatedTags: TlvOptionalRepeatedField(22, TlvCaseAuthenticatedTag, { maxLength: 3 }),
+    },
+    issuer: AllowedSubjectAndIssuerMatterFields,
 });
 
-// TODO: Add also ASN1 encoder and validator for intermediate certificate
-export const TlvIntermediateCertificate = TlvObject({
-    serialNumber: TlvField(1, TlvByteString.bound({ maxLength: 20 })),
-    signatureAlgorithm: TlvField(2, TlvUInt8),
-    issuer: TlvField(
-        3,
-        TlvTaggedList({
-            issuerRcacId: TlvOptionalField(20, TlvUInt64),
-        }),
-    ),
-    notBefore: TlvField(4, TlvUInt32),
-    notAfter: TlvField(5, TlvUInt32),
-    subject: TlvField(
-        6,
-        TlvTaggedList({
-            fabricId: TlvOptionalField(21, TlvFabricId),
-            icacId: TlvField(19, TlvUInt64),
-        }),
-    ),
-    publicKeyAlgorithm: TlvField(7, TlvUInt8),
-    ellipticCurveIdentifier: TlvField(8, TlvUInt8),
-    ellipticCurvePublicKey: TlvField(9, TlvByteString),
-    extensions: TlvField(
-        10,
-        TlvTaggedList({
-            basicConstraints: TlvField(
-                1,
-                TlvObject({
-                    isCa: TlvField(1, TlvBoolean),
-                }),
-            ),
-            keyUsage: TlvField(2, TlvUInt16),
-            subjectKeyIdentifier: TlvField(4, TlvByteString.bound({ length: 20 })),
-            authorityKeyIdentifier: TlvField(5, TlvByteString.bound({ length: 20 })),
-        }),
-    ),
-    signature: TlvField(11, TlvByteString),
+export const TlvIntermediateCertificate = BaseMatterCertificate({
+    subject: {
+        icacId: TlvField(19, TlvUInt64),
+        fabricId: TlvOptionalField(21, TlvFabricId),
+    },
+    issuer: AllowedSubjectAndIssuerMatterFields,
 });
 
-export interface DeviceAttestationCertificate {
+const TlvBaseCertificate = BaseMatterCertificate();
+
+interface AttestationCertificateBase {
     serialNumber: ByteArray;
     signatureAlgorithm: number;
+    issuer: {};
+    notBefore: number;
+    notAfter: number;
+    subject: {};
+    publicKeyAlgorithm: number;
+    ellipticCurveIdentifier: number;
+    ellipticCurvePublicKey: ByteArray;
+    extensions: {
+        basicConstraints: {
+            isCa: boolean;
+            pathLen?: number;
+        };
+        keyUsage: TypeFromPartialBitSchema<typeof ExtensionKeyUsageBitmap>;
+        extendedKeyUsage?: number[];
+        subjectKeyIdentifier: ByteArray;
+        authorityKeyIdentifier: ByteArray;
+        futureExtension?: ByteArray[];
+    };
+    signature: ByteArray;
+}
+
+export interface DeviceAttestationCertificate extends AttestationCertificateBase {
     issuer: {
         commonName: string;
         productId?: number;
         vendorId: VendorId;
     };
-    notBefore: number;
-    notAfter: number;
     subject: {
         commonName: string;
         productId: number;
         vendorId: VendorId;
     };
-    publicKeyAlgorithm: number;
-    ellipticCurveIdentifier: number;
-    ellipticCurvePublicKey: ByteArray;
-    extensions: {
-        basicConstraints: {
-            isCa: boolean;
-            pathLen?: number;
-        };
-        keyUsage: number;
-        extendedKeyUsage?: number[];
-        subjectKeyIdentifier: ByteArray;
-        authorityKeyIdentifier: ByteArray;
-        futureExtension?: ByteArray;
-    };
-    signature: ByteArray;
 }
 
-export interface ProductAttestationIntermediateCertificate {
-    serialNumber: ByteArray;
-    signatureAlgorithm: number;
+export interface ProductAttestationIntermediateCertificate extends AttestationCertificateBase {
     issuer: {
         commonName: string;
         vendorId?: VendorId;
     };
-    notBefore: number;
-    notAfter: number;
     subject: {
         commonName: string;
         productId?: number;
         vendorId: VendorId;
     };
-    publicKeyAlgorithm: number;
-    ellipticCurveIdentifier: number;
-    ellipticCurvePublicKey: ByteArray;
-    extensions: {
-        basicConstraints: {
-            isCa: boolean;
-            pathLen?: number;
-        };
-        keyUsage: number;
-        extendedKeyUsage?: number[];
-        subjectKeyIdentifier: ByteArray;
-        authorityKeyIdentifier: ByteArray;
-        futureExtension?: ByteArray;
-    };
-    signature: ByteArray;
 }
 
-export interface ProductAttestationAuthorityCertificate {
-    serialNumber: ByteArray;
-    signatureAlgorithm: number;
+export interface ProductAttestationAuthorityCertificate extends AttestationCertificateBase {
     issuer: {
         commonName: string;
         vendorId?: VendorId;
     };
-    notBefore: number;
-    notAfter: number;
     subject: {
         commonName: string;
         vendorId?: VendorId;
     };
-    publicKeyAlgorithm: number;
-    ellipticCurveIdentifier: number;
-    ellipticCurvePublicKey: ByteArray;
-    extensions: {
-        basicConstraints: {
-            isCa: boolean;
-            pathLen?: number;
-        };
-        keyUsage: number;
-        extendedKeyUsage?: number[];
-        subjectKeyIdentifier: ByteArray;
-        authorityKeyIdentifier?: ByteArray;
-        futureExtension?: ByteArray;
-    };
-    signature: ByteArray;
 }
 
 export const TlvCertificationDeclaration = TlvObject({
@@ -340,229 +357,296 @@ export const TlvCertificationDeclaration = TlvObject({
     ),
 });
 
+export type BaseCertificate = TypeFromSchema<typeof TlvBaseCertificate>;
 export type RootCertificate = TypeFromSchema<typeof TlvRootCertificate>;
 export type IntermediateCertificate = TypeFromSchema<typeof TlvIntermediateCertificate>;
 export type OperationalCertificate = TypeFromSchema<typeof TlvOperationalCertificate>;
-type Unsigned<Type> = { [Property in keyof Type as Exclude<Property, "signature">]: Type[Property] };
+export type Unsigned<Type> = { [Property in keyof Type as Exclude<Property, "signature">]: Type[Property] };
+
+/**
+ * Preserve order of keys from original subject and also copy potential custom elements
+ * @param data
+ */
+function subjectOrIssuerToAsn1(data: { [field: string]: any }) {
+    const asn = {} as { [field: string]: any[] };
+    Object.entries(data).forEach(([key, value]) => {
+        if (value === undefined) {
+            return;
+        }
+        switch (key) {
+            case "commonName":
+                asn.commonName = X520.CommonName(value as string);
+                break;
+            case "sureName":
+                asn.sureName = X520.SurName(value as string);
+                break;
+            case "serialNum":
+                asn.serialNum = X520.SerialNumber(value as string);
+                break;
+            case "countryName":
+                asn.countryName = X520.CountryName(value as string);
+                break;
+            case "localityName":
+                asn.localityName = X520.LocalityName(value as string);
+                break;
+            case "stateOrProvinceName":
+                asn.stateOrProvinceName = X520.StateOrProvinceName(value as string);
+                break;
+            case "orgName":
+                asn.orgName = X520.OrganisationName(value as string);
+                break;
+            case "orgUnitName":
+                asn.orgUnitName = X520.OrganizationalUnitName(value as string);
+                break;
+            case "title":
+                asn.title = X520.Title(value as string);
+                break;
+            case "name":
+                asn.name = X520.Name(value as string);
+                break;
+            case "givenName":
+                asn.givenName = X520.GivenName(value as string);
+                break;
+            case "initials":
+                asn.initials = X520.Initials(value as string);
+                break;
+            case "genQualifier":
+                asn.genQualifier = X520.GenerationQualifier(value as string);
+                break;
+            case "dnQualifier":
+                asn.dnQualifier = X520.DnQualifier(value as string);
+                break;
+            case "pseudonym":
+                asn.pseudonym = X520.Pseudonym(value as string);
+                break;
+            case "domainComponent":
+                asn.domainComponent = X520.DomainComponent(value as string);
+                break;
+            case "nodeId":
+                asn.nodeId = NodeId_Matter(value as NodeId);
+                break;
+            case "firmwareSigningId":
+                asn.firmwareSigningId = FirmwareSigningId_Matter(value as number);
+                break;
+            case "icacId":
+                asn.icacId = IcacId_Matter(value as number | bigint);
+                break;
+            case "rcacId":
+                asn.rcacId = RcacId_Matter(value as number | bigint);
+                break;
+            case "fabricId":
+                asn.fabricId = FabricId_Matter(value as FabricId);
+                break;
+            case "caseAuthenticatedTags":
+                // In theory if someone mixes multiple caseAuthenticatedTag fields with other fields we currently would
+                // code them in ASN.1 as fields at the first position from the original data which might fail
+                // certificate validation. Changing this would require to change Tlv decoding, so lets try that way for now.
+                const caseAuthenticatedTags = value as CaseAuthenticatedTag[];
+                CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
+
+                const cat0 = caseAuthenticatedTags[0];
+                const cat1 = caseAuthenticatedTags[1];
+                const cat2 = caseAuthenticatedTags[2];
+                if (cat0 !== undefined) {
+                    asn.caseAuthenticatedTag0 = NocCat_Matter(cat0);
+                }
+                if (cat1 !== undefined) {
+                    asn.caseAuthenticatedTag1 = NocCat_Matter(cat1);
+                }
+                if (cat2 !== undefined) {
+                    asn.caseAuthenticatedTag2 = NocCat_Matter(cat2);
+                }
+                break;
+            case "vendorId": // Only relevant for ASN.1 encoding of DAC/PAA/PAI certificates
+                asn.vendorId = VendorId_Matter(value as VendorId);
+                break;
+            case "productId": // Only relevant for ASN.1 encoding of DAC/PAA/PAI certificates
+                asn.productId = ProductId_Matter(value as number);
+                break;
+            case "commonNamePs":
+                asn.commonNamePs = X520.CommonName(value as string, true);
+                break;
+            case "sureNamePs":
+                asn.sureNamePs = X520.SurName(value as string, true);
+                break;
+            case "serialNumPs":
+                asn.serialNumPs = X520.SerialNumber(value as string, true);
+                break;
+            case "countryNamePs":
+                asn.countryNamePs = X520.CountryName(value as string, true);
+                break;
+            case "localityNamePs":
+                asn.localityNamePs = X520.LocalityName(value as string, true);
+                break;
+            case "stateOrProvinceNamePs":
+                asn.stateOrProvinceNamePs = X520.StateOrProvinceName(value as string, true);
+                break;
+            case "orgNamePs":
+                asn.orgNamePs = X520.OrganisationName(value as string, true);
+                break;
+            case "orgUnitNamePs":
+                asn.orgUnitNamePs = X520.OrganizationalUnitName(value as string, true);
+                break;
+            case "titlePs":
+                asn.titlePs = X520.Title(value as string, true);
+                break;
+            case "namePs":
+                asn.namePs = X520.Name(value as string, true);
+                break;
+            case "givenNamePs":
+                asn.givenNamePs = X520.GivenName(value as string, true);
+                break;
+            case "initialsPs":
+                asn.initialsPs = X520.Initials(value as string, true);
+                break;
+            case "genQualifierPs":
+                asn.genQualifierPs = X520.GenerationQualifier(value as string, true);
+                break;
+            case "dnQualifierPs":
+                asn.dnQualifierPs = X520.DnQualifier(value as string, true);
+                break;
+            case "pseudonymPs":
+                asn.pseudonymPs = X520.Pseudonym(value as string, true);
+                break;
+        }
+    });
+    return asn;
+}
+
+function extensionsToAsn1(extensions: BaseCertificate["extensions"]) {
+    const asn = {} as { [field: string]: any[] | any };
+    Object.entries(extensions).forEach(([key, value]) => {
+        if (value === undefined) {
+            return;
+        }
+        switch (key) {
+            case "basicConstraints":
+                asn.basicConstraints = X509.BasicConstraints(value);
+                break;
+            case "keyUsage":
+                asn.keyUsage = X509.KeyUsage(
+                    ExtensionKeyUsageSchema.encode(value as TypeFromPartialBitSchema<typeof ExtensionKeyUsageBitmap>),
+                );
+                break;
+            case "extendedKeyUsage":
+                asn.extendedKeyUsage = X509.ExtendedKeyUsage(value as number[] | undefined);
+                break;
+            case "subjectKeyIdentifier":
+                asn.subjectKeyIdentifier = X509.SubjectKeyIdentifier(value as ByteArray);
+                break;
+            case "authorityKeyIdentifier":
+                asn.authorityKeyIdentifier = X509.AuthorityKeyIdentifier(value as ByteArray);
+                break;
+            case "futureExtension":
+                asn.futureExtension = RawBytes(ByteArray.concat(...((value as ByteArray[] | undefined) ?? [])));
+                break;
+        }
+    });
+    return asn;
+}
 
 export class CertificateManager {
-    static rootCertToAsn1({
+    static #genericBuildAsn1Structure({
         serialNumber,
         notBefore,
         notAfter,
-        issuer: { issuerRcacId },
-        subject: { rcacId },
+        issuer,
+        subject,
         ellipticCurvePublicKey,
-        extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-    }: Unsigned<RootCertificate>) {
-        return DerCodec.encode({
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                issuerRcacId: issuerRcacId === undefined ? undefined : RcacId_Matter(issuerRcacId),
-            },
+        extensions,
+    }: Unsigned<BaseCertificate>) {
+        const {
+            basicConstraints: { isCa, pathLen },
+        } = extensions;
+        if (!isCa && pathLen !== undefined) {
+            throw new CertificateError("Path length must be undefined for non-CA certificates.");
+        }
+        return {
+            version: ContextTagged(0, 2), // v3
+            serialNumber: DatatypeOverride(DerType.Integer, serialNumber),
+            signatureAlgorithm: X962.EcdsaWithSHA256,
+            issuer: subjectOrIssuerToAsn1(issuer),
             validity: {
                 notBefore: matterToJsDate(notBefore),
                 notAfter: matterToJsDate(notAfter),
             },
-            subject: {
-                rcacId: RcacId_Matter(rcacId),
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({ isCa: true }),
-                keyUsage: KeyUsage_Signature_ContentCommited_X509,
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        });
+            subject: subjectOrIssuerToAsn1(subject),
+            publicKey: X962.PublicKeyEcPrime256v1(ellipticCurvePublicKey),
+            extensions: ContextTagged(3, extensionsToAsn1(extensions)),
+        };
     }
 
-    static nocCertToAsn1({
-        serialNumber,
-        notBefore,
-        notAfter,
-        issuer: { issuerRcacId },
-        subject: { fabricId, nodeId, caseAuthenticatedTags },
-        ellipticCurvePublicKey,
-        extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-    }: Unsigned<OperationalCertificate>) {
-        // If we ever get a second case of repeated elements, solve is more generic
-        if (caseAuthenticatedTags !== undefined) {
-            CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
+    static #genericCertToAsn1(cert: Unsigned<BaseCertificate>) {
+        return DerCodec.encode(this.#genericBuildAsn1Structure(cert));
+    }
+
+    static rootCertToAsn1(cert: Unsigned<RootCertificate>) {
+        const {
+            extensions: {
+                basicConstraints: { isCa },
+            },
+        } = cert;
+        if (!isCa) {
+            throw new CertificateError("Root certificate must be a CA.");
+        }
+        return this.#genericCertToAsn1(cert);
+    }
+
+    static intermediateCaCertToAsn1(cert: Unsigned<IntermediateCertificate>) {
+        const {
+            extensions: {
+                basicConstraints: { isCa },
+            },
+        } = cert;
+        if (!isCa) {
+            throw new CertificateError("Intermediate certificate must be a CA.");
+        }
+        return this.#genericCertToAsn1(cert);
+    }
+
+    static nodeOperationalCertToAsn1(cert: Unsigned<OperationalCertificate>) {
+        const {
+            issuer: { icacId, rcacId },
+            extensions: {
+                basicConstraints: { isCa },
+            },
+        } = cert;
+        if (icacId === undefined && rcacId === undefined) {
+            throw new CertificateError("Issuer RCAC or ICAC ID must be defined for an operational certificate.");
+        }
+        if (isCa) {
+            throw new CertificateError("Node operational certificate must not be a CA.");
         }
 
-        const cat0 = caseAuthenticatedTags?.[0];
-        const cat1 = caseAuthenticatedTags?.[1];
-        const cat2 = caseAuthenticatedTags?.[2];
-
-        return DerCodec.encode({
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                issuerRcacId: issuerRcacId === undefined ? undefined : RcacId_Matter(issuerRcacId),
-            },
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: {
-                fabricId: FabricId_Matter(fabricId),
-                nodeId: NodeId_Matter(NodeId(nodeId)),
-                cat0: cat0 !== undefined ? NocCat_Matter(cat0) : undefined,
-                cat1: cat1 !== undefined ? NocCat_Matter(cat1) : undefined,
-                cat2: cat2 !== undefined ? NocCat_Matter(cat2) : undefined,
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({}),
-                keyUsage: KeyUsage_Signature_X509,
-                extendedKeyUsage: ExtendedKeyUsage_X509({ serverAuth: true, clientAuth: true }),
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        });
+        return this.#genericCertToAsn1(cert);
     }
 
-    static daCertToAsn1(
-        {
-            serialNumber,
-            notBefore,
-            notAfter,
-            issuer: { commonName: issuerCommonName, vendorId: issuerVendorId },
-            subject: { commonName: subjectCommonName, vendorId: subjectVendorId, productId: subjectProductId },
-            ellipticCurvePublicKey,
-            extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-        }: Unsigned<DeviceAttestationCertificate>,
-        key: Key,
-    ) {
-        const certificate = {
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                commonName: CommonName_X520(issuerCommonName),
-                vendorId: VendorId_Matter(issuerVendorId),
-            },
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: {
-                commonName: CommonName_X520(subjectCommonName),
-                vendorId: VendorId_Matter(subjectVendorId),
-                productId: ProductId_Matter(subjectProductId),
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({
-                    isCa: false,
-                }),
-                keyUsage: KeyUsage_Signature_X509,
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        };
+    static deviceAttestationCertToAsn1(cert: Unsigned<DeviceAttestationCertificate>, key: Key) {
+        const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
-            signAlgorithm: EcdsaWithSHA256_X962,
+            signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
     }
 
-    static paiCertToAsn1(
-        {
-            serialNumber,
-            notBefore,
-            notAfter,
-            issuer: { commonName: issuerCommonName, vendorId: issuerVendorId },
-            subject: { commonName, vendorId, productId },
-            ellipticCurvePublicKey,
-            extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-        }: Unsigned<ProductAttestationIntermediateCertificate>,
+    static productAttestationIntermediateCertToAsn1(
+        cert: Unsigned<ProductAttestationIntermediateCertificate>,
         key: Key,
     ) {
-        const certificate = {
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                commonName: CommonName_X520(issuerCommonName),
-                vendorId: issuerVendorId === undefined ? undefined : VendorId_Matter(issuerVendorId),
-            },
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: {
-                commonName: CommonName_X520(commonName),
-                vendorId: VendorId_Matter(vendorId),
-                productId: productId === undefined ? undefined : ProductId_Matter(productId),
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({
-                    isCa: true,
-                    pathLen: 0,
-                }),
-                keyUsage: KeyUsage_Signature_ContentCommited_X509,
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier: AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        };
+        const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
-            signAlgorithm: EcdsaWithSHA256_X962,
+            signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
     }
 
-    static paaCertToAsn1(
-        {
-            serialNumber,
-            notBefore,
-            notAfter,
-            issuer: { commonName: issuerCommonName, vendorId: issuerVendorId },
-            subject: { commonName, vendorId },
-            ellipticCurvePublicKey,
-            extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
-        }: Unsigned<ProductAttestationAuthorityCertificate>,
-        key: Key,
-    ) {
-        const certificate = {
-            version: ContextTagged(0, 2),
-            serialNumber: serialNumber[0],
-            signatureAlgorithm: EcdsaWithSHA256_X962,
-            issuer: {
-                commonName: CommonName_X520(issuerCommonName),
-                vendorId: issuerVendorId === undefined ? undefined : VendorId_Matter(issuerVendorId),
-            },
-            validity: {
-                notBefore: matterToJsDate(notBefore),
-                notAfter: matterToJsDate(notAfter),
-            },
-            subject: {
-                commonName: CommonName_X520(commonName),
-                vendorId: vendorId === undefined ? undefined : VendorId_Matter(vendorId),
-            },
-            publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
-            extensions: ContextTagged(3, {
-                basicConstraints: BasicConstraints_X509({
-                    isCa: false,
-                }),
-                keyUsage: KeyUsage_Signature_ContentCommited_X509,
-                subjectKeyIdentifier: SubjectKeyIdentifier_X509(subjectKeyIdentifier),
-                authorityKeyIdentifier:
-                    authorityKeyIdentifier === undefined
-                        ? undefined
-                        : AuthorityKeyIdentifier_X509(authorityKeyIdentifier),
-            }),
-        };
+    static productAttestationAuthorityCertToAsn1(cert: Unsigned<ProductAttestationAuthorityCertificate>, key: Key) {
+        const certificate = this.#genericBuildAsn1Structure(cert);
         return DerCodec.encode({
             certificate,
-            signAlgorithm: EcdsaWithSHA256_X962,
+            signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(certificate), "der")),
         });
     }
@@ -575,40 +659,394 @@ export class CertificateManager {
         const certificate = {
             version: 3,
             digestAlgorithm: [SHA256_CMS],
-            encapContentInfo: Pkcs7Data(eContent),
+            encapContentInfo: Pkcs7.Data(eContent),
             signerInfo: [
                 {
                     version: 3,
                     subjectKeyIdentifier: ContextTaggedBytes(0, subjectKeyIdentifier),
                     digestAlgorithm: SHA256_CMS,
-                    signatureAlgorithm: EcdsaWithSHA256_X962,
+                    signatureAlgorithm: X962.EcdsaWithSHA256,
                     signature: Crypto.sign(privateKey, eContent, "der"),
                 },
             ],
         };
 
-        return DerCodec.encode(Pkcs7SignedData(certificate));
+        return DerCodec.encode(Pkcs7.SignedData(certificate));
     }
 
-    static validateRootCertificate(rootCert: RootCertificate) {
-        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.rootCertToAsn1(rootCert), rootCert.signature);
+    /**
+     * Validate general requirements a Matter certificate fields must fulfill.
+     * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
+     */
+    static validateGeneralCertificateFields(cert: RootCertificate | OperationalCertificate | IntermediateCertificate) {
+        if (cert.serialNumber.length > 20)
+            throw new CertificateError(
+                `Serial number must not be longer then 20 octets. Current serial number has ${cert.serialNumber.length} octets.`,
+            );
+
+        if (cert.signatureAlgorithm !== 1) {
+            // ecdsa-with-sha256
+            throw new CertificateError(`Unsupported signature algorithm: ${cert.signatureAlgorithm}`);
+        }
+
+        if (cert.publicKeyAlgorithm !== 1) {
+            // ec-pub-key
+            throw new CertificateError(`Unsupported public key algorithm: ${cert.publicKeyAlgorithm}`);
+        }
+
+        if (cert.ellipticCurveIdentifier !== 1) {
+            // prime256v1
+            throw new CertificateError(`Unsupported elliptic curve identifier: ${cert.ellipticCurveIdentifier}`);
+        }
+
+        // All implementations SHALL reject Matter certificates with more than 5 RDNs in a single DN.
+        if (Object.keys(cert.subject).length > 5) {
+            throw new CertificateError(`Certificate subject must not contain more than 5 RDNs.`);
+        }
+        if (Object.keys(cert.issuer).length > 5) {
+            throw new CertificateError(`Certificate issuer must not contain more than 5 RDNs.`);
+        }
+
+        // notBefore date should be already reached, notAfter is not checked right now
+        // TODO: implement real checks when we add "Last known Good UTC time"
+        if (cert.notBefore * 1000 > Time.nowMs()) {
+            logger.warn(`Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs()}`);
+            /*throw new CertificateError(
+                `Certificate notBefore date is in the future: ${cert.notBefore * 1000} vs ${Time.nowMs()}`,
+            );*/
+        }
     }
 
-    static validateNocCertificate(rootCert: RootCertificate, nocCert: OperationalCertificate) {
-        Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.nocCertToAsn1(nocCert), nocCert.signature);
+    /**
+     * Verify requirements a Matter Root certificate must fulfill.
+     * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
+     */
+    static verifyRootCertificate(rootCert: RootCertificate) {
+        CertificateManager.validateGeneralCertificateFields(rootCert);
+
+        // The subject DN SHALL NOT encode any matter-node-id attribute.
+        if ("nodeId" in rootCert.subject) {
+            throw new CertificateError(`Root certificate must not contain a nodeId.`);
+        }
+
+        // The subject DN MAY encode at most one matter-fabric-id attribute.
+        if (rootCert.subject.fabricId !== undefined) {
+            if (Array.isArray(rootCert.subject.fabricId)) {
+                throw new CertificateError(
+                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(rootCert.subject.fabricId)}`,
+                );
+            }
+            // If present, the matter-fabric-id attribute’s value SHALL NOT be 0
+            if (rootCert.subject.fabricId === FabricId(0)) {
+                throw new CertificateError(
+                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(rootCert.subject.fabricId)}`,
+                );
+            }
+        }
+
+        // The subject DN SHALL NOT encode any matter-icac-id attribute.
+        if ("icacId" in rootCert.subject) {
+            throw new CertificateError(`Root certificate must not contain an icacId.`);
+        }
+
+        // The subject DN SHALL encode exactly one matter-rcac-id attribute.
+        if (rootCert.subject.rcacId === undefined || Array.isArray(rootCert.subject.rcacId)) {
+            throw new CertificateError(`Invalid rcacId in Root certificate: ${Logger.toJSON(rootCert.subject.rcacId)}`);
+        }
+
+        // The subject DN SHALL NOT encode any matter-noc-cat attribute.
+        if ("caseAuthenticatedTags" in rootCert.subject) {
+            throw new CertificateError(`Root certificate must not contain a caseAuthenticatedTags.`);
+        }
+
+        // The basic constraints extension SHALL be encoded with is-ca set to true.
+        if (rootCert.extensions.basicConstraints.isCa !== true) {
+            throw new CertificateError(`Root certificate must have isCa set to true.`);
+        }
+
+        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
+        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
+        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
+        //if (ExtensionKeyUsageSchema.encode(rootCert.extensions.keyUsage) !== 0x0060) {
+        if (!rootCert.extensions.keyUsage.keyCertSign || !rootCert.extensions.keyUsage.cRLSign) {
+            throw new CertificateError(`Root certificate keyUsage must have keyCertSign and CRLSign set.`);
+        }
+
+        // The extended key usage extension SHALL NOT be present.
+        if (rootCert.extensions.extendedKeyUsage !== undefined) {
+            throw new CertificateError(`Root certificate must not have extendedKeyUsage set.`);
+        }
+
+        // The subject key identifier extension SHALL be present and 160 bit long.
+        if (rootCert.extensions.subjectKeyIdentifier === undefined) {
+            throw new CertificateError(`Root certificate must have subjectKeyIdentifier set.`);
+        }
+        if (rootCert.extensions.subjectKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Root certificate subjectKeyIdentifier must be 160 bit.`);
+        }
+
+        // The authority key identifier extension SHALL be present and 160 bit long.
+        if (rootCert.extensions.authorityKeyIdentifier === undefined) {
+            throw new CertificateError(`Root certificate must have authorityKeyIdentifier set.`);
+        }
+        if (rootCert.extensions.authorityKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Root certificate authorityKeyIdentifier must be 160 bit.`);
+        }
+
+        // The authority key identifier extension SHALL be equal to the subject key identifier extension.
+        if (!rootCert.extensions.authorityKeyIdentifier.equals(rootCert.extensions.subjectKeyIdentifier)) {
+            throw new CertificateError(
+                `Root certificate authorityKeyIdentifier must be equal to subjectKeyIdentifier.`,
+            );
+        }
+
+        // Root cert is self signed anyway, so we do not need to verify it with itself
+        //Crypto.verify(PublicKey(rootCert.ellipticCurvePublicKey), this.rootCertToAsn1(rootCert), rootCert.signature);
+    }
+
+    /**
+     * Verify requirements a Matter Node Operational certificate must fulfill.
+     * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
+     */
+    static verifyNodeOperationalCertificate(
+        rootOrIcaCert: RootCertificate | IntermediateCertificate,
+        nocCert: OperationalCertificate,
+    ) {
+        CertificateManager.validateGeneralCertificateFields(nocCert);
+
+        // The subject DN SHALL encode exactly one matter-node-id attribute.
+        if (nocCert.subject.nodeId === undefined || Array.isArray(nocCert.subject.nodeId)) {
+            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Logger.toJSON(nocCert.subject.nodeId)}`);
+        }
+        // The matter-node-id attribute’s value SHALL be in the Operational Node ID
+        if (!NodeId.isOperationalNodeId(nocCert.subject.nodeId)) {
+            throw new CertificateError(`Invalid nodeId in NoC certificate: ${Logger.toJSON(nocCert.subject.nodeId)}`);
+        }
+
+        // The subject DN SHALL encode exactly one matter-fabric-id attribute.
+        if (nocCert.subject.fabricId === undefined || Array.isArray(nocCert.subject.fabricId)) {
+            throw new CertificateError(
+                `Invalid fabricId in NoC certificate: ${Logger.toJSON(nocCert.subject.fabricId)}`,
+            );
+        }
+        // The matter-fabric-id attribute’s value SHALL NOT be 0
+        if (nocCert.subject.fabricId === FabricId(0)) {
+            throw new CertificateError(
+                `Invalid fabricId in NoC certificate: ${Logger.toJSON(nocCert.subject.fabricId)}`,
+            );
+        }
+
+        // The subject DN SHALL NOT encode any matter-icac-id attribute.
+        if ("icacId" in nocCert.subject) {
+            throw new CertificateError(`Noc certificate must not contain an icacId.`);
+        }
+
+        // The subject DN SHALL NOT encode any matter-rcac-id attribute.
+        if ("rcacId" in nocCert.subject) {
+            throw new CertificateError(`Noc certificate must not contain an rcacId.`);
+        }
+
+        // The subject DN MAY encode at most three matter-noc-cat attributes.
+        if (nocCert.subject.caseAuthenticatedTags !== undefined) {
+            CaseAuthenticatedTag.validateNocTagList(nocCert.subject.caseAuthenticatedTags); // throws ValidationError
+        }
+
+        // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
+        // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
+        // the same certificate chain.
+        if (
+            rootOrIcaCert.subject.fabricId !== undefined &&
+            rootOrIcaCert.subject.fabricId !== nocCert.subject.fabricId
+        ) {
+            throw new CertificateError(
+                `FabricId in NoC certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                    rootOrIcaCert.subject.fabricId,
+                )} !== ${Logger.toJSON(nocCert.subject.fabricId)}`,
+            );
+        }
+
+        // The basic constraints extension SHALL be encoded with is-ca set to false.
+        if (nocCert.extensions.basicConstraints.isCa) {
+            throw new CertificateError(`Noc certificate must not have isCa set to true.`);
+        }
+
+        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
+        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
+        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
+        //if (ExtensionKeyUsageSchema.encode(nocCert.extensions.keyUsage) !== 1) {
+        if (!nocCert.extensions.keyUsage.digitalSignature) {
+            throw new CertificateError(`Noc certificate must have keyUsage set to digitalSignature.`);
+        }
+
+        // The extended key usage extension SHALL be encoded with exactly two key-purpose-id values: serverAuth and clientAuth.
+        if (
+            nocCert.extensions.extendedKeyUsage === undefined ||
+            (!nocCert.extensions.extendedKeyUsage.includes(1) && !nocCert.extensions.extendedKeyUsage.includes(2))
+        ) {
+            throw new CertificateError(
+                `Noc certificate must have extendedKeyUsage with serverAuth and clientAuth: ${Logger.toJSON(nocCert.extensions.extendedKeyUsage)}`,
+            );
+        }
+
+        // The subject key identifier extension SHALL be present and 160 bit long.
+        if (nocCert.extensions.subjectKeyIdentifier === undefined) {
+            throw new CertificateError(`Noc certificate must have subjectKeyIdentifier set.`);
+        }
+        if (nocCert.extensions.subjectKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Noc certificate subjectKeyIdentifier must be 160 bit.`);
+        }
+
+        // The authority key identifier extension SHALL be present and 160 bit long.
+        if (nocCert.extensions.authorityKeyIdentifier === undefined) {
+            throw new CertificateError(`Noc certificate must have authorityKeyIdentifier set.`);
+        }
+        if (nocCert.extensions.authorityKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Noc certificate authorityKeyIdentifier must be 160 bit.`);
+        }
+
+        // Validate authority key identifier against subject key identifier
+        if (!nocCert.extensions.authorityKeyIdentifier.equals(rootOrIcaCert.extensions.subjectKeyIdentifier)) {
+            throw new CertificateError(
+                `Noc certificate authorityKeyIdentifier must be equal to Root/Ica subjectKeyIdentifier.`,
+            );
+        }
+
+        Crypto.verify(
+            PublicKey(rootOrIcaCert.ellipticCurvePublicKey),
+            this.nodeOperationalCertToAsn1(nocCert),
+            nocCert.signature,
+        );
+    }
+
+    /**
+     * Verify requirements a Matter Intermediate CA certificate must fulfill.
+     * Rules for this are listed in @see {@link MatterSpecification.v12.Core} §6.5.x
+     */
+    static verifyIntermediateCaCertificate(rootCert: RootCertificate, icaCert: IntermediateCertificate) {
+        CertificateManager.validateGeneralCertificateFields(icaCert);
+
+        // The subject DN SHALL NOT encode any matter-node-id attribute.
+        if ("nodeId" in icaCert.subject) {
+            throw new CertificateError(`Ica certificate must not contain a nodeId.`);
+        }
+
+        // The subject DN MAY encode at most one matter-fabric-id attribute.
+        if (icaCert.subject.fabricId !== undefined) {
+            if (Array.isArray(icaCert.subject.fabricId)) {
+                throw new CertificateError(
+                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                );
+            }
+            // If present, the matter-fabric-id attribute’s value SHALL NOT be 0
+            if (icaCert.subject.fabricId === FabricId(0)) {
+                throw new CertificateError(
+                    `Invalid fabricId in NoC certificate: ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                );
+            }
+            // If present on root certificate fabric-id needs to match with Ica fabric Id
+            if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
+                throw new CertificateError(
+                    `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                        rootCert.subject.fabricId,
+                    )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
+                );
+            }
+        }
+
+        // The subject DN SHALL encode exactly one matter-icac-id attribute.
+        if (icaCert.subject.icacId === undefined || Array.isArray(icaCert.subject.icacId)) {
+            throw new CertificateError(`Invalid icacId in Ica certificate: ${Logger.toJSON(icaCert.subject.icacId)}`);
+        }
+
+        // The subject DN SHALL NOT encode any matter-rcac-id attribute.
+        if ("rcacId" in icaCert.subject) {
+            throw new CertificateError(`Ica certificate must not contain an rcacId.`);
+        }
+
+        // The subject DN SHALL NOT encode any matter-noc-cat attribute.
+        if ("caseAuthenticatedTags" in icaCert.subject) {
+            throw new CertificateError(`Ica certificate must not contain a caseAuthenticatedTags.`);
+        }
+
+        // When any matter-fabric-id attributes are present in either the Matter Root CA Certificate or the Matter ICA
+        // Certificate, the value SHALL match the one present in the Matter Node Operational Certificate (NOC) within
+        // the same certificate chain.
+        if (rootCert.subject.fabricId !== icaCert.subject.fabricId) {
+            throw new CertificateError(
+                `FabricId in Ica certificate does not match the fabricId in the parent certificate. ${Logger.toJSON(
+                    rootCert.subject.fabricId,
+                )} !== ${Logger.toJSON(icaCert.subject.fabricId)}`,
+            );
+        }
+
+        // Verify the certificate chain by checking rcac ids in subject and issuer
+        if (rootCert.subject.rcacId !== icaCert.issuer.rcacId) {
+            throw new CertificateError(
+                `RcacId in Ica certificate does not match the rcacId in the parent certificate. ${Logger.toJSON(
+                    rootCert.subject.rcacId,
+                )} !== ${Logger.toJSON(icaCert.issuer.rcacId)}`,
+            );
+        }
+
+        // The basic constraints extension SHALL be encoded with is-ca set to true.
+        if (!icaCert.extensions.basicConstraints.isCa) {
+            throw new CertificateError(`Ica certificate must have isCa set to true.`);
+        }
+
+        // The key usage extension SHALL be encoded with exactly two flags: keyCertSign (0x0020) and CRLSign (0x0040).
+        // Formally the check should be the following line but Amazon uses a wrong Root cert which also has
+        // digitalCertificate set, so we just check the the two needed are set and ignore additionally set parameters.
+        //if (ExtensionKeyUsageSchema.encode(icaCert.extensions.keyUsage) !== 0x0060) {
+        if (!icaCert.extensions.keyUsage.keyCertSign || !icaCert.extensions.keyUsage.cRLSign) {
+            throw new CertificateError(`Ica certificate must have keyUsage set to keyCertSign and CRLSign.`);
+        }
+
+        // The extended key usage extension SHALL NOT be present.
+        if (icaCert.extensions.extendedKeyUsage !== undefined) {
+            throw new CertificateError(`Ica certificate must not have extendedKeyUsage set.`);
+        }
+
+        // The subject key identifier extension SHALL be present and 160 bit long.
+        if (icaCert.extensions.subjectKeyIdentifier === undefined) {
+            throw new CertificateError(`Ica certificate must have subjectKeyIdentifier set.`);
+        }
+        if (icaCert.extensions.subjectKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Ica certificate subjectKeyIdentifier must be 160 bit.`);
+        }
+
+        // The authority key identifier extension SHALL be present and 160 bit long.
+        if (icaCert.extensions.authorityKeyIdentifier === undefined) {
+            throw new CertificateError(`Ica certificate must have authorityKeyIdentifier set.`);
+        }
+        if (icaCert.extensions.authorityKeyIdentifier.length !== 20) {
+            throw new CertificateError(`Ica certificate authorityKeyIdentifier must be 160 bit.`);
+        }
+
+        // Validate authority key identifier against subject key identifier
+        if (!icaCert.extensions.authorityKeyIdentifier.equals(rootCert.extensions.subjectKeyIdentifier)) {
+            throw new CertificateError(
+                `Ica certificate authorityKeyIdentifier must be equal to root cert subjectKeyIdentifier.`,
+            );
+        }
+
+        Crypto.verify(
+            PublicKey(rootCert.ellipticCurvePublicKey),
+            this.intermediateCaCertToAsn1(icaCert),
+            icaCert.signature,
+        );
     }
 
     static createCertificateSigningRequest(key: Key) {
         const request = {
             version: 0,
-            subject: { organization: OrganisationName_X520("CSR") },
-            publicKey: PublicKeyEcPrime256v1_X962(key.publicKey),
+            subject: { organization: X520.OrganisationName("CSR") },
+            publicKey: X962.PublicKeyEcPrime256v1(key.publicKey),
             endSignedBytes: ContextTagged(0),
         };
 
         return DerCodec.encode({
             request,
-            signAlgorithm: EcdsaWithSHA256_X962,
+            signAlgorithm: X962.EcdsaWithSHA256,
             signature: BitByteArray(Crypto.sign(key, DerCodec.encode(request), "der")),
         });
     }
@@ -633,7 +1071,7 @@ export class CertificateManager {
         const publicKey = publicKeyBytesNode[BYTES_KEY];
 
         // Verify the CSR signature
-        if (!EcdsaWithSHA256_X962[OBJECT_ID_KEY][BYTES_KEY].equals(signAlgorithmNode[ELEMENTS_KEY]?.[0]?.[BYTES_KEY]))
+        if (!X962.EcdsaWithSHA256[OBJECT_ID_KEY][BYTES_KEY].equals(signAlgorithmNode[ELEMENTS_KEY]?.[0]?.[BYTES_KEY]))
             throw new CertificateError("Unsupported signature type");
         Crypto.verify(PublicKey(publicKey), DerCodec.encode(requestNode), signatureNode[BYTES_KEY], "der");
 

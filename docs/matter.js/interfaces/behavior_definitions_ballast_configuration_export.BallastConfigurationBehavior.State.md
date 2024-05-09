@@ -49,7 +49,7 @@ and the level shall not be set. The value of null indicates that ballast factor 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.7.4
+MatterSpecification.v11.Cluster § 3.3.7.4
 
 #### Inherited from
 
@@ -57,7 +57,7 @@ StateType.ballastFactorAdjustment
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L131)
 
 ___
 
@@ -72,7 +72,7 @@ to 0.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.6.3
+MatterSpecification.v11.Cluster § 3.3.6.3
 
 #### Inherited from
 
@@ -80,7 +80,7 @@ StateType.ballastStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:73](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L73)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:72](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L72)
 
 ___
 
@@ -95,7 +95,7 @@ A value of null indicates in invalid value.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.7.3
+MatterSpecification.v11.Cluster § 3.3.7.3
 
 #### Inherited from
 
@@ -103,7 +103,7 @@ StateType.intrinsicBallastFactor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L111)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L110)
 
 ___
 
@@ -118,7 +118,7 @@ Alarms cluster).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.9.5
+MatterSpecification.v11.Cluster § 3.3.9.5
 
 #### Inherited from
 
@@ -126,7 +126,7 @@ StateType.lampAlarmMode
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:209](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L209)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:208](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L208)
 
 ___
 
@@ -145,7 +145,7 @@ A value of null indicates an invalid or unknown time.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.9.4
+MatterSpecification.v11.Cluster § 3.3.9.4
 
 #### Inherited from
 
@@ -153,7 +153,7 @@ StateType.lampBurnHours
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:195](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L195)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:194](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L194)
 
 ___
 
@@ -173,7 +173,7 @@ If this attribute takes the value of null, then this alarm shall not be generate
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.9.6
+MatterSpecification.v11.Cluster § 3.3.9.6
 
 #### Inherited from
 
@@ -181,7 +181,7 @@ StateType.lampBurnHoursTripPoint
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:228](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L228)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:227](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L227)
 
 ___
 
@@ -193,7 +193,7 @@ The LampManufacturer attribute specifies the name of the manufacturer of the cur
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.9.2
+MatterSpecification.v11.Cluster § 3.3.9.2
 
 #### Inherited from
 
@@ -201,7 +201,7 @@ StateType.lampManufacturer
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:163](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L163)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:162](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L162)
 
 ___
 
@@ -215,7 +215,7 @@ this number does not take into account whether lamps are actually in their socke
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.8.1
+MatterSpecification.v11.Cluster § 3.3.8.1
 
 #### Inherited from
 
@@ -223,7 +223,7 @@ StateType.lampQuantity
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:145](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L145)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:144](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L144)
 
 ___
 
@@ -238,7 +238,7 @@ A value of null indicates an invalid or unknown time.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.9.3
+MatterSpecification.v11.Cluster § 3.3.9.3
 
 #### Inherited from
 
@@ -246,7 +246,7 @@ StateType.lampRatedHours
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:177](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L177)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:176](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L176)
 
 ___
 
@@ -258,7 +258,7 @@ The LampType attribute specifies the type of lamps (including their wattage) con
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.9.1
+MatterSpecification.v11.Cluster § 3.3.9.1
 
 #### Inherited from
 
@@ -266,7 +266,7 @@ StateType.lampType
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:152](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:151](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L151)
 
 ___
 
@@ -285,7 +285,7 @@ set.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.7.2
+MatterSpecification.v11.Cluster § 3.3.7.2
 
 #### Inherited from
 
@@ -293,7 +293,7 @@ StateType.maxLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:101](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L101)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:100](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L100)
 
 ___
 
@@ -312,7 +312,7 @@ set.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.7.1
+MatterSpecification.v11.Cluster § 3.3.7.1
 
 #### Inherited from
 
@@ -320,7 +320,7 @@ StateType.minLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:87](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:86](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L86)
 
 ___
 
@@ -333,7 +333,7 @@ the dimming light curve (see The Dimming Light Curve).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.6.2
+MatterSpecification.v11.Cluster § 3.3.6.2
 
 #### Inherited from
 
@@ -341,7 +341,7 @@ StateType.physicalMaxLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:63](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L63)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:62](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L62)
 
 ___
 
@@ -354,7 +354,7 @@ the dimming light curve (see The Dimming Light Curve).
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.3.6.1
+MatterSpecification.v11.Cluster § 3.3.6.1
 
 #### Inherited from
 
@@ -362,4 +362,4 @@ StateType.physicalMinLevel
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L54)

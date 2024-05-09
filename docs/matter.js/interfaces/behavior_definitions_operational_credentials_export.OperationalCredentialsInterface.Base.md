@@ -45,11 +45,11 @@ A Commissioner or Administrator SHOULD issue this command after performing the A
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.8
+MatterSpecification.v11.Core § 11.17.6.8
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:362](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L362)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:361](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L361)
 
 ___
 
@@ -93,11 +93,11 @@ trust using the RemoveFabric command.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.13
+MatterSpecification.v11.Core § 11.17.6.13
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:536](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L536)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:535](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L535)
 
 ___
 
@@ -123,11 +123,11 @@ used in the computation of the Attestation Information.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.1
+MatterSpecification.v11.Core § 11.17.6.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:309](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L309)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:308](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L308)
 
 ___
 
@@ -150,11 +150,11 @@ Status Code of INVALID_COMMAND.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.3
+MatterSpecification.v11.Core § 11.17.6.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:317](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L317)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:316](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L316)
 
 ___
 
@@ -199,11 +199,11 @@ executed, then this command shall fail with a FAILURE status code sent back to t
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.5
+MatterSpecification.v11.Core § 11.17.6.5
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:347](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L347)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:346](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L346)
 
 ___
 
@@ -276,11 +276,11 @@ command SHOULD NOT expect a response before terminating its secure session with 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.12
+MatterSpecification.v11.Core § 11.17.6.12
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:507](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L507)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:506](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L506)
 
 ___
 
@@ -323,11 +323,11 @@ currently visible, even for an existing fabric currently in process of being upd
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.11
+MatterSpecification.v11.Core § 11.17.6.11
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:449](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L449)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:448](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L448)
 
 ___
 
@@ -401,8 +401,8 @@ matching the FabricIndex under which the updated NOC is scoped.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.6.9
+MatterSpecification.v11.Core § 11.17.6.9
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:421](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L421)
+[packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts:420](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/OperationalCredentialsInterface.ts#L420)

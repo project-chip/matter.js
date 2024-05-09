@@ -42,9 +42,8 @@ export class RootSupervisor implements ValueSupervisor {
      * Create a new supervisor.
      *
      * @param schema the {@link Schema} for the supervised data
-     * @param managed a class for the managed value
      */
-    constructor(schema: Schema, managed?: new () => Val) {
+    constructor(schema: Schema) {
         if (schema instanceof ClusterModel) {
             this.#featureMap = schema.featureMap;
             this.#supportedFeatures = schema.supportedFeatures ?? new FeatureSet();
@@ -54,7 +53,7 @@ export class RootSupervisor implements ValueSupervisor {
         }
         this.#members = new Set(schema.members);
 
-        this.#root = this.#createValueSupervisor(schema, managed);
+        this.#root = this.#createValueSupervisor(schema);
     }
 
     get owner() {
@@ -155,7 +154,7 @@ export class RootSupervisor implements ValueSupervisor {
         return supervisor;
     }
 
-    #createValueSupervisor(schema: Schema, managed?: new () => Val) {
+    #createValueSupervisor(schema: Schema) {
         // Implements deferred generation (see comments below).  Proxies to the real generator, installs the generated
         // function, then invokes. Since I/O functions are properties and not methods, we then continue to proxy to the
         // generated function for places where the function is held directly.
@@ -171,7 +170,7 @@ export class RootSupervisor implements ValueSupervisor {
                         throw new InternalError("Deferred I/O generation invoked impossibly early");
                     }
 
-                    (manager as any)[name] = generator(schema, this, managed);
+                    (manager as any)[name] = generator(schema, this);
 
                     generated = true;
                 }
@@ -198,7 +197,7 @@ export class RootSupervisor implements ValueSupervisor {
                     schema,
                     access: AccessControl(schema),
                     validate: ValueValidator(schema, this),
-                    manage: ValueManager(schema, this, managed),
+                    manage: ValueManager(schema, this),
                     patch: ValuePatcher(schema, this),
                 };
             } finally {

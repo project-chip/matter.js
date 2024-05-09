@@ -237,14 +237,16 @@ Matter.children.push(Cluster({
             children: [
                 Field({
                     name: "NocsrElements", id: 0x0, type: "octstr", conformance: "M", constraint: "max 900",
-                    details: "This field shall contain the octet string of the serialized nocsr_elements_message." +
-                        "\n" +
-                        "This field shall contain the octet string of the necessary attestation_signature as described in " +
-                        "Section 11.17.4.9, “NOCSR Information”.",
+                    details: "This field shall contain the octet string of the serialized nocsr_elements_message.",
                     xref: { document: "core", section: "11.17.6.6.1" }
                 }),
 
-                Field({ name: "AttestationSignature", id: 0x1, type: "octstr", conformance: "M", constraint: "64" })
+                Field({
+                    name: "AttestationSignature", id: 0x1, type: "octstr", conformance: "M", constraint: "64",
+                    details: "This field shall contain the octet string of the necessary attestation_signature as described in " +
+                        "Section 11.17.4.9, “NOCSR Information”.",
+                    xref: { document: "core", section: "11.17.6.6.2" }
+                })
             ]
         }),
 
@@ -287,7 +289,7 @@ Matter.children.push(Cluster({
                 }),
 
                 Field({
-                    name: "CaseAdminSubject", id: 0x3, type: "SubjectID", conformance: "M",
+                    name: "CaseAdminSubject", id: 0x3, type: "subject-id", conformance: "M",
 
                     details: "If the AddNOC command succeeds according to the semantics of the following subsections, then the" +
                         "\n" +
@@ -531,36 +533,39 @@ Matter.children.push(Cluster({
         Command({
             name: "UpdateFabricLabel", id: 0x9, access: "F A", conformance: "M", direction: "request",
             response: "NocResponse",
-
             details: "This command shall be used by an Administrator to set the user-visible Label field for a given " +
                 "Fabric, as reflected by entries in the Fabrics attribute." +
                 "\n" +
                 "The Label SHOULD be used by Administrators to provide additional per-fabric context when operations " +
-                "such as RemoveFabric are used." +
-                "\n" +
-                "This field shall contain the label to set for the fabric associated with the current secure session." +
-                "\n" +
-                "Effect on Receipt" +
-                "\n" +
-                "If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that " +
-                "is not the accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be " +
-                "returned for the command and there shall NOT be any permanent changes to any Fabric data." +
-                "\n" +
-                "Otherwise, the Label field for the accesing fabric shall immediately be updated to reflect the" +
-                "\n" +
-                "Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be " +
-                "returned." +
-                "\n" +
-                "If the command was invoked within a fail-safe context after a successful UpdateNOC command, then " +
-                "the label update shall apply to the pending update state that will be reverted if fail-safe expires " +
-                "prior to a CommissioningComplete command. In other words, label updates apply to the state of the " +
-                "Fabrics Attribute as currently visible, even for an existing fabric currently in process of being " +
-                "updated.",
-
+                "such as RemoveFabric are used.",
             xref: { document: "core", section: "11.17.6.11" },
 
             children: [
-                Field({ name: "Label", id: 0x0, type: "string", access: "F", conformance: "M", constraint: "max 32" }),
+                Field({
+                    name: "Label", id: 0x0, type: "string", access: "F", conformance: "M", constraint: "max 32",
+
+                    details: "This field shall contain the label to set for the fabric associated with the current secure session." +
+                        "\n" +
+                        "Effect on Receipt" +
+                        "\n" +
+                        "If the Label field is identical to a Label already in use by a Fabric within the Fabrics list that " +
+                        "is not the accessing fabric, then an NOCResponse with a StatusCode of LabelConflict shall be " +
+                        "returned for the command and there shall NOT be any permanent changes to any Fabric data." +
+                        "\n" +
+                        "Otherwise, the Label field for the accesing fabric shall immediately be updated to reflect the" +
+                        "\n" +
+                        "Label argument provided. Following the update, an NOCResponse with a StatusCode of OK shall be " +
+                        "returned." +
+                        "\n" +
+                        "If the command was invoked within a fail-safe context after a successful UpdateNOC command, then " +
+                        "the label update shall apply to the pending update state that will be reverted if fail-safe expires " +
+                        "prior to a CommissioningComplete command. In other words, label updates apply to the state of the " +
+                        "Fabrics Attribute as currently visible, even for an existing fabric currently in process of being " +
+                        "updated.",
+
+                    xref: { document: "core", section: "11.17.6.11.1" }
+                }),
+
                 Field({
                     name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "M",
                     constraint: "1 to 254"
@@ -588,49 +593,52 @@ Matter.children.push(Cluster({
                 "for an Administrator or Commissioner to convey Fabric Removal to an entity related to that Fabric, " +
                 "whether in-band or out-of-band, then this method SHOULD be used to notify the other Administrative " +
                 "Domain’s party of the removal. Otherwise, users may only observe the removal of a Fabric " +
-                "association as persistently failing attempts to reach a Node operationally." +
-                "\n" +
-                "This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric " +
-                "which is to be removed from the device." +
-                "\n" +
-                "Effect on Receipt" +
-                "\n" +
-                "If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then " +
-                "an NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and there " +
-                "shall NOT be any permanent changes to any device data." +
-                "\n" +
-                "Otherwise, one of the following outcomes shall occur:" +
-                "\n" +
-                "  1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall " +
-                "     delete all Matter related data on the node which was created since it was commissioned. This " +
-                "     includes all Fabric-Scoped data, including Access Control List, bindings, scenes, group keys," +
-                "\n" +
-                "operational certificates, etc. All Trusted Roots shall also be removed. Any Matter related data " +
-                "including logs, secure sessions, exchanges and interaction model constructs shall also be removed. " +
-                "Since this operation involves the removal of the secure session data that may underpin the current " +
-                "set of exchanges, the Node invoking the command SHOULD NOT expect a response before terminating its " +
-                "secure session with the target." +
-                "\n" +
-                "2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the " +
-                "process of irrevocably deleting all associated Fabric-Scoped data, including Access Control List, " +
-                "bindings, group keys, operational certificates, etc. Any remaining Trusted Roots no longer " +
-                "referenced by any operational certificate shall also be removed. All secure sessions, exchanges and " +
-                "interaction model constructs related to the Operational Identity under the given Fabric shall also " +
-                "be removed. Following the removal, an NOCResponse with a StatusCode of OK shall be returned." +
-                "\n" +
-                "3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of " +
-                "irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, " +
-                "group keys, operational certificates, etc. Any remaining Trusted Roots no longer referenced by any " +
-                "operational certificate shall also be removed. All secure sessions, exchanges and interaction model " +
-                "constructs related to the Operational Identity under the given Fabric shall also be removed. Since " +
-                "this operation involves the removal of the secure session data that may underpin the current set of " +
-                "exchanges, the Node invoking the command SHOULD NOT expect a response before terminating its secure " +
-                "session with the target.",
+                "association as persistently failing attempts to reach a Node operationally.",
 
             xref: { document: "core", section: "11.17.6.12" },
-            children: [
-                Field({ name: "FabricIndex", id: 0x0, type: "fabric-idx", conformance: "M", constraint: "1 to 254" })
-            ]
+
+            children: [Field({
+                name: "FabricIndex", id: 0x0, type: "fabric-idx", conformance: "M", constraint: "1 to 254",
+
+                details: "This field shall contain the Fabric Index reference (see fabric-index) associated with the Fabric " +
+                    "which is to be removed from the device." +
+                    "\n" +
+                    "Effect on Receipt" +
+                    "\n" +
+                    "If the FabricIndex field does not match the FabricIndex of any entry within the Fabrics list, then " +
+                    "an NOCResponse with a StatusCode of InvalidFabricIndex shall be returned for the command and there " +
+                    "shall NOT be any permanent changes to any device data." +
+                    "\n" +
+                    "Otherwise, one of the following outcomes shall occur:" +
+                    "\n" +
+                    "  1. If the FabricIndex matches the last remaining entry in the Fabrics list, then the device shall " +
+                    "     delete all Matter related data on the node which was created since it was commissioned. This " +
+                    "     includes all Fabric-Scoped data, including Access Control List, bindings, scenes, group keys," +
+                    "\n" +
+                    "operational certificates, etc. All Trusted Roots shall also be removed. Any Matter related data " +
+                    "including logs, secure sessions, exchanges and interaction model constructs shall also be removed. " +
+                    "Since this operation involves the removal of the secure session data that may underpin the current " +
+                    "set of exchanges, the Node invoking the command SHOULD NOT expect a response before terminating its " +
+                    "secure session with the target." +
+                    "\n" +
+                    "2. If the FabricIndex does not equal the accessing fabric index, then the device shall begin the " +
+                    "process of irrevocably deleting all associated Fabric-Scoped data, including Access Control List, " +
+                    "bindings, group keys, operational certificates, etc. Any remaining Trusted Roots no longer " +
+                    "referenced by any operational certificate shall also be removed. All secure sessions, exchanges and " +
+                    "interaction model constructs related to the Operational Identity under the given Fabric shall also " +
+                    "be removed. Following the removal, an NOCResponse with a StatusCode of OK shall be returned." +
+                    "\n" +
+                    "3. If the FabricIndex equals the accessing fabric index, then the device shall begin the process of " +
+                    "irrevocably deleting all associated Fabric-Scoped data, including Access Control Entries, bindings, " +
+                    "group keys, operational certificates, etc. Any remaining Trusted Roots no longer referenced by any " +
+                    "operational certificate shall also be removed. All secure sessions, exchanges and interaction model " +
+                    "constructs related to the Operational Identity under the given Fabric shall also be removed. Since " +
+                    "this operation involves the removal of the secure session data that may underpin the current set of " +
+                    "exchanges, the Node invoking the command SHOULD NOT expect a response before terminating its secure " +
+                    "session with the target.",
+
+                xref: { document: "core", section: "11.17.6.12.1" }
+            })]
         }),
 
         Command({

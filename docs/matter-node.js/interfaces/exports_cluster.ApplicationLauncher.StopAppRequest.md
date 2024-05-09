@@ -8,7 +8,7 @@ Input to the ApplicationLauncher stopApp command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.2
+MatterSpecification.v11.Cluster § 6.4.4.2
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This field shall specify the Application to stop.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.4.4.2.1
+MatterSpecification.v11.Cluster § 6.4.4.2.1
 
 #### Inherited from
 

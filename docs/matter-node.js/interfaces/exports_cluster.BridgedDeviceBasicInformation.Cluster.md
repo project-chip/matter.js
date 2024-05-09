@@ -31,7 +31,7 @@ Bridged Device. See below for Conformance details.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.13
+MatterSpecification.v11.Core § 9.13
 
 ## Hierarchy
 
@@ -114,10 +114,10 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `leave` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<`void`, `any`\> | **`See`** MatterCoreSpecificationV1_1 § 9.13.5 |
-| `reachableChanged` | [`Event`](exports_cluster.Event.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `reachableNewValue`: [`FieldType`](exports_tlv.FieldType.md)\<`boolean`\>  }\>, `any`\> | This event shall be generated when there is a change in the Reachable attribute. Its purpose is to provide an indication towards interested parties that the reachability of a bridged device (over the non-Matter network) has changed, so they may take appropriate action. After (re)start of a bridge this event may be generated. **`See`** MatterCoreSpecificationV1_1 § 9.13.5.1 |
-| `shutDown` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<`void`, `any`\> | **`See`** MatterCoreSpecificationV1_1 § 9.13.5 |
-| `startUp` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `softwareVersion`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `any`\> | **`See`** MatterCoreSpecificationV1_1 § 9.13.5 |
+| `leave` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<`void`, `any`\> | **`See`** MatterSpecification.v11.Core § 9.13.5 |
+| `reachableChanged` | [`Event`](exports_cluster.Event.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `reachableNewValue`: [`FieldType`](exports_tlv.FieldType.md)\<`boolean`\>  }\>, `any`\> | This event shall be generated when there is a change in the Reachable attribute. Its purpose is to provide an indication towards interested parties that the reachability of a bridged device (over the non-Matter network) has changed, so they may take appropriate action. After (re)start of a bridge this event may be generated. **`See`** MatterSpecification.v11.Core § 9.13.5.1 |
+| `shutDown` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<`void`, `any`\> | **`See`** MatterSpecification.v11.Core § 9.13.5 |
+| `startUp` | [`OptionalEvent`](exports_cluster.OptionalEvent.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `softwareVersion`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `any`\> | **`See`** MatterSpecification.v11.Core § 9.13.5 |
 
 #### Inherited from
 

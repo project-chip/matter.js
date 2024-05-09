@@ -11,13 +11,20 @@ import { Schema } from "../../supervision/Schema.js";
 import { Val } from "../Val.js";
 import { ValidationLocation } from "./location.js";
 
+export class UnsupportedConformanceNodeError extends SchemaImplementationError {
+    constructor(schema: Schema, compiledNode: DynamicNode) {
+        super(
+            DataModelPath(schema.path),
+            `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
+        );
+    }
+}
+
 export enum Code {
-    // Ignored in logical disjunctions (groups and "|" operator); equivalent to
-    // disallowed otherwise
+    // Ignored in logical disjunctions (groups and "|" operator); equivalent to disallowed otherwise
     Nonconformant = "nonconformant",
 
-    // Expression matches; may convert to optional inside [] but mandatory
-    // otherwise
+    // Expression matches; may convert to optional inside [] but mandatory otherwise
     Conformant = "conformant",
 
     // Expression matches and value is optional
@@ -26,8 +33,7 @@ export enum Code {
     // Value must be undefined
     Disallowed = "disallowed",
 
-    // A value; used in an expression or else evaluates to mandatory iff the
-    // associated value is defined
+    // A value; used in an expression or else evaluates to mandatory iff the associated value is defined
     Value = "value",
 
     // Dynamic node must be evaluated at runtime to produce static node
@@ -72,7 +78,10 @@ export function evaluateNode(node: DynamicNode, value: Val, location: Validation
 export function asConformance<T extends DynamicNode>(node: T) {
     if (node.code === Code.Value) {
         return {
-            code: node.value === undefined ? Code.Nonconformant : Code.Conformant,
+            code:
+                node.value === undefined || node.value === null || node.value === false
+                    ? Code.Nonconformant
+                    : Code.Conformant,
         } as const;
     } else {
         return node;
@@ -228,3 +237,26 @@ export function createComparison(
             ),
     };
 }
+
+/**
+ * Create a node that performs a runtime boolean test.
+ */
+export function createBooleanTest(node: DynamicNode): DynamicNode {
+    if (isStatic(node)) {
+        return node;
+    }
+
+    const { evaluate } = node;
+
+    return {
+        code: Code.Evaluate,
+
+        evaluate: (value, location) => {
+            const result = evaluate(value, location);
+            assertValue(location, result, "boolean test");
+            return asConformance(result);
+        },
+    };
+}
+
+export type EnumMemberValidator = (location: ValidationLocation) => void;

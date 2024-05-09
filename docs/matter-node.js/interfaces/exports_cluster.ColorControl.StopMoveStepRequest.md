@@ -8,7 +8,7 @@ Input to the ColorControl stopMoveStep command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.20
+MatterSpecification.v11.Cluster § 3.2.11.20
 
 ## Hierarchy
 

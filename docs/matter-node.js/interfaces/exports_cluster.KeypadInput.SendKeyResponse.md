@@ -8,7 +8,7 @@ This command shall be generated in response to a SendKey command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.8.3.2
+MatterSpecification.v11.Cluster § 6.8.3.2
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ This shall indicate the of the command.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.8.3.2.1
+MatterSpecification.v11.Cluster § 6.8.3.2.1
 
 #### Inherited from
 

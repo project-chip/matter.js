@@ -70,11 +70,11 @@ packages/matter.js/dist/esm/environment/RuntimeService.d.ts:17
 
 ### [value]
 
-• `get` **[value]**(): `string`
+• `get` **[value]**(): `unknown`[]
 
 #### Returns
 
-`string`
+`unknown`[]
 
 #### Defined in
 

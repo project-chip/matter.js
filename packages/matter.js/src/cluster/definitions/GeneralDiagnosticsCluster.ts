@@ -402,7 +402,19 @@ export namespace GeneralDiagnostics {
      * @see {@link MatterSpecification.v11.Core} § 11.11.8.2
      */
     export const TlvRadioFaultChangeEvent = TlvObject({
+        /**
+         * This field shall represent the set of faults currently detected, as per Section 11.11.4.2, “RadioFaultEnum”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.11.8.2.1
+         */
         current: TlvField(0, TlvArray(TlvEnum<RadioFault>(), { maxLength: 7 })),
+
+        /**
+         * This field shall represent the set of faults detected prior to this change event, as per Section 11.11.4.2,
+         * “RadioFaultEnum”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.11.8.2.2
+         */
         previous: TlvField(1, TlvArray(TlvEnum<RadioFault>(), { maxLength: 7 }))
     });
 
@@ -419,7 +431,20 @@ export namespace GeneralDiagnostics {
      * @see {@link MatterSpecification.v11.Core} § 11.11.8.3
      */
     export const TlvNetworkFaultChangeEvent = TlvObject({
+        /**
+         * This field shall represent the set of faults currently detected, as per Section 11.11.4.3,
+         * “NetworkFaultEnum”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.11.8.3.1
+         */
         current: TlvField(0, TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 })),
+
+        /**
+         * This field shall represent the set of faults detected prior to this change event, as per Section 11.11.4.3,
+         * “NetworkFaultEnum”.
+         *
+         * @see {@link MatterSpecification.v11.Core} § 11.11.8.3.2
+         */
         previous: TlvField(1, TlvArray(TlvEnum<NetworkFault>(), { maxLength: 4 }))
     });
 
@@ -617,12 +642,6 @@ export namespace GeneralDiagnostics {
              * The RadioFaultChange Event shall indicate a change in the set of radio faults currently detected by the
              * Node.
              *
-             * This field shall represent the set of faults currently detected, as per Section 11.11.4.2,
-             * “RadioFaultEnum”.
-             *
-             * This field shall represent the set of faults detected prior to this change event, as per Section
-             * 11.11.4.2, “RadioFaultEnum”.
-             *
              * @see {@link MatterSpecification.v11.Core} § 11.11.8.2
              */
             radioFaultChange: OptionalEvent(0x1, EventPriority.Critical, TlvRadioFaultChangeEvent),
@@ -630,12 +649,6 @@ export namespace GeneralDiagnostics {
             /**
              * The NetworkFaultChange Event shall indicate a change in the set of network faults currently detected by
              * the Node.
-             *
-             * This field shall represent the set of faults currently detected, as per Section 11.11.4.3,
-             * “NetworkFaultEnum”.
-             *
-             * This field shall represent the set of faults detected prior to this change event, as per Section
-             * 11.11.4.3, “NetworkFaultEnum”.
              *
              * @see {@link MatterSpecification.v11.Core} § 11.11.8.3
              */

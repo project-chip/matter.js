@@ -285,12 +285,15 @@ Matter.children.push(Cluster({
 
         Datatype({
             name: "GroupKeySetStruct", type: "struct", conformance: "M",
-            details: "This field shall provide the fabric-unique index for the associated group key set, as specified in " +
-                "Section 4.15.3.5.1, “Group Key Set ID”.",
             xref: { document: "core", section: "11.2.6.4" },
 
             children: [
-                Field({ name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M" }),
+                Field({
+                    name: "GroupKeySetId", id: 0x0, type: "uint16", conformance: "M",
+                    details: "This field shall provide the fabric-unique index for the associated group key set, as specified in " +
+                        "Section 4.15.3.5.1, “Group Key Set ID”.",
+                    xref: { document: "core", section: "11.2.6.4.1" }
+                }),
 
                 Field({
                     name: "GroupKeySecurityPolicy", id: 0x1, type: "GroupKeySecurityPolicyEnum", access: "S",
@@ -299,7 +302,7 @@ Matter.children.push(Cluster({
                         "\n" +
                         "When CacheAndSync is not supported in the FeatureMap of this cluster, any action attempting to set " +
                         "CacheAndSync in the GroupKeySecurityPolicy field shall fail with an INVALID_COMMAND error.",
-                    xref: { document: "core", section: "11.2.6.4.1" }
+                    xref: { document: "core", section: "11.2.6.4.2" }
                 }),
 
                 Field({
@@ -308,14 +311,14 @@ Matter.children.push(Cluster({
                     details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
                         "group key for epoch slot 0 of the given group key set. If EpochKey0 is not null, EpochStartTime0 " +
                         "shall NOT be null.",
-                    xref: { document: "core", section: "11.2.6.4.2" }
+                    xref: { document: "core", section: "11.2.6.4.3" }
                 }),
 
                 Field({
                     name: "EpochStartTime0", id: 0x3, type: "epoch-us", access: "S", conformance: "M", quality: "X",
                     details: "This field, if not null, shall define when EpochKey0 becomes valid as specified by Section 4.15.3, " +
                         "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
-                    xref: { document: "core", section: "11.2.6.4.3" }
+                    xref: { document: "core", section: "11.2.6.4.4" }
                 }),
 
                 Field({
@@ -324,14 +327,14 @@ Matter.children.push(Cluster({
                     details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
                         "group key for epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 " +
                         "shall NOT be null.",
-                    xref: { document: "core", section: "11.2.6.4.4" }
+                    xref: { document: "core", section: "11.2.6.4.5" }
                 }),
 
                 Field({
                     name: "EpochStartTime1", id: 0x5, type: "epoch-us", access: "S", conformance: "M", quality: "X",
                     details: "This field, if not null, shall define when EpochKey1 becomes valid as specified by Section 4.15.3, " +
                         "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
-                    xref: { document: "core", section: "11.2.6.4.5" }
+                    xref: { document: "core", section: "11.2.6.4.6" }
                 }),
 
                 Field({
@@ -340,14 +343,14 @@ Matter.children.push(Cluster({
                     details: "This field, if not null, shall be the root credential used in the derivation of an operational " +
                         "group key for epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTime2 " +
                         "shall NOT be null.",
-                    xref: { document: "core", section: "11.2.6.4.6" }
+                    xref: { document: "core", section: "11.2.6.4.7" }
                 }),
 
                 Field({
                     name: "EpochStartTime2", id: 0x7, type: "epoch-us", access: "S", conformance: "M", quality: "X",
                     details: "This field, if not null, shall define when EpochKey2 becomes valid as specified by Section 4.15.3, " +
                         "“Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.",
-                    xref: { document: "core", section: "11.2.6.4.7" }
+                    xref: { document: "core", section: "11.2.6.4.8" }
                 }),
 
                 Field({
@@ -366,24 +369,27 @@ Matter.children.push(Cluster({
                         "NOTE Support for GroupKeyMulticastPolicy is provisional. Correct default behavior is that implied " +
                         "by value PerGroupID.",
 
-                    xref: { document: "core", section: "11.2.6.4.8" }
+                    xref: { document: "core", section: "11.2.6.4.9" }
                 })
             ]
         }),
 
         Datatype({
             name: "GroupInfoMapStruct", type: "struct", access: "R F", conformance: "M",
-            details: "This field uniquely identifies the group within the scope of the given Fabric.",
             xref: { document: "core", section: "11.2.6.5" },
 
             children: [
-                Field({ name: "GroupId", id: 0x1, type: "group-id", access: "R F", conformance: "M" }),
+                Field({
+                    name: "GroupId", id: 0x1, type: "group-id", access: "R F", conformance: "M",
+                    details: "This field uniquely identifies the group within the scope of the given Fabric.",
+                    xref: { document: "core", section: "11.2.6.5.1" }
+                }),
 
                 Field({
                     name: "Endpoints", id: 0x2, type: "list", access: "R F", conformance: "M", constraint: "min 1",
                     details: "This field provides the list of Endpoint IDs on the Node to which messages to this group shall be " +
                         "forwarded.",
-                    xref: { document: "core", section: "11.2.6.5.1" },
+                    xref: { document: "core", section: "11.2.6.5.2" },
                     children: [Field({ name: "entry", type: "endpoint-no" })]
                 }),
 
@@ -391,7 +397,7 @@ Matter.children.push(Cluster({
                     name: "GroupName", id: 0x3, type: "string", access: "R F", conformance: "O", constraint: "max 16",
                     details: "This field provides a name for the group. This field shall contain the last GroupName written for a " +
                         "given GroupId on any Endpoint via the Groups cluster.",
-                    xref: { document: "core", section: "11.2.6.5.2" }
+                    xref: { document: "core", section: "11.2.6.5.3" }
                 }),
 
                 Field({

@@ -6,7 +6,7 @@
 
 import type { ClusterType } from "../../cluster/ClusterType.js";
 import type { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import type { Observable } from "../../util/Observable.js";
+import type { AsyncObservable, Observable } from "../../util/Observable.js";
 import type { Behavior } from "../Behavior.js";
 import type { ActionContext } from "../context/ActionContext.js";
 import type { ClusterOf } from "./ClusterBehaviorUtil.js";
@@ -28,28 +28,29 @@ export namespace ClusterEvents {
     /**
      * Properties the cluster contributes to Events.
      */
-    export type Properties<C> = AttributeObservables<ClusterType.AttributesOf<C>> &
+    export type Properties<C> = AttributeObservables<ClusterType.AttributesOf<C>, "Changing"> &
+        AttributeObservables<ClusterType.AttributesOf<C>, "Changed"> &
         EventObservables<ClusterType.EventsOf<C>>;
 
-    export type AttributeObservables<A extends Record<string, ClusterType.Attribute>> = {
+    export type AttributeObservables<A extends Record<string, ClusterType.Attribute>, N extends string> = {
         [K in keyof A as string extends K
             ? never
             : K extends string
               ? A[K] extends { optional: true }
                   ? never
-                  : `${K}$Change`
+                  : `${K}$${N}`
               : never]: AttributeObservable<A[K]>;
     } & {
         [K in keyof A as string extends K
             ? never
             : K extends string
               ? A[K] extends { optional: true }
-                  ? `${K}$Change`
+                  ? `${K}$${N}`
                   : never
               : never]?: AttributeObservable<A[K]>;
     };
 
-    export type AttributeObservable<A extends ClusterType.Attribute = ClusterType.Attribute> = Observable<
+    export type AttributeObservable<A extends ClusterType.Attribute = ClusterType.Attribute> = AsyncObservable<
         [value: TypeFromSchema<A["schema"]>, oldValue: TypeFromSchema<A["schema"]>, context: ActionContext]
     >;
 

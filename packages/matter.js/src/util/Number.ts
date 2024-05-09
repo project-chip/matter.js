@@ -42,6 +42,10 @@ export function maxValue<T extends bigint | number>(a: T | undefined, b: T | und
     return a > b ? a : b;
 }
 
-export function toHexString(value: number | bigint) {
-    return `0x${value.toString(16)}`;
+/**
+ * Convert a number or bigint to a hex string of a valid "even" hex length
+ */
+export function toHex(value: number | bigint) {
+    const hex = value.toString(16);
+    return hex.length % 2 === 0 ? hex : `0${hex}`;
 }

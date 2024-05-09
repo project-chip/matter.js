@@ -8,7 +8,7 @@ These are optional features supported by ThermostatCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 4.3.3.1
+MatterSpecification.v11.Cluster § 4.3.3.1
 
 ## Table of contents
 

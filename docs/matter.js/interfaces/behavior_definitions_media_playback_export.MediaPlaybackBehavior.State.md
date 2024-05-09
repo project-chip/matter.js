@@ -28,7 +28,7 @@ During fast-forward, rewind, and other seek operations; this attribute shall be 
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.3.1
+MatterSpecification.v11.Cluster § 6.10.3.1
 
 #### Inherited from
 
@@ -36,4 +36,4 @@ StateType.currentState
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:439](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L439)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:438](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L438)

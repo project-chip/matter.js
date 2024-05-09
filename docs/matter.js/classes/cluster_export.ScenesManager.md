@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:90](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L90)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ScenesServer.ts#L90)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:43](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L43)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ScenesServer.ts#L43)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L81)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:81](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ScenesServer.ts#L81)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:119](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L119)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:119](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ScenesServer.ts#L119)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:110](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L110)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ScenesServer.ts#L110)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:96](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L96)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:96](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ScenesServer.ts#L96)
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L53)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:53](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ScenesServer.ts#L53)
 
 ___
 
@@ -205,4 +205,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:61](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/server/ScenesServer.ts#L61)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/server/ScenesServer.ts#L61)

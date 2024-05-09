@@ -48,7 +48,7 @@ Device certification used by the OperationalCredentials cluster.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:38](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L38)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:38](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L38)
 
 ## Properties
 
@@ -58,7 +58,7 @@ Device certification used by the OperationalCredentials cluster.
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:22](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L22)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:22](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L22)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:24](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L24)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:24](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L24)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:23](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L23)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:23](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L23)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:21](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L21)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:21](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L21)
 
 ## Accessors
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:26](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L26)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:26](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L26)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:34](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L34)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L34)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:30](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L30)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:30](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L30)
 
 ## Methods
 
@@ -151,4 +151,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L60)
+[packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts:60](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/operational-credentials/DeviceCertification.ts#L60)

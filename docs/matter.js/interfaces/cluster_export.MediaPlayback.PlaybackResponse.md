@@ -8,7 +8,7 @@ This command shall be generated in response to various Playback Commands.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.12
+MatterSpecification.v11.Cluster § 6.10.4.12
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.12.2
+MatterSpecification.v11.Cluster § 6.10.4.12.2
 
 #### Inherited from
 
@@ -41,7 +41,7 @@ TypeFromSchema.data
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:139](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L139)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:138](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L138)
 
 ___
 
@@ -53,7 +53,7 @@ This shall indicate the status of the command which resulted in this response.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.10.4.12.1
+MatterSpecification.v11.Cluster § 6.10.4.12.1
 
 #### Inherited from
 
@@ -61,4 +61,4 @@ TypeFromSchema.status
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:132](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L132)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L131)

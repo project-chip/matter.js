@@ -32,7 +32,7 @@ The null value indicates that the value is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.4.5.3
+MatterSpecification.v11.Cluster § 2.4.5.3
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L133)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L132)
 
 ___
 
@@ -56,7 +56,7 @@ The null value indicates that the value is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.4.5.1
+MatterSpecification.v11.Cluster § 2.4.5.1
 
 #### Inherited from
 
@@ -64,7 +64,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:113](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L113)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:112](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L112)
 
 ___
 
@@ -79,7 +79,7 @@ The null value indicates that the value is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.4.5.2
+MatterSpecification.v11.Cluster § 2.4.5.2
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:123](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:122](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L122)
 
 ___
 
@@ -101,7 +101,7 @@ See Measured Value.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.4.5.4
+MatterSpecification.v11.Cluster § 2.4.5.4
 
 #### Inherited from
 
@@ -109,4 +109,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:142](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L142)
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:141](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L141)

@@ -8,7 +8,7 @@ These are optional features supported by ThreadNetworkDiagnosticsCluster.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.13.4
+MatterSpecification.v11.Core § 11.13.4
 
 ## Table of contents
 

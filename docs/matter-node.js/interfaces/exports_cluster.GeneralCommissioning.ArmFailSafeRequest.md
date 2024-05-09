@@ -8,7 +8,7 @@ Input to the GeneralCommissioning armFailSafe command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.2
+MatterSpecification.v11.Core § 11.9.6.2
 
 ## Hierarchy
 

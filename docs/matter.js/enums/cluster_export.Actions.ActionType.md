@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.2
+MatterSpecification.v11.Core § 9.14.4.2
 
 ## Table of contents
 
@@ -35,11 +35,11 @@ Example: flash all lights in the house when CO sensor triggers.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.2.6
+MatterSpecification.v11.Core § 9.14.4.2.6
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:111](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L111)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:110](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L110)
 
 ___
 
@@ -54,11 +54,11 @@ started, stopped, paused, resumed. Example: see example 3.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.2.3
+MatterSpecification.v11.Core § 9.14.4.2.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:75](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:74](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L74)
 
 ___
 
@@ -76,11 +76,11 @@ Example: lock the doors when the server’s system has detected no one is at hom
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.2.4
+MatterSpecification.v11.Core § 9.14.4.2.4
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:88](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L88)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:87](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L87)
 
 ___
 
@@ -96,11 +96,11 @@ Example: play a pattern on the lights in the living room if there is someone in 
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.2.5
+MatterSpecification.v11.Core § 9.14.4.2.5
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:99](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L99)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:98](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L98)
 
 ___
 
@@ -112,7 +112,7 @@ Use this only when none of the other values applies
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L36)
 
 ___
 
@@ -133,11 +133,11 @@ Example: see examples 1 and 2.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.2.1
+MatterSpecification.v11.Core § 9.14.4.2.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:53](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:52](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L52)
 
 ___
 
@@ -154,8 +154,8 @@ Example: see example 4.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.2.2
+MatterSpecification.v11.Core § 9.14.4.2.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:65](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:64](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L64)

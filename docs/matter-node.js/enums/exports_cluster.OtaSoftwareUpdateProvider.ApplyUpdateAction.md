@@ -9,7 +9,7 @@ the Action field of the ApplyUpdateResponse command. See (Section 11.19.6.5.4.1,
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.4.2
+MatterSpecification.v11.Core § 11.19.6.4.2
 
 ## Table of contents
 

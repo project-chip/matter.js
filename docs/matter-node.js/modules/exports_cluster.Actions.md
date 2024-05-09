@@ -92,7 +92,7 @@ Note - The bit allocation of this bitmap shall follow the ID’s of the Commands
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.1
+MatterSpecification.v11.Core § 9.14.4.1
 
 #### Type declaration
 
@@ -135,7 +135,7 @@ Body of the Actions actionFailed event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.7.2
+MatterSpecification.v11.Core § 9.14.7.2
 
 #### Defined in
 
@@ -151,7 +151,7 @@ This data type holds the details of a single action, and contains the data field
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.6
+MatterSpecification.v11.Core § 9.14.4.6
 
 #### Defined in
 
@@ -167,7 +167,7 @@ Input to the Actions disableAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.11
+MatterSpecification.v11.Core § 9.14.6.11
 
 #### Defined in
 
@@ -183,7 +183,7 @@ Input to the Actions disableActionWithDuration command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.12
+MatterSpecification.v11.Core § 9.14.6.12
 
 #### Defined in
 
@@ -199,7 +199,7 @@ Input to the Actions enableAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.9
+MatterSpecification.v11.Core § 9.14.6.9
 
 #### Defined in
 
@@ -215,7 +215,7 @@ Input to the Actions enableActionWithDuration command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.10
+MatterSpecification.v11.Core § 9.14.6.10
 
 #### Defined in
 
@@ -240,7 +240,7 @@ This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.4.7
+MatterSpecification.v11.Core § 9.14.4.7
 
 #### Defined in
 
@@ -256,7 +256,7 @@ Input to the Actions instantAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.1
+MatterSpecification.v11.Core § 9.14.6.1
 
 #### Defined in
 
@@ -272,7 +272,7 @@ Input to the Actions instantActionWithTransition command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.2
+MatterSpecification.v11.Core § 9.14.6.2
 
 #### Defined in
 
@@ -288,7 +288,7 @@ Input to the Actions pauseAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.6
+MatterSpecification.v11.Core § 9.14.6.6
 
 #### Defined in
 
@@ -304,7 +304,7 @@ Input to the Actions pauseActionWithDuration command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.7
+MatterSpecification.v11.Core § 9.14.6.7
 
 #### Defined in
 
@@ -320,7 +320,7 @@ Input to the Actions resumeAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.8
+MatterSpecification.v11.Core § 9.14.6.8
 
 #### Defined in
 
@@ -336,7 +336,7 @@ Input to the Actions startAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.3
+MatterSpecification.v11.Core § 9.14.6.3
 
 #### Defined in
 
@@ -352,7 +352,7 @@ Input to the Actions startActionWithDuration command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.4
+MatterSpecification.v11.Core § 9.14.6.4
 
 #### Defined in
 
@@ -368,7 +368,7 @@ Body of the Actions stateChanged event
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.7.1
+MatterSpecification.v11.Core § 9.14.7.1
 
 #### Defined in
 
@@ -384,7 +384,7 @@ Input to the Actions stopAction command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.14.6.5
+MatterSpecification.v11.Core § 9.14.6.5
 
 #### Defined in
 

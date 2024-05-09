@@ -211,7 +211,7 @@ class ControllerNode {
                 },
                 passcode: setupPin,
             } as NodeCommissioningOptions;
-            logger.info(`Commissioning ... ${JSON.stringify(options)}`);
+            logger.info(`Commissioning ... ${Logger.toJSON(options)}`);
             const nodeId = await commissioningController.commissionNode(options);
 
             console.log(`Commissioning successfully done with nodeId ${nodeId}`);

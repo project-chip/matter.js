@@ -17,11 +17,10 @@ import { introspectionInstanceOf } from "./ClusterBehaviorUtil.js";
 const logger = Logger.get("ValidatedElements");
 
 /**
- * Analyzes a ClusterBehavior implementation to ensure it conforms to the
- * Matter specification.
+ * Analyzes a ClusterBehavior implementation to ensure it conforms to the Matter specification.
  *
- * As this API is accessible via vanilla JavaScript, validation includes tests
- * for errors that TypeScript otherwise prevents.
+ * As this API is accessible via vanilla JavaScript, validation includes tests for errors that TypeScript otherwise
+ * prevents.
  *
  * Records elements supported and a list of errors if validation fails.
  */
@@ -48,10 +47,21 @@ export class ValidatedElements {
 
     #name: string;
     #type: Behavior.Type;
+    #instance?: Behavior;
     #cluster: ClusterType;
 
-    constructor(type: ClusterBehavior.Type) {
+    /**
+     * Obtain validation information.
+     *
+     * Validation may run against the type alone or with a specific instance of the behavior.  The latter option allows
+     * for per-instance specialization.
+     *
+     * @param type the behavior type to analyze
+     * @param instance optional concrete instance of the behavior
+     */
+    constructor(type: ClusterBehavior.Type, instance?: Behavior) {
         this.#type = type;
+        this.#instance = instance;
         this.#name = type.name;
         this.#cluster = type.cluster;
 
@@ -65,6 +75,9 @@ export class ValidatedElements {
         if (typeof this.#cluster !== "object") {
             this.error("cluster", "Property is not an object", true);
             return;
+        }
+        if (instance !== undefined && (instance === null || typeof instance !== "object")) {
+            this.error("instance", "Is not an object", true);
         }
 
         this.#validateAttributes();
@@ -109,18 +122,23 @@ export class ValidatedElements {
             return;
         }
 
-        const constructor = this.#type.State;
-        if (!constructor) {
-            this.error("State", "Property missing", true);
-            return;
-        }
+        let state;
 
-        let defaults;
-        try {
-            defaults = new constructor();
-        } catch (e) {
-            this.error("State", "Not constructable", true);
-            return;
+        if (this.#instance) {
+            state = this.#instance.state;
+        } else {
+            const constructor = this.#type.State;
+            if (!constructor) {
+                this.error("State", "Property missing", true);
+                return;
+            }
+
+            try {
+                state = new constructor();
+            } catch (e) {
+                this.error("State", "Not constructable", true);
+                return;
+            }
         }
 
         for (const name in attributes) {
@@ -134,7 +152,7 @@ export class ValidatedElements {
                 continue;
             }
 
-            if (!(name in defaults)) {
+            if (!(name in state)) {
                 if (!attr.optional) {
                     this.error(`State.${name}`, "Mandatory element unsupported", false);
                 }
@@ -143,10 +161,9 @@ export class ValidatedElements {
 
             this.attributes.add(name);
 
-            // TODO - should we enforce presence of events.<attr>$Change?
+            // TODO - should we enforce presence of events.<attr>$Changed?
 
-            // TODO - validate "optional but not nullable" if attributes get
-            // proper metadata (or go to model for this)
+            // TODO - validate "optional but not nullable" if attributes get proper metadata (or go to model for this)
         }
     }
 
@@ -158,11 +175,16 @@ export class ValidatedElements {
         }
 
         let implementations;
-        try {
-            implementations = introspectionInstanceOf(this.#type);
-        } catch (e) {
-            this.error("constructor", "Not constructable", true);
-            return;
+
+        if (this.#instance) {
+            implementations = this.#instance;
+        } else {
+            try {
+                implementations = introspectionInstanceOf(this.#type);
+            } catch (e) {
+                this.error("constructor", "Not constructable", true);
+                return;
+            }
         }
 
         for (const name in commands) {
@@ -172,19 +194,21 @@ export class ValidatedElements {
                 continue;
             }
 
-            if (!(name in implementations) || implementations[name] === undefined) {
+            const implementation = (implementations as Record<string, unknown>)[name];
+
+            if (!(name in implementations) || implementation === undefined) {
                 if (!command.optional) {
                     this.error(name, `Implementation missing`, true);
                 }
                 continue;
             }
 
-            if (typeof implementations[name] !== "function") {
+            if (typeof implementation !== "function") {
                 this.error(name, `Implementation is not a function`, true);
                 continue;
             }
 
-            if (implementations[name] === Behavior.unimplemented) {
+            if (implementation === Behavior.unimplemented) {
                 if (!command.optional) {
                     // TODO - do not pollute the logs with these as Matter spec is in flux (should this include groups
                     // or just scenes?)
@@ -216,11 +240,16 @@ export class ValidatedElements {
         }
 
         let emitters;
-        try {
-            emitters = new constructor() as unknown as Record<string, Observable>;
-        } catch (e) {
-            this.error("Events", "Not constructable", true);
-            return;
+
+        if (this.#instance) {
+            emitters = this.#instance.events;
+        } else {
+            try {
+                emitters = new constructor() as unknown as Record<string, Observable>;
+            } catch (e) {
+                this.error("Events", "Not constructable", true);
+                return;
+            }
         }
 
         for (const name in expected) {

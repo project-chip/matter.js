@@ -36,7 +36,7 @@ higher value than the required minimum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.5.7
+MatterSpecification.v11.Core § 9.10.5.7
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ StateType.accessControlEntriesPerFabric
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:422](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L422)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:421](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L421)
 
 ___
 
@@ -66,7 +66,7 @@ the Node.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.5.3
+MatterSpecification.v11.Core § 9.10.5.3
 
 #### Inherited from
 
@@ -74,7 +74,7 @@ StateType.acl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:367](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L367)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:366](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L366)
 
 ___
 
@@ -89,7 +89,7 @@ The Access Control Extension list shall support a single extension entry per sup
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.5.4
+MatterSpecification.v11.Core § 9.10.5.4
 
 #### Inherited from
 
@@ -97,7 +97,7 @@ StateType.extension
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:381](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L381)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:380](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L380)
 
 ___
 
@@ -114,7 +114,7 @@ higher value than the required minimum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.5.5
+MatterSpecification.v11.Core § 9.10.5.5
 
 #### Inherited from
 
@@ -122,7 +122,7 @@ StateType.subjectsPerAccessControlEntry
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:397](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L397)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:396](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L396)
 
 ___
 
@@ -139,7 +139,7 @@ higher value than the required minimum.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 9.10.5.6
+MatterSpecification.v11.Core § 9.10.5.6
 
 #### Inherited from
 
@@ -147,4 +147,4 @@ StateType.targetsPerAccessControlEntry
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:409](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L409)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:408](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L408)

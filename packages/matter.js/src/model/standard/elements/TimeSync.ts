@@ -220,21 +220,25 @@ Matter.children.push(Cluster({
 
         Event({
             name: "TimeZoneStatus", id: 0x2, access: "V", conformance: "TZ", priority: "info",
-
             details: "This event shall be generated when the server changes its time zone offset or name. It shall NOT be " +
                 "sent for DST changes that are not accompanied by a time zone change." +
                 "\n" +
-                "This event returns a structure as follows:" +
-                "\n" +
-                "Current time zone offset from UTC in seconds." +
-                "\n" +
-                "Current time zone name. This name SHOULD use the country/city format specified by the IANA time " +
-                "zone database [https://www.iana.org/time-zones].",
-
+                "This event returns a structure as follows:",
             xref: { document: "core", section: "11.16.10.3" },
+
             children: [
-                Field({ name: "Offset", id: 0x0, type: "int32", conformance: "M", constraint: "-43200 to 50400" }),
-                Field({ name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "0 to 64" })
+                Field({
+                    name: "Offset", id: 0x0, type: "int32", conformance: "M", constraint: "-43200 to 50400",
+                    details: "Current time zone offset from UTC in seconds.",
+                    xref: { document: "core", section: "11.16.10.3.1" }
+                }),
+
+                Field({
+                    name: "Name", id: 0x1, type: "string", conformance: "O", constraint: "0 to 64",
+                    details: "Current time zone name. This name SHOULD use the country/city format specified by the IANA time " +
+                        "zone database [https://www.iana.org/time-zones].",
+                    xref: { document: "core", section: "11.16.10.3.2" }
+                })
             ]
         }),
 
@@ -416,24 +420,28 @@ Matter.children.push(Cluster({
 
         Datatype({
             name: "DSTOffsetStruct", type: "struct", conformance: "M",
-            details: "The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this " +
-                "field will accept any values in the int32 range to accommodate potential future legislation that " +
-                "does not fit with these assumptions.",
             xref: { document: "core", section: "11.16.6.4" },
 
             children: [
-                Field({ name: "Offset", id: 0x0, type: "int32", conformance: "M", constraint: "desc" }),
+                Field({
+                    name: "Offset", id: 0x0, type: "int32", conformance: "M", constraint: "desc",
+                    details: "The DST offset in seconds. Normally this is in the range of 0 to 3600 seconds (1 hour), but this " +
+                        "field will accept any values in the int32 range to accommodate potential future legislation that " +
+                        "does not fit with these assumptions.",
+                    xref: { document: "core", section: "11.16.6.4.1" }
+                }),
+
                 Field({
                     name: "ValidStarting", id: 0x1, type: "epoch-us", conformance: "M",
                     details: "The UTC time when the offset shall be applied.",
-                    xref: { document: "core", section: "11.16.6.4.1" }
+                    xref: { document: "core", section: "11.16.6.4.2" }
                 }),
 
                 Field({
                     name: "ValidUntil", id: 0x2, type: "epoch-us", conformance: "M",
                     details: "The UTC time when the offset shall stop being applied. This value shall be larger than the " +
                         "ValidStarting time.",
-                    xref: { document: "core", section: "11.16.6.4.2" }
+                    xref: { document: "core", section: "11.16.6.4.3" }
                 })
             ]
         })

@@ -8,7 +8,7 @@ The value of the DoorLock lockType attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.2
+MatterSpecification.v11.Cluster § 5.2.3.2
 
 ## Table of contents
 

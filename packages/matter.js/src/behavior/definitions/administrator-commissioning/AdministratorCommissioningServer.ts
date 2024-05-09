@@ -115,7 +115,6 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     }
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
-    // TODO - fix ClusterBehavior.for so this is hidden as it only applies when basic feature is enabled
     async openBasicCommissioningWindow({ commissioningTimeout }: OpenBasicCommissioningWindowRequest) {
         const device = this.session.context;
 

@@ -5,19 +5,24 @@
  */
 
 import { DataModelPath } from "../../../endpoint/DataModelPath.js";
-import { Conformance, FeatureSet, FieldValue, ValueModel } from "../../../model/index.js";
+import { Conformance, FeatureSet, FieldValue, Metatype, ValueModel } from "../../../model/index.js";
+import { camelize } from "../../../util/String.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
+import { Schema } from "../../supervision/Schema.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
 import {
     Code,
     ConformantNode,
     DynamicNode,
+    EnumMemberValidator,
     NonconformantNode,
     StaticNode,
+    UnsupportedConformanceNodeError,
     asBoolean,
     asConformance,
+    createBooleanTest,
     createComparison,
     createLogicalBinaryEvaluator,
     createLogicalInversion,
@@ -30,23 +35,20 @@ import { ValidationLocation } from "./location.js";
 /**
  * Generates JS function equivalent of a conformance expression.
  *
- * We generate a function for each node in the AST.  In addition to the
- * function, we track whether the function evaluates pure-feature conformance
- * (vs. an expression).
+ * We generate a function for each node in the AST.  In addition to the function, we track whether the function
+ * evaluates pure-feature conformance (vs. an expression).
  *
- * In general the conformance AST jumbles set logic with expression evaluation
- * so we need to track two types of state to implement properly.
+ * In general the conformance AST jumbles set logic with expression evaluation so we need to track two types of state to
+ * implement properly.
  *
- * Many of the comments reference "static" vs "runtime" evaluation.  This is
- * an important distinction that we use to heavily optimize the generated
- * function:
+ * Many of the comments reference "static" vs "runtime" evaluation.  This is an important distinction that we use to
+ * heavily optimize the generated function:
  *
- *   - "static" means conformance is known at compile time and runtime
- *     evaluation is thus minimal.  These result in a {@link StaticNode}.
+ *   - "static" means conformance is known at compile time and runtime evaluation is thus minimal.  These result in a
+ *     {@link StaticNode}.
  *
- *   - "runtime" means conformance depends on sibling fields in an object.
- *     These result in a {@link RuntimeNode} with additional logic that
- *     performs additional logic against operational state.
+ *   - "runtime" means conformance depends on sibling fields in an object. These result in a {@link RuntimeNode} with
+ *     additional logic that applies to operational state.
  */
 export function astToFunction(
     schema: ValueModel,
@@ -59,28 +61,31 @@ export function astToFunction(
     // Compile the AST
     const compiledNode = compile(ast);
 
-    // The compiled AST is DynamicNode describing how to test a field for
-    // conformance.  Convert this into a validation function.
+    let validator: ValueSupervisor.Validate | undefined;
+
+    // The compiled AST is a DynamicNode describing how to test a field for conformance.  Convert this into a validation
+    // function
     switch (compiledNode.code) {
         case Code.Conformant:
             // Passes validation if the field is present
-            return requireValue;
+            validator = requireValue;
+            break;
 
         case Code.Nonconformant:
         case Code.Disallowed:
             // Passes validation if the field is not present
-            return disallowValue;
+            validator = disallowValue;
+            break;
 
         case Code.Optional:
             // No conformance validation required
-            return;
+            break;
 
         case Code.Evaluate:
-            // We must perform runtime evaluation to determine whether the
-            // field is conformant
-            const evaluate = compiledNode.evaluate;
+            // We must perform runtime evaluation to determine whether the field is conformant
+            const { evaluate } = compiledNode;
 
-            return (value, session, location) => {
+            validator = (value, session, location) => {
                 const staticNode = evaluate(value, location);
 
                 switch (staticNode.code) {
@@ -97,28 +102,29 @@ export function astToFunction(
                         break;
 
                     default:
-                        throw new SchemaImplementationError(
-                            DataModelPath(schema.path),
-                            `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
-                        );
+                        throw new UnsupportedConformanceNodeError(schema, compiledNode);
                 }
             };
+            break;
 
         default:
-            throw new SchemaImplementationError(
-                DataModelPath(schema.path),
-                `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
-            );
+            throw new UnsupportedConformanceNodeError(schema, compiledNode);
     }
+
+    if (validator !== disallowValue && schema.effectiveMetatype === Metatype.enum) {
+        validator = addEnumMemberValidation(validator);
+    }
+
+    return validator;
 
     /**
      * Convert an AST node into a DynamicNode.
      *
-     * If the node requires runtime evaluation it will be a RuntimeNode, which
-     * is a proxy that creates a StaticNode for a specific record.
+     * If the node requires runtime evaluation it will be a RuntimeNode, which is a proxy that creates a StaticNode for
+     * a specific record.
      *
-     * Runtime evaluation is required if the conformance expression has a
-     * choice or cross-references other properties of the same object.
+     * Runtime evaluation is required if the conformance expression has a choice or cross-references other properties of
+     * the same object.
      *
      * Otherwise the node is a StaticNode.
      */
@@ -129,8 +135,7 @@ export function astToFunction(
             case Conformance.Flag.Provisional:
             case Conformance.Flag.Deprecated:
             case Conformance.Flag.Optional:
-                // Alone these all effectively map to "optional" and thus
-                // result in no test as all values are acceptable
+                // Alone these all effectively map to "optional" and thus result in no test as all values are acceptable
                 return { code: Code.Optional };
 
             case Conformance.Special.Choice:
@@ -185,12 +190,10 @@ export function astToFunction(
     /**
      * A "choice" is an AST node such as "O.a".
      *
-     * Choice conformance is only relevant when validating multiple properties
-     * on the same cluster or struct.
+     * Choice conformance is only relevant when validating multiple properties on the same cluster or struct.
      *
-     * Compiling a choice always results in a RuntimeNode that updates the
-     * count in options.choice.  If a property is validated individually then
-     * choice is irrelevant and the node does not affect conformance.
+     * Compiling a choice always results in a RuntimeNode that updates the count in options.choice.  If a property is
+     * validated individually then choice is irrelevant and the node does not affect conformance.
      */
     function createChoice(param: Conformance.Ast.Choice): DynamicNode {
         const compiled = compile(param.expr);
@@ -206,9 +209,8 @@ export function astToFunction(
             code: Code.Evaluate,
 
             evaluate: (value, options) => {
-                // Update choice definitions.  This is supplied by the struct
-                // validator.  If we're only validating a single field then
-                // choices aren't available so the choice is ignored
+                // Update choice definitions.  This is supplied by the struct validator.  If we're only validating a
+                // single field then choices aren't available so the choice is ignored
                 const choices = options?.choices;
                 let choice;
                 if (choices) {
@@ -221,18 +223,16 @@ export function astToFunction(
                     }
                 }
 
-                // The status of the subexpression is not relevant for the
-                // choice.  If conformance fails then it doesn't matter if
-                // we count the choice or not
+                // The status of the subexpression is not relevant for the choice.  If conformance fails then it doesn't
+                // matter if we count the choice or not
                 return evaluateNode(compiled, value, options);
             },
         };
     }
 
     /**
-     * A "group" node is a list or the entries in an optional ([ ... ]) clause.
-     * The resulting node is the value of the first list member that does not
-     * report as Code.Nonconformant.
+     * A "group" node is a list or the entries in an optional ([ ... ]) clause. The resulting node is the value of the
+     * first list member that does not report as Code.Nonconformant.
      */
     function createGroup(param: Conformance.Ast.Group): DynamicNode {
         if (!Array.isArray(param)) {
@@ -242,8 +242,8 @@ export function astToFunction(
             );
         }
 
-        // A "group" is a list of conformances; any success passes the entire
-        // group and subsequent tests are not evaluated
+        // A "group" is a list of conformances; any success passes the entire group and subsequent tests are not
+        // evaluated
         const members = param.map(test => compile(test));
 
         // Reduce tests that must be evaluated at runtime vs. compile time
@@ -287,16 +287,13 @@ export function astToFunction(
     }
 
     /**
-     * A name references a feature or the name of a sibling property on the
-     * containing object.  We treat the name as a feature if the name is
-     * present in featuresAvailable.
+     * A name references a feature or the name of a sibling property on the containing object.  We treat the name as a
+     * feature if the name is present in featuresAvailable.
      *
-     * For features, conformance is known at compile time so the resuling node
-     * is a StaticNode.
+     * For features, conformance is known at compile time so the resuling node is a StaticNode.
      *
-     * For property names, we need to load the corresponding value at runtime.
-     * This results in a RuntimeNode that retrieves the value from
-     * options.siblings.
+     * For property names, we need to load the corresponding value at runtime. This results in a RuntimeNode that
+     * retrieves the value from options.siblings.
      */
     function createName(param: string): DynamicNode {
         if (featuresAvailable.has(param)) {
@@ -311,6 +308,7 @@ export function astToFunction(
         } else {
             // Name references a sibling property.  This results in a value
             // node but must be evaluated at runtime against a specific struct
+            param = camelize(param);
             return {
                 code: Code.Evaluate,
 
@@ -325,13 +323,11 @@ export function astToFunction(
     }
 
     /**
-     * Compile an "optional if" node.  This converts conformant nodes into
-     * optional nodes and otherwise leaves the node unchanged.
+     * Compile an "optional if" node.  This converts conformant nodes into optional nodes and otherwise leaves the node
+     * unchanged.
      *
-     * This represents a conformance expression surrounded by brackets
-     * such as [ FOO, BAR ].  We first evaluate the internal expression which
-     * may happen statically or at runtime.  Then we convert conformant nodes
-     * to optional.
+     * This represents a conformance expression surrounded by brackets such as [ FOO, BAR ].  We first evaluate the
+     * internal expression which may happen statically or at runtime.  Then we convert conformant nodes to optional.
      */
     function createOptionalIf(param: Conformance.Ast): DynamicNode {
         let node = compile(param) ?? {};
@@ -364,8 +360,7 @@ export function astToFunction(
     }
 
     /**
-     * A value node represents is static literal value.  This is how we encode
-     * numeric literals used in expressions.
+     * A value node represents is static literal value.  This is how we encode numeric literals used in expressions.
      */
     function createValue(param: FieldValue): DynamicNode {
         return {
@@ -375,8 +370,7 @@ export function astToFunction(
     }
 
     /**
-     * "Disallowed" represents "X" in a conformance expression which explicitly
-     * disallows the property.
+     * "Disallowed" represents "X" in a conformance expression which explicitly disallows the property.
      */
     function createDisallowed(): StaticNode {
         return {
@@ -387,33 +381,29 @@ export function astToFunction(
     /**
      * "Mandatory" is a conformance "M" and maps explicitly to conformant.
      *
-     * This means that we will convert [ M ] to optional but that's a pretty
-     * silly construct that the spec doesn't use.  Otherwise the field will be
-     * required.
+     * This means that we will convert [ M ] to optional but that's a pretty silly construct that the spec doesn't use.
+     * Otherwise the field will be required.
      */
     function createMandatory(): DynamicNode {
         return ConformantNode;
     }
 
     /**
-     * A logical binary operator is an expression that compares two values
-     * using a logical operator.  So e.g. "LF | TL".
+     * A logical binary operator is an expression that compares two values using a logical operator.  So e.g. "LF | TL".
      *
-     * These operators work on conformance values.  Effectively casts
-     * non-binary field values to booleans where undefined =
-     * false/nonconformant and defined = true/conformant.
+     * These operators work on conformance values.  Effectively casts non-binary field values to booleans where
+     * undefined = false/nonconformant and defined = true/conformant.
      *
-     * This code is rather long because we unroll each operator by hand
-     * depending on whether the operators may be evaluated statically or not.
-     * This makes sense because we can avoid most runtime computations for
-     * common cases such as the "LF | TL" example.
+     * This code is rather long because we unroll each operator by hand depending on whether the operators may be
+     * evaluated statically or not. This makes sense because we can avoid most runtime computations for common cases
+     * such as the "LF | TL" example.
      */
     function createLogicalBinaryOp(
         operator: Conformance.Operator,
         { lhs, rhs }: Conformance.Ast.BinaryOperands,
     ): DynamicNode {
-        const compiledLhs = compile(lhs);
-        const compiledRhs = compile(rhs);
+        const compiledLhs = createBooleanTest(compile(lhs));
+        const compiledRhs = createBooleanTest(compile(rhs));
 
         switch (operator) {
             case Conformance.Operator.AND:
@@ -493,9 +483,8 @@ export function astToFunction(
     /**
      * A comparison operator compares two values.  So e.g. "FieldName > 4".
      *
-     * Throws an error if the input AST nodes are not values.  We could
-     * convert conformance to a binary 0 or 1 but this does not have real-world
-     * applicability and would only occur for malformed conformance.
+     * Throws an error if the input AST nodes are not values.  We could convert conformance to a binary 0 or 1 but this
+     * does not have real-world applicability and would only occur for malformed conformance.
      */
     function createComparisonOp(
         operator: Conformance.Operator,
@@ -505,8 +494,7 @@ export function astToFunction(
     }
 
     /**
-     * Inverts the meaning of conformance.  A conformant node becomes
-     * non-conformant and vice-versa.
+     * Inverts the meaning of conformance.  A conformant node becomes non-conformant and vice-versa.
      */
     function createNotOp(param: Conformance.Ast): DynamicNode {
         const operand = compile(param);
@@ -527,5 +515,109 @@ export function astToFunction(
         if (value !== undefined) {
             throw new ConformanceError(schema, location, "Value is present but disallowed per Matter specification");
         }
+    }
+
+    function disallowEnumValue(schema: Schema): EnumMemberValidator {
+        return location => {
+            throw new ConformanceError(
+                schema,
+                location,
+                `Enum value ${schema.name} (ID ${schema.effectiveId}) is disallowed per Matter specification`,
+            );
+        };
+    }
+
+    /**
+     * Extends the "main" validator (conformance on the field itself) with member validation (validation of specific
+     * values).
+     */
+    function addEnumMemberValidation(
+        mainValidator: ValueSupervisor.Validate | undefined,
+    ): ValueSupervisor.Validate | undefined {
+        // If there are no members we can't enforce anything
+        const members = schema.members;
+        if (!members.length) {
+            return mainValidator;
+        }
+
+        // Create a validator for each member with conformance.  If the member is not constrained then we perform no
+        // special validation for it
+        let memberValidators: undefined | Record<number, EnumMemberValidator>;
+        for (const member of members) {
+            // If there's no ID the schema is invalid so just skip
+            const id = member.effectiveId;
+            if (id === undefined) {
+                continue;
+            }
+
+            const compiledNode = compile(member.conformance.ast);
+
+            let memberValidator: undefined | EnumMemberValidator;
+            switch (compiledNode.code) {
+                case Code.Conformant:
+                case Code.Optional:
+                    // There's nothing to enforce here
+                    continue;
+
+                case Code.Nonconformant:
+                case Code.Disallowed:
+                    // If this member is selected it's an error
+                    memberValidator = disallowEnumValue(member);
+                    break;
+
+                case Code.Evaluate:
+                    // Requires runtime evaluation
+                    const { evaluate } = compiledNode;
+
+                    const disallow = disallowEnumValue(member);
+
+                    memberValidator = location => {
+                        // Note that we don't need the value here as it is constant so just use "true" indicating the
+                        // value is present
+                        const staticNode = evaluate(true, location);
+
+                        switch (staticNode.code) {
+                            case Code.Conformant:
+                            case Code.Optional:
+                                // Acceptable
+                                break;
+
+                            case Code.Nonconformant:
+                            case Code.Disallowed:
+                                // Unacceptable; throw an error
+                                disallow(location);
+                                break;
+
+                            default:
+                                throw new UnsupportedConformanceNodeError(member, compiledNode);
+                        }
+                    };
+                    break;
+
+                default:
+                    throw new UnsupportedConformanceNodeError(member, compiledNode);
+            }
+
+            if (!memberValidators) {
+                memberValidators = {};
+            }
+
+            memberValidators[id] = memberValidator;
+        }
+
+        // If we did not find members with conformance that requires enforcement then just return the main validator
+        if (memberValidators === undefined) {
+            return mainValidator;
+        }
+
+        // Extend the main validator with member validation
+        return (value, session, location) => {
+            mainValidator?.(value, session, location);
+
+            if (typeof value === "number") {
+                // Invoke the member validator if one exists for the selected value
+                memberValidators[value]?.(location);
+            }
+        };
     }
 }

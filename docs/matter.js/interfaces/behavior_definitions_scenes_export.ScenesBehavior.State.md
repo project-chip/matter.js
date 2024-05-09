@@ -32,7 +32,7 @@ invoked is not associated with a group.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.7.3
+MatterSpecification.v11.Cluster § 1.4.7.3
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ StateType.currentGroup
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:509](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L509)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:508](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L508)
 
 ___
 
@@ -52,7 +52,7 @@ The CurrentScene attribute holds the scene identifier of the scene last invoked.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.7.2
+MatterSpecification.v11.Cluster § 1.4.7.2
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ StateType.currentScene
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:501](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L501)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:500](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L500)
 
 ___
 
@@ -76,7 +76,7 @@ that last configured the Scenes cluster is not known.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.7.6
+MatterSpecification.v11.Cluster § 1.4.7.6
 
 #### Inherited from
 
@@ -84,7 +84,7 @@ StateType.lastConfiguredBy
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:542](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L542)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:541](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L541)
 
 ___
 
@@ -98,7 +98,7 @@ be 0.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.7.5
+MatterSpecification.v11.Cluster § 1.4.7.5
 
 #### Inherited from
 
@@ -106,7 +106,7 @@ StateType.nameSupport
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:531](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L531)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:530](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L530)
 
 ___
 
@@ -118,7 +118,7 @@ The SceneCount attribute specifies the number of scenes currently in the server�
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.7.1
+MatterSpecification.v11.Cluster § 1.4.7.1
 
 #### Inherited from
 
@@ -126,7 +126,7 @@ StateType.sceneCount
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:494](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L494)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:493](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L493)
 
 ___
 
@@ -144,7 +144,7 @@ of the server is modified, this attribute is set to FALSE.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 1.4.7.4
+MatterSpecification.v11.Cluster § 1.4.7.4
 
 #### Inherited from
 
@@ -152,4 +152,4 @@ StateType.sceneValid
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:522](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L522)
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:521](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L521)

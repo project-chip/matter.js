@@ -30,9 +30,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:157](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:156](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L156)
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:159](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:158](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L158)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:91](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L91)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:90](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L90)
 
 ___
 
@@ -56,4 +56,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:160](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L160)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:159](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L159)

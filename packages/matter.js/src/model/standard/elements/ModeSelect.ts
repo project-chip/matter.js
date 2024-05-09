@@ -212,7 +212,7 @@ Matter.children.push(Cluster({
                 }),
 
                 Field({
-                    name: "Value", id: 0x1, type: "enum16", conformance: "M", quality: "F",
+                    name: "Value", id: 0x1, type: "uint16", conformance: "M", quality: "F",
                     details: "This field shall indicate the semantic tag within a semantic tag namespace which is either " +
                         "manufacturer specific or standard. For semantic tags in a standard namespace, see Standard " +
                         "Namespace.",

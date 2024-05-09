@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_0, section 8.10
+MatterSpecification.v10.Core, section 8.10
 
 ## Table of contents
 

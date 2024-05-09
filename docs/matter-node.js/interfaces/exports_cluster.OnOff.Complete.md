@@ -76,12 +76,12 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `off` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.1 |
+| `off` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.1 |
 | `offWithEffect` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `effectIdentifier`: [`FieldType`](exports_tlv.FieldType.md)\<[`OnOffEffectIdentifier`](../enums/exports_cluster.OnOff.OnOffEffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](exports_tlv.FieldType.md)\<`number`\>  }\>, `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `levelControlForLighting`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<[`BitSchema`](../modules/exports_schema.md#bitschema)\>  } | - |
-| `on` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.2 |
+| `on` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.2 |
 | `onWithRecallGlobalScene` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `levelControlForLighting`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<[`BitSchema`](../modules/exports_schema.md#bitschema)\>  } | - |
 | `onWithTimedOff` | [`Command`](exports_cluster.Command.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `offWaitTime`: [`FieldType`](exports_tlv.FieldType.md)\<``null`` \| `number`\> ; `onOffControl`: [`FieldType`](exports_tlv.FieldType.md)\<[`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `acceptOnlyWhenOn`: [`BitFlag`](../modules/exports_schema.md#bitflag) ; `reserved`: [`BitField`](../modules/exports_schema.md#bitfield)  }\>\> ; `onTime`: [`FieldType`](exports_tlv.FieldType.md)\<``null`` \| `number`\>  }\>, `void`, `any`\> & \{ `isConditional`: ``true`` ; `mandatoryIf`: [] \| [\{ `levelControlForLighting`: `boolean`  }] ; `optional`: ``true`` ; `optionalIf`: [] \| [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<[`BitSchema`](../modules/exports_schema.md#bitschema)\>  } | - |
-| `toggle` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterApplicationClusterSpecificationV1_1 § 1.5.7.3 |
+| `toggle` | [`Command`](exports_cluster.Command.md)\<`void`, `void`, `any`\> | This command does not have any data fields. **`See`** MatterSpecification.v11.Cluster § 1.5.7.3 |
 
 #### Inherited from
 

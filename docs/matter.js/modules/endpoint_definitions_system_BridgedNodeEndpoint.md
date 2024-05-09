@@ -25,9 +25,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:32](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L32)
+[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:31](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L31)
 
-[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:81](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L81)
+[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:80](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L80)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:69](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L69)
+[packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts:68](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/system/BridgedNodeEndpoint.ts#L68)

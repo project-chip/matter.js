@@ -28,7 +28,7 @@ The value of the BallastConfiguration ballastStatus attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.3.6.3
+MatterSpecification.v11.Cluster § 3.3.6.3
 
 #### Type declaration
 
@@ -87,7 +87,7 @@ The value of the BallastConfiguration lampAlarmMode attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.3.9.5
+MatterSpecification.v11.Cluster § 3.3.9.5
 
 #### Type declaration
 

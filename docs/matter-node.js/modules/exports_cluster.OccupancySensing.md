@@ -68,7 +68,7 @@ All other bits are reserved.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 2.7.5.1
+MatterSpecification.v11.Cluster § 2.7.5.1
 
 #### Type declaration
 
@@ -88,7 +88,7 @@ ___
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 2.7.5.3
+MatterSpecification.v11.Cluster § 2.7.5.3
 
 #### Type declaration
 

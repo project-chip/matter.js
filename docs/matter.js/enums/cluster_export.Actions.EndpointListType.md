@@ -9,7 +9,7 @@ created logical grouping of the endpoints (e.g. bridged devices) based on locati
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.5
+MatterSpecification.v11.Core § 9.14.4.5
 
 ## Table of contents
 
@@ -33,11 +33,11 @@ not use this for anything else than just to know which endpoints would be affect
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.5.1
+MatterSpecification.v11.Core § 9.14.4.5.1
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:288](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L288)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:287](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L287)
 
 ___
 
@@ -55,11 +55,11 @@ adds a bridged device or creates a new room).
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.5.2
+MatterSpecification.v11.Core § 9.14.4.5.2
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:301](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L301)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:300](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L300)
 
 ___
 
@@ -78,8 +78,8 @@ control as a group, so Matter controllers could provide the user with a way to d
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 9.14.4.5.3
+MatterSpecification.v11.Core § 9.14.4.5.3
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:315](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L315)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:314](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L314)

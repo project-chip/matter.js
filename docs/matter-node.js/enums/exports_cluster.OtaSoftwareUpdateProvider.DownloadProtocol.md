@@ -10,7 +10,7 @@ NOT be supported, as there is no way to authenticate the involved participants.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.19.6.4.3
+MatterSpecification.v11.Core § 11.19.6.4.3
 
 ## Table of contents
 

@@ -145,23 +145,23 @@ await deviceStorage.set({
 // cluster implementation to print status to the console.
 class OnOffShellExecServer extends OnOffServer {
     // Intercept the "on" command to the Matter On/Off cluster to print a log message.
-    override on() {
+    override async on() {
         executeCommand("on");
-        super.on();
+        await super.on();
     }
 
     // This is the functional inverse of on() above.
     //
     // For demonstration purposes we update state ourselves rather than deferring to matter.js's default "off" handler
     // via super.off().
-    override off() {
+    override async off() {
         executeCommand("off");
         this.state.onOff = false;
     }
 
     // Use event handlers to log on/off state reactively, after it changes.
     override initialize() {
-        this.events.onOff$Change.on(value => {
+        this.events.onOff$Changed.on(value => {
             console.log(`Light is now ${value ? "ON" : "OFF"}`);
         });
     }

@@ -37,7 +37,7 @@ See Section 11.8.7.2.2, “DebugText Field” for usage.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.10
+MatterSpecification.v11.Core § 11.8.7.10
 
 ## Hierarchy
 
@@ -65,7 +65,7 @@ TypeFromSchema.debugText
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:489](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L489)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:488](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L488)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.10.1
+MatterSpecification.v11.Core § 11.8.7.10.1
 
 #### Inherited from
 
@@ -102,7 +102,7 @@ TypeFromSchema.errorValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:513](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L513)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:512](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L512)
 
 ___
 
@@ -116,4 +116,4 @@ TypeFromSchema.networkingStatus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:488](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L488)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:487](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L487)

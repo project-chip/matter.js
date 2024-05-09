@@ -65,7 +65,7 @@ Model specification for more information.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 9.5.4.1
+MatterSpecification.v11.Core § 9.5.4.1
 
 #### Defined in
 

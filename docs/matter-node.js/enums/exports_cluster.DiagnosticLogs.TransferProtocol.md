@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.3
+MatterSpecification.v11.Core § 11.10.4.3
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ shall be used by a Client to request that logs are transferred using BDX as defi
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.3.2
+MatterSpecification.v11.Core § 11.10.4.3.2
 
 #### Defined in
 
@@ -45,7 +45,7 @@ shall be used by a Client to request that logs are transferred using the LogCont
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.10.4.3.1
+MatterSpecification.v11.Core § 11.10.4.3.1
 
 #### Defined in
 

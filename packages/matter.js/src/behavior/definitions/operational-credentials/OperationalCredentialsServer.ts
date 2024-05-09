@@ -4,16 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CertificateError } from "../../../certificate/CertificateManager.js";
+import { AccessLevel, Command } from "../../../cluster/Cluster.js";
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
-import { MatterFlowError } from "../../../common/MatterError.js";
+import { MatterFlowError, UnexpectedDataError } from "../../../common/MatterError.js";
+import { ValidationError } from "../../../common/ValidationError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
-import { Fabric } from "../../../fabric/Fabric.js";
+import { Fabric, PublicKeyError } from "../../../fabric/Fabric.js";
 import { FabricAction, FabricManager, FabricTableFullError } from "../../../fabric/FabricManager.js";
 import { Logger } from "../../../log/Logger.js";
 import type { Node } from "../../../node/Node.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
+import { TlvBoolean } from "../../../tlv/TlvBoolean.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../../tlv/TlvObject.js";
+import { TlvByteString } from "../../../tlv/TlvString.js";
 import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { CommissioningBehavior } from "../../system/commissioning/CommissioningBehavior.js";
@@ -26,6 +32,7 @@ import {
     AttestationRequest,
     CertificateChainRequest,
     CsrRequest,
+    NocResponse,
     RemoveFabricRequest,
     UpdateFabricLabelRequest,
     UpdateNocRequest,
@@ -33,6 +40,32 @@ import {
 import { TlvAttestation, TlvCertSigningRequest } from "./OperationalCredentialsTypes.js";
 
 const logger = Logger.get("OperationalCredentials");
+
+/**
+ * Monkey patching Tlv Structure of attestationRequest and csrRequest commands to prevent data validation of the nonce
+ * fields to be handled as ConstraintError because we need to return a special error.
+ * We do this to leave the model in fact for other validations and only apply the change for our Schema-aware Tlv parsing.
+ */
+OperationalCredentials.Cluster.commands = {
+    ...OperationalCredentials.Cluster.commands,
+    attestationRequest: Command(
+        0x0,
+        TlvObject({ attestationNonce: TlvField(0, TlvByteString) }),
+        0x1,
+        OperationalCredentials.TlvAttestationResponse,
+        { invokeAcl: AccessLevel.Administer },
+    ),
+    csrRequest: Command(
+        0x4,
+        TlvObject({
+            csrNonce: TlvField(0, TlvByteString),
+            isForUpdateNoc: TlvOptionalField(1, TlvBoolean),
+        }),
+        0x5,
+        OperationalCredentials.TlvCsrResponse,
+        { invokeAcl: AccessLevel.Administer },
+    ),
+};
 
 /**
  * This is the default server implementation of OperationalCredentialsBehavior.
@@ -53,10 +86,13 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
         this.state.commissionedFabrics = this.state.fabrics.length;
 
-        this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline, { offline: true });
+        this.reactTo((this.endpoint as Node).lifecycle.online, this.#nodeOnline);
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {
+        if (attestationNonce.length !== 32) {
+            throw new StatusResponseError("Invalid attestation nonce length", StatusCode.InvalidCommand);
+        }
         const elements = TlvAttestation.encode({
             declaration: this.#certification.declaration,
             attestationNonce: attestationNonce,
@@ -69,6 +105,10 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override csrRequest({ csrNonce, isForUpdateNoc }: CsrRequest) {
+        if (csrNonce.length !== 32) {
+            throw new StatusResponseError("Invalid csr nonce length", StatusCode.InvalidCommand);
+        }
+
         if (isForUpdateNoc && this.session.isPase) {
             throw new StatusResponseError(
                 "csrRequest for UpdateNoc received on a PASE session.",
@@ -99,24 +139,43 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             case OperationalCredentials.CertificateChainType.PaiCertificate:
                 return { certificate: this.#certification.intermediateCertificate };
             default:
-                throw new MatterFlowError(`Unsupported certificate type: ${certificateType}`);
+                throw new StatusResponseError(
+                    `Unsupported certificate type: ${certificateType}`,
+                    StatusCode.InvalidCommand,
+                );
         }
     }
 
-    override async addNoc({ nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }: AddNocRequest) {
-        // TODO 1. Verify the NOC using:
-        //         a. Crypto_VerifyChain(certificates = [NOCValue, ICACValue, RootCACertificate]) if ICACValue is present,
-        //         b. Crypto_VerifyChain(certificates = [NOCValue, RootCACertificate]) if ICACValue is not present. If this
-        //            verification fails, the error status SHALL be InvalidNOC.
-        //     2. The public key of the NOC SHALL match the last generated operational public key on this session, and
-        //        therefore the public key present in the last CSRResponse provided to the Administrator or
-        //        Commissioner that sent the AddNOC or UpdateNOC command. If this check fails, the error status SHALL
-        //        be InvalidPublicKey.
-        //     3. The DN Encoding Rules SHALL be validated for every certificate in the chain, including valid value
-        //        range checks for identifiers such as Fabric ID and Node ID. If this validation fails, the error status
-        //        SHALL be InvalidNodeOpId if the matter-node-id attribute in the subject DN of the NOC has a value
-        //        outside the Operational Node ID range and InvalidNOC for all other failures.
+    #mapNocErrors(error: unknown): NocResponse {
+        if (error instanceof MatterFabricConflictError) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.FabricConflict,
+                debugText: error.message,
+            };
+        } else if (error instanceof FabricTableFullError) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
+                debugText: error.message,
+            };
+        } else if (
+            error instanceof CertificateError ||
+            error instanceof ValidationError ||
+            error instanceof UnexpectedDataError
+        ) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
+                debugText: error.message,
+            };
+        } else if (error instanceof PublicKeyError) {
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidPublicKey,
+                debugText: error.message,
+            };
+        }
+        throw error;
+    }
 
+    override async addNoc({ nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }: AddNocRequest) {
         const failsafeContext = this.session.context.failsafeContext;
 
         if (failsafeContext.fabricIndex !== undefined) {
@@ -165,19 +224,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 caseAdminSubject,
             });
         } catch (error) {
-            if (error instanceof MatterFabricConflictError) {
-                return {
-                    statusCode: OperationalCredentials.NodeOperationalCertStatus.FabricConflict,
-                    debugText: error.message,
-                };
-            } else if (error instanceof FabricTableFullError) {
-                return {
-                    statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
-                    debugText: error.message,
-                };
-            } else {
-                throw error;
-            }
+            logger.info("Building fabric for addNoc failed", error);
+            return this.#mapNocErrors(error);
         }
 
         await failsafeContext.addFabric(fabric);
@@ -262,15 +310,20 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         // Build a new Fabric with the updated NOC and ICAC
-        const updateFabric = await timedOp.buildUpdatedFabric(nocValue, icacValue);
+        try {
+            const updateFabric = await timedOp.buildUpdatedFabric(nocValue, icacValue);
 
-        // update FabricManager and Resumption records but leave current session intact
-        await timedOp.updateFabric(updateFabric);
+            // update FabricManager and Resumption records but leave current session intact
+            await timedOp.updateFabric(updateFabric);
 
-        return {
-            statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
-            fabricIndex: updateFabric.fabricIndex,
-        };
+            return {
+                statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
+                fabricIndex: updateFabric.fabricIndex,
+            };
+        } catch (error) {
+            logger.info("Building fabric for updateNoc failed", error);
+            return this.#mapNocErrors(error);
+        }
     }
 
     override async updateFabricLabel({ label }: UpdateFabricLabelRequest) {
@@ -331,7 +384,19 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             );
         }
 
-        failsafeContext.setRootCert(rootCaCertificate);
+        try {
+            failsafeContext.setRootCert(rootCaCertificate);
+        } catch (error) {
+            logger.info("setting root certificate failed", error);
+            if (
+                error instanceof CertificateError ||
+                error instanceof ValidationError ||
+                error instanceof UnexpectedDataError
+            ) {
+                throw new StatusResponseError(error.message, StatusCode.InvalidCommand);
+            }
+            throw error;
+        }
     }
 
     async #updateFabrics() {

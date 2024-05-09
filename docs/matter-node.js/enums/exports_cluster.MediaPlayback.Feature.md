@@ -8,7 +8,7 @@ These are optional features supported by MediaPlaybackCluster.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.10.2
+MatterSpecification.v11.Cluster § 6.10.2
 
 ## Table of contents
 

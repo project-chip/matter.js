@@ -8,7 +8,7 @@ Input to the ColorControl moveColor command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.12
+MatterSpecification.v11.Cluster § 3.2.11.12
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@ TypeFromSchema.optionsMask
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:343](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L343)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:342](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L342)
 
 ___
 
@@ -51,7 +51,7 @@ TypeFromSchema.optionsOverride
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:344](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L344)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:343](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L343)
 
 ___
 
@@ -64,7 +64,7 @@ CurrentX attribute of one unit.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.12.1
+MatterSpecification.v11.Cluster § 3.2.11.12.1
 
 #### Inherited from
 
@@ -72,7 +72,7 @@ TypeFromSchema.rateX
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:333](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L333)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:332](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L332)
 
 ___
 
@@ -85,7 +85,7 @@ CurrentY attribute of one unit.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 3.2.11.12.2
+MatterSpecification.v11.Cluster § 3.2.11.12.2
 
 #### Inherited from
 
@@ -93,4 +93,4 @@ TypeFromSchema.rateY
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:341](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L341)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:340](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L340)

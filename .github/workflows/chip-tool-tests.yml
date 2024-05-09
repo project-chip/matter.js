@@ -62,7 +62,11 @@ jobs:
         with:
           filters: |
             src:
-              - "chip-testing/src/suites-long/**"
+              - "packages/matter.js/src/behavior/definitions/administrator-commissioning/**"
+              - "packages/matter.js/src/behavior/definitions/general-commissioning/**"
+              - "packages/matter.js/src/behavior/definitions/operational-credentials/**"
+              - "packages/matter.js/src/session/pase/**"
+              - "packages/matter.js/src/session/case/**"
 
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests]') == true }}
         name: Chip Tool tests required to run?
@@ -101,8 +105,8 @@ jobs:
           rebuild-chip-tool: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild }}
           build-matter-js: "false"
 
-  # Execute the normal tests
-  chip-tests:
+  # Execute the core cluster tests
+  chip-tests-core:
     needs: [prepare-chip-build]
     if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
@@ -115,8 +119,8 @@ jobs:
         with:
           rebuild-chip-tool: "false"
 
-      - name: 0.8-API - Run Tests using the python parser sending commands to chip-tool from yaml files
-        id: test-execution-08
+      - name: 0.8-API Core - Run Core cluster tests using the python parser sending commands to chip-tool from yaml files
+        id: test-execution-08-core
         shell: bash
         run: |
           cd connectedhomeip
@@ -125,11 +129,76 @@ jobs:
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
               --log-level info \
-              --target-glob "{Test_AddNewFabricFromExistingFabric,Test_TC_BINFO*,Test_TC_BRBINFO*,Test_TC_CADMIN*,Test_TC_CGEN*,Test_TC_CNET*,Test_TC_DESC*,Test_TC_?LABEL*,Test_TC_OO*,Test_TC_OPCREDS*,TestArmFailSafe,TestBasicInformation,TestCASERecovery,TestCommandsById,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestUserLabelCluster*,TestDiscovery}" \
+              --target-glob "{Test_AddNewFabricFromExistingFabric,Test_TC_BINFO_*,Test_TC_BRBINFO_*,Test_TC_CADMIN_*,Test_TC_CGEN_*,Test_TC_CNET_*,Test_TC_DGGEN_*,Test_TC_DESC_*,Test_TC_OPCREDS_*,TestArmFailSafe,TestCASERecovery,TestCommandsById,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestDiscovery}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
               --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+              --tv-app ../chip-testing/dist/esm/TvTestApp.js \
+            '
+
+  # Execute the fast application cluster tests
+  chip-tests-app-fast:
+    needs: [prepare-chip-build]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+
+      - name: 0.8-API App - Run fast application cluster tests using the python parser sending commands to chip-tool from yaml files
+        id: test-execution-08-app-fast
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../bin/chip-tool \
+              --log-level info \
+              --target-glob "{Test_TC_APBSC_*,Test_TC_BOOL_*,Test_TC_FLABEL_*,Test_TC_FLW_*,Test_TC_I_*,Test_TC_LCFG_*,Test_TC_LOWPOWER_*,Test_TC_LTIME_*,Test_TC_LUNIT_*,Test_TC_MOD_*,Test_TC_OCC_*,Test_TC_OO_*,Test_TC_PCC_*,Test_TC_PRS_*,Test_TC_PS_*,Test_TC_RH_*,Test_TC_SWTCH_*,Test_TC_TMP_*,Test_TC_TSUIC_*,Test_TC_ULABEL_*,Test_TC_WAKEONLAN_*,TestUserLabelCluster*}" \
+              run \
+              --iterations 1 \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+              --tv-app ../chip-testing/dist/esm/TvTestApp.js \
+            '
+
+  # Execute the slower (because simulated) application cluster tests
+  chip-tests-app-slow:
+    needs: [prepare-chip-build]
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out matter.js
+        uses: actions/checkout@v4
+
+      - name: Initialize chip tests
+        uses: ./.github/actions/prepare-chip-testing
+        with:
+          rebuild-chip-tool: "false"
+
+      - name: 0.8-API App - Run slower application cluster tests using the python parser sending commands to chip-tool from yaml files
+        id: test-execution-08-app-slow
+        shell: bash
+        run: |
+          cd connectedhomeip
+          ./scripts/run_in_build_env.sh  \
+            './scripts/tests/run_test_suite.py \
+              --runner chip_tool_python \
+              --chip-tool ../bin/chip-tool \
+              --log-level info \
+              --target-glob "{Test_TC_LVL_*,Test_TC_WNCV_*}" \
+              run \
+              --iterations 1 \
+              --all-clusters-app ../chip-testing/dist/esm/AllClustersTestApp.js \
+              --bridge-app ../chip-testing/dist/esm/BridgeTestApp.js \
+              --tv-app ../chip-testing/dist/esm/TvTestApp.js \
             '
 
   chip-tests-legacy:
@@ -155,7 +224,7 @@ jobs:
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
               --log-level info \
-              --target-glob "{Test_AddNewFabricFromExistingFabric,Test_TC_BINFO*,Test_TC_BRBINFO*,Test_TC_CADMIN*,Test_TC_CGEN*,Test_TC_CNET*,Test_TC_DESC*,Test_TC_?LABEL*,Test_TC_OO*,Test_TC_OPCREDS*,TestArmFailSafe,TestBasicInformation,TestCASERecovery,TestCommandsById,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestUserLabelCluster*,TestDiscovery}" \
+              --target-glob "{Test_AddNewFabricFromExistingFabric,Test_TC_BINFO_*,Test_TC_BRBINFO_*,Test_TC_CADMIN_*,Test_TC_CGEN_*,Test_TC_CNET_*,Test_TC_DESC_*,Test_TC_?LABEL_*,Test_TC_OO_*,Test_TC_OPCREDS_*,TestArmFailSafe,TestCASERecovery,TestCommandsById,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestUserLabelCluster*,TestDiscovery}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js \
@@ -242,10 +311,14 @@ jobs:
       - name: 0.8-API - Run Tests
         id: python-tests-08
         shell: bash
+        # TC_DeviceBasicComposition.py can be tried again when we removed Scenes cluster/reimplemented it
         run: |
           cd connectedhomeip
           mkdir -p out/trace_data
-          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_CGEN_2_4.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_CGEN_2_4.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_DA_1_2.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_DA_1_5.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestApp.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_DA_1_7.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --bool-arg allow_sdk_dac:true --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
 
   python-repl-tests-legacy:
     needs: [prepare-chip-build]
@@ -270,6 +343,9 @@ jobs:
         run: |
           cd connectedhomeip
           mkdir -p out/trace_data
-          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_DeviceBasicComposition.py" --script-args "--storage-path admin_storage.json --manual-code 10054912339 --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
-          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_CGEN_2_4.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_DeviceBasicComposition.py" --script-args "--storage-path admin_storage.json --manual-code 10054912339 --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --PICS src/app/tests/suites/certification/ci-pics-values --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_CGEN_2_4.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_DA_1_2.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_DA_1_5.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
+          ./scripts/run_in_python_env.sh out/venv './scripts/tests/run_python_test.py --app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js --factoryreset --app-args "--discriminator 1234 --KVS kvs1" --script "src/python_testing/TC_DA_1_7.py" --script-args "--storage-path admin_storage.json --commissioning-method on-network --discriminator 1234 --passcode 20202021 --bool-arg allow_sdk_dac:true --PICS src/app/tests/suites/certification/ci-pics-values --trace-to json:out/trace_data/test-{SCRIPT_BASE_NAME}.json --trace-to perfetto:out/trace_data/test-{SCRIPT_BASE_NAME}.perfetto"'
 

@@ -8,7 +8,7 @@ This command shall be generated in response to a CertificateChainRequest command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.4
+MatterSpecification.v11.Core § 11.17.6.4
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ CertificateChainRequest command.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.17.6.4.1
+MatterSpecification.v11.Core § 11.17.6.4.1
 
 #### Inherited from
 

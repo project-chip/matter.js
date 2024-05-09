@@ -30,7 +30,6 @@ import {
 import { InteractionClient } from "../protocol/interaction/InteractionClient.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
-import { toHexString } from "../util/Number.js";
 import { Aggregator } from "./Aggregator.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { PairedDevice, RootEndpoint } from "./Device.js";
@@ -39,6 +38,7 @@ import { BasicInformation } from "../cluster/definitions/BasicInformationCluster
 import { AdministratorCommissioning } from "../cluster/definitions/index.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import {
@@ -315,7 +315,7 @@ export class PairedNode {
                 const cluster = device.getClusterClientById(clusterId);
                 if (cluster === undefined) {
                     logger.info(
-                        `Ignoring received attribute update for unknown cluster ${toHexString(
+                        `Ignoring received attribute update for unknown cluster ${Diagnostic.hex(
                             clusterId,
                         )} on endpoint ${endpointId}!`,
                     );
@@ -345,7 +345,7 @@ export class PairedNode {
                 const cluster = device.getClusterClientById(clusterId);
                 if (cluster === undefined) {
                     logger.info(
-                        `Ignoring received event for unknown cluster ${toHexString(
+                        `Ignoring received event for unknown cluster ${Diagnostic.hex(
                             clusterId,
                         )} on endpoint ${endpointId}!`,
                     );
@@ -462,7 +462,7 @@ export class PairedNode {
             }),
         );
 
-        logger.debug(`Node ${this.nodeId}: Endpoint usages`, JSON.stringify(endpointUsages));
+        logger.debug(`Node ${this.nodeId}: Endpoint usages`, Logger.toJSON(endpointUsages));
 
         while (true) {
             // get all endpoints with only one usage
@@ -473,7 +473,7 @@ export class PairedNode {
                 break;
             }
 
-            logger.debug(`Node ${this.nodeId}: Processing Endpoint ${JSON.stringify(singleUsageEndpoints)}`);
+            logger.debug(`Node ${this.nodeId}: Processing Endpoint ${Logger.toJSON(singleUsageEndpoints)}`);
 
             const idsToCleanup: { [key: EndpointNumber]: boolean } = {};
             singleUsageEndpoints.forEach(([childId, usages]) => {
@@ -495,7 +495,7 @@ export class PairedNode {
                 delete endpointUsages[EndpointNumber(parseInt(childId))];
                 idsToCleanup[usages[0]] = true;
             });
-            logger.debug(`Node ${this.nodeId}: Endpoint data Cleanup`, JSON.stringify(idsToCleanup));
+            logger.debug(`Node ${this.nodeId}: Endpoint data Cleanup`, Logger.toJSON(idsToCleanup));
             Object.keys(idsToCleanup).forEach(idToCleanup => {
                 Object.keys(endpointUsages).forEach(id => {
                     const usageId = EndpointNumber(parseInt(id));

@@ -26,11 +26,11 @@ Upon receipt, this shall hide the input list from the screen.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.3
+MatterSpecification.v11.Cluster § 6.9.4.3
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:51](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L51)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:50](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L50)
 
 ___
 
@@ -53,11 +53,11 @@ List.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.1
+MatterSpecification.v11.Cluster § 6.9.4.1
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:37](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L37)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:36](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L36)
 
 ___
 
@@ -73,8 +73,8 @@ Upon receipt, this shall display the active status of the input list on screen.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.9.4.2
+MatterSpecification.v11.Cluster § 6.9.4.2
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:44](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L44)
+[packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts:43](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/media-input/MediaInputInterface.ts#L43)

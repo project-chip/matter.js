@@ -68,7 +68,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:133](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L133)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:134](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L134)
 
 ## Properties
 
@@ -78,7 +78,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:134](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L134)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:135](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L135)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:135](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L135)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:136](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L136)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:130](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L130)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:131](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L131)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:129](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L129)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:130](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L130)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:128](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L128)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:129](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L129)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:131](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L131)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:132](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L132)
 
 ## Accessors
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1033](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1033)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1034](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1034)
 
 ## Methods
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1025](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1025)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1026](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1026)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:162](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L162)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:163](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L163)
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:189](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L189)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:190](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L190)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:178](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L178)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:179](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L179)
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:284](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L284)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:285](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L285)
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:302](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L302)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:303](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L303)
 
 ___
 
@@ -309,7 +309,7 @@ ___
 | `options.endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
 | `options.event` | `E` |
 | `options.isFabricFiltered?` | `boolean` |
-| `options.minimumEventNumber?` | `number` \| `bigint` |
+| `options.minimumEventNumber?` | [`EventNumber`](../modules/datatype_export.md#eventnumber) |
 
 #### Returns
 
@@ -317,7 +317,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:333](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L333)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:334](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L334)
 
 ___
 
@@ -340,7 +340,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:213](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L213)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:214](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L214)
 
 ___
 
@@ -365,7 +365,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:236](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L236)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:237](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L237)
 
 ___
 
@@ -388,7 +388,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:225](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L225)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:226](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L226)
 
 ___
 
@@ -421,7 +421,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:839](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L839)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:840](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L840)
 
 ___
 
@@ -453,7 +453,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:940](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L940)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:941](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L941)
 
 ___
 
@@ -474,7 +474,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:350](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L350)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:351](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L351)
 
 ___
 
@@ -495,7 +495,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:151](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L151)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:152](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L152)
 
 ___
 
@@ -517,7 +517,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1003](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1003)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1004](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1004)
 
 ___
 
@@ -537,7 +537,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:156](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L156)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:157](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L157)
 
 ___
 
@@ -572,7 +572,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:394](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L394)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:395](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L395)
 
 ___
 
@@ -596,7 +596,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:430](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L430)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:431](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L431)
 
 ___
 
@@ -626,7 +626,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:654](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L654)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:655](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L655)
 
 ___
 
@@ -662,7 +662,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:499](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L499)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:500](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L500)
 
 ___
 
@@ -690,7 +690,7 @@ ___
 | `options.listener?` | (`value`: [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)\<`T`\>) => `void` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
-| `options.minimumEventNumber?` | `number` \| `bigint` |
+| `options.minimumEventNumber?` | [`EventNumber`](../modules/datatype_export.md#eventnumber) |
 | `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
 #### Returns
@@ -699,7 +699,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:583](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L583)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:584](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L584)
 
 ___
 
@@ -730,7 +730,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:696](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L696)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:697](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L697)
 
 ___
 
@@ -756,4 +756,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:994](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L994)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:995](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L995)

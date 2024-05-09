@@ -32,7 +32,7 @@ The null value indicates that the value is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.5.4.3
+MatterSpecification.v11.Cluster § 2.5.4.3
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ StateType.maxMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:55](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:54](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L54)
 
 ___
 
@@ -55,7 +55,7 @@ in Measured Value.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.5.4.1
+MatterSpecification.v11.Cluster § 2.5.4.1
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ StateType.measuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:35](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:34](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L34)
 
 ___
 
@@ -78,7 +78,7 @@ The null value indicates that the value is not available.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.5.4.2
+MatterSpecification.v11.Cluster § 2.5.4.2
 
 #### Inherited from
 
@@ -86,7 +86,7 @@ StateType.minMeasuredValue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:45](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:44](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L44)
 
 ___
 
@@ -98,7 +98,7 @@ See Measured Value.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 2.5.4.4
+MatterSpecification.v11.Cluster § 2.5.4.4
 
 #### Inherited from
 
@@ -106,4 +106,4 @@ StateType.tolerance
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:62](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:61](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L61)

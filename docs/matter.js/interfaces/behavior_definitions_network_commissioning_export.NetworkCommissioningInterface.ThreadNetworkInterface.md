@@ -43,8 +43,8 @@ update.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.8.7.4
+MatterSpecification.v11.Core § 11.8.7.4
 
 #### Defined in
 
-[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:549](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L549)
+[packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts:548](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/behavior/definitions/network-commissioning/NetworkCommissioningInterface.ts#L548)

@@ -11,7 +11,7 @@ notifications of flow measurements.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 2.5
+MatterSpecification.v11.Cluster § 2.5
 
 ## Hierarchy
 

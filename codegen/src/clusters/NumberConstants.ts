@@ -37,7 +37,7 @@ export const SpecializedNumbers: { [name: string]: [string, string] } = {
     [Globals.fabricIdx.name]: ["datatype", "TlvFabricIndex"],
     [Globals.groupId.name]: ["datatype", "TlvGroupId"],
     [Globals.nodeId.name]: ["datatype", "TlvNodeId"],
-    [Globals.SubjectId.name]: ["datatype", "TlvSubjectId"],
+    [Globals.subjectId.name]: ["datatype", "TlvSubjectId"],
     [Globals.vendorId.name]: ["datatype", "TlvVendorId"],
     [Globals.percent.name]: ["number", "TlvPercent"],
     [Globals.percent100ths.name]: ["number", "TlvPercent100ths"],
@@ -66,7 +66,7 @@ export const WrappedConstantKeys = {
     [Globals.fabricIdx.name]: true,
     [Globals.groupId.name]: true,
     [Globals.nodeId.name]: true,
-    [Globals.SubjectId.name]: true,
+    [Globals.subjectId.name]: true,
     [Globals.vendorId.name]: true,
 };
 

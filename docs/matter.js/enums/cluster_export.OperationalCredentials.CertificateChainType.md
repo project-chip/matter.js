@@ -9,7 +9,7 @@ attestation certificate chain to transmit back to the client.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.2
+MatterSpecification.v11.Core § 11.17.4.2
 
 ## Table of contents
 
@@ -28,7 +28,7 @@ Request the DER- encoded DAC certificate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:200](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L200)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:199](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L199)
 
 ___
 
@@ -40,4 +40,4 @@ Request the DER- encoded PAI certificate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:205](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L205)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:204](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L204)

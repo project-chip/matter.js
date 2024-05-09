@@ -138,7 +138,7 @@ The value of the DoorLock alarmMask attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.39
+MatterSpecification.v11.Cluster § 5.2.3.39
 
 #### Type declaration
 
@@ -169,30 +169,30 @@ These elements and properties are present in all DoorLock clusters.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `attributes` | \{ `actuatorEnabled`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\> ; `alarmMask`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `autoRelockTime`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `defaultConfigurationRegister`: [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `enableInsideStatusLed`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> ; `enableLocalProgramming`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> ; `enableOneTouchLocking`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> ; `enablePrivacyModeButton`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> ; `language`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`string`, `any`\> ; `ledSettings`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `localProgrammingFeatures`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `lockState`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`LockState`](../enums/exports_cluster.DoorLock.LockState.md) \| ``null``, `any`\> ; `lockType`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`LockType`](../enums/exports_cluster.DoorLock.LockType.md), `any`\> ; `operatingMode`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`OperatingMode`](../enums/exports_cluster.DoorLock.OperatingMode.md), `any`\> ; `soundVolume`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `supportedOperatingModes`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } | - |
-| `attributes.actuatorEnabled` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\> | The ActuatorEnabled attribute indicates if the lock is currently able to (Enabled) or not able to (Disabled) process remote Lock, Unlock, or Unlock with Timeout commands. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.3 |
-| `attributes.alarmMask` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This attribute is only supported if the Alarms cluster is on the same endpoint. The alarm mask is used to turn on/off alarms for particular functions. Alarms for an alarm group are enabled if the associated alarm mask bit is set. Each bit represents a group of alarms. Entire alarm groups can be turned on or off by setting or clearing the associated bit in the alarm mask. This mask DOES NOT apply to the Events mechanism of this cluster. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.39 |
-| `attributes.autoRelockTime` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> | The number of seconds to wait after unlocking a lock before it automatically locks again. 0=disabled. If set, unlock operations from any source will be timed. For one time unlock with timeout use the specific command. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.26 |
-| `attributes.defaultConfigurationRegister` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This attribute represents the default configurations as they are physically set on the device (example: hardware dip switch setting, etc…) and represents the default setting for some of the attributes within this cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode attributes). This is a read-only attribute and is intended to allow clients to determine what changes may need to be made without having to query all the included attributes. It may be beneficial for the clients to know what the device’s original settings were in the event that the device needs to be restored to factory default settings. If the Client device would like to query and modify the door lock server’s operating settings, it SHOULD send read and write attribute requests to the specific attributes. For example, the Sound Volume attribute default value is Silent Mode. However, it is possible that the current Sound Volume is High Volume. Therefore, if the client wants to query/modify the current Sound Volume setting on the server, the client SHOULD read/write to the Sound Volume attribute. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.28 |
-| `attributes.enableInsideStatusLed` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> | Enable/disable an inside LED that allows the user to see at a glance if the door is locked. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.31 |
-| `attributes.enableLocalProgramming` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> | Enable/disable local programming on the door lock of certain features (see LocalProgrammingFeatures attribute). If this value is set to TRUE then local programming is enabled on the door lock for all features. If it is set to FALSE then local programming is disabled on the door lock for those features whose bit is set to 0 in the LocalProgrammingFeatures attribute. Local programming shall be enabled by default. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.29 |
-| `attributes.enableOneTouchLocking` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> | Enable/disable the ability to lock the door lock with a single touch on the door lock. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.30 |
-| `attributes.enablePrivacyModeButton` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> | Enable/disable a button inside the door that is used to put the lock into privacy mode. When the lock is in privacy mode it cannot be manipulated from the outside. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.32 |
-| `attributes.language` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`string`, `any`\> | Modifies the language for the on-screen or audible user interface using a 2-byte language code from ISO-639-1. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.22 |
-| `attributes.ledSettings` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> | The settings for the LED support three different modes **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.25 |
-| `attributes.localProgrammingFeatures` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | The local programming features that will be disabled when EnableLocalProgramming attribute is set to False. If a door lock doesn’t support disabling one aspect of local programming it shall return CONSTRAINT_ERROR during a write operation of this attribute. If the EnableLocalProgramming attribute is set to True then all local programming features shall be enabled regardless of the bits set to 0 in this attribute. The features that can be disabled from local programming are defined in the following bitmap. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.33 |
-| `attributes.lockState` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`LockState`](../enums/exports_cluster.DoorLock.LockState.md) \| ``null``, `any`\> | The LockState Attribute may be NULL if the lock hardware does not currently know the status of the locking mechanism. For example, a lock may not know the LockState status after a power cycle until the first lock actuation is completed. The Not Fully Locked value is used by a lock to indicate that the state of the lock is somewhere between Locked and Unlocked so it is only partially secured. For example, a deadbolt could be partially extended and not in a dead latched state. If the Scenes server cluster is implemented on the same endpoint, the following extension field shall be added to the Scene Table: • LockState When the LockState attribute is part of a Scene table, the attribute is treated as a writable command; that is, setting the LockState to lock will command the lock to lock, and setting the LockState to unlock will command the lock to unlock. Setting the LockState attribute to “not fully locked” is not supported. The Transition Time field in the Scene table will be treated as a delay before setting the LockState attribute; that is, it is possible to activate a scene with the lock actuation some seconds later. Locks that do not have an actuation mechanism SHOULD not support the Scene table extension. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.1 |
-| `attributes.lockType` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`LockType`](../enums/exports_cluster.DoorLock.LockType.md), `any`\> | **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.2 |
-| `attributes.operatingMode` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`OperatingMode`](../enums/exports_cluster.DoorLock.OperatingMode.md), `any`\> | The current operating mode of the lock (see OperatingModeEnum). **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.23 |
-| `attributes.soundVolume` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> | The sound volume on a door lock has four possible settings: silent, low, high and medium volumes **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.27 |
-| `attributes.supportedOperatingModes` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This bitmap contains all operating bits of the Operating Mode Attribute supported by the lock. All operating modes NOT supported by a lock shall be set to one. The value of the OperatingMode enumeration defines the related bit to be set, as **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.3.24 |
+| `attributes.actuatorEnabled` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<`boolean`, `any`\> | The ActuatorEnabled attribute indicates if the lock is currently able to (Enabled) or not able to (Disabled) process remote Lock, Unlock, or Unlock with Timeout commands. **`See`** MatterSpecification.v11.Cluster § 5.2.3.3 |
+| `attributes.alarmMask` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This attribute is only supported if the Alarms cluster is on the same endpoint. The alarm mask is used to turn on/off alarms for particular functions. Alarms for an alarm group are enabled if the associated alarm mask bit is set. Each bit represents a group of alarms. Entire alarm groups can be turned on or off by setting or clearing the associated bit in the alarm mask. This mask DOES NOT apply to the Events mechanism of this cluster. **`See`** MatterSpecification.v11.Cluster § 5.2.3.39 |
+| `attributes.autoRelockTime` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> | The number of seconds to wait after unlocking a lock before it automatically locks again. 0=disabled. If set, unlock operations from any source will be timed. For one time unlock with timeout use the specific command. **`See`** MatterSpecification.v11.Cluster § 5.2.3.26 |
+| `attributes.defaultConfigurationRegister` | [`OptionalAttribute`](../interfaces/exports_cluster.OptionalAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This attribute represents the default configurations as they are physically set on the device (example: hardware dip switch setting, etc…) and represents the default setting for some of the attributes within this cluster (for example: LED, Auto Lock, Sound Volume, and Operating Mode attributes). This is a read-only attribute and is intended to allow clients to determine what changes may need to be made without having to query all the included attributes. It may be beneficial for the clients to know what the device’s original settings were in the event that the device needs to be restored to factory default settings. If the Client device would like to query and modify the door lock server’s operating settings, it SHOULD send read and write attribute requests to the specific attributes. For example, the Sound Volume attribute default value is Silent Mode. However, it is possible that the current Sound Volume is High Volume. Therefore, if the client wants to query/modify the current Sound Volume setting on the server, the client SHOULD read/write to the Sound Volume attribute. **`See`** MatterSpecification.v11.Cluster § 5.2.3.28 |
+| `attributes.enableInsideStatusLed` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> | Enable/disable an inside LED that allows the user to see at a glance if the door is locked. **`See`** MatterSpecification.v11.Cluster § 5.2.3.31 |
+| `attributes.enableLocalProgramming` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> | Enable/disable local programming on the door lock of certain features (see LocalProgrammingFeatures attribute). If this value is set to TRUE then local programming is enabled on the door lock for all features. If it is set to FALSE then local programming is disabled on the door lock for those features whose bit is set to 0 in the LocalProgrammingFeatures attribute. Local programming shall be enabled by default. **`See`** MatterSpecification.v11.Cluster § 5.2.3.29 |
+| `attributes.enableOneTouchLocking` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> | Enable/disable the ability to lock the door lock with a single touch on the door lock. **`See`** MatterSpecification.v11.Cluster § 5.2.3.30 |
+| `attributes.enablePrivacyModeButton` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\> | Enable/disable a button inside the door that is used to put the lock into privacy mode. When the lock is in privacy mode it cannot be manipulated from the outside. **`See`** MatterSpecification.v11.Cluster § 5.2.3.32 |
+| `attributes.language` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`string`, `any`\> | Modifies the language for the on-screen or audible user interface using a 2-byte language code from ISO-639-1. **`See`** MatterSpecification.v11.Cluster § 5.2.3.22 |
+| `attributes.ledSettings` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> | The settings for the LED support three different modes **`See`** MatterSpecification.v11.Cluster § 5.2.3.25 |
+| `attributes.localProgrammingFeatures` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | The local programming features that will be disabled when EnableLocalProgramming attribute is set to False. If a door lock doesn’t support disabling one aspect of local programming it shall return CONSTRAINT_ERROR during a write operation of this attribute. If the EnableLocalProgramming attribute is set to True then all local programming features shall be enabled regardless of the bits set to 0 in this attribute. The features that can be disabled from local programming are defined in the following bitmap. **`See`** MatterSpecification.v11.Cluster § 5.2.3.33 |
+| `attributes.lockState` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`LockState`](../enums/exports_cluster.DoorLock.LockState.md) \| ``null``, `any`\> | The LockState Attribute may be NULL if the lock hardware does not currently know the status of the locking mechanism. For example, a lock may not know the LockState status after a power cycle until the first lock actuation is completed. The Not Fully Locked value is used by a lock to indicate that the state of the lock is somewhere between Locked and Unlocked so it is only partially secured. For example, a deadbolt could be partially extended and not in a dead latched state. If the Scenes server cluster is implemented on the same endpoint, the following extension field shall be added to the Scene Table: • LockState When the LockState attribute is part of a Scene table, the attribute is treated as a writable command; that is, setting the LockState to lock will command the lock to lock, and setting the LockState to unlock will command the lock to unlock. Setting the LockState attribute to “not fully locked” is not supported. The Transition Time field in the Scene table will be treated as a delay before setting the LockState attribute; that is, it is possible to activate a scene with the lock actuation some seconds later. Locks that do not have an actuation mechanism SHOULD not support the Scene table extension. **`See`** MatterSpecification.v11.Cluster § 5.2.3.1 |
+| `attributes.lockType` | [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`LockType`](../enums/exports_cluster.DoorLock.LockType.md), `any`\> | **`See`** MatterSpecification.v11.Cluster § 5.2.3.2 |
+| `attributes.operatingMode` | [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<[`OperatingMode`](../enums/exports_cluster.DoorLock.OperatingMode.md), `any`\> | The current operating mode of the lock (see OperatingModeEnum). **`See`** MatterSpecification.v11.Cluster § 5.2.3.23 |
+| `attributes.soundVolume` | [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> | The sound volume on a door lock has four possible settings: silent, low, high and medium volumes **`See`** MatterSpecification.v11.Cluster § 5.2.3.27 |
+| `attributes.supportedOperatingModes` | [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> | This bitmap contains all operating bits of the Operating Mode Attribute supported by the lock. All operating modes NOT supported by a lock shall be set to one. The value of the OperatingMode enumeration defines the related bit to be set, as **`See`** MatterSpecification.v11.Cluster § 5.2.3.24 |
 | `commands` | \{ `lockDoor`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockDoor`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockWithTimeout`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } | - |
-| `commands.lockDoor` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.4 |
-| `commands.unlockDoor` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.4 |
-| `commands.unlockWithTimeout` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.4 |
+| `commands.lockDoor` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 5.2.4 |
+| `commands.unlockDoor` | [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 5.2.4 |
+| `commands.unlockWithTimeout` | [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> | **`See`** MatterSpecification.v11.Cluster § 5.2.4 |
 | `events` | \{ `doorLockAlarm`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperation`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperationError`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } | - |
-| `events.doorLockAlarm` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The door lock cluster provides several alarms which can be sent when there is a critical state on the door lock. The alarms available for the door lock cluster are listed in the AlarmCodeEnum section below. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.5.1 |
-| `events.lockOperation` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The door lock server sends out a LockOperation event when the event is triggered by the various lock operation sources. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.5.3 |
-| `events.lockOperationError` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The door lock server sends out a LockOperationError event when a lock operation fails for various reasons. **`See`** MatterApplicationClusterSpecificationV1_1 § 5.2.5.4 |
+| `events.doorLockAlarm` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The door lock cluster provides several alarms which can be sent when there is a critical state on the door lock. The alarms available for the door lock cluster are listed in the AlarmCodeEnum section below. **`See`** MatterSpecification.v11.Cluster § 5.2.5.1 |
+| `events.lockOperation` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The door lock server sends out a LockOperation event when the event is triggered by the various lock operation sources. **`See`** MatterSpecification.v11.Cluster § 5.2.5.3 |
+| `events.lockOperationError` | [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> | The door lock server sends out a LockOperationError event when a lock operation fails for various reasons. **`See`** MatterSpecification.v11.Cluster § 5.2.5.4 |
 | `extensions` | readonly [\{ `component`: \{ `attributes`: \{ `doorClosedEvents`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `doorOpenEvents`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `doorState`: [`Attribute`](../interfaces/exports_cluster.Attribute.md)\<[`DoorState`](../enums/exports_cluster.DoorLock.DoorState.md) \| ``null``, `any`\> ; `openPeriod`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\>  } ; `events`: \{ `doorStateChange`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `doorPositionSensor`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `enableLogging`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`boolean`, `any`\> ; `numberOfLogRecordsSupported`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `getLogRecord`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `logging`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `credentialRulesSupport`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `expiringUserTimeout`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`number`, `any`\> ; `numberOfCredentialsSupportedPerUser`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `numberOfTotalUsersSupported`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `clearCredential`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `clearUser`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getCredentialStatus`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `getUser`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setCredential`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setUser`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: \{ `lockUserChange`: [`Event`](../interfaces/exports_cluster.Event.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  } ; `flags`: \{ `user`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `maxPinCodeLength`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `minPinCodeLength`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `numberOfPinUsersSupported`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `sendPinOverTheAir`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<`boolean`, `any`\>  }  } ; `flags`: \{ `pinCredential`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `maxRfidCodeLength`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `minRfidCodeLength`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\> ; `numberOfRfidUsersSupported`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  }  } ; `flags`: \{ `rfidCredential`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `numberOfWeekDaySchedulesSupportedPerUser`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `clearWeekDaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getWeekDaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setWeekDaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `weekDayAccessSchedules`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `numberOfYearDaySchedulesSupportedPerUser`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `clearYearDaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getYearDaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setYearDaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `yearDayAccessSchedules`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `numberOfHolidaySchedulesSupported`: [`FixedAttribute`](../interfaces/exports_cluster.FixedAttribute.md)\<`number`, `any`\>  } ; `commands`: \{ `clearHolidaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getHolidaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setHolidaySchedule`: [`Command`](../interfaces/exports_cluster.Command.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](exports_session._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  } ; `flags`: \{ `holidaySchedules`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `userCodeTemporaryDisableTime`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `wrongCodeEntryLimit`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\>  }  } ; `flags`: \{ `pinCredential`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `userCodeTemporaryDisableTime`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\> ; `wrongCodeEntryLimit`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`number`, `any`\>  }  } ; `flags`: \{ `rfidCredential`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `requirePinForRemoteOperation`: [`WritableAttribute`](../interfaces/exports_cluster.WritableAttribute.md)\<`boolean`, `any`\>  }  } ; `flags`: \{ `credentialOverTheAirAccess`: ``true`` ; `pinCredential`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `keypadOperationEventMask`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `keypadProgrammingEventMask`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  } ; `flags`: \{ `notification`: ``true`` ; `pinCredential`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `manualOperationEventMask`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `remoteOperationEventMask`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `remoteProgrammingEventMask`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  } ; `flags`: \{ `notification`: ``true``  }  }, \{ `component`: \{ `attributes`: \{ `rfidOperationEventMask`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `rfidProgrammingEventMask`: [`OptionalWritableAttribute`](../interfaces/exports_cluster.OptionalWritableAttribute.md)\<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](exports_schema._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  } ; `flags`: \{ `notification`: ``true`` ; `rfidCredential`: ``true``  }  }, \{ `component`: \{ `commands`: \{ `clearAllPinCodes`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `clearPinCode`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `getPinCode`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `setPinCode`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `pinCredential`: ``true`` ; `user`: ``false``  }  }, \{ `component`: \{ `commands`: \{ `getUserStatus`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, `void`, `any`\> ; `getUserType`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, `void`, `any`\> ; `setUserStatus`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, `void`, `any`\> ; `setUserType`: [`OptionalCommand`](../interfaces/exports_cluster.OptionalCommand.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `fingerCredentials`: ``true`` ; `pinCredential`: ``true`` ; `rfidCredential`: ``true`` ; `user`: ``false``  }  }, \{ `component`: {} ; `flags`: \{ `user`: ``false``  }  }, \{ `component`: \{ `commands`: \{ `clearAllRfidCodes`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `clearRfidCode`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `getRfidCode`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\> ; `setRfidCode`: [`Command`](../interfaces/exports_cluster.Command.md)\<`void`, `void`, `any`\>  }  } ; `flags`: \{ `rfidCredential`: ``true`` ; `user`: ``false``  }  }, \{ `component`: ``false`` ; `flags`: \{ `faceCredentials`: ``false`` ; `fingerCredentials`: ``false`` ; `pinCredential`: ``false`` ; `rfidCredential`: ``false`` ; `user`: ``true``  }  }] | This metadata controls which DoorLockCluster elements matter.js activates for specific feature combinations. |
 | `features` | \{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag) ; `logging`: [`BitFlag`](exports_schema.md#bitflag) ; `notification`: [`BitFlag`](exports_schema.md#bitflag) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag) ; `user`: [`BitFlag`](exports_schema.md#bitflag) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag)  } | - |
 | `features.credentialOverTheAirAccess` | [`BitFlag`](exports_schema.md#bitflag) | CredentialOverTheAirAccess PIN codes over- the-air supported for lock/unlock operations |
@@ -296,7 +296,7 @@ The value of the DoorLock credentialRulesSupport attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.19
+MatterSpecification.v11.Cluster § 5.2.3.19
 
 #### Type declaration
 
@@ -321,7 +321,7 @@ applies for.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.6
+MatterSpecification.v11.Cluster § 5.2.6.6
 
 #### Type declaration
 
@@ -349,7 +349,7 @@ The value of the DoorLock defaultConfigurationRegister attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.28
+MatterSpecification.v11.Cluster § 5.2.3.28
 
 #### Type declaration
 
@@ -423,7 +423,7 @@ The value of the DoorLock keypadOperationEventMask attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.40
+MatterSpecification.v11.Cluster § 5.2.3.40
 
 #### Type declaration
 
@@ -452,7 +452,7 @@ The value of the DoorLock keypadProgrammingEventMask attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.44
+MatterSpecification.v11.Cluster § 5.2.3.44
 
 #### Type declaration
 
@@ -478,7 +478,7 @@ The value of the DoorLock localProgrammingFeatures attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.33
+MatterSpecification.v11.Cluster § 5.2.3.33
 
 #### Type declaration
 
@@ -525,7 +525,7 @@ The value of the DoorLock manualOperationEventMask attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.42
+MatterSpecification.v11.Cluster § 5.2.3.42
 
 #### Type declaration
 
@@ -718,7 +718,7 @@ The value of the DoorLock remoteOperationEventMask attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.41
+MatterSpecification.v11.Cluster § 5.2.3.41
 
 #### Type declaration
 
@@ -746,7 +746,7 @@ The value of the DoorLock remoteProgrammingEventMask attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.45
+MatterSpecification.v11.Cluster § 5.2.3.45
 
 #### Type declaration
 
@@ -817,7 +817,7 @@ The value of the DoorLock rfidOperationEventMask attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.43
+MatterSpecification.v11.Cluster § 5.2.3.43
 
 #### Type declaration
 
@@ -845,7 +845,7 @@ The value of the DoorLock rfidProgrammingEventMask attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.46
+MatterSpecification.v11.Cluster § 5.2.3.46
 
 #### Type declaration
 
@@ -869,7 +869,7 @@ The value of the DoorLock supportedOperatingModes attribute
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.3.24
+MatterSpecification.v11.Cluster § 5.2.3.24
 
 #### Type declaration
 
@@ -895,7 +895,7 @@ Input to the DoorLock clearCredential command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -911,7 +911,7 @@ Input to the DoorLock clearHolidaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -927,7 +927,7 @@ Input to the DoorLock clearUser command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -943,7 +943,7 @@ Input to the DoorLock clearWeekDaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -959,7 +959,7 @@ Input to the DoorLock clearYearDaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -976,7 +976,7 @@ credential types and their corresponding indices (if any) for the event or user 
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.6.3
+MatterSpecification.v11.Cluster § 5.2.6.3
 
 #### Defined in
 
@@ -992,7 +992,7 @@ Body of the DoorLock doorLockAlarm event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.1
+MatterSpecification.v11.Cluster § 5.2.5.1
 
 #### Defined in
 
@@ -1008,7 +1008,7 @@ Body of the DoorLock doorStateChange event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.2
+MatterSpecification.v11.Cluster § 5.2.5.2
 
 #### Defined in
 
@@ -1024,7 +1024,7 @@ Input to the DoorLock getCredentialStatus command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1038,7 +1038,7 @@ ___
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1054,7 +1054,7 @@ Input to the DoorLock getHolidaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1068,7 +1068,7 @@ ___
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1084,7 +1084,7 @@ Input to the DoorLock getUser command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1098,7 +1098,7 @@ ___
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1114,7 +1114,7 @@ Input to the DoorLock getWeekDaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1128,7 +1128,7 @@ ___
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1144,7 +1144,7 @@ Input to the DoorLock getYearDaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1158,7 +1158,7 @@ ___
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1174,7 +1174,7 @@ Input to the DoorLock lockDoor command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1190,7 +1190,7 @@ Body of the DoorLock lockOperationError event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.4
+MatterSpecification.v11.Cluster § 5.2.5.4
 
 #### Defined in
 
@@ -1206,7 +1206,7 @@ Body of the DoorLock lockOperation event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.3
+MatterSpecification.v11.Cluster § 5.2.5.3
 
 #### Defined in
 
@@ -1222,7 +1222,7 @@ Body of the DoorLock lockUserChange event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.5
+MatterSpecification.v11.Cluster § 5.2.5.5
 
 #### Defined in
 
@@ -1238,7 +1238,7 @@ Input to the DoorLock setCredential command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1252,7 +1252,7 @@ ___
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1268,7 +1268,7 @@ Input to the DoorLock setHolidaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1284,7 +1284,7 @@ Input to the DoorLock setUser command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1300,7 +1300,7 @@ Input to the DoorLock setWeekDaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1316,7 +1316,7 @@ Input to the DoorLock setYearDaySchedule command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1332,7 +1332,7 @@ Input to the DoorLock unlockDoor command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 
@@ -1348,7 +1348,7 @@ Input to the DoorLock unlockWithTimeout command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.4
+MatterSpecification.v11.Cluster § 5.2.4
 
 #### Defined in
 

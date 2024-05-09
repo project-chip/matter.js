@@ -225,7 +225,7 @@ export interface SymmetricKey extends Key {
 
 function checkDerVersion(type: string, node: DerNode | undefined, version: number) {
     const derVersion =
-        node && node._tag === DerType.UnsignedInt && node._bytes && node._bytes.length === 1 && node._bytes[0];
+        node && node._tag === DerType.Integer && node._bytes && node._bytes.length === 1 && node._bytes[0];
 
     if (derVersion !== version) {
         throw new KeyError(`${type} key version mismatch`);

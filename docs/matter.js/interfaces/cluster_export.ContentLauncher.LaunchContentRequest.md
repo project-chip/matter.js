@@ -8,7 +8,7 @@ Input to the ContentLauncher launchContent command
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.1
+MatterSpecification.v11.Cluster § 6.7.4.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ start playing automatically. * FALSE means matches should be displayed on screen
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.1.2
+MatterSpecification.v11.Cluster § 6.7.4.1.2
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ TypeFromSchema.autoPlay
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:488](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L488)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:487](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L487)
 
 ___
 
@@ -55,7 +55,7 @@ This shall indicate Optional app-specific data.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.1.3
+MatterSpecification.v11.Cluster § 6.7.4.1.3
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ TypeFromSchema.data
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:495](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L495)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:494](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L494)
 
 ___
 
@@ -75,7 +75,7 @@ This shall indicate the content to launch.
 
 **`See`**
 
-[MatterApplicationClusterSpecificationV1_1](spec_export.MatterApplicationClusterSpecificationV1_1.md) § 6.7.4.1.1
+MatterSpecification.v11.Cluster § 6.7.4.1.1
 
 #### Inherited from
 
@@ -83,4 +83,4 @@ TypeFromSchema.search
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:480](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L480)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:479](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L479)

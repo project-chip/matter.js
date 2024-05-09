@@ -20,6 +20,7 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
+import { EventNumber } from "../../datatype/EventNumber.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
@@ -334,7 +335,7 @@ export class InteractionClient {
         endpointId: EndpointNumber;
         clusterId: ClusterId;
         event: E;
-        minimumEventNumber?: number | bigint;
+        minimumEventNumber?: EventNumber;
         isFabricFiltered?: boolean;
     }): Promise<DecodedEventData<T>[] | undefined> {
         const { endpointId, clusterId, event, minimumEventNumber, isFabricFiltered = true } = options;
@@ -587,7 +588,7 @@ export class InteractionClient {
         minIntervalFloorSeconds: number;
         maxIntervalCeilingSeconds: number;
         isUrgent?: boolean;
-        minimumEventNumber?: number | bigint;
+        minimumEventNumber?: EventNumber;
         isFabricFiltered?: boolean;
         listener?: (value: DecodedEventData<T>) => void;
         updateTimeoutHandler?: TimerCallback;

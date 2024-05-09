@@ -8,7 +8,7 @@ Input to the ColorControl enhancedMoveHue command
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.16
+MatterSpecification.v11.Cluster § 3.2.11.16
 
 ## Hierarchy
 
@@ -36,7 +36,7 @@ sub-clause MoveHue Command). If the MoveMode field is equal to 0 (Stop), the Rat
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.16.1
+MatterSpecification.v11.Cluster § 3.2.11.16.1
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ to INVALID_COMMAND. If the MoveMode field is set to 0 (stop) the Rate field shal
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 3.2.11.16.2
+MatterSpecification.v11.Cluster § 3.2.11.16.2
 
 #### Inherited from
 

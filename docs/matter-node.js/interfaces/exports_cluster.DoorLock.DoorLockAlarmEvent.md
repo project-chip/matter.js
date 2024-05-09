@@ -8,7 +8,7 @@ Body of the DoorLock doorLockAlarm event
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.1
+MatterSpecification.v11.Cluster § 5.2.5.1
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ The alarm code of the event that has happened.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 5.2.5.1.1
+MatterSpecification.v11.Cluster § 5.2.5.1.1
 
 #### Inherited from
 

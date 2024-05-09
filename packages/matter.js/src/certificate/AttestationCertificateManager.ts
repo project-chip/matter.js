@@ -16,6 +16,8 @@ import {
     TestCert_PAA_NoVID_SKID,
 } from "./ChipPAAuthorities.js";
 
+import { toHex } from "../util/Number.js";
+
 function getPaiCommonName(vendorId: VendorId, productId?: number) {
     return `node-matter Dev PAI 0x${vendorId.toString(16).toUpperCase()} ${
         productId === undefined ? "no PID" : `0x${productId.toString(16).toUpperCase()}`
@@ -68,7 +70,7 @@ export class AttestationCertificateManager {
     private generatePAACert(vendorId?: VendorId) {
         const now = Time.get().now();
         const unsignedCertificate = {
-            serialNumber: ByteArray.of(Number(this.paaCertId)),
+            serialNumber: ByteArray.fromHex(toHex(this.paaCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -88,18 +90,21 @@ export class AttestationCertificateManager {
                     isCa: true,
                     pathLen: 1,
                 },
-                keyUsage: 96,
+                keyUsage: {
+                    keyCertSign: true,
+                    cRLSign: true,
+                },
                 subjectKeyIdentifier: this.paaKeyIdentifier,
                 authorityKeyIdentifier: this.paaKeyIdentifier,
             },
         };
-        return CertificateManager.paaCertToAsn1(unsignedCertificate, this.paaKeyPair);
+        return CertificateManager.productAttestationAuthorityCertToAsn1(unsignedCertificate, this.paaKeyPair);
     }
 
     private generatePAICert(vendorId: VendorId, productId?: number) {
         const now = Time.get().now();
         const unsignedCertificate = {
-            serialNumber: ByteArray.of(Number(this.paiCertId)),
+            serialNumber: ByteArray.fromHex(toHex(this.paiCertId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -119,19 +124,22 @@ export class AttestationCertificateManager {
                     isCa: true,
                     pathLen: 0,
                 },
-                keyUsage: 96,
+                keyUsage: {
+                    keyCertSign: true,
+                    cRLSign: true,
+                },
                 subjectKeyIdentifier: this.paiKeyIdentifier,
                 authorityKeyIdentifier: this.paaKeyIdentifier,
             },
         };
-        return CertificateManager.paiCertToAsn1(unsignedCertificate, this.paaKeyPair);
+        return CertificateManager.productAttestationIntermediateCertToAsn1(unsignedCertificate, this.paaKeyPair);
     }
 
     generateDaCert(publicKey: ByteArray, vendorId: VendorId, productId: number) {
         const now = Time.get().now();
         const certId = this.nextCertificateId++;
         const unsignedCertificate = {
-            serialNumber: ByteArray.of(certId), // TODO: figure out what should happen if certId > 255
+            serialNumber: ByteArray.fromHex(toHex(certId)),
             signatureAlgorithm: 1 /* EcdsaWithSHA256 */,
             publicKeyAlgorithm: 1 /* EC */,
             ellipticCurveIdentifier: 1 /* P256v1 */,
@@ -151,11 +159,13 @@ export class AttestationCertificateManager {
                 basicConstraints: {
                     isCa: false,
                 },
-                keyUsage: 1,
+                keyUsage: {
+                    digitalSignature: true,
+                },
                 subjectKeyIdentifier: Crypto.hash(publicKey).slice(0, 20),
                 authorityKeyIdentifier: this.paiKeyIdentifier,
             },
         };
-        return CertificateManager.daCertToAsn1(unsignedCertificate, this.paiKeyPair);
+        return CertificateManager.deviceAttestationCertToAsn1(unsignedCertificate, this.paiKeyPair);
     }
 }

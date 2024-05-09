@@ -8,7 +8,7 @@ This indicates an object describing the navigable target.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.5.1
+MatterSpecification.v11.Cluster § 6.11.5.1
 
 ## Hierarchy
 
@@ -33,7 +33,7 @@ An unique id within the TargetList.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.5.1.1
+MatterSpecification.v11.Cluster § 6.11.5.1.1
 
 #### Inherited from
 
@@ -53,7 +53,7 @@ A name string for the TargetInfoStruct.
 
 **`See`**
 
-MatterApplicationClusterSpecificationV1_1 § 6.11.5.1.2
+MatterSpecification.v11.Cluster § 6.11.5.1.2
 
 #### Inherited from
 

@@ -11,7 +11,7 @@ TrustedRootCertificates attribute of the Node Operational Credentials cluster.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.4
+MatterSpecification.v11.Core § 11.17.4.4
 
 ## Hierarchy
 
@@ -39,7 +39,7 @@ TypeFromSchema.fabricIndex
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:60](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:59](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L59)
 
 ___
 
@@ -52,7 +52,7 @@ Encoding. If no ICAC is present in the chain, this field shall be set to null.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.4.2
+MatterSpecification.v11.Core § 11.17.4.4.2
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ TypeFromSchema.icac
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:58](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:57](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L57)
 
 ___
 
@@ -73,7 +73,7 @@ Encoding.
 
 **`See`**
 
-[MatterCoreSpecificationV1_1](spec_export.MatterCoreSpecificationV1_1.md) § 11.17.4.4.1
+MatterSpecification.v11.Core § 11.17.4.4.1
 
 #### Inherited from
 
@@ -81,4 +81,4 @@ TypeFromSchema.noc
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:50](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L50)
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:49](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L49)

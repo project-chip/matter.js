@@ -79,7 +79,7 @@ Input to the GeneralCommissioning armFailSafe command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.2
+MatterSpecification.v11.Core § 11.9.6.2
 
 #### Defined in
 
@@ -93,7 +93,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.3
+MatterSpecification.v11.Core § 11.9.6.3
 
 #### Defined in
 
@@ -109,7 +109,7 @@ This structure provides some constant values that may be of use to all commissio
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.4.3
+MatterSpecification.v11.Core § 11.9.4.3
 
 #### Defined in
 
@@ -128,7 +128,7 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.7
+MatterSpecification.v11.Core § 11.9.6.7
 
 #### Defined in
 
@@ -144,7 +144,7 @@ Input to the GeneralCommissioning setRegulatoryConfig command
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.4
+MatterSpecification.v11.Core § 11.9.6.4
 
 #### Defined in
 
@@ -163,7 +163,7 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.9.6.5
+MatterSpecification.v11.Core § 11.9.6.5
 
 #### Defined in
 

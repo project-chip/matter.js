@@ -6,7 +6,7 @@
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.5.1
+MatterSpecification.v11.Core § 11.12.5.1
 
 ## Hierarchy
 
@@ -35,7 +35,7 @@ thread. Efforts SHOULD be made to avoid reusing ID values when possible.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.5.1.1
+MatterSpecification.v11.Core § 11.12.5.1.1
 
 #### Inherited from
 
@@ -56,7 +56,7 @@ duration of the thread.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.5.1.2
+MatterSpecification.v11.Core § 11.12.5.1.2
 
 #### Inherited from
 
@@ -77,7 +77,7 @@ utilized on the respective thread.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.5.1.3
+MatterSpecification.v11.Core § 11.12.5.1.3
 
 #### Inherited from
 
@@ -100,7 +100,7 @@ ResetWatermarks command.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.5.1.4
+MatterSpecification.v11.Core § 11.12.5.1.4
 
 #### Inherited from
 
@@ -122,7 +122,7 @@ for use by the respective thread.
 
 **`See`**
 
-MatterCoreSpecificationV1_1 § 11.12.5.1.5
+MatterSpecification.v11.Core § 11.12.5.1.5
 
 #### Inherited from
 

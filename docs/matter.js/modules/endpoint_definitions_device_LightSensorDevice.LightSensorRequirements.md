@@ -22,11 +22,11 @@
 
 The Groups cluster is optional per the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [GroupsBehavior](endpoint_definitions_device_LightSensorDevice.LightSensorRequirements.md#groupsbehavior) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:47](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L47)
+[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:46](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L46)
 
 ___
 
@@ -36,11 +36,11 @@ ___
 
 The Identify cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IdentifyServer](endpoint_definitions_device_LightSensorDevice.LightSensorRequirements.md#identifyserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:33](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L33)
+[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:32](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L32)
 
 ___
 
@@ -50,11 +50,11 @@ ___
 
 The IlluminanceMeasurement cluster is required by the Matter specification
 
-We provide this alias for convenience.
+We provide this alias to the default implementation [IlluminanceMeasurementServer](endpoint_definitions_device_LightSensorDevice.LightSensorRequirements.md#illuminancemeasurementserver) for convenience.
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:40](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L40)
+[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:39](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L39)
 
 ___
 
@@ -74,7 +74,7 @@ A definition for each client cluster supported by the endpoint per the Matter sp
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:57](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L57)
+[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:56](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L56)
 
 ___
 
@@ -94,4 +94,4 @@ An implementation for each server cluster supported by the endpoint per the Matt
 
 #### Defined in
 
-[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:52](https://github.com/project-chip/matter.js/blob/3adaded6/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L52)
+[packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts:51](https://github.com/project-chip/matter.js/blob/c0d55745d5279e16fdfaa7d2c564daa31e19c627/packages/matter.js/src/endpoint/definitions/device/LightSensorDevice.ts#L51)

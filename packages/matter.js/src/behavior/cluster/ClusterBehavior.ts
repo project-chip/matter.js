@@ -15,7 +15,7 @@ import type { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import type { RootSupervisor } from "../supervision/RootSupervisor.js";
 import { Schema } from "../supervision/Schema.js";
 import { NetworkBehavior } from "../system/network/NetworkBehavior.js";
-import { createType, type ClusterOf } from "./ClusterBehaviorUtil.js";
+import { ExtensionInterfaceOf, createType, type ClusterOf } from "./ClusterBehaviorUtil.js";
 import type { ClusterEvents } from "./ClusterEvents.js";
 import { ClusterInterface } from "./ClusterInterface.js";
 import type { ClusterState } from "./ClusterState.js";
@@ -203,6 +203,7 @@ export namespace ClusterBehavior {
         readonly supervisor: RootSupervisor;
         readonly dependencies?: Iterable<Behavior.Type>;
         supports: typeof ClusterBehavior.supports;
+        readonly ExtensionInterface: ExtensionInterfaceOf<B>;
 
         // Prior to TS 5.4 could do this.  Sadly typing no longer carries through on these...  This["cluster"] reverts
         // to ClusterType).  So we have to define the long way.
@@ -264,15 +265,20 @@ export namespace ClusterBehavior {
                 | "events"
                 | "initialize"
 
-                // Typescript 5.3 gets confused and thinks this is an instance property if we don't omit and then add (as
-                // we do below)
+                // Typescript 5.3 gets confused and thinks this is an instance property if we don't omit and then add
+                // (as we do below)
                 | typeof Symbol.asyncDispose
 
                 // Omit command methods of old cluster
                 | keyof ClusterInterface.MethodsOf<ClusterInterface.InterfaceOf<B>, ClusterOf<B>>
+
+                // Omit methods defined in ExtensionInterface
+                | keyof ExtensionInterfaceOf<B>
             > &
             // Add command methods
-            ClusterInterface.MethodsOf<I, C> & {
+            ClusterInterface.MethodsOf<I, C> &
+            // Add methods defined manually in ExtensionInterface
+            ExtensionInterfaceOf<B> & {
                 // Cluster-specific members
                 /**
                  * The implemented cluster.
@@ -296,4 +302,20 @@ export namespace ClusterBehavior {
 
                 [Symbol.asyncDispose](): MaybePromise<void>;
             };
+
+    /**
+     * This is an unfortunate kludge required to work around https://github.com/microsoft/TypeScript/issues/27965.  It
+     * allows you to designate extension methods available on behavior instances.
+     *
+     * Methods designated in this way make it so you can override methods using the syntax:
+     *
+     *     override foo() {}
+     *
+     * rather than:
+     *
+     *     override foo: () => {}
+     *
+     * See {@link ClusterInterface} for more details.
+     */
+    export declare const ExtensionInterface: {};
 }
