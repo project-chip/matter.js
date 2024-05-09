@@ -233,7 +233,7 @@ export class ModelTraversal {
         let shadow: Model | undefined;
         this.operationWithDismissal(model, () => {
             this.visitInheritance(this.findBase(parentOf(model)), parent => {
-                if (model.id !== undefined) {
+                if (model.id !== undefined && model.tag !== ElementTag.Command) {
                     shadow = parent.children.select(model.id, [model.tag], this.dismissed);
                     if (shadow) {
                         return false;

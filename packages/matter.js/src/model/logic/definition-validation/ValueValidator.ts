@@ -24,7 +24,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
         this.model.conformance.validateReferences(name => {
             // Features are all caps, other names are field references
-            if (name.match(/^[A-Z_$]+$/)) {
+            if (name.match(/^[A-Z0-9_$]+$/)) {
                 // Feature lookup
                 const cluster = this.model.owner(ClusterModel);
                 return !!cluster?.features.find(f => f.name === name);

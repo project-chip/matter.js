@@ -28,6 +28,10 @@ export class CommandModel extends ValueModel implements CommandElement {
         return new ModelTraversal().findResponse(this) as ValueModel;
     }
 
+    get effectiveDirection() {
+        return this.direction ?? (new ModelTraversal().findShadow(this) as CommandModel | undefined)?.direction;
+    }
+
     /**
      * Commands may re-use the ID for request and response so identification requires the ID in conjunction with the
      * direction.
