@@ -201,6 +201,7 @@ matter.js is used at the core of those two projects currently:
 - [zigbee-matter-bridge](https://github.com/antonio-gabriele/zigbee-matter-bridge): a Zigbee to Matter Bridge
 - [matterbridge](https://github.com/Luligu/matterbridge): a matter.js plugin manager with 7 example plugins
 - [matterbridge-zigbee2mqtt](https://github.com/Luligu/matterbridge-zigbee2mqtt): a matterbridge production-level plugin that expose all zigbee2mqtt devices and groups to Matter
+- [matterbridge-somfy-tahoma](https://github.com/Luligu/matterbridge-somfy-tahoma): a matterbridge production-level plugin that expose all somfy tahoma screens to Matter
 
 ## Device types tested on various Ecosystems
 
@@ -214,10 +215,10 @@ Table Legend:
 - "MDL Section" column identifies the relevant section in the Matter Device Library Specification Version 1.2 (Oct. 18, 2023).
 - "ID" refers to the device type ID as set out in each device type's "Classification" section in the the MDL.
 
-| **MDL  Section** | **Matter Device type and Class**                    | **Apple  <br>iOS 17.1**  |   **Google**  | **Amazon** | **SmartThings** | **LG ThinQ** | **Tuya** | **Home Assisitant <br>2023.11.0** |
+| **MDL  Section** | **Matter Device type and Class**                    | **Apple  <br>iOS 17.1**  |   **Google**  | **Amazon** | **SmartThings** | **LG ThinQ** | **Tuya** | **Home Assisitant <br>2024.5.2** |
 |------------------|-----------------------------------------------------|:------------------------:|:-------------:|:----------:|:---------------:|:------------:|:--------:|:---------------------------------:|
-|                  | **Bridge Support**                                  |            X             |       X       |      X     |        X        |       -      |     -    |                 ?                 |
-|                  | **Composed Devices Support**                        |            X             |       X       |      -     |        -        |       -      |     -    |                 ?                 |
+|                  | **Bridge Support**                                  |            X             |       X       |      X     |        X        |       -      |     -    |                 X                 |
+|                  | **Composed Devices Support**                        |            X             |       X       |      -     |        -        |       -      |     -    |                 X                 |
 | 4                | **Lighting Device Types**                           |                          |               |            |                 |              |          |                                   |
 | 4.1              | On/Off Light  <br>(ID: 0x0100)                      |            X             |       X       |      X     |        X        |       X      |     X    |                 X                 |
 | 4.2              | Dimmable Light <br>(ID: 0x0101)                     |            X             |       X       |      X     |        X        |       -      |     X    |                 X                 |
@@ -228,20 +229,20 @@ Table Legend:
 | 5.2              | Dimmable Plug-in Unit <br>(ID: 0x010B)              |            ?             |       ?       |      ?     |        ?        |       -      |     ?    |                 ?                 |
 | 5.3              | Pump <br>(ID: 0x0303)                               |            -             |       -       |      -     |        -        |       -      |     -    |                 -                 |
 | 6                | **Switches and Control Device Types**               |                          |               |            |                 |              |          |                                   |
-| 6.1              | On/Off Light Switch <br>(ID: 0x0103)                |            x             |       x       |      ?     |        ?        |       ?      |     ?    |                 x                 |
-| 6.2              | Dimmer Switch <br>(ID: 0x0104)                      |            X             |       x       |      ?     |        ?        |       ?      |     ?    |                 x                 |
-| 6.3              | Color Dimmer Switch <br>(ID: 0x0105)                |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
+| 6.1              | On/Off Light Switch <br>(ID: 0x0103)                |            x             |       x       |      ?     |        ?        |       ?      |     ?    |                 X                 |
+| 6.2              | Dimmer Switch <br>(ID: 0x0104)                      |            X             |       x       |      ?     |        ?        |       ?      |     ?    |                 X                 |
+| 6.3              | Color Dimmer Switch <br>(ID: 0x0105)                |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 X                 |
 | 6.4              | Control Bridge <br>(ID: 0x0840)                     |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 6.5              | Pump Controller <br>(ID: 0x0304)                    |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 6.6              | Generic Switch <br>(ID: 0x000F)                     | X (Latching Switch only) |       -       |      ?     |        ?        |       ?      |     ?    |                 X                 |
 | 7                | **Sensor Device Types**                             |                          |               |            |                 |              |          |                                   |
 | 7.1              | Contact Sensor <br>(ID: 0x0015)                     |            X             |       X       |      X     |        X        |       ?      |     ?    |                 X                 |
-| 7.2              | Light Sensor  <br>(ID: 0x0106)                      |            X             |       X       |      -     |        X        |       ?      |     ?    |                 ?                 |
-| 7.3              | Occupancy Sensor <br>(ID: 0x0107)                   |            X             |       X       |      -     |        ?        |       ?      |     ?    |                 ?                 |
-| 7.4              | Temperature Sensor <br>(ID: 0x0302)                 |            X             |       X       |      -     |        X        |       ?      |     ?    |                 ?                 |
-| 7.5              | Pressure Sensor <br>(ID: 0x0305)                    |            -             |       X       |      -     |        ?        |       ?      |     ?    |                 ?                 |
-| 7.6              | Flow Sensor  <br>(ID: 0x0306)                       |            -             |       X       |      -     |        X        |       ?      |     ?    |                 ?                 |
-| 7.7              | Humidity Sensor <br>(ID: 0x0307)                    |            X             |       X       |      -     |        X        |       ?      |     ?    |                 ?                 |
+| 7.2              | Light Sensor  <br>(ID: 0x0106)                      |            X             |       X       |      -     |        X        |       ?      |     ?    |                 X                 |
+| 7.3              | Occupancy Sensor <br>(ID: 0x0107)                   |            X             |       X       |      -     |        ?        |       ?      |     ?    |                 X                 |
+| 7.4              | Temperature Sensor <br>(ID: 0x0302)                 |            X             |       X       |      -     |        X        |       ?      |     ?    |                 X                 |
+| 7.5              | Pressure Sensor <br>(ID: 0x0305)                    |            -             |       X       |      -     |        ?        |       ?      |     ?    |                 X                 |
+| 7.6              | Flow Sensor  <br>(ID: 0x0306)                       |            -             |       X       |      -     |        X        |       ?      |     ?    |                 X                 |
+| 7.7              | Humidity Sensor <br>(ID: 0x0307)                    |            X             |       X       |      -     |        X        |       ?      |     ?    |                 X                 |
 | 7.8              | On/Off Sensor <br>(ID: 0x0850)                      |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 7.9              | Smoke CO Alarm <br>(ID: 0x0076)                     |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 8                | **Closure Device Types**                            |                          |               |            |                 |              |          |                                   |
@@ -251,7 +252,7 @@ Table Legend:
 | 8.4              | Window Covering Controller <br>(ID: 0x0203)         |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 9                | **HVAC Device Types**                               |                          |               |            |                 |              |          |                                   |
 | 9.1              | Heating/Cooling-Unit <br>(ID: 0x0300)               |            -             |       -       |      -     |        -        |       ?      |     ?    |                 ?                 |
-| 9.2              | Thermostat <br>(ID: 0x0301)                         |            X             |       X       |      X     |        ?        |       ?      |     ?    |                 ?                 |
+| 9.2              | Thermostat <br>(ID: 0x0301)                         |            X             |       X       |      X     |        ?        |       ?      |     ?    |                 X                 |
 | 9.3              | Fan <br>(ID: 0x002B)                                |            -             |       -       |      -     |        -        |       ?      |     ?    |                 ?                 |
 | 9.4              | Air Purifier <br>(ID: 0x002D)                       |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
 | 9.5              | Air Quality Sensor <br>(ID: 0x002C)                 |            ?             |       ?       |      ?     |        ?        |       ?      |     ?    |                 ?                 |
