@@ -198,6 +198,28 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
         disown(child);
     }
 
+    /**
+     * Add a child of the model.  Adopts the mdodel and adds to any applicable indices.
+     */
+    function addChild(child: Model) {
+        if (child.parent?.children === children) {
+            return;
+        }
+
+        if (indices) {
+            for (const [type, slot] of indices.entries()) {
+                if (child instanceof type) {
+                    if (child.id) {
+                        indexInsert(slot.byId, child.id, child);
+                    }
+                    indexInsert(slot.byName, child.name, child);
+                }
+            }
+        }
+
+        adopt(child);
+    }
+
     function get(type: typeof Model, idOrName: number | string) {
         const slot = indices?.get(type) ?? buildIndex(type);
         if (typeof idOrName === "number") {
@@ -321,6 +343,9 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                 if (oldName !== undefined) {
                     indexDelete(slot.byName, oldName, child);
                 }
+                if (child.name !== undefined) {
+                    indexInsert(slot.byName, child.name, child);
+                }
             }
         }
     }
@@ -361,7 +386,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
                 let child = children[p as unknown as number];
                 if (child && !(child instanceof Model)) {
                     child = Model.create(child);
-                    adopt(child);
+                    addChild(child);
                     children[p as unknown as number] = child;
                 }
 
@@ -424,7 +449,7 @@ export function Children<M extends Model = Model, E extends AnyElement = AnyElem
 
             children[p as unknown as number] = newValue;
             if (newValue instanceof Model) {
-                adopt(newValue);
+                addChild(newValue);
             }
 
             return true;

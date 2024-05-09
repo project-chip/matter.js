@@ -423,7 +423,7 @@ export abstract class Model {
                 set(this: Model, value: number | undefined) {
                     const oldId = this.effectiveId;
                     this.#id = value;
-                    this.children.updateId(this, oldId);
+                    this.#parent?.children.updateId(this, oldId);
                 },
 
                 enumerable: true,
@@ -437,7 +437,7 @@ export abstract class Model {
                 set(this: Model, value: string) {
                     const oldName = this.#name;
                     this.#name = value;
-                    this.children.updateName(this, oldName);
+                    this.#parent?.children.updateName(this, oldName);
                 },
 
                 enumerable: true,
