@@ -4126,6 +4126,223 @@ export const SpecMatter = Matter({
             ]
         }),
 
+        Datatype({
+            name: "MeasurementTypeEnum", type: "enum16",
+            xref: { document: "cluster", section: "2.1.4.2" },
+
+            children: [
+                Field({ name: "Unspecified", id: 0x0, conformance: "M" }),
+                Field({ name: "Voltage", id: 0x1, conformance: "M", description: "Voltage in millivolts (mV)" }),
+                Field({
+                    name: "ActiveCurrent", id: 0x2, conformance: "M", description: "Active current in milliamps (mA)"
+                }),
+                Field({
+                    name: "ReactiveCurrent", id: 0x3, conformance: "M",
+                    description: "Reactive current in milliamps (mA)"
+                }),
+                Field({
+                    name: "ApparentCurrent", id: 0x4, conformance: "M",
+                    description: "Apparent current in milliamps (mA)"
+                }),
+                Field({ name: "ActivePower", id: 0x5, conformance: "M", description: "Active power in milliwatts (mW)" }),
+                Field({
+                    name: "ReactivePower", id: 0x6, conformance: "M",
+                    description: "Reactive power in millivolt-amps reactive (mVAR)"
+                }),
+                Field({
+                    name: "ApparentPower", id: 0x7, conformance: "M",
+                    description: "Apparent power in millivolt-amps (mVA)"
+                }),
+                Field({
+                    name: "RmsVoltage", id: 0x8, conformance: "M",
+                    description: "Root mean squared voltage in millivolts (mV)"
+                }),
+                Field({
+                    name: "RmsCurrent", id: 0x9, conformance: "M",
+                    description: "Root mean squared current in milliamps (mA)"
+                }),
+                Field({
+                    name: "RmsPower", id: 0xa, conformance: "M",
+                    description: "Root mean squared power in milliwatts (mW)"
+                }),
+                Field({ name: "Frequency", id: 0xb, conformance: "M", description: "AC frequency in millihertz (mHz)" }),
+                Field({
+                    name: "PowerFactor", id: 0xc, conformance: "M",
+                    description: "Power Factor ratio in+/- 1/100ths of a percent."
+                }),
+                Field({
+                    name: "NeutralCurrent", id: 0xd, conformance: "M",
+                    description: "AC neutral current in milliamps (mA)"
+                }),
+                Field({
+                    name: "ElectricalEnergy", id: 0xe, conformance: "M",
+                    description: "Electrical energy in milliwatt-hours (mWh)"
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "MeasurementAccuracyRangeStruct", type: "struct",
+
+            details: "This struct represents the accuracy of a measurement for a range of measurement values. Accuracy " +
+                "shall be expressed as a maximum +/- percentage of the true value, a maximum +/- fixed value of the " +
+                "true value, or both." +
+                "\n" +
+                "  • If both PercentMax and FixedMax are indicated, then for a given true value in the range between " +
+                "    RangeMin and RangeMax," +
+                "\n" +
+                "    ◦ the reported value shall be less than or equal to the sum of the true value, FixedMax and " +
+                "      PercentMax percent of the true value." +
+                "\n" +
+                "    ◦ the reported value shall be greater than or equal to the true value minus the sum of FixedMax " +
+                "      and PercentMax percent of the true value." +
+                "\n" +
+                "  • If only PercentMax is indicated, then for a given true value in the range between RangeMin and " +
+                "    RangeMax," +
+                "\n" +
+                "    ◦ the reported value shall be less than or equal to the sum of the true value and PercentMax " +
+                "      percent of the true value." +
+                "\n" +
+                "    ◦ the reported value shall be greater than or equal to the true value minus PercentMax per" +
+                "\n" +
+                "cent of the true value." +
+                "\n" +
+                "  • If only FixedMax is indicated, then for a given true value in the range between RangeMin and " +
+                "    RangeMax," +
+                "\n" +
+                "    ◦ the reported value shall be less than or equal to the sum of the true value and FixedMax." +
+                "\n" +
+                "    ◦ the reported value shall be greater than or equal to the true value minus FixedMax.",
+
+            xref: { document: "cluster", section: "2.1.4.3" },
+
+            children: [
+                Field({
+                    name: "RangeMin", id: 0x0, type: "int64", conformance: "M", constraint: "-262 to 262", quality: "F",
+
+                    details: "This field shall indicate the minimum measurement value for the specified level of accuracy." +
+                        "\n" +
+                        "The value of this field shall be greater than or equal to the value of the MinMeasuredValue field " +
+                        "on the encompassing MeasurementAccuracyStruct." +
+                        "\n" +
+                        "The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on " +
+                        "the encompassing MeasurementAccuracyStruct.",
+
+                    xref: { document: "cluster", section: "2.1.4.3.1" }
+                }),
+
+                Field({
+                    name: "RangeMax", id: 0x1, type: "int64", conformance: "M", constraint: "-262 to 262", quality: "F",
+
+                    details: "This field shall indicate the maximum measurement value for the specified level of accuracy. The " +
+                        "value of this field shall be greater than the value of the RangeMin field." +
+                        "\n" +
+                        "The value of this field shall be greater than or equal to the value of the MinMeasuredValue field " +
+                        "on the encompassing MeasurementAccuracyStruct." +
+                        "\n" +
+                        "The value of this field shall be less than or equal to the value of the MaxMeasuredValue field on " +
+                        "the encompassing MeasurementAccuracyStruct.",
+
+                    xref: { document: "cluster", section: "2.1.4.3.2" }
+                }),
+
+                Field({
+                    name: "PercentMax", id: 0x2, type: "percent100ths", conformance: "O.a+", quality: "F",
+                    details: "This field shall indicate the maximum +/- percentage accuracy for the associated measurement.",
+                    xref: { document: "cluster", section: "2.1.4.3.3" }
+                }),
+
+                Field({
+                    name: "PercentMin", id: 0x3, type: "percent100ths", conformance: "[PercentMax]",
+                    constraint: "max percentTypical", quality: "F",
+                    details: "This field shall indicate the minimum +/- percentage accuracy for the associated measurement.",
+                    xref: { document: "cluster", section: "2.1.4.3.4" }
+                }),
+
+                Field({
+                    name: "PercentTypical", id: 0x4, type: "percent100ths", conformance: "[PercentMin]",
+                    constraint: "percentMin to percentMax", quality: "F",
+                    details: "This field shall indicate the typical +/- percentage accuracy for the associated measurement.",
+                    xref: { document: "cluster", section: "2.1.4.3.5" }
+                }),
+
+                Field({
+                    name: "FixedMax", id: 0x5, type: "uint64", conformance: "O.a+", quality: "F",
+                    details: "This field shall indicate the maximum +/- fixed accuracy for the associated measurement, in the " +
+                        "unit indicated by MeasurementType.",
+                    xref: { document: "cluster", section: "2.1.4.3.6" }
+                }),
+
+                Field({
+                    name: "FixedMin", id: 0x6, type: "uint64", conformance: "[FixedMax]", constraint: "max fixedMax",
+                    quality: "F",
+                    details: "This field shall indicate the minimum +/- fixed accuracy for the associated measurement, in the " +
+                        "unit indicated by MeasurementType.",
+                    xref: { document: "cluster", section: "2.1.4.3.7" }
+                }),
+
+                Field({
+                    name: "FixedTypical", id: 0x7, type: "uint64", conformance: "[FixedMin]",
+                    constraint: "fixedMin to fixedMax", quality: "F",
+                    details: "This field shall indicate the typical +/- fixed accuracy for the associated measurement, in the " +
+                        "unit indicated by MeasurementType.",
+                    xref: { document: "cluster", section: "2.1.4.3.8" }
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "MeasurementAccuracyStruct", type: "struct",
+            details: "This struct represents the set of accuracy ranges for a given measurement, the maximum and minimum " +
+                "values for the measurement, and whether the measurement is directly measured or just estimated from " +
+                "other information.",
+            xref: { document: "cluster", section: "2.1.4.4" },
+
+            children: [
+                Field({
+                    name: "MeasurementType", id: 0x0, type: "MeasurementTypeEnum", conformance: "M", quality: "F",
+                    details: "This field shall indicate the type of measurement for the accuracy provided.",
+                    xref: { document: "cluster", section: "2.1.4.4.1" }
+                }),
+
+                Field({
+                    name: "Measured", id: 0x1, type: "bool", conformance: "M", default: true, quality: "F",
+                    details: "This field shall indicate whether the associated measurement was directly measured. If this field " +
+                        "is not set to true, then the associated measurement was estimated.",
+                    xref: { document: "cluster", section: "2.1.4.4.2" }
+                }),
+
+                Field({
+                    name: "MinMeasuredValue", id: 0x2, type: "int64", conformance: "M", constraint: "-262 to 262",
+                    quality: "F"
+                }),
+                Field({
+                    name: "MaxMeasuredValue", id: 0x3, type: "int64", conformance: "M", constraint: "-262 to 262",
+                    quality: "F"
+                }),
+
+                Field({
+                    name: "AccuracyRanges", id: 0x4, type: "list", conformance: "M", constraint: "min 1", quality: "F",
+
+                    details: "This field shall indicate a list of measurement ranges and their associated accuracies." +
+                        "\n" +
+                        "The value of the RangeMin field on the first MeasurementAccuracyRangeStruct in this list shall be " +
+                        "equal to the value of the MinMeasuredValue field." +
+                        "\n" +
+                        "The value of the RangeMax field on the last MeasurementAccuracyRangeStruct in this list shall be " +
+                        "less than or equal to the value of the MaxMeasuredValue field." +
+                        "\n" +
+                        "The value of the RangeMin field on each MeasurementAccuracyRangeStruct in this list other than the " +
+                        "first shall be one more the value of the RangeMax field on the previous " +
+                        "MeasurementAccuracyRangeStruct in this list (i.e. there shall be no gaps in the accuracy ranges, " +
+                        "and the ranges shall be in increasing order).",
+
+                    xref: { document: "cluster", section: "2.1.4.4.5" },
+                    children: [Field({ name: "entry", type: "MeasurementAccuracyRangeStruct" })]
+                })
+            ]
+        }),
+
         Cluster({
             name: "IlluminanceMeasurement", id: 0x400, classification: "application",
             details: "The Illuminance Measurement cluster provides an interface to illuminance measurement functionality, " +
@@ -21496,6 +21713,186 @@ export const SpecMatter = Matter({
             ]
         }),
 
+        Attribute({
+            name: "ClusterRevision", id: 0xfffd, type: "uint16", access: "R V", conformance: "M",
+            constraint: "min 1", quality: "F",
+
+            details: "The ClusterRevision attribute indicates the revision of the server cluster specification supported " +
+                "by the cluster instance. An implementation of a cluster specification before the ClusterRevision " +
+                "attribute was added shall have an assumed cluster revision of 0 (zero). For a new cluster " +
+                "specification, the initial value for the ClusterRevision attribute shall be 1 (not zero)." +
+                "\n" +
+                "A history of revision numbers for a cluster specification release is listed in the Revision History " +
+                "section for a cluster specification. Each new revision of a cluster specification shall specify a " +
+                "new revision number incremented (by 1) from the last. The highest revision number in a cluster " +
+                "specification’s Revision History is the revision number for the cluster specification. Therefore, a " +
+                "ClusterRevision attribute value shall be the (highest) revision number of the cluster specification " +
+                "that has been implemented.",
+
+            xref: { document: "core", section: "7.13.1" }
+        }),
+
+        Attribute({
+            name: "FeatureMap", id: 0xfffc, type: "map32", access: "R V", conformance: "M", default: 0,
+            quality: "F",
+
+            details: "Each instance of a cluster shall support this attribute." +
+                "\n" +
+                "The FeatureMap attribute shall indicate whether the server supports zero or more optional cluster " +
+                "features. A cluster feature is a set of cluster elements that are mandatory or optional for a " +
+                "defined feature of the cluster. If a cluster feature is supported by the cluster instance, then the " +
+                "corresponding bit shall be set to 1, otherwise the bit shall be set to 0 (zero). All undefined bits " +
+                "in this attribute shall be set to 0 (zero)." +
+                "\n" +
+                "The set of cluster elements that are designated as mandatory (M) are implicitly part of the " +
+                "mandatory cluster feature set, and do not have a bit in the FeatureMap attribute." +
+                "\n" +
+                "A cluster specification shall support this attribute if the cluster supports features. If a cluster " +
+                "specification is revised to support features (and so this attribute), each bit in the FeatureMap " +
+                "attribute shall have a defined default value (1 or 0), to conform with the previous revision of the " +
+                "cluster specification, that did not support the FeatureMap attribute. The value of 1 means the " +
+                "feature elements were mandatory (M) in the previous revision. The value of 0 (zero) means the " +
+                "elements were optional in the previous revision." +
+                "\n" +
+                "Any newly created feature set of a cluster shall be dependent on that cluster." +
+                "\n" +
+                "Feature sets are revision controlled as part of a cluster using the ClusterRevision attribute. The " +
+                "cluster specification is the independent element that is revision controlled. A remote application " +
+                "reading the FeatureMap Attribute and ClusterRevision Attribute will then know exactly what features " +
+                "are supported in the cluster instance." +
+                "\n" +
+                "Each feature set shall be well defined within the cluster specification. Each feature shall be " +
+                "mapped to a short capitalized code name for the feature set to be referenced as a conformance tag " +
+                "in the cluster specification text, including the Conformance columns defining the elements of the " +
+                "cluster." +
+                "\n" +
+                "If a cluster defines more than 32 feature sets, then it will be necessary to add another feature " +
+                "bitmap attribute. Any client trying to reference the new feature set will know about the new " +
+                "bitmap, because it knows about the new feature set(s). Legacy products will not know about the new " +
+                "feature set nor the new bitmap." +
+                "\n" +
+                "For a cluster whose definition which does not define a FeatureMap, the server shall set this " +
+                "attribute to 0 (zero)." +
+                "\n" +
+                "Please see Feature Conformance for details on conformance.",
+
+            xref: { document: "core", section: "7.13.2" }
+        }),
+
+        Attribute({
+            name: "AttributeList", id: 0xfffb, type: "list", access: "R V", conformance: "M", quality: "F",
+            details: "Each instance of a cluster shall support this attribute. This attribute shall be a list of the " +
+                "attribute IDs of the attributes supported by the cluster instance.",
+            xref: { document: "core", section: "7.13.3" },
+            children: [Field({ name: "entry", type: "attrib-id" })]
+        }),
+
+        Attribute({
+            name: "EventList", id: 0xfffa, type: "list", access: "R V", conformance: "P, M", quality: "F",
+            details: "Each instance of a cluster shall support this attribute. This attribute shall be a list of the " +
+                "event IDs of the events supported by the cluster instance.",
+            xref: { document: "core", section: "7.13.6" },
+            children: [Field({ name: "entry", type: "event-id" })]
+        }),
+
+        Attribute({
+            name: "AcceptedCommandList", id: 0xfff9, type: "list", access: "R V", conformance: "M",
+            quality: "F",
+
+            details: "This attribute is a list of client generated commands which are supported by this cluster server " +
+                "instance." +
+                "\n" +
+                "Each instance of a cluster shall support this attribute." +
+                "\n" +
+                "This attribute shall be a list of the command IDs for client generated commands that are supported " +
+                "and processed by the server." +
+                "\n" +
+                "For each client request command in this list that mandates a response from the server, the response " +
+                "command shall be indicated in the GeneratedCommandList attribute.",
+
+            xref: { document: "core", section: "7.13.4" },
+            children: [Field({ name: "entry", type: "command-id" })]
+        }),
+
+        Attribute({
+            name: "GeneratedCommandList", id: 0xfff8, type: "list", access: "R V", conformance: "M",
+            quality: "F",
+
+            details: "This attribute is a list of server generated commands. A server generated command is a server to " +
+                "client command." +
+                "\n" +
+                "Each instance of a cluster shall support this attribute." +
+                "\n" +
+                "This attribute shall be a list of the command IDs for server generated commands." +
+                "\n" +
+                "For each command in this list that is a response to a client command request, the request command " +
+                "shall be indicated in the AcceptedCommandList attribute.",
+
+            xref: { document: "core", section: "7.13.5" },
+            children: [Field({ name: "entry", type: "command-id" })]
+        }),
+
+        Field({
+            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "fabric, scoped",
+            constraint: "1 to 254",
+
+            details: "This field shall be present for fabric-scoped data. This field does not have to be defined " +
+                "explicitly in the field table for fabric-scoped data." +
+                "\n" +
+                "This field shall NOT be present in a write interaction. For a write interaction, the server shall " +
+                "provide the value of the accessing fabric-index as the FabricIndex field value to processing logic, " +
+                "after receipt of the interaction. For a read interaction this field shall be included in all " +
+                "reported data that is defined as fabric-scoped.",
+
+            xref: { document: "core", section: "7.13.7" }
+        }),
+
+        Datatype({
+            name: "WildcardPathFlagsBitmap", type: "map8",
+            details: "The WildcardPathFlagsBitmap indicates flags that apply to the path, affecting wildcard expansion. " +
+                "The following flags are defined:",
+            xref: { document: "core", section: "8.9.2.3" },
+
+            children: [
+                Field({
+                    name: "WildcardSkipRootNode", constraint: "0",
+                    description: "Skip the Root Node endpoint (endpoint 0) during wildcard expansion."
+                }),
+                Field({
+                    name: "WildcardSkipGlobalAttributes", constraint: "1",
+                    description: "Skip several large global attributes during wildcard expansion."
+                }),
+                Field({
+                    name: "WildcardSkipAttributeList", constraint: "2",
+                    description: "Skip the AttributeList global attribute during wildcard expansion."
+                }),
+                Field({
+                    name: "WildcardSkipEventList", constraint: "3",
+                    description: "Skip the EventList global attribute during wildcard expansion."
+                }),
+                Field({
+                    name: "WildcardSkipCommandLists", constraint: "4",
+                    description: "Skip the AcceptedCommandList and GeneratedCommandList global attributes during wildcard expansion."
+                }),
+                Field({
+                    name: "WildcardSkipCustomElements", constraint: "5",
+                    description: "Skip any manufacturer-specific clusters or attributes during wildcard expansion."
+                }),
+                Field({
+                    name: "WildcardSkipFixedAttributes", constraint: "6",
+                    description: "Skip any Fixed (F) quality attributes during wildcard expansion."
+                }),
+                Field({
+                    name: "WildcardSkipChangesOmittedAttributes", constraint: "7",
+                    description: "Skip any Changes Omitted (C) quality attributes during wildcard expansion."
+                }),
+                Field({
+                    name: "WildcardSkipDiagnosticsClusters", constraint: "8",
+                    description: "Skip all clusters with the Diagnostics (K) quality during wildcard expansion."
+                })
+            ]
+        }),
+
         Cluster({
             name: "Descriptor", id: 0x1d, classification: "endpoint",
 
@@ -31842,6 +32239,32 @@ export const SpecMatter = Matter({
                             constraint: "1 to 254"
                         })
                     ]
+                })
+            ]
+        }),
+
+        Datatype({
+            name: "SoftwareVersionCertificationStatusEnum", type: "enum8",
+            details: "The values 0 through 2 shall correspond to the values 0 through 2 used in certification_type in the " +
+                "Certification Declaration.",
+            xref: { document: "core", section: "11.23.7.2" },
+
+            children: [
+                Field({
+                    name: "DevTest", id: 0x0, conformance: "M",
+                    description: "used for development and test purposes (These will typically not be placed in DCL)"
+                }),
+                Field({
+                    name: "Provisional", id: 0x1, conformance: "M",
+                    description: "used for a SoftwareVersion when going into certification testing (These might or might not be placed in DCL, depending on CSA policy and procedures)"
+                }),
+                Field({
+                    name: "Certified", id: 0x2, conformance: "M",
+                    description: "used for a SoftwareVersion which has been certified"
+                }),
+                Field({
+                    name: "Revoked", id: 0x3, conformance: "M",
+                    description: "used for a SoftwareVersion which has been revoked"
                 })
             ]
         }),

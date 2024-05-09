@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
 import { Specification } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
@@ -76,12 +77,12 @@ function applyPatches(subref: HtmlReference, clusterRef: HtmlReference) {
  * Collect the bits that define a cluster.  Here we are just building a tree of HTML nodes.  Conversion to Matter
  * elements happens in translate-cluster.
  *
- * Note that this routine returns bare datatypes in cases where the type is "global" -- that is, not defined within a
- * specific cluster.
+ * The primary purpose of this function is to load clusters but it also loads bare "global" types when encountered.
+ * There are not many global types and this allows us to process specs in a single pass.
  */
 export function* loadClusters(clusters: HtmlReference): Generator<ClusterReference | GlobalReference> {
     // The definition we are building
-    let definition: ClusterReference | undefined;
+    let definition: ClusterReference | GlobalReference | undefined;
 
     // A stack of functions that ingest subsections
     const collectors = Array<SubsectionCollector>();
@@ -115,6 +116,11 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                     subsection: definition.xref.section,
                     collector: clusterCollector,
                 });
+            } else {
+                definition = identifyGlobal(subref);
+                if (definition) {
+                    collectDetails(definition);
+                }
             }
         }
 
@@ -137,6 +143,10 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
 
             const name = ref.name.slice(0, ref.name.length - 8);
             if (FAKE_CLUSTER_NAMES.indexOf(name) !== -1) {
+                collectors.push({
+                    subsection: ref.xref.section,
+                    collector() {},
+                });
                 return;
             }
 
@@ -159,8 +169,8 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
     }
 
     function clusterCollector(subref: HtmlReference) {
-        if (definition === undefined) {
-            throw new Error(`Cluster collector invoked without active cluster definition`);
+        if (definition?.type !== "cluster") {
+            throw new InternalError(`Cluster collector invoked without an active cluster definition`);
         }
 
         if (subref.xref.section === definition.xref.section) {
@@ -207,7 +217,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
                 // themselves are defined in subsections
                 collectors.push({
                     subsection: subref.xref.section,
-                    collector: datatypeRef => {
+                    collector(datatypeRef) {
                         if (!definition.datatypes) {
                             definition.datatypes = [];
                         }
@@ -244,7 +254,7 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
     function collectDetails(ref: HtmlReference) {
         collectors.push({
             subsection: ref.detailSection ?? ref.xref.section,
-            collector: (subref: HtmlReference) => {
+            collector(subref: HtmlReference) {
                 if (!ref.details) {
                     ref.details = [];
                 }
@@ -271,8 +281,8 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
             | "statusCodes",
         ref: HtmlReference,
     ) {
-        if (definition === undefined) {
-            throw new Error(`Cannot define element ${name} because there is no active cluster definition`);
+        if (definition?.type !== "cluster") {
+            throw new InternalError(`Cannot define element ${name} because there is no active cluster definition`);
         }
 
         if (!ref.table) {
@@ -298,5 +308,22 @@ export function* loadClusters(clusters: HtmlReference): Generator<ClusterReferen
         logger.debug(`${name} § ${ref.xref.section}`);
 
         collectDetails((definition[name] = ref));
+    }
+
+    function identifyGlobal(ref: HtmlReference): GlobalReference | undefined {
+        if (
+            // Special case for global element definitions in core doc
+            (ref.name === "Global Elements" && ref.xref.document === "core") ||
+            // Most standalone types are designated like this
+            ref.name.endsWith(" Type") ||
+            // Some don't have the "Type" suffix
+            ref.name.match(/\S+(?:Bitmap|Enum)/i)
+        ) {
+            return {
+                type: "global",
+                ...ref,
+                name: ref.name.replace(/\s+type$/i, ""),
+            };
+        }
     }
 }

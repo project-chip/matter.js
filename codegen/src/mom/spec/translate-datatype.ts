@@ -14,7 +14,7 @@ import {
     fixTypeErrors,
     fixTypeIdentifier,
 } from "./fixes.js";
-import { Bits, Code, Identifier, Integer, NoSpace, Str } from "./html-translators.js";
+import { Bits, Code, Identifier, Integer, LowerIdentifier, NoSpace, Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";
 import {
     Alias,
@@ -131,13 +131,14 @@ const FieldSchema = {
     children: Children(translateValueChildren),
 
     // This only applies to the "global elements" table in the core spec
-    element: Optional(Identifier),
+    element: Optional(LowerIdentifier),
 };
+export type FieldRecord = TableRecord<typeof FieldSchema>;
 
 /**
  * Translate fields of any struct-like element into instances of that element.
  */
-export function translateFields<T extends AnyElement.Type<TableRecord<typeof FieldSchema>>>(
+export function translateFields<T extends AnyElement.Type<FieldRecord>>(
     type: T,
     fields?: HtmlReference,
 ): ReturnType<T>[] {

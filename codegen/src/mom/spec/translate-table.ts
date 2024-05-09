@@ -198,7 +198,13 @@ export function translateRecordsToMatter<R, E extends { id?: number; name: strin
 function installPreciseDetails(
     tag: string,
     definitions: HtmlReference[],
-    records: Array<{ name?: string; xref?: Specification.CrossReference; details?: string; children?: AnyElement[] }>,
+    records: Array<{
+        name?: string;
+        xref?: Specification.CrossReference;
+        details?: string;
+        children?: AnyElement[];
+        element?: string;
+    }>,
     childTranslator?: ChildTranslator,
 ) {
     const lookup = Object.fromEntries(
@@ -210,7 +216,16 @@ function installPreciseDetails(
             return;
         }
 
-        const detail = lookup[`${r.name.toLowerCase()} ${tag}`] || lookup[`${r.name.toLowerCase()}`];
+        let titleSuffix;
+        if (r.element?.endsWith("field")) {
+            titleSuffix = "field";
+        } else if (r.element) {
+            titleSuffix = r.element;
+        } else {
+            titleSuffix = tag;
+        }
+
+        const detail = lookup[`${r.name.toLowerCase()} ${titleSuffix}`] || lookup[`${r.name.toLowerCase()}`];
         if (detail) {
             r.xref = detail.xref;
 

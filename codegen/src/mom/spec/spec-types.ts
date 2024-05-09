@@ -39,7 +39,6 @@ export interface HtmlReference {
  */
 export interface GlobalReference extends HtmlReference {
     type: "global";
-    collection?: boolean;
 }
 
 /**
