@@ -142,9 +142,9 @@ export function translateFields<T extends AnyElement.Type<FieldRecord>>(
     type: T,
     fields?: HtmlReference,
 ): ReturnType<T>[] {
-    const records = translateTable(type.Tag, fields, FieldSchema);
+    let records = translateTable(type.Tag, fields, FieldSchema);
 
-    records.filter(r => {
+    records = records.filter(r => {
         fixTypeErrors(r);
 
         if (fixConformanceErrors(r) === false) {

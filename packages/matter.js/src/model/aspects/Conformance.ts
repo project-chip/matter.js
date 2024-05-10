@@ -42,10 +42,6 @@ export class Conformance extends Aspect<Conformance.Definition> {
 
         let ast: Conformance.Ast;
         if (typeof definition === "string") {
-            if (definition.toLowerCase() === "desc") {
-                this.ast = { type: Conformance.Special.Desc };
-                return;
-            }
             ast = ParsedAst(this, definition);
         } else if (Array.isArray(definition)) {
             const asts = definition.map(def => ParsedAst(this, def));
@@ -564,6 +560,10 @@ function ParsedAst(conformance: Conformance, definition: string) {
 
             if (flags.has(name as Conformance.Flag)) {
                 return { type: name as Conformance.Flag };
+            }
+
+            if (name.toLowerCase() === "desc") {
+                return { type: Conformance.Special.Desc };
             }
 
             return { type: Conformance.Special.Name, param: name };

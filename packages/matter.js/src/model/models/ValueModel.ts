@@ -227,7 +227,7 @@ export abstract class ValueModel extends Model implements ValueElement {
     /**
      * Is this model disallowed?
      */
-    get disallowed() {
+    get isDisallowed() {
         return this.effectiveConformance.type === Conformance.Flag.Disallowed;
     }
 

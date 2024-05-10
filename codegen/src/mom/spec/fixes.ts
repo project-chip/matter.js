@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// This file contains routines to repair various ingestion issues caused by spec mistakes or the AsciiDoc->PDF->HTML
+// This file contains hacks to repair various ingestion issues caused by spec mistakes and/or the AsciiDoc->PDF->HTML
 // madness
 
 const TYPE_ERRORS: { [badType: string]: string } = {
@@ -21,6 +21,7 @@ const TYPE_ERRORS: { [badType: string]: string } = {
     UnsignedTemperatureType: "UnsignedTemperature",
     SemanticTagStruct: "semtag",
     "system-us": "systime-us",
+    "system-ms": "systime-ms",
 };
 
 export function fixTypeIdentifier(type: string | undefined) {
@@ -70,7 +71,8 @@ export function fixConstraintErrors(record: { constraint?: string }) {
     record.constraint = constraint
         .replace(/ octets| entries| bytes| per node/i, "")
         .replace(/ to(\d|max)/i, " to $1")
-        .replace(/ValuetoMax/, "Value to Max");
+        .replace(/ValuetoMax/, "Value to Max")
+        .replace(/Sup ported/, "Supported");
 
     // Ignore window covering's bitmap constraints
     if (constraint.match(/^[0x]{4} [0x]{4}$/)) {
@@ -88,12 +90,12 @@ export function fixConformanceErrors(record: { conformance?: string }) {
         return false;
     }
 
-    if (conformance === "Matter!Zigbee") {
+    if (conformance === "Matter!Zigbee" || conformance.match(/fabric\s*-\s*scoped/i)) {
         delete record.conformance;
         return;
     }
 
-    conformance = conformance?.replace(/\|CO N/, "|CON");
+    conformance = conformance?.replace(/\|CO N/, "|CON").replace("PIRUnoccupiedToOccupied", "PirUnoccupiedToOccupied");
 
     record.conformance = conformance;
 }

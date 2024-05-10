@@ -4721,7 +4721,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "PirUnoccupiedToOccupiedDelay", id: 0x11, type: "uint16", access: "RW VM",
-                    conformance: "PIRUnoccupiedToOccupiedThreshold, O", default: 0,
+                    conformance: "PirUnoccupiedToOccupiedThreshold, O", default: 0,
                     details: "This attribute specifies the time delay, in seconds, before the PIR sensor changes to its occupied " +
                         "state after the detection of movement in the sensed area.",
                     xref: { document: "cluster", section: "2.7.5.5" }
@@ -4729,7 +4729,7 @@ export const SpecMatter = Matter({
 
                 Attribute({
                     name: "PirUnoccupiedToOccupiedThreshold", id: 0x12, type: "uint8", access: "RW VM",
-                    conformance: "PIRUnoccupiedToOccupiedDelay, O", constraint: "1 to 254", default: 1,
+                    conformance: "PirUnoccupiedToOccupiedDelay, O", constraint: "1 to 254", default: 1,
                     details: "This attribute specifies the number of movement detection events that must occur in the period " +
                         "PIRUnoccupiedToOccupiedDelay, before the PIR sensor changes to its occupied state.",
                     xref: { document: "cluster", section: "2.7.5.6" }
@@ -9911,13 +9911,6 @@ export const SpecMatter = Matter({
                 }),
 
                 Attribute({
-                    name: "FanModeSequence", id: 0x1, type: "FanModeSequenceEnum", access: "R[W] VO",
-                    conformance: "Zigbee", constraint: "0 to 5", default: "MS", quality: "N",
-                    details: "This attribute indicates the fan speed ranges that shall be supported.",
-                    xref: { document: "cluster", section: "4.4.6.2" }
-                }),
-
-                Attribute({
                     name: "FanModeSequence", id: 0x1, type: "FanModeSequenceEnum", access: "R V", conformance: "M",
                     constraint: "0 to 5", quality: "F",
                     details: "This attribute indicates the fan speed ranges that shall be supported.",
@@ -12228,7 +12221,10 @@ export const SpecMatter = Matter({
                         "set to UnrestrictedUser and all schedules shall be cleared.",
 
                     xref: { document: "cluster", section: "5.2.10.32" },
-                    children: [Field({ name: "RfidSlotIndexUserId", id: 0x0, type: "uint16", conformance: "M", constraint: "65534" })]
+                    children: [Field({
+                        name: "RfidSlotIndexUserId", id: 0x0, type: "uint16", conformance: "M",
+                        constraint: "1 to numberOfRfidUsersSupported, 65534"
+                    })]
                 }),
 
                 Command({
@@ -13576,6 +13572,89 @@ export const SpecMatter = Matter({
                         Field({ name: "Rfid", id: 0x3, conformance: "M", description: "Event source is RFID" }),
                         Field({
                             name: "Indeterminate", id: 0xff, conformance: "M", description: "Event source is unknown"
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "OperationEventCodeEnum", type: "enum8",
+                    xref: { document: "cluster", section: "5.2.6.25.1" },
+
+                    children: [
+                        Field({
+                            name: "UnknownOrMfgSpecific", id: 0x0, conformance: "O", description: "Event code is unknown"
+                        }),
+                        Field({ name: "Lock", id: 0x1, conformance: "O", description: "Event code is lock" }),
+                        Field({ name: "Unlock", id: 0x2, conformance: "O", description: "Event code is unlock" }),
+                        Field({
+                            name: "LockFailureInvalidPiNorRfid", id: 0x3, conformance: "O",
+                            description: "Event code is lock failure due to invalid PIN or RFID"
+                        }),
+                        Field({
+                            name: "LockFailureInvalidSchedule", id: 0x4, conformance: "O",
+                            description: "Event code is lock failure due to invalid schedule"
+                        }),
+                        Field({
+                            name: "UnlockFailureInvalidPiNorRfid", id: 0x5, conformance: "O",
+                            description: "Event code is unlock failure due to invalid PIN or RFID"
+                        }),
+                        Field({
+                            name: "UnlockFailureInvalidSchedule", id: 0x6, conformance: "O",
+                            description: "Event code is unlock failure due to invalid schedule"
+                        }),
+                        Field({
+                            name: "OneTouchLock", id: 0x7, conformance: "O", description: "Event code is one touch lock"
+                        }),
+                        Field({ name: "KeyLock", id: 0x8, conformance: "O", description: "Event code is key lock" }),
+                        Field({ name: "KeyUnlock", id: 0x9, conformance: "O", description: "Event code is key unlock" }),
+                        Field({ name: "AutoLock", id: 0xa, conformance: "O", description: "Event code is auto lock" }),
+                        Field({
+                            name: "ScheduleLock", id: 0xb, conformance: "WDSCH | YDSCH",
+                            description: "Event code is schedule lock"
+                        }),
+                        Field({
+                            name: "ScheduleUnlock", id: 0xc, conformance: "WDSCH | YDSCH",
+                            description: "Event code is schedule unlock"
+                        }),
+                        Field({
+                            name: "ManualLock", id: 0xd, conformance: "O",
+                            description: "Event code is manual lock (Key or Thumbturn)"
+                        }),
+                        Field({
+                            name: "ManualUnlock", id: 0xe, conformance: "O",
+                            description: "Event code is manual unlock (Key or Thumbturn)"
+                        }),
+                        Field({
+                            name: "NonAccessUserOperationEvent", id: 0xf, conformance: "O",
+                            description: "Event code is non access user operation"
+                        })
+                    ]
+                }),
+
+                Datatype({
+                    name: "ProgrammingEventCodeEnum", type: "enum8",
+                    xref: { document: "cluster", section: "5.2.6.25.2" },
+
+                    children: [
+                        Field({
+                            name: "UnknownOrMfgSpecific", id: 0x0, conformance: "O", description: "Event code is unknown"
+                        }),
+                        Field({
+                            name: "ProgrammingCodeChanged", id: 0x1, conformance: "O",
+                            description: "Event code is code changed"
+                        }),
+                        Field({ name: "PinCodeAdded", id: 0x2, conformance: "O", description: "Event code is PIN added" }),
+                        Field({
+                            name: "PinCodeCleared", id: 0x3, conformance: "O", description: "Event code is PIN cleared"
+                        }),
+                        Field({
+                            name: "PinCodeChanged", id: 0x4, conformance: "O", description: "Event code is PIN changed"
+                        }),
+                        Field({
+                            name: "RfidCodeAdded", id: 0x5, conformance: "O", description: "Event code is RFID added"
+                        }),
+                        Field({
+                            name: "RfidCodeCleared", id: 0x6, conformance: "O", description: "Event code is RFID cleared"
                         })
                     ]
                 }),
@@ -21833,8 +21912,7 @@ export const SpecMatter = Matter({
         }),
 
         Field({
-            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", conformance: "fabric, scoped",
-            constraint: "1 to 254",
+            name: "FabricIndex", id: 0xfe, type: "fabric-idx", access: "R F V", constraint: "1 to 254",
 
             details: "This field shall be present for fabric-scoped data. This field does not have to be defined " +
                 "explicitly in the field table for fabric-scoped data." +
@@ -28103,7 +28181,7 @@ export const SpecMatter = Matter({
 
                     children: [
                         Field({
-                            name: "SystemTimeMs", id: 0x0, type: "system-ms", conformance: "M",
+                            name: "SystemTimeMs", id: 0x0, type: "systime-ms", conformance: "M",
                             details: "This shall indicate the current System Time in milliseconds (type system-ms), with the value taken " +
                                 "at the time of processing of the TimeSnapshot command that generated this response." +
                                 "\n" +

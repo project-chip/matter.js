@@ -59,9 +59,8 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
                 return;
             }
 
-            // Spec does not always provide type information for deprecated
-            // fields
-            if (this.model.isDeprecated) {
+            // Spec does not always provide type information for deprecated fields
+            if (this.model.isDeprecated || this.model.isDisallowed) {
                 return;
             }
 
@@ -83,8 +82,8 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
         }
         const metatype = metabase.metatype;
         if (metatype === undefined) {
-            // This shouldn't happen because the presence of the metatype is
-            // what makes it a metabase.  But eslint doesn't know that
+            // This shouldn't happen because the presence of the metatype is what makes it a metabase.  But eslint
+            // doesn't know that
             this.error("METATYPE_MISSING", `Metabase ${metabase.name} has no metatype`);
             return;
         }
@@ -100,10 +99,9 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
 
         // Convert value to proper type if possible
         if (metatype === Metatype.string && defaultValue === "empty") {
-            // Metatype doesn't handle this case because otherwise you'd never
-            // be able to have a string called "empty".  In this case though
-            // the data likely comes from the spec so we're going to take a
-            // flyer and say you can never have "empty" as a default value
+            // Metatype doesn't handle this case because otherwise you'd never be able to have a string called "empty".
+            // In this case though the data likely comes from the spec so we're going to take a flyer and say you can
+            // never have "empty" as a default value
             defaultValue = "";
         }
         const cast = Metatype.cast(metatype, defaultValue);
@@ -233,8 +231,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             return true;
         }
 
-        // If the default value is a string referencing another field, convert
-        // to a reference object
+        // If the default value is a string referencing another field, convert to a reference object
         if (typeof def === "string") {
             const other = this.model.parent?.member(def);
             if (other) {
@@ -243,8 +240,7 @@ export class ValueValidator<T extends ValueModel> extends ModelValidator<T> {
             }
         }
 
-        // If the default value for bitmaps is an array, treat as a set of
-        // flag names or IDs; validate as such
+        // If the default value for bitmaps is an array, treat as a set of flag names or IDs; validate as such
         if (metatype === Metatype.bitmap && Array.isArray(def)) {
             for (const value of def) {
                 if (typeof value !== "string" && typeof value !== "number") {

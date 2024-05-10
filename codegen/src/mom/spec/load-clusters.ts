@@ -70,6 +70,11 @@ function applyPatches(subref: HtmlReference, clusterRef: HtmlReference) {
             // ...but here
             subref.name = "SupportedStreamingProtocols Attribute";
         }
+    } else if (isCluster(clusterRef, Specification.Cluster, "Door Lock")) {
+        // These two are nested one level too deep in 1.3 spec
+        if (isSection(subref, "5.2.6.25.1", "5.2.6.25.2")) {
+            return ScanDirective.POP;
+        }
     }
 }
 
