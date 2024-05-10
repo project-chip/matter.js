@@ -41,6 +41,7 @@ jobs:
       chip-tests-required: ${{ steps.check-trigger.outputs.chip-tests-required || steps.check-rebuild.outputs.chip-tests-required || steps.check-long-tests.outputs.chip-tests-required  }}
       chip-tool-rebuild: ${{ steps.check-rebuild.outputs.chip-tool-rebuild }}
       chip-long-tests-required: ${{ steps.check-long-tests.outputs.chip-long-tests-required }}
+      chip-slowapp-tests-required: ${{ steps.check-long-tests.outputs.chip-slowapp-tests-required }}
     steps:
       - name: Check out matter.js
         uses: actions/checkout@v4
@@ -58,6 +59,15 @@ jobs:
               - "packages/**/package.json"
 
       - uses: dorny/paths-filter@v3
+        id: changes-slowapp-tests
+        with:
+          filters: |
+            src:
+              - "packages/matter.js/src/behavior/definitions/color-control/**"
+              - "packages/matter.js/src/behavior/definitions/level-control/**"
+              - "packages/matter.js/src/behavior/definitions/window-covering/**"
+
+      - uses: dorny/paths-filter@v3
         id: changes-long-tests
         with:
           filters: |
@@ -72,6 +82,12 @@ jobs:
         name: Chip Tool tests required to run?
         id: check-trigger
         run: echo "chip-tests-required=true" >> $GITHUB_OUTPUT
+
+      - if: ${{ (github.event_name != 'schedule' && (steps.changes-long-tests.outputs.src == 'true' || contains(needs.head-commit-message.outputs.head-commit-message, '[execute-chiptests-long]') == true)) }}
+        name: Enable slow App tests if needed
+        id: check-slowapp-tests
+        run: |
+          echo "chip-slowapp-tests-required=true" >> $GITHUB_OUTPUT
 
       - if: ${{ contains(github.event.head_commit.message, '[rebuild-chip]') == true }}
         name: Chip Tool rebuild required?
@@ -88,6 +104,7 @@ jobs:
         id: check-long-tests
         run: |
           echo "chip-tests-required=true" >> $GITHUB_OUTPUT
+          echo "chip-slowapp-tests-required=true" >> $GITHUB_OUTPUT
           echo "chip-long-tests-required=true" >> $GITHUB_OUTPUT
 
   # If we need to do anything make sure that chip binaries are build and environment can be set up
@@ -172,7 +189,7 @@ jobs:
   # Execute the slower (because simulated) application cluster tests
   chip-tests-app-slow:
     needs: [prepare-chip-build]
-    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-slowapp-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
