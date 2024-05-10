@@ -9,6 +9,7 @@ import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { Level } from "./Level.js";
+import { Logger } from "./Logger.js";
 
 /**
  * Get a formatter for the specified format.
@@ -418,6 +419,9 @@ function renderValue(value: unknown, formatter: Formatter, squash: boolean): str
                 return renderDiagnostic(e, formatter);
             })
             .join(squash ? "" : " ");
+    }
+    if (typeof value === "object") {
+        return formatter.text(Logger.toJSON(value));
     }
 
     const text = typeof value === "string" || value instanceof String ? value : value.toString().trim();
