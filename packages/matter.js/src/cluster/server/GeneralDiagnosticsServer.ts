@@ -53,7 +53,7 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
                 }
             });
 
-            let networkType = GeneralDiagnostics.InterfaceType.Ethernet;
+            const networkType = GeneralDiagnostics.InterfaceType.Ethernet;
 
             // Filter all unassigned MACs out, sort operational on top, limit to 8 entries and map to the required format.
             networkInterfaces.setLocal(
@@ -83,7 +83,11 @@ export const GeneralDiagnosticsClusterHandler: () => ClusterServerHandlers<typeo
             totalOperationalHoursUpdateTimer.stop();
         },
 
-        upTimeAttributeGetter: () => Math.round((Time.nowMs() - bootUpTime) / 1000),
+        upTimeAttributeGetter: () => {
+            const upTime = Math.round((Time.nowMs() - bootUpTime) / 1000);
+            console.log("upTimeAttributeGetter", upTime);
+            return upTime;
+        },
 
         testEventTrigger: () => {},
     };
