@@ -7,6 +7,10 @@
     "references": [{ "path": "../../matter.js/src" }],
     "typedocOptions": {
         "entryPoints": ["ble/export.ts"],
+        "plugin": ["typedoc-plugin-missing-exports", "typedoc-plugin-markdown"],
+        "excludeExternals": true,
+        "parametersFormat": "table",
+        "membersWithOwnFile": ["Class", "Enum", "Interface"],
         "out": "../../../docs/matter-node-ble.js"
     }
 }
