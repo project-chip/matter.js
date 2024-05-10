@@ -25,6 +25,13 @@ import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js
 import { SessionsBehavior } from "../sessions/SessionsBehavior.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
 
+type NetworkInterfaceDetails = {
+    [key: string]: {
+        mac: string;
+        ips: string[];
+    };
+};
+
 /**
  * Handles network functionality for {@link NodeServer}.
  */
@@ -64,6 +71,19 @@ export class ServerNetworkRuntime extends NetworkRuntime {
         return this.#mdnsBroadcaster;
     }
 
+    get networkInterfaces(): NetworkInterfaceDetails {
+        const network = this.owner.env.get(Network);
+        const interfaces = network.getNetInterfaces();
+        const interfaceDetails: NetworkInterfaceDetails = {};
+        interfaces.forEach(name => {
+            const details = network.getIpMac(name);
+            if (details !== undefined) {
+                interfaceDetails[name] = details;
+            }
+        });
+        return interfaceDetails;
+    }
+
     async openAdvertisementWindow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
@@ -82,7 +102,7 @@ export class ServerNetworkRuntime extends NetworkRuntime {
     }
 
     /**
-     * The IPv6 {@link UdpInterface}.  We create this interface independently of the server so the OS can select a port
+     * The IPv6 {@link UdpInterface}. We create this interface independently of the server so the OS can select a port
      * before we are fully online.
      */
     protected async getPrimaryNetInterface() {
