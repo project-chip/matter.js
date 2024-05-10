@@ -11,6 +11,7 @@ import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError, UnexpectedDataError } from "../../../common/MatterError.js";
 import { ValidationError } from "../../../common/ValidationError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
+import { Endpoint } from "../../../endpoint/Endpoint.js";
 import { Fabric, PublicKeyError } from "../../../fabric/Fabric.js";
 import { FabricAction, FabricManager, FabricTableFullError } from "../../../fabric/FabricManager.js";
 import { Logger } from "../../../log/Logger.js";
@@ -477,7 +478,7 @@ export namespace OperationalCredentialsServer {
          */
         certification?: DeviceCertification.Configuration = undefined;
 
-        [Val.properties](_endpoint: any, session: ValueSupervisor.Session) {
+        [Val.properties](_endpoint: Endpoint, session: ValueSupervisor.Session) {
             return {
                 get currentFabricIndex() {
                     return session.fabric ?? FabricIndex.NO_FABRIC;
