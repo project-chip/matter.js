@@ -39,7 +39,7 @@ class RollerShade extends LiftingWindowCoveringServer {
     }
 
     override async initialize() {
-        this.reactTo(this.events.targetPositionLiftPercent100ths$Changed, this.writeTargetToMotor, { offline: true });
+        this.reactTo(this.events.targetPositionLiftPercent100ths$Changed, this.writeTargetToMotor);
 
         await this.readTargetFromMotor();
         if (this.targetPos === null) {

@@ -18,7 +18,7 @@ import {
     FixedAttribute,
     OptionalFixedAttribute
 } from "../../cluster/Cluster.js";
-import { TlvUInt8, TlvEnum, TlvUInt16, TlvBitmap, TlvInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TlvUInt8, TlvEnum, TlvUInt16, TlvBitmap, TlvInt16 } from "../../tlv/TlvNumber.js";
 import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { BitFlag, BitField } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -411,7 +411,7 @@ export namespace ColorControl {
          *
          * @see {@link MatterSpecification.v11.Cluster} § 3.2.11.21.1
          */
-        moveMode: TlvField(0, TlvUInt8),
+        moveMode: TlvField(0, TlvEnum<MoveMode>()),
 
         /**
          * The Rate field specifies the rate of movement in steps per second. A step is a change in the color
@@ -476,7 +476,7 @@ export namespace ColorControl {
          *
          * @see {@link MatterSpecification.v11.Cluster} § 3.2.11.22.1
          */
-        stepMode: TlvField(0, TlvUInt8),
+        stepMode: TlvField(0, TlvEnum<StepMode>()),
 
         /**
          * The StepSize field specifies the change to be added to (or subtracted from) the current value of the
@@ -696,6 +696,26 @@ export namespace ColorControl {
     export interface EnhancedMoveToHueAndSaturationRequest extends TypeFromSchema<typeof TlvEnhancedMoveToHueAndSaturationRequest> {}
 
     /**
+     * The value of the ColorControl colorLoopActive attribute
+     *
+     * @see {@link MatterSpecification.v11.Cluster} § 3.2.7.13
+     */
+    export enum ColorLoopActive {
+        Inactive = 0,
+        Active = 1
+    }
+
+    /**
+     * The value of the ColorControl colorLoopDirection attribute
+     *
+     * @see {@link MatterSpecification.v11.Cluster} § 3.2.7.14
+     */
+    export enum ColorLoopDirection {
+        Decrement = 0,
+        Increment = 1
+    }
+
+    /**
      * The value of ColorControl.updateFlags
      *
      * @see {@link MatterSpecification.v11.Cluster} § 3.2.11.19.1
@@ -854,45 +874,16 @@ export namespace ColorControl {
     }
 
     /**
-     * The value of the ColorControl featureMap attribute
+     * The value of the ColorControl colorCapabilities attribute
      *
-     * @see {@link MatterSpecification.v11.Cluster} § 3.2.5
+     * @see {@link MatterSpecification.v11.Cluster} § 3.2.7.18
      */
-    export const FeatureMap = {
-        /**
-         * HueSaturation
-         *
-         * Supports color specification via hue/saturation.
-         */
-        hs: BitFlag(0),
-
-        /**
-         * EnhancedHue
-         *
-         * Enhanced hue is supported.
-         */
-        ehue: BitFlag(1),
-
-        /**
-         * ColorLoop
-         *
-         * Color loop is supported.
-         */
-        cl: BitFlag(2),
-
-        /**
-         * Xy
-         *
-         * Supports color specification via XY.
-         */
+    export const ColorCapabilities = {
+        hueSaturation: BitFlag(0),
+        enhancedHue: BitFlag(1),
+        colorLoop: BitFlag(2),
         xy: BitFlag(3),
-
-        /**
-         * ColorTemperature
-         *
-         * Supports specification of color temperature.
-         */
-        ct: BitFlag(4)
+        colorTemperature: BitFlag(4)
     };
 
     /**
@@ -1045,11 +1036,7 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v11.Cluster} § 3.2.7.8
              */
-            colorTemperatureMireds: Attribute(
-                0x7,
-                TlvUInt16.bound({ max: 65279 }),
-                { scene: true, persistent: true, default: 250 }
-            ),
+            colorTemperatureMireds: Attribute(0x7, TlvUInt16, { scene: true, persistent: true, default: 250 }),
 
             /**
              * The ColorTempPhysicalMinMireds attribute indicates the minimum mired value supported by the hardware.
@@ -1203,7 +1190,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v11.Cluster} § 3.2.7.13
              */
-            colorLoopActive: Attribute(0x4002, TlvUInt8, { scene: true, persistent: true, default: 0 }),
+            colorLoopActive: Attribute(
+                0x4002,
+                TlvEnum<ColorLoopActive>(),
+                { scene: true, persistent: true, default: ColorLoopActive.Inactive }
+            ),
 
             /**
              * The ColorLoopDirection attribute specifies the current direction of the color loop. If this attribute
@@ -1212,7 +1203,11 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v11.Cluster} § 3.2.7.14
              */
-            colorLoopDirection: Attribute(0x4003, TlvUInt8, { scene: true, persistent: true, default: 0 }),
+            colorLoopDirection: Attribute(
+                0x4003,
+                TlvEnum<ColorLoopDirection>(),
+                { scene: true, persistent: true, default: ColorLoopDirection.Decrement }
+            ),
 
             /**
              * The ColorLoopTime attribute specifies the number of seconds it shall take to perform a full color loop,
@@ -1362,7 +1357,7 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v11.Cluster} § 3.2.7.3
              */
-            remainingTime: OptionalAttribute(0x2, TlvUInt16.bound({ max: 65534 }), { default: 0 }),
+            remainingTime: OptionalAttribute(0x2, TlvUInt16, { default: 0 }),
 
             /**
              * The DriftCompensation attribute indicates what mechanism, if any, is in use for compensation for
@@ -1697,7 +1692,7 @@ export namespace ColorControl {
              *
              * @see {@link MatterSpecification.v11.Cluster} § 3.2.7.18
              */
-            colorCapabilities: FixedAttribute(0x400a, TlvBitmap(TlvUInt32, FeatureMap))
+            colorCapabilities: Attribute(0x400a, TlvBitmap(TlvUInt16, ColorCapabilities))
         },
 
         /**

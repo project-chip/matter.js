@@ -13,6 +13,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 * Matter-Core functionality:
   * Feature: cluster default implementations for the following clusters were added/updated:
     * BooleanState: Automatically emit the StateChange event when enabled for the cluster and the stateValue changes
+    * ColorControl: Implemented all features and commands as defined by specification with an optional transition logic managed by matter.js
     * LevelControl: Implemented all non-Frequency command handlers as defined by specification with an optional transition logic managed by matter.js
     * LocalizationConfiguration: Implemented activeLocale validation
     * LowPower: Implemented event `enterLowPowerMode` to be emitted when the sleep command gets called
