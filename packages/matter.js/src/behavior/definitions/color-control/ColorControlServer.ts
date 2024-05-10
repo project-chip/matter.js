@@ -2230,6 +2230,6 @@ export namespace ColorControlServerLogic {
     };
 }
 
-// We had turned on some more features to provide da default implementation, but export the cluster with default
+// We had turned on some more features to provide a default implementation, but export the cluster with default
 // Features again.
 export class ColorControlServer extends ColorControlServerLogic.for(ClusterType(ColorControl.Base)) {}

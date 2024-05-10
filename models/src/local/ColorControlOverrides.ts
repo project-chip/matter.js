@@ -121,7 +121,7 @@ LocalMatter.children.push({
             ],
         },
 
-        // Set the correct type of ModeMode because just in the description
+        // Set the correct type of MoveMode because just in the description
         {
             tag: "command",
             id: 0x4b,
